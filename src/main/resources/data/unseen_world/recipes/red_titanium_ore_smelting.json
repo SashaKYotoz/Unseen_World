@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 5.5,
+  "cookingtime": 600,
+  "ingredient": {
+    "item": "unseen_world:raw_red_titanium"
+  },
+  "result": "unseen_world:red_titanium_ingot"
+}

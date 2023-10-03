@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "unseen_world:block/out_growt_apple_bush_1"
+    },
+    "age=1": {
+      "model": "unseen_world:block/out_growt_apple_bush"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "unseen_world:block/misteryflower_sapling"
+    },
+    "age=1": {
+      "model": "unseen_world:block/misteryflower_with_few_berries"
+    },
+    "age=2": {
+      "model": "unseen_world:block/misteryflower_berries"
+    }
+  }
+}

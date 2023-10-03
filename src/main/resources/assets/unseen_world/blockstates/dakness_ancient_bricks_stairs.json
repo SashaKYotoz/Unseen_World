@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/dakness_ancient_bricks_stairs"
+    },
+    "type=top": {
+      "model": "unseen_world:block/dakness_ancient_bricks_stairs_top"
+    },
+    "type=double": {
+      "model": "unseen_world:block/dakness_ancient_bricks_stairs_full"
+    }
+  }
+}

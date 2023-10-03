@@ -1,0 +1,11 @@
+{
+  "parent": "unseen_world:custom/dark_crimson_azalea",
+  "textures": {
+    "all": "unseen_world:block/azalea_plant",
+    "particle": "unseen_world:block/azalea_plant",
+    "side": "unseen_world:block/azalea_side",
+    "top": "unseen_world:block/azalea_top",
+    "plant": "unseen_world:block/azalea_plant"
+  },
+  "render_type": "translucent"
+}

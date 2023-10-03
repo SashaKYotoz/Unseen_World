@@ -1,0 +1,23 @@
+{
+  "feature": "unseen_world:red_titanium_ore_spawn",
+  "placement": [
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:trapezoid",
+        "min_inclusive": {
+          "absolute": -48
+        },
+        "max_inclusive": {
+          "absolute": 24
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

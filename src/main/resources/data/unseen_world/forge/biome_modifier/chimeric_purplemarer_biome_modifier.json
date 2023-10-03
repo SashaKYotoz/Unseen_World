@@ -1,0 +1,13 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "unseen_world:amethyst_forest",
+    "unseen_world:tanzanite_above_ground_cavern"
+  ],
+  "spawners": {
+    "type": "unseen_world:chimeric_purplemarer",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

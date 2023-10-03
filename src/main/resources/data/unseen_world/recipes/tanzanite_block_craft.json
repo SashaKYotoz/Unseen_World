@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:tanzanite_shard"
+    },
+    {
+      "item": "unseen_world:tanzanite_shard"
+    },
+    {
+      "item": "unseen_world:tanzanite_shard"
+    },
+    {
+      "item": "unseen_world:tanzanite_shard"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:tanzanite_block",
+    "count": 1
+  }
+}

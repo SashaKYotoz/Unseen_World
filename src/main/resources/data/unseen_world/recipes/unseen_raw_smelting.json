@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 3,
+  "cookingtime": 300,
+  "ingredient": {
+    "item": "unseen_world:raw_unseenium"
+  },
+  "result": "unseen_world:unseen_ingot"
+}

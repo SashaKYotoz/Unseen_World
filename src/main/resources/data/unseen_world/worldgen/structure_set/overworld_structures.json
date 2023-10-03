@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:dark_cracked_portals",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1887391119,
+    "spacing": 18,
+    "separation": 9
+  }
+}

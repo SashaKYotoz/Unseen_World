@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:deepslate",
+    "unseen_world:chlorite_slate_stone",
+    "minecraft:netherrack",
+    "minecraft:blackstone"
+  ]
+}

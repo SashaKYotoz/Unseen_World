@@ -1,0 +1,11 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "unseen_world:item/tulvar_temple"
+  },
+  "overrides": [
+    {"predicate": {"custom_model_data":1}, "model": "unseen_world:item/void_tulvar"},
+    {"predicate": {"custom_model_data":2}, "model": "unseen_world:item/nature_tulvar"},
+    {"predicate": {"custom_model_data":3}, "model": "unseen_world:item/titanium_tulvar"}
+  ]
+}

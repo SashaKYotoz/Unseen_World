@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "unseen_world:block/totemof_guddy_blaze"
+    },
+    "facing=east": {
+      "model": "unseen_world:block/totemof_guddy_blaze",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "unseen_world:block/totemof_guddy_blaze",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "unseen_world:block/totemof_guddy_blaze",
+      "y": 270
+    }
+  }
+}

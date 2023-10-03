@@ -1,0 +1,89 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0,
+  "effects": {
+    "mood_sound": {
+      "sound": "ambient.warped_forest.mood",
+      "tick_delay": 6000,
+      "offset": 8,
+      "block_search_extent": 2
+    },
+    "additions_sound": {
+      "sound": "ambient.crimson_forest.additions",
+      "tick_chance": 0.0111
+    },
+    "music": {
+      "sound": "unseen_world:tealive_valley_ambient",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": true
+    },
+    "foliage_color": -16724839,
+    "grass_color": -13182773,
+    "sky_color": -12071744,
+    "fog_color": -12071744,
+    "water_color": -16724839,
+    "water_fog_color": -16724839
+  },
+  "spawners": {
+    "monster": [],
+    "creature": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:ore_lapis",
+      "minecraft:ore_lapis_buried",
+      "minecraft:ore_copper",
+      "minecraft:underwater_magma"
+    ],
+    [],
+    [],
+    [
+      "minecraft:lush_caves_ceiling_vegetation",
+      "minecraft:cave_vines",
+      "minecraft:lush_caves_clay",
+      "minecraft:lush_caves_vegetation",
+      "minecraft:rooted_azalea_tree",
+      "minecraft:spore_blossom",
+      "minecraft:classic_vines_cave_feature"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

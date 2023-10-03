@@ -1,0 +1,117 @@
+{
+  "type": "unseen_world:dark_crimson_azalea",
+  "config": {
+    "size": 2,
+    "discard_chance_on_air_exposure": 0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:grass"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:fern"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:tall_grass",
+            "Properties": {
+              "half": "lower"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:seagrass"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:tall_seagrass",
+            "Properties": {
+              "half": "lower"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:misteryflower_with_few_berries"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:misteryflower_berries"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:dark_crimson_flowing_azalia",
+            "Properties": {
+              "facing": "north"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:azalea"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:dark_crimson_azalea"
+        }
+      }
+    ]
+  }
+}

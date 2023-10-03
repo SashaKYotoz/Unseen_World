@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "unseen_world:amethyst_forest",
+  "spawners": {
+    "type": "unseen_world:amethyst_golem",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

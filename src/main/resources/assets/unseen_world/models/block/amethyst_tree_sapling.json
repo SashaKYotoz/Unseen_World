@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "unseen_world:block/amethyst_sapling",
+    "particle": "unseen_world:block/amethyst_sapling"
+  },
+  "render_type": "cutout"
+}

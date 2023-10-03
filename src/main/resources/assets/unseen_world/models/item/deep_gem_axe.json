@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "unseen_world:item/deep_gem_axe"
+  }
+}

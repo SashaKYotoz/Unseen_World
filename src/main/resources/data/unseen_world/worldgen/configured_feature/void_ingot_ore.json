@@ -1,0 +1,98 @@
+{
+  "type": "unseen_world:void_ingot_ore",
+  "config": {
+    "size": 5,
+    "discard_chance_on_air_exposure": 0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:deepslate",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:dark_grass",
+            "Properties": {
+              "facing": "north"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:infested_deepslate",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:basalt",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:void_air"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:cave_air"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:void_ingot_ore"
+        }
+      }
+    ]
+  }
+}

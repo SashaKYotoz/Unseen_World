@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:nightdew_of_chimeric_darkness"
+    },
+    {
+      "item": "unseen_world:nightdew_of_chimeric_darkness"
+    },
+    {
+      "item": "unseen_world:nightdew_of_chimeric_darkness"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:nightdew_nectar_bottle",
+    "count": 1
+  }
+}

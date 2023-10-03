@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "unseen_world:items/red_titanium_sword_with_tanzite_shard"
+  }
+}

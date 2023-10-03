@@ -1,0 +1,15 @@
+{
+  "parent": "unseen_world:custom/blazer_titanium_shield",
+  "textures": {
+    "0": "unseen_world:block/blaze_shield",
+    "particle": "unseen_world:item/blaze_shield"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "blocking": 1
+      },
+      "model": "unseen_world:item/blazer_shield1"
+    }
+  ]
+}

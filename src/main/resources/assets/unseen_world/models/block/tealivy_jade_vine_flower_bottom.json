@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "unseen_world:block/tealivy_jade_vine_flower_bottom",
+    "particle": "unseen_world:block/tealivy_jade_vine_flower_bottom"
+  },
+  "render_type": "cutout"
+}

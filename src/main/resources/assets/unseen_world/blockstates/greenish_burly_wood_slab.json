@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/greenish_burly_wood_slab"
+    },
+    "type=top": {
+      "model": "unseen_world:block/greenish_burly_wood_slab_top"
+    },
+    "type=double": {
+      "model": "unseen_world:block/greenish_burly_wood_slab_full"
+    }
+  }
+}

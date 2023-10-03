@@ -1,0 +1,56 @@
+{
+  "type": "unseen_world:tanzanite_block",
+  "config": {
+    "size": 2,
+    "discard_chance_on_air_exposure": 0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:deepslate",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:tanzanite_block"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:tanzanite_block"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:stone"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:tanzanite_block"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:amethyst_grass_block"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:tanzanite_block"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "":[ 
+    {
+      "model": "unseen_world:block/grizzly_leaves"
+    },
+    {
+      "model": "unseen_world:block/grizzly_leaves_1"
+    },
+    {
+      "model": "unseen_world:block/grizzly_leaves_2"
+    }
+	]
+  }
+}

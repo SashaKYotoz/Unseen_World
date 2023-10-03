@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "features": "unseen_world:grass_block_of_shiny_redlight",
+  "step": "underground_ores"
+}

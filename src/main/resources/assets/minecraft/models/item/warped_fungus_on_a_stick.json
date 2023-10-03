@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "minecraft:item/warped_fungus_on_a_stick"
+  },
+  "overrides": [
+    {"predicate": {"custom_model_data":1}, "model": "unseen_world:item/tanzashroom_on_a_stick"}
+  ]
+}

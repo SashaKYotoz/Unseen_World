@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "unseen_world:dark_crimson_flowing_azalia"
+          },
+          "weight": 4
+        },
+        {
+          "data": {
+            "Name": "unseen_world:dark_crimson_azalea"
+          },
+          "weight": 15
+        },
+        {
+          "data": {
+            "Name": "minecraft:air"
+          },
+          "weight": 10
+        }
+      ]
+    }
+  }
+}

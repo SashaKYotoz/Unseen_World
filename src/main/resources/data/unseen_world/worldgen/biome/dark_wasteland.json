@@ -1,0 +1,112 @@
+{
+  "has_precipitation": true,
+  "temperature": 0,
+  "downfall": 0.5,
+  "effects": {
+    "mood_sound": {
+      "sound": "ambient.cave",
+      "tick_delay": 6000,
+      "offset": 8,
+      "block_search_extent": 2
+    },
+    "music": {
+      "sound": "unseen_world:dark_chimeric_sound",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": true
+    },
+    "particle": {
+      "options": {
+        "type": "glow"
+      },
+      "probability": 0.001
+    },
+    "foliage_color": 10387789,
+    "grass_color": -16777216,
+    "sky_color": -16777216,
+    "fog_color": -16777216,
+    "water_color": 4159204,
+    "water_fog_color": -16777216
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "unseen_world:darkspiritwolf",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      {
+        "type": "unseen_world:dark_hoglin",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "creature": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [
+      {
+        "type": "unseen_world:dark_phantom",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [
+      "minecraft:iceberg_packed",
+      "minecraft:iceberg_blue",
+      "minecraft:amethyst_geode",
+      "minecraft:forest_rock"
+    ],
+    [],
+    [],
+    [],
+    [
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:ore_lapis",
+      "minecraft:ore_lapis_buried",
+      "minecraft:ore_copper",
+      "minecraft:underwater_magma",
+      "minecraft:ore_emerald",
+      "unseen_world:darkness_ooze_vegetation"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:dark_wasteland_tree"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

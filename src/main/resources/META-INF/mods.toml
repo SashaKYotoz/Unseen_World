@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="unseen_world"
+version="3.0.3"
+displayName="Unseen_World"
+credits="Created using mod maker MCreator - https://mcreator.net/about"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/unseen_world"
+logoFile="logo.png"
+authors="SashaKYotoz"
+description="Unseen World are waiting for you"
+
+[[dependencies.unseen_world]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1]"
+    ordering="NONE"
+    side="BOTH"
+
+
+
+

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "experience": 5,
+  "cookingtime": 300,
+  "ingredient": {
+    "item": "unseen_world:void_ingot_ore"
+  },
+  "result": "unseen_world:blue_void"
+}

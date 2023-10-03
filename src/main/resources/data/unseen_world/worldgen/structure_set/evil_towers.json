@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 10387312,
+    "separation": 16,
+    "spacing": 24
+  },
+  "structures": [
+    {
+      "structure": "unseen_world:evil_towers",
+      "weight": 1
+    }
+  ]
+}

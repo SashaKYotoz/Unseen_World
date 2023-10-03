@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:grizzly_forest",
+    "unseen_world:darkcrimsonforest"
+  ],
+  "features": "unseen_world:chlorite_slate_stone",
+  "step": "underground_ores"
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "unseen_world:block/small_crimserry_soul_berry"
+    },
+    "age=1": {
+      "model": "unseen_world:block/small_crimserry_soul_berry1"
+    },
+    "age=2": {
+      "model": "unseen_world:block/grown_crimserry_soul_berry"
+    }
+  }
+}

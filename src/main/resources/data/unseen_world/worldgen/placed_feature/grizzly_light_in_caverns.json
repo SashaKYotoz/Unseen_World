@@ -1,0 +1,21 @@
+{
+  "feature": "unseen_world:grizzly_light_in_caverns",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:has_sturdy_face",
+        "direction": "up",
+        "offset": [
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "type": "minecraft:count",
+      "count": 5
+    }
+  ]
+}

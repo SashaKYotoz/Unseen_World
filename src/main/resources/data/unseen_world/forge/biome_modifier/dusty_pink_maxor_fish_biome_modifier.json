@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "warm_ocean",
+    "lukewarm_ocean",
+    "river"
+  ],
+  "spawners": {
+    "type": "unseen_world:dusty_pink_maxor_fish",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

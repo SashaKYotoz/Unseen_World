@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:dakness_ancient_bricks"
+    },
+    {
+      "item": "unseen_world:dakness_ancient_bricks"
+    },
+    {
+      "item": "unseen_world:dakness_ancient_bricks"
+    },
+    {
+      "item": "unseen_world:dakness_ancient_bricks"
+    },
+    {
+      "item": "unseen_world:dakness_ancient_bricks"
+    },
+    {
+      "item": "unseen_world:dakness_ancient_bricks"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:dakness_ancient_bricks_slab",
+    "count": 4
+  }
+}

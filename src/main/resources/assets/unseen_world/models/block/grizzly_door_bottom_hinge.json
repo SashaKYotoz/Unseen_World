@@ -1,0 +1,7 @@
+{
+  "parent": "block/door_bottom_rh",
+  "textures": {
+    "bottom": "unseen_world:blocks/grizzly_door_down",
+    "top": "unseen_world:blocks/grizzly_door_up"
+  }
+}

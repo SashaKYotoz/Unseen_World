@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "unseen_world:block/dark_crimson_vine_flower"
+    },
+    "facing=east": {
+      "model": "unseen_world:block/dark_crimson_vine_flower",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "unseen_world:block/dark_crimson_vine_flower",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "unseen_world:block/dark_crimson_vine_flower",
+      "y": 270
+    }
+  }
+}

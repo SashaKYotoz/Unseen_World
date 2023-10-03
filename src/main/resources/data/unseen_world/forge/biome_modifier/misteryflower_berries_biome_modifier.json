@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "features": "unseen_world:misteryflower_berries",
+  "step": "vegetal_decoration"
+}

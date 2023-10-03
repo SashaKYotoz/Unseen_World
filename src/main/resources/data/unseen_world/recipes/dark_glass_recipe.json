@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 5,
+  "cookingtime": 400,
+  "ingredient": {
+    "item": "unseen_world:crystallized_dark_sand"
+  },
+  "result": "minecraft:black_stained_glass"
+}

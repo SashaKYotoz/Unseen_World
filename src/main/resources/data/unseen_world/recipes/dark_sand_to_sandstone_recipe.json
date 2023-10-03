@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:white_dye"
+    },
+    {
+      "item": "unseen_world:crystallized_dark_sand"
+    },
+    {
+      "item": "unseen_world:crystallized_dark_sand"
+    },
+    {
+      "item": "unseen_world:crystallized_dark_sand"
+    },
+    {
+      "item": "unseen_world:crystallized_dark_sand"
+    }
+  ],
+  "result": {
+    "item": "minecraft:sandstone",
+    "count": 4
+  }
+}

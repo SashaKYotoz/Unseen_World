@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:blazer_summon_block"
+    },
+    "title": {
+      "translate": "advancements.survive_per_the_meteoritestrophy.title"
+    },
+    "description": {
+      "translate": "advancements.survive_per_the_meteoritestrophy.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "survive_per_the_meteoritestrophy": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 5
+  },
+  "parent": "unseen_world:flight_of_fantasies"
+}

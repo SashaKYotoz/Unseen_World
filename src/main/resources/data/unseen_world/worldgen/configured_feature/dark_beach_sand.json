@@ -1,0 +1,24 @@
+{
+  "type": "unseen_world:dark_beach_sand",
+  "config": {
+    "target": {
+      "Name": "minecraft:deepslate",
+      "Properties": {
+        "axis": "y"
+      }
+    },
+    "state": {
+      "Name": "unseen_world:crystallized_dark_sand",
+      "Properties": {
+        "facing": "north"
+      }
+    },
+    "radius": {
+      "type": "uniform",
+      "value": {
+        "min_inclusive": 3,
+        "max_inclusive": 9
+      }
+    }
+  }
+}

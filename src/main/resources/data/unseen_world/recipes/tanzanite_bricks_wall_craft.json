@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:tanzanite_bricks"
+    },
+    {
+      "item": "unseen_world:tanzanite_bricks"
+    },
+    {
+      "item": "unseen_world:tanzanite_bricks"
+    },
+    {
+      "item": "unseen_world:tanzanite_bricks"
+    },
+    {
+      "item": "unseen_world:tanzanite_bricks"
+    },
+    {
+      "item": "unseen_world:tanzanite_bricks"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:tanzanite_bricks_wall",
+    "count": 6
+  }
+}

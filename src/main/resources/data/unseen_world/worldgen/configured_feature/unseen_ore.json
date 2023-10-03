@@ -1,0 +1,73 @@
+{
+  "type": "unseen_world:unseen_ore",
+  "config": {
+    "size": 4,
+    "discard_chance_on_air_exposure": 0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:unseen_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:basalt",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:unseen_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:stone"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:unseen_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:red_ooze",
+            "Properties": {
+              "facing": "north"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:unseen_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "minecraft:deepslate",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:unseen_ore"
+        }
+      }
+    ]
+  }
+}

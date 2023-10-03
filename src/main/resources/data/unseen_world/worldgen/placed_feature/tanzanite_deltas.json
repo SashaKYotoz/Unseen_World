@@ -1,0 +1,23 @@
+{
+  "feature": "unseen_world:tanzanite_deltas",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 2
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:carving_mask",
+      "step": "air"
+    }
+  ]
+}

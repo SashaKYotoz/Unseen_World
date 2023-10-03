@@ -1,0 +1,28 @@
+{
+  "type": "unseen_world:tanzashroom",
+  "config": {
+    "tries": 16,
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "unseen_world:tanzashroom"
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
+    }
+  }
+}

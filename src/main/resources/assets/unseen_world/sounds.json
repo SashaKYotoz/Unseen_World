@@ -1,0 +1,66 @@
+{
+  "amethyst_ambient": {
+    "sounds": [
+      {
+        "name": "unseen_world:amethyst",
+        "stream": true
+      }
+    ]
+  },
+  "tealive_valley_ambient": {
+    "sounds": [
+      {
+        "name": "unseen_world:teanlive",
+        "stream": false
+      }
+    ]
+  },
+  "chimeric_sound": {
+    "sounds": [
+      {
+        "name": "unseen_world:chimeric_sound",
+        "stream": false
+      }
+    ]
+  },
+  "dark_chimeric_sound": {
+    "sounds": [
+      {
+        "name": "unseen_world:dark_crimson_sound",
+        "stream": false
+      }
+    ]
+  },
+  "happy_place": {
+    "sounds": [
+      {
+        "name": "unseen_world:happy_place",
+        "stream": true
+      }
+    ]
+  },
+  "chaotic": {
+    "sounds": [
+      {
+        "name": "unseen_world:chaotic",
+        "stream": true
+      }
+    ]
+  },
+  "grizzly_forest_ambient": {
+    "sounds": [
+      {
+        "name": "unseen_world:grizzly_forest_ambient",
+        "stream": true
+      }
+    ]
+  },
+  "fire_staff_shot": {
+    "sounds": [
+      {
+        "name": "unseen_world:magic_staff_sound",
+        "stream": false
+      }
+    ]
+  }
+}

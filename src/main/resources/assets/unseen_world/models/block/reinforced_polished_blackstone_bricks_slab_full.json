@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "unseen_world:block/reinforced_polished_blackstone_bricks_top",
+    "top": "unseen_world:block/reinforced_polished_blackstone_bricks_top",
+    "side": "unseen_world:block/reinforced_polished_blackstone_bricks"
+  },
+  "render_type": "solid"
+}

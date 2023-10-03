@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:red_dungeons",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1769180631,
+    "spacing": 24,
+    "separation": 6
+  }
+}

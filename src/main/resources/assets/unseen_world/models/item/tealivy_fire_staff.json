@@ -1,0 +1,8 @@
+{
+  "parent": "unseen_world:custom/tealivy_fire_staff",
+  "textures": {
+    "0": "unseen_world:block/tealivy_fire_staff",
+    "1": "unseen_world:block/tealivy_fire",
+    "particle": "unseen_world:item/tealivy_fire_staff"
+  }
+}

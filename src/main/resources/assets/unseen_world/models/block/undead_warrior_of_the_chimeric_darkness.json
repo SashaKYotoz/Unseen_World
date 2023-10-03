@@ -1,0 +1,9 @@
+{
+  "parent": "unseen_world:custom/warrior_of_the_chimeric_darkness_block",
+  "textures": {
+    "all": "unseen_world:block/warrior_of_the_chimeric_darkness_block",
+    "particle": "unseen_world:block/warrior_of_the_chimeric_darkness_block",
+    "0": "unseen_world:block/warrior_of_the_chimeric_darkness_block"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_orientable_trapdoor_open",
+  "textures": {
+    "texture": "unseen_world:block/amethyst_trapdoor",
+    "particle": "unseen_world:block/amethyst_trapdoor"
+  },
+  "render_type": "translucent"
+}

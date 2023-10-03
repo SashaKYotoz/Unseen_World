@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "unseen_world:tanzanite_above_ground_cavern",
+  "features": "unseen_world:tanzanite_deltas",
+  "step": "top_layer_modification"
+}

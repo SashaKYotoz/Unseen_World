@@ -1,0 +1,16 @@
+{
+  "feature": "unseen_world:tanzanite_aboveground_spikes",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    }
+  ]
+}

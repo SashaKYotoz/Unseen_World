@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "01",
+    " 3",
+    " 5"
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "1": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "3": {
+      "item": "unseen_world:red_blaze_rod"
+    },
+    "5": {
+      "item": "unseen_world:red_blaze_rod"
+    }
+  },
+  "result": {
+    "item": "unseen_world:red_titanium_hoe",
+    "count": 1
+  }
+}

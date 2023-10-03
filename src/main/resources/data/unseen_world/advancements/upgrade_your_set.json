@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:beacon_of_weapons"
+    },
+    "title": {
+      "translate": "advancements.upgrade_your_set.title"
+    },
+    "description": {
+      "translate": "advancements.upgrade_your_set.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "upgrade_your_set": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 10
+  },
+  "parent": "unseen_world:found_treasure"
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "unseen_world:tanzanite_above_ground_cavern",
+    "unseen_world:dark_basalt_detlas",
+    "unseen_world:greynish_beach"
+  ],
+  "spawners": {
+    "type": "unseen_world:streder",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

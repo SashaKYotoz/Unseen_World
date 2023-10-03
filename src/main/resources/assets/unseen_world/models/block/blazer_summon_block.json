@@ -1,0 +1,11 @@
+{
+  "parent": "unseen_world:custom/blazer_summon_block",
+  "textures": {
+    "all": "unseen_world:block/blazersummonblock",
+    "particle": "unseen_world:block/blazersummonblock",
+    "0": "unseen_world:block/blazersummonblock",
+    "1": "unseen_world:block/blazer_helmet_forward",
+    "2": "unseen_world:block/blazer_helmet_side"
+  },
+  "render_type": "translucent"
+}

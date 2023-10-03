@@ -1,0 +1,7 @@
+{
+  "parent": "block/button",
+  "textures": {
+    "texture": "unseen_world:block/grizzly_planks"
+  },
+  "render_type": "solid"
+}

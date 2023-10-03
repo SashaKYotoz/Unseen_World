@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "":[ 
+    {
+      "model": "unseen_world:block/amethyst_grass_block"
+    },
+    {
+      "model": "unseen_world:block/amethyst_grass_block1"
+    }
+	]
+  }
+}

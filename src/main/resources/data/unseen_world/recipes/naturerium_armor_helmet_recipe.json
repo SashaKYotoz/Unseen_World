@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "012",
+    "3 5"
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:naturerium_ingot"
+    },
+    "1": {
+      "item": "unseen_world:naturerium_ingot"
+    },
+    "2": {
+      "item": "unseen_world:naturerium_ingot"
+    },
+    "3": {
+      "item": "unseen_world:naturerium_ingot"
+    },
+    "5": {
+      "item": "unseen_world:naturerium_ingot"
+    }
+  },
+  "result": {
+    "item": "unseen_world:naturerium_armor_helmet",
+    "count": 1
+  }
+}

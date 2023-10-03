@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:void_hammer"
+    },
+    "title": {
+      "translate": "advancements.biguncle.title"
+    },
+    "description": {
+      "translate": "advancements.biguncle.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "biguncle": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 1
+  },
+  "parent": "unseen_world:goto_darkness"
+}

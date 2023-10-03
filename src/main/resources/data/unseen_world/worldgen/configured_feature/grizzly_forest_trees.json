@@ -1,0 +1,29 @@
+{
+  "type": "unseen_world:grizzly_forest_trees",
+  "config": {
+    "valid_base_block": {
+      "Name": "unseen_world:grass_block_of_shiny_redlight"
+    },
+    "stem_state": {
+      "Name": "unseen_world:grizzly_log",
+      "Properties": {
+        "axis": "y"
+      }
+    },
+    "hat_state": {
+      "Name": "unseen_world:grizzly_leaves",
+      "Properties": {
+        "distance": "7",
+        "persistent": "false",
+        "waterlogged": "false"
+      }
+    },
+    "decor_state": {
+      "Name": "unseen_world:grizzly_light_block"
+    },
+    "replaceable_blocks": {
+      "type": "minecraft:matching_blocks",
+      "blocks": "#replaceable_by_trees"
+    }
+  }
+}

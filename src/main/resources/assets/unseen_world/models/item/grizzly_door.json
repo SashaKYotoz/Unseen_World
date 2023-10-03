@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "unseen_world:item/grizzly_door"
+  },
+  "render_type": "translucent"
+}

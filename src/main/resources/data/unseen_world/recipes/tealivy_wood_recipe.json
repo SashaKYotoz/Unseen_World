@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "01",
+    "23"
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:tealivy_log"
+    },
+    "1": {
+      "item": "unseen_world:tealivy_log"
+    },
+    "2": {
+      "item": "unseen_world:tealivy_log"
+    },
+    "3": {
+      "item": "unseen_world:tealivy_log"
+    }
+  },
+  "result": {
+    "item": "unseen_world:tealivy_wood",
+    "count": 3
+  }
+}

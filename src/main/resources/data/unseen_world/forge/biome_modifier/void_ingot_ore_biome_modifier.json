@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:dark_basalt_detlas",
+    "unseen_world:dark_wasteland",
+    "unseen_world:darkcrimsonforest"
+  ],
+  "features": "unseen_world:void_ingot_ore",
+  "step": "underground_ores"
+}
