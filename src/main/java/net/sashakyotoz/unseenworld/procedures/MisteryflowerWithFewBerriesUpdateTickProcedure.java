@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.LevelAccessor;
@@ -17,19 +17,10 @@ public class MisteryflowerWithFewBerriesUpdateTickProcedure {
 			{
 				BlockPos _bp = BlockPos.containing(x, y, z);
 				BlockState _bs = UnseenWorldModBlocks.MISTERYFLOWER_BERRIES.get().defaultBlockState();
-				BlockState _bso = world.getBlockState(_bp);
-				for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-					Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-					if (_property != null && _bs.getValue(_property) != null)
-						try {
-							_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-						} catch (Exception e) {
-						}
-				}
 				world.setBlock(_bp, _bs, 3);
 			}
 			if (world instanceof ServerLevel _level)
-				_level.sendParticles((SimpleParticleType) (UnseenWorldModParticleTypes.GREENISH_PARTICLE.get()), x, y, z, 12, 3, 3, 3, 1);
+				_level.sendParticles(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(), x, y, z, 12, 3, 3, 3, 1);
 		}
 	}
 }

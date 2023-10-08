@@ -10,15 +10,11 @@
       "offset": 8,
       "block_search_extent": 2
     },
-    "additions_sound": {
-      "sound": "unseen_world:chimeric_sound",
-      "tick_chance": 0.0111
-    },
     "particle": {
       "options": {
         "type": "unseen_world:liquid_of_chimery_particle"
       },
-      "probability": 0.001
+      "probability": 0.0005
     },
     "foliage_color": 10387789,
     "grass_color": 9470285,

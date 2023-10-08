@@ -13,6 +13,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import net.sashakyotoz.unseenworld.procedures.MiningbootsProcudeProcedure;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -37,7 +38,7 @@ public class MiningBootsAbilityMessage {
 	public static void handler(MiningBootsAbilityMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
 		NetworkEvent.Context context = contextSupplier.get();
 		context.enqueueWork(() -> {
-			pressAction(context.getSender(), message.type, message.pressedms);
+			pressAction(Objects.requireNonNull(context.getSender()), message.type, message.pressedms);
 		});
 		context.setPacketHandled(true);
 	}
@@ -47,7 +48,6 @@ public class MiningBootsAbilityMessage {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		// security measure to prevent arbitrary chunk generation
 		if (!world.hasChunkAt(entity.blockPosition()))
 			return;
 		if (type == 0) {

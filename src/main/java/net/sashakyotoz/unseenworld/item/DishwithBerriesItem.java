@@ -48,9 +48,6 @@ public class DishwithBerriesItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
 		DishwithBerriesFoodEatenProcedure.execute(entity);
 		if (itemstack.isEmpty()) {
 			return retval;

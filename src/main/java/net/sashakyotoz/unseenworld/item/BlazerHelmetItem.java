@@ -17,7 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.sashakyotoz.unseenworld.client.model.ModelBlazer_Helmet;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 import java.util.Collections;
 import java.util.List;

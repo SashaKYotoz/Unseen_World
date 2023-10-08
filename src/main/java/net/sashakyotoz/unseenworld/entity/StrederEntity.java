@@ -2,10 +2,10 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModFluids;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModFluids;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -60,7 +60,6 @@ import java.util.Set;
 public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.BOOLEAN);
     private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.DEEP_WATER_ANFELTSIA.get());
-    private static final Ingredient TEMPT_ITEMS = Ingredient.of(UnseenWorldModItems.DEEP_WATER_ANFELTSIA.get(), Items.WARPED_FUNGUS_ON_A_STICK);
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);
@@ -413,7 +412,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
 
     public static void init() {
         SpawnPlacements.register(UnseenWorldModEntities.STREDER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (entityType, world, reason, pos, random) -> Mob.checkMobSpawnRules(entityType, world, reason, pos, random));
+                Mob::checkMobSpawnRules);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

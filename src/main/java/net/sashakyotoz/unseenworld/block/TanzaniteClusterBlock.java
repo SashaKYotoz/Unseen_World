@@ -38,12 +38,12 @@ public class TanzaniteClusterBlock extends AmethystBlock implements SimpleWaterl
 		int p_152015_ = 7;
 		int p_152016_ = 3;
 		this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(false)).setValue(FACING, Direction.UP));
-		this.upAabb = Block.box((double) p_152016_, 0.0D, (double) p_152016_, (double) (16 - p_152016_), (double) p_152015_, (double) (16 - p_152016_));
-		this.downAabb = Block.box((double) p_152016_, (double) (16 - p_152015_), (double) p_152016_, (double) (16 - p_152016_), 16.0D, (double) (16 - p_152016_));
-		this.northAabb = Block.box((double) p_152016_, (double) p_152016_, (double) (16 - p_152015_), (double) (16 - p_152016_), (double) (16 - p_152016_), 16.0D);
-		this.southAabb = Block.box((double) p_152016_, (double) p_152016_, 0.0D, (double) (16 - p_152016_), (double) (16 - p_152016_), (double) p_152015_);
-		this.eastAabb = Block.box(0.0D, (double) p_152016_, (double) p_152016_, (double) p_152015_, (double) (16 - p_152016_), (double) (16 - p_152016_));
-		this.westAabb = Block.box((double) (16 - p_152015_), (double) p_152016_, (double) p_152016_, 16.0D, (double) (16 - p_152016_), (double) (16 - p_152016_));
+		this.upAabb = Block.box(p_152016_, 0.0D, p_152016_, 16 - p_152016_, p_152015_, 16 - p_152016_);
+		this.downAabb = Block.box(p_152016_, 16 - p_152015_, p_152016_, 16 - p_152016_, 16.0D, 16 - p_152016_);
+		this.northAabb = Block.box(p_152016_, p_152016_, 16 - p_152015_, 16 - p_152016_, 16 - p_152016_, 16.0D);
+		this.southAabb = Block.box(p_152016_, p_152016_, 0.0D, 16 - p_152016_, 16 - p_152016_, p_152015_);
+		this.eastAabb = Block.box(0.0D, p_152016_, p_152016_, p_152015_, 16 - p_152016_, 16 - p_152016_);
+		this.westAabb = Block.box(16 - p_152015_, p_152016_, p_152016_, 16.0D, 16 - p_152016_, 16 - p_152016_);
 	}
 
 	public VoxelShape getShape(BlockState p_152021_, BlockGetter p_152022_, BlockPos p_152023_, CollisionContext p_152024_) {

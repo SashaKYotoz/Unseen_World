@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;

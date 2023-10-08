@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.procedures.ArmorAbilitiesProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
@@ -80,7 +80,7 @@ public abstract class NatureriumArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/nothing_layer_1.png";
+			return "unseen_world:textures/models/armor/naturerium_layer_1.png";
 		}
 	}
 
@@ -99,11 +99,11 @@ public abstract class NatureriumArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/nothing_layer_1.png";
+			return "unseen_world:textures/models/armor/naturerium_layer_1.png";
 		}
 
 		@Override
-		public void onArmorTick(ItemStack itemstack, Level world, Player entity) {
+		public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int slot, boolean p_41408_) {
 			ArmorAbilitiesProcedure.execute(entity);
 		}
 	}
@@ -123,7 +123,7 @@ public abstract class NatureriumArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/nothing_layer_2.png";
+			return "unseen_world:textures/models/armor/naturerium_layer_2.png";
 		}
 	}
 
@@ -142,7 +142,7 @@ public abstract class NatureriumArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/nothing_layer_1.png";
+			return "unseen_world:textures/models/armor/naturerium_layer_1.png";
 		}
 	}
 }

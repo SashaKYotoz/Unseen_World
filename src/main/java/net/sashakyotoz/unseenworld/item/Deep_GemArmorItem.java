@@ -10,7 +10,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 public abstract class Deep_GemArmorItem extends ArmorItem {
 	public Deep_GemArmorItem(ArmorItem.Type type, Item.Properties properties) {

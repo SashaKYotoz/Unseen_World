@@ -20,7 +20,7 @@ import java.util.Collections;
 
 public class Greenish_BurlyWoodStairsBlock extends StairBlock {
 	public Greenish_BurlyWoodStairsBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(15f, 10f).requiresCorrectToolForDrops().dynamicShape());
+		super(Blocks.AIR::defaultBlockState, BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(15f, 10f).requiresCorrectToolForDrops().dynamicShape());
 	}
 
 	@Override

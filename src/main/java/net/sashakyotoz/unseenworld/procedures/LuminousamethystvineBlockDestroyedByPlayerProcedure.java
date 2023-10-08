@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;

@@ -1,8 +1,8 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -99,22 +99,22 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.ambient"));
+        return SoundEvents.RAVAGER_AMBIENT;
     }
 
     @Override
     public void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.step")), 0.15f, 1);
+        this.playSound(SoundEvents.RAVAGER_STEP, 0.15f, 1);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.hurt"));
+        return SoundEvents.RAVAGER_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.death"));
+        return SoundEvents.RAVAGER_DEATH;
     }
 
     @Override
@@ -298,7 +298,7 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
     public void equipSaddle(@Nullable SoundSource p_21748_) {
         setSaddled(true);
         if (p_21748_ != null) {
-            this.level().playSound((Player) null, this, SoundEvents.LLAMA_SWAG, p_21748_, 0.5F, 1.0F);
+            this.level().playSound(null, this, SoundEvents.RAVAGER_STUNNED, p_21748_, 0.5F, 1.0F);
         }
     }
     @Override

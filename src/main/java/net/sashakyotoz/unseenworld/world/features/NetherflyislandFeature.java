@@ -32,17 +32,15 @@ public class NetherflyislandFeature extends Feature<NoneFeatureConfiguration> {
 			return false;
 		if (template == null)
 			template = context.level().getLevel().getStructureManager().getOrCreate(new ResourceLocation("unseen_world", "fly_nether_island"));
-		if (template == null)
-			return false;
 		boolean anyPlaced = false;
-		if ((context.random().nextInt(1000000) + 1) <= 2500) {
+		if ((context.random().nextInt(1000000) + 1) <= 3000) {
 			int count = context.random().nextInt(1) + 1;
 			for (int a = 0; a < count; a++) {
 				int i = context.origin().getX() + context.random().nextInt(16);
 				int k = context.origin().getZ() + context.random().nextInt(16);
 				int j = context.level().getHeight(Heightmap.Types.OCEAN_FLOOR_WG, i, k);
 				j += context.random().nextInt(64) + 16;
-				BlockPos spawnTo = new BlockPos(i + 0, j + 3, k + 0);
+				BlockPos spawnTo = new BlockPos(i, j + 3, k);
 				if (template.placeInWorld(context.level(), spawnTo, spawnTo, new StructurePlaceSettings().setMirror(Mirror.values()[context.random().nextInt(2)]).setRotation(Rotation.values()[context.random().nextInt(3)]).setRandom(context.random())
 						.addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR).setIgnoreEntities(false), context.random(), 2)) {
 					anyPlaced = true;

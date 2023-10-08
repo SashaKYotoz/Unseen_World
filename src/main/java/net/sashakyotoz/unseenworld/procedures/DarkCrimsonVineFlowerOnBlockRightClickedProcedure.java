@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -21,7 +21,6 @@ public class DarkCrimsonVineFlowerOnBlockRightClickedProcedure {
 		if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.BONE_MEAL) {
 			if ((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == Blocks.AIR) {
 				if (Math.random() < 0.25) {
-					{
 						BlockPos _bp = BlockPos.containing(x, y, z);
 						BlockState _bs = UnseenWorldModBlocks.DARK_CRIMSON_BLOOMING_VINE.get().defaultBlockState();
 						BlockState _bso = world.getBlockState(_bp);
@@ -34,7 +33,6 @@ public class DarkCrimsonVineFlowerOnBlockRightClickedProcedure {
 								}
 						}
 						world.setBlock(_bp, _bs, 3);
-					}
 					world.setBlock(BlockPos.containing(x, y - 1, z), UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get().defaultBlockState(), 3);
 				}
 			}
@@ -45,7 +43,6 @@ public class DarkCrimsonVineFlowerOnBlockRightClickedProcedure {
 		}
 		if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get().asItem()) {
 			if ((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == Blocks.AIR) {
-				{
 					BlockPos _bp = BlockPos.containing(x, y, z);
 					BlockState _bs = UnseenWorldModBlocks.DARK_CRIMSON_BLOOMING_VINE.get().defaultBlockState();
 					BlockState _bso = world.getBlockState(_bp);
@@ -58,7 +55,6 @@ public class DarkCrimsonVineFlowerOnBlockRightClickedProcedure {
 							}
 					}
 					world.setBlock(_bp, _bs, 3);
-				}
 				world.setBlock(BlockPos.containing(x, y - 1, z), UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get().defaultBlockState(), 3);
 			}
 		}

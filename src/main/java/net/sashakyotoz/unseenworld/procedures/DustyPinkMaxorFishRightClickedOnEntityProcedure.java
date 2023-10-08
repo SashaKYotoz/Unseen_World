@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.procedures;
 
 import net.sashakyotoz.unseenworld.entity.DustyPinkMaxorFishEntity;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import net.minecraft.world.item.Items;

@@ -1,8 +1,8 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 
@@ -96,7 +96,7 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.hoglin.step")), 0.15f, 1);
+		this.playSound(SoundEvents.HOGLIN_STEP, 0.15f, 1);
 	}
 
 	@Override

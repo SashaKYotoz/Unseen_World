@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.procedures.VoidEndermenSwordRightClickedInAirProcedure;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.crafting.Ingredient;

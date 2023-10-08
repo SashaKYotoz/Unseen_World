@@ -11,7 +11,7 @@
     },
     "additions_sound": {
       "sound": "ambient.crimson_forest.loop",
-      "tick_chance": 0.0111
+      "tick_chance": 0.0015
     },
     "music": {
       "sound": "unseen_world:dark_chimeric_sound",
@@ -23,7 +23,7 @@
       "options": {
         "type": "unseen_world:bluevoidparticle"
       },
-      "probability": 0.001
+      "probability": 0.0005
     },
     "foliage_color": 10387789,
     "grass_color": -15138816,

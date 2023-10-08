@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
@@ -98,7 +98,7 @@ public class NethermenEntity extends EnderMan {
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.nether_bricks.step")), 0.15f, 1);
+		this.playSound(SoundEvents.NETHER_BRICKS_STEP, 0.15f, 1);
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class NethermenEntity extends EnderMan {
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.death"));
+		return SoundEvents.ENDERMAN_DEATH;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class NethermenEntity extends EnderMan {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.19999999999999998);
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
 		builder = builder.add(Attributes.MAX_HEALTH, 32);
 		builder = builder.add(Attributes.ARMOR, 2);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);

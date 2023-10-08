@@ -2,7 +2,7 @@
   "type": "unseen_world:unseen_ore",
   "config": {
     "size": 4,
-    "discard_chance_on_air_exposure": 0,
+    "discard_chance_on_air_exposure": 0.25,
     "targets": [
       {
         "target": {
@@ -51,7 +51,7 @@
           }
         },
         "state": {
-          "Name": "unseen_world:unseen_ore"
+          "Name": "unseen_world:red_titanium_ore"
         }
       },
       {

@@ -1,8 +1,8 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
@@ -35,14 +35,14 @@ public class RedSylphRightClickedOnEntityProcedure {
 					entityToSpawn.setPickUpDelay(10);
 					_level.addFreshEntity(entityToSpawn);
 				}
-				world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.GOLDEN.get()), x, y, z, 0, 1, 0);
+				world.addParticle(UnseenWorldModParticleTypes.GOLDEN.get(), x, y, z, 0, 1, 0);
 			} else if (Math.random() < 0.35) {
 				if (world instanceof ServerLevel _level) {
 					ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(UnseenWorldModItems.BERRIESFROM_BLOOMING_VINE.get()));
 					entityToSpawn.setPickUpDelay(10);
 					_level.addFreshEntity(entityToSpawn);
 				}
-				world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get()), x, y, z, 0, 1, 0);
+				world.addParticle(UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get(), x, y, z, 0, 1, 0);
 			}
 		} else if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get().asItem()) {
 			if (entity instanceof LivingEntity _entity) {
@@ -62,7 +62,7 @@ public class RedSylphRightClickedOnEntityProcedure {
 					entityToSpawn.setPickUpDelay(10);
 					_level.addFreshEntity(entityToSpawn);
 				}
-				world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.GOLDEN.get()), x, y, z, 0, 1, 0);
+				world.addParticle(UnseenWorldModParticleTypes.GOLDEN.get(), x, y, z, 0, 1, 0);
 			}
 		} else {
 			if (entity instanceof LivingEntity _entity) {
@@ -73,7 +73,8 @@ public class RedSylphRightClickedOnEntityProcedure {
 					_player.getInventory().setChanged();
 			}
 			if (sourceentity instanceof Player _player) {
-				ItemStack _stktoremove = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
+				LivingEntity _livEnt = (LivingEntity) sourceentity;
+				ItemStack _stktoremove = _livEnt.getMainHandItem();
 				_player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
 			}
 		}

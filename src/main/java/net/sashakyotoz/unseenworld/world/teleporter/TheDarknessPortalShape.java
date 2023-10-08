@@ -19,7 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.BlockUtil;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 import javax.annotation.Nullable;
 

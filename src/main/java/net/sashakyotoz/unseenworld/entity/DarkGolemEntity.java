@@ -1,9 +1,9 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.UnseenWorldModCommonConfigs;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.procedures.DarkGolemEntityDiesProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -194,17 +194,17 @@ public class DarkGolemEntity extends Monster {
 
     @Override
     public void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step"))), 0.15f, 1);
+        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15f, 1);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
+        return SoundEvents.IRON_GOLEM_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
+        return SoundEvents.IRON_GOLEM_DAMAGE;
     }
 
     @Override
@@ -266,10 +266,10 @@ public class DarkGolemEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, UnseenWorldModCommonConfigs.DARK_GOLEM_SPEED.getDefault());
-        builder = builder.add(Attributes.MAX_HEALTH,UnseenWorldModCommonConfigs.DARK_GOLEM_HEALTH_POINTS.getDefault());
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
+        builder = builder.add(Attributes.MAX_HEALTH, 300);
         builder = builder.add(Attributes.ARMOR, 5);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, UnseenWorldModCommonConfigs.DARK_GOLEM_DAMAGE.getDefault());
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 2);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 2.5);

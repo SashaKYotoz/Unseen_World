@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.block;
 
 import com.google.common.annotations.VisibleForTesting;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -139,7 +139,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
 
     @VisibleForTesting
     public static void maybeTransferFluid(BlockState p_221860_, ServerLevel p_221861_, BlockPos p_221862_, float p_221863_) {
-        if (!(p_221863_ > 0.17578125F) || !(p_221863_ > 0.05859375F)) {
+        if (!(p_221863_ > 0.17578125F)) {
             if (isStalactiteStartPos(p_221860_, p_221861_, p_221862_)) {
                 Optional<DripstoneOfAmethystOvergrowthBlock.FluidInfo> optional = getFluidAboveStalactite(p_221861_, p_221862_, p_221860_);
                 if (optional.isPresent()) {
@@ -250,10 +250,6 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
         return p_254432_.damageSources().fallingStalactite(p_254432_);
     }
 
-    public Predicate<Entity> getHurtsEntitySelector() {
-        return EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(EntitySelector.LIVING_ENTITY_STILL_ALIVE);
-    }
-
     private static void spawnFallingStalactite(BlockState p_154098_, ServerLevel p_154099_, BlockPos p_154100_) {
         BlockPos.MutableBlockPos blockpos$mutableblockpos = p_154100_.mutable();
 
@@ -349,12 +345,6 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
         createDripstone(p_154232_, blockpos1, Direction.UP, DripstoneThickness.TIP_MERGE);
     }
 
-    public static void spawnDripParticle(Level p_154063_, BlockPos p_154064_, BlockState p_154065_) {
-        getFluidAboveStalactite(p_154063_, p_154064_, p_154065_).ifPresent((p_221856_) -> {
-            spawnDripParticle(p_154063_, p_154064_, p_154065_, p_221856_.fluid);
-        });
-    }
-
     private static void spawnDripParticle(Level p_154072_, BlockPos p_154073_, BlockState p_154074_, Fluid p_154075_) {
         Vec3 vec3 = p_154074_.getOffset(p_154072_, p_154073_);
         double d1 = (double)p_154073_.getX() + 0.5D + vec3.x;
@@ -371,12 +361,8 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
             return p_154133_;
         } else {
             Direction direction = p_154131_.getValue(TIP_DIRECTION);
-            BiPredicate<BlockPos, BlockState> bipredicate = (p_202023_, p_202024_) -> {
-                return p_202024_.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) && p_202024_.getValue(TIP_DIRECTION) == direction;
-            };
-            return findBlockVertical(p_154132_, p_154133_, direction.getAxisDirection(), bipredicate, (p_154168_) -> {
-                return isTip(p_154168_, p_154135_);
-            }, p_154134_).orElse((BlockPos)null);
+            BiPredicate<BlockPos, BlockState> bipredicate = (p_202023_, p_202024_) -> p_202024_.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) && p_202024_.getValue(TIP_DIRECTION) == direction;
+            return findBlockVertical(p_154132_, p_154133_, direction.getAxisDirection(), bipredicate, (p_154168_) -> isTip(p_154168_, p_154135_), p_154134_).orElse(null);
         }
     }
 
@@ -481,20 +467,6 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
         return findBlockVertical(p_154077_, p_154078_, Direction.DOWN.getAxisDirection(), bipredicate, predicate, 11).orElse(null);
     }
 
-    @Nullable
-    public static BlockPos findStalactiteTipAboveCauldron(Level p_154056_, BlockPos p_154057_) {
-        BiPredicate<BlockPos, BlockState> bipredicate = (p_202030_, p_202031_) -> {
-            return canDripThrough(p_154056_, p_202030_, p_202031_);
-        };
-        return findBlockVertical(p_154056_, p_154057_, Direction.UP.getAxisDirection(), bipredicate, PointedDripstoneBlock::canDrip, 11).orElse((BlockPos)null);
-    }
-
-    public static Fluid getCauldronFillFluidType(ServerLevel p_221850_, BlockPos p_221851_) {
-        return getFluidAboveStalactite(p_221850_, p_221851_, p_221850_.getBlockState(p_221851_)).map((p_221858_) -> {
-            return p_221858_.fluid;
-        }).filter(DripstoneOfAmethystOvergrowthBlock::canFillCauldron).orElse(Fluids.EMPTY);
-    }
-
     private static Optional<DripstoneOfAmethystOvergrowthBlock.FluidInfo> getFluidAboveStalactite(Level p_154182_, BlockPos p_154183_, BlockState p_154184_) {
         return !isStalactite(p_154184_) ? Optional.empty() : findRootBlock(p_154182_, p_154183_, p_154184_).map((p_221876_) -> {
             BlockPos blockpos = p_221876_.above();
@@ -558,6 +530,6 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
         }
     }
 
-    static record FluidInfo(BlockPos pos, Fluid fluid, BlockState sourceState) {
+    record FluidInfo(BlockPos pos, Fluid fluid, BlockState sourceState) {
     }
 }

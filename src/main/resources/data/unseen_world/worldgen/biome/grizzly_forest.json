@@ -3,23 +3,17 @@
   "temperature": 1.2,
   "downfall": 0,
   "effects": {
-    "mood_sound": {
-      "sound": "unseen_world:grizzly_forest_ambient",
-      "tick_delay": 6000,
-      "offset": 8,
-      "block_search_extent": 2
-    },
     "music": {
-      "sound": "unseen_world:dark_chimeric_sound",
-      "min_delay": 12000,
-      "max_delay": 24000,
+      "sound": "unseen_world:biome.grizzly_forest",
+      "min_delay": 6000,
+      "max_delay": 12000,
       "replace_current_music": true
     },
     "particle": {
       "options": {
         "type": "unseen_world:redness"
       },
-      "probability": 0.002
+      "probability": 0.001
     },
     "foliage_color": -8454144,
     "grass_color": -49345,

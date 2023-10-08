@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEnchantments;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEnchantments;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -35,14 +35,14 @@ public class ShiningBladeAbilityProcedure {
 	private static void execute(@Nullable Event event, LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		double Shining_Power = 0;
+		double Shining_Power;
 		if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()) > 0) {
 			Shining_Power = (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get());
-			if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()) == 1) {
+			if (Shining_Power == 1) {
 				if (world instanceof ServerLevel _level)
 					_level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, new Vec3(x, y, z), Vec2.ZERO, _level, 4, "", Component.literal(""), _level.getServer(), null).withSuppressedOutput(),
 							"/effect give @e[distance=..4 ,type=!minecraft:player] minecraft:glowing 5");
-			} else if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()) == 2) {
+			} else if (Shining_Power == 2) {
 				if (world instanceof ServerLevel _level)
 					_level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, new Vec3(x, y, z), Vec2.ZERO, _level, 4, "", Component.literal(""), _level.getServer(), null).withSuppressedOutput(),
 							"/effect give @e[distance=..6 ,type=!minecraft:player] minecraft:glowing 5");

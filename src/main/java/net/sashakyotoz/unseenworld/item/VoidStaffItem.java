@@ -62,12 +62,10 @@ public class VoidStaffItem extends Item {
 			double x = entity.getX();
 			double y = entity.getY();
 			double z = entity.getZ();
-			if (true) {
-				VoidStaffEntity entityarrow = VoidStaffEntity.shoot(world, entity, world.getRandom(), 1.5f, 4, 2);
-				itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
-				entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
-				VoidStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
-			}
+			VoidStaffEntity entityarrow = VoidStaffEntity.shoot(world, entity, world.getRandom(), 1.5f, 4, 2);
+			itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
+			entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+			VoidStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
 		}
 	}
 }

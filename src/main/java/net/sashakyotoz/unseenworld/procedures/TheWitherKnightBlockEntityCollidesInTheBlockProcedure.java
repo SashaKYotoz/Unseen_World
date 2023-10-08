@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 
 public class TheWitherKnightBlockEntityCollidesInTheBlockProcedure {

@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.block;
 
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.common.util.ForgeSoundType;
 
@@ -28,9 +29,9 @@ public class RedOozeBlock extends Block {
 
 	public RedOozeBlock() {
 		super(BlockBehaviour.Properties.of()
-				.sound(new ForgeSoundType(1.0f, 1.0f, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.rooted_dirt.break")), () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.rooted_dirt.step")),
-						() -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.soul_soil.place")), () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sand.hit")),
-						() -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.soul_sand.fall"))))
+				.sound(new ForgeSoundType(1.0f, 1.0f, () -> SoundEvents.ROOTED_DIRT_BREAK, () -> SoundEvents.ROOTED_DIRT_STEP,
+						() -> SoundEvents.SOUL_SOIL_PLACE, () -> SoundEvents.SAND_HIT,
+						() -> SoundEvents.SOUL_SAND_FALL))
 				.strength(4f, 10f));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}

@@ -61,7 +61,7 @@
         "type": "minecraft:uniform",
         "value": {
           "min_inclusive": 2,
-          "max_inclusive": 4
+          "max_inclusive": 3
         }
       },
       "branch_start_offset_from_top": {
@@ -78,13 +78,13 @@
     },
     "foliage_placer": {
       "type": "minecraft:cherry_foliage_placer",
-      "radius": 5,
+      "radius": 4,
       "offset": 0,
       "height": 5,
       "wide_bottom_layer_hole_chance": 0.25,
       "corner_hole_chance": 0.25,
-      "hanging_leaves_chance": 0.165,
-      "hanging_leaves_extension_chance": 0.35
+      "hanging_leaves_chance": 0.25,
+      "hanging_leaves_extension_chance": 0.5
     },
     "decorators": [
       {

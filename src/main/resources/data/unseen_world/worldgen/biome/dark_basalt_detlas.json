@@ -17,7 +17,7 @@
       "options": {
         "type": "unseen_world:bluevoidparticle"
       },
-      "probability": 0.002
+      "probability": 0.001
     },
     "foliage_color": -16777216,
     "grass_color": -16777216,

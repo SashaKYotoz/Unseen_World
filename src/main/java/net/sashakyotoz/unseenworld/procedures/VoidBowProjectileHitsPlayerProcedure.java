@@ -8,8 +8,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.core.particles.SimpleParticleType;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModParticleTypes;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
 
 public class VoidBowProjectileHitsPlayerProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {

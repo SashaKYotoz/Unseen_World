@@ -32,7 +32,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.BlockUtil;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 import java.util.function.Function;
 import java.util.Optional;

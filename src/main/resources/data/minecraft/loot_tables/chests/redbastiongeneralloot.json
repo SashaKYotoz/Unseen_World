@@ -3,18 +3,18 @@
   "pools": [
     {
       "rolls": {
-        "min": 0,
-        "max": 1
+        "min": 1,
+        "max": 2
       },
       "bonus_rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
+          "weight": 4,
           "name": "unseen_world:red_titanium_ingot",
-          "weight": 5,
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
                 "max": 2
@@ -24,11 +24,11 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
           "name": "unseen_world:void_upgrade_smithing_template",
-          "weight": 1,
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
                 "max": 1
@@ -47,10 +47,9 @@
         {
           "type": "minecraft:item",
           "name": "unseen_world:redness_hammer",
-          "weight": 5,
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
                 "max": 1
@@ -72,11 +71,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:netherite_ingot",
           "weight": 30,
+          "name": "minecraft:netherite_ingot",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
                 "max": 2
@@ -86,11 +85,11 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:diamond",
           "weight": 35,
+          "name": "minecraft:diamond",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
                 "max": 3

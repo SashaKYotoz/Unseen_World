@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.LevelAccessor;
@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.BlockPos;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Comparator;
@@ -46,34 +47,33 @@ public class FierySaberRightclickedProcedure {
 						if (entityiterator instanceof LivingEntity _entity)
 							_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
 								@Override
-								public Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
+								public Component getLocalizedDeathMessage(@NotNull LivingEntity _msgEntity) {
 									return Component.translatable("death.attack." + "Fiery Breath");
 								}
 							}, 4);
 						{
-							ItemStack _ist = itemstack;
-							if (_ist.hurt(1, RandomSource.create(), null)) {
-								_ist.shrink(1);
-								_ist.setDamageValue(0);
+							if (itemstack.hurt(1, RandomSource.create(), null)) {
+								itemstack.shrink(1);
+								itemstack.setDamageValue(0);
 							}
 						}
 					}
 				}
 			}
 			if (itemstack.getOrCreateTag().getDouble("CustomModelData") == 0 || itemstack.getOrCreateTag().getDouble("CustomModelData") == 3) {
-				world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.REDNESS.get()),
+				world.addParticle(UnseenWorldModParticleTypes.REDNESS.get(),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getX()),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getY()),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getZ()), 0,
 						0.25, 0);
 			} else if (itemstack.getOrCreateTag().getDouble("CustomModelData") == 1) {
-				world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get()),
+				world.addParticle(UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get(),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getX()),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getY()),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getZ()), 0,
 						0.25, 0);
 			} else if (itemstack.getOrCreateTag().getDouble("CustomModelData") == 2) {
-				world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.GREENISH_PARTICLE.get()),
+				world.addParticle(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getX()),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getY()),
 						(entity.level().clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getZ()), 0,

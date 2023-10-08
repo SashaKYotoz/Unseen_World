@@ -1,8 +1,8 @@
 package net.sashakyotoz.unseenworld.block.entity;
 
 import io.netty.buffer.Unpooled;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlockEntities;
-import net.sashakyotoz.unseenworld.world.inventory.GoldenChestGUIMenu;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlockEntities;
+import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
 public class GoldenchestBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
-	private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(30, ItemStack.EMPTY);
+	private NonNullList<ItemStack> stacks = NonNullList.withSize(30, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
 	public GoldenchestBlockEntity(BlockPos position, BlockState state) {
@@ -75,7 +75,7 @@ public class GoldenchestBlockEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("goldenchest");
+		return Component.literal("golden_chest");
 	}
 
 	@Override

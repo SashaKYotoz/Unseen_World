@@ -1,11 +1,11 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 import net.sashakyotoz.unseenworld.world.teleporter.TheDarknessPortalShape;
 import net.sashakyotoz.unseenworld.world.teleporter.TheDarknessTeleporter;
 
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -24,10 +24,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class TheDarknessPortalBlock extends NetherPortalBlock {
@@ -41,9 +41,7 @@ public class TheDarknessPortalBlock extends NetherPortalBlock {
 
 	public static void portalSpawn(Level world, BlockPos pos) {
 		Optional<TheDarknessPortalShape> optional = TheDarknessPortalShape.findEmptyPortalShape(world, pos, Direction.Axis.X);
-		if (optional.isPresent()) {
-			optional.get().createPortalBlocks();
-		}
+		optional.ifPresent(TheDarknessPortalShape::createPortalBlocks);
 	}
 
 	@Override
@@ -72,15 +70,15 @@ public class TheDarknessPortalBlock extends NetherPortalBlock {
 				pz = pos.getZ() + 0.5 + 0.25 * j;
 				vz = random.nextFloat() * 2 * j;
 			}
-			world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get()), px, py, pz, vx, vy, vz);
+			world.addParticle(UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get(), px, py, pz, vx, vy, vz);
 		}
 		if (random.nextInt(110) == 0)
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(("block.portal.ambient"))), SoundSource.BLOCKS, 0.5f, random.nextFloat() * 0.4f + 0.8f);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.5f, random.nextFloat() * 0.4f + 0.8f);
 	}
 
 	@Override
 	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-		if (entity.canChangeDimensions() && !entity.level().isClientSide() && true) {
+		if (entity.canChangeDimensions() && !entity.level().isClientSide()) {
 			if (entity.isOnPortalCooldown()) {
 				entity.setPortalCooldown();
 			} else if (entity.level().dimension() != ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness"))) {
@@ -94,6 +92,6 @@ public class TheDarknessPortalBlock extends NetherPortalBlock {
 	}
 
 	private void teleportToDimension(Entity entity, BlockPos pos, ResourceKey<Level> destinationType) {
-		entity.changeDimension(entity.getServer().getLevel(destinationType), new TheDarknessTeleporter(entity.getServer().getLevel(destinationType), pos));
+		entity.changeDimension(Objects.requireNonNull(entity.getServer().getLevel(destinationType)), new TheDarknessTeleporter(entity.getServer().getLevel(destinationType), pos));
 	}
 }

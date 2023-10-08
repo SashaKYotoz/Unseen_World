@@ -1,5 +1,7 @@
 package net.sashakyotoz.unseenworld.client.model;
 
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.util.Mth;
 import net.minecraft.resources.ResourceLocation;
@@ -15,13 +17,9 @@ import net.minecraft.client.model.EntityModel;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.LivingEntity;
 
-// Made with Blockbench 4.2.4
-// Exported for Minecraft version 1.17 - 1.18 with Mojang mappings
-// Paste this class into your mod and generate all required imports
 public class ModelThe_Wither_Knight_Armor<T extends Entity> extends EntityModel<T> {
-	// This layer location should be baked with EntityRendererProvider.Context in
-	// the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_the_wither_knight_armor"), "main");
 	public final ModelPart Head;
 	public final ModelPart Body;
@@ -85,13 +83,12 @@ public class ModelThe_Wither_Knight_Armor<T extends Entity> extends EntityModel<
 
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.RightArm.xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * limbSwingAmount;
-		this.LeftLeg.xRot = Mth.cos(limbSwing * 1.0F) * -1.0F * limbSwingAmount;
+		this.LeftLeg.xRot = Mth.cos(limbSwing) * -1.0F * limbSwingAmount;
 		this.Head.yRot = netHeadYaw / (180F / (float) Math.PI);
 		this.Head.xRot = headPitch / (180F / (float) Math.PI);
 		this.LeftArm.xRot = Mth.cos(limbSwing * 0.6662F) * limbSwingAmount;
-		this.RightLeg.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
-		this.LeftBoot.xRot = Mth.cos(limbSwing * 1.0F) * -1.0F * limbSwingAmount;
-		this.rods.yRot = ageInTicks / 20.f;
-		this.RightBoot.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
+		this.RightLeg.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
+		this.LeftBoot.xRot = Mth.cos(limbSwing) * -1.0F * limbSwingAmount;
+		this.RightBoot.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
 	}
 }

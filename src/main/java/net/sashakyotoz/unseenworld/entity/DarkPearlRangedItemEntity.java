@@ -1,8 +1,9 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
@@ -34,10 +35,6 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 
 	public DarkPearlRangedItemEntity(EntityType<? extends DarkPearlRangedItemEntity> type, Level world) {
 		super(type, world);
-	}
-
-	public DarkPearlRangedItemEntity(EntityType<? extends DarkPearlRangedItemEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
 	}
 
 	public DarkPearlRangedItemEntity(EntityType<? extends DarkPearlRangedItemEntity> type, LivingEntity entity, Level world) {
@@ -99,7 +96,7 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 		entityarrow.setBaseDamage(damage);
 		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
-		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ender_pearl.throw")), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
 	}
 
@@ -114,7 +111,7 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
-		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ender_pearl.throw")), SoundSource.PLAYERS, 1, 1f / (RandomSource.create().nextFloat() * 0.5f + 1));
+		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.PLAYERS, 1, 1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
 	}
 }

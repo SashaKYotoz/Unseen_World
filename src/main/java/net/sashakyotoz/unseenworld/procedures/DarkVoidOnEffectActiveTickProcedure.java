@@ -12,8 +12,9 @@ public class DarkVoidOnEffectActiveTickProcedure {
 		if (UnseenWorldModVariables.WorldVariables.get(world).timer < world.dayTime()) {
 			UnseenWorldModVariables.WorldVariables.get(world).timer = world.dayTime() + 30;
 			UnseenWorldModVariables.WorldVariables.get(world).syncData(world);
-			if (entity instanceof LivingEntity _entity)
-				_entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) - 1));
+			if (entity instanceof LivingEntity _entity) {
+				_entity.setHealth(_entity.getHealth() - 1);
+			}
 		}
 	}
 }

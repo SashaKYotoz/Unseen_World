@@ -5,6 +5,7 @@ import net.sashakyotoz.unseenworld.procedures.UnseeniumOnEffectActiveTickProcedu
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
+import org.jetbrains.annotations.NotNull;
 
 public class UnseeniumMobEffect extends MobEffect {
 	public UnseeniumMobEffect() {
@@ -17,7 +18,7 @@ public class UnseeniumMobEffect extends MobEffect {
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
+	public void applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
 		UnseeniumOnEffectActiveTickProcedure.execute(entity);
 	}
 

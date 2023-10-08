@@ -1,7 +1,8 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
@@ -61,9 +62,9 @@ public class DarkspiritwolfEntity extends Wolf {
 				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, DarkskeletonEntity.class, false, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, TealiveSkeletonEntity.class, false, true));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Player.class, true, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, DarkskeletonEntity.class, false, true));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TealiveSkeletonEntity.class, false, true));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.8));
 		this.targetSelector.addGoal(6, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(7, new LeapAtTargetGoal(this, (float) 0.5));
@@ -78,22 +79,22 @@ public class DarkspiritwolfEntity extends Wolf {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.ambient"));
+		return SoundEvents.VEX_AMBIENT;
 	}
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.soul_sand.step")), 0.15f, 1);
+		this.playSound(SoundEvents.SOUL_SAND_STEP, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.hurt"));
+		return SoundEvents.WOLF_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.death"));
+		return SoundEvents.WOLF_DEATH;
 	}
 
 	@Override

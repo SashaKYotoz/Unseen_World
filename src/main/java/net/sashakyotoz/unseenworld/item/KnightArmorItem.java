@@ -157,9 +157,8 @@ public abstract class KnightArmorItem extends ArmorItem {
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 			return "unseen_world:textures/entities/the_wither_knight_armor.png";
 		}
-
 		@Override
-		public void onArmorTick(ItemStack itemstack, Level world, Player entity) {
+		public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int slot, boolean p_41408_) {
 			KnightArmorBodyTickEventProcedure.execute(entity);
 		}
 	}

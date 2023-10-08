@@ -16,12 +16,7 @@ import net.minecraft.client.model.EntityModel;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-// Made with Blockbench 4.2.4
-// Exported for Minecraft version 1.17 - 1.18 with Mojang mappings
-// Paste this class into your mod and generate all required imports
 public class ModelChimeric_Redmarer<T extends Entity> extends EntityModel<T> {
-	// This layer location should be baked with EntityRendererProvider.Context in
-	// the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_chimeric_redmarer"), "main");
 	public final ModelPart head;
 	public final ModelPart body;
@@ -82,9 +77,9 @@ public class ModelChimeric_Redmarer<T extends Entity> extends EntityModel<T> {
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
 		this.head.xRot = headPitch / (180F / (float) Math.PI);
-		this.backleftLeg.xRot = Mth.cos(limbSwing * 1.0F) * -1.0F * limbSwingAmount;
+		this.backleftLeg.xRot = Mth.cos(limbSwing) * -1.0F * limbSwingAmount;
 		this.tail.zRot = netHeadYaw / (180F / (float) Math.PI);
-		this.backrightLeg.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
-		this.forwardlegs.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
+		this.backrightLeg.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
+		this.forwardlegs.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
 	}
 }

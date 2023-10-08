@@ -68,7 +68,6 @@ public class DarkCrimsonBloomingVineBlock extends Block {
 	@OnlyIn(Dist.CLIENT)
 	public void randomTick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		Player entity = Minecraft.getInstance().player;
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();

@@ -1,8 +1,6 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.LuminousamethystvineBlockDestroyedByPlayerProcedure;
-import net.sashakyotoz.unseenworld.procedures.LuminousamethystvineUpdateTickProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +24,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sashakyotoz.unseenworld.procedures.LuminousamethystvineBlockDestroyedByPlayerProcedure;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 public class LuminousamethystvineBlock extends Block implements SimpleWaterloggedBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -95,10 +95,15 @@ public class LuminousamethystvineBlock extends Block implements SimpleWaterlogge
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		LuminousamethystvineUpdateTickProcedure.execute(world, x, y, z);
+		if ((world.getBlockState(new BlockPos(x, y + 1, z))).getBlock() == Blocks.AIR) {
+			BlockPos _pos = new BlockPos(x, y, z);
+			Block.dropResources(world.getBlockState(_pos), world, new BlockPos(x, y, z), null);
+			world.destroyBlock(_pos, false);
+		}
+		else if(world.getBlockState(BlockPos.containing(x, y - 1, z)).getBlock() == Blocks.AIR && Math.random() > 0.25) {
+			world.setBlock(new BlockPos(x,y-1,z), UnseenWorldModBlocks.LUMINOUSAMETHYSTVINE.get().defaultBlockState(),3);
+		}
 	}
-
-	@Override
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
 		boolean retval = super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
 		LuminousamethystvineBlockDestroyedByPlayerProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), entity);

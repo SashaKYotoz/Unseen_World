@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.sashakyotoz.unseenworld.init.*;
+import net.sashakyotoz.unseenworld.util.*;
 
 public abstract class LiquidOfChimeryFluid extends ForgeFlowingFluid {
     public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldModFluidTypes.LIQUID_OF_CHIMERY_TYPE::get, () -> UnseenWorldModFluids.LIQUID_OF_CHIMERY.get(),

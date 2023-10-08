@@ -10,16 +10,16 @@
       "block_search_extent": 2
     },
     "music": {
-      "sound": "unseen_world:amethyst_ambient",
-      "min_delay": 12000,
-      "max_delay": 24000,
+      "sound": "unseen_world:biome.amethyst_forest",
+      "min_delay": 6000,
+      "max_delay": 12000,
       "replace_current_music": true
     },
     "particle": {
       "options": {
         "type": "unseen_world:bluevoidparticle"
       },
-      "probability": 0.002
+      "probability": 0.001
     },
     "foliage_color": -6750107,
     "grass_color": -6750107,

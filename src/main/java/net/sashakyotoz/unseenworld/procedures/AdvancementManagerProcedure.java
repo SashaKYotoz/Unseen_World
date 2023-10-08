@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event;

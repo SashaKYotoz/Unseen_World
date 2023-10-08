@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEnchantments;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEnchantments;
 import net.minecraftforge.common.TierSortingRegistry;
 
 import net.minecraft.world.level.block.state.BlockState;

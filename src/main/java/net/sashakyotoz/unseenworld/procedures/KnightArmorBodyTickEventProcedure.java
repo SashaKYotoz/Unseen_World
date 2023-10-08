@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,13 +18,9 @@ public class KnightArmorBodyTickEventProcedure {
 				&& (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).getItem() == UnseenWorldModItems.KNIGHT_ARMOR_BOOTS.get()) {
 			if (!(entity instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(MobEffects.FIRE_RESISTANCE))) {
 				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 1));
+					_entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 120, 1));
 			}
-			if (entity.isShiftKeyDown()) {
-				entity.setNoGravity(true);
-			} else {
-				entity.setNoGravity(false);
-			}
+			entity.setNoGravity(entity.isShiftKeyDown());
 		}
 	}
 }

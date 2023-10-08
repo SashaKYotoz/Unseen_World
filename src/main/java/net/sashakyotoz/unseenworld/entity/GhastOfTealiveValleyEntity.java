@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.minecraftforge.network.PlayMessages;
 
 import net.minecraft.world.phys.Vec3;
@@ -91,7 +91,7 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 			super.hurt(p_32730_, 1000.0F);
 			return true;
 		} else {
-			return this.isInvulnerableTo(p_32730_) ? false : super.hurt(p_32730_, p_32731_);
+			return !this.isInvulnerableTo(p_32730_) && super.hurt(p_32730_, p_32731_);
 		}
 	}
 
@@ -163,7 +163,6 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 				this.ghast.yBodyRot = this.ghast.getYRot();
 			} else {
 				LivingEntity livingentity = this.ghast.getTarget();
-				double d0 = 64.0D;
 				if (livingentity.distanceToSqr(this.ghast) < 4096.0D) {
 					double d1 = livingentity.getX() - this.ghast.getX();
 					double d2 = livingentity.getZ() - this.ghast.getZ();
@@ -238,21 +237,19 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		public void tick() {
 			LivingEntity livingentity = this.ghast.getTarget();
 			if (livingentity != null) {
-				double d0 = 64.0D;
 				if (livingentity.distanceToSqr(this.ghast) < 4096.0D && this.ghast.hasLineOfSight(livingentity)) {
 					Level level = this.ghast.level();
 					++this.chargeTime;
 					if (this.chargeTime == 10 && !this.ghast.isSilent()) {
-						level.levelEvent((Player) null, 1015, this.ghast.blockPosition(), 0);
+						level.levelEvent(null, 1015, this.ghast.blockPosition(), 0);
 					}
 					if (this.chargeTime == 20) {
-						double d1 = 4.0D;
 						Vec3 vec3 = this.ghast.getViewVector(1.0F);
 						double d2 = livingentity.getX() - (this.ghast.getX() + vec3.x * 4.0D);
 						double d3 = livingentity.getY(0.5D) - (0.5D + this.ghast.getY(0.5D));
 						double d4 = livingentity.getZ() - (this.ghast.getZ() + vec3.z * 4.0D);
 						if (!this.ghast.isSilent()) {
-							level.levelEvent((Player) null, 1016, this.ghast.blockPosition(), 0);
+							level.levelEvent(null, 1016, this.ghast.blockPosition(), 0);
 						}
 						LargeFireball largefireball = new LargeFireball(level, this.ghast, d2, d3, d4, this.ghast.getExplosionPower());
 						largefireball.setPos(this.ghast.getX() + vec3.x * 4.0D, this.ghast.getY(0.5D) + 0.5D, largefireball.getZ() + vec3.z * 4.0D);

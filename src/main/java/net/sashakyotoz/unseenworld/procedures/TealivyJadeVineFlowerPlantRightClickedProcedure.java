@@ -14,7 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 public class TealivyJadeVineFlowerPlantRightClickedProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
@@ -25,12 +25,10 @@ public class TealivyJadeVineFlowerPlantRightClickedProcedure {
 				ItemStack _stktoremove = new ItemStack(Items.GLASS_BOTTLE);
 				_player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
 			}
-			if (entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(Blocks.AIR)) : false) {
-				if (entity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(UnseenWorldModItems.NIGHTDEW_NECTAR_BOTTLE.get());
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
+			if (entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(Blocks.AIR))) {
+				ItemStack _setstack = new ItemStack(UnseenWorldModItems.NIGHTDEW_NECTAR_BOTTLE.get());
+				_setstack.setCount(1);
+				ItemHandlerHelper.giveItemToPlayer(_playerHasItem, _setstack);
 			} else {
 				if (world instanceof ServerLevel _level) {
 					ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(UnseenWorldModItems.NIGHTDEW_NECTAR_BOTTLE.get()));

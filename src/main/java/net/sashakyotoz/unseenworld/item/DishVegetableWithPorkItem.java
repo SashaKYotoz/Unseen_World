@@ -30,17 +30,9 @@ public class DishVegetableWithPorkItem extends Item {
 	}
 
 	@Override
-	public float getDestroySpeed(ItemStack par1ItemStack, BlockState par2Block) {
-		return 0F;
-	}
-
-	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
 		DishwithBerriesFoodEatenProcedure.execute(entity);
 		if (itemstack.isEmpty()) {
 			return retval;

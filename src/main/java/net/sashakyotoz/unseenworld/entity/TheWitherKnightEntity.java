@@ -1,8 +1,9 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.UnseenWorldModCommonConfigs;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.procedures.TheWitherKnightEntityDiesProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -11,7 +12,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -34,9 +34,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class TheWitherKnightEntity extends Monster {
     private static final EntityDataAccessor<Boolean> DATA_IS_ADVANCED = SynchedEntityData.defineId(TheWitherKnightEntity.class, EntityDataSerializers.BOOLEAN);
@@ -51,6 +51,15 @@ public class TheWitherKnightEntity extends Monster {
 
     public TheWitherKnightEntity(PlayMessages.SpawnEntity packet, Level world) {
         this(UnseenWorldModEntities.THE_WITHER_KNIGHT.get(), world);
+    }
+    public TheWitherKnightEntity(EntityType<TheWitherKnightEntity> type, Level world) {
+        super(type, world);
+        xpReward = 20;
+        setNoAi(false);
+        setCustomName(Component.literal("§6The Wither Knight"));
+        setCustomNameVisible(true);
+        setPersistenceRequired();
+        this.moveControl = new FlyingMoveControl(this, 16, true);
     }
 
     public boolean isAdvanced() {
@@ -142,15 +151,6 @@ public class TheWitherKnightEntity extends Monster {
         this.setAdvanced(this.getHealth() < (this.getMaxHealth() / 2));
         super.tick();
     }
-    public TheWitherKnightEntity(EntityType<TheWitherKnightEntity> type, Level world) {
-        super(type, world);
-        xpReward = 20;
-        setNoAi(false);
-        setCustomName(Component.literal("§6The Wither Knight"));
-        setCustomNameVisible(true);
-        setPersistenceRequired();
-        this.moveControl = new FlyingMoveControl(this, 16, true);
-    }
 
     @Override
     protected PathNavigation createNavigation(Level world) {
@@ -172,11 +172,7 @@ public class TheWitherKnightEntity extends Monster {
                 }
 
                 public boolean canUse() {
-                    if (TheWitherKnightEntity.this.getTarget() != null && !TheWitherKnightEntity.this.getMoveControl().hasWanted()) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return TheWitherKnightEntity.this.getTarget() != null && !TheWitherKnightEntity.this.getMoveControl().hasWanted();
                 }
 
                 @Override
@@ -252,22 +248,22 @@ public class TheWitherKnightEntity extends Monster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.ambient"));
+        return SoundEvents.WITHER_AMBIENT;
     }
 
     @Override
     public void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither_skeleton.step")), 0.15f, 1);
+        this.playSound(SoundEvents.NETHER_GOLD_ORE_STEP, 0.15f, 1);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither_skeleton.hurt"));
+        return SoundEvents.WITHER_SKELETON_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.death"));
+        return SoundEvents.WITHER_DEATH;
     }
 
     @Override
@@ -327,11 +323,11 @@ public class TheWitherKnightEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, UnseenWorldModCommonConfigs.WITHER_KNIGHT_SPEED.getDefault());
-        builder = builder.add(Attributes.MAX_HEALTH, UnseenWorldModCommonConfigs.WITHER_KNIGHT_HEALTH_POINTS.getDefault());
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(Attributes.MAX_HEALTH, 350);
         builder = builder.add(Attributes.ARMOR, 15);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, UnseenWorldModCommonConfigs.WITHER_KNIGHT_DAMAGE.getDefault());
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 12);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 5);
         builder = builder.add(Attributes.FLYING_SPEED, 1.2);
         return builder;

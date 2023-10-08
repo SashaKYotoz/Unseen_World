@@ -1,8 +1,9 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 
@@ -63,7 +64,7 @@ public class CavernScarecrowEntity extends TamableAnimal {
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
 			@Override
 			protected double getAttackReachSqr(LivingEntity entity) {
-				return (double) (4.0 + entity.getBbWidth() * entity.getBbWidth());
+				return 4.0 + entity.getBbWidth() * entity.getBbWidth();
 			}
 		});
 		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1.2));
@@ -87,17 +88,17 @@ public class CavernScarecrowEntity extends TamableAnimal {
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.deepslate.hit")), 0.15f, 1);
+		this.playSound(SoundEvents.DEEPSLATE_STEP, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.nether_bricks.hit"));
+		return SoundEvents.NETHERITE_BLOCK_HIT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+		return SoundEvents.GENERIC_DEATH;
 	}
 
 	@Override
@@ -166,7 +167,7 @@ public class CavernScarecrowEntity extends TamableAnimal {
 
 	public static void init() {
 		SpawnPlacements.register(UnseenWorldModEntities.CAVERN_SCARECROW.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> Mob.checkMobSpawnRules(entityType, world, reason, pos, random));
+				Mob::checkMobSpawnRules);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

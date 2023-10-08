@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEnchantments;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEnchantments;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -30,7 +30,7 @@ public class GravitythorsprocudeProcedure {
 	private static void execute(@Nullable Event event, double x, double z, Entity entity, Entity sourceentity) {
 		if (entity == null || sourceentity == null)
 			return;
-		double enchantLevel = 0;
+		double enchantLevel;
 		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.GRAVITY_SPIKE.get()) > 0) {
 			enchantLevel = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.GRAVITY_SPIKE.get());
 			sourceentity.setDeltaMovement(new Vec3(x, (enchantLevel / 2), z));

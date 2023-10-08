@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.sashakyotoz.unseenworld.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "humbledless-world.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "BlockEntityWithoutLevelRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

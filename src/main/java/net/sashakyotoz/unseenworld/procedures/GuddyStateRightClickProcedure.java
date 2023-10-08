@@ -1,8 +1,8 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -34,7 +34,7 @@ public class GuddyStateRightClickProcedure {
 	private static void execute(@Nullable Event event, LevelAccessor world, double x, double y, double z) {
 		if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == UnseenWorldModBlocks.TOTEMOF_GUDDY_BLAZE.get()) {
 			world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
-			world.addParticle((SimpleParticleType) (UnseenWorldModParticleTypes.REDNESS.get()), x, y, z, 0, 1, 0);
+			world.addParticle(UnseenWorldModParticleTypes.REDNESS.get(), x, y, z, 0, 1, 0);
 			if (world instanceof ServerLevel _level) {
 				Entity entityToSpawn = UnseenWorldModEntities.SAVAGE_SMALL_BLAZE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {

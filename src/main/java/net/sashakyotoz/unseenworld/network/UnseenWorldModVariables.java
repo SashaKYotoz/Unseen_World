@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.nbt.CompoundTag;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -83,7 +84,7 @@ public class UnseenWorldModVariables {
 
 		public static WorldVariables get(LevelAccessor world) {
 			if (world instanceof ServerLevel level) {
-				return level.getDataStorage().computeIfAbsent(e -> WorldVariables.load(e), WorldVariables::new, DATA_NAME);
+				return level.getDataStorage().computeIfAbsent(WorldVariables::load, WorldVariables::new, DATA_NAME);
 			} else {
 				return clientSide;
 			}
@@ -133,8 +134,10 @@ public class UnseenWorldModVariables {
 			this.data = this.type == 0 ? new MapVariables() : new WorldVariables();
 			if (this.data instanceof MapVariables _mapvars)
 				_mapvars.read(buffer.readNbt());
-			else if (this.data instanceof WorldVariables _worldvars)
-				_worldvars.read(buffer.readNbt());
+			else {
+				WorldVariables _worldvars = (WorldVariables) this.data;
+				_worldvars.read(Objects.requireNonNull(buffer.readNbt()));
+			}
 		}
 
 		public SavedDataSyncMessage(int type, SavedData data) {

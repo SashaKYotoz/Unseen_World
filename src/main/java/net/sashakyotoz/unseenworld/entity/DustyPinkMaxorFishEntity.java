@@ -39,8 +39,9 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.sashakyotoz.unseenworld.init.*;
+import net.sashakyotoz.unseenworld.util.*;
 import net.sashakyotoz.unseenworld.procedures.DustyPinkMaxorFishRightClickedOnEntityProcedure;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -49,7 +50,7 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 		this(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), world);
 	}
 
-	public void travel(Vec3 p_27490_) {
+	public void travel(@NotNull Vec3 p_27490_) {
 		if (this.isEffectiveAi() && this.isInWater()) {
 			this.moveRelative(0.015F, p_27490_);
 			this.move(MoverType.SELF, this.getDeltaMovement());
@@ -175,14 +176,9 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
 		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
 		DustyPinkMaxorFishRightClickedOnEntityProcedure.execute(entity, sourceentity);
 		return retval;
 	}

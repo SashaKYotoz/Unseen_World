@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.procedures;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.LevelAccessor;
@@ -32,15 +32,6 @@ public class AncientTransientBlockCloseOnBlockRightClickedProcedure {
 							{
 								BlockPos _bp = BlockPos.containing(x + sx, y + sy, z + sz);
 								BlockState _bs = UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_OPEN.get().defaultBlockState();
-								BlockState _bso = world.getBlockState(_bp);
-								for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-									Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-									if (_property != null && _bs.getValue(_property) != null)
-										try {
-											_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-										} catch (Exception e) {
-										}
-								}
 								world.setBlock(_bp, _bs, 3);
 							}
 						}

@@ -62,12 +62,10 @@ public class NetheriumStaffItem extends Item {
 			double x = entity.getX();
 			double y = entity.getY();
 			double z = entity.getZ();
-			if (true) {
-				NetheriumStaffEntity entityarrow = NetheriumStaffEntity.shoot(world, entity, world.getRandom(), 3f, 2, 2);
-				itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
-				entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
-				NetheriumStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
-			}
+			NetheriumStaffEntity entityarrow = NetheriumStaffEntity.shoot(world, entity, world.getRandom(), 3f, 2, 2);
+			itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
+			entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+			NetheriumStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
 		}
 	}
 }

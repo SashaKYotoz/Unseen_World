@@ -10,9 +10,9 @@
       "block_search_extent": 2
     },
     "music": {
-      "sound": "unseen_world:dark_chimeric_sound",
-      "min_delay": 12000,
-      "max_delay": 24000,
+      "sound": "biome.dark_chimeric",
+      "min_delay": 4000,
+      "max_delay": 8000,
       "replace_current_music": true
     },
     "particle": {

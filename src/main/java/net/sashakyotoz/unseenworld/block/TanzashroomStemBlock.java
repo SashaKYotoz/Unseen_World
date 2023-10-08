@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.sashakyotoz.unseenworld.procedures.TanzashroomStemNeighbourBlockChangesProcedure;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;

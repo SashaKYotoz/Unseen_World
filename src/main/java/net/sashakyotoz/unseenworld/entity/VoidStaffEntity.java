@@ -1,28 +1,32 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.procedures.VoidStaffProjectileHitsBlockProcedure;
-import net.sashakyotoz.unseenworld.procedures.VoidStaffWhileProjectileFlyingTickProcedure;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.util.RandomSource;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.procedures.VoidStaffProjectileHitsBlockProcedure;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModSounds;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
@@ -32,10 +36,6 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
 
 	public VoidStaffEntity(EntityType<? extends VoidStaffEntity> type, Level world) {
 		super(type, world);
-	}
-
-	public VoidStaffEntity(EntityType<? extends VoidStaffEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
 	}
 
 	public VoidStaffEntity(EntityType<? extends VoidStaffEntity> type, LivingEntity entity, Level world) {
@@ -65,7 +65,7 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	@Override
-	public void onHitBlock(BlockHitResult blockHitResult) {
+	public void onHitBlock(@NotNull BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
 		VoidStaffProjectileHitsBlockProcedure.execute(this.level(), blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ());
 	}
@@ -73,9 +73,20 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
 	@Override
 	public void tick() {
 		super.tick();
-		VoidStaffWhileProjectileFlyingTickProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this.getOwner());
+		execute(this.getX(), this.getY(), this.getZ(), this.getOwner());
 		if (this.inGround)
 			this.discard();
+	}
+	public static void execute(double x, double y, double z, Entity entity) {
+		if (entity == null)
+			return;
+		UnseenWorldMod.queueServerWork(20, () -> {
+			{
+				entity.teleportTo(x, y, z);
+				if (entity instanceof ServerPlayer _serverPlayer)
+					_serverPlayer.connection.teleport(x, y, z, entity.getYRot(), entity.getXRot());
+			}
+		});
 	}
 
 	public static VoidStaffEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
@@ -86,7 +97,7 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setBaseDamage(damage);
 		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
-		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("unseen_world:fire_staff_shot")), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldModSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
 	}
 
@@ -101,7 +112,7 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setKnockback(2);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
-		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("unseen_world:fire_staff_shot")), SoundSource.PLAYERS, 1,
+		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldModSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
 	}

@@ -1,8 +1,4 @@
 {
   "type": "unseen_world:tanzanite_deltas",
-  "config": {
-    "state": {
-      "Name": "unseen_world:tanzashroom_light"
-    }
-  }
+  "config": {}
 }

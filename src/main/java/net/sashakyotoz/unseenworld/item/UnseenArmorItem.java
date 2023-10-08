@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.procedures.UnseenArmorBodyTickEventProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
@@ -110,7 +110,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 		}
 
 		@Override
-		public void onArmorTick(ItemStack itemstack, Level world, Player entity) {
+		public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int slot, boolean p_41408_) {
 			UnseenArmorBodyTickEventProcedure.execute(entity);
 		}
 	}

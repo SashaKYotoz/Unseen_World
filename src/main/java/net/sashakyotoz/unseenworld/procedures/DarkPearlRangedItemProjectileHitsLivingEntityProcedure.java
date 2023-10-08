@@ -11,10 +11,9 @@ public class DarkPearlRangedItemProjectileHitsLivingEntityProcedure {
 		if (entity == null)
 			return;
 		{
-			Entity _ent = entity;
-			_ent.teleportTo(x, (y + 0.5), z);
-			if (_ent instanceof ServerPlayer _serverPlayer)
-				_serverPlayer.connection.teleport(x, (y + 0.5), z, _ent.getYRot(), _ent.getXRot());
+			entity.teleportTo(x, (y + 0.5), z);
+			if (entity instanceof ServerPlayer _serverPlayer)
+				_serverPlayer.connection.teleport(x, (y + 0.5), z, entity.getYRot(), entity.getXRot());
 		}
 		if (world instanceof ServerLevel _level)
 			_level.sendParticles(ParticleTypes.CRIT, x, y, z, 15, 3, 3, 3, 1);

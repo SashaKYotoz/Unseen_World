@@ -21,7 +21,7 @@ import java.util.Collections;
 
 public class ChloriteSlateStoneBricksSlabBlock extends StairBlock {
 	public ChloriteSlateStoneBricksSlabBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(25f, 15f).lightLevel(s -> 4).requiresCorrectToolForDrops().dynamicShape());
+		super(Blocks.AIR::defaultBlockState, BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(25f, 15f).lightLevel(s -> 4).requiresCorrectToolForDrops().dynamicShape());
 	}
 
 	@Override

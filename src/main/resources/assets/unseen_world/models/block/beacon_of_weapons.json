@@ -1,12 +1,6 @@
 {
-  "parent": "unseen_world:custom/beacon_of_weapons",
   "textures": {
-    "all": "unseen_world:block/beacon_of_weapons_side",
-    "particle": "unseen_world:block/beacon_of_weapons_side",
-    "inner_top": "unseen_world:block/beacon_of_weapons_top",
-    "side": "unseen_world:block/beacon_of_weapons_side",
-    "top": "unseen_world:block/beacon_of_weapons",
-    "bottom": "unseen_world:block/beacon_of_weapons_bottom"
+    "particle": "unseen_world:block/beacon_of_weapons_side"
   },
-  "render_type": "translucent"
+  "shades": false
 }

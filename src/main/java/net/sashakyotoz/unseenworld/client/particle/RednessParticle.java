@@ -61,7 +61,7 @@ public class RednessParticle extends TextureSheetParticle {
 		this.roll += this.angularVelocity;
 		this.angularVelocity += this.angularAcceleration;
 		if (!this.removed) {
-			this.setSprite(this.spriteSet.get((this.age / 1) % 1 + 1, 1));
+			this.setSprite(this.spriteSet.get(1, 1));
 		}
 	}
 }

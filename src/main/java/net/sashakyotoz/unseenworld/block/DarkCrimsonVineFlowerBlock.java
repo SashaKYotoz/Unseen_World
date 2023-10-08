@@ -26,11 +26,12 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DarkCrimsonVineFlowerBlock extends Block {
+
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public DarkCrimsonVineFlowerBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.CAVE_VINES).mapColor(DyeColor.CYAN).sound(SoundType.SWEET_BERRY_BUSH).randomTicks().strength(0f, 10f).lightLevel(s -> 3).requiresCorrectToolForDrops().noCollission().noOcclusion().randomTicks()
-				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.copy(Blocks.CAVE_VINES).mapColor(DyeColor.CYAN).sound(SoundType.SWEET_BERRY_BUSH).randomTicks().strength(0f, 5f).lightLevel(s -> 3).requiresCorrectToolForDrops().noCollission().noOcclusion().randomTicks()
+				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 
@@ -98,10 +99,6 @@ public class DarkCrimsonVineFlowerBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
 		DarkCrimsonVineFlowerOnBlockRightClickedProcedure.execute(world, x, y, z, entity);
 		return InteractionResult.SUCCESS;
 	}

@@ -1,8 +1,9 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.UnseenWorldModCommonConfigs;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.procedures.TheBlazerEntityDiesProcedure;
 import net.sashakyotoz.unseenworld.procedures.TheBlazerOnEntityTickUpdateProcedure;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -114,7 +115,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
 					Level level = this.ghast.level();
 					++this.chargeTime;
 					if (this.chargeTime == 80 && !this.ghast.isSilent()) {
-						level.levelEvent((Player) null, 1015, this.ghast.blockPosition(), 0);
+						level.levelEvent(null, 1015, this.ghast.blockPosition(), 0);
 						blocked = true;
 					}
 					if (this.chargeTime == 160) {
@@ -140,11 +141,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
 			}
 
 			public boolean canUse() {
-				if (TheBlazerEntity.this.getTarget() != null && !TheBlazerEntity.this.getMoveControl().hasWanted()) {
-					return true;
-				} else {
-					return false;
-				}
+				return TheBlazerEntity.this.getTarget() != null && !TheBlazerEntity.this.getMoveControl().hasWanted();
 			}
 
 			@Override
@@ -205,22 +202,22 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.blaze.ambient"));
+		return SoundEvents.BLAZE_AMBIENT;
 	}
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.nether_bricks.hit")), 0.15f, 1);
+		this.playSound(SoundEvents.NETHERITE_BLOCK_STEP, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.blaze.hurt"));
+		return SoundEvents.BLAZE_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.blaze.death"));
+		return SoundEvents.BLAZE_DEATH;
 	}
 
 	@Override
@@ -230,7 +227,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (blocked == true) {
+		if (blocked) {
 			if (source.getDirectEntity() instanceof Player)
 				return false;
 		}
@@ -255,7 +252,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
 	public void baseTick() {
 		super.baseTick();
 		if(!(blazer.getTarget() == null))
-		TheBlazerOnEntityTickUpdateProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+			TheBlazerOnEntityTickUpdateProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
 	}
 
 	@Override
@@ -306,7 +303,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-		builder = builder.add(Attributes.MAX_HEALTH, UnseenWorldModCommonConfigs.BLAZER_HEALTH_POINTS.getDefault());
+		builder = builder.add(Attributes.MAX_HEALTH, 450);
 		builder = builder.add(Attributes.ARMOR, 6);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 12);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);

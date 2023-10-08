@@ -6,14 +6,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 
 public class UnseeniumOnEffectActiveTickProcedure {
-	public static void execute(Entity entity) {
+	public static void execute(LivingEntity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-			_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, true, false));
-		if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-			_entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, true, false));
-		if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-			_entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 1, true, false));
+		if (!entity.level().isClientSide()){
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, true, false));
+			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, true, false));
+			entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 1, true, false));
+		}
 	}
 }

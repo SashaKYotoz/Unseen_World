@@ -16,12 +16,7 @@ import net.minecraft.client.model.EntityModel;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-// Made with Blockbench 4.2.4
-// Exported for Minecraft version 1.17 - 1.18 with Mojang mappings
-// Paste this class into your mod and generate all required imports
 public class ModelStreder_with_Saddle<T extends Entity> extends EntityModel<T> {
-	// This layer location should be baked with EntityRendererProvider.Context in
-	// the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_streder_with_saddle"), "main");
 	public final ModelPart body;
 	public final ModelPart upperSpikes;
@@ -83,8 +78,8 @@ public class ModelStreder_with_Saddle<T extends Entity> extends EntityModel<T> {
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.leftSpikes.yRot = Mth.cos(limbSwing * 0.75F) * limbSwingAmount;
 		this.rightSpikes.yRot = Mth.cos(limbSwing * 0.75F + (float) Math.PI) * limbSwingAmount;
-		this.rightLeg.xRot = Mth.cos(limbSwing * 1.0F) * 1.2F * limbSwingAmount;
-		this.leftLeg.xRot = Mth.cos(limbSwing * 1.0F) * -1.2F * limbSwingAmount;
+		this.rightLeg.xRot = Mth.cos(limbSwing) * 1.2F * limbSwingAmount;
+		this.leftLeg.xRot = Mth.cos(limbSwing) * -1.2F * limbSwingAmount;
 		this.upperSpikes.zRot = headPitch / (180F / (float) Math.PI);
 	}
 }

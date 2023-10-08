@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.sashakyotoz.unseenworld.procedures.MisteryflowerBerriesPlantRightClickedProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

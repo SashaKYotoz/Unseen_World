@@ -13,7 +13,7 @@ import net.sashakyotoz.unseenworld.entity.CavernScarecrowEntity;
 public class CavernScarecrowRenderer extends MobRenderer<CavernScarecrowEntity, ModelCavern_Scarecrow<CavernScarecrowEntity>> {
 	public CavernScarecrowRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelCavern_Scarecrow(context.bakeLayer(ModelCavern_Scarecrow.LAYER_LOCATION)), 0.5f);
-		this.addLayer(new EyesLayer<CavernScarecrowEntity, ModelCavern_Scarecrow<CavernScarecrowEntity>>(this) {
+		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
 				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/cavern_scarecrow.png"));

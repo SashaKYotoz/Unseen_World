@@ -8,25 +8,20 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import net.sashakyotoz.unseenworld.world.inventory.GoldenChestGUIMenu;
-
 import java.util.HashMap;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
 public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUIMenu> {
 	private final static HashMap<String, Object> guistate = GoldenChestGUIMenu.guistate;
-	private final Level world;
-	private final int x, y, z;
-	private final Player entity;
 
 	public GoldenChestGUIScreen(GoldenChestGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
-		this.world = container.world;
-		this.x = container.x;
-		this.y = container.y;
-		this.z = container.z;
-		this.entity = container.entity;
+		Level world = container.world;
+		int x = container.x;
+		int y = container.y;
+		int z = container.z;
+		Player entity = container.entity;
 		this.imageWidth = 197;
 		this.imageHeight = 170;
 	}
@@ -46,8 +41,7 @@ public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUI
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		guiGraphics.blit(texture, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
-
-		guiGraphics.blit(new ResourceLocation("unseen_world:textures/screens/golden_chest_decor.png"), this.leftPos + 53, this.topPos + 36, 0, 0, 96, 32, 96, 32);
+		guiGraphics.blit(new ResourceLocation("unseen_world:textures/screens/golden_chest_decor.png"), this.leftPos + 50, this.topPos + 36, 0, 0, 96, 32, 96, 32);
 
 		RenderSystem.disableBlend();
 	}
@@ -55,6 +49,7 @@ public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUI
 	@Override
 	public boolean keyPressed(int key, int b, int c) {
 		if (key == 256) {
+			assert this.minecraft != null;
 			this.minecraft.player.closeContainer();
 			return true;
 		}

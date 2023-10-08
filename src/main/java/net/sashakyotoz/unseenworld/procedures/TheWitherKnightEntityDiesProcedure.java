@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.Advancement;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 public class TheWitherKnightEntityDiesProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity sourceentity) {

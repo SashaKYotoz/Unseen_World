@@ -1,8 +1,9 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.minecraft.sounds.SoundEvents;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.procedures.AmethystGolemEntityDiesProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -75,17 +76,17 @@ public class AmethystGolemEntity extends TamableAnimal {
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step")), 0.15f, 1);
+		this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.calcite.break"));
+		return SoundEvents.CALCITE_BREAK;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_cluster.break"));
+		return SoundEvents.AMETHYST_BLOCK_BREAK;
 	}
 
 	@Override
@@ -165,7 +166,6 @@ public class AmethystGolemEntity extends TamableAnimal {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
 		Level world = this.level();
 		for (int l = 0; l < 1; ++l) {
 			double x0 = x + random.nextFloat();

@@ -18,7 +18,7 @@ import java.util.Collections;
 
 public class AmethystStairsBlock extends StairBlock {
 	public AmethystStairsBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(4.8f, 3.2f).dynamicShape());
+		super(Blocks.AIR::defaultBlockState, BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(4.8f, 3.2f).dynamicShape());
 	}
 
 	@Override

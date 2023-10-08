@@ -10,8 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.effect.MobEffectInstance;
 
-import net.sashakyotoz.unseenworld.init.UnseenWorldModMobEffects;
-import net.sashakyotoz.unseenworld.init.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 import javax.annotation.Nullable;
 

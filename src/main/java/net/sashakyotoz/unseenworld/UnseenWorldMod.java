@@ -13,18 +13,33 @@
  */
 package net.sashakyotoz.unseenworld;
 
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.sashakyotoz.unseenworld.init.*;
+import net.sashakyotoz.unseenworld.client.renderer.BeaconOfWeaponsRenderer;
+import net.sashakyotoz.unseenworld.client.renderer.layers.KnightArmorRodsLayer;
+import net.sashakyotoz.unseenworld.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +76,22 @@ public class UnseenWorldMod {
 		UnseenWorldModMenus.REGISTRY.register(bus);
 		UnseenWorldModFluids.REGISTRY.register(bus);
 		UnseenWorldModFluidTypes.REGISTRY.register(bus);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, UnseenWorldModConfigs.SPEC);
+		if (FMLEnvironment.dist.isClient()) {
+			bus.addListener(this::registerLayer);
+		}
+	}
+	@OnlyIn(Dist.CLIENT)
+	private void registerLayer(EntityRenderersEvent event) {
+		if (event instanceof EntityRenderersEvent.AddLayers addLayersEvent) {
+			EntityModelSet entityModels = addLayersEvent.getEntityModels();
+			addLayersEvent.getSkins().forEach((s) -> {
+				LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>> livingEntityRenderer = addLayersEvent.getSkin(s);
+				if (livingEntityRenderer instanceof PlayerRenderer playerRenderer) {
+					playerRenderer.addLayer(new KnightArmorRodsLayer<>(playerRenderer, entityModels));
+				}
+			});
+		}
 	}
 
 	private static final String PROTOCOL_VERSION = "1";
@@ -89,6 +120,14 @@ public class UnseenWorldMod {
 			});
 			actions.forEach(e -> e.getKey().run());
 			workQueue.removeAll(actions);
+		}
+	}
+	@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	public static class ClientModEvents {
+		@SubscribeEvent
+		public static void onClientSetup(FMLClientSetupEvent event) {
+			UnseenWorldModItemProperties.addCustomItemProperties();
+			BlockEntityRenderers.register(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(), BeaconOfWeaponsRenderer::new);
 		}
 	}
 }

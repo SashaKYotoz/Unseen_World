@@ -39,7 +39,7 @@ public class BowlwithBerrieswithoutEffectItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level world, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, world, list, flag);
-		list.add(Component.literal("\u00A76Without mystery effect"));
+		list.add(Component.translatable("item.unseen_world.bowl_without_effect"));
 	}
 
 	@Override

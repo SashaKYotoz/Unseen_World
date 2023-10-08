@@ -13,15 +13,12 @@ import net.minecraft.world.entity.animal.allay.Allay;
 
 public class RedSlylfRenderer extends MobRenderer<RedSlylfEntity, ModelRed_Sylph<RedSlylfEntity>> {
 	public RedSlylfRenderer(EntityRendererProvider.Context context) {
-		super(context, new ModelRed_Sylph(context.bakeLayer(ModelRed_Sylph.LAYER_LOCATION)), 0.5f);
+		super(context, new ModelRed_Sylph<>(context.bakeLayer(ModelRed_Sylph.LAYER_LOCATION)), 0.5f);
 		this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(RedSlylfEntity entity) {
 		return new ResourceLocation("unseen_world:textures/entities/red_sylph.png");
-	}
-	protected int getBlockLightLevel(Allay p_234560_, BlockPos p_234561_) {
-		return 12;
 	}
 }

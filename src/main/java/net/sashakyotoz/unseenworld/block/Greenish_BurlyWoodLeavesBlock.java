@@ -1,10 +1,10 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.GreenishBurlyWoodLeavesClientDisplayRandomTickProcedure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -21,6 +21,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 
 public class Greenish_BurlyWoodLeavesBlock extends Block {
 	public Greenish_BurlyWoodLeavesBlock() {
@@ -49,12 +50,14 @@ public class Greenish_BurlyWoodLeavesBlock extends Block {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void animateTick(BlockState blockstate, Level world, BlockPos pos, RandomSource random) {
-		super.animateTick(blockstate, world, pos, random);
-		Player entity = Minecraft.getInstance().player;
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		GreenishBurlyWoodLeavesClientDisplayRandomTickProcedure.execute(world, x, y, z);
+	public void animateTick(BlockState p_272714_, Level p_272837_, BlockPos p_273218_, RandomSource p_273360_) {
+		super.animateTick(p_272714_, p_272837_, p_273218_, p_273360_);
+		if (p_273360_.nextInt(10) == 0) {
+			BlockPos blockpos = p_273218_.below();
+			BlockState blockstate = p_272837_.getBlockState(blockpos);
+			if (!isFaceFull(blockstate.getCollisionShape(p_272837_, blockpos), Direction.UP)) {
+				ParticleUtils.spawnParticleBelow(p_272837_, p_273218_, p_273360_, UnseenWorldModParticleTypes.GREENISH_PARTICLE.get());
+			}
+		}
 	}
 }

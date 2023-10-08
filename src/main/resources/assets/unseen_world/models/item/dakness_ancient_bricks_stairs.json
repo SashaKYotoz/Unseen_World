@@ -1,5 +1,5 @@
 {
-  "parent": "unseen_world:block/dakness_ancient_bricks_stairs",
+  "parent": "unseen_world:block/dakness_ancient_bricks_slab",
   "display": {
     "thirdperson": {
       "rotation": [

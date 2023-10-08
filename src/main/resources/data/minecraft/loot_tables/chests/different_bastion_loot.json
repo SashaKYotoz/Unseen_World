@@ -10,10 +10,9 @@
         {
           "type": "minecraft:item",
           "name": "unseen_world:red_blaze_rod",
-          "weight": 25,
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
                 "max": 3
@@ -29,30 +28,25 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "unseen_world:outgrowthapple",
           "weight": 50,
+          "name": "unseen_world:outgrowthapple",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
                 "max": 5
               }
-            },
-            {
-              "function": "minecraft:apply_bonus",
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:ore_drops"
             }
           ]
         },
         {
           "type": "minecraft:item",
-          "name": "unseen_world:purple_berries",
           "weight": 50,
+          "name": "unseen_world:purple_berries",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
                 "max": 3
@@ -70,39 +64,29 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:netherite_scrap",
           "weight": 7,
+          "name": "minecraft:netherite_scrap",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
                 "max": 2
               }
-            },
-            {
-              "function": "minecraft:apply_bonus",
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:ore_drops"
             }
           ]
         },
         {
           "type": "minecraft:item",
-          "name": "unseen_world:red_titanium_ingot",
           "weight": 5,
+          "name": "unseen_world:red_titanium_ingot",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
                 "max": 2
               }
-            },
-            {
-              "function": "minecraft:apply_bonus",
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:ore_drops"
             }
           ]
         }
@@ -117,10 +101,9 @@
         {
           "type": "minecraft:item",
           "name": "unseen_world:music_disc_happy_place",
-          "weight": 3,
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
                 "max": 1
