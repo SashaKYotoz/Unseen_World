@@ -32,9 +32,6 @@ public class NightdewNectarBottleItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.GLASS_BOTTLE);
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
 		entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 2400, 0));
 		if (itemstack.isEmpty()) {
 			return retval;

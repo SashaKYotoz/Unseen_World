@@ -11,8 +11,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionResult;
 
-import net.sashakyotoz.unseenworld.procedures.HeavyClaymoreRightclickedOnBlockProcedure;
-import net.sashakyotoz.unseenworld.procedures.HeavyClaymoreLivingEntityIsHitWithToolProcedure;
+import net.sashakyotoz.unseenworld.managers.HeavyClaymoreRightclickedOnBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.HeavyClaymoreLivingEntityIsHitWithToolProcedure;
 
 public class HeavyClaymoreItem extends SwordItem {
 	public HeavyClaymoreItem() {

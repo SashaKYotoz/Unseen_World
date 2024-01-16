@@ -80,7 +80,7 @@ public class TanzaniteGuardianEntity extends Monster {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.ambient"));
+		return SoundEvents.ELDER_GUARDIAN_AMBIENT;
 	}
 
 	@Override

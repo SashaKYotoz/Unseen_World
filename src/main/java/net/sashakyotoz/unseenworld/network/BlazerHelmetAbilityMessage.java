@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
 
-import net.sashakyotoz.unseenworld.procedures.BlazerHelmetHelmetTickEventProcedure;
+import net.sashakyotoz.unseenworld.managers.BlazerHelmetHelmetTickEventProcedure;
 
 import java.util.Objects;
 import java.util.function.Supplier;

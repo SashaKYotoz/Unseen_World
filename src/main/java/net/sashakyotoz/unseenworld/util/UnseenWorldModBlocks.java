@@ -6,10 +6,9 @@ package net.sashakyotoz.unseenworld.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,6 +17,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.BlockGetter;
@@ -47,6 +48,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.tags.ITag;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.block.*;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
@@ -172,18 +174,24 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> DARK_WATER = REGISTRY.register("dark_water", () -> new LiquidBlock(UnseenWorldModFluids.DARK_WATER,
 			BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(100f).lightLevel(s -> 8).noCollission().noLootTable().liquid().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY).replaceable()){
 		@Override
-		public void entityInside(BlockState p_60495_, Level p_60496_, BlockPos p_60497_, Entity entity) {
+		public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
 			if (!(entity instanceof MoonfishEntity || entity instanceof DustyPinkMaxorFishEntity || entity instanceof StrederEntity
-					|| (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == UnseenWorldModItems.NATURERIUM_ARMOR_HELMET.get()
-					|| (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == UnseenWorldModItems.DEEP_GEM_ARMOR_HELMET.get()
-					|| (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == UnseenWorldModItems.RED_TITANIUM_ARMOR_HELMET.get()
-					|| (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == UnseenWorldModItems.VOIDINGOT_ARMOR_HELMET.get()
-					|| entity instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(UnseenWorldModMobEffects.DARK_IMMUNITE.get()))) {
+					|| isHelmetProtected(entity)
+                    || entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(UnseenWorldModMobEffects.DARK_IMMUNITE.get())
+                    || entity instanceof Projectile)) {
 				entity.setDeltaMovement(new Vec3(0, 0.05, 0));
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
+				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
 			}
 		}
+        private boolean isHelmetProtected(Entity entity) {
+            if (entity instanceof LivingEntity livingEntity) {
+                ItemStack headSlotItem = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
+                ITag<Item> helmetTag = ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(UnseenWorldModTags.Items.DARK_WATER_PROTECTED_HELMETS.location()));
+                return helmetTag.contains(headSlotItem.getItem());
+            }
+            return false;
+        }
 	});
     public static final RegistryObject<Block> LIQUID_OF_CHIMERY = REGISTRY.register("liquid_of_chimery", () -> new LiquidBlock(UnseenWorldModFluids.LIQUID_OF_CHIMERY, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).strength(100f).hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).lightLevel(s -> 4).noCollission()
 			.noLootTable().liquid().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY).replaceable()));
@@ -308,11 +316,11 @@ public class UnseenWorldModBlocks {
         }
     });
     public static final RegistryObject<Block> DARK_CRIMSON_LEAVES = REGISTRY.register("dark_crimson_leaves", Dark_crimsonLeavesBlock::new);
-    public static final RegistryObject<Block> DARK_CRIMSON_WOOD = REGISTRY.register("dark_crimson_wood", () -> new Dark_crimsonWoodBlock());
-    public static final RegistryObject<Block> DARK_CRIMSON_LOG = REGISTRY.register("dark_crimson_log", () -> new Dark_crimsonLogBlock());
-    public static final RegistryObject<Block> DARK_CRIMSON_PLANKS = REGISTRY.register("dark_crimson_planks", () -> new Dark_crimsonPlanksBlock());
-    public static final RegistryObject<Block> DARK_CRIMSON_STAIRS = REGISTRY.register("dark_crimson_stairs", () -> new Dark_crimsonStairsBlock());
-    public static final RegistryObject<Block> DARK_CRIMSON_SLAB = REGISTRY.register("dark_crimson_slab", () -> new Dark_crimsonSlabBlock());
+    public static final RegistryObject<Block> DARK_CRIMSON_WOOD = REGISTRY.register("dark_crimson_wood", () -> new DarkCrimsonWoodBlock());
+    public static final RegistryObject<Block> DARK_CRIMSON_LOG = REGISTRY.register("dark_crimson_log", () -> new DarkCrimsonLogBlock());
+    public static final RegistryObject<Block> DARK_CRIMSON_PLANKS = REGISTRY.register("dark_crimson_planks", () -> new DarkCrimsonPlanksBlock());
+    public static final RegistryObject<Block> DARK_CRIMSON_STAIRS = REGISTRY.register("dark_crimson_stairs", () -> new DarkCrimsonStairsBlock());
+    public static final RegistryObject<Block> DARK_CRIMSON_SLAB = REGISTRY.register("dark_crimson_slab", () -> new DarkCrimsonSlabBlock());
     public static final RegistryObject<Block> DARK_CRIMSON_TRAPDOOR = REGISTRY.register("dark_crimson_trapdoor", () -> new DarkCrimsonTrapdoorBlock());
     public static final RegistryObject<Block> DARK_CRIMSON_DOOR = REGISTRY.register("dark_crimson_door", () -> new DarkCrimsonDoorBlock());
     public static final RegistryObject<Block> GRIZZLY_WOOD = REGISTRY.register("grizzly_wood", () -> new GrizzlyWoodBlock());
@@ -375,7 +383,11 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> TANZANITE_BRICKS_STAIRS = REGISTRY.register("tanzanite_bricks_stairs", () -> new TanzaniteBricksStairsBlock());
     public static final RegistryObject<Block> TANZANITE_BRICKS_SLAB = REGISTRY.register("tanzanite_bricks_slab", () -> new TanzaniteBricksSlabBlock());
     public static final RegistryObject<Block> TANZANITE_BRICKS_WALL = REGISTRY.register("tanzanite_bricks_wall", () -> new TanzaniteBricksWallBlock());
-    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS = REGISTRY.register("dakness_ancient_bricks", () -> new Block(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
+    public static final RegistryObject<Block> DARK_CURRANTSLATE = REGISTRY.register("dark_currantslate",()->new Block(BlockBehaviour.Properties.of().strength(2.5f,3).sound(SoundType.DEEPSLATE).mapColor(MapColor.COLOR_MAGENTA)));
+    public static final RegistryObject<Block> DARK_CURRANTSLATE_STAIRS = REGISTRY.register("dark_currantslate_stairs",()->new StairBlock(DARK_CURRANTSLATE.get().defaultBlockState(),BlockBehaviour.Properties.of().strength(2.5f,3).sound(SoundType.DEEPSLATE).mapColor(MapColor.COLOR_MAGENTA)));
+    public static final RegistryObject<Block> DARK_CURRANTSLATE_SLAB = REGISTRY.register("dark_currantslate_slab",()->new SlabBlock(BlockBehaviour.Properties.of().strength(2.5f,3).sound(SoundType.DEEPSLATE).mapColor(MapColor.COLOR_MAGENTA)));
+    public static final RegistryObject<Block> DARK_CURRANTSLATE_WALL = REGISTRY.register("dark_currantslate_wall",()->new WallBlock(BlockBehaviour.Properties.of().strength(2.5f,3).sound(SoundType.DEEPSLATE).mapColor(MapColor.COLOR_MAGENTA)));
+    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS = REGISTRY.register("darkness_ancient_bricks", () -> new Block(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
 		@Override
 		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
 			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
@@ -391,7 +403,7 @@ public class UnseenWorldModBlocks {
 			return Collections.singletonList(new ItemStack(this, 1));
 		}
 	});
-    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_STAIRS = REGISTRY.register("dakness_ancient_bricks_stairs", () -> new StairBlock(DARKNESS_ANCIENT_BRICKS.get().defaultBlockState(),BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
+    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_STAIRS = REGISTRY.register("darkness_ancient_bricks_stairs", () -> new StairBlock(DARKNESS_ANCIENT_BRICKS.get().defaultBlockState(),BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
 		@Override
 		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
 			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
@@ -406,7 +418,7 @@ public class UnseenWorldModBlocks {
 			return Collections.singletonList(new ItemStack(this, 1));
 		}
 	});
-    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_SLAB = REGISTRY.register("dakness_ancient_bricks_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops().dynamicShape()){
+    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_SLAB = REGISTRY.register("darkness_ancient_bricks_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops().dynamicShape()){
 		@Override
 		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
 			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
@@ -422,7 +434,7 @@ public class UnseenWorldModBlocks {
 			return Collections.singletonList(new ItemStack(this, 1));
 		}
 	});
-    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_WALL = REGISTRY.register("dakness_ancient_bricks_wall", () -> new WallBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops().noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape()){
+    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_WALL = REGISTRY.register("darkness_ancient_bricks_wall", () -> new WallBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops().noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape()){
 		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
 			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
 				return tieredItem.getTier().getLevel() >= 2;

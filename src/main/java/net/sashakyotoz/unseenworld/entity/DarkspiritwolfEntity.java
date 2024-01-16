@@ -3,7 +3,6 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -31,17 +30,16 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.core.BlockPos;
 
-public class DarkspiritwolfEntity extends Wolf {
-	public DarkspiritwolfEntity(PlayMessages.SpawnEntity packet, Level world) {
+public class DarkSpiritWolfEntity extends Wolf {
+	public DarkSpiritWolfEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(UnseenWorldModEntities.DARKSPIRITWOLF.get(), world);
 	}
 
-	public DarkspiritwolfEntity(EntityType<DarkspiritwolfEntity> type, Level world) {
+	public DarkSpiritWolfEntity(EntityType<DarkSpiritWolfEntity> type, Level world) {
 		super(type, world);
 		setMaxUpStep(0.6f);
 		xpReward = 5;

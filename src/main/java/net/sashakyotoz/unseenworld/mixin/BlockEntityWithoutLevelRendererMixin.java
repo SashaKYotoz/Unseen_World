@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.unseenworld.client.model.ModelBeaconOfWeapons;
 import net.sashakyotoz.unseenworld.client.renderer.BeaconOfWeaponsRenderer;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,16 +27,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BlockEntityWithoutLevelRenderer.class)
 public class BlockEntityWithoutLevelRendererMixin {
 @Unique
-private ModelBeaconOfWeapons beacon;
+public ModelBeaconOfWeapons beacon;
 @Shadow
+@NotNull
 private final EntityModelSet entityModelSet;
     public BlockEntityWithoutLevelRendererMixin(EntityModelSet entityModelSet, BlockEntityRendererProvider.Context context) {
         this.entityModelSet = entityModelSet;
     }
+    @Inject(method = "onResourceManagerReload", at = @At("RETURN"))
+    public void onResourceManagerReloadUnseenWorld(ResourceManager resourceManager, CallbackInfo ci) {
+        this.beacon = new ModelBeaconOfWeapons(this.entityModelSet.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
+    }
     @Inject(method = "renderByItem", at = @At("RETURN"))
-    public void renderByItemHumbledlessWorld(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
-        if (itemStack.is(UnseenWorldModItems.BEACON_OF_WEAPONS.get())) {
-            long gameTime = Minecraft.getInstance().level.getGameTime();
+    public void renderByItemUnseenWorld(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
+        Minecraft minecraft =  Minecraft.getInstance();
+        if (itemStack.is(UnseenWorldModItems.BEACON_OF_WEAPONS.get()) && minecraft.level != null) {
+            long gameTime = minecraft.level.getGameTime();
             float test = (float)(gameTime % 360) * 0.5F;
             float e = ++test;
             float tick = e / 36.0F;
@@ -48,9 +55,5 @@ private final EntityModelSet entityModelSet;
             this.beacon.beacon.setRotation(0.0F, tick % 360.0F, 0.0F);
             poseStack.popPose();
         }
-    }
-    @Inject(method = "onResourceManagerReload", at = @At("RETURN"))
-    public void onResourceManagerReloadUnseenWorld(ResourceManager resourceManager, CallbackInfo ci) {
-        this.beacon = new ModelBeaconOfWeapons(this.entityModelSet.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
     }
 }

@@ -3,26 +3,26 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     }
   ],
   "result": {
-    "item": "unseen_world:dakness_ancient_bricks_slab",
-    "count": 4
+    "item": "unseen_world:darkness_ancient_bricks_stairs",
+    "count": 5
   }
 }

@@ -26,7 +26,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.procedures.DarkCrimsonFlowingAzaliaOnBlockRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.DarkCrimsonFlowingAzaliaOnBlockRightClickedProcedure;
 
 import java.util.List;
 import java.util.Collections;

@@ -21,4 +21,5 @@ public class UnseenWorldModParticleTypes {
 	public static final RegistryObject<SimpleParticleType> FIRE_PARTICLE = REGISTRY.register("fire_particle", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> LIQUID_OF_CHIMERY_PARTICLE = REGISTRY.register("liquid_of_chimery_particle", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> GRIZZLY_PARTICLE = REGISTRY.register("grizzly_particle", () -> new SimpleParticleType(false));
+	public static final RegistryObject<SimpleParticleType> TANZANITE_RAY = REGISTRY.register("tanzanite_ray", () -> new SimpleParticleType(true));
 }

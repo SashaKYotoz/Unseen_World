@@ -18,7 +18,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.procedures.AncientTransientBlockOpenEntityCollidesInTheBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.AncientTransientBlockOpenEntityCollidesInTheBlockProcedure;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 import java.util.Collections;

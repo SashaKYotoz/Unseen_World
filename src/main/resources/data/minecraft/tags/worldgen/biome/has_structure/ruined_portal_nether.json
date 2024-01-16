@@ -1,7 +1,8 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:darkcrimsonforest",
-    "unseen_world:amethyst_forest"
+    "unseen_world:dark_crimson_valley",
+    "unseen_world:amethyst_forest",
+    "unseen_world:amethyst_fields"
   ]
 }

@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -20,7 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.sashakyotoz.unseenworld.client.model.ModelThe_Wither_Knight_Armor;
-import net.sashakyotoz.unseenworld.procedures.KnightArmorBodyTickEventProcedure;
+import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
 
 import java.util.Collections;
 import java.util.List;
@@ -159,7 +158,7 @@ public abstract class KnightArmorItem extends ArmorItem {
 		}
 		@Override
 		public void inventoryTick(ItemStack itemStack, Level level, Entity entity, int slot, boolean p_41408_) {
-			KnightArmorBodyTickEventProcedure.execute(entity);
+			ArmorAbilitiesProcedure.execute(entity);
 		}
 	}
 

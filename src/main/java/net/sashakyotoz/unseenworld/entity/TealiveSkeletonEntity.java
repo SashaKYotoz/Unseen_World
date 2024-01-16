@@ -78,7 +78,7 @@ public class TealiveSkeletonEntity extends Monster {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.stray.ambient"));
+		return SoundEvents.STRAY_AMBIENT;
 	}
 
 	@Override
@@ -88,12 +88,12 @@ public class TealiveSkeletonEntity extends Monster {
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.stray.hurt"));
+		return SoundEvents.STRAY_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.skeleton.death"));
+		return SoundEvents.STRAY_DEATH;
 	}
 
 	@Override

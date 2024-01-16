@@ -12,7 +12,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.sashakyotoz.unseenworld.procedures.PurpleBerriesRightClickedOnBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.PurpleBerriesRightClickedOnBlockProcedure;
 
 public class PurpleBerriesItem extends Item {
 	public PurpleBerriesItem() {

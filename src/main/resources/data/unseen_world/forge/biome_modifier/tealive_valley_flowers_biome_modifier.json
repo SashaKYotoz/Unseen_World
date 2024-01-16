@@ -1,6 +1,9 @@
 {
   "type": "forge:add_features",
   "biomes": "unseen_world:tealive_luminous_valley",
-  "features": "unseen_world:tealive_valley_flowers",
+  "features": [
+    "unseen_world:tealive_valley_flowers_1",
+    "unseen_world:tealive_valley_flowers"
+  ],
   "step": "vegetal_decoration"
 }

@@ -16,13 +16,21 @@ import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
 import net.sashakyotoz.unseenworld.client.model.ModelBeaconOfWeapons;
 
+import java.util.Calendar;
+
 public class BeaconOfWeaponsRenderer <T extends BeaconOfWeaponsBlockEntity> implements BlockEntityRenderer<T> {
     public static ResourceLocation TEXTURE = new ResourceLocation(UnseenWorldMod.MODID, "textures/entities/beacon_of_weapons.png");
+    public static ResourceLocation CHRISTMAS_TEXTURE = new ResourceLocation(UnseenWorldMod.MODID, "textures/entities/beacon_of_weapons_christmas.png");
     private final ItemRenderer itemRenderer;
+    private boolean xmasTexture = false;
     private static ModelBeaconOfWeapons beacon;
     public BeaconOfWeaponsRenderer(BlockEntityRendererProvider.Context context) {
         this.itemRenderer = context.getItemRenderer();
         beacon = new ModelBeaconOfWeapons(context.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 20 && calendar.get(Calendar.DATE) <= 30) {
+            this.xmasTexture = true;
+        }
     }
 
     @Override
@@ -32,20 +40,22 @@ public class BeaconOfWeaponsRenderer <T extends BeaconOfWeaponsBlockEntity> impl
         long gameTime = world.getGameTime();
         float offsetY;
         poseStack.mulPose(Axis.XP.rotationDegrees(-180.0F));
-        beacon.renderToBuffer(poseStack, multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), i, j, 1.0F, 1.0F, 1.0F, 1.0F);
+        if(xmasTexture)
+            beacon.renderToBuffer(poseStack, multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(CHRISTMAS_TEXTURE)), i, j, 1.0F, 1.0F, 1.0F, 1.0F);
+        else
+            beacon.renderToBuffer(poseStack, multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), i, j, 1.0F, 1.0F, 1.0F, 1.0F);
         beacon.top.setPos(8.0F, -8.0F, -8.0F);
         beacon.base.setPos(16.0F, 0F, -16.0F);
         float test;
         if (BeaconOfWeaponsBlockEntity.item.isEmpty()){
-            test = (float)(gameTime % 980) * 0.325F;
+            test = (float)(gameTime % 1080) * 0.325F;
             offsetY = (float)Math.sin((float)gameTime / 8.0F) * 0.75F;
-            beacon.beacon.setPos(8.0F, 0F - offsetY, -8.0F);
         }
         else{
             test =(float)(gameTime % 360) * 0.5F;
             offsetY = (float)Math.sin((float)gameTime / 8.0F);
-            beacon.beacon.setPos(8.0F, 0F - offsetY, -8.0F);
         }
+        beacon.beacon.setPos(8.0F, 0F - offsetY, -8.0F);
         float e = ++test;
         float tick = e / 36.0F;
         beacon.beacon.setRotation(0.0F, tick % 360.0F, 0.0F);

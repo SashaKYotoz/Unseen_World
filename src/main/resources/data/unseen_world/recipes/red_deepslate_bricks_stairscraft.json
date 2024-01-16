@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "0  ",
+    "34 ",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:reddeepslatebricks"
+    },
+    "3": {
+      "item": "unseen_world:reddeepslatebricks"
+    },
+    "4": {
+      "item": "unseen_world:reddeepslatebricks"
+    },
+    "6": {
+      "item": "unseen_world:reddeepslatebricks"
+    },
+    "7": {
+      "item": "unseen_world:reddeepslatebricks"
+    },
+    "8": {
+      "item": "unseen_world:reddeepslatebricks"
+    }
+  },
+  "result": {
+    "item": "unseen_world:reddeepslatebricksstairs",
+    "count": 6
+  }
+}

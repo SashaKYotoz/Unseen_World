@@ -18,7 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.procedures.AncientTransientBlockCloseOnBlockRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.AncientTransientBlockCloseOnBlockRightClickedProcedure;
 
 import java.util.List;
 import java.util.Collections;

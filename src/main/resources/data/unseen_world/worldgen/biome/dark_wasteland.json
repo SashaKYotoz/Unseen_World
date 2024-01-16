@@ -71,13 +71,6 @@
     [
       "minecraft:lake_lava_underground"
     ],
-    [
-      "minecraft:iceberg_packed",
-      "minecraft:iceberg_blue",
-      "minecraft:amethyst_geode",
-      "minecraft:forest_rock"
-    ],
-    [],
     [],
     [],
     [
@@ -94,16 +87,14 @@
       "minecraft:ore_diamond_large",
       "minecraft:ore_diamond_buried",
       "minecraft:ore_lapis",
-      "minecraft:ore_lapis_buried",
-      "minecraft:ore_copper",
       "minecraft:underwater_magma",
       "minecraft:ore_emerald",
       "unseen_world:darkness_ooze_vegetation"
     ],
     [],
-    [],
     [
-      "unseen_world:dark_wasteland_tree"
+      "unseen_world:dark_wasteland_tree",
+      "unseen_world:ice_spikes"
     ],
     [
       "minecraft:freeze_top_layer"

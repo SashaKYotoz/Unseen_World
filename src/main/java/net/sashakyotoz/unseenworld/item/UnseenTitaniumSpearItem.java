@@ -74,9 +74,8 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
 		Vec3 targetVec = eyeVec.add(viewVec.x * reach, viewVec.y * reach, viewVec.z * reach);
 		AABB viewBB = entity.getBoundingBox().expandTowards(viewVec.scale(reach)).inflate(4.0D, 4.0D, 4.0D);
 		EntityHitResult result = ProjectileUtil.getEntityHitResult(world, entity, eyeVec, targetVec, viewBB, EntitySelector.NO_CREATIVE_OR_SPECTATOR, 4f);
-		if (result == null || !(result.getEntity() instanceof LivingEntity))
+		if (result == null || !(result.getEntity() instanceof LivingEntity target))
 			return false;
-		LivingEntity target = (LivingEntity) result.getEntity();
 		double distanceToTargetSqr = entity.distanceToSqr(target);
 		boolean hitResult = (result != null ? target : null) != null;
 		if (hitResult) {
@@ -89,8 +88,8 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
 		return super.onEntitySwing(stack, entity);
 	}
 
-	public boolean canAttackBlock(BlockState p_43409_, Level p_43410_, BlockPos p_43411_, Player p_43412_) {
-		return !p_43412_.isCreative();
+	public boolean canAttackBlock(BlockState state, Level p_43410_, BlockPos p_43411_, Player player) {
+		return !player.isCreative();
 	}
 
 	@Override
@@ -98,30 +97,28 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
 		return UseAnim.SPEAR;
 	}
 
-	public int getUseDuration(ItemStack p_43419_) {
+	public int getUseDuration(ItemStack stack) {
 		return 72000;
 	}
 
-	public void releaseUsing(ItemStack p_43394_, Level p_43395_, LivingEntity p_43396_, int p_43397_) {
-		if (p_43396_ instanceof Player player) {
-			int i = this.getUseDuration(p_43394_) - p_43397_;
+	public void releaseUsing(ItemStack itemStack, Level level, LivingEntity livingEntity, int p_43397_) {
+		if (livingEntity instanceof Player player) {
+			int i = this.getUseDuration(itemStack) - p_43397_;
 			if (i >= 10) {
-				int j = EnchantmentHelper.getRiptide(p_43394_);
+				int j = EnchantmentHelper.getRiptide(itemStack);
 				if (j <= 0 || player.isInWaterOrRain()) {
-					if (!p_43395_.isClientSide) {
-						p_43394_.hurtAndBreak(1, player, (p_43388_) -> {
-							p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand());
-						});
+					if (!level.isClientSide) {
+						itemStack.hurtAndBreak(1, player, (player1) -> player1.broadcastBreakEvent(livingEntity.getUsedItemHand()));
 						if (j == 0) {
-							UnseenTitaniumSpearEntity throwntrident = new UnseenTitaniumSpearEntity(p_43395_, player, p_43394_);
-							throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F + (float) j * 0.5F, 1.0F);
+							UnseenTitaniumSpearEntity thrownSpear = new UnseenTitaniumSpearEntity(level, player, itemStack);
+							thrownSpear.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F + (float) j * 0.5F, 1.0F);
 							if (player.getAbilities().instabuild) {
-								throwntrident.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+								thrownSpear.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 							}
-							p_43395_.addFreshEntity(throwntrident);
-							p_43395_.playSound((Player) null, throwntrident, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+							level.addFreshEntity(thrownSpear);
+							level.playSound(null, thrownSpear, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
 							if (!player.getAbilities().instabuild) {
-								player.getInventory().removeItem(p_43394_);
+								player.getInventory().removeItem(itemStack);
 							}
 						}
 					}
@@ -137,11 +134,10 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
 						f1 *= f5 / f4;
 						f2 *= f5 / f4;
 						f3 *= f5 / f4;
-						player.push((double) f1, (double) f2, (double) f3);
+						player.push(f1, f2, f3);
 						player.startAutoSpinAttack(20);
 						if (player.onGround()) {
-							float f6 = 1.2F;
-							player.move(MoverType.SELF, new Vec3(0.0D, (double) 1.2F, 0.0D));
+							player.move(MoverType.SELF, new Vec3(0.0D, 1.2F, 0.0D));
 						}
 						SoundEvent soundevent;
 						if (j >= 3) {
@@ -151,7 +147,7 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
 						} else {
 							soundevent = SoundEvents.TRIDENT_RIPTIDE_1;
 						}
-						p_43395_.playSound((Player) null, player, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
+						level.playSound(null, player, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
 			}

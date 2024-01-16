@@ -8,12 +8,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.procedures.ArmorAbilitiesProcedure;
+import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public abstract class VoidingotArmorItem extends ArmorItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(Items.NETHERITE_INGOT), new ItemStack(UnseenWorldModItems.VOID_INGOT_INGOT.get()));
+				return Ingredient.of(new ItemStack(Items.NETHERITE_INGOT), new ItemStack(UnseenWorldModItems.VOID_INGOT.get()));
 			}
 
 			@Override

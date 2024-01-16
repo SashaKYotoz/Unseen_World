@@ -9,94 +9,196 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-
 import net.minecraft.world.level.block.Block;
-
-import net.sashakyotoz.unseenworld.item.VoidingotArmorItem;
-import net.sashakyotoz.unseenworld.item.Void_ingotSwordItem;
-import net.sashakyotoz.unseenworld.item.Void_ingotShovelItem;
-import net.sashakyotoz.unseenworld.item.Void_ingotPickaxeItem;
-import net.sashakyotoz.unseenworld.item.Void_ingotIngotItem;
-import net.sashakyotoz.unseenworld.item.Void_ingotHoeItem;
-import net.sashakyotoz.unseenworld.item.Void_ingotAxeItem;
-import net.sashakyotoz.unseenworld.item.VoidUpgradeSmithingTemplateItem;
-import net.sashakyotoz.unseenworld.item.VoidStaffItem;
-import net.sashakyotoz.unseenworld.item.VoidHammerItem;
-import net.sashakyotoz.unseenworld.item.VoidEndermenSwordItem;
-import net.sashakyotoz.unseenworld.item.VoidBowItem;
-import net.sashakyotoz.unseenworld.item.UnseenTitaniumSpearItem;
-import net.sashakyotoz.unseenworld.item.UnseenSwordItem;
-import net.sashakyotoz.unseenworld.item.UnseenShovelItem;
-import net.sashakyotoz.unseenworld.item.UnseenPickaxeItem;
-import net.sashakyotoz.unseenworld.item.UnseenIngotItem;
-import net.sashakyotoz.unseenworld.item.UnseenHoeItem;
-import net.sashakyotoz.unseenworld.item.UnseenAxeItem;
-import net.sashakyotoz.unseenworld.item.UnseenArmorItem;
-import net.sashakyotoz.unseenworld.item.TheDarknessItem;
-import net.sashakyotoz.unseenworld.item.TealivyVoidSpearItem;
-import net.sashakyotoz.unseenworld.item.TealivyFireStaffItem;
-import net.sashakyotoz.unseenworld.item.TealiveStonyShardItem;
-import net.sashakyotoz.unseenworld.item.TanzaniteShardItem;
-import net.sashakyotoz.unseenworld.item.RednessHammerItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumSwordItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumShovelItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumPickaxeItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumIngotItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumHoeItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumAxeItem;
-import net.sashakyotoz.unseenworld.item.Red_TitaniumArmorItem;
-import net.sashakyotoz.unseenworld.item.RedTitaniumPoisonousSwordItem;
-import net.sashakyotoz.unseenworld.item.RedBlazeRodItem;
-import net.sashakyotoz.unseenworld.item.PurpleBerriesItem;
-import net.sashakyotoz.unseenworld.item.OutgrowthappleItem;
-import net.sashakyotoz.unseenworld.item.NightdewNectarBottleItem;
-import net.sashakyotoz.unseenworld.item.NetheriumStaffItem;
-import net.sashakyotoz.unseenworld.item.NatureriumSwordItem;
-import net.sashakyotoz.unseenworld.item.NatureriumShovelItem;
-import net.sashakyotoz.unseenworld.item.NatureriumPickaxeItem;
-import net.sashakyotoz.unseenworld.item.NatureriumIngotItem;
-import net.sashakyotoz.unseenworld.item.NatureriumHoeItem;
-import net.sashakyotoz.unseenworld.item.NatureriumAxeItem;
-import net.sashakyotoz.unseenworld.item.NatureriumArmorItem;
-import net.sashakyotoz.unseenworld.item.MusicdiscPianoItem;
-import net.sashakyotoz.unseenworld.item.MusicDiscHappyPlaceItem;
-import net.sashakyotoz.unseenworld.item.MoonFishinBucketItem;
-import net.sashakyotoz.unseenworld.item.LuminousporkchopItem;
-import net.sashakyotoz.unseenworld.item.LuminouscookedporkchopItem;
-import net.sashakyotoz.unseenworld.item.LightTulvarItem;
-import net.sashakyotoz.unseenworld.item.KnightArmorItem;
-import net.sashakyotoz.unseenworld.item.HeavyClaymoreItem;
-import net.sashakyotoz.unseenworld.item.FierySaberItem;
-import net.sashakyotoz.unseenworld.item.DustyPinkMaxorFishBucketItem;
-import net.sashakyotoz.unseenworld.item.DishwithBerriesItem;
-import net.sashakyotoz.unseenworld.item.DishVegetableWithPorkItem;
-import net.sashakyotoz.unseenworld.item.Deep_GemSwordItem;
-import net.sashakyotoz.unseenworld.item.Deep_GemShovelItem;
-import net.sashakyotoz.unseenworld.item.Deep_GemPickaxeItem;
-import net.sashakyotoz.unseenworld.item.Deep_GemHoeItem;
-import net.sashakyotoz.unseenworld.item.Deep_GemAxeItem;
-import net.sashakyotoz.unseenworld.item.Deep_GemArmorItem;
-import net.sashakyotoz.unseenworld.item.DarkGolemHeartItem;
-import net.sashakyotoz.unseenworld.item.DarkFreeSoulItem;
-import net.sashakyotoz.unseenworld.item.CrimserrySoulBerryFoodItem;
-import net.sashakyotoz.unseenworld.item.CookedMoonFishItem;
-import net.sashakyotoz.unseenworld.item.CookedDustyPinkMaxorFishItem;
-import net.sashakyotoz.unseenworld.item.ChloriteSlateStoneShardItem;
-import net.sashakyotoz.unseenworld.item.ChimericBluePepperItem;
-import net.sashakyotoz.unseenworld.item.BowlwithBerrieswithoutEffectItem;
-import net.sashakyotoz.unseenworld.item.BlazerHelmetItem;
-import net.sashakyotoz.unseenworld.item.BlazeShieldShardItem;
-import net.sashakyotoz.unseenworld.item.AmethystHammerItem;
-import net.sashakyotoz.unseenworld.procedures.DarkpearlRightclickedProcedure;
+import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.item.*;
+import net.sashakyotoz.unseenworld.managers.DarkPearlRightClickedProcedure;
 
 public class UnseenWorldModItems {
 	public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, UnseenWorldMod.MODID);
+	public static final RegistryObject<Item> MUSICDISC_PIANO = REGISTRY.register("musicdisc_piano", MusicdiscPianoItem::new);
+	public static final RegistryObject<Item> MUSIC_DISC_HAPPY_PLACE = REGISTRY.register("music_disc_happy_place", MusicDiscHappyPlaceItem::new);
+	public static final RegistryObject<Item> DARK_WATER_BUCKET = REGISTRY.register("dark_water_bucket", () -> new BucketItem(UnseenWorldModFluids.DARK_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> LIQUID_OF_CHIMERY_BUCKET = REGISTRY.register("liquid_of_chimery_bucket", () -> new BucketItem(UnseenWorldModFluids.LIQUID_OF_CHIMERY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> MOON_FISHIN_BUCKET = REGISTRY.register("moon_fishin_bucket", () -> new MoonFishinBucketItem());
+	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_BUCKET = REGISTRY.register("dusty_pink_maxor_fish_bucket", () -> new DustyPinkMaxorFishBucketItem());
+	public static final RegistryObject<Item> DEEP_GEM_SWORD = REGISTRY.register("deep_gem_sword", () -> new DeepGemSwordItem());
+	public static final RegistryObject<Item> VOID_INGOT_SWORD = REGISTRY.register("void_ingot_sword", () -> new VoidIngotSwordItem());
+	public static final RegistryObject<Item> RED_TITANIUM_SWORD = REGISTRY.register("red_titanium_sword", () -> new RedTitaniumSwordItem());
+	public static final RegistryObject<Item> RED_TITANIUM_POISONOUS_SWORD = REGISTRY.register("red_titanium_poisonous_sword", () -> new RedTitaniumPoisonousSwordItem());
+	public static final RegistryObject<Item> NATURERIUM_SWORD = REGISTRY.register("naturerium_sword", () -> new NatureriumSwordItem());
+	public static final RegistryObject<Item> UNSEEN_SWORD = REGISTRY.register("unseen_sword", () -> new UnseenSwordItem());
+	public static final RegistryObject<Item> VOID_ENDERMEN_SWORD = REGISTRY.register("void_endermen_sword", () -> new VoidEndermenSwordItem());
+	public static final RegistryObject<Item> HEAVY_CLAYMORE = REGISTRY.register("heavy_claymore", HeavyClaymoreItem::new);
+	public static final RegistryObject<Item> LIGHT_TULVAR = REGISTRY.register("light_tulvar", LightTulvarItem::new);
+	public static final RegistryObject<Item> FIERY_SABER = REGISTRY.register("fiery_saber", FierySaberItem::new);
+	public static final RegistryObject<Item> VOID_HAMMER = REGISTRY.register("void_hammer", () -> new SwordItem(new Tier() {
+		public int getUses() {
+			return 2500;
+		}
+
+		public float getSpeed() {
+			return 10f;
+		}
+
+		public float getAttackDamageBonus() {
+			return 12f;
+		}
+
+		public int getLevel() {
+			return 5;
+		}
+
+		public int getEnchantmentValue() {
+			return 18;
+		}
+
+		public Ingredient getRepairIngredient() {
+			return Ingredient.of(new ItemStack(UnseenWorldModItems.VOID_INGOT.get()));
+		}
+	}, 3, -3.1f, new Item.Properties().fireResistant()));
+	public static final RegistryObject<Item> REDNESS_HAMMER = REGISTRY.register("redness_hammer", () -> new SwordItem(new Tier() {
+		public int getUses() {
+			return 2750;
+		}
+
+		public float getSpeed() {
+			return 8f;
+		}
+
+		public float getAttackDamageBonus() {
+			return 13f;
+		}
+
+		public int getLevel() {
+			return 5;
+		}
+
+		public int getEnchantmentValue() {
+			return 20;
+		}
+
+		public Ingredient getRepairIngredient() {
+			return Ingredient.of(new ItemStack(UnseenWorldModItems.RED_TITANIUM_INGOT.get()));
+		}
+	}, 3, -3.1f, new Item.Properties().fireResistant()));
+	public static final RegistryObject<Item> AMETHYST_HAMMER = REGISTRY.register("amethyst_hammer", () -> new SwordItem(new Tier() {
+		public int getUses() {
+			return 1750;
+		}
+
+		public float getSpeed() {
+			return 10f;
+		}
+
+		public float getAttackDamageBonus() {
+			return 11f;
+		}
+
+		public int getLevel() {
+			return 5;
+		}
+
+		public int getEnchantmentValue() {
+			return 18;
+		}
+
+		public Ingredient getRepairIngredient() {
+			return Ingredient.of(new ItemStack(Items.AMETHYST_SHARD), new ItemStack(UnseenWorldModItems.TANZANITE_SHARD.get()));
+		}
+	}, 3, -3.1f, new Item.Properties().fireResistant()));
+	public static final RegistryObject<Item> TEALIVY_VOID_SPEAR = REGISTRY.register("tealivy_void_spear", TealivyVoidSpearItem::new);
+	public static final RegistryObject<Item> UNSEEN_TITANIUM_SPEAR = REGISTRY.register("unseen_titanium_spear", UnseenTitaniumSpearItem::new);
+	public static final RegistryObject<Item> NETHERIUM_STAFF = REGISTRY.register("netherium_staff", NetheriumStaffItem::new);
+	public static final RegistryObject<Item> VOID_STAFF = REGISTRY.register("void_staff", VoidStaffItem::new);
+	public static final RegistryObject<Item> TANZANITE_STAFF = REGISTRY.register("tanzanite_staff", TanzaniteStaffItem::new);
+	public static final RegistryObject<Item> TEALIVY_FIRE_STAFF = REGISTRY.register("tealivy_fire_staff", TealivyFireStaffItem::new);
+	public static final RegistryObject<Item> VOID_BOW = REGISTRY.register("void_bow", VoidBowItem::new);
+	public static final RegistryObject<Item> DEEP_GEM_ARMOR_HELMET = REGISTRY.register("deep_gem_armor_helmet", DeepGemArmorItem.Helmet::new);
+	public static final RegistryObject<Item> DEEP_GEM_ARMOR_CHESTPLATE = REGISTRY.register("deep_gem_armor_chestplate", DeepGemArmorItem.Chestplate::new);
+	public static final RegistryObject<Item> DEEP_GEM_ARMOR_LEGGINGS = REGISTRY.register("deep_gem_armor_leggings", DeepGemArmorItem.Leggings::new);
+	public static final RegistryObject<Item> DEEP_GEM_ARMOR_BOOTS = REGISTRY.register("deep_gem_armor_boots", DeepGemArmorItem.Boots::new);
+	public static final RegistryObject<Item> VOIDINGOT_ARMOR_HELMET = REGISTRY.register("voidingot_armor_helmet", VoidingotArmorItem.Helmet::new);
+	public static final RegistryObject<Item> VOIDINGOT_ARMOR_CHESTPLATE = REGISTRY.register("voidingot_armor_chestplate", VoidingotArmorItem.Chestplate::new);
+	public static final RegistryObject<Item> VOIDINGOT_ARMOR_LEGGINGS = REGISTRY.register("voidingot_armor_leggings", VoidingotArmorItem.Leggings::new);
+	public static final RegistryObject<Item> VOIDINGOT_ARMOR_BOOTS = REGISTRY.register("voidingot_armor_boots", VoidingotArmorItem.Boots::new);
+	public static final RegistryObject<Item> UNSEEN_ARMOR_HELMET = REGISTRY.register("unseen_armor_helmet", UnseenArmorItem.Helmet::new);
+	public static final RegistryObject<Item> UNSEEN_ARMOR_CHESTPLATE = REGISTRY.register("unseen_armor_chestplate", UnseenArmorItem.Chestplate::new);
+	public static final RegistryObject<Item> UNSEEN_ARMOR_LEGGINGS = REGISTRY.register("unseen_armor_leggings", UnseenArmorItem.Leggings::new);
+	public static final RegistryObject<Item> UNSEEN_ARMOR_BOOTS = REGISTRY.register("unseen_armor_boots", UnseenArmorItem.Boots::new);
+	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_HELMET = REGISTRY.register("red_titanium_armor_helmet", RedTitaniumArmorItem.Helmet::new);
+	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_CHESTPLATE = REGISTRY.register("red_titanium_armor_chestplate", RedTitaniumArmorItem.Chestplate::new);
+	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_LEGGINGS = REGISTRY.register("red_titanium_armor_leggings", RedTitaniumArmorItem.Leggings::new);
+	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_BOOTS = REGISTRY.register("red_titanium_armor_boots", RedTitaniumArmorItem.Boots::new);
+	public static final RegistryObject<Item> NATURERIUM_ARMOR_HELMET = REGISTRY.register("naturerium_armor_helmet", NatureriumArmorItem.Helmet::new);
+	public static final RegistryObject<Item> NATURERIUM_ARMOR_CHESTPLATE = REGISTRY.register("naturerium_armor_chestplate", NatureriumArmorItem.Chestplate::new);
+	public static final RegistryObject<Item> NATURERIUM_ARMOR_LEGGINGS = REGISTRY.register("naturerium_armor_leggings", NatureriumArmorItem.Leggings::new);
+	public static final RegistryObject<Item> NATURERIUM_ARMOR_BOOTS = REGISTRY.register("naturerium_armor_boots", NatureriumArmorItem.Boots::new);
+	public static final RegistryObject<Item> KNIGHT_ARMOR_HELMET = REGISTRY.register("knight_armor_helmet", KnightArmorItem.Helmet::new);
+	public static final RegistryObject<Item> KNIGHT_ARMOR_CHESTPLATE = REGISTRY.register("knight_armor_chestplate", KnightArmorItem.Chestplate::new);
+	public static final RegistryObject<Item> KNIGHT_ARMOR_LEGGINGS = REGISTRY.register("knight_armor_leggings", KnightArmorItem.Leggings::new);
+	public static final RegistryObject<Item> KNIGHT_ARMOR_BOOTS = REGISTRY.register("knight_armor_boots", KnightArmorItem.Boots::new);
+	public static final RegistryObject<Item> BLAZER_HELMET = REGISTRY.register("blazer_helmet", BlazerItem.Helmet::new);
+	public static final RegistryObject<Item> BLAZER_SHIELD = REGISTRY.register("blazer_shield", () -> new ShieldItem(new Item.Properties().durability(1240).fireResistant().rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> DARK_SKELETON_SPAWN_EGG = REGISTRY.register("dark_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_SKELETON, -14935012, -3355393, new Item.Properties()));
+	public static final RegistryObject<Item> AMETHYST_GOLEM_SPAWN_EGG = REGISTRY.register("amethyst_golem_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.AMETHYST_GOLEM, -10066330, -26113, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_PHANTOM_SPAWN_EGG = REGISTRY.register("dark_phantom_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_PHANTOM, -16777216, -1, new Item.Properties()));
+	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_SPAWN_EGG = REGISTRY.register("dusty_pink_maxor_fish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH, -26113, -13421773, new Item.Properties()));
+	public static final RegistryObject<Item> MOONFISH_SPAWN_EGG = REGISTRY.register("moonfish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.MOONFISH, -11770241, -3355393, new Item.Properties()));
+	public static final RegistryObject<Item> CAVERN_SCARECROW_SPAWN_EGG = REGISTRY.register("cavern_scarecrow_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CAVERN_SCARECROW, -8355712, -27648, new Item.Properties()));
+	public static final RegistryObject<Item> SAVAGE_SMALL_BLAZE_SPAWN_EGG = REGISTRY.register("savage_small_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.SAVAGE_SMALL_BLAZE, -39424, -13434880, new Item.Properties()));
+	public static final RegistryObject<Item> CHIMERIC_PURPLEMARER_SPAWN_EGG = REGISTRY.register("chimeric_purplemarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CHIMERIC_PURPLEMARER, -13434829, -6750055, new Item.Properties()));
+	public static final RegistryObject<Item> CHIMERIC_REDMARER_SPAWN_EGG = REGISTRY.register("chimeric_redmarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CHIMERIC_REDMARER, -6750208, -6737152, new Item.Properties()));
+	public static final RegistryObject<Item> NETHERMEN_SPAWN_EGG = REGISTRY.register("nethermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.NETHERMEN, -33024, -41153, new Item.Properties()));
+	public static final RegistryObject<Item> RED_SLYLF_SPAWN_EGG = REGISTRY.register("red_slylf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_SLYLF, -6737152, -39373, new Item.Properties()));
+	public static final RegistryObject<Item> RED_BLAZE_SPAWN_EGG = REGISTRY.register("red_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_BLAZE, -11010048, -29184, new Item.Properties()));
+	public static final RegistryObject<Item> STREDER_SPAWN_EGG = REGISTRY.register("streder_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.STREDER, -9671553, -13421773, new Item.Properties()));
+	public static final RegistryObject<Item> GHAST_OF_TEALIVE_VALLEY_SPAWN_EGG = REGISTRY.register("ghast_of_tealive_valley_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY, -16724839, -16724788, new Item.Properties()));
+	public static final RegistryObject<Item> TANZANITE_GUARDIAN_SPAWN_EGG = REGISTRY.register("tanzanite_guardian_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TANZANITE_GUARDIAN, -10092442, -39220, new Item.Properties()));
+	public static final RegistryObject<Item> DARKSPIRITWOLF_SPAWN_EGG = REGISTRY.register("darkspiritwolf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARKSPIRITWOLF, -13421773, -16724737, new Item.Properties()));
+	public static final RegistryObject<Item> VOID_ENDERMEN_SPAWN_EGG = REGISTRY.register("void_endermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.VOID_ENDERMEN, -13877415, -9846858, new Item.Properties()));
+	public static final RegistryObject<Item> TEALIVE_SKELETON_SPAWN_EGG = REGISTRY.register("tealive_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TEALIVE_SKELETON, -16764109, -16737946, new Item.Properties()));
+	public static final RegistryObject<Item> RED_RAVENGER_SPAWN_EGG = REGISTRY.register("red_ravenger_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_RAVENGER, -9297374, -49408, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_HOGLIN_SPAWN_EGG = REGISTRY.register("dark_hoglin_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_HOGLIN, -3355393, -16777216, new Item.Properties()));
+	public static final RegistryObject<Item> DEEP_GEM_PICKAXE = REGISTRY.register("deep_gem_pickaxe", () -> new DeepGemPickaxeItem());
+	public static final RegistryObject<Item> DEEP_GEM_AXE = REGISTRY.register("deep_gem_axe", () -> new DeepGemAxeItem());
+	public static final RegistryObject<Item> DEEP_GEM_SHOVEL = REGISTRY.register("deep_gem_shovel", () -> new DeepGemShovelItem());
+	public static final RegistryObject<Item> DEEP_GEM_HOE = REGISTRY.register("deep_gem_hoe", () -> new DeepGemHoeItem());
+	public static final RegistryObject<Item> VOID_INGOT_PICKAXE = REGISTRY.register("void_ingot_pickaxe", () -> new VoidIngotPickaxeItem());
+	public static final RegistryObject<Item> VOID_INGOT_AXE = REGISTRY.register("void_ingot_axe", () -> new VoidIngotAxeItem());
+	public static final RegistryObject<Item> VOID_INGOT_SHOVEL = REGISTRY.register("void_ingot_shovel", () -> new VoidIngotShovelItem());
+	public static final RegistryObject<Item> VOID_INGOT_HOE = REGISTRY.register("void_ingot_hoe", () -> new VoidIngotHoeItem());
+	public static final RegistryObject<Item> RED_TITANIUM_PICKAXE = REGISTRY.register("red_titanium_pickaxe", () -> new RedTitaniumPickaxeItem());
+	public static final RegistryObject<Item> RED_TITANIUM_AXE = REGISTRY.register("red_titanium_axe", () -> new RedTitaniumAxeItem());
+	public static final RegistryObject<Item> RED_TITANIUM_SHOVEL = REGISTRY.register("red_titanium_shovel", () -> new RedTitaniumShovelItem());
+	public static final RegistryObject<Item> RED_TITANIUM_HOE = REGISTRY.register("red_titanium_hoe", () -> new RedTitaniumHoeItem());
+	public static final RegistryObject<Item> NATURERIUM_PICKAXE = REGISTRY.register("naturerium_pickaxe", () -> new NatureriumPickaxeItem());
+	public static final RegistryObject<Item> NATURERIUM_AXE = REGISTRY.register("naturerium_axe", () -> new NatureriumAxeItem());
+	public static final RegistryObject<Item> NATURERIUM_SHOVEL = REGISTRY.register("naturerium_shovel", () -> new NatureriumShovelItem());
+	public static final RegistryObject<Item> NATURERIUM_HOE = REGISTRY.register("naturerium_hoe", () -> new NatureriumHoeItem());
+	public static final RegistryObject<Item> UNSEEN_PICKAXE = REGISTRY.register("unseen_pickaxe", () -> new UnseenPickaxeItem());
+	public static final RegistryObject<Item> UNSEEN_AXE = REGISTRY.register("unseen_axe", () -> new UnseenAxeItem());
+	public static final RegistryObject<Item> UNSEEN_SHOVEL = REGISTRY.register("unseen_shovel", () -> new UnseenShovelItem());
+	public static final RegistryObject<Item> UNSEEN_HOE = REGISTRY.register("unseen_hoe", () -> new UnseenHoeItem());
+	public static final RegistryObject<Item> VOID_UPGRADE_SMITHING_TEMPLATE = REGISTRY.register("void_upgrade_smithing_template", VoidUpgradeSmithingTemplateItem::new);
+	public static final RegistryObject<Item> THE_DARKNESS = REGISTRY.register("the_darkness", TheDarknessItem::new);
+	public static final RegistryObject<Item> DARK_GOLEM_HEART = REGISTRY.register("dark_golem_heart", () -> new DarkGolemHeartItem());
+	public static final RegistryObject<Item> DARKPEARL = REGISTRY.register("darkpearl", () -> new Item(new Item.Properties().stacksTo(16).rarity(Rarity.RARE)){
+		@Override
+		public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
+			InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
+			DarkPearlRightClickedProcedure.execute(entity);
+			return ar;
+		}
+	});
+	public static final RegistryObject<Item> FIRE_PEARL = REGISTRY.register("fire_pearl", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.COMMON)));
+	public static final RegistryObject<Item> DEEP_GEM = REGISTRY.register("deep_gem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> SMALL_CRIMSERRY_SOUL_BERRY = block(UnseenWorldModBlocks.SMALL_CRIMSERRY_SOUL_BERRY);
 	public static final RegistryObject<Item> MISTERYFLOWER_SAPLING = block(UnseenWorldModBlocks.MISTERYFLOWER_SAPLING);
 	public static final RegistryObject<Item> DARK_CRIMSON_FENCE = block(UnseenWorldModBlocks.DARK_CRIMSON_FENCE);
@@ -122,133 +224,32 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> TANZASHROOM = block(UnseenWorldModBlocks.TANZASHROOM);
 	public static final RegistryObject<Item> TANZASHROOM_BLOCK = block(UnseenWorldModBlocks.TANZASHROOM_BLOCK);
 	public static final RegistryObject<Item> TANZASHROOM_STEM = block(UnseenWorldModBlocks.TANZASHROOM_STEM);
-	public static final RegistryObject<Item> MUSICDISC_PIANO = REGISTRY.register("musicdisc_piano", MusicdiscPianoItem::new);
-	public static final RegistryObject<Item> MUSIC_DISC_HAPPY_PLACE = REGISTRY.register("music_disc_happy_place", MusicDiscHappyPlaceItem::new);
-	public static final RegistryObject<Item> DARK_WATER_BUCKET = REGISTRY.register("dark_water_bucket", () -> new BucketItem(UnseenWorldModFluids.DARK_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.UNCOMMON)));
-	public static final RegistryObject<Item> LIQUID_OF_CHIMERY_BUCKET = REGISTRY.register("liquid_of_chimery_bucket", () -> new BucketItem(UnseenWorldModFluids.LIQUID_OF_CHIMERY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> MOON_FISHIN_BUCKET = REGISTRY.register("moon_fishin_bucket", () -> new MoonFishinBucketItem());
-	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_BUCKET = REGISTRY.register("dusty_pink_maxor_fish_bucket", () -> new DustyPinkMaxorFishBucketItem());
-	public static final RegistryObject<Item> DEEP_GEM_SWORD = REGISTRY.register("deep_gem_sword", () -> new Deep_GemSwordItem());
-	public static final RegistryObject<Item> VOID_INGOT_SWORD = REGISTRY.register("void_ingot_sword", () -> new Void_ingotSwordItem());
-	public static final RegistryObject<Item> RED_TITANIUM_SWORD = REGISTRY.register("red_titanium_sword", () -> new Red_TitaniumSwordItem());
-	public static final RegistryObject<Item> RED_TITANIUM_POISONOUS_SWORD = REGISTRY.register("red_titanium_poisonous_sword", () -> new RedTitaniumPoisonousSwordItem());
-	public static final RegistryObject<Item> NATURERIUM_SWORD = REGISTRY.register("naturerium_sword", () -> new NatureriumSwordItem());
-	public static final RegistryObject<Item> UNSEEN_SWORD = REGISTRY.register("unseen_sword", () -> new UnseenSwordItem());
-	public static final RegistryObject<Item> VOID_ENDERMEN_SWORD = REGISTRY.register("void_endermen_sword", () -> new VoidEndermenSwordItem());
-	public static final RegistryObject<Item> HEAVY_CLAYMORE = REGISTRY.register("heavy_claymore", () -> new HeavyClaymoreItem());
-	public static final RegistryObject<Item> LIGHT_TULVAR = REGISTRY.register("light_tulvar", () -> new LightTulvarItem());
-	public static final RegistryObject<Item> FIERY_SABER = REGISTRY.register("fiery_saber", () -> new FierySaberItem());
-	public static final RegistryObject<Item> VOID_HAMMER = REGISTRY.register("void_hammer", () -> new VoidHammerItem());
-	public static final RegistryObject<Item> REDNESS_HAMMER = REGISTRY.register("redness_hammer", () -> new RednessHammerItem());
-	public static final RegistryObject<Item> AMETHYST_HAMMER = REGISTRY.register("amethyst_hammer", () -> new AmethystHammerItem());
-	public static final RegistryObject<Item> TEALIVY_VOID_SPEAR = REGISTRY.register("tealivy_void_spear", TealivyVoidSpearItem::new);
-	public static final RegistryObject<Item> UNSEEN_TITANIUM_SPEAR = REGISTRY.register("unseen_titanium_spear", UnseenTitaniumSpearItem::new);
-	public static final RegistryObject<Item> NETHERIUM_STAFF = REGISTRY.register("netherium_staff", NetheriumStaffItem::new);
-	public static final RegistryObject<Item> VOID_STAFF = REGISTRY.register("void_staff", VoidStaffItem::new);
-	public static final RegistryObject<Item> TEALIVY_FIRE_STAFF = REGISTRY.register("tealivy_fire_staff", TealivyFireStaffItem::new);
-	public static final RegistryObject<Item> VOID_BOW = REGISTRY.register("void_bow", VoidBowItem::new);
-	public static final RegistryObject<Item> DEEP_GEM_ARMOR_HELMET = REGISTRY.register("deep_gem_armor_helmet", Deep_GemArmorItem.Helmet::new);
-	public static final RegistryObject<Item> DEEP_GEM_ARMOR_CHESTPLATE = REGISTRY.register("deep_gem_armor_chestplate", Deep_GemArmorItem.Chestplate::new);
-	public static final RegistryObject<Item> DEEP_GEM_ARMOR_LEGGINGS = REGISTRY.register("deep_gem_armor_leggings", Deep_GemArmorItem.Leggings::new);
-	public static final RegistryObject<Item> DEEP_GEM_ARMOR_BOOTS = REGISTRY.register("deep_gem_armor_boots", Deep_GemArmorItem.Boots::new);
-	public static final RegistryObject<Item> VOIDINGOT_ARMOR_HELMET = REGISTRY.register("voidingot_armor_helmet", VoidingotArmorItem.Helmet::new);
-	public static final RegistryObject<Item> VOIDINGOT_ARMOR_CHESTPLATE = REGISTRY.register("voidingot_armor_chestplate", VoidingotArmorItem.Chestplate::new);
-	public static final RegistryObject<Item> VOIDINGOT_ARMOR_LEGGINGS = REGISTRY.register("voidingot_armor_leggings", VoidingotArmorItem.Leggings::new);
-	public static final RegistryObject<Item> VOIDINGOT_ARMOR_BOOTS = REGISTRY.register("voidingot_armor_boots", VoidingotArmorItem.Boots::new);
-	public static final RegistryObject<Item> UNSEEN_ARMOR_HELMET = REGISTRY.register("unseen_armor_helmet", UnseenArmorItem.Helmet::new);
-	public static final RegistryObject<Item> UNSEEN_ARMOR_CHESTPLATE = REGISTRY.register("unseen_armor_chestplate", UnseenArmorItem.Chestplate::new);
-	public static final RegistryObject<Item> UNSEEN_ARMOR_LEGGINGS = REGISTRY.register("unseen_armor_leggings", UnseenArmorItem.Leggings::new);
-	public static final RegistryObject<Item> UNSEEN_ARMOR_BOOTS = REGISTRY.register("unseen_armor_boots", UnseenArmorItem.Boots::new);
-	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_HELMET = REGISTRY.register("red_titanium_armor_helmet", Red_TitaniumArmorItem.Helmet::new);
-	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_CHESTPLATE = REGISTRY.register("red_titanium_armor_chestplate", Red_TitaniumArmorItem.Chestplate::new);
-	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_LEGGINGS = REGISTRY.register("red_titanium_armor_leggings", Red_TitaniumArmorItem.Leggings::new);
-	public static final RegistryObject<Item> RED_TITANIUM_ARMOR_BOOTS = REGISTRY.register("red_titanium_armor_boots", Red_TitaniumArmorItem.Boots::new);
-	public static final RegistryObject<Item> NATURERIUM_ARMOR_HELMET = REGISTRY.register("naturerium_armor_helmet", NatureriumArmorItem.Helmet::new);
-	public static final RegistryObject<Item> NATURERIUM_ARMOR_CHESTPLATE = REGISTRY.register("naturerium_armor_chestplate", NatureriumArmorItem.Chestplate::new);
-	public static final RegistryObject<Item> NATURERIUM_ARMOR_LEGGINGS = REGISTRY.register("naturerium_armor_leggings", NatureriumArmorItem.Leggings::new);
-	public static final RegistryObject<Item> NATURERIUM_ARMOR_BOOTS = REGISTRY.register("naturerium_armor_boots", NatureriumArmorItem.Boots::new);
-	public static final RegistryObject<Item> KNIGHT_ARMOR_HELMET = REGISTRY.register("knight_armor_helmet", KnightArmorItem.Helmet::new);
-	public static final RegistryObject<Item> KNIGHT_ARMOR_CHESTPLATE = REGISTRY.register("knight_armor_chestplate", KnightArmorItem.Chestplate::new);
-	public static final RegistryObject<Item> KNIGHT_ARMOR_LEGGINGS = REGISTRY.register("knight_armor_leggings", KnightArmorItem.Leggings::new);
-	public static final RegistryObject<Item> KNIGHT_ARMOR_BOOTS = REGISTRY.register("knight_armor_boots", KnightArmorItem.Boots::new);
-	public static final RegistryObject<Item> BLAZER_HELMET_HELMET = REGISTRY.register("blazer_helmet_helmet", BlazerHelmetItem.Helmet::new);
-	public static final RegistryObject<Item> BLAZER_SHIELD = REGISTRY.register("blazer_shield", () -> new ShieldItem(new Item.Properties().durability(1240).fireResistant().rarity(Rarity.UNCOMMON)));
-	public static final RegistryObject<Item> DARKSKELETON_SPAWN_EGG = REGISTRY.register("darkskeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARKSKELETON, -14935012, -3355393, new Item.Properties()));
-	public static final RegistryObject<Item> AMETHYST_GOLEM_SPAWN_EGG = REGISTRY.register("amethyst_golem_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.AMETHYST_GOLEM, -10066330, -26113, new Item.Properties()));
-	public static final RegistryObject<Item> DARK_PHANTOM_SPAWN_EGG = REGISTRY.register("dark_phantom_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_PHANTOM, -16777216, -1, new Item.Properties()));
-	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_SPAWN_EGG = REGISTRY.register("dusty_pink_maxor_fish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH, -26113, -13421773, new Item.Properties()));
-	public static final RegistryObject<Item> MOONFISH_SPAWN_EGG = REGISTRY.register("moonfish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.MOONFISH, -11770241, -3355393, new Item.Properties()));
-	public static final RegistryObject<Item> CAVERN_SCARECROW_SPAWN_EGG = REGISTRY.register("cavern_scarecrow_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CAVERN_SCARECROW, -8355712, -27648, new Item.Properties()));
-	public static final RegistryObject<Item> SAVAGE_SMALL_BLAZE_SPAWN_EGG = REGISTRY.register("savage_small_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.SAVAGE_SMALL_BLAZE, -39424, -13434880, new Item.Properties()));
-	public static final RegistryObject<Item> CHIMERIC_PURPLEMARER_SPAWN_EGG = REGISTRY.register("chimeric_purplemarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CHIMERIC_PURPLEMARER, -13434829, -6750055, new Item.Properties()));
-	public static final RegistryObject<Item> CHIMERIC_REDMARER_SPAWN_EGG = REGISTRY.register("chimeric_redmarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CHIMERIC_REDMARER, -6750208, -6737152, new Item.Properties()));
-	public static final RegistryObject<Item> NETHERMEN_SPAWN_EGG = REGISTRY.register("nethermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.NETHERMEN, -33024, -41153, new Item.Properties()));
-	public static final RegistryObject<Item> RED_SLYLF_SPAWN_EGG = REGISTRY.register("red_slylf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_SLYLF, -6737152, -39373, new Item.Properties()));
-	public static final RegistryObject<Item> RED_BLAZE_SPAWN_EGG = REGISTRY.register("red_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_BLAZE, -11010048, -29184, new Item.Properties()));
-	public static final RegistryObject<Item> STREDER_SPAWN_EGG = REGISTRY.register("streder_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.STREDER, -9671553, -13421773, new Item.Properties()));
-	public static final RegistryObject<Item> GHAST_OF_TEALIVE_VALLEY_SPAWN_EGG = REGISTRY.register("ghast_of_tealive_valley_spawn_egg",
-			() -> new ForgeSpawnEggItem(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY, -16724839, -16724788, new Item.Properties()));
-	public static final RegistryObject<Item> TANZANITE_GUARDIAN_SPAWN_EGG = REGISTRY.register("tanzanite_guardian_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TANZANITE_GUARDIAN, -10092442, -39220, new Item.Properties()));
-	public static final RegistryObject<Item> DARKSPIRITWOLF_SPAWN_EGG = REGISTRY.register("darkspiritwolf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARKSPIRITWOLF, -13421773, -16724737, new Item.Properties()));
-	public static final RegistryObject<Item> VOID_ENDERMEN_SPAWN_EGG = REGISTRY.register("void_endermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.VOID_ENDERMEN, -13877415, -9846858, new Item.Properties()));
-	public static final RegistryObject<Item> TEALIVE_SKELETON_SPAWN_EGG = REGISTRY.register("tealive_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TEALIVE_SKELETON, -16764109, -16737946, new Item.Properties()));
-	public static final RegistryObject<Item> RED_RAVENGER_SPAWN_EGG = REGISTRY.register("red_ravenger_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_RAVENGER, -9297374, -49408, new Item.Properties()));
-	public static final RegistryObject<Item> DARK_HOGLIN_SPAWN_EGG = REGISTRY.register("dark_hoglin_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_HOGLIN, -3355393, -16777216, new Item.Properties()));
-	public static final RegistryObject<Item> DEEP_GEM_PICKAXE = REGISTRY.register("deep_gem_pickaxe", () -> new Deep_GemPickaxeItem());
-	public static final RegistryObject<Item> DEEP_GEM_AXE = REGISTRY.register("deep_gem_axe", () -> new Deep_GemAxeItem());
-	public static final RegistryObject<Item> DEEP_GEM_SHOVEL = REGISTRY.register("deep_gem_shovel", () -> new Deep_GemShovelItem());
-	public static final RegistryObject<Item> DEEP_GEM_HOE = REGISTRY.register("deep_gem_hoe", () -> new Deep_GemHoeItem());
-	public static final RegistryObject<Item> VOID_INGOT_PICKAXE = REGISTRY.register("void_ingot_pickaxe", () -> new Void_ingotPickaxeItem());
-	public static final RegistryObject<Item> VOID_INGOT_AXE = REGISTRY.register("void_ingot_axe", () -> new Void_ingotAxeItem());
-	public static final RegistryObject<Item> VOID_INGOT_SHOVEL = REGISTRY.register("void_ingot_shovel", () -> new Void_ingotShovelItem());
-	public static final RegistryObject<Item> VOID_INGOT_HOE = REGISTRY.register("void_ingot_hoe", () -> new Void_ingotHoeItem());
-	public static final RegistryObject<Item> RED_TITANIUM_PICKAXE = REGISTRY.register("red_titanium_pickaxe", () -> new Red_TitaniumPickaxeItem());
-	public static final RegistryObject<Item> RED_TITANIUM_AXE = REGISTRY.register("red_titanium_axe", () -> new Red_TitaniumAxeItem());
-	public static final RegistryObject<Item> RED_TITANIUM_SHOVEL = REGISTRY.register("red_titanium_shovel", () -> new Red_TitaniumShovelItem());
-	public static final RegistryObject<Item> RED_TITANIUM_HOE = REGISTRY.register("red_titanium_hoe", () -> new Red_TitaniumHoeItem());
-	public static final RegistryObject<Item> NATURERIUM_PICKAXE = REGISTRY.register("naturerium_pickaxe", () -> new NatureriumPickaxeItem());
-	public static final RegistryObject<Item> NATURERIUM_AXE = REGISTRY.register("naturerium_axe", () -> new NatureriumAxeItem());
-	public static final RegistryObject<Item> NATURERIUM_SHOVEL = REGISTRY.register("naturerium_shovel", () -> new NatureriumShovelItem());
-	public static final RegistryObject<Item> NATURERIUM_HOE = REGISTRY.register("naturerium_hoe", () -> new NatureriumHoeItem());
-	public static final RegistryObject<Item> UNSEEN_PICKAXE = REGISTRY.register("unseen_pickaxe", () -> new UnseenPickaxeItem());
-	public static final RegistryObject<Item> UNSEEN_AXE = REGISTRY.register("unseen_axe", () -> new UnseenAxeItem());
-	public static final RegistryObject<Item> UNSEEN_SHOVEL = REGISTRY.register("unseen_shovel", () -> new UnseenShovelItem());
-	public static final RegistryObject<Item> UNSEEN_HOE = REGISTRY.register("unseen_hoe", () -> new UnseenHoeItem());
-	public static final RegistryObject<Item> VOID_UPGRADE_SMITHING_TEMPLATE = REGISTRY.register("void_upgrade_smithing_template", VoidUpgradeSmithingTemplateItem::new);
-	public static final RegistryObject<Item> THE_DARKNESS = REGISTRY.register("the_darkness", TheDarknessItem::new);
-	public static final RegistryObject<Item> DARK_GOLEM_HEART = REGISTRY.register("dark_golem_heart", () -> new DarkGolemHeartItem());
-	public static final RegistryObject<Item> DARKPEARL = REGISTRY.register("darkpearl", () -> new Item(new Item.Properties().stacksTo(16).rarity(Rarity.RARE)){
-		@Override
-		public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-			InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-			DarkpearlRightclickedProcedure.execute(entity);
-			return ar;
-		}
-	});
-	public static final RegistryObject<Item> FIRE_PEARL = REGISTRY.register("fire_pearl", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.COMMON)));
-	public static final RegistryObject<Item> DEEP_GEM = REGISTRY.register("deep_gem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
+	public static final RegistryObject<Item> DARK_CURRANTSLATE = block(UnseenWorldModBlocks.DARK_CURRANTSLATE);
+	public static final RegistryObject<Item> DARK_CURRANTSLATE_STAIRS = block(UnseenWorldModBlocks.DARK_CURRANTSLATE_STAIRS);
+	public static final RegistryObject<Item> DARK_CURRANTSLATE_SLAB = block(UnseenWorldModBlocks.DARK_CURRANTSLATE_SLAB);
+	public static final RegistryObject<Item> DARK_CURRANTSLATE_WALL = block(UnseenWorldModBlocks.DARK_CURRANTSLATE_WALL);
 	public static final RegistryObject<Item> DEEP_GEM_ORE = block(UnseenWorldModBlocks.DEEP_GEM_ORE);
 	public static final RegistryObject<Item> DEEP_GEM_BLOCK = block(UnseenWorldModBlocks.DEEP_GEM_BLOCK);
 	public static final RegistryObject<Item> BLUE_VOID = REGISTRY.register("blue_void", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
-	public static final RegistryObject<Item> VOID_INGOT_INGOT = REGISTRY.register("void_ingot_ingot", () -> new Void_ingotIngotItem());
+	public static final RegistryObject<Item> VOID_INGOT = REGISTRY.register("void_ingot_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> VOID_INGOT_ORE = block(UnseenWorldModBlocks.VOID_INGOT_ORE);
 	public static final RegistryObject<Item> VOID_INGOT_BLOCK = block(UnseenWorldModBlocks.VOID_INGOT_BLOCK);
 	public static final RegistryObject<Item> RAW_RED_TITANIUM = REGISTRY.register("raw_red_titanium", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
-	public static final RegistryObject<Item> RED_TITANIUM_INGOT = REGISTRY.register("red_titanium_ingot", () -> new Red_TitaniumIngotItem());
+	public static final RegistryObject<Item> RED_TITANIUM_INGOT = REGISTRY.register("red_titanium_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> RED_TITANIUM_ORE = block(UnseenWorldModBlocks.RED_TITANIUM_ORE);
 	public static final RegistryObject<Item> RED_TITANIUM_BLOCK = block(UnseenWorldModBlocks.RED_TITANIUM_BLOCK);
 	public static final RegistryObject<Item> RAW_UNSEENIUM = REGISTRY.register("raw_unseenium", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)));
-	public static final RegistryObject<Item> UNSEEN_INGOT = REGISTRY.register("unseen_ingot", () -> new UnseenIngotItem());
+	public static final RegistryObject<Item> UNSEEN_INGOT = REGISTRY.register("unseen_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> UNSEEN_ORE = block(UnseenWorldModBlocks.UNSEEN_ORE);
 	public static final RegistryObject<Item> UNSEEN_BLOCK = block(UnseenWorldModBlocks.UNSEEN_BLOCK);
-	public static final RegistryObject<Item> NATURERIUM_INGOT = REGISTRY.register("naturerium_ingot", () -> new NatureriumIngotItem());
+	public static final RegistryObject<Item> NATURERIUM_INGOT = REGISTRY.register("naturerium_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> NATURERIUM_BLOCK = block(UnseenWorldModBlocks.NATURERIUM_BLOCK);
-	public static final RegistryObject<Item> RED_BLAZE_ROD = REGISTRY.register("red_blaze_rod", () -> new RedBlazeRodItem());
-	public static final RegistryObject<Item> BLAZE_SHIELD_SHARD = REGISTRY.register("blaze_shield_shard", () -> new BlazeShieldShardItem());
-	public static final RegistryObject<Item> TANZANITE_SHARD = REGISTRY.register("tanzanite_shard", () -> new TanzaniteShardItem());
-	public static final RegistryObject<Item> CHLORITE_SLATE_STONE_SHARD = REGISTRY.register("chlorite_slate_stone_shard", ChloriteSlateStoneShardItem::new);
-	public static final RegistryObject<Item> TEALIVE_STONY_SHARD = REGISTRY.register("tealive_stony_shard", () -> new TealiveStonyShardItem());
-	public static final RegistryObject<Item> DARK_FREE_SOUL = REGISTRY.register("dark_free_soul", () -> new DarkFreeSoulItem());
+	public static final RegistryObject<Item> RED_BLAZE_ROD = REGISTRY.register("red_blaze_rod", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> BLAZE_SHIELD_SHARD = REGISTRY.register("blaze_shield_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> TANZANITE_SHARD = REGISTRY.register("tanzanite_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> CHLORITE_SLATE_STONE_SHARD = REGISTRY.register("chlorite_slate_stone_shard", ()-> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> TEALIVE_STONY_SHARD = REGISTRY.register("tealive_stony_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> DARK_FREE_SOUL = REGISTRY.register("dark_free_soul", DarkFreeSoulItem::new);
 	public static final RegistryObject<Item> COLD_DARK_BRICKS = block(UnseenWorldModBlocks.COLD_DARK_BRICKS);
 	public static final RegistryObject<Item> GRASS_BLOCK_OF_SHINY_REDLIGHT = block(UnseenWorldModBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT);
 	public static final RegistryObject<Item> DARK_GRASS = block(UnseenWorldModBlocks.DARK_GRASS);
@@ -345,9 +346,9 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> OUTGROWTHAPPLE = REGISTRY.register("outgrowthapple", () -> new OutgrowthappleItem());
 	public static final RegistryObject<Item> CHIMERIC_BLUE_PEPPER = REGISTRY.register("chimeric_blue_pepper", () -> new ChimericBluePepperItem());
 	public static final RegistryObject<Item> PURPLE_BERRIES = REGISTRY.register("purple_berries", () -> new PurpleBerriesItem());
-	public static final RegistryObject<Item> LUMINOUSPORKCHOP = REGISTRY.register("luminousporkchop", () -> new LuminousporkchopItem());
-	public static final RegistryObject<Item> LUMINOUSCOOKEDPORKCHOP = REGISTRY.register("luminouscookedporkchop", () -> new LuminouscookedporkchopItem());
-	public static final RegistryObject<Item> BERRIESFROM_BLOOMING_VINE = REGISTRY.register("berriesfrom_blooming_vine", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1.5f).build())){
+	public static final RegistryObject<Item> LUMINOUS_PORKCHOP = REGISTRY.register("luminousporkchop", () -> new LuminousporkchopItem());
+	public static final RegistryObject<Item> LUMINOUS_COOKED_PORKCHOP = REGISTRY.register("luminouscookedporkchop", () -> new LuminouscookedporkchopItem());
+	public static final RegistryObject<Item> BERRIESFROM_BLOOMING_VINE = REGISTRY.register("berriesfrom_blooming_vine", () -> new ItemNameBlockItem(UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1.5f).build())){
 		@Override
 		public int getUseDuration(ItemStack itemstack) {
 			return 64;
@@ -362,7 +363,7 @@ public class UnseenWorldModItems {
 			return 24;
 		}
 	});
-	public static final RegistryObject<Item> COOKED_MOON_FISH = REGISTRY.register("cooked_moon_fish", () -> new CookedMoonFishItem());
+	public static final RegistryObject<Item> COOKED_MOON_FISH = REGISTRY.register("cooked_moon_fish", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(2.5f).build())));
 	public static final RegistryObject<Item> NIGHTDEW_NECTAR_BOTTLE = REGISTRY.register("nightdew_nectar_bottle", () -> new NightdewNectarBottleItem());
 	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_FOOD = REGISTRY.register("dusty_pink_maxor_fish_food", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(0.8f).build())){
 		@Override
@@ -370,7 +371,7 @@ public class UnseenWorldModItems {
 			return 24;
 		}
 	});
-	public static final RegistryObject<Item> COOKED_DUSTY_PINK_MAXOR_FISH = REGISTRY.register("cooked_dusty_pink_maxor_fish", () -> new CookedDustyPinkMaxorFishItem());
+	public static final RegistryObject<Item> COOKED_DUSTY_PINK_MAXOR_FISH = REGISTRY.register("cooked_dusty_pink_maxor_fish", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(3f).build())));
 	public static final RegistryObject<Item> DISH_VEGETABLE_WITH_PORK = REGISTRY.register("dish_vegetable_with_pork", () -> new DishVegetableWithPorkItem());
 	public static final RegistryObject<Item> BLAZER_SUMMON_BLOCK = block(UnseenWorldModBlocks.BLAZER_SUMMON_BLOCK);
 	public static final RegistryObject<Item> DARK_CRIMSON_BLOOMING_VINE = block(UnseenWorldModBlocks.DARK_CRIMSON_BLOOMING_VINE);

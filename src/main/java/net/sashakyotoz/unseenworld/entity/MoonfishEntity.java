@@ -44,16 +44,16 @@ public class MoonfishEntity extends WaterAnimal {
 		this(UnseenWorldModEntities.MOONFISH.get(), world);
 	}
 
-	public void travel(Vec3 p_27490_) {
+	public void travel(Vec3 vec3) {
 		if (this.isEffectiveAi() && this.isInWater()) {
-			this.moveRelative(0.015F, p_27490_);
+			this.moveRelative(0.015F, vec3);
 			this.move(MoverType.SELF, this.getDeltaMovement());
 			this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
 			if (this.getTarget() == null) {
 				this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
 			}
 		} else {
-			super.travel(p_27490_);
+			super.travel(vec3);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class MoonfishEntity extends WaterAnimal {
 						MoonfishEntity.this.setDeltaMovement(MoonfishEntity.this.getDeltaMovement().add(0.0D, (double) MoonfishEntity.this.getSpeed() * (dy / dw) * 0.25D, 0.0D));
 					}
 					MoonfishEntity.this.setSpeed(Mth.lerp(0.125F, MoonfishEntity.this.getSpeed(), fw));
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * MoonfishEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					MoonfishEntity.this.setYRot(this.rotlerp(MoonfishEntity.this.getYRot(), f, 10));
 					MoonfishEntity.this.yBodyRot = MoonfishEntity.this.getYRot();
@@ -122,7 +122,7 @@ public class MoonfishEntity extends WaterAnimal {
 
 	public void aiStep() {
 		if (!this.isInWater() && this.onGround() && this.verticalCollision) {
-			this.setDeltaMovement(this.getDeltaMovement().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F), (double) 0.4F, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F)));
+			this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F, 0.4F, (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F));
 			this.setOnGround(false);
 			this.hasImpulse = true;
 		}
@@ -146,12 +146,12 @@ public class MoonfishEntity extends WaterAnimal {
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.tropical_fish.hurt"));
+		return SoundEvents.TROPICAL_FISH_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.tropical_fish.death"));
+		return SoundEvents.TROPICAL_FISH_DEATH;
 	}
 
 	@Override

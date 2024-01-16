@@ -1,8 +1,8 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.NightdewOfChimericDarknessOnBlockRightClickedProcedure;
-import net.sashakyotoz.unseenworld.procedures.NightdewOfChimericDarknessUpdateTickProcedure;
+import net.sashakyotoz.unseenworld.managers.NightdewOfChimericDarknessOnBlockRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.NightdewOfChimericDarknessUpdateTickProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

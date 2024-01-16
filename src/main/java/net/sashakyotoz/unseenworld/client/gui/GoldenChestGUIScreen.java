@@ -17,11 +17,6 @@ public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUI
 
 	public GoldenChestGUIScreen(GoldenChestGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
-		Level world = container.world;
-		int x = container.x;
-		int y = container.y;
-		int z = container.z;
-		Player entity = container.entity;
 		this.imageWidth = 197;
 		this.imageHeight = 170;
 	}

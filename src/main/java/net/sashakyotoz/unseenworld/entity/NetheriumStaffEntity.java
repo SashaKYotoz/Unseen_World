@@ -3,7 +3,6 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,12 +17,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
 
-import net.sashakyotoz.unseenworld.procedures.NetheriumStaffWhileProjectileFlyingTickProcedure;
-import net.sashakyotoz.unseenworld.procedures.NetheriumStaffProjectileHitsBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.NetheriumStaffWhileProjectileFlyingTickProcedure;
+import net.sashakyotoz.unseenworld.managers.NetheriumStaffProjectileHitsBlockProcedure;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModSounds;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
@@ -34,10 +32,6 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 
 	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, Level world) {
 		super(type, world);
-	}
-
-	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
 	}
 
 	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, LivingEntity entity, Level world) {

@@ -1,10 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.procedures.TheWitherKnightEntityDiesProcedure;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -15,6 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -29,11 +27,16 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.managers.AdvancementManager;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -47,7 +50,7 @@ public class TheWitherKnightEntity extends Monster {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState idle1AnimationState = new AnimationState();
     public final AnimationState flyAnimationState = new AnimationState();
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
+    private final ServerBossEvent bossInfo = new ServerBossEvent(Component.translatable("entity.unseen_world.the_wither_knight").withStyle(ChatFormatting.YELLOW), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
     public TheWitherKnightEntity(PlayMessages.SpawnEntity packet, Level world) {
         this(UnseenWorldModEntities.THE_WITHER_KNIGHT.get(), world);
@@ -56,18 +59,25 @@ public class TheWitherKnightEntity extends Monster {
         super(type, world);
         xpReward = 20;
         setNoAi(false);
-        setCustomName(Component.literal("§6The Wither Knight"));
+        setCustomName(Component.translatable("entity.unseen_world.the_wither_knight").withStyle(ChatFormatting.YELLOW));
         setCustomNameVisible(true);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 16, true);
+    }
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if(!Objects.equals(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get(), UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.getDefault())){
+            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get());
+            this.setHealth(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get().floatValue());
+        }
     }
 
     public boolean isAdvanced() {
         return this.entityData.get(DATA_IS_ADVANCED);
     }
 
-    public void setAdvanced(boolean p_32759_) {
-        this.entityData.set(DATA_IS_ADVANCED, p_32759_);
+    public void setAdvanced(boolean advanced) {
+        this.entityData.set(DATA_IS_ADVANCED, advanced);
     }
 
     protected void defineSynchedData() {
@@ -90,36 +100,36 @@ public class TheWitherKnightEntity extends Monster {
             super.handleEntityEvent(p_219360_);
         }
     }
-    public boolean doHurtTarget(Entity p_34491_) {
-        if (!(p_34491_ instanceof LivingEntity)) {
+    public boolean doHurtTarget(Entity entity) {
+        if (!(entity instanceof LivingEntity)) {
             return false;
         } else {
             this.level().broadcastEntityEvent(this, (byte) 4);
-            return TheWitherKnightEntity.hurtAndThrowTarget(this, (LivingEntity) p_34491_);
+            return TheWitherKnightEntity.hurtAndThrowTarget(this, (LivingEntity) entity);
         }
     }
-    static boolean hurtAndThrowTarget(LivingEntity p_34643_, LivingEntity p_34644_) {
-        float f = (float) p_34643_.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        boolean flag = p_34644_.hurt(p_34643_.damageSources().mobAttack(p_34643_), f);
+    static boolean hurtAndThrowTarget(LivingEntity livingEntity, LivingEntity p_34644_) {
+        float f = (float) livingEntity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        boolean flag = p_34644_.hurt(livingEntity.damageSources().mobAttack(livingEntity), f);
         if (flag) {
-            p_34643_.doEnchantDamageEffects(p_34643_, p_34644_);
-            throwTarget(p_34643_, p_34644_);
+            livingEntity.doEnchantDamageEffects(livingEntity, p_34644_);
+            throwTarget(livingEntity, p_34644_);
         }
         return flag;
     }
-    static void throwTarget(LivingEntity p_34646_, LivingEntity p_34647_) {
-        double d0 = p_34646_.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-        double d1 = p_34647_.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+    static void throwTarget(LivingEntity livingEntity, LivingEntity livingEntity1) {
+        double d0 = livingEntity.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+        double d1 = livingEntity1.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
         double d2 = 0.5D + d0 - d1;
         if (!(d2 <= 0.0D)) {
-            double d3 = p_34647_.getX() - p_34646_.getX();
-            double d4 = p_34647_.getZ() - p_34646_.getZ();
-            float f = (float) (p_34646_.level().random.nextInt(21) - 8);
-            double d5 = d2 * (double) (p_34646_.level().random.nextFloat() * 0.75F + 0.25F);
+            double d3 = livingEntity1.getX() - livingEntity.getX();
+            double d4 = livingEntity1.getZ() - livingEntity.getZ();
+            float f = (float) (livingEntity.level().random.nextInt(21) - 8);
+            double d5 = d2 * (double) (livingEntity.level().random.nextFloat() * 0.75F + 0.25F);
             Vec3 vec3 = (new Vec3(d3, 0.0D, d4)).normalize().scale(d5).yRot(f);
-            double d6 = d2 * (double) p_34646_.level().random.nextFloat() * 0.5D;
-            p_34647_.push(vec3.x, d6, vec3.z);
-            p_34647_.hurtMarked = true;
+            double d6 = d2 * (double) livingEntity.level().random.nextFloat() * 0.5D;
+            livingEntity1.push(vec3.x, d6, vec3.z);
+            livingEntity1.hurtMarked = true;
         }
     }
     private boolean isMovingInAir() {
@@ -170,7 +180,6 @@ public class TheWitherKnightEntity extends Monster {
                 {
                     this.setFlags(EnumSet.of(Goal.Flag.MOVE));
                 }
-
                 public boolean canUse() {
                     return TheWitherKnightEntity.this.getTarget() != null && !TheWitherKnightEntity.this.getMoveControl().hasWanted();
                 }
@@ -281,8 +290,7 @@ public class TheWitherKnightEntity extends Monster {
             return false;
         if (source.is(DamageTypes.WITHER_SKULL))
             return false;
-        if(chance < 0.25 && isAdvanced())
-        {
+        if(chance < 0.25 && isAdvanced()) {
             this.setHealth(getHealth() + 5f);
             return false;
         }
@@ -292,12 +300,17 @@ public class TheWitherKnightEntity extends Monster {
     @Override
     public void die(DamageSource source) {
         super.die(source);
-        TheWitherKnightEntityDiesProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), source.getEntity());
-    }
-
-    @Override
-    public boolean canChangeDimensions() {
-        return false;
+        if(source.getEntity() instanceof Player player)
+            AdvancementManager.addAdvancement(player,AdvancementManager.THE_WITHER_KNIGHT_ADV);
+        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get()));
+        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.GOLDENCHEST.get()));
+        if(this.getRandom().nextBoolean()){
+            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get()));
+        }else{
+            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_LEGGINGS.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_BOOTS.get()));
+        }
     }
 
     @Override

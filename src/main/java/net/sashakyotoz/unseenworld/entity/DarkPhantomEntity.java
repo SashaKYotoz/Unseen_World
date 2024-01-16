@@ -73,11 +73,7 @@ public class DarkPhantomEntity extends Monster {
 			}
 
 			public boolean canUse() {
-				if (DarkPhantomEntity.this.getTarget() != null && !DarkPhantomEntity.this.getMoveControl().hasWanted()) {
-					return true;
-				} else {
-					return false;
-				}
+				return DarkPhantomEntity.this.getTarget() != null && !DarkPhantomEntity.this.getMoveControl().hasWanted();
 			}
 
 			@Override

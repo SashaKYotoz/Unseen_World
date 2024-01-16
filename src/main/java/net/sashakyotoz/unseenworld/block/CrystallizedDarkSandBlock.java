@@ -55,15 +55,15 @@ public class CrystallizedDarkSandBlock extends FallingBlock {
 		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	}
 
-	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof TieredItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 0;
-		return false;
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	public static void blockColorLoad(RegisterColorHandlersEvent.Block event) {
-		event.getBlockColors().register((bs, world, pos, index) -> world != null && pos != null ? Minecraft.getInstance().level.getBiome(pos).value().getSkyColor() : 8562943, UnseenWorldModBlocks.CRYSTALLIZED_DARK_SAND.get());
+		event.getBlockColors().register((bs, world, pos, index) -> {
+			if (world != null && pos != null) {
+				assert Minecraft.getInstance().level != null;
+				return Minecraft.getInstance().level.getBiome(pos).value().getSkyColor();
+			} else {
+				return 8562943;
+			}
+		}, UnseenWorldModBlocks.CRYSTALLIZED_DARK_SAND.get());
 	}
 }

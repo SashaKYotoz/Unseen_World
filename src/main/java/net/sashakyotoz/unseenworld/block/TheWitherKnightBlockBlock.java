@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.TheWitherKnightBlockEntityCollidesInTheBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.TheWitherKnightBlockEntityCollidesInTheBlockProcedure;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.CollisionContext;

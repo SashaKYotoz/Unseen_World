@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 
-import net.sashakyotoz.unseenworld.procedures.DarkFreeSoulRightclickedProcedure;
+import net.sashakyotoz.unseenworld.managers.DarkFreeSoulRightClickProcedure;
 
 public class DarkFreeSoulItem extends Item {
 	public DarkFreeSoulItem() {
@@ -26,10 +26,7 @@ public class DarkFreeSoulItem extends Item {
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		ItemStack itemstack = ar.getObject();
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		DarkFreeSoulRightclickedProcedure.execute(entity, itemstack);
+		DarkFreeSoulRightClickProcedure.execute(entity, itemstack);
 		return ar;
 	}
 }

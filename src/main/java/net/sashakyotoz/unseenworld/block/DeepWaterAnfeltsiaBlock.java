@@ -1,6 +1,10 @@
 
 package net.sashakyotoz.unseenworld.block;
 
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.*;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModFluids;
 import net.minecraft.client.renderer.BiomeColors;
@@ -11,34 +15,38 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 
-public class DeepWaterAnfeltsiaBlock extends BushBlock implements LiquidBlockContainer, net.minecraftforge.common.IForgeShearable {
+public class DeepWaterAnfeltsiaBlock extends BushBlock implements SimpleWaterloggedBlock,net.minecraftforge.common.IForgeShearable {
+	private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
 	public DeepWaterAnfeltsiaBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.PEONY).sound(SoundType.GRASS).instabreak().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).lightLevel(s -> 4).noCollission());
+		super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).replaceable().noCollission().instabreak().sound(SoundType.WET_GRASS).pushReaction(PushReaction.DESTROY).lightLevel(l->4));
 	}
 
 	public VoxelShape getShape(BlockState p_154525_, BlockGetter p_154526_, BlockPos p_154527_, CollisionContext p_154528_) {
 		return SHAPE;
 	}
 
-	protected boolean mayPlaceOn(BlockState p_154539_, BlockGetter p_154540_, BlockPos p_154541_) {
-		return p_154540_.getBlockState(p_154541_.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) || p_154540_.getBlockState(p_154541_.above()).is(Blocks.WATER);
+	protected boolean mayPlaceOn(BlockState p_154539_, BlockGetter blockGetter, BlockPos blockPos) {
+		return (blockGetter.getBlockState(blockPos.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) || blockGetter.getBlockState(blockPos.above()).is(Blocks.WATER)) && blockGetter.getBlockState(blockPos.below()).isSolid();
 	}
 
 	public BlockState updateShape(BlockState p_154530_, Direction p_154531_, BlockState p_154532_, LevelAccessor p_154533_, BlockPos p_154534_, BlockPos p_154535_) {
 		BlockState blockstate = super.updateShape(p_154530_, p_154531_, p_154532_, p_154533_, p_154534_, p_154535_);
+		if (!blockstate.isAir()) {
+			p_154533_.scheduleTick(p_154534_, UnseenWorldModFluids.DARK_WATER.get(), UnseenWorldModFluids.DARK_WATER.get().getTickDelay(p_154533_));
+		}
 		return blockstate;
 	}
-
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_56388_) {
+		p_56388_.add(WATERLOGGED);
+	}
 	public FluidState getFluidState(BlockState p_154537_) {
 		return UnseenWorldModFluids.DARK_WATER.get().getSource(false);
 	}
@@ -46,14 +54,5 @@ public class DeepWaterAnfeltsiaBlock extends BushBlock implements LiquidBlockCon
 	@OnlyIn(Dist.CLIENT)
 	public static void blockColorLoad(RegisterColorHandlersEvent.Block event) {
 		event.getBlockColors().register((bs, world, pos, index) -> world != null && pos != null ? BiomeColors.getAverageWaterColor(world, pos) : -1, UnseenWorldModBlocks.DEEP_WATER_ANFELTSIA.get());
-	}
-
-	@Override
-	public boolean canPlaceLiquid(BlockGetter p_154505_, BlockPos p_154506_, BlockState p_154507_, Fluid p_154508_) {
-		return false;
-	}
-	@Override
-	public boolean placeLiquid(LevelAccessor p_154520_, BlockPos p_154521_, BlockState p_154522_, FluidState p_154523_) {
-		return false;
 	}
 }

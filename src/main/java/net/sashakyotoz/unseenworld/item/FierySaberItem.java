@@ -14,8 +14,8 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 
-import net.sashakyotoz.unseenworld.procedures.FierySaberRightclickedProcedure;
-import net.sashakyotoz.unseenworld.procedures.FierySaberRightclickedOnBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.FierySaberRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.FierySaberRightClickedOnBlockProcedure;
 
 public class FierySaberItem extends SwordItem {
 	public FierySaberItem() {
@@ -49,14 +49,14 @@ public class FierySaberItem extends SwordItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		FierySaberRightclickedProcedure.execute(world, entity, ar.getObject());
+		FierySaberRightClickedProcedure.execute(world, entity, ar.getObject());
 		return ar;
 	}
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		InteractionResult retval = super.useOn(context);
-		FierySaberRightclickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer(), context.getItemInHand());
+		FierySaberRightClickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer(), context.getItemInHand());
 		return retval;
 	}
 }

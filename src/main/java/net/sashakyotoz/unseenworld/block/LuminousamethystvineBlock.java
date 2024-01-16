@@ -24,7 +24,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.procedures.LuminousamethystvineBlockDestroyedByPlayerProcedure;
+import net.sashakyotoz.unseenworld.managers.LuminousamethystvineBlockDestroyedByPlayerProcedure;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 public class LuminousamethystvineBlock extends Block implements SimpleWaterloggedBlock {
@@ -90,18 +90,27 @@ public class LuminousamethystvineBlock extends Block implements SimpleWaterlogge
 	}
 
 	@Override
-	public void randomTick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
-		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		if ((world.getBlockState(new BlockPos(x, y + 1, z))).getBlock() == Blocks.AIR) {
-			BlockPos _pos = new BlockPos(x, y, z);
-			Block.dropResources(world.getBlockState(_pos), world, new BlockPos(x, y, z), null);
-			world.destroyBlock(_pos, false);
+	public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos pos) {
+		return !levelReader.getBlockState(pos.above()).isAir();
+	}
+
+	@Override
+	public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+		super.onNeighborChange(state, level, pos, neighbor);
+		if (!state.canSurvive(level, pos)) {
+			Level level1 = (Level) level;
+			Block.dropResources(level.getBlockState(pos),level1, pos, null);
+			level1.destroyBlock(pos, true);
 		}
-		else if(world.getBlockState(BlockPos.containing(x, y - 1, z)).getBlock() == Blocks.AIR && Math.random() > 0.25) {
-			world.setBlock(new BlockPos(x,y-1,z), UnseenWorldModBlocks.LUMINOUSAMETHYSTVINE.get().defaultBlockState(),3);
+	}
+
+	@Override
+	public void randomTick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
+		super.randomTick(blockstate, world, pos, random);
+		if(!this.canSurvive(blockstate,world,pos))
+			world.destroyBlock(pos,true);
+		if(this.canSurvive(blockstate,world,pos) && world.getBlockState(pos.below()).isAir() && Math.random() < 0.25) {
+			world.setBlock(pos.below(), UnseenWorldModBlocks.LUMINOUSAMETHYSTVINE.get().defaultBlockState(),3);
 		}
 	}
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {

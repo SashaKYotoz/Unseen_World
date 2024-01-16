@@ -12,12 +12,12 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.EntityModel;
 
-import net.sashakyotoz.unseenworld.entity.NethermenEntity;
+import net.sashakyotoz.unseenworld.entity.NethermanEntity;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class ModelLava_Enderman<T extends NethermenEntity> extends EntityModel<T> {
+public class ModelLava_Enderman<T extends NethermanEntity> extends EntityModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_lava_enderman"), "main");
 	public final ModelPart head;
 	public final ModelPart chin;

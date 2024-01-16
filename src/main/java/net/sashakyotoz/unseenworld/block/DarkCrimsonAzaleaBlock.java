@@ -24,7 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.procedures.DarkCrimsonAzaleaClientDisplayRandomTickProcedure;
+import net.sashakyotoz.unseenworld.managers.DarkCrimsonAzaleaRandomTickProcedure;
 
 import java.util.List;
 import java.util.Collections;
@@ -102,6 +102,6 @@ public class DarkCrimsonAzaleaBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		DarkCrimsonAzaleaClientDisplayRandomTickProcedure.execute(world, x, y, z);
+		DarkCrimsonAzaleaRandomTickProcedure.execute(world, x, y, z);
 	}
 }

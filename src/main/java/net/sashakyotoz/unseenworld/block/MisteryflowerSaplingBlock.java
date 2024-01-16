@@ -1,9 +1,9 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.MisteryflowerSaplingPlantDestroyedByPlayerProcedure;
-import net.sashakyotoz.unseenworld.procedures.MisteryflowerSaplingPlantRightClickedProcedure;
-import net.sashakyotoz.unseenworld.procedures.MisteryflowerSaplingUpdateTickProcedure;
+import net.sashakyotoz.unseenworld.managers.MisteryflowerSaplingPlantDestroyedByPlayerProcedure;
+import net.sashakyotoz.unseenworld.managers.MisteryflowerSaplingPlantRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.MisteryflowerSaplingUpdateTickProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

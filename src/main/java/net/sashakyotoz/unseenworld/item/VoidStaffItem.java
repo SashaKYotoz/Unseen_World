@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.sashakyotoz.unseenworld.procedures.VoidStaffRangedItemUsedProcedure;
+import net.sashakyotoz.unseenworld.managers.VoidStaffRangedItemUsedProcedure;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +49,7 @@ public class VoidStaffItem extends Item {
 		if (slot == EquipmentSlot.MAINHAND) {
 			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 			builder.putAll(super.getDefaultAttributeModifiers(slot));
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Ranged item modifier", (double) 1, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Ranged item modifier", 1, AttributeModifier.Operation.ADDITION));
 			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Ranged item modifier", -2.4, AttributeModifier.Operation.ADDITION));
 			return builder.build();
 		}
@@ -62,9 +62,9 @@ public class VoidStaffItem extends Item {
 			double x = entity.getX();
 			double y = entity.getY();
 			double z = entity.getZ();
-			VoidStaffEntity entityarrow = VoidStaffEntity.shoot(world, entity, world.getRandom(), 1.5f, 4, 2);
+			VoidStaffEntity staffEntity = VoidStaffEntity.shoot(world, entity, world.getRandom(), 1.5f, 4, 2);
 			itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
-			entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+			staffEntity.pickup = AbstractArrow.Pickup.DISALLOWED;
 			VoidStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
 		}
 	}

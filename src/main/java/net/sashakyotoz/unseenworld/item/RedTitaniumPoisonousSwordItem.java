@@ -1,15 +1,15 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-
-import net.sashakyotoz.unseenworld.procedures.RedTitaniumPoisonousSwordLivingEntityIsHitWithToolProcedure;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 public class RedTitaniumPoisonousSwordItem extends SwordItem {
 	public RedTitaniumPoisonousSwordItem() {
@@ -41,9 +41,10 @@ public class RedTitaniumPoisonousSwordItem extends SwordItem {
 	}
 
 	@Override
-	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-		RedTitaniumPoisonousSwordLivingEntityIsHitWithToolProcedure.execute(entity);
+	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceEntity) {
+		boolean retval = super.hurtEnemy(itemstack, entity, sourceEntity);
+		if(!entity.level().isClientSide())
+			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 3));
 		return retval;
 	}
 }

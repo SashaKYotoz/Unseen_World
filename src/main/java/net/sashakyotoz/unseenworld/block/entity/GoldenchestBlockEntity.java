@@ -75,7 +75,7 @@ public class GoldenchestBlockEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("golden_chest");
+		return Component.translatable("block.unseen_world.golden_chest_label");
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class GoldenchestBlockEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("§6Golden chest");
+		return Component.translatable("block.unseen_world.golden_chest_label");
 	}
 
 	@Override

@@ -38,8 +38,6 @@ public class TealivyTreeFeature extends Feature<NoneFeatureConfiguration> {
 			return false;
 		if (template == null)
 			template = context.level().getLevel().getStructureManager().getOrCreate(new ResourceLocation("unseen_world", "tealivy_tree"));
-		if (template == null)
-			return false;
 		boolean anyPlaced = false;
 		if ((context.random().nextInt(1000000) + 1) <= 250000) {
 			int count = context.random().nextInt(1) + 1;

@@ -356,9 +356,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33887_, DifficultyInstance p_33888_, MobSpawnType p_33889_, @Nullable SpawnGroupData p_33890_, @Nullable CompoundTag p_33891_) {
-        if (this.isBaby()) {
-            return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
-        } else {
+        if (!this.isBaby()) {
             RandomSource randomsource = p_33887_.getRandom();
             if (randomsource.nextInt(30) == 0) {
                 Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(p_33887_.getLevel());
@@ -374,10 +372,10 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
                     p_33890_ = this.spawnJockey(p_33887_, p_33888_, ageablemob, null);
                 }
             } else {
-                p_33890_ = new AgeableMob.AgeableMobGroupData(0.5F);
+                p_33890_ = new AgeableMobGroupData(0.5F);
             }
-            return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
         }
+        return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
     }
 
     private SpawnGroupData spawnJockey(ServerLevelAccessor p_33882_, DifficultyInstance p_33883_, Mob p_33884_, @Nullable SpawnGroupData p_33885_) {

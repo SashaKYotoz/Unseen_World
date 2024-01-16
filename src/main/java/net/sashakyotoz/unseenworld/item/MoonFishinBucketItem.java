@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.InteractionResult;
 
-import net.sashakyotoz.unseenworld.procedures.MoonFishinBucketRightclickedOnBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.MoonFishInBucketRightClickedOnBlockProcedure;
 
 public class MoonFishinBucketItem extends Item {
 	public MoonFishinBucketItem() {
@@ -23,7 +23,7 @@ public class MoonFishinBucketItem extends Item {
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		super.useOn(context);
-		MoonFishinBucketRightclickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer());
+		MoonFishInBucketRightClickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer());
 		return InteractionResult.SUCCESS;
 	}
 }

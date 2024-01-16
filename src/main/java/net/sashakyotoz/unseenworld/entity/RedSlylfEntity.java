@@ -5,7 +5,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.*;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -36,12 +35,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.procedures.RedSylphRightClickedOnEntityProcedure;
+import net.sashakyotoz.unseenworld.managers.RedSylphRightClickedOnEntityProcedure;
 
 import java.util.List;
 
@@ -91,11 +89,6 @@ public class RedSlylfEntity extends TamableAnimal {
 	@Override
 	public MobType getMobType() {
 		return MobType.UNDEFINED;
-	}
-
-	@Override
-	public double getPassengersRidingOffset() {
-		return super.getPassengersRidingOffset() + 1.5;
 	}
 
 	@Override

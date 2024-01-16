@@ -31,7 +31,7 @@ public class UnseenWorldModTrades {
 
                     new ItemStack(Blocks.BROWN_MUSHROOM), 10, 5, 0.05f));
             trades.get(2).add(new BasicItemListing(new ItemStack(UnseenWorldModItems.RAW_UNSEENIUM.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 4), new ItemStack(UnseenWorldModItems.UNSEEN_INGOT.get(), 2), 10, 5, 0.05f));
-            trades.get(2).add(new BasicItemListing(new ItemStack(UnseenWorldModItems.BLUE_VOID.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 6), new ItemStack(UnseenWorldModItems.VOID_INGOT_INGOT.get()), 10, 5, 0.05f));
+            trades.get(2).add(new BasicItemListing(new ItemStack(UnseenWorldModItems.BLUE_VOID.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 6), new ItemStack(UnseenWorldModItems.VOID_INGOT.get()), 10, 5, 0.05f));
             trades.get(2).add(new BasicItemListing(new ItemStack(UnseenWorldModItems.NATURERIUM_INGOT.get()),
 
                     new ItemStack(Items.NETHERITE_SCRAP, 2), 5, 5, 0.05f));

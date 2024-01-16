@@ -1,9 +1,9 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.SmallCrimserrySoulBerryPlantDestroyedByPlayerProcedure;
-import net.sashakyotoz.unseenworld.procedures.SmallCrimserrySoulBerryPlantRightClickedProcedure;
-import net.sashakyotoz.unseenworld.procedures.SmallCrimserrySoulBerryUpdateTickProcedure;
+import net.sashakyotoz.unseenworld.managers.SmallCrimserrySoulBerryPlantDestroyedByPlayerProcedure;
+import net.sashakyotoz.unseenworld.managers.SmallCrimserrySoulBerryPlantRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.SmallCrimserrySoulBerryUpdateTickProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

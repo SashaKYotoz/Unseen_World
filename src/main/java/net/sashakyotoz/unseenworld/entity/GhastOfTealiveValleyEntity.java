@@ -78,20 +78,20 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		return true;
 	}
 
-	private static boolean isReflectedFireball(DamageSource p_238408_) {
-		return p_238408_.getDirectEntity() instanceof LargeFireball && p_238408_.getEntity() instanceof Player;
+	private static boolean isReflectedFireball(DamageSource damageSource) {
+		return damageSource.getDirectEntity() instanceof LargeFireball && damageSource.getEntity() instanceof Player;
 	}
 
-	public boolean isInvulnerableTo(DamageSource p_238289_) {
-		return !isReflectedFireball(p_238289_) && super.isInvulnerableTo(p_238289_);
+	public boolean isInvulnerableTo(DamageSource damageSource) {
+		return !isReflectedFireball(damageSource) && super.isInvulnerableTo(damageSource);
 	}
 
-	public boolean hurt(DamageSource p_32730_, float p_32731_) {
-		if (isReflectedFireball(p_32730_)) {
-			super.hurt(p_32730_, 1000.0F);
+	public boolean hurt(DamageSource damageSource, float p_32731_) {
+		if (isReflectedFireball(damageSource)) {
+			super.hurt(damageSource, 1000.0F);
 			return true;
 		} else {
-			return !this.isInvulnerableTo(p_32730_) && super.hurt(p_32730_, p_32731_);
+			return !this.isInvulnerableTo(damageSource) && super.hurt(damageSource, p_32731_);
 		}
 	}
 
@@ -124,19 +124,19 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		return 5.0F;
 	}
 
-	public void addAdditionalSaveData(CompoundTag p_32744_) {
-		super.addAdditionalSaveData(p_32744_);
-		p_32744_.putByte("ExplosionPower", (byte) this.explosionPower);
+	public void addAdditionalSaveData(CompoundTag compoundTag) {
+		super.addAdditionalSaveData(compoundTag);
+		compoundTag.putByte("ExplosionPower", (byte) this.explosionPower);
 	}
 
-	public void readAdditionalSaveData(CompoundTag p_32733_) {
-		super.readAdditionalSaveData(p_32733_);
-		if (p_32733_.contains("ExplosionPower", 99)) {
-			this.explosionPower = p_32733_.getByte("ExplosionPower");
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
+		if (tag.contains("ExplosionPower", 99)) {
+			this.explosionPower = tag.getByte("ExplosionPower");
 		}
 	}
 
-	protected float getStandingEyeHeight(Pose p_32741_, EntityDimensions p_32742_) {
+	protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
 		return 2.6F;
 	}
 
@@ -177,9 +177,9 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		private final GhastOfTealiveValleyEntity ghast;
 		private int floatDuration;
 
-		public GhastMoveControl(GhastOfTealiveValleyEntity p_32768_) {
-			super(p_32768_);
-			this.ghast = p_32768_;
+		public GhastMoveControl(GhastOfTealiveValleyEntity ghastOfTealiveValleyEntity) {
+			super(ghastOfTealiveValleyEntity);
+			this.ghast = ghastOfTealiveValleyEntity;
 		}
 
 		public void tick() {
@@ -198,10 +198,10 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 			}
 		}
 
-		private boolean canReach(Vec3 p_32771_, int p_32772_) {
+		private boolean canReach(Vec3 vec3, int p_32772_) {
 			AABB aabb = this.ghast.getBoundingBox();
 			for (int i = 1; i < p_32772_; ++i) {
-				aabb = aabb.move(p_32771_);
+				aabb = aabb.move(vec3);
 				if (!this.ghast.level().noCollision(this.ghast, aabb)) {
 					return false;
 				}

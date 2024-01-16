@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.item;
 
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.procedures.UnseenArmorBodyTickEventProcedure;
+import net.sashakyotoz.unseenworld.managers.UnseenArmorBodyTickEventProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.sounds.SoundEvent;

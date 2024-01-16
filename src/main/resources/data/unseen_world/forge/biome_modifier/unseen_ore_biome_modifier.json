@@ -4,7 +4,8 @@
     "unseen_world:tanzanite_above_ground_cavern",
     "unseen_world:dark_basalt_detlas",
     "unseen_world:dark_wasteland",
-    "unseen_world:darkcrimsonforest"
+    "unseen_world:dark_crimson_valley",
+    "unseen_world:shiny_caverns"
   ],
   "features": "unseen_world:unseen_ore",
   "step": "underground_ores"

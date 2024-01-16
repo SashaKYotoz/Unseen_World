@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 
-import net.sashakyotoz.unseenworld.procedures.GrassBlockOfShinyRedlightAdditionalGenerationConditionProcedure;
+import net.sashakyotoz.unseenworld.managers.GrassBlockOfShinyRedlightAdditionalGenerationConditionProcedure;
 
 import java.util.Set;
 

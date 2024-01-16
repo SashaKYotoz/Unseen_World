@@ -34,7 +34,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import net.sashakyotoz.unseenworld.block.entity.GoldenchestBlockEntity;
-import net.sashakyotoz.unseenworld.procedures.GoldenchestOnBlockRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.GoldenchestOnBlockRightClickedProcedure;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
 
 import java.util.Collections;
@@ -115,7 +115,7 @@ public class GoldenchestBlock extends Block implements EntityBlock {
 			NetworkHooks.openScreen(player, new MenuProvider() {
 				@Override
 				public Component getDisplayName() {
-					return Component.literal("§6Golden chest");
+					return Component.translatable("block.unseen_world.golden_chest_label");
 				}
 
 				@Override

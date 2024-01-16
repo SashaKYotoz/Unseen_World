@@ -95,7 +95,6 @@ public class ModelThe_Wither_Knight<T extends TheWitherKnightEntity> extends Hie
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.Head.yRot = netHeadYaw / (180F / (float) Math.PI);
 		this.Head.xRot = headPitch / (180F / (float) Math.PI);
-		int random = (int) Math.round((Math.random()));
 		this.animate(entity.attackAnimationState, WitherKnightAnimations.ATTACK, ageInTicks);
 		this.animate(entity.attack1AnimationState, WitherKnightAnimations.ATTACK1, ageInTicks);
 		this.animate(entity.walkAnimationState, WitherKnightAnimations.WALK, ageInTicks);

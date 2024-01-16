@@ -17,7 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerPlayer;
 
-import net.sashakyotoz.unseenworld.procedures.NetheriumStaffRangedItemUsedProcedure;
+import net.sashakyotoz.unseenworld.managers.NetheriumStaffRangedItemUsedProcedure;
 import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
 import com.google.common.collect.Multimap;

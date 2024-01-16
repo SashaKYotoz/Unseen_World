@@ -3,8 +3,8 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.procedures.VoidBowProjectileHitsPlayerProcedure;
-import net.sashakyotoz.unseenworld.procedures.VoidBowWhileProjectileFlyingTickProcedure;
+import net.sashakyotoz.unseenworld.managers.VoidBowProjectileHitsPlayerProcedure;
+import net.sashakyotoz.unseenworld.managers.VoidBowWhileProjectileFlyingTickProcedure;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;

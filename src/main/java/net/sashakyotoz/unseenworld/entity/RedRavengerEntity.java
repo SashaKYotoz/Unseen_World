@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
+import net.minecraft.nbt.CompoundTag;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.core.BlockPos;
@@ -9,7 +10,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -37,11 +37,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMount, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(RedRavengerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -180,6 +180,15 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
         }
         return retval;
     }
+    public void addAdditionalSaveData(CompoundTag tag) {
+        tag.putBoolean("serpentSaddled", isSaddled());
+        super.addAdditionalSaveData(tag);
+    }
+
+    public void readAdditionalSaveData(CompoundTag tag) {
+        setSaddled(tag.getBoolean("serpentSaddled"));
+        super.readAdditionalSaveData(tag);
+    }
 
     private void clampRotation(Entity p_252070_) {
         p_252070_.setYBodyRot(this.getYRot());
@@ -223,7 +232,7 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
                 }
             }
 
-            Vec3 vec3 = (new Vec3((double)f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+            Vec3 vec3 = (new Vec3(f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
             p_38379_.setPos(this.getX() + vec3.x, this.getY() + (double)f1 + 0.5, this.getZ() + vec3.z);
             this.clampRotation(p_38379_);
             if (p_38379_ instanceof Animal && this.getPassengers().size() == 2) {
@@ -237,17 +246,17 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of(UnseenWorldModItems.LUMINOUSPORKCHOP.get(), Items.BEEF, Items.MUTTON, Items.PORKCHOP).contains(stack.getItem());
+        return List.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), Items.BEEF, Items.MUTTON, Items.PORKCHOP).contains(stack.getItem());
     }
 
 
     public boolean isSaddle(ItemStack stack) {
-        return List.of(Items.SADDLE).contains(stack.getItem());
+        return Objects.equals(Items.SADDLE, stack.getItem());
     }
 
     @Override
     public void travel(Vec3 dir) {
-        Entity entity = this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
+        Entity entity = this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
         if (this.isVehicle()) {
             this.setYRot(entity.getYRot());
             this.yRotO = this.getYRot();

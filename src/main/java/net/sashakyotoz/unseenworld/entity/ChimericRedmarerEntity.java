@@ -21,7 +21,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -44,7 +43,7 @@ import java.util.Set;
 
 public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(ChimericRedmarerEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUSPORKCHOP.get(), UnseenWorldModItems.LUMINOUSCOOKEDPORKCHOP.get());
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), UnseenWorldModItems.LUMINOUS_COOKED_PORKCHOP.get());
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(ChimericRedmarerEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(ChimericRedmarerEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);
@@ -59,11 +58,11 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         xpReward = 2;
         setNoAi(false);
     }
-    protected void tickRidden(Player p_278331_, Vec3 p_278234_) {
+    protected void tickRidden(Player p_278331_, Vec3 vec3) {
         this.setRot(p_278331_.getYRot(), p_278331_.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         this.steering.tickBoost();
-        super.tickRidden(p_278331_, p_278234_);
+        super.tickRidden(p_278331_, vec3);
     }
 
     protected Vec3 getRiddenInput(Player p_278251_, Vec3 p_275578_) {
@@ -141,7 +140,7 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return p_33880_.isUnobstructed(this);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getFirstPassenger();
         if (entity instanceof Player player) {
@@ -151,7 +150,6 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         }
         return null;
     }
-
     public Vec3 getDismountLocationForPassenger(LivingEntity p_33908_) {
         Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot()),
                 getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 22.5F),
@@ -176,7 +174,7 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return this.moveDist + 0.5F;
     }
 
-    protected void playStepSound(BlockPos p_33915_, BlockState p_33916_) {
+    protected void playStepSound(BlockPos pos, BlockState state) {
         this.playSound(SoundEvents.STRIDER_STEP, 1.0F, 1.0F);
     }
 
@@ -192,7 +190,7 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return SoundEvents.FOX_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound(DamageSource p_33934_) {
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
         return SoundEvents.FOX_HURT;
     }
 
@@ -200,7 +198,7 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return SoundEvents.FOX_DEATH;
     }
 
-    protected boolean canAddPassenger(Entity p_33950_) {
+    protected boolean canAddPassenger(Entity entity) {
         return !this.isVehicle();
     }
 
@@ -213,12 +211,12 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
     }
 
     @javax.annotation.Nullable
-    public ChimericRedmarerEntity getBreedOffspring(ServerLevel p_149861_, AgeableMob p_149862_) {
-        return UnseenWorldModEntities.CHIMERIC_REDMARER.get().create(p_149861_);
+    public ChimericRedmarerEntity getBreedOffspring(ServerLevel serverLevel, AgeableMob mob) {
+        return UnseenWorldModEntities.CHIMERIC_REDMARER.get().create(serverLevel);
     }
 
-    public boolean isFood(ItemStack p_33946_) {
-        return FOOD_ITEMS.test(p_33946_);
+    public boolean isFood(ItemStack stack) {
+        return FOOD_ITEMS.test(stack);
     }
 
     protected void dropEquipment() {
@@ -228,18 +226,18 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         }
     }
 
-    public InteractionResult mobInteract(Player p_33910_, InteractionHand p_33911_) {
-        boolean flag = this.isFood(p_33910_.getItemInHand(p_33911_));
-        if (!flag && this.isSaddled() && !this.isVehicle() && !p_33910_.isSecondaryUseActive()) {
+    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        boolean flag = this.isFood(player.getItemInHand(interactionHand));
+        if (!flag && this.isSaddled() && !this.isVehicle() && !player.isSecondaryUseActive()) {
             if (!this.level().isClientSide) {
-                p_33910_.startRiding(this);
+                player.startRiding(this);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
-            InteractionResult interactionresult = super.mobInteract(p_33910_, p_33911_);
+            InteractionResult interactionresult = super.mobInteract(player, interactionHand);
             if (!interactionresult.consumesAction()) {
-                ItemStack itemstack = p_33910_.getItemInHand(p_33911_);
-                return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(p_33910_, this, p_33911_) : InteractionResult.PASS;
+                ItemStack itemstack = player.getItemInHand(interactionHand);
+                return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(player, this, interactionHand) : InteractionResult.PASS;
             } else {
                 if (flag && !this.isSilent()) {
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FOX_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
@@ -276,16 +274,15 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
     }
 
-    private SpawnGroupData spawnJockey(ServerLevelAccessor p_33882_, DifficultyInstance p_33883_, Mob p_33884_, @Nullable SpawnGroupData p_33885_) {
-        p_33884_.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-        p_33884_.finalizeSpawn(p_33882_, p_33883_, MobSpawnType.JOCKEY, p_33885_, null);
-        p_33884_.startRiding(this, true);
+    private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance instance, Mob mob, @Nullable SpawnGroupData p_33885_) {
+        mob.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+        mob.finalizeSpawn(accessor, instance, MobSpawnType.JOCKEY, p_33885_, null);
+        mob.startRiding(this, true);
         return new AgeableMob.AgeableMobGroupData(0.0F);
     }
 
     public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.CHIMERIC_REDMARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Mob::checkMobSpawnRules);
+        SpawnPlacements.register(UnseenWorldModEntities.CHIMERIC_REDMARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

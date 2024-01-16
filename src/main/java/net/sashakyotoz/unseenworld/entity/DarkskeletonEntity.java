@@ -1,46 +1,32 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
-
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.Difficulty;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-
-import net.sashakyotoz.unseenworld.procedures.DarkskeletonEntityDiesProcedure;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 
 public class DarkskeletonEntity extends Monster {
 	public int texture;
 
 	public DarkskeletonEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.DARKSKELETON.get(), world);
+		this(UnseenWorldModEntities.DARK_SKELETON.get(), world);
 	}
 
 	public DarkskeletonEntity(EntityType<DarkskeletonEntity> type, Level world) {
@@ -74,7 +60,7 @@ public class DarkskeletonEntity extends Monster {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.skeleton.ambient"));
+		return SoundEvents.SKELETON_AMBIENT;
 	}
 
 	@Override
@@ -105,14 +91,8 @@ public class DarkskeletonEntity extends Monster {
 		return super.hurt(source, amount);
 	}
 
-	@Override
-	public void die(DamageSource source) {
-		super.die(source);
-		DarkskeletonEntityDiesProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ());
-	}
-
 	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.DARKSKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+		SpawnPlacements.register(UnseenWorldModEntities.DARK_SKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 

@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.block;
 
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.procedures.TanzashroomPlantRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.TanzashroomPlantRightClickedProcedure;
 
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;

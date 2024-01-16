@@ -44,8 +44,8 @@ import java.util.Set;
 
 public class ChimericPurplemarerEntity extends TamableAnimal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(ChimericPurplemarerEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUSPORKCHOP.get(), UnseenWorldModItems.LUMINOUSCOOKEDPORKCHOP.get());
-    private static final Ingredient TEMPT_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUSPORKCHOP.get(), Items.WARPED_FUNGUS_ON_A_STICK);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), UnseenWorldModItems.LUMINOUS_COOKED_PORKCHOP.get());
+    private static final Ingredient TEMPT_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), Items.WARPED_FUNGUS_ON_A_STICK);
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(ChimericPurplemarerEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(ChimericPurplemarerEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);

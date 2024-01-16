@@ -1,18 +1,13 @@
 {
-  "type": "unseen_world:tanzanite_block",
+  "type": "minecraft:ore",
   "config": {
-    "size": 2,
+    "size": 64,
     "discard_chance_on_air_exposure": 0,
     "targets": [
       {
         "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "minecraft:deepslate",
-            "Properties": {
-              "axis": "y"
-            }
-          }
+          "predicate_type": "minecraft:tag_match",
+          "tag": "unseen_world:stone_the_darkness"
         },
         "state": {
           "Name": "unseen_world:tanzanite_block"
@@ -20,35 +15,11 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "minecraft:blackstone"
-          }
+          "predicate_type": "minecraft:block_match",
+          "block": "unseen_world:tanzanite_block"
         },
         "state": {
-          "Name": "unseen_world:tanzanite_block"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "minecraft:stone"
-          }
-        },
-        "state": {
-          "Name": "unseen_world:tanzanite_block"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "unseen_world:amethyst_grass_block"
-          }
-        },
-        "state": {
-          "Name": "unseen_world:tanzanite_block"
+          "Name": "unseen_world:chlorite_slate_stone"
         }
       }
     ]

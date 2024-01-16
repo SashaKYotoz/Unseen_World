@@ -16,10 +16,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.procedures.BlazerSummonBlockEntityCollidesInTheBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.BlazerSummonBlockEntityCollidesInTheBlockProcedure;
 
 public class BlazerSummonBlockBlock extends Block {
 	public BlazerSummonBlockBlock() {

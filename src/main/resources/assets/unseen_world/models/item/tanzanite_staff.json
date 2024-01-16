@@ -1,0 +1,7 @@
+{
+  "parent": "unseen_world:custom/tanzanite_staff",
+  "textures": {
+    "0": "unseen_world:item/tanzanite_staff",
+    "particle": "unseen_world:item/tanzanite_staff"
+  }
+}

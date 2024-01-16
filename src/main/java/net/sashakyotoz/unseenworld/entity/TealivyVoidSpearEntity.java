@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.core.BlockPos;
@@ -87,17 +88,13 @@ public class TealivyVoidSpearEntity extends AbstractArrow {
 		}
 	}
 
-	public boolean isFoil() {
-		return this.entityData.get(ID_FOIL);
-	}
-
 	@Nullable
-	protected EntityHitResult findHitEntity(Vec3 p_37575_, Vec3 p_37576_) {
-		return this.dealtDamage ? null : super.findHitEntity(p_37575_, p_37576_);
+	protected EntityHitResult findHitEntity(Vec3 vec3, Vec3 p_37576_) {
+		return this.dealtDamage ? null : super.findHitEntity(vec3, p_37576_);
 	}
 
-	protected void onHitEntity(EntityHitResult p_37573_) {
-		Entity entity = p_37573_.getEntity();
+	protected void onHitEntity(EntityHitResult entityHitResult) {
+		Entity entity = entityHitResult.getEntity();
 		float f = 8.0F;
 		if (entity instanceof LivingEntity livingentity) {
 			f += EnchantmentHelper.getDamageBonus(this.tridentItem, livingentity.getMobType());
@@ -192,11 +189,12 @@ public class TealivyVoidSpearEntity extends AbstractArrow {
 		return true;
 	}
 
-	public TealivyVoidSpearEntity(Level p_37569_, LivingEntity p_37570_, ItemStack p_37571_) {
-		super(UnseenWorldModEntities.TEALIVY_VOID_SPEAR.get(), p_37570_, p_37569_);
-		this.tridentItem = p_37571_.copy();
-		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(p_37571_));
-		this.entityData.set(ID_FOIL, p_37571_.hasFoil());
+	public TealivyVoidSpearEntity(Level level, LivingEntity entity, ItemStack stack) {
+		super(UnseenWorldModEntities.TEALIVY_VOID_SPEAR.get(), entity, level);
+		this.tridentItem = stack.copy();
+		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(stack));
+		this.entityData.set(ID_FOIL, stack.hasFoil());
+		UnseenWorldMod.LOGGER.debug("Bytes: " + (byte) EnchantmentHelper.getLoyalty(stack));
 	}
 
 	protected void defineSynchedData() {

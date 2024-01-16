@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.block;
 
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.procedures.TealivyJadeVineFlowerPlantRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.TealivyJadeVineFlowerPlantRightClickedProcedure;
 
 import net.minecraftforge.common.PlantType;
 

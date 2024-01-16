@@ -1,8 +1,0 @@
-{
-  "type": "unseen_world:dark_grass",
-  "config": {
-    "size": 1,
-    "discard_chance_on_air_exposure": 0,
-    "targets": []
-  }
-}

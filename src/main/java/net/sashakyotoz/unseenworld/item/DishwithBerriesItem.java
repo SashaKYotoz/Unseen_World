@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.network.chat.Component;
 
-import net.sashakyotoz.unseenworld.procedures.DishwithBerriesFoodEatenProcedure;
+import net.sashakyotoz.unseenworld.managers.DishwithBerriesFoodEatenProcedure;
 
 import java.util.List;
 

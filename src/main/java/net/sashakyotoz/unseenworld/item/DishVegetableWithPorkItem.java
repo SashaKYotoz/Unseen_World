@@ -1,7 +1,6 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.Rarity;
@@ -12,7 +11,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;
 
-import net.sashakyotoz.unseenworld.procedures.DishwithBerriesFoodEatenProcedure;
+import net.sashakyotoz.unseenworld.managers.DishwithBerriesFoodEatenProcedure;
 
 public class DishVegetableWithPorkItem extends Item {
 	public DishVegetableWithPorkItem() {

@@ -1,42 +1,32 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.hoglin.HoglinBase;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
-
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.monster.hoglin.HoglinBase;
-import net.minecraft.world.entity.monster.hoglin.Hoglin;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.Difficulty;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-
-import net.sashakyotoz.unseenworld.procedures.DarkHoglinEntityDiesProcedure;
 
 public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 	private int attackAnimationRemainingTicks;
@@ -51,14 +41,14 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 		setNoAi(false);
 	}
 
-	public boolean doHurtTarget(Entity p_34491_) {
-		if (!(p_34491_ instanceof LivingEntity)) {
+	public boolean doHurtTarget(Entity entity) {
+		if (!(entity instanceof LivingEntity)) {
 			return false;
 		} else {
 			this.attackAnimationRemainingTicks = 15;
 			this.level().broadcastEntityEvent(this, (byte) 4);
 			this.playSound(SoundEvents.HOGLIN_ATTACK, 1.0F, this.getVoicePitch());
-			return HoglinBase.hurtAndThrowTarget(this, (LivingEntity) p_34491_);
+			return HoglinBase.hurtAndThrowTarget(this, (LivingEntity) entity);
 		}
 	}
 
@@ -91,7 +81,7 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.hoglin.ambient"));
+		return SoundEvents.HOGLIN_AMBIENT;
 	}
 
 	@Override
@@ -101,12 +91,12 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.hoglin.hurt"));
+		return SoundEvents.HOGLIN_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.hoglin.death"));
+		return SoundEvents.HOGLIN_DEATH;
 	}
 
 	public boolean isFood(ItemStack p_34562_) {
@@ -120,12 +110,6 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 		if (source.getMsgId().equals("witherSkull"))
 			return false;
 		return super.hurt(source, amount);
-	}
-
-	@Override
-	public void die(DamageSource source) {
-		super.die(source);
-		DarkHoglinEntityDiesProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
 	}
 
 	public static void init() {

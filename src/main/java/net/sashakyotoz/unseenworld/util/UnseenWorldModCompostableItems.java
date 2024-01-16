@@ -16,5 +16,7 @@ public class UnseenWorldModCompostableItems {
 	public static void addComposterItems(FMLCommonSetupEvent event) {
 		ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.SMALL_CRIMSERRY_SOUL_BERRY.get().asItem(), 0.2f);
 		ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERYFLOWER_SAPLING.get().asItem(), 0.2f);
+		ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY_FOOD.get().asItem(), 0.2f);
+		ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIESFROM_BLOOMING_VINE.get().asItem(), 0.2f);
 	}
 }

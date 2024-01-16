@@ -1,0 +1,28 @@
+{
+  "feature": "unseen_world:dead_coral_trees",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 16
+        },
+        "max_inclusive": {
+          "absolute": 53
+        }
+      }
+    }
+  ]
+}

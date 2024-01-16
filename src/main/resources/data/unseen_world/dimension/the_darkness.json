@@ -7,12 +7,9 @@
       "disable_mob_generation": true,
       "aquifers_enabled": true,
       "ore_veins_enabled": true,
-      "legacy_random_source": true,
+      "legacy_random_source": false,
       "default_block": {
-        "Name": "minecraft:deepslate",
-        "Properties": {
-          "axis": "y"
-        }
+        "Name": "unseen_world:dark_currantslate"
       },
       "default_fluid": {
         "Name": "unseen_world:dark_water"
@@ -60,8 +57,8 @@
         "vegetation": {
           "type": "minecraft:shifted_noise",
           "noise": "minecraft:vegetation",
-          "xz_scale": 0.3125,
-          "y_scale": 0,
+          "xz_scale": 0.25,
+          "y_scale": 0.25,
           "shift_x": "minecraft:shift_x",
           "shift_y": 0,
           "shift_z": "minecraft:shift_z"
@@ -78,7 +75,7 @@
             "argument1": {
               "type": "minecraft:y_clamped_gradient",
               "from_y": -64,
-              "to_y": -40,
+              "to_y": -32,
               "from_value": 0,
               "to_value": 1
             },
@@ -164,7 +161,7 @@
                             "argument1": {
                               "type": "minecraft:y_clamped_gradient",
                               "from_y": 240,
-                              "to_y": 256,
+                              "to_y": 272,
                               "from_value": 1,
                               "to_value": 0
                             },
@@ -175,7 +172,7 @@
                                 "type": "minecraft:range_choice",
                                 "input": "minecraft:overworld/sloped_cheese",
                                 "min_inclusive": -1000000,
-                                "max_exclusive": 1.5625,
+                                "max_exclusive": 1.625,
                                 "when_in_range": {
                                   "type": "minecraft:min",
                                   "argument1": "minecraft:overworld/sloped_cheese",
@@ -201,8 +198,8 @@
                                             "argument": {
                                               "type": "minecraft:noise",
                                               "noise": "minecraft:cave_layer",
-                                              "xz_scale": 1.5,
-                                              "y_scale": 7
+                                              "xz_scale": 2,
+                                              "y_scale": 5
                                             }
                                           }
                                         },
@@ -217,7 +214,7 @@
                                                 "type": "minecraft:noise",
                                                 "noise": "minecraft:cave_cheese",
                                                 "xz_scale": 1,
-                                                "y_scale": 0.675
+                                                "y_scale": 0.75
                                               }
                                             },
                                             "min": -1,
@@ -337,10 +334,171 @@
           "y_scale": 1
         }
       },
-      "spawn_target": [],
+      "spawn_target": [
+        {
+          "temperature": [
+            -1,
+            1
+          ],
+          "humidity": [
+            -1,
+            1
+          ],
+          "continentalness": [
+            -0.11,
+            1
+          ],
+          "erosion": [
+            -1,
+            1
+          ],
+          "weirdness": [
+            -1,
+            -0.16
+          ],
+          "depth": 0,
+          "offset": 0
+        },
+        {
+          "temperature": [
+            -1,
+            1
+          ],
+          "humidity": [
+            -1,
+            1
+          ],
+          "continentalness": [
+            -0.11,
+            1
+          ],
+          "erosion": [
+            -1,
+            1
+          ],
+          "weirdness": [
+            0.16,
+            1
+          ],
+          "depth": 0,
+          "offset": 0
+        }
+      ],
       "surface_rule": {
         "type": "minecraft:sequence",
         "sequence": [
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "unseen_world:dark_ocean",
+                "unseen_world:dark_lifeless_ocean"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:above_preliminary_surface"
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:y_above",
+                      "anchor": {
+                        "absolute": 60
+                      },
+                      "surface_depth_multiplier": 0,
+                      "add_stone_depth": false
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "minecraft:air"
+                      }
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "offset": 0,
+                      "surface_type": "floor",
+                      "add_surface_depth": false,
+                      "secondary_depth_range": 0
+                    },
+                    "then_run": {
+                      "type": "minecraft:sequence",
+                      "sequence": [
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:water",
+                            "offset": -1,
+                            "surface_depth_multiplier": 0,
+                            "add_stone_depth": false
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "unseen_world:crystallized_dark_sand"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "unseen_world:crystallized_dark_sand"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "offset": 0,
+                      "surface_type": "floor",
+                      "add_surface_depth": true,
+                      "secondary_depth_range": 0
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "unseen_world:crystallized_dark_sand"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:vertical_gradient",
+              "random_name": "minecraft:deepslate",
+              "true_at_and_below": {
+                "above_bottom": 4
+              },
+              "false_at_and_above": {
+                "absolute": -16
+              }
+            },
+            "then_run": {
+              "type": "minecraft:block",
+              "result_state": {
+                "Name": "minecraft:deepslate",
+                "Properties": {
+                  "axis": "y"
+                }
+              }
+            }
+          },
           {
             "type": "minecraft:condition",
             "if_true": {
@@ -406,7 +564,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:deepslate",
+                            "Name": "unseen_world:dark_currantslate",
                             "Properties": {
                               "axis": "y"
                             }
@@ -443,7 +601,8 @@
             "if_true": {
               "type": "minecraft:biome",
               "biome_is": [
-                "unseen_world:amethyst_forest"
+                "unseen_world:amethyst_forest",
+                "unseen_world:amethyst_fields"
               ]
             },
             "then_run": {
@@ -484,7 +643,7 @@
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:blackstone"
+                            "Name": "unseen_world:dark_currantslate"
                           }
                         }
                       ]
@@ -515,7 +674,8 @@
             "if_true": {
               "type": "minecraft:biome",
               "biome_is": [
-                "unseen_world:grizzly_forest"
+                "unseen_world:grizzly_forest",
+                "unseen_world:grizzly_steppe"
               ]
             },
             "then_run": {
@@ -649,7 +809,7 @@
                     "then_run": {
                       "type": "minecraft:block",
                       "result_state": {
-                        "Name": "minecraft:blackstone"
+                        "Name": "unseen_world:dark_currantslate"
                       }
                     }
                   }
@@ -771,14 +931,20 @@
                           "then_run": {
                             "type": "minecraft:block",
                             "result_state": {
-                              "Name": "minecraft:blackstone"
+                              "Name": "minecraft:basalt",
+                              "Properties": {
+                                "axis": "y"
+                              }
                             }
                           }
                         },
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:blackstone"
+                            "Name": "minecraft:basalt",
+                            "Properties": {
+                              "axis": "y"
+                            }
                           }
                         }
                       ]
@@ -796,7 +962,7 @@
                     "then_run": {
                       "type": "minecraft:block",
                       "result_state": {
-                        "Name": "minecraft:deepslate",
+                        "Name": "unseen_world:dark_currantslate",
                         "Properties": {
                           "axis": "y"
                         }
@@ -887,7 +1053,8 @@
             "if_true": {
               "type": "minecraft:biome",
               "biome_is": [
-                "unseen_world:darkcrimsonforest"
+                "unseen_world:darkcrimsonforest",
+                "unseen_world:dark_crimson_valley"
               ]
             },
             "then_run": {
@@ -956,6 +1123,216 @@
                 ]
               }
             }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "unseen_world:snowy_highlands"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:above_preliminary_surface"
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "offset": 0,
+                      "surface_type": "floor",
+                      "add_surface_depth": false,
+                      "secondary_depth_range": 0
+                    },
+                    "then_run": {
+                      "type": "minecraft:sequence",
+                      "sequence": [
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:water",
+                            "offset": -1,
+                            "surface_depth_multiplier": 0,
+                            "add_stone_depth": false
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "minecraft:snow_block"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "minecraft:powder_snow"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "offset": 0,
+                      "surface_type": "floor",
+                      "add_surface_depth": true,
+                      "secondary_depth_range": 0
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "minecraft:snow_block"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "unseen_world:greynish_beach"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:above_preliminary_surface"
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "offset": 0,
+                      "surface_type": "floor",
+                      "add_surface_depth": false,
+                      "secondary_depth_range": 0
+                    },
+                    "then_run": {
+                      "type": "minecraft:sequence",
+                      "sequence": [
+                        {
+                          "type": "minecraft:condition",
+                          "if_true": {
+                            "type": "minecraft:water",
+                            "offset": -1,
+                            "surface_depth_multiplier": 0,
+                            "add_stone_depth": false
+                          },
+                          "then_run": {
+                            "type": "minecraft:block",
+                            "result_state": {
+                              "Name": "unseen_world:crystallized_dark_sand"
+                            }
+                          }
+                        },
+                        {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "unseen_world:crystallized_dark_sand"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "offset": 0,
+                      "surface_type": "floor",
+                      "add_surface_depth": true,
+                      "secondary_depth_range": 0
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "unseen_world:crystallized_dark_sand"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "unseen_world:shiny_caverns"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:vertical_gradient",
+                    "random_name": "unseen_world:shiny_stone",
+                    "true_at_and_below": {
+                      "above_bottom": 8
+                    },
+                    "false_at_and_above": {
+                      "absolute": 55
+                    }
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": {
+                      "Name": "minecraft:calcite"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "unseen_world:tanzanite_above_ground_cavern"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:vertical_gradient",
+                    "random_name": "unseen_world:shiny_stone",
+                    "true_at_and_below": {
+                      "above_bottom": 8
+                    },
+                    "false_at_and_above": {
+                      "absolute": 54
+                    }
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": {
+                      "Name": "unseen_world:tanzanite_block"
+                    }
+                  }
+                }
+              ]
+            }
           }
         ]
       }
@@ -964,162 +1341,114 @@
       "type": "minecraft:multi_noise",
       "biomes": [
         {
-          "biome": "unseen_world:tealive_luminous_valley",
+          "biome": "unseen_world:dark_lifeless_ocean",
           "parameters": {
             "temperature": [
-              -0.44,
-              0.74
-            ],
-            "humidity": [
-              -1.64,
-              -0.36
-            ],
-            "continentalness": [
-              0.28,
-              1.14
-            ],
-            "erosion": [
-              -0.02,
-              0.78
-            ],
-            "weirdness": [
-              -0.088,
-              1.1919
-            ],
-            "depth": 0,
-            "offset": 0
-          }
-        },
-        {
-          "biome": "unseen_world:amethyst_forest",
-          "parameters": {
-            "temperature": [
-              -0.65,
-              0.54
+              -1,
+              1
             ],
             "humidity": [
               -1,
-              0.2
-            ],
-            "continentalness": [
-              0.225,
-              0.98
-            ],
-            "erosion": [
-              0.075,
-              1.2
-            ],
-            "weirdness": [
-              -1.22,
-              -0.021
-            ],
-            "depth": 0,
-            "offset": 0
-          }
-        },
-        {
-          "biome": "unseen_world:grizzly_forest",
-          "parameters": {
-            "temperature": [
-              -0.175,
-              1.105
-            ],
-            "humidity": [
-              -1.6,
-              -0.3
-            ],
-            "continentalness": [
-              0.3,
               1
             ],
+            "continentalness": [
+              -1.5,
+              -0.455
+            ],
             "erosion": [
-              -0.075,
-              1.24
+              0.7,
+              1
             ],
             "weirdness": [
-              -1.585,
-              -0.3065
+              -1,
+              -0.5
+            ],
+            "depth": [
+              0,
+              0
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:dark_ocean",
+          "parameters": {
+            "temperature": [
+              -1,
+              1
+            ],
+            "humidity": [
+              -1,
+              1
+            ],
+            "continentalness": [
+              -0.455,
+              -0.19
+            ],
+            "erosion": [
+              0.7,
+              1
+            ],
+            "weirdness": [
+              -1,
+              -0.5
+            ],
+            "depth": [
+              0,
+              0
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:greynish_beach",
+          "parameters": {
+            "temperature": [
+              -1,
+              1
+            ],
+            "humidity": [
+              -1,
+              1
+            ],
+            "continentalness": [
+              -0.19,
+              0
+            ],
+            "erosion": [
+              0.625,
+              1
+            ],
+            "weirdness": [
+              -1,
+              -0.55
             ],
             "depth": 0,
             "offset": 0
           }
         },
         {
-          "biome": "unseen_world:tanzanite_above_ground_cavern",
+          "biome": "unseen_world:tealive_luminous_valley",
           "parameters": {
             "temperature": [
-              -1.27,
-              -0.07
+              -0.25,
+              0.25
             ],
             "humidity": [
-              -1.3,
-              -0.18
+              -0.25,
+              0.25
             ],
             "continentalness": [
-              0.5,
-              0.812
+              0,
+              0.3
             ],
             "erosion": [
-              -1.02,
-              0.2
+              0.25,
+              1
             ],
             "weirdness": [
-              -0.4358,
-              0.765
-            ],
-            "depth": 0,
-            "offset": 0
-          }
-        },
-        {
-          "biome": "unseen_world:greenish_valley",
-          "parameters": {
-            "temperature": [
-              -0.28,
-              0.98
-            ],
-            "humidity": [
-              0.19,
-              0.74
-            ],
-            "continentalness": [
-              0.174,
-              1.38
-            ],
-            "erosion": [
-              0.32,
-              1.34
-            ],
-            "weirdness": [
-              -0.912,
-              0.369
-            ],
-            "depth": 0,
-            "offset": 0
-          }
-        },
-        {
-          "biome": "unseen_world:dark_basalt_detlas",
-          "parameters": {
-            "temperature": [
-              -1.65,
-              -0.32
-            ],
-            "humidity": [
-              -1.24,
-              0.05
-            ],
-            "continentalness": [
-              0.56,
-              1.98
-            ],
-            "erosion": [
-              -1.64,
-              -0.31
-            ],
-            "weirdness": [
-              -0.6275,
-              0.6525
+              -1,
+              -0.85
             ],
             "depth": 0,
             "offset": 0
@@ -1129,24 +1458,159 @@
           "biome": "unseen_world:dark_wasteland",
           "parameters": {
             "temperature": [
-              -0.78,
-              0.3
+              -0.75,
+              -0.35
             ],
             "humidity": [
-              -0.64,
-              0.64
+              -0.75,
+              -0.35
             ],
             "continentalness": [
-              0.265,
-              0.5
+              0.1,
+              0.35
             ],
             "erosion": [
-              0.175,
-              0.95
+              0.25,
+              0.5
             ],
             "weirdness": [
-              -0.6,
-              0.67
+              -0.85,
+              -0.75
+            ],
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:amethyst_fields",
+          "parameters": {
+            "temperature": [
+              -0.5,
+              0.25
+            ],
+            "humidity": [
+              -0.5,
+              0.25
+            ],
+            "continentalness": [
+              0,
+              0.3
+            ],
+            "erosion": [
+              0.25,
+              1
+            ],
+            "weirdness": [
+              -1,
+              -0.85
+            ],
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:grizzly_steppe",
+          "parameters": {
+            "temperature": [
+              0.5,
+              1
+            ],
+            "humidity": [
+              0.5,
+              1
+            ],
+            "continentalness": [
+              0,
+              0.3
+            ],
+            "erosion": [
+              0.5,
+              1
+            ],
+            "weirdness": [
+              -0.9,
+              -0.55
+            ],
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:dark_crimson_valley",
+          "parameters": {
+            "temperature": [
+              -1,
+              -0.5
+            ],
+            "humidity": [
+              -1,
+              -0.5
+            ],
+            "continentalness": [
+              0.1,
+              0.4
+            ],
+            "erosion": [
+              0.525,
+              1
+            ],
+            "weirdness": [
+              -0.85,
+              -0.5
+            ],
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:greenish_valley",
+          "parameters": {
+            "temperature": [
+              0,
+              0.75
+            ],
+            "humidity": [
+              0.25,
+              0.75
+            ],
+            "continentalness": [
+              0,
+              0.3
+            ],
+            "erosion": [
+              0.5,
+              1
+            ],
+            "weirdness": [
+              -0.95,
+              -0.65
+            ],
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:amethyst_forest",
+          "parameters": {
+            "temperature": [
+              -0.25,
+              0
+            ],
+            "humidity": [
+              -0.25,
+              0
+            ],
+            "continentalness": [
+              0.45,
+              0.55
+            ],
+            "erosion": [
+              0.65,
+              0.75
+            ],
+            "weirdness": [
+              -0.55,
+              -0.5
             ],
             "depth": 0,
             "offset": 0
@@ -1156,73 +1620,166 @@
           "biome": "unseen_world:darkcrimsonforest",
           "parameters": {
             "temperature": [
-              -0.8,
-              0.4
+              -0.75,
+              -0.25
             ],
             "humidity": [
-              -0.65,
-              0.65
+              -0.75,
+              -0.25
             ],
             "continentalness": [
               0.3,
-              0.9
+              0.5
             ],
             "erosion": [
-              -0.2,
-              0.5
+              0.55,
+              0.85
             ],
             "weirdness": [
-              0.25,
-              1.3
+              -0.65,
+              -0.5
             ],
             "depth": 0,
             "offset": 0
           }
         },
         {
-          "biome": "unseen_world:dark_ocean",
+          "biome": "unseen_world:grizzly_forest",
           "parameters": {
             "temperature": [
-              -0.55,
-              0.35
+              0.65,
+              1
             ],
             "humidity": [
-              -0.2,
-              0.5
+              0.6,
+              1
             ],
             "continentalness": [
-              -1.5,
-              -0.14
+              0.45,
+              0.55
             ],
             "erosion": [
-              -0.04,
-              0.05
+              0.45,
+              0.85
             ],
-            "weirdness": 0,
+            "weirdness": [
+              -0.75,
+              -0.35
+            ],
             "depth": 0,
             "offset": 0
           }
         },
         {
-          "biome": "unseen_world:greynish_beach",
+          "biome": "unseen_world:snowy_highlands",
           "parameters": {
             "temperature": [
-              -0.4,
-              0.67
+              -1,
+              -0.65
             ],
             "humidity": [
-              -0.1,
-              0.6
+              -1,
+              -0.5
             ],
             "continentalness": [
-              -0.14,
-              0.125
+              0.65,
+              1
             ],
             "erosion": [
-              -0.15,
-              0.15
+              -1,
+              -0.75
             ],
-            "weirdness": 0,
+            "weirdness": [
+              0.75,
+              0.85
+            ],
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:tanzanite_above_ground_cavern",
+          "parameters": {
+            "temperature": [
+              -0.8,
+              -0.5
+            ],
+            "humidity": [
+              -0.8,
+              -0.5
+            ],
+            "continentalness": [
+              0.5,
+              0.75
+            ],
+            "erosion": [
+              -0.825,
+              -0.7
+            ],
+            "weirdness": [
+              -0.75,
+              -0.5
+            ],
+            "depth": [
+              0.1,
+              0.25
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:shiny_caverns",
+          "parameters": {
+            "temperature": [
+              0.65,
+              0.75
+            ],
+            "humidity": [
+              0.65,
+              0.75
+            ],
+            "continentalness": [
+              0.5,
+              0.75
+            ],
+            "erosion": [
+              0,
+              0.25
+            ],
+            "weirdness": [
+              -0.75,
+              -0.5
+            ],
+            "depth": [
+              0.2,
+              0.3
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "unseen_world:dark_basalt_detlas",
+          "parameters": {
+            "temperature": [
+              -1,
+              -0.5
+            ],
+            "humidity": [
+              -1,
+              -0.5
+            ],
+            "continentalness": [
+              0.75,
+              1
+            ],
+            "erosion": [
+              -1,
+              -0.75
+            ],
+            "weirdness": [
+              0.75,
+              1
+            ],
             "depth": 0,
             "offset": 0
           }

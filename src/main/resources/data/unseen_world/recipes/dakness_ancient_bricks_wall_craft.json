@@ -7,26 +7,26 @@
   ],
   "key": {
     "0": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "1": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "2": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "3": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "4": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "5": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     }
   },
   "result": {
-    "item": "unseen_world:dakness_ancient_bricks_wall",
-    "count": 6
+    "item": "unseen_world:darkness_ancient_bricks_wall",
+    "count": 3
   }
 }

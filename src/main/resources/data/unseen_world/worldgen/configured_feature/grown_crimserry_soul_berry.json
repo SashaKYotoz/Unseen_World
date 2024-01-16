@@ -1,7 +1,9 @@
 {
-  "type": "unseen_world:grown_crimserry_soul_berry",
+  "type": "minecraft:random_patch",
   "config": {
     "tries": 32,
+    "xz_spread": 6,
+    "y_spread": 3,
     "feature": {
       "feature": {
         "type": "minecraft:simple_block",

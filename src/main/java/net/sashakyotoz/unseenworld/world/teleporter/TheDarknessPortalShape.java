@@ -27,15 +27,9 @@ import java.util.function.Predicate;
 import java.util.Optional;
 
 public class TheDarknessPortalShape {
-	private static final int MIN_WIDTH = 2;
-	public static final int MAX_WIDTH = 21;
-	private static final int MIN_HEIGHT = 3;
-	public static final int MAX_HEIGHT = 21;
 	private static final BlockBehaviour.StatePredicate FRAME = (p_77720_, p_77721_, p_77722_) -> {
 		return p_77720_.getBlock() == UnseenWorldModBlocks.COLD_DARK_BRICKS.get();
 	};
-	private static final float SAFE_TRAVEL_MAX_ENTITY_XY = 4.0F;
-	private static final double SAFE_TRAVEL_MAX_VERTICAL_DELTA = 1.0D;
 	private final LevelAccessor level;
 	private final Direction.Axis axis;
 	private final Direction rightDir;
@@ -46,9 +40,7 @@ public class TheDarknessPortalShape {
 	private final int width;
 
 	public static Optional<TheDarknessPortalShape> findEmptyPortalShape(LevelAccessor p_77709_, BlockPos p_77710_, Direction.Axis p_77711_) {
-		return findPortalShape(p_77709_, p_77710_, (p_77727_) -> {
-			return p_77727_.isValid() && p_77727_.numPortalBlocks == 0;
-		}, p_77711_);
+		return findPortalShape(p_77709_, p_77710_, (p_77727_) -> p_77727_.isValid() && p_77727_.numPortalBlocks == 0, p_77711_);
 	}
 
 	public static Optional<TheDarknessPortalShape> findPortalShape(LevelAccessor p_77713_, BlockPos p_77714_, Predicate<TheDarknessPortalShape> p_77715_, Direction.Axis p_77716_) {

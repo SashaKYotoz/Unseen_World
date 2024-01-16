@@ -2,6 +2,7 @@
   "type": "forge:add_features",
   "biomes": [
     "unseen_world:grizzly_forest",
+    "unseen_world:grizzly_steppe",
     "unseen_world:greenish_valley"
   ],
   "features": "unseen_world:grown_crimserry_soul_berry",

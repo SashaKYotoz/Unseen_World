@@ -1,12 +1,12 @@
 {
-  "type": "unseen_world:void_ingot_ore",
+  "type": "minecraft:ore",
   "config": {
     "size": 5,
     "discard_chance_on_air_exposure": 0,
     "targets": [
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:blackstone"
           }
@@ -17,7 +17,7 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:deepslate",
             "Properties": {
@@ -31,12 +31,9 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
-            "Name": "unseen_world:dark_grass",
-            "Properties": {
-              "facing": "north"
-            }
+            "Name": "unseen_world:dark_currantslate"
           }
         },
         "state": {
@@ -45,21 +42,7 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "minecraft:infested_deepslate",
-            "Properties": {
-              "axis": "y"
-            }
-          }
-        },
-        "state": {
-          "Name": "unseen_world:void_ingot_ore"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:basalt",
             "Properties": {
@@ -73,20 +56,9 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:void_air"
-          }
-        },
-        "state": {
-          "Name": "unseen_world:void_ingot_ore"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "minecraft:cave_air"
           }
         },
         "state": {

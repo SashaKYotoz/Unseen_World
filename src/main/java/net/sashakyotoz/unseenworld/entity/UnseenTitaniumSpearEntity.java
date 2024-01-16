@@ -87,13 +87,9 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 		}
 	}
 
-	public boolean isFoil() {
-		return this.entityData.get(ID_FOIL);
-	}
-
 	@Nullable
-	protected EntityHitResult findHitEntity(Vec3 p_37575_, Vec3 p_37576_) {
-		return this.dealtDamage ? null : super.findHitEntity(p_37575_, p_37576_);
+	protected EntityHitResult findHitEntity(Vec3 vec3, Vec3 p_37576_) {
+		return this.dealtDamage ? null : super.findHitEntity(vec3, p_37576_);
 	}
 
 	protected void onHitEntity(EntityHitResult p_37573_) {
@@ -104,7 +100,7 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 		}
 
 		Entity entity1 = this.getOwner();
-		DamageSource damagesource = this.damageSources().trident(this, (Entity) (entity1 == null ? this : entity1));
+		DamageSource damagesource = this.damageSources().trident(this, entity1 == null ? this : entity1);
 		this.dealtDamage = true;
 		SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
 		if (entity.hurt(damagesource, f)) {
@@ -145,8 +141,8 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 		return EnchantmentHelper.hasChanneling(this.tridentItem);
 	}
 
-	protected boolean tryPickup(Player p_150196_) {
-		return super.tryPickup(p_150196_) || this.isNoPhysics() && this.ownedBy(p_150196_) && p_150196_.getInventory().add(this.getPickupItem());
+	protected boolean tryPickup(Player player) {
+		return super.tryPickup(player) || this.isNoPhysics() && this.ownedBy(player) && player.getInventory().add(this.getPickupItem());
 	}
 
 	protected SoundEvent getDefaultHitGroundSoundEvent() {

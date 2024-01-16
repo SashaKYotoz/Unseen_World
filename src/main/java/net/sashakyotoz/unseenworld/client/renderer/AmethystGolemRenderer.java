@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.client.renderer;
 
-import net.sashakyotoz.unseenworld.client.model.Modelamethyst_golem;
+import net.sashakyotoz.unseenworld.client.model.ModelAmethystGolem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -10,9 +10,9 @@ import net.sashakyotoz.unseenworld.entity.AmethystGolemEntity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class AmethystGolemRenderer extends MobRenderer<AmethystGolemEntity, Modelamethyst_golem<AmethystGolemEntity>> {
+public class AmethystGolemRenderer extends MobRenderer<AmethystGolemEntity, ModelAmethystGolem<AmethystGolemEntity>> {
 	public AmethystGolemRenderer(EntityRendererProvider.Context context) {
-		super(context, new Modelamethyst_golem(context.bakeLayer(Modelamethyst_golem.LAYER_LOCATION)), 0.6f);
+		super(context, new ModelAmethystGolem(context.bakeLayer(ModelAmethystGolem.LAYER_LOCATION)), 0.6f);
 	}
 
 	protected void scale(AmethystGolemEntity entity, PoseStack stack, float p_115985_) {

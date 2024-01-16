@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.entity.LivingEntity;
 
-import net.sashakyotoz.unseenworld.procedures.CrimserrySoulBerryFoodFoodEatenProcedure;
+import net.sashakyotoz.unseenworld.managers.CrimserrySoulBerryFoodFoodEatenProcedure;
 
 public class CrimserrySoulBerryFoodItem extends Item {
 	public CrimserrySoulBerryFoodItem() {

@@ -1,8 +1,6 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.procedures.DarkCrimsonVineFlowerOnBlockRightClickedProcedure;
-import net.sashakyotoz.unseenworld.procedures.DarkCrimsonVineFlowerUpdateTickProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -11,28 +9,30 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
-public class DarkCrimsonVineFlowerBlock extends Block {
-
-	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements BonemealableBlock,DarkCrimsonVine {
 
 	public DarkCrimsonVineFlowerBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.CAVE_VINES).mapColor(DyeColor.CYAN).sound(SoundType.SWEET_BERRY_BUSH).randomTicks().strength(0f, 5f).lightLevel(s -> 3).requiresCorrectToolForDrops().noCollission().noOcclusion().randomTicks()
-				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true));
-		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+		super(BlockBehaviour.Properties.of().mapColor(DyeColor.CYAN).sound(SoundType.SWEET_BERRY_BUSH).randomTicks().instabreak().lightLevel(s -> 3).requiresCorrectToolForDrops().noCollission().noOcclusion().randomTicks()
+				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true), Direction.DOWN, SHAPE, false, 0.15D);
+		this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0).setValue(BERRIES, Boolean.FALSE));
 	}
 
 	@Override
@@ -50,56 +50,48 @@ public class DarkCrimsonVineFlowerBlock extends Block {
 		return Shapes.empty();
 	}
 
-	@Override
+	protected int getBlocksToGrowWhenBonemealed(RandomSource p_220928_) {
+		return 1;
+	}
+
+	protected boolean canGrowInto(BlockState p_152998_) {
+		return p_152998_.isAir();
+	}
+
+	protected Block getBodyBlock() {
+		return UnseenWorldModBlocks.DARK_CRIMSON_BLOOMING_VINE.get();
+	}
+
+	protected BlockState updateBodyAfterConvertedFromHead(BlockState p_152987_, BlockState p_152988_) {
+		return p_152988_.setValue(BERRIES, p_152987_.getValue(BERRIES));
+	}
+
+	protected BlockState getGrowIntoState(BlockState p_220935_, RandomSource p_220936_) {
+		return super.getGrowIntoState(p_220935_, p_220936_).setValue(BERRIES, p_220936_.nextFloat() < 0.15F);
+	}
+
+	public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
+		return new ItemStack(Items.GLOW_BERRIES);
+	}
+
+	public InteractionResult use(BlockState p_152980_, Level p_152981_, BlockPos p_152982_, Player p_152983_, InteractionHand p_152984_, BlockHitResult p_152985_) {
+		return DarkCrimsonVine.use(p_152983_, p_152980_, p_152981_, p_152982_);
+	}
+
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING);
+		super.createBlockStateDefinition(builder);
+		builder.add(BERRIES);
 	}
 
-	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+	public boolean isValidBonemealTarget(LevelReader p_256026_, BlockPos p_152971_, BlockState p_152972_, boolean p_152973_) {
+		return !p_152972_.getValue(BERRIES);
 	}
 
-	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+	public boolean isBonemealSuccess(Level p_220930_, RandomSource p_220931_, BlockPos p_220932_, BlockState p_220933_) {
+		return true;
 	}
 
-	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
-	}
-
-	@Override
-	public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-		return 5;
-	}
-
-	@Override
-	public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-		return 3;
-	}
-
-	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof TieredItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 0;
-		return false;
-	}
-
-	public void randomTick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
-		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		DarkCrimsonVineFlowerUpdateTickProcedure.execute(world, x, y, z);
-	}
-
-	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		DarkCrimsonVineFlowerOnBlockRightClickedProcedure.execute(world, x, y, z, entity);
-		return InteractionResult.SUCCESS;
+	public void performBonemeal(ServerLevel p_220923_, RandomSource p_220924_, BlockPos p_220925_, BlockState p_220926_) {
+		p_220923_.setBlock(p_220925_, p_220926_.setValue(BERRIES, Boolean.TRUE), 2);
 	}
 }

@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.client.renderer;
 
-import net.sashakyotoz.unseenworld.client.model.ModelDark_hoglin;
+import net.sashakyotoz.unseenworld.client.model.ModelDarkHoglin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -10,19 +10,27 @@ import net.minecraft.client.renderer.RenderType;
 
 import net.sashakyotoz.unseenworld.entity.DarkHoglinEntity;
 
-public class DarkHoglinRenderer extends MobRenderer<DarkHoglinEntity, ModelDark_hoglin<DarkHoglinEntity>> {
+import java.util.Calendar;
+
+public class DarkHoglinRenderer extends MobRenderer<DarkHoglinEntity, ModelDarkHoglin<DarkHoglinEntity>> {
+	private static final ResourceLocation christmas_texture = new ResourceLocation("unseen_world:textures/entities/dark_hoglin_christmas.png");
+	private boolean xmasTexture = false;
 	public DarkHoglinRenderer(EntityRendererProvider.Context context) {
-		super(context, new ModelDark_hoglin(context.bakeLayer(ModelDark_hoglin.LAYER_LOCATION)), 0.5f);
-		this.addLayer(new EyesLayer<DarkHoglinEntity, ModelDark_hoglin<DarkHoglinEntity>>(this) {
+		super(context, new ModelDarkHoglin(context.bakeLayer(ModelDarkHoglin.LAYER_LOCATION)), 0.5f);
+		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
 				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/dark_hoglin.png"));
 			}
 		});
+		Calendar calendar = Calendar.getInstance();
+		if (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 20 && calendar.get(Calendar.DATE) <= 30) {
+			this.xmasTexture = true;
+		}
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(DarkHoglinEntity entity) {
-		return new ResourceLocation("unseen_world:textures/entities/dark_hoglin.png");
+		return xmasTexture ? christmas_texture : new ResourceLocation("unseen_world:textures/entities/dark_hoglin.png");
 	}
 }

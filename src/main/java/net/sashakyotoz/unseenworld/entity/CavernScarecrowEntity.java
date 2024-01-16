@@ -83,7 +83,7 @@ public class CavernScarecrowEntity extends TamableAnimal {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.scrape"));
+		return SoundEvents.AXE_SCRAPE;
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.entity.LivingEntity;
 
-import net.sashakyotoz.unseenworld.procedures.OutgrowthappleFoodEatenProcedure;
+import net.sashakyotoz.unseenworld.managers.OutgrowthAppleFoodEatenProcedure;
 
 public class OutgrowthappleItem extends Item {
 	public OutgrowthappleItem() {
@@ -32,7 +32,7 @@ public class OutgrowthappleItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		OutgrowthappleFoodEatenProcedure.execute(world, x, y, z, entity);
+		OutgrowthAppleFoodEatenProcedure.execute(world, x, y, z, entity);
 		return retval;
 	}
 }

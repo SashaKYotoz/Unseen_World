@@ -6,17 +6,17 @@
   ],
   "key": {
     "0": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "1": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     },
     "2": {
-      "item": "unseen_world:dakness_ancient_bricks"
+      "item": "unseen_world:darkness_ancient_bricks"
     }
   },
   "result": {
-    "item": "unseen_world:dakness_ancient_bricks_stairs",
+    "item": "unseen_world:darkness_ancient_bricks_slab",
     "count": 6
   }
 }

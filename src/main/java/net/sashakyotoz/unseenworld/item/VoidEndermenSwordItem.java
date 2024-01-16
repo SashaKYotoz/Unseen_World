@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.item;
 
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.procedures.VoidEndermenSwordRightClickedInAirProcedure;
+import net.sashakyotoz.unseenworld.managers.VoidEndermenSwordRightClickedInAirProcedure;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.Tier;
@@ -37,7 +37,7 @@ public class VoidEndermenSwordItem extends SwordItem {
 			}
 
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(UnseenWorldModItems.VOID_INGOT_INGOT.get()));
+				return Ingredient.of(new ItemStack(UnseenWorldModItems.VOID_INGOT.get()));
 			}
 		}, 3, -2.4f, new Item.Properties().fireResistant());
 	}

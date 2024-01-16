@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "unseen_world:greynish_beach",
-  "features": "unseen_world:dark_beach_sand",
-  "step": "top_layer_modification"
-}

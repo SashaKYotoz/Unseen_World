@@ -3,8 +3,8 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -38,28 +38,25 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.sashakyotoz.unseenworld.util.*;
-import net.sashakyotoz.unseenworld.procedures.DustyPinkMaxorFishRightClickedOnEntityProcedure;
+import net.sashakyotoz.unseenworld.managers.DustyPinkMaxorFishRightClickedOnEntityProcedure;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class DustyPinkMaxorFishEntity extends WaterAnimal {
 	public DustyPinkMaxorFishEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), world);
 	}
 
-	public void travel(@NotNull Vec3 p_27490_) {
+	public void travel(@NotNull Vec3 vec3) {
 		if (this.isEffectiveAi() && this.isInWater()) {
-			this.moveRelative(0.015F, p_27490_);
+			this.moveRelative(0.015F, vec3);
 			this.move(MoverType.SELF, this.getDeltaMovement());
 			this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
 			if (this.getTarget() == null) {
 				this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
 			}
 		} else {
-			super.travel(p_27490_);
+			super.travel(vec3);
 		}
 	}
 	@Override
@@ -138,7 +135,7 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.cod.ambient"));
+		return SoundEvents.COD_AMBIENT;
 	}
 
 	public void aiStep() {
@@ -152,17 +149,17 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.cod.flop"))), 0.15f, 1);
+		this.playSound(SoundEvents.COD_FLOP, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.salmon.hurt"));
+		return SoundEvents.SALMON_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.salmon.death"));
+		return SoundEvents.SALMON_DEATH;
 	}
 
 	@Override
@@ -201,10 +198,10 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 	public static void init() {
 			SpawnPlacements.register(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DustyPinkMaxorFishEntity::checkSurfaceWaterAnimalSpawnRules);
 	}
-	public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<? extends WaterAnimal> p_218283_, LevelAccessor p_218284_, MobSpawnType p_218285_, BlockPos p_218286_, RandomSource p_218287_) {
-		int i = p_218284_.getSeaLevel();
+	public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<? extends WaterAnimal> entityType, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource source) {
+		int i = accessor.getSeaLevel();
 		int j = i - 8;
-		return p_218286_.getY() >= j && p_218286_.getY() <= i && p_218284_.getFluidState(p_218286_.below()).is(FluidTags.WATER) || p_218284_.getFluidState(p_218286_.below()).is(UnseenWorldModFluids.DARK_WATER.get()) && p_218284_.getBlockState(p_218286_.above()).is(Blocks.WATER) || p_218284_.getBlockState(p_218286_.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) && p_218284_.getDifficulty() == Difficulty.EASY;
+		return pos.getY() >= j && pos.getY() <= i && accessor.getFluidState(pos.below()).is(FluidTags.WATER) || accessor.getFluidState(pos.below()).is(UnseenWorldModFluids.DARK_WATER.get()) && accessor.getBlockState(pos.above()).is(Blocks.WATER) || accessor.getBlockState(pos.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) && accessor.getDifficulty() == Difficulty.EASY;
 	}
 	@Override
 	protected void handleAirSupply(int p_30344_) {

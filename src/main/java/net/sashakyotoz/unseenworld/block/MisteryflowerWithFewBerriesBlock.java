@@ -26,8 +26,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.procedures.MisteryflowerWithFewBerriesUpdateTickProcedure;
-import net.sashakyotoz.unseenworld.procedures.MisteryflowerWithFewBerriesPlantRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.MisteryflowerWithFewBerriesUpdateTickProcedure;
+import net.sashakyotoz.unseenworld.managers.MisteryflowerWithFewBerriesPlantRightClickedProcedure;
 
 import java.util.List;
 import java.util.Collections;

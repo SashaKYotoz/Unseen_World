@@ -18,8 +18,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModMenus;
-import net.sashakyotoz.unseenworld.procedures.GoldenChestGUIThisGUIIsClosedProcedure;
-import org.jetbrains.annotations.NotNull;
+import net.sashakyotoz.unseenworld.managers.GoldenChestGUIIsClosedProcedure;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -295,7 +294,7 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
     @Override
     public void removed(Player playerIn) {
         super.removed(playerIn);
-        GoldenChestGUIThisGUIIsClosedProcedure.execute(world, x, y, z);
+        GoldenChestGUIIsClosedProcedure.execute(world, x, y, z);
         if (!bound && playerIn instanceof ServerPlayer serverPlayer) {
             if (!serverPlayer.isAlive() || serverPlayer.hasDisconnected()) {
                 for (int j = 0; j < internal.getSlots(); ++j) {

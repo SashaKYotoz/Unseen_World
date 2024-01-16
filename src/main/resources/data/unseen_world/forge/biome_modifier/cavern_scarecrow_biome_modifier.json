@@ -2,6 +2,7 @@
   "type": "forge:add_spawns",
   "biomes": [
     "unseen_world:grizzly_forest",
+    "unseen_world:grizzly_steppe",
     "unseen_world:greenish_valley"
   ],
   "spawners": {

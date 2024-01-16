@@ -1,9 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": [
-    "unseen_world:greenish_valley",
-    "unseen_world:darkcrimsonforest"
-  ],
-  "features": "unseen_world:dark_crimson_flowing_azalia",
-  "step": "underground_ores"
-}

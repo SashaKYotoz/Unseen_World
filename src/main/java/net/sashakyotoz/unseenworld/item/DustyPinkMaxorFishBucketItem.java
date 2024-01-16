@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.InteractionResult;
 
-import net.sashakyotoz.unseenworld.procedures.DustyPinkMaxorFishBucketRightclickedOnBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.DustyPinkMaxorFishBucketRightclickedOnBlockProcedure;
 
 public class DustyPinkMaxorFishBucketItem extends Item {
 	public DustyPinkMaxorFishBucketItem() {

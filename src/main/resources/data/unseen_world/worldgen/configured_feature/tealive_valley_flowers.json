@@ -1,5 +1,5 @@
 {
-  "type": "unseen_world:tealive_valley_flowers",
+  "type": "minecraft:random_patch",
   "config": {
     "tries": 64,
     "xz_spread": 6,

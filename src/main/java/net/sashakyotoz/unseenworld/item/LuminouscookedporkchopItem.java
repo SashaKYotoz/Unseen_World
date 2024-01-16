@@ -29,9 +29,6 @@ public class LuminouscookedporkchopItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
 		entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 600, 1, (false), (false)));
 		return retval;
 	}

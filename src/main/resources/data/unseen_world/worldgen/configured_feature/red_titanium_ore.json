@@ -1,12 +1,12 @@
 {
-  "type": "unseen_world:red_titanium_ore",
+  "type": "minecraft:ore",
   "config": {
     "size": 2,
     "discard_chance_on_air_exposure": 0,
     "targets": [
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:netherrack"
           }
@@ -17,7 +17,7 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:deepslate",
             "Properties": {
@@ -31,7 +31,7 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
+          "predicate_type": "minecraft:blockstate_match",
           "block_state": {
             "Name": "minecraft:blackstone"
           }
@@ -42,10 +42,8 @@
       },
       {
         "target": {
-          "predicate_type": "blockstate_match",
-          "block_state": {
-            "Name": "minecraft:cave_air"
-          }
+          "predicate_type": "minecraft:block_match",
+          "block": "unseen_world:dark_currantslate"
         },
         "state": {
           "Name": "unseen_world:red_titanium_ore"

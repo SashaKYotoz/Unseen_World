@@ -75,7 +75,8 @@
     [],
     [
       "minecraft:freeze_top_layer",
-      "unseen_world:tanzanite_geode"
+      "unseen_world:tanzanite_geode",
+      "unseen_world:tanzanite_spikes"
     ]
   ]
 }

@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.network.chat.Component;
 
-import net.sashakyotoz.unseenworld.procedures.DarkGolemHeartRightclickedOnBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.DarkGolemHeartRightClickOnBlockProcedure;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class DarkGolemHeartItem extends Item {
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		super.useOn(context);
-		DarkGolemHeartRightclickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer());
+		DarkGolemHeartRightClickOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer());
 		return InteractionResult.SUCCESS;
 	}
 }

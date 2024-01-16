@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 
-import net.sashakyotoz.unseenworld.procedures.GrizzlyLightBlockAdditionalGenerationConditionProcedure;
+import net.sashakyotoz.unseenworld.managers.GrizzlyLightBlockAdditionalGenerationConditionProcedure;
 
 import java.util.Set;
 

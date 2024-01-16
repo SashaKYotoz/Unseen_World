@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
 
-import net.sashakyotoz.unseenworld.procedures.MiningbootsProcudeProcedure;
+import net.sashakyotoz.unseenworld.managers.MiningBootsProcedure;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -50,10 +50,8 @@ public class MiningBootsAbilityMessage {
 		double z = entity.getZ();
 		if (!world.hasChunkAt(entity.blockPosition()))
 			return;
-		if (type == 0) {
-
-			MiningbootsProcudeProcedure.execute(world, x, y, z, entity);
-		}
+		if (type == 0)
+			MiningBootsProcedure.execute(world, x, y, z, entity);
 	}
 
 	@SubscribeEvent
