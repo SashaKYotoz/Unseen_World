@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "unseen_world:tanzanite_block",
     "unseen_world:tanzanite_block_budding",
@@ -23,6 +24,7 @@
     "unseen_world:chlorite_slate_stone_bricks",
     "unseen_world:chlorite_slate_stone_bricks_stairs",
     "unseen_world:chlorite_slate_stone_bricks_slab",
-    "unseen_world:chlorite_slate_stone_bricks_wall"
+    "unseen_world:chlorite_slate_stone_bricks_wall",
+    "unseen_world:deep_gem_ore"
   ]
 }

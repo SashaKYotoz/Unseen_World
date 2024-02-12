@@ -16,7 +16,7 @@ import net.minecraft.client.model.EntityModel;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class ModelStreder_with_Saddle<T extends Entity> extends EntityModel<T> {
+public class ModelStrederWithSaddle<T extends Entity> extends EntityModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_streder_with_saddle"), "main");
 	public final ModelPart body;
 	public final ModelPart upperSpikes;
@@ -25,7 +25,7 @@ public class ModelStreder_with_Saddle<T extends Entity> extends EntityModel<T> {
 	public final ModelPart rightLeg;
 	public final ModelPart leftLeg;
 
-	public ModelStreder_with_Saddle(ModelPart root) {
+	public ModelStrederWithSaddle(ModelPart root) {
 		this.body = root.getChild("body");
 		this.upperSpikes = root.getChild("upperSpikes");
 		this.rightSpikes = root.getChild("rightSpikes");

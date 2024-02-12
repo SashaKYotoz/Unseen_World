@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
@@ -43,6 +44,8 @@ import java.util.Objects;
 
 public class TheWitherKnightEntity extends Monster {
     private static final EntityDataAccessor<Boolean> DATA_IS_ADVANCED = SynchedEntityData.defineId(TheWitherKnightEntity.class, EntityDataSerializers.BOOLEAN);
+    private boolean gravityFlag = false;
+    private int timer = 0;
     public AnimationState attackAnimationState = new AnimationState();
     public AnimationState attack1AnimationState = new AnimationState();
     public AnimationState flyingAttackAnimationState = new AnimationState();
@@ -58,11 +61,10 @@ public class TheWitherKnightEntity extends Monster {
     public TheWitherKnightEntity(EntityType<TheWitherKnightEntity> type, Level world) {
         super(type, world);
         xpReward = 20;
-        setNoAi(false);
-        setCustomName(Component.translatable("entity.unseen_world.the_wither_knight").withStyle(ChatFormatting.YELLOW));
-        setCustomNameVisible(true);
+        setMaxUpStep(1.5f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 16, true);
+        setItemSlotAndDropWhenKilled(EquipmentSlot.OFFHAND,new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get()));
     }
     public void onAddedToWorld() {
         super.onAddedToWorld();
@@ -157,6 +159,18 @@ public class TheWitherKnightEntity extends Monster {
                     flyAnimationState.stop();
                 }
             }
+        }
+        if (this.getTarget() != null && this.getTarget().getY() >= this.getY() + 2 && !this.isAdvanced()){
+            timer = 20;
+            this.setDeltaMovement(0,0.25f,0);
+            gravityFlag = true;
+        }
+        if (timer > -20)
+            timer--;
+        if (gravityFlag && timer <=0){
+            this.setShiftKeyDown(timer > -20);
+            gravityFlag = timer > -5;
+            this.setDeltaMovement(0,0.15f,0);
         }
         this.setAdvanced(this.getHealth() < (this.getMaxHealth() / 2));
         super.tick();
@@ -302,7 +316,6 @@ public class TheWitherKnightEntity extends Monster {
         super.die(source);
         if(source.getEntity() instanceof Player player)
             AdvancementManager.addAdvancement(player,AdvancementManager.THE_WITHER_KNIGHT_ADV);
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get()));
         this.spawnAtLocation(new ItemStack(UnseenWorldModItems.GOLDENCHEST.get()));
         if(this.getRandom().nextBoolean()){
             this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get()));
@@ -339,8 +352,8 @@ public class TheWitherKnightEntity extends Monster {
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
         builder = builder.add(Attributes.MAX_HEALTH, 350);
         builder = builder.add(Attributes.ARMOR, 15);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 12);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 15);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 5);
         builder = builder.add(Attributes.FLYING_SPEED, 1.2);
         return builder;

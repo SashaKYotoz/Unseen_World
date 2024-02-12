@@ -37,7 +37,7 @@ public class TheBlazerOnEntityTickUpdateProcedure {
                 entity.yHeadRotO = entity.getYRot();
                 Level projectileLevel = entity.level();
                 if (!projectileLevel.isClientSide()) {
-                    Projectile _entityToSpawn = new Object() {
+                    Projectile entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                             AbstractArrow entityToSpawn = new NetheriumStaffEntity(UnseenWorldModEntities.NETHERIUM_STAFF.get(), level);
                             entityToSpawn.setOwner(shooter);
@@ -47,9 +47,9 @@ public class TheBlazerOnEntityTickUpdateProcedure {
                             return entityToSpawn;
                         }
                     }.getArrow(projectileLevel, entity, (float) 7, 5);
-                    _entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
-                    _entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, 2, 0);
-                    projectileLevel.addFreshEntity(_entityToSpawn);
+                    entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
+                    entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, 2, 0);
+                    projectileLevel.addFreshEntity(entityToSpawn);
                 }
             }
         } else if (Math.random() < 0.01) {

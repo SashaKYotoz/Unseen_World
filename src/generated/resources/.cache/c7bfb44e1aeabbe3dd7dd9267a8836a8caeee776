@@ -1,6 +1,7 @@
-// 1.20.1	2024-01-16T17:55:52.6987478	Tags for minecraft:block mod id unseen_world
+// 1.20.1	2024-01-25T19:21:03.7360815	Tags for minecraft:block mod id unseen_world
 25dfd7cb4294e283a166eca3640274023a801beb data/forge/tags/blocks/chests.json
-4ff660f88e16548391618de2ba19f748350339f5 data/forge/tags/blocks/needs_wood_tool.json
+5b35b50c267185fb0f790d51d713ae0daa5c6301 data/forge/tags/blocks/needs_netherite_tool.json
+f81e830245d61750ad8b73f0f7a0d1913493687f data/forge/tags/blocks/needs_wood_tool.json
 611df901df070349ec449eb9263a4beb2e12272f data/forge/tags/blocks/ores.json
 fa96b0ebe70ebe1b9ca708e25a277f142def0422 data/minecraft/tags/blocks/dirt.json
 dee6c6fd19c289408521fb10903e812e954963aa data/minecraft/tags/blocks/sand.json

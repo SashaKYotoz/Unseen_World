@@ -60,7 +60,7 @@ public class DarkSpiritWolfEntity extends Wolf {
 				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, DarkskeletonEntity.class, false, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, DarkSkeletonEntity.class, false, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TealiveSkeletonEntity.class, false, true));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.8));

@@ -22,14 +22,14 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 
-public class DarkskeletonEntity extends Monster {
+public class DarkSkeletonEntity extends Monster {
 	public int texture;
 
-	public DarkskeletonEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public DarkSkeletonEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(UnseenWorldModEntities.DARK_SKELETON.get(), world);
 	}
 
-	public DarkskeletonEntity(EntityType<DarkskeletonEntity> type, Level world) {
+	public DarkSkeletonEntity(EntityType<DarkSkeletonEntity> type, Level world) {
 		super(type, world);
 		xpReward = 3;
 		setNoAi(false);

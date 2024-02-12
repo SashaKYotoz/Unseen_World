@@ -64,7 +64,7 @@ public class ModelCavern_Scarecrow<T extends Entity> extends EntityModel<T> {
 		this.head.xRot = headPitch / (180F / (float) Math.PI);
 		this.jaw.yRot = netHeadYaw / (180F / (float) Math.PI);
 		this.jaw.xRot = headPitch / (180F / (float) Math.PI);
-		this.backLegs.xRot = Mth.cos(limbSwing * 1.0F) * -1.0F * limbSwingAmount;
-		this.forwardLegs.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
+		this.backLegs.xRot = Mth.cos(limbSwing) * -1.0F * limbSwingAmount;
+		this.forwardLegs.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
 	}
 }

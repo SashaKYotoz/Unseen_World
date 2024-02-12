@@ -13,8 +13,7 @@ public class VoidEndermenSwordRightClickedInAirProcedure {
 		if (entity == null)
 			return;
 		double speed = 0.75;
-		double Yaw;
-		Yaw = entity.getYRot();
+		double Yaw = entity.getYRot();
 		entity.setDeltaMovement(new Vec3((speed * Math.cos((Yaw + 90) * (Math.PI / 180))), (entity.getXRot() * (-0.025)), (speed * Math.sin((Yaw + 90) * (Math.PI / 180)))));
 		if (world.getBlockState(BlockPos.containing(x, y - 2, z)).canOcclude() || world.getBlockState(BlockPos.containing(x, y - 3, z)).canOcclude() || world.getBlockState(BlockPos.containing(x, y - 4, z)).canOcclude()) {
 			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())

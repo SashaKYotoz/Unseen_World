@@ -35,6 +35,13 @@ public class UnseenWorldBlockTagProvider extends BlockTagsProvider {
                                 || blockRegistryObject.get().getDescriptionId().contains("darkness_ancient"))
                         .map(RegistryObject::get)
                         .toArray(Block[]::new)
+        ).add(UnseenWorldModBlocks.DEEP_GEM_ORE.get());
+        this.tag(Tags.Blocks.NEEDS_NETHERITE_TOOL).replace(false).add(
+                UnseenWorldModBlocks.REGISTRY.getEntries().stream()
+                        .filter(blockRegistryObject -> blockRegistryObject.get().getDescriptionId().contains("ore")
+                                && !blockRegistryObject.get().getDescriptionId().contains("deep_gem"))
+                        .map(RegistryObject::get)
+                        .toArray(Block[]::new)
         );
         this.tag(Tags.Blocks.ORES).replace(false).add(
                 UnseenWorldModBlocks.REGISTRY.getEntries().stream()

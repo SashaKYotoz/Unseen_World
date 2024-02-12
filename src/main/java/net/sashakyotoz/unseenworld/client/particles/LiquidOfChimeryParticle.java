@@ -32,14 +32,14 @@ public class LiquidOfChimeryParticle extends TextureSheetParticle {
 
 	private final SpriteSet spriteSet;
 	private float angularVelocity;
-	private float angularAcceleration;
+	private final float angularAcceleration;
 
 	protected LiquidOfChimeryParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
 		super(world, x, y, z);
 		this.spriteSet = spriteSet;
 		this.setSize(0.3f, 0.3f);
 		this.quadSize *= 2f;
-		this.lifetime = (int) Math.max(1, 50 + (this.random.nextInt(6) - 3));
+		this.lifetime = Math.max(1, 50 + (this.random.nextInt(6) - 3));
 		this.gravity = -0.1f;
 		this.hasPhysics = false;
 		this.xd = vx * 1.2;

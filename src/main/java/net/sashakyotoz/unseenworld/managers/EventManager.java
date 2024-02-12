@@ -98,22 +98,22 @@ public class EventManager {
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
         Minecraft minecraft = Minecraft.getInstance();
-        Player player = (Player) event.getCamera().getEntity();
-        if (player == null) return;
-        float delta = Minecraft.getInstance().getFrameTime();
-        float ticksExistedDelta = player.tickCount + delta;
-        float intensity = 0.025f;
-        if (!minecraft.isPaused() && player.level().isClientSide() && shakingTime > 0) {
-            event.setPitch((float) (event.getPitch() + intensity * Math.cos(ticksExistedDelta * 3 + 2) * 25));
-            event.setYaw((float) (event.getYaw() + intensity * Math.cos(ticksExistedDelta * 5 + 1) * 25));
-            event.setRoll((float) (event.getRoll() + intensity * Math.cos(ticksExistedDelta * 4) * 25));
+        if (minecraft.getCameraEntity() instanceof Player player && !player.isSpectator()){
+            float delta = Minecraft.getInstance().getFrameTime();
+            float ticksExistedDelta = player.tickCount + delta;
+            float intensity = 0.025f;
+            if (!minecraft.isPaused() && player.level().isClientSide() && shakingTime > 0) {
+                event.setPitch((float) (event.getPitch() + intensity * Math.cos(ticksExistedDelta * 3 + 2) * 25));
+                event.setYaw((float) (event.getYaw() + intensity * Math.cos(ticksExistedDelta * 5 + 1) * 25));
+                event.setRoll((float) (event.getRoll() + intensity * Math.cos(ticksExistedDelta * 4) * 25));
+            }
         }
     }
 
     private static void claymoreAbility(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (entity == null)
             return;
-        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.HEAVY_CLAYMORE.get()
+        if ((entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.HEAVY_CLAYMORE.get()
                 || (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.HEAVY_CLAYMORE.get()) {
             if (world instanceof ServerLevel level)
                 level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, new Vec3(x, y, z), Vec2.ZERO, level, 4, "", Component.literal(""), level.getServer(), null).withSuppressedOutput(),
@@ -223,12 +223,12 @@ public class EventManager {
         if (entity == null || sourceentity == null)
             return;
         if (!UnseenWorldModConfigs.DEACTIVATE_LIFE_STEELING.get()) {
-            double lifesteel = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.LIFE_STEEL.get());
+            int lifeSteel = (sourceentity instanceof LivingEntity livingEntity ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.LIFE_STEEL.get());
             if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.LIFE_STEEL.get()) > 0) {
                 if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60 + UnseenWorldModConfigs.LIFE_STEELING_POWER.get() * 10, (int) (1 * lifesteel + UnseenWorldModConfigs.LIFE_STEELING_POWER.get())));
-                    if (Math.random() < 0.25)
-                        entity.addEffect(new MobEffectInstance(MobEffects.HARM, 60, (int) (1 * lifesteel + UnseenWorldModConfigs.LIFE_STEELING_POWER.get())));
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60 + UnseenWorldModConfigs.LIFE_STEELING_POWER.get() * 10, lifeSteel + UnseenWorldModConfigs.LIFE_STEELING_POWER.get()));
+                    if (!entity.hasEffect(MobEffects.HARM))
+                        entity.addEffect(new MobEffectInstance(MobEffects.HARM, 1, -1 + (lifeSteel > 2 ? 3 : 1)));
                 }
             }
         }
@@ -237,7 +237,7 @@ public class EventManager {
     private static void randomEffectGiving(LevelAccessor world, Entity entity) {
         if (entity == null)
             return;
-        if ((world instanceof Level _lvl ? _lvl.dimension() : Level.OVERWORLD) == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness"))) && Math.random() < 0.0025 && UnseenWorldModConfigs.SPEC.isLoaded()) {
+        if ((world instanceof Level level ? level.dimension() : Level.OVERWORLD) == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness"))) && Math.random() < 0.0025 && UnseenWorldModConfigs.SPEC.isLoaded()) {
             if (Math.random() < UnseenWorldModConfigs.METEORITESTROPHY_CHANCE.get()) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                     _entity.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.METEORITESTROPHY.get(), 100, 1));

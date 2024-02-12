@@ -4,12 +4,12 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="unseen_world"
-version="3.3"
+version="3.3.2"
 displayName="Unseen World"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/unseen_world"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/unseen-world"
 logoFile="logo.png"
 authors="SashaKYotoz"
-description="Unseen World are waiting for you"
+description="Unseen World, world of darkness, are waiting for you"
 
 [[dependencies.unseen_world]]
     modId="minecraft"

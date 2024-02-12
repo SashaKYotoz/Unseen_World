@@ -32,8 +32,8 @@ public class UnseenWorldModEntities {
             .setCustomClientFactory(TealivyFireStaffEntity::new).setShouldReceiveVelocityUpdates(true).clientTrackingRange(16).setUpdateInterval(1).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<VoidBowEntity>> VOID_BOW = register("projectile_void_bow",
             EntityType.Builder.<VoidBowEntity>of(VoidBowEntity::new, MobCategory.MISC).setCustomClientFactory(VoidBowEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
-    public static final RegistryObject<EntityType<DarkskeletonEntity>> DARK_SKELETON = register("dark_skeleton",
-            EntityType.Builder.<DarkskeletonEntity>of(DarkskeletonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(DarkskeletonEntity::new)
+    public static final RegistryObject<EntityType<DarkSkeletonEntity>> DARK_SKELETON = register("dark_skeleton",
+            EntityType.Builder.<DarkSkeletonEntity>of(DarkSkeletonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(DarkSkeletonEntity::new)
                     .sized(0.6f, 1.8f));
     public static final RegistryObject<EntityType<AmethystGolemEntity>> AMETHYST_GOLEM = register("amethyst_golem", EntityType.Builder.<AmethystGolemEntity>of(AmethystGolemEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true)
             .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(AmethystGolemEntity::new).fireImmune().sized(1.2f, 1.6f));
@@ -92,7 +92,7 @@ public class UnseenWorldModEntities {
     @SubscribeEvent
     public static void init(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            DarkskeletonEntity.init();
+            DarkSkeletonEntity.init();
             AmethystGolemEntity.init();
             DarkPhantomEntity.init();
             DustyPinkMaxorFishEntity.init();
@@ -121,7 +121,7 @@ public class UnseenWorldModEntities {
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(DARK_SKELETON.get(), DarkskeletonEntity.createAttributes().build());
+        event.put(DARK_SKELETON.get(), DarkSkeletonEntity.createAttributes().build());
         event.put(AMETHYST_GOLEM.get(), AmethystGolemEntity.createAttributes().build());
         event.put(DARK_PHANTOM.get(), DarkPhantomEntity.createAttributes().build());
         event.put(DUSTY_PINK_MAXOR_FISH.get(), DustyPinkMaxorFishEntity.createAttributes().build());

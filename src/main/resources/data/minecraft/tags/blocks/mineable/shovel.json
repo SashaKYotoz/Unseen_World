@@ -2,8 +2,9 @@
   "replace": false,
   "values": [
     "unseen_world:dark_grass",
+    "unseen_world:red_ooze",
     "unseen_world:amethyst_grass_block",
-    "unseen_world:grass_block_of_shiny_redlight",
+    "unseen_world:crystallized_dark_sand",
     "unseen_world:tealive_luminous_grass_block"
   ]
 }

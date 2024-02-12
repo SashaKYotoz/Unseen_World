@@ -13,7 +13,6 @@ public class AncientTransientBlockCloseOnBlockRightClickedProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		boolean found = false;
 		double sx = 0;
 		double sy = 0;
 		double sz = 0;

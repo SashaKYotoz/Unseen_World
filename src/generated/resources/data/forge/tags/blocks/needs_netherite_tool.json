@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:deep_gem_ore",
     "unseen_world:void_ingot_ore",
     "unseen_world:red_titanium_ore",
     "unseen_world:unseen_ore"

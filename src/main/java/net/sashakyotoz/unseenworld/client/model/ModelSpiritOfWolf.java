@@ -83,10 +83,10 @@ public class ModelSpiritOfWolf<T extends Entity> extends EntityModel<T> {
 		float f = 0.75F;
 		this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
 		this.head.xRot = headPitch / (180F / (float) Math.PI);
-		this.leg0.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
-		this.leg1.xRot = Mth.cos(limbSwing * 1.0F) * -1.0F * limbSwingAmount;
-		this.leg2.xRot = Mth.cos(limbSwing * 1.0F) * 1.0F * limbSwingAmount;
+		this.leg0.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
+		this.leg1.xRot = Mth.cos(limbSwing) * -1.0F * limbSwingAmount;
+		this.leg2.xRot = Mth.cos(limbSwing) * 1.0F * limbSwingAmount;
 		this.tail.yRot = -f * 0.4F * Mth.sin(0.5F * ageInTicks);
-		this.leg3.xRot = Mth.cos(limbSwing * 1.0F) * -1.0F * limbSwingAmount;
+		this.leg3.xRot = Mth.cos(limbSwing) * -1.0F * limbSwingAmount;
 	}
 }

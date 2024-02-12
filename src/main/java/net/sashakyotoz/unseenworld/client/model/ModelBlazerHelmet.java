@@ -14,11 +14,11 @@ import net.minecraft.client.model.EntityModel;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
-public class ModelBlazer_Helmet<T extends Entity> extends EntityModel<T> {
+public class ModelBlazerHelmet<T extends Entity> extends EntityModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_blazer_helmet"), "main");
 	public final ModelPart head;
 
-	public ModelBlazer_Helmet(ModelPart root) {
+	public ModelBlazerHelmet(ModelPart root) {
 		this.head = root.getChild("head");
 	}
 

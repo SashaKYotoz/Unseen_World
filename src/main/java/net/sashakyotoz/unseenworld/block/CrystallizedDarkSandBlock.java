@@ -1,6 +1,8 @@
 
 package net.sashakyotoz.unseenworld.block;
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -17,6 +19,9 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+
+import java.util.Collections;
+import java.util.List;
 
 public class CrystallizedDarkSandBlock extends FallingBlock {
 	private final int dustColor;
@@ -65,5 +70,12 @@ public class CrystallizedDarkSandBlock extends FallingBlock {
 				return 8562943;
 			}
 		}, UnseenWorldModBlocks.CRYSTALLIZED_DARK_SAND.get());
+	}
+	@Override
+	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+		List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+		if (!dropsOriginal.isEmpty())
+			return dropsOriginal;
+		return Collections.singletonList(new ItemStack(this, 1));
 	}
 }

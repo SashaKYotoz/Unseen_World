@@ -16,7 +16,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.sashakyotoz.unseenworld.client.model.ModelBlazer_Helmet;
+import net.sashakyotoz.unseenworld.client.model.ModelBlazerHelmet;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 import java.util.Collections;
@@ -81,7 +81,7 @@ public abstract class BlazerItem extends ArmorItem {
 				@Override
 				public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
 					HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
-							Map.of("head", new ModelBlazer_Helmet(Minecraft.getInstance().getEntityModels().bakeLayer(ModelBlazer_Helmet.LAYER_LOCATION)).head, "hat", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "body",
+							Map.of("head", new ModelBlazerHelmet(Minecraft.getInstance().getEntityModels().bakeLayer(ModelBlazerHelmet.LAYER_LOCATION)).head, "hat", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "body",
 									new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_arm", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_arm",
 									new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_leg",
 									new ModelPart(Collections.emptyList(), Collections.emptyMap()))));

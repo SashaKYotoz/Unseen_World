@@ -6,7 +6,6 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.AnimationChannel;
 
 public class WitherKnightAnimations {
-
 	public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(2f).looping()
 			.addAnimation("rods",
 					new AnimationChannel(AnimationChannel.Targets.ROTATION, new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, -7.5f), AnimationChannel.Interpolations.LINEAR),

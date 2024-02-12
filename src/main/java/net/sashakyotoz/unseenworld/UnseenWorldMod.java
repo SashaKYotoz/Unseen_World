@@ -1,16 +1,3 @@
-/*
- *    MCreator note:
- *
- *    If you lock base mod element files, you can edit this file and it won't get overwritten.
- *    If you change your modid or package, you need to apply these changes to this file MANUALLY.
- *
- *    Settings in @Mod annotation WON'T be changed in case of the base mod element
- *    files lock too, so you need to set them manually here in such case.
- *
- *    If you do not lock base mod element files in Workspace settings, this file
- *    will be REGENERATED on each build.
- *
- */
 package net.sashakyotoz.unseenworld;
 
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -22,6 +9,7 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -132,5 +120,10 @@ public class UnseenWorldMod {
         UnseenWorldModItemProperties.addCustomItemProperties();
         event.enqueueWork(() -> MenuScreens.register(UnseenWorldModMenus.GOLDEN_CHEST_GUI.get(), GoldenChestGUIScreen::new));
         BlockEntityRenderers.register(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(), BeaconOfWeaponsRenderer::new);
+        //Compostable Items
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.SMALL_CRIMSERRY_SOUL_BERRY.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERYFLOWER_SAPLING.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY_FOOD.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIESFROM_BLOOMING_VINE.get().asItem(), 0.2f);
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
 
-import net.sashakyotoz.unseenworld.managers.BlazerHelmetHelmetTickEventProcedure;
+import net.sashakyotoz.unseenworld.managers.BlazerHelmetTickEventProcedure;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -52,7 +52,7 @@ public class BlazerHelmetAbilityMessage {
 			return;
 		if (type == 1) {
 
-			BlazerHelmetHelmetTickEventProcedure.execute(world, x, y, z, entity);
+			BlazerHelmetTickEventProcedure.execute(world, x, y, z, entity);
 		}
 	}
 

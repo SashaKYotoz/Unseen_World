@@ -83,7 +83,7 @@ public class ModelVoidEndermen<T extends VoidEndermanEntity> extends EntityModel
 			this.LeftArm.xRot = Mth.cos(limbSwing * 0.75F) * limbSwingAmount - 0.25F;
 		} else {
 			this.head.y = -16.0F;
-			this.chin.y = +2.0F;
+			this.chin.y = 2.0F;
 		}
 	}
 }

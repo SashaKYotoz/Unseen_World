@@ -1,8 +1,9 @@
 {
   "type": "forge:add_features",
-  "biomes": {
-    "type": "forge:any"
-  },
+  "biomes": [
+    "unseen_world:grizzly_steppe",
+    "unseen_world:dark_wasteland"
+  ],
   "features": "unseen_world:misteryflower_with_few_berries",
   "step": "vegetal_decoration"
 }

@@ -96,11 +96,11 @@ public class ModelRed_Sylph<T extends RedSlylfEntity> extends HierarchicalModel<
     }
 
     @Override
-    public void translateToHand(HumanoidArm p_233322_, PoseStack p_233323_) {
-        this.root.translateAndRotate(p_233323_);
-        this.bb_main.translateAndRotate(p_233323_);
-        p_233323_.mulPose(Axis.XP.rotation(this.right_arm.xRot));
-        p_233323_.scale(0.7F, 0.7F, 0.7F);
-        p_233323_.translate(-0.2F, 0.8F, -0.3F);
+    public void translateToHand(HumanoidArm arm, PoseStack stack) {
+        this.root.translateAndRotate(stack);
+        this.bb_main.translateAndRotate(stack);
+        stack.mulPose(Axis.XP.rotation(this.right_arm.xRot));
+        stack.scale(0.7F, 0.7F, 0.7F);
+        stack.translate(-0.2F, 0.8F, -0.3F);
     }
 }

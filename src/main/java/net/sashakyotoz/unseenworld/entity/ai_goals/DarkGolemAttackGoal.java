@@ -31,7 +31,7 @@ public class DarkGolemAttackGoal extends Goal {
     private int ticksUntilNextAttack;
     private long lastCanUseCheck;
     private int failedPathFindingPenalty = 0;
-    private boolean canPenalize = false;
+    private boolean canPenalize;
 
     public DarkGolemAttackGoal(DarkGolemEntity golemEntity, double speedModifier, boolean followIfInvisible, boolean canPenalize) {
         this.mob = golemEntity;
@@ -162,12 +162,14 @@ public class DarkGolemAttackGoal extends Goal {
                         this.mob.setAttacking(false);
                     }
                     case "armed"->{
-                        EventManager.shakingTime +=200;
-                        final Vec3 center = new Vec3(this.mob.getX(), entity.getY(), this.mob.getZ());
-                        List<Entity> _entfound = this.mob.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator != null && entityiterator != this.mob) {
-                                entityiterator.hurt(new DamageSource(this.mob.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)), 15);
+                        if (this.mob.getHealth() > 20){
+                            EventManager.shakingTime +=200;
+                            final Vec3 center = new Vec3(this.mob.getX(), entity.getY(), this.mob.getZ());
+                            List<Entity> entityList = this.mob.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                            for (Entity entityiterator : entityList) {
+                                if (entityiterator != null && entityiterator != this.mob) {
+                                    entityiterator.hurt(this.mob.damageSources().generic(), 15);
+                                }
                             }
                         }
                         this.mob.setAttacking(false);

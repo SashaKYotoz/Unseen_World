@@ -23,10 +23,7 @@ public class GhastOfTealiveValleyRenderer extends MobRenderer<GhastOfTealiveVall
 		return entity.isCharging() ? GHAST_SHOOTING_LOCATION : GHAST_LOCATION;
 	}
 
-	protected void scale(GhastOfTealiveValleyEntity p_114757_, PoseStack p_114758_, float p_114759_) {
-		float f = 2.0F;
-		float f1 = 4.0F;
-		float f2 = 4.0F;
-		p_114758_.scale(3.0F, 3.0F, 3.0F);
+	protected void scale(GhastOfTealiveValleyEntity ghast, PoseStack stack, float p_114759_) {
+		stack.scale(3.0F, 3.0F, 3.0F);
 	}
 }

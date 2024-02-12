@@ -219,7 +219,7 @@ public class UnseenWorldModBlocks {
 			return Collections.singletonList(new ItemStack(this, 1));
 		}
 	});
-    public static final RegistryObject<Block> VOID_INGOT_ORE = REGISTRY.register("void_ingot_ore", Void_ingotOreBlock::new);
+    public static final RegistryObject<Block> VOID_INGOT_ORE = REGISTRY.register("void_ingot_ore", VoidIngotOreBlock::new);
     public static final RegistryObject<Block> VOID_INGOT_BLOCK = REGISTRY.register("void_ingot_block", () -> new Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(5f, 10f).requiresCorrectToolForDrops()) {
         @Override
         public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
@@ -363,13 +363,6 @@ public class UnseenWorldModBlocks {
                     () -> SoundEvents.LARGE_AMETHYST_BUD_PLACE, () -> SoundEvents.AMETHYST_BLOCK_HIT,
                     () -> SoundEvents.AMETHYST_CLUSTER_FALL)).strength(5f, 10f).lightLevel(s -> 3).requiresCorrectToolForDrops()) {
         @Override
-        public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-            if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-                return tieredItem.getTier().getLevel() >= 1;
-            return false;
-        }
-
-        @Override
         public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
             List<ItemStack> dropsOriginal = super.getDrops(state, builder);
             if (!dropsOriginal.isEmpty())
@@ -389,11 +382,14 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> DARK_CURRANTSLATE_WALL = REGISTRY.register("dark_currantslate_wall",()->new WallBlock(BlockBehaviour.Properties.of().strength(2.5f,3).sound(SoundType.DEEPSLATE).mapColor(MapColor.COLOR_MAGENTA)));
     public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS = REGISTRY.register("darkness_ancient_bricks", () -> new Block(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
 		@Override
-		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-				return tieredItem.getTier().getLevel() >= 2;
-			return false;
+		public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 1));
 		}
+	});
+    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_STAIRS = REGISTRY.register("darkness_ancient_bricks_stairs", () -> new StairBlock(DARKNESS_ANCIENT_BRICKS.get().defaultBlockState(),BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
 
 		@Override
 		public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
@@ -403,28 +399,7 @@ public class UnseenWorldModBlocks {
 			return Collections.singletonList(new ItemStack(this, 1));
 		}
 	});
-    public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_STAIRS = REGISTRY.register("darkness_ancient_bricks_stairs", () -> new StairBlock(DARKNESS_ANCIENT_BRICKS.get().defaultBlockState(),BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops()){
-		@Override
-		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-				return tieredItem.getTier().getLevel() >= 2;
-			return false;
-		}
-		@Override
-		public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
-			if (!dropsOriginal.isEmpty())
-				return dropsOriginal;
-			return Collections.singletonList(new ItemStack(this, 1));
-		}
-	});
     public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_SLAB = REGISTRY.register("darkness_ancient_bricks_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops().dynamicShape()){
-		@Override
-		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-				return tieredItem.getTier().getLevel() >= 2;
-			return false;
-		}
 
 		@Override
 		public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
@@ -435,11 +410,6 @@ public class UnseenWorldModBlocks {
 		}
 	});
     public static final RegistryObject<Block> DARKNESS_ANCIENT_BRICKS_WALL = REGISTRY.register("darkness_ancient_bricks_wall", () -> new WallBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.STONE).strength(10f).lightLevel(s -> 5).requiresCorrectToolForDrops().noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape()){
-		public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-			if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-				return tieredItem.getTier().getLevel() >= 2;
-			return false;
-		}
 		@Override
 		public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
@@ -456,13 +426,6 @@ public class UnseenWorldModBlocks {
         @Override
         public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
             return new ItemStack(UnseenWorldModItems.CHLORITE_SLATE_STONE_SHARD.get());
-        }
-
-        @Override
-        public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-            if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-                return tieredItem.getTier().getLevel() >= 2;
-            return false;
         }
 
         @Override
@@ -506,15 +469,14 @@ public class UnseenWorldModBlocks {
         public static boolean isValidRune(Level p_207910_, BlockPos p_207911_, BlockPos p_207912_) {
             return p_207910_.getBlockState(p_207911_.offset(p_207912_)).is(BEACON_RUNE.get()) && p_207910_.getBlockState(p_207911_.offset(p_207912_.getX() / 2, p_207912_.getY(), p_207912_.getZ() / 2)).is(BlockTags.REPLACEABLE);
         }
-        public void animateTick(BlockState p_221092_, Level p_221093_, BlockPos p_221094_, RandomSource p_221095_) {
-            super.animateTick(p_221092_, p_221093_, p_221094_, p_221095_);
+        public void animateTick(BlockState state, Level level, BlockPos p_220829_, RandomSource source) {
+            super.animateTick(state, level, p_220829_, source);
             for(BlockPos blockpos : BOOKSHELF_OFFSETS) {
-                if (p_221095_.nextInt(16) == 0 && isValidRune(p_221093_, p_221094_, blockpos)) {
-                    p_221093_.addParticle(UnseenWorldModParticleTypes.REDNESS.get(), (double)p_221094_.getX() + 0.5D, (double)p_221094_.getY() + 2.0D, (double)p_221094_.getZ() + 0.5D, (double)((float)blockpos.getX() + p_221095_.nextFloat()) - 0.5D, (double)((float)blockpos.getY() - p_221095_.nextFloat() - 1.0F), (double)((float)blockpos.getZ() + p_221095_.nextFloat()) - 0.5D);
+                if (source.nextInt(16) == 0 && isValidRune(level, p_220829_, blockpos)) {
+                    level.addParticle(UnseenWorldModParticleTypes.REDNESS.get(), (double)p_220829_.getX() + 0.5D, (double)p_220829_.getY() + 2.0D, (double)p_220829_.getZ() + 0.5D, (double)((float)blockpos.getX() + source.nextFloat()) - 0.5D, (double)((float)blockpos.getY() - source.nextFloat() - 1.0F), (double)((float)blockpos.getZ() + source.nextFloat()) - 0.5D);
                 }
             }
         }
-
         @Nullable
         @Override
         public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
@@ -651,7 +613,7 @@ public class UnseenWorldModBlocks {
             return Collections.singletonList(new ItemStack(this, 1));
         }
     });
-    public static final RegistryObject<Block> BLAZER_SUMMON_BLOCK = REGISTRY.register("blazer_summon_block", () -> new BlazerSummonBlockBlock());
+    public static final RegistryObject<Block> BLAZER_SUMMON_BLOCK = REGISTRY.register("blazer_summon_block", () -> new BlazerSummonBlock());
     public static final RegistryObject<Block> DARK_CRIMSON_BLOOMING_VINE = REGISTRY.register("dark_crimson_blooming_vine", DarkCrimsonBloomingVineBlock::new);
     public static final RegistryObject<Block> THE_WITHER_KNIGHT_BLOCK = REGISTRY.register("the_wither_knight_block", () -> new TheWitherKnightBlockBlock());
     public static final RegistryObject<Block> MISTERYFLOWER_WITH_FEW_BERRIES = REGISTRY.register("misteryflower_with_few_berries", () -> new MisteryflowerWithFewBerriesBlock());

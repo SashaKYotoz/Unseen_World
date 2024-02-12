@@ -115,7 +115,7 @@ public class ModelWarriorOfTheChimericDarkness<T extends DarkGolemEntity> extend
 		poseStack.translate(0.5F, 0.25F, 0.0F);
 	}
 
-	protected ModelPart getArm(HumanoidArm p_102852_) {
-		return p_102852_ == HumanoidArm.LEFT ? this.rightArm : this.leftArm;
+	protected ModelPart getArm(HumanoidArm arm) {
+		return arm == HumanoidArm.LEFT ? this.rightArm : this.leftArm;
 	}
 }

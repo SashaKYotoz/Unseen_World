@@ -75,12 +75,7 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 0.8));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.2, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-            }
-        });
+        this.goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.2, true));
         this.targetSelector.addGoal(7, new HurtByTargetGoal(this).setAlertOthers());
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
@@ -131,54 +126,54 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
     }
 
     @Override
-    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-        ItemStack itemstack = sourceentity.getItemInHand(hand);
-        InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        InteractionResult result = InteractionResult.sidedSuccess(this.level().isClientSide());
         Item item = itemstack.getItem();
         if (itemstack.getItem() instanceof SpawnEggItem) {
-            retval = super.mobInteract(sourceentity, hand);
+            result = super.mobInteract(player, hand);
         } else if (this.level().isClientSide()) {
-            retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
+            result = (this.isTame() && this.isOwnedBy(player) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
         } else {
             if (this.isTame()) {
                 if (isSaddle(itemstack)) {
                     setSaddled(true);
-                    sourceentity.getInventory().clearOrCountMatchingItems(p -> itemstack.getItem() == p.getItem(), 1, sourceentity.inventoryMenu.getCraftSlots());
+                    player.getInventory().clearOrCountMatchingItems(p -> itemstack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                 }
                 if (this.getPassengers().size() < 2 && !this.isBaby() && isSaddled()) {
-                    sourceentity.startRiding(this);
+                    player.startRiding(this);
                 }
-                if (this.isOwnedBy(sourceentity)) {
+                if (this.isOwnedBy(player)) {
                     if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
-                        this.usePlayerItem(sourceentity, hand, itemstack);
+                        this.usePlayerItem(player, hand, itemstack);
                         this.heal((float) item.getFoodProperties().getNutrition());
-                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                        result = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
-                        this.usePlayerItem(sourceentity, hand, itemstack);
+                        this.usePlayerItem(player, hand, itemstack);
                         this.heal(4);
-                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                        result = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else {
-                        retval = super.mobInteract(sourceentity, hand);
+                        result = super.mobInteract(player, hand);
                     }
                 }
             } else if (this.isFood(itemstack)) {
-                this.usePlayerItem(sourceentity, hand, itemstack);
-                if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, sourceentity)) {
-                    this.tame(sourceentity);
+                this.usePlayerItem(player, hand, itemstack);
+                if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                    this.tame(player);
                     this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
                     this.level().broadcastEntityEvent(this, (byte) 6);
                 }
                 this.setPersistenceRequired();
-                retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                result = InteractionResult.sidedSuccess(this.level().isClientSide());
             } else {
-                retval = super.mobInteract(sourceentity, hand);
-                if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME) {
+                result = super.mobInteract(player, hand);
+                if (result == InteractionResult.SUCCESS || result == InteractionResult.CONSUME) {
                     this.setPersistenceRequired();
                 }
             }
         }
-        return retval;
+        return result;
     }
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putBoolean("serpentSaddled", isSaddled());
@@ -207,38 +202,36 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-        RedRavengerEntity retval = UnseenWorldModEntities.RED_RAVENGER.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
-        return retval;
+        RedRavengerEntity entity = UnseenWorldModEntities.RED_RAVENGER.get().create(serverWorld);
+        entity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
+        return entity;
     }
     protected float getSinglePassengerXOffset() {
         return 0.0F;
     }
 
-    public void positionRider(@NotNull Entity p_38379_,Entity.MoveFunction p_289551_) {
-        if (this.hasPassenger(p_38379_)) {
+    public void positionRider(@NotNull Entity entity,Entity.MoveFunction function) {
+        if (this.hasPassenger(entity)) {
             float f = this.getSinglePassengerXOffset();
-            float f1 = (float)((this.isRemoved() ? (double)0.01F : this.getPassengersRidingOffset()) + p_38379_.getMyRidingOffset());
+            float f1 = (float)((this.isRemoved() ? (double)0.01F : this.getPassengersRidingOffset()) + entity.getMyRidingOffset());
             if (this.getPassengers().size() > 1) {
-                int i = this.getPassengers().indexOf(p_38379_);
+                int i = this.getPassengers().indexOf(entity);
                 if (i == 0) {
                     f = 0.2F;
                 } else {
                     f = -0.6F;
                 }
-
-                if (p_38379_ instanceof Animal) {
+                if (entity instanceof Animal) {
                     f += 0.2F;
                 }
             }
-
             Vec3 vec3 = (new Vec3(f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
-            p_38379_.setPos(this.getX() + vec3.x, this.getY() + (double)f1 + 0.5, this.getZ() + vec3.z);
-            this.clampRotation(p_38379_);
-            if (p_38379_ instanceof Animal && this.getPassengers().size() == 2) {
-                int j = p_38379_.getId() % 2 == 0 ? 90 : 270;
-                p_38379_.setYBodyRot(((Animal)p_38379_).yBodyRot + (float)j);
-                p_38379_.setYHeadRot(p_38379_.getYHeadRot() + (float)j);
+            entity.setPos(this.getX() + vec3.x, this.getY() + (double)f1 + 0.5, this.getZ() + vec3.z);
+            this.clampRotation(entity);
+            if (entity instanceof Animal && this.getPassengers().size() == 2) {
+                int j = entity.getId() % 2 == 0 ? 90 : 270;
+                entity.setYBodyRot(((Animal)entity).yBodyRot + (float)j);
+                entity.setYHeadRot(entity.getYHeadRot() + (float)j);
             }
 
         }

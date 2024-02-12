@@ -16,8 +16,8 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class BowlwithBerrieswithoutEffectItem extends Item {
-	public BowlwithBerrieswithoutEffectItem() {
+public class BowlWithBerriesWithoutEffectItem extends Item {
+	public BowlWithBerriesWithoutEffectItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(7).saturationMod(8f).build()));
 	}
 

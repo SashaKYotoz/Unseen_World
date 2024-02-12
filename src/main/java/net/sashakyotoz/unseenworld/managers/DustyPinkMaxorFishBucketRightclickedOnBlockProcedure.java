@@ -56,15 +56,6 @@ public class DustyPinkMaxorFishBucketRightclickedOnBlockProcedure {
 			{
 				BlockPos _bp = BlockPos.containing(x - 1, y, z);
 				BlockState _bs = Blocks.WATER.defaultBlockState();
-				BlockState _bso = world.getBlockState(_bp);
-				for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-					Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-					if (_property != null && _bs.getValue(_property) != null)
-						try {
-							_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-						} catch (Exception e) {
-						}
-				}
 				world.setBlock(_bp, _bs, 3);
 			}
 			if (world instanceof ServerLevel _level) {
@@ -73,9 +64,9 @@ public class DustyPinkMaxorFishBucketRightclickedOnBlockProcedure {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-			if (entity instanceof Player _player) {
+			if (entity instanceof Player player) {
 				ItemStack _stktoremove = new ItemStack(UnseenWorldModItems.DUSTY_PINK_MAXOR_FISH_BUCKET.get());
-				_player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+				player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
 			}
 			if (entity instanceof Player _player) {
 				ItemStack _setstack = new ItemStack(Items.BUCKET);
@@ -86,15 +77,6 @@ public class DustyPinkMaxorFishBucketRightclickedOnBlockProcedure {
 			{
 				BlockPos _bp = BlockPos.containing(x + 1, y, z);
 				BlockState _bs = Blocks.WATER.defaultBlockState();
-				BlockState _bso = world.getBlockState(_bp);
-				for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-					Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-					if (_property != null && _bs.getValue(_property) != null)
-						try {
-							_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-						} catch (Exception e) {
-						}
-				}
 				world.setBlock(_bp, _bs, 3);
 			}
 			if (world instanceof ServerLevel _level) {

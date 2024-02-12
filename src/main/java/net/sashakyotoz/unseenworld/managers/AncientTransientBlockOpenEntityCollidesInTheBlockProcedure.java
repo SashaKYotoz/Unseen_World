@@ -7,9 +7,9 @@ import net.minecraft.core.BlockPos;
 
 public class AncientTransientBlockOpenEntityCollidesInTheBlockProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z) {
-		double sx = 0;
-		double sy = 0;
-		double sz = 0;
+		double sx;
+		double sy;
+		double sz;
 		sx = -4;
 		for (int index0 = 0; index0 < 8; index0++) {
 			sy = -4;

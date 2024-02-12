@@ -1,9 +1,10 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:dakness_ancient_bricks_wall",
+    "unseen_world:darkness_ancient_bricks_wall",
     "unseen_world:chlorite_slate_stone_bricks_wall",
     "unseen_world:reddeepslatebricks_fence",
-    "unseen_world:tanzanite_bricks_wall"
+    "unseen_world:tanzanite_bricks_wall",
+    "unseen_world:dark_currantslate_wall"
   ]
 }

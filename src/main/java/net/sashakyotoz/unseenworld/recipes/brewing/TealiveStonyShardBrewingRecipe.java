@@ -16,10 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class TealiveStonyShardBrewingBrewingRecipe implements IBrewingRecipe {
+public class TealiveStonyShardBrewingRecipe implements IBrewingRecipe {
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new TealiveStonyShardBrewingBrewingRecipe()));
+		event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new TealiveStonyShardBrewingRecipe()));
 	}
 
 	@Override

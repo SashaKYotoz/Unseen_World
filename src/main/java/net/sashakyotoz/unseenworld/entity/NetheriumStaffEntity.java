@@ -69,7 +69,7 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void tick() {
 		super.tick();
-		NetheriumStaffWhileProjectileFlyingTickProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ());
+		NetheriumStaffWhileProjectileFlyingTickProcedure.onTickParticles(this.level(), this.getX(), this.getY(), this.getZ());
 		if (this.inGround)
 			this.discard();
 	}

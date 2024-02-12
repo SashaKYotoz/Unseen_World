@@ -23,7 +23,7 @@ public class UnseenWorldModConfigs {
 		REDUCING_OF_GRAVITY_CHANCE = BUILDER.comment("Determine chance of appling reducing of gravity effect on player").defineInRange("reducing_of_gravity_chance",0.0035,0.0005, 0.1);
 		METEORITESTROPHY_CHANCE = BUILDER.comment("Determine chance of appling meteoritestrophy effect on player").defineInRange("meteoritestrophy_chance",0.0025,0.0005, 0.1);
 		LIFE_STEELING_POWER = BUILDER.comment("Determine extra power of life steeling enchantment").defineInRange("extra_power_of_life_steeling",0,0, 5);
-		GRAVITY_SPIKES_POWER = BUILDER.comment("Determine extra power of gravity thorns enchantment").defineInRange("extra_power_of_gravity_thorns",0,0, 5);
+		GRAVITY_SPIKES_POWER = BUILDER.comment("Determine extra power of gravity thorns enchantment").defineInRange("extra_power_of_gravity_thorns",0,-1, 5);
 		SHINING_BLADE_POWER = BUILDER.comment("Determine extra power of shining blade enchantment").defineInRange("extra_power_of_shining_blade",0,0, 5);
 		DEACTIVATE_GRAVITY_SPIKES = BUILDER.comment("Determine if gravity thorns enchantment has to work").define("deactivate_spikes",false);
 		DEACTIVATE_LIFE_STEELING = BUILDER.comment("Determine if life steel enchantment has to work").define("deactivate_life_steeling",false);

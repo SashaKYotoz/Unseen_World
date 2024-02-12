@@ -27,18 +27,18 @@ public class KnightArmorRodsLayer<T extends LivingEntity, M extends EntityModel<
         this.armorModel = new ModelThe_Wither_Knight_Armor_Rods<>(p_174494_.bakeLayer(ModelThe_Wither_Knight_Armor_Rods.LAYER_LOCATION));
     }
 
-    public void render(PoseStack p_116951_, MultiBufferSource p_116952_, int p_116953_, T p_116954_, float p_116955_, float p_116956_, float p_116957_, float p_116958_, float p_116959_, float p_116960_) {
-        ItemStack itemstack = p_116954_.getItemBySlot(EquipmentSlot.CHEST);
-        if (shouldRender(itemstack, p_116954_)) {
+    public void render(PoseStack stack, MultiBufferSource bufferSource, int p_116953_, T entity, float p_116955_, float p_116956_, float p_116957_, float p_116958_, float p_116959_, float p_116960_) {
+        ItemStack itemstack = entity.getItemBySlot(EquipmentSlot.CHEST);
+        if (shouldRender(itemstack, entity)) {
             ResourceLocation resourcelocation;
-            resourcelocation = getRodsLocation(itemstack, p_116954_);
-            p_116951_.pushPose();
-            p_116951_.translate(0.0F, 0.0F, 0.125F);
+            resourcelocation = getRodsLocation(itemstack, entity);
+            stack.pushPose();
+            stack.translate(0.0F, 0.0F, 0.125F);
             this.getParentModel().copyPropertiesTo(this.armorModel);
-            this.armorModel.setupAnim(p_116954_, p_116955_, p_116956_, p_116958_, p_116959_, p_116960_);
-            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(p_116952_, RenderType.armorCutoutNoCull(resourcelocation), false, itemstack.hasFoil());
-            this.armorModel.renderToBuffer(p_116951_, vertexconsumer, p_116953_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            p_116951_.popPose();
+            this.armorModel.setupAnim(entity, p_116955_, p_116956_, p_116958_, p_116959_, p_116960_);
+            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(resourcelocation), false, itemstack.hasFoil());
+            this.armorModel.renderToBuffer(stack, vertexconsumer, p_116953_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            stack.popPose();
         }
     }
 

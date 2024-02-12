@@ -19,7 +19,7 @@ import net.sashakyotoz.unseenworld.entity.animations.WitherKnightAnimations;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class ModelThe_Wither_Knight<T extends TheWitherKnightEntity> extends HierarchicalModel<T> implements ArmedModel {
+public class ModelThe_Wither_Knight<T extends TheWitherKnightEntity> extends WitherArmedModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("unseen_world", "model_the_wither_knight"), "main");
 	public final ModelPart Head;
 	public final ModelPart Body;
@@ -102,11 +102,12 @@ public class ModelThe_Wither_Knight<T extends TheWitherKnightEntity> extends Hie
 	}
 
 	@Override
-	public void translateToHand(HumanoidArm p_103392_, PoseStack p_103393_) {
+	public void translateToHand(HumanoidArm humanoidArm, PoseStack stack) {
 		ModelPart modelpart = this.left_arm;
-		float f = 0.5F * (float) (p_103392_ == HumanoidArm.LEFT ? 1 : -1);
+		float f =(humanoidArm == HumanoidArm.LEFT ? 0.95f : -0.95f);
+		stack.scale(1.1f,1.1f,1.1f);
 		modelpart.x += f;
-		modelpart.translateAndRotate(p_103393_);
+		modelpart.translateAndRotate(stack);
 		modelpart.x -= f;
 	}
 }

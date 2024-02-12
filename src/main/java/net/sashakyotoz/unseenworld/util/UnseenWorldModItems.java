@@ -1,7 +1,3 @@
-
-/*
- *    MCreator note: This file will be REGENERATED on each build.
- */
 package net.sashakyotoz.unseenworld.util;
 
 import net.minecraft.world.InteractionHand;
@@ -356,7 +352,7 @@ public class UnseenWorldModItems {
 	});
 	public static final RegistryObject<Item> CRIMSERRY_SOUL_BERRY_FOOD = REGISTRY.register("crimserry_soul_berry_food", () -> new CrimserrySoulBerryFoodItem());
 	public static final RegistryObject<Item> DISHWITH_BERRIES = REGISTRY.register("dishwith_berries", DishwithBerriesItem::new);
-	public static final RegistryObject<Item> BOWLWITH_BERRIESWITHOUT_EFFECT = REGISTRY.register("bowlwith_berrieswithout_effect", () -> new BowlwithBerrieswithoutEffectItem());
+	public static final RegistryObject<Item> BOWLWITH_BERRIESWITHOUT_EFFECT = REGISTRY.register("bowlwith_berrieswithout_effect", () -> new BowlWithBerriesWithoutEffectItem());
 	public static final RegistryObject<Item> MOON_FISH_FOOD = REGISTRY.register("moon_fish_food", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(1f).build())){
 		@Override
 		public int getUseDuration(ItemStack itemstack) {

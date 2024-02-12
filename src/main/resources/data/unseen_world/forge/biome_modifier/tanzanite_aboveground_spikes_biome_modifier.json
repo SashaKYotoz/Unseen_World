@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "unseen_world:tanzanite_above_ground_cavern",
-  "features": "unseen_world:tanzanite_aboveground_spikes",
-  "step": "local_modifications"
-}

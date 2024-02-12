@@ -1,7 +1,3 @@
-
-/*
- *    MCreator note: This file will be REGENERATED on each build.
- */
 package net.sashakyotoz.unseenworld.util;
 
 import net.sashakyotoz.unseenworld.UnseenWorldMod;

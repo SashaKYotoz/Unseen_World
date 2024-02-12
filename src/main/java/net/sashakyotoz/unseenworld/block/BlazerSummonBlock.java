@@ -20,19 +20,14 @@ import net.minecraft.core.BlockPos;
 
 import net.sashakyotoz.unseenworld.managers.BlazerSummonBlockEntityCollidesInTheBlockProcedure;
 
-public class BlazerSummonBlockBlock extends Block {
-	public BlazerSummonBlockBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(-1, 3600000).lightLevel(s -> 5).requiresCorrectToolForDrops().noOcclusion().isRedstoneConductor((bs, br, bp) -> false).noLootTable());
+public class BlazerSummonBlock extends Block {
+	public BlazerSummonBlock() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(-1, 3600000).lightLevel(s -> 5).requiresCorrectToolForDrops().noOcclusion().noLootTable());
 	}
 
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
 		return true;
-	}
-
-	@Override
-	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
-		return 0;
 	}
 
 	@Override

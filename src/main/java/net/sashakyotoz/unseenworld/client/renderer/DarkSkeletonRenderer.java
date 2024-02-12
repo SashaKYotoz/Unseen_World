@@ -6,15 +6,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-import net.sashakyotoz.unseenworld.entity.DarkskeletonEntity;
+import net.sashakyotoz.unseenworld.entity.DarkSkeletonEntity;
 
-public class DarkSkeletonRenderer extends MobRenderer<DarkskeletonEntity, ModelArmoredSkeleton<DarkskeletonEntity>> {
+public class DarkSkeletonRenderer extends MobRenderer<DarkSkeletonEntity, ModelArmoredSkeleton<DarkSkeletonEntity>> {
 	public DarkSkeletonRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelArmoredSkeleton(context.bakeLayer(ModelArmoredSkeleton.LAYER_LOCATION)), 0.5f);
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(DarkskeletonEntity entity) {
+	public ResourceLocation getTextureLocation(DarkSkeletonEntity entity) {
 		return new ResourceLocation("unseen_world:textures/entities/armored_skeleton" + entity.texture + ".png");
 
 	}
