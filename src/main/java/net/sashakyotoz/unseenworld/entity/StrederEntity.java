@@ -77,11 +77,11 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         setNoAi(false);
     }
 
-    public void onSyncedDataUpdated(EntityDataAccessor<?> p_33900_) {
-        if (DATA_BOOST_TIME.equals(p_33900_) && this.level().isClientSide) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> dataAccessor) {
+        if (DATA_BOOST_TIME.equals(dataAccessor) && this.level().isClientSide) {
             this.steering.onSynced();
         }
-        super.onSyncedDataUpdated(p_33900_);
+        super.onSyncedDataUpdated(dataAccessor);
     }
 
     protected void defineSynchedData() {
@@ -91,14 +91,14 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         this.entityData.define(DATA_IS_SADDLED, false);
     }
 
-    public void addAdditionalSaveData(CompoundTag p_33918_) {
-        super.addAdditionalSaveData(p_33918_);
-        this.steering.addAdditionalSaveData(p_33918_);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        this.steering.addAdditionalSaveData(tag);
     }
 
-    public void readAdditionalSaveData(CompoundTag p_33898_) {
-        super.readAdditionalSaveData(p_33898_);
-        this.steering.readAdditionalSaveData(p_33898_);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.steering.readAdditionalSaveData(tag);
     }
 
     public boolean isSaddled() {
@@ -109,24 +109,24 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return this.isAlive() && !this.isBaby();
     }
 
-    public void equipSaddle(@Nullable SoundSource p_33878_) {
+    public void equipSaddle(@Nullable SoundSource source) {
         this.steering.setSaddle(true);
-        if (p_33878_ != null) {
-            this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, p_33878_, 0.5F, 1.0F);
+        if (source != null) {
+            this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, source, 0.5F, 1.0F);
         }
     }
-    protected void tickRidden(Player p_278331_, Vec3 p_278234_) {
-        this.setRot(p_278331_.getYRot(), p_278331_.getXRot() * 0.5F);
+    protected void tickRidden(Player player, Vec3 p_278234_) {
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         this.steering.tickBoost();
-        super.tickRidden(p_278331_, p_278234_);
+        super.tickRidden(player, p_278234_);
     }
 
-    protected Vec3 getRiddenInput(Player p_278251_, Vec3 p_275578_) {
+    protected Vec3 getRiddenInput(Player player, Vec3 p_275578_) {
         return new Vec3(0.0D, 0.0D, 1.0D);
     }
 
-    protected float getRiddenSpeed(Player p_278317_) {
+    protected float getRiddenSpeed(Player player) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double)(this.isSuffocating() ? 0.35F : 0.55F) * (double)this.steering.boostFactor());
     }
 
@@ -151,8 +151,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     }
 
     @Override
-    public boolean canStandOnFluid(FluidState p_204067_) {
-        return p_204067_.is(FluidTags.LAVA) || p_204067_.is(UnseenWorldModFluids.DARK_WATER.get());
+    public boolean canStandOnFluid(FluidState state) {
+        return state.is(FluidTags.LAVA) || state.is(UnseenWorldModFluids.DARK_WATER.get());
     }
     @Override
     public float nextStep() {
@@ -165,8 +165,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return (double) this.getBbHeight() - 0.34D + (double) (0.12F * Mth.cos(f1 * 1.5F) * 2.0F * f);
     }
 
-    public boolean checkSpawnObstruction(LevelReader p_33880_) {
-        return p_33880_.isUnobstructed(this);
+    public boolean checkSpawnObstruction(LevelReader reader) {
+        return reader.isUnobstructed(this);
     }
 
     @Nullable
@@ -180,12 +180,12 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return null;
     }
 
-    public Vec3 getDismountLocationForPassenger(LivingEntity p_33908_) {
-        Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot()),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 22.5F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() + 22.5F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 45.0F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() + 45.0F)};
+    public Vec3 getDismountLocationForPassenger(LivingEntity entity) {
+        Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot()),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() - 22.5F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() + 22.5F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() - 45.0F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() + 45.0F)};
         Set<BlockPos> set = Sets.newLinkedHashSet();
         double d0 = this.getBoundingBox().maxY;
         double d1 = this.getBoundingBox().minY - 0.5D;
@@ -202,10 +202,10 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
                 double d3 = this.level().getBlockFloorHeight(blockpos);
                 if (DismountHelper.isBlockFloorValid(d3)) {
                     Vec3 vec31 = Vec3.upFromBottomCenterOf(blockpos, d3);
-                    for (Pose pose : p_33908_.getDismountPoses()) {
-                        AABB aabb = p_33908_.getLocalBoundsForPose(pose);
-                        if (DismountHelper.canDismountTo(this.level(), p_33908_, aabb.move(vec31))) {
-                            p_33908_.setPose(pose);
+                    for (Pose pose : entity.getDismountPoses()) {
+                        AABB aabb = entity.getLocalBoundsForPose(pose);
+                        if (DismountHelper.canDismountTo(this.level(), entity, aabb.move(vec31))) {
+                            entity.setPose(pose);
                             return vec31;
                         }
                     }
@@ -215,7 +215,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return new Vec3(this.getX(), this.getBoundingBox().maxY, this.getZ());
     }
 
-    protected void playStepSound(BlockPos p_33915_, BlockState p_33916_) {
+    protected void playStepSound(BlockPos pos, BlockState blockState) {
         this.playSound(this.isInLava() ? SoundEvents.STRIDER_STEP_LAVA : SoundEvents.STRIDER_STEP, 1.0F, 1.0F);
     }
 
@@ -223,12 +223,12 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return this.steering.boost(this.getRandom());
     }
 
-    protected void checkFallDamage(double p_33870_, boolean p_33871_, BlockState p_33872_, BlockPos p_33873_) {
+    protected void checkFallDamage(double p_33870_, boolean p_33871_, BlockState state, BlockPos pos) {
         this.checkInsideBlocks();
         if (this.isInLava()) {
             this.resetFallDistance();
         } else {
-            super.checkFallDamage(p_33870_, p_33871_, p_33872_, p_33873_);
+            super.checkFallDamage(p_33870_, p_33871_, state, pos);
         }
     }
 
@@ -242,8 +242,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
             label36:
             {
                 BlockState blockstate = this.level().getBlockState(this.blockPosition());
-                BlockState blockstate1 = this.getBlockStateOnLegacy();
-                flag = blockstate.is(BlockTags.STRIDER_WARM_BLOCKS) || blockstate1.is(UnseenWorldModBlocks.DARK_WATER.get()) || blockstate1.is(BlockTags.STRIDER_WARM_BLOCKS) || this.getFluidHeight(FluidTags.LAVA) > 0.0D;
+                BlockState stateOnLegacy = this.getBlockStateOnLegacy();
+                flag = blockstate.is(BlockTags.STRIDER_WARM_BLOCKS) || stateOnLegacy.is(UnseenWorldModBlocks.DARK_WATER.get()) || stateOnLegacy.is(BlockTags.STRIDER_WARM_BLOCKS) || this.getFluidHeight(FluidTags.LAVA) > 0.0D;
                 Entity entity = this.getVehicle();
                 if (entity instanceof StrederEntity strider) {
                     if (strider.isSuffocating()) {
@@ -285,7 +285,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return SoundEvents.STRIDER_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound(DamageSource p_33934_) {
+    protected SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.STRIDER_HURT;
     }
 
@@ -293,7 +293,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return SoundEvents.STRIDER_DEATH;
     }
 
-    protected boolean canAddPassenger(Entity p_33950_) {
+    protected boolean canAddPassenger(Entity entity) {
         return !this.isVehicle() && !this.isEyeInFluid(FluidTags.LAVA);
     }
 
@@ -305,8 +305,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         return false;
     }
 
-    public float getWalkTargetValue(BlockPos p_33895_, LevelReader p_33896_) {
-        if (p_33896_.getBlockState(p_33895_).getFluidState().is(FluidTags.LAVA) || p_33896_.getBlockState(p_33895_).getFluidState().is(UnseenWorldModFluids.DARK_WATER.get())) {
+    public float getWalkTargetValue(BlockPos pos, LevelReader reader) {
+        if (reader.getBlockState(pos).getFluidState().is(FluidTags.LAVA) || reader.getBlockState(pos).getFluidState().is(UnseenWorldModFluids.DARK_WATER.get())) {
             return 10.0F;
         } else {
             return this.isInLava() ? Float.NEGATIVE_INFINITY : 0.0F;
@@ -314,12 +314,12 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     }
 
     @Nullable
-    public StrederEntity getBreedOffspring(ServerLevel p_149861_, AgeableMob p_149862_) {
-        return UnseenWorldModEntities.STREDER.get().create(p_149861_);
+    public StrederEntity getBreedOffspring(ServerLevel level, AgeableMob mob) {
+        return UnseenWorldModEntities.STREDER.get().create(level);
     }
 
-    public boolean isFood(ItemStack p_33946_) {
-        return FOOD_ITEMS.test(p_33946_);
+    public boolean isFood(ItemStack stack) {
+        return FOOD_ITEMS.test(stack);
     }
 
     protected void dropEquipment() {
@@ -329,18 +329,18 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         }
     }
 
-    public InteractionResult mobInteract(Player p_33910_, InteractionHand p_33911_) {
-        boolean flag = this.isFood(p_33910_.getItemInHand(p_33911_));
-        if (!flag && this.isSaddled() && !this.isVehicle() && !p_33910_.isSecondaryUseActive()) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        boolean flag = this.isFood(player.getItemInHand(hand));
+        if (!flag && this.isSaddled() && !this.isVehicle() && !player.isSecondaryUseActive()) {
             if (!this.level().isClientSide) {
-                p_33910_.startRiding(this);
+                player.startRiding(this);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
-            InteractionResult interactionresult = super.mobInteract(p_33910_, p_33911_);
+            InteractionResult interactionresult = super.mobInteract(player, hand);
             if (!interactionresult.consumesAction()) {
-                ItemStack itemstack = p_33910_.getItemInHand(p_33911_);
-                return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(p_33910_, this, p_33911_) : InteractionResult.PASS;
+                ItemStack itemstack = player.getItemInHand(hand);
+                return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(player, this, hand) : InteractionResult.PASS;
             } else {
                 if (flag && !this.isSilent()) {
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.STRIDER_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
@@ -355,62 +355,61 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     }
 
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33887_, DifficultyInstance p_33888_, MobSpawnType p_33889_, @Nullable SpawnGroupData p_33890_, @Nullable CompoundTag p_33891_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance instance, MobSpawnType spawnType, @Nullable SpawnGroupData data, @Nullable CompoundTag p_33891_) {
         if (!this.isBaby()) {
-            RandomSource randomsource = p_33887_.getRandom();
+            RandomSource randomsource = accessor.getRandom();
             if (randomsource.nextInt(30) == 0) {
-                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(p_33887_.getLevel());
+                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(accessor.getLevel());
                 if (mob != null) {
-                    p_33890_ = this.spawnJockey(p_33887_, p_33888_, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
+                    data = this.spawnJockey(accessor, instance, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
                     mob.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.WARPED_FUNGUS_ON_A_STICK));
                     this.equipSaddle(null);
                 }
             } else if (randomsource.nextInt(10) == 0) {
-                AgeableMob ageablemob = UnseenWorldModEntities.STREDER.get().create(p_33887_.getLevel());
+                AgeableMob ageablemob = UnseenWorldModEntities.STREDER.get().create(accessor.getLevel());
                 if (ageablemob != null) {
                     ageablemob.setAge(-24000);
-                    p_33890_ = this.spawnJockey(p_33887_, p_33888_, ageablemob, null);
+                    data = this.spawnJockey(accessor, instance, ageablemob, null);
                 }
             } else {
-                p_33890_ = new AgeableMobGroupData(0.5F);
+                data = new AgeableMobGroupData(0.5F);
             }
         }
-        return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
+        return super.finalizeSpawn(accessor, instance, spawnType, data, p_33891_);
     }
 
-    private SpawnGroupData spawnJockey(ServerLevelAccessor p_33882_, DifficultyInstance p_33883_, Mob p_33884_, @Nullable SpawnGroupData p_33885_) {
-        p_33884_.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-        p_33884_.finalizeSpawn(p_33882_, p_33883_, MobSpawnType.JOCKEY, p_33885_, null);
-        p_33884_.startRiding(this, true);
+    private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance instance, Mob mob, @Nullable SpawnGroupData p_33885_) {
+        mob.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+        mob.finalizeSpawn(accessor, instance, MobSpawnType.JOCKEY, p_33885_, null);
+        mob.startRiding(this, true);
         return new AgeableMob.AgeableMobGroupData(0.0F);
     }
-    protected PathNavigation createNavigation(Level p_33913_) {
-        return new StrederEntity.StrederPathNavigation(this, p_33913_);
+    protected PathNavigation createNavigation(Level level) {
+        return new StrederEntity.StrederPathNavigation(this, level);
     }
 
     static class StrederPathNavigation extends GroundPathNavigation {
-        StrederPathNavigation(StrederEntity p_33969_, Level p_33970_) {
-            super(p_33969_, p_33970_);
+        StrederPathNavigation(StrederEntity entity, Level level) {
+            super(entity, level);
         }
 
-        protected PathFinder createPathFinder(int p_33972_) {
+        protected PathFinder createPathFinder(int i) {
             this.nodeEvaluator = new WalkNodeEvaluator();
             this.nodeEvaluator.setCanPassDoors(true);
-            return new PathFinder(this.nodeEvaluator, p_33972_);
+            return new PathFinder(this.nodeEvaluator, i);
         }
 
-        protected boolean hasValidPathType(BlockPathTypes p_33974_) {
-            return p_33974_ == BlockPathTypes.LAVA || p_33974_ == BlockPathTypes.DAMAGE_FIRE || p_33974_ == BlockPathTypes.DANGER_FIRE || super.hasValidPathType(p_33974_);
+        protected boolean hasValidPathType(BlockPathTypes pathTypes) {
+            return pathTypes == BlockPathTypes.LAVA || pathTypes == BlockPathTypes.DAMAGE_FIRE || pathTypes == BlockPathTypes.DANGER_FIRE || super.hasValidPathType(pathTypes);
         }
 
-        public boolean isStableDestination(BlockPos p_33976_) {
-            return this.level.getBlockState(p_33976_).is(Blocks.LAVA) || super.isStableDestination(p_33976_) || this.level.getBlockState(p_33976_).is(UnseenWorldModBlocks.DARK_WATER.get());
+        public boolean isStableDestination(BlockPos pos) {
+            return this.level.getBlockState(pos).is(Blocks.LAVA) || super.isStableDestination(pos) || this.level.getBlockState(pos).is(UnseenWorldModBlocks.DARK_WATER.get());
         }
     }
 
     public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.STREDER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Mob::checkMobSpawnRules);
+        SpawnPlacements.register(UnseenWorldModEntities.STREDER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

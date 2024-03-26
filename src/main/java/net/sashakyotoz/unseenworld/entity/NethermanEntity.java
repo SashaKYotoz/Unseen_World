@@ -31,6 +31,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.core.BlockPos;
+import org.jetbrains.annotations.NotNull;
 
 public class NethermanEntity extends EnderMan {
 	private int attackAnimationRemainingTicks;
@@ -80,12 +81,12 @@ public class NethermanEntity extends EnderMan {
 		super.aiStep();
 	}
 
-	public void handleEntityEvent(byte p_34496_) {
-		if (p_34496_ == 4) {
+	public void handleEntityEvent(byte b) {
+		if (b == 4) {
 			this.attackAnimationRemainingTicks = 100;
 			this.playSound(SoundEvents.ENDERMAN_HURT, 1.0F, this.getVoicePitch());
 		} else {
-			super.handleEntityEvent(p_34496_);
+			super.handleEntityEvent(b);
 		}
 	}
 
@@ -127,7 +128,7 @@ public class NethermanEntity extends EnderMan {
 				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
-	public static AttributeSupplier.Builder createAttributes() {
+	public static AttributeSupplier.@NotNull Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
 		builder = builder.add(Attributes.MAX_HEALTH, 32);

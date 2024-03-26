@@ -1,15 +1,16 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-
-import net.sashakyotoz.unseenworld.managers.OutgrowthAppleFoodEatenProcedure;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 
 public class OutgrowthappleItem extends Item {
 	public OutgrowthappleItem() {
@@ -27,12 +28,12 @@ public class OutgrowthappleItem extends Item {
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		OutgrowthAppleFoodEatenProcedure.execute(world, x, y, z, entity);
-		return retval;
+	public ItemStack finishUsingItem(ItemStack itemstack, Level level, LivingEntity entity) {
+		ItemStack stack = super.finishUsingItem(itemstack, level, entity);
+		level.addParticle(UnseenWorldModParticleTypes.REDNESS.get(), entity.getX(), entity.getY(), entity.getZ(), 0.5, 2, 0.5);
+		entity.hurt(entity.damageSources().generic(), 1);
+		if (!entity.level().isClientSide())
+			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 2));
+		return stack;
 	}
 }

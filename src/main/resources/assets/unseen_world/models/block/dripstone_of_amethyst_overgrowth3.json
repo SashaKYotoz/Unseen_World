@@ -4,5 +4,5 @@
     "cross": "unseen_world:block/amethyst_dripstone_bottom",
     "particle": "unseen_world:block/amethyst_dripstone_bottom"
   },
-  "render_type": "translucent"
+  "render_type": "cutout"
 }

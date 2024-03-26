@@ -33,55 +33,57 @@ public class UnseenWorldModEntities {
     public static final RegistryObject<EntityType<VoidBowEntity>> VOID_BOW = register("projectile_void_bow",
             EntityType.Builder.<VoidBowEntity>of(VoidBowEntity::new, MobCategory.MISC).setCustomClientFactory(VoidBowEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<DarkSkeletonEntity>> DARK_SKELETON = register("dark_skeleton",
-            EntityType.Builder.<DarkSkeletonEntity>of(DarkSkeletonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(DarkSkeletonEntity::new)
+            EntityType.Builder.<DarkSkeletonEntity>of(DarkSkeletonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(DarkSkeletonEntity::new)
                     .sized(0.6f, 1.8f));
     public static final RegistryObject<EntityType<AmethystGolemEntity>> AMETHYST_GOLEM = register("amethyst_golem", EntityType.Builder.<AmethystGolemEntity>of(AmethystGolemEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(AmethystGolemEntity::new).fireImmune().sized(1.2f, 1.6f));
+            .setTrackingRange(16).setCustomClientFactory(AmethystGolemEntity::new).fireImmune().sized(1.2f, 1.6f));
     public static final RegistryObject<EntityType<DarkPhantomEntity>> DARK_PHANTOM = register("dark_phantom", EntityType.Builder.<DarkPhantomEntity>of(DarkPhantomEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(DarkPhantomEntity::new).fireImmune().sized(1f, 1f));
+            .setTrackingRange(8).setCustomClientFactory(DarkPhantomEntity::new).fireImmune().sized(1f, 1f));
     public static final RegistryObject<EntityType<DustyPinkMaxorFishEntity>> DUSTY_PINK_MAXOR_FISH = register("dusty_pink_maxor_fish",
-            EntityType.Builder.<DustyPinkMaxorFishEntity>of(DustyPinkMaxorFishEntity::new, MobCategory.WATER_AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(5)
+            EntityType.Builder.<DustyPinkMaxorFishEntity>of(DustyPinkMaxorFishEntity::new, MobCategory.WATER_AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(8)
                     .setCustomClientFactory(DustyPinkMaxorFishEntity::new)
                     .sized(0.5f, 0.5f));
-    public static final RegistryObject<EntityType<MoonfishEntity>> MOONFISH = register("moonfish",
-            EntityType.Builder.<MoonfishEntity>of(MoonfishEntity::new, MobCategory.WATER_AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(5).setCustomClientFactory(MoonfishEntity::new)
+    public static final RegistryObject<EntityType<MoonFishEntity>> MOONFISH = register("moonfish",
+            EntityType.Builder.<MoonFishEntity>of(MoonFishEntity::new, MobCategory.WATER_AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(MoonFishEntity::new)
                     .sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<CavernScarecrowEntity>> CAVERN_SCARECROW = register("cavern_scarecrow", EntityType.Builder.<CavernScarecrowEntity>of(CavernScarecrowEntity::new, MobCategory.CREATURE)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(CavernScarecrowEntity::new).fireImmune().sized(0.6f, 0.8f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(CavernScarecrowEntity::new).fireImmune().sized(0.6f, 0.8f));
+    public static final RegistryObject<EntityType<SnowdrifterEntity>> SNOWDRIFTER = register("snowdrifter", EntityType.Builder.<SnowdrifterEntity>of(SnowdrifterEntity::new, MobCategory.CREATURE)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(SnowdrifterEntity::new).fireImmune().sized(1f, 1f));
     public static final RegistryObject<EntityType<SavageSmallBlazeEntity>> SAVAGE_SMALL_BLAZE = register("savage_small_blaze", EntityType.Builder.<SavageSmallBlazeEntity>of(SavageSmallBlazeEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(SavageSmallBlazeEntity::new).fireImmune().sized(0.6f, 1.6f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(SavageSmallBlazeEntity::new).fireImmune().sized(0.6f, 1.6f));
     public static final RegistryObject<EntityType<ChimericPurplemarerEntity>> CHIMERIC_PURPLEMARER = register("chimeric_purplemarer", EntityType.Builder.<ChimericPurplemarerEntity>of(ChimericPurplemarerEntity::new, MobCategory.CREATURE)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(ChimericPurplemarerEntity::new).fireImmune().sized(0.8f, 1.6f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(ChimericPurplemarerEntity::new).fireImmune().sized(0.8f, 1.6f));
     public static final RegistryObject<EntityType<ChimericRedmarerEntity>> CHIMERIC_REDMARER = register("chimeric_redmarer", EntityType.Builder.<ChimericRedmarerEntity>of(ChimericRedmarerEntity::new, MobCategory.CREATURE)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(ChimericRedmarerEntity::new).fireImmune().sized(0.8f, 1.6f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(ChimericRedmarerEntity::new).fireImmune().sized(0.8f, 1.6f));
     public static final RegistryObject<EntityType<NethermanEntity>> NETHERMEN = register("nethermen",
-            EntityType.Builder.<NethermanEntity>of(NethermanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(NethermanEntity::new).fireImmune().sized(0.6f, 3f));
+            EntityType.Builder.<NethermanEntity>of(NethermanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setCustomClientFactory(NethermanEntity::new).fireImmune().sized(0.6f, 3f));
     public static final RegistryObject<EntityType<RedSlylfEntity>> RED_SLYLF = register("red_slylf",
-            EntityType.Builder.<RedSlylfEntity>of(RedSlylfEntity::new, MobCategory.AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(RedSlylfEntity::new).fireImmune().sized(0.7f, 0.9f));
+            EntityType.Builder.<RedSlylfEntity>of(RedSlylfEntity::new, MobCategory.AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setCustomClientFactory(RedSlylfEntity::new).fireImmune().sized(0.7f, 0.9f));
     public static final RegistryObject<EntityType<RedBlazeEntity>> RED_BLAZE = register("red_blaze",
-            EntityType.Builder.<RedBlazeEntity>of(RedBlazeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(RedBlazeEntity::new).fireImmune().sized(0.6f, 1.8f));
+            EntityType.Builder.<RedBlazeEntity>of(RedBlazeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(RedBlazeEntity::new).fireImmune().sized(0.6f, 1.8f));
     public static final RegistryObject<EntityType<StrederEntity>> STREDER = register("streder",
-            EntityType.Builder.<StrederEntity>of(StrederEntity::new, MobCategory.AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(StrederEntity::new).fireImmune().sized(0.4f, 1f));
+            EntityType.Builder.<StrederEntity>of(StrederEntity::new, MobCategory.AMBIENT).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(StrederEntity::new).fireImmune().sized(0.4f, 1f));
     public static final RegistryObject<EntityType<GhastOfTealiveValleyEntity>> GHAST_OF_TEALIVE_VALLEY = register("ghast_of_tealive_valley", EntityType.Builder.<GhastOfTealiveValleyEntity>of(GhastOfTealiveValleyEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(GhastOfTealiveValleyEntity::new).fireImmune().sized(2f, 2f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(GhastOfTealiveValleyEntity::new).fireImmune().sized(2f, 2f));
     public static final RegistryObject<EntityType<TanzaniteGuardianEntity>> TANZANITE_GUARDIAN = register("tanzanite_guardian", EntityType.Builder.<TanzaniteGuardianEntity>of(TanzaniteGuardianEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(TanzaniteGuardianEntity::new).fireImmune().sized(1.6f, 2.4f));
-    public static final RegistryObject<EntityType<DarkSpiritWolfEntity>> DARKSPIRITWOLF = register("dark_spirit_wolf", EntityType.Builder.<DarkSpiritWolfEntity>of(DarkSpiritWolfEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(DarkSpiritWolfEntity::new).fireImmune().sized(0.6f, 0.5f));
-    public static final RegistryObject<EntityType<VoidEndermanEntity>> VOID_ENDERMEN = register("void_endermen", EntityType.Builder.<VoidEndermanEntity>of(VoidEndermanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(VoidEndermanEntity::new).fireImmune().sized(0.6f, 2.5f));
+            .setTrackingRange(8).setCustomClientFactory(TanzaniteGuardianEntity::new).fireImmune().sized(1.6f, 2.4f));
+    public static final RegistryObject<EntityType<DarkSpiritWolfEntity>> DARKSPIRITWOLF = register("dark_spirit_wolf", EntityType.Builder.<DarkSpiritWolfEntity>of(DarkSpiritWolfEntity::new, MobCategory.MONSTER)
+            .setTrackingRange(8).setCustomClientFactory(DarkSpiritWolfEntity::new).fireImmune().sized(0.6f, 0.5f));
+    public static final RegistryObject<EntityType<VoidEndermanEntity>> VOID_ENDERMEN = register("void_endermen", EntityType.Builder.<VoidEndermanEntity>of(VoidEndermanEntity::new, MobCategory.MONSTER)
+            .setTrackingRange(16).setCustomClientFactory(VoidEndermanEntity::new).fireImmune().sized(0.6f, 2.5f));
     public static final RegistryObject<EntityType<TealiveSkeletonEntity>> TEALIVE_SKELETON = register("tealive_skeleton", EntityType.Builder.<TealiveSkeletonEntity>of(TealiveSkeletonEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(TealiveSkeletonEntity::new).fireImmune().sized(0.7f, 1.8f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setCustomClientFactory(TealiveSkeletonEntity::new).fireImmune().sized(0.7f, 1.8f));
     public static final RegistryObject<EntityType<RedRavengerEntity>> RED_RAVENGER = register("red_ravenger", EntityType.Builder.<RedRavengerEntity>of(RedRavengerEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory(RedRavengerEntity::new).fireImmune().sized(1.5f, 1.8f));
+            .setTrackingRange(8).setCustomClientFactory(RedRavengerEntity::new).fireImmune().sized(1.5f, 1.8f));
     public static final RegistryObject<EntityType<DarkHoglinEntity>> DARK_HOGLIN = register("dark_hoglin", EntityType.Builder.<DarkHoglinEntity>of(DarkHoglinEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8)
-            .setUpdateInterval(3).setCustomClientFactory(DarkHoglinEntity::new).fireImmune().sized(1.2f, 1.5f));
+            .setCustomClientFactory(DarkHoglinEntity::new).fireImmune().sized(1.2f, 1.5f));
     public static final RegistryObject<EntityType<DarkGolemEntity>> DARK_GOLEM = register("dark_golem",
-            EntityType.Builder.<DarkGolemEntity>of(DarkGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(DarkGolemEntity::new).fireImmune().sized(1f, 1.8f));
+            EntityType.Builder.<DarkGolemEntity>of(DarkGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setCustomClientFactory(DarkGolemEntity::new).fireImmune().sized(1f, 1.8f));
     public static final RegistryObject<EntityType<TheBlazerEntity>> THE_BLAZER = register("the_blazer", EntityType.Builder.<TheBlazerEntity>of(TheBlazerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16)
-            .setUpdateInterval(3).setCustomClientFactory(TheBlazerEntity::new).fireImmune().sized(0.7f, 2.3f));
+            .setCustomClientFactory(TheBlazerEntity::new).fireImmune().sized(0.7f, 2.3f));
     public static final RegistryObject<EntityType<TheWitherKnightEntity>> THE_WITHER_KNIGHT = register("the_wither_knight", EntityType.Builder.<TheWitherKnightEntity>of(TheWitherKnightEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory(TheWitherKnightEntity::new).fireImmune().sized(0.6f, 2f));
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setCustomClientFactory(TheWitherKnightEntity::new).fireImmune().sized(0.6f, 2f));
     public static final RegistryObject<EntityType<DarkPearlRangedItemEntity>> DARK_PEARL_RANGED_ITEM = register("projectile_dark_pearl_ranged_item", EntityType.Builder.<DarkPearlRangedItemEntity>of(DarkPearlRangedItemEntity::new, MobCategory.MISC)
             .setCustomClientFactory(DarkPearlRangedItemEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(20).sized(0.5f, 0.5f));
 
@@ -96,7 +98,7 @@ public class UnseenWorldModEntities {
             AmethystGolemEntity.init();
             DarkPhantomEntity.init();
             DustyPinkMaxorFishEntity.init();
-            MoonfishEntity.init();
+            MoonFishEntity.init();
             CavernScarecrowEntity.init();
             SavageSmallBlazeEntity.init();
             ChimericPurplemarerEntity.init();
@@ -112,10 +114,10 @@ public class UnseenWorldModEntities {
             TealiveSkeletonEntity.init();
             RedRavengerEntity.init();
             DarkHoglinEntity.init();
+            SnowdrifterEntity.init();
             DarkGolemEntity.init();
             TheBlazerEntity.init();
             TheWitherKnightEntity.init();
-            VoidHammerEntity.init();
         });
     }
 
@@ -125,7 +127,7 @@ public class UnseenWorldModEntities {
         event.put(AMETHYST_GOLEM.get(), AmethystGolemEntity.createAttributes().build());
         event.put(DARK_PHANTOM.get(), DarkPhantomEntity.createAttributes().build());
         event.put(DUSTY_PINK_MAXOR_FISH.get(), DustyPinkMaxorFishEntity.createAttributes().build());
-        event.put(MOONFISH.get(), MoonfishEntity.createAttributes().build());
+        event.put(MOONFISH.get(), MoonFishEntity.createAttributes().build());
         event.put(CAVERN_SCARECROW.get(), CavernScarecrowEntity.createAttributes().build());
         event.put(SAVAGE_SMALL_BLAZE.get(), SavageSmallBlazeEntity.createAttributes().build());
         event.put(CHIMERIC_PURPLEMARER.get(), ChimericPurplemarerEntity.createAttributes().build());
@@ -141,6 +143,7 @@ public class UnseenWorldModEntities {
         event.put(TEALIVE_SKELETON.get(), TealiveSkeletonEntity.createAttributes().build());
         event.put(RED_RAVENGER.get(), RedRavengerEntity.createAttributes().build());
         event.put(DARK_HOGLIN.get(), DarkHoglinEntity.createAttributes().build());
+        event.put(SNOWDRIFTER.get(), SnowdrifterEntity.createAttributes().build());
         event.put(DARK_GOLEM.get(), DarkGolemEntity.createAttributes().build());
         event.put(THE_BLAZER.get(), TheBlazerEntity.createAttributes().build());
         event.put(THE_WITHER_KNIGHT.get(), TheWitherKnightEntity.createAttributes().build());

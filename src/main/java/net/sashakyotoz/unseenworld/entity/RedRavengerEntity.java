@@ -185,15 +185,15 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
         super.readAdditionalSaveData(tag);
     }
 
-    private void clampRotation(Entity p_252070_) {
-        p_252070_.setYBodyRot(this.getYRot());
-        float f = p_252070_.getYRot();
+    private void clampRotation(Entity entity) {
+        entity.setYBodyRot(this.getYRot());
+        float f = entity.getYRot();
         float f1 = Mth.wrapDegrees(f - this.getYRot());
         float f2 = Mth.clamp(f1, -160.0F, 160.0F);
-        p_252070_.yRotO += f2 - f1;
+        entity.yRotO += f2 - f1;
         float f3 = f + f2 - f1;
-        p_252070_.setYRot(f3);
-        p_252070_.setYHeadRot(f3);
+        entity.setYRot(f3);
+        entity.setYHeadRot(f3);
     }
 
     protected boolean canAddPassenger(Entity p_248594_) {

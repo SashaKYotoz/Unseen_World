@@ -17,7 +17,7 @@ public class AmethystGolemRenderer extends MobRenderer<AmethystGolemEntity, Mode
 
 	protected void scale(AmethystGolemEntity entity, PoseStack stack, float p_115985_) {
 		stack.scale(1.5F, 1.5F, 1.5F);
-		stack.translate(0.0D, (double) 0.001F, 0.0D);
+		stack.translate(0.0D, 0.001F, 0.0D);
 	}
 
 	@Override

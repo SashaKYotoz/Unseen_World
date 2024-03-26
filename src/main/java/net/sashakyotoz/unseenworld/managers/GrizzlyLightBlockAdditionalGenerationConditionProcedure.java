@@ -8,23 +8,19 @@ import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 public class GrizzlyLightBlockAdditionalGenerationConditionProcedure {
     public static boolean execute(LevelAccessor world, double x, double y, double z) {
-        double sx;
-        double sy;
-        double sz;
+        double sx, sy, sz;
         if ((world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == UnseenWorldModBlocks.GRIZZLY_LEAVES.get() && (world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == Blocks.AIR) {
             sx = -3;
-            for (int index0 = 0; index0 < 6; index0++) {
+            for (int x1 = 0; x1 < 6; x1++) {
                 sy = -3;
-                for (int index1 = 0; index1 < 6; index1++) {
+                for (int y1 = 0; y1 < 6; y1++) {
                     sz = -3;
-                    for (int index2 = 0; index2 < 6; index2++) {
+                    for (int z1 = 0; z1 < 6; z1++) {
                         if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.GRIZZLY_LEAVES.get()
                                 && (world.getBlockState(BlockPos.containing(x + sx, (y + sy) - 1, z + sz))).getBlock() == Blocks.AIR) {
-                            {
-                                BlockPos pos = BlockPos.containing(x + sx, (y + sy) - 1, z + sz);
-                                BlockState blockState = UnseenWorldModBlocks.GRIZZLY_LEAVES.get().defaultBlockState();
-                                world.setBlock(pos, blockState, 3);
-                            }
+                            BlockPos pos = BlockPos.containing(x + sx, (y + sy) - 1, z + sz);
+                            BlockState blockState = UnseenWorldModBlocks.GRIZZLY_LEAVES.get().defaultBlockState();
+                            world.setBlock(pos, blockState, 3);
                             if (Math.random() < 0.25) {
                                 if ((world.getBlockState(BlockPos.containing(x + sx, (y + sy) - 2, z + sz))).getBlock() == Blocks.AIR) {
                                     BlockPos blockPos = BlockPos.containing(x + sx, (y + sy) - 2, z + sz);

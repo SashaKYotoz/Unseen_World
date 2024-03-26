@@ -1,6 +1,8 @@
 
 package net.sashakyotoz.unseenworld.world.features;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
@@ -34,24 +36,25 @@ public class TealivyBigTreeFeature extends Feature<NoneFeatureConfiguration> {
 
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-		if (!generate_dimensions.contains(context.level().getLevel().dimension()))
+		WorldGenLevel level = context.level();
+		RandomSource random = context.random();
+		BlockPos pos = context.origin();
+		if (!generate_dimensions.contains(level.getLevel().dimension()))
 			return false;
 		if (template == null)
-			template = context.level().getLevel().getStructureManager().getOrCreate(new ResourceLocation("unseen_world", "tealivy_big_tree"));
-		if (template == null)
-			return false;
+			template = level.getLevel().getStructureManager().getOrCreate(new ResourceLocation("unseen_world", "tealivy_big_tree"));
 		boolean anyPlaced = false;
-		if ((context.random().nextInt(1000000) + 1) <= 250000) {
-			int count = context.random().nextInt(1) + 1;
+		if ((random.nextInt(1000000) + 1) <= 250000) {
+			int count = random.nextInt(1) + 1;
 			for (int a = 0; a < count; a++) {
-				int i = context.origin().getX() + context.random().nextInt(16);
-				int k = context.origin().getZ() + context.random().nextInt(16);
-				int j = context.level().getHeight(Heightmap.Types.WORLD_SURFACE_WG, i, k) - 1;
-				if (!base_blocks.contains(context.level().getBlockState(new BlockPos(i, j, k)).getBlock()))
+				int i = pos.getX() + random.nextInt(16);
+				int k = pos.getZ() + random.nextInt(16);
+				int j = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, i, k) - 1;
+				if (!base_blocks.contains(level.getBlockState(new BlockPos(i, j, k)).getBlock()))
 					continue;
 				BlockPos spawnTo = new BlockPos(i, j - 2, k);
-				if (template.placeInWorld(context.level(), spawnTo, spawnTo, new StructurePlaceSettings().setMirror(Mirror.values()[context.random().nextInt(2)]).setRotation(Rotation.values()[context.random().nextInt(3)]).setRandom(context.random())
-						.addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR).setIgnoreEntities(false), context.random(), 2)) {
+				if (template.placeInWorld(level, spawnTo, spawnTo, new StructurePlaceSettings().setMirror(Mirror.values()[random.nextInt(2)]).setRotation(Rotation.values()[random.nextInt(3)]).setRandom(random)
+						.addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR).setIgnoreEntities(false), random, 2)) {
 					anyPlaced = true;
 				}
 			}

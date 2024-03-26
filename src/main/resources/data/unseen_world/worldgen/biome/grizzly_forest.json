@@ -15,12 +15,12 @@
       },
       "probability": 0.001
     },
-    "foliage_color": -8454144,
-    "grass_color": -49345,
-    "sky_color": -8454144,
-    "fog_color": -8454144,
-    "water_color": 4159204,
-    "water_fog_color": -8454144
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
   },
   "spawners": {
     "monster": [],
@@ -48,9 +48,6 @@
     [
       "minecraft:forest_rock"
     ],
-    [],
-    [],
-    [],
     [
       "minecraft:ore_coal_upper",
       "minecraft:ore_coal_lower",

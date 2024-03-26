@@ -8,7 +8,6 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -27,16 +26,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BlockEntityWithoutLevelRenderer.class)
 public class BlockEntityWithoutLevelRendererMixin {
 @Unique
-public ModelBeaconOfWeapons beacon;
+public ModelBeaconOfWeapons unseenworld$beacon;
 @Shadow
 @NotNull
 private final EntityModelSet entityModelSet;
-    public BlockEntityWithoutLevelRendererMixin(EntityModelSet entityModelSet, BlockEntityRendererProvider.Context context) {
+    public BlockEntityWithoutLevelRendererMixin(EntityModelSet entityModelSet) {
         this.entityModelSet = entityModelSet;
     }
     @Inject(method = "onResourceManagerReload", at = @At("RETURN"))
     public void onResourceManagerReloadUnseenWorld(ResourceManager resourceManager, CallbackInfo ci) {
-        this.beacon = new ModelBeaconOfWeapons(this.entityModelSet.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
+        this.unseenworld$beacon = new ModelBeaconOfWeapons(this.entityModelSet.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
     }
     @Inject(method = "renderByItem", at = @At("RETURN"))
     public void renderByItemUnseenWorld(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
@@ -51,8 +50,8 @@ private final EntityModelSet entityModelSet;
             poseStack.translate(1, 1.2, 0);
             poseStack.mulPose(Axis.XP.rotationDegrees(-180.0F));
             VertexConsumer vertexConsumer2 = ItemRenderer.getFoilBufferDirect(multiBufferSource, RenderType.entityCutoutNoCull(BeaconOfWeaponsRenderer.TEXTURE), false, itemStack.hasFoil());
-            this.beacon.renderToBuffer(poseStack, vertexConsumer2, i, j, 1.0F, 1.0F, 1.0F, 1.0F);
-            this.beacon.beacon.setRotation(0.0F, tick % 360.0F, 0.0F);
+            this.unseenworld$beacon.renderToBuffer(poseStack, vertexConsumer2, i, j, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.unseenworld$beacon.beacon.setRotation(0.0F, tick % 360.0F, 0.0F);
             poseStack.popPose();
         }
     }

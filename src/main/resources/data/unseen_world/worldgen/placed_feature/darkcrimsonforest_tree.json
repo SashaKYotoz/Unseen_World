@@ -24,7 +24,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:oak_sapling",
+          "Name": "unseen_world:darkcrimsonsapling",
           "Properties": {
             "stage": "0"
           }

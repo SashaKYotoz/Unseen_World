@@ -27,9 +27,7 @@ import java.util.function.Predicate;
 import java.util.Optional;
 
 public class TheDarknessPortalShape {
-	private static final BlockBehaviour.StatePredicate FRAME = (p_77720_, p_77721_, p_77722_) -> {
-		return p_77720_.getBlock() == UnseenWorldModBlocks.COLD_DARK_BRICKS.get();
-	};
+	private static final BlockBehaviour.StatePredicate FRAME = (state, getter, pos) -> state.getBlock() == UnseenWorldModBlocks.COLD_DARK_BRICKS.get();
 	private final LevelAccessor level;
 	private final Direction.Axis axis;
 	private final Direction rightDir;
@@ -39,22 +37,22 @@ public class TheDarknessPortalShape {
 	private int height;
 	private final int width;
 
-	public static Optional<TheDarknessPortalShape> findEmptyPortalShape(LevelAccessor p_77709_, BlockPos p_77710_, Direction.Axis p_77711_) {
-		return findPortalShape(p_77709_, p_77710_, (p_77727_) -> p_77727_.isValid() && p_77727_.numPortalBlocks == 0, p_77711_);
+	public static Optional<TheDarknessPortalShape> findEmptyPortalShape(LevelAccessor accessor, BlockPos p_77710_, Direction.Axis p_77711_) {
+		return findPortalShape(accessor, p_77710_, (p_77727_) -> p_77727_.isValid() && p_77727_.numPortalBlocks == 0, p_77711_);
 	}
 
-	public static Optional<TheDarknessPortalShape> findPortalShape(LevelAccessor p_77713_, BlockPos p_77714_, Predicate<TheDarknessPortalShape> p_77715_, Direction.Axis p_77716_) {
-		Optional<TheDarknessPortalShape> optional = Optional.of(new TheDarknessPortalShape(p_77713_, p_77714_, p_77716_)).filter(p_77715_);
+	public static Optional<TheDarknessPortalShape> findPortalShape(LevelAccessor accessor, BlockPos p_77714_, Predicate<TheDarknessPortalShape> p_77715_, Direction.Axis p_77716_) {
+		Optional<TheDarknessPortalShape> optional = Optional.of(new TheDarknessPortalShape(accessor, p_77714_, p_77716_)).filter(p_77715_);
 		if (optional.isPresent()) {
 			return optional;
 		} else {
 			Direction.Axis direction$axis = p_77716_ == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-			return Optional.of(new TheDarknessPortalShape(p_77713_, p_77714_, direction$axis)).filter(p_77715_);
+			return Optional.of(new TheDarknessPortalShape(accessor, p_77714_, direction$axis)).filter(p_77715_);
 		}
 	}
 
-	public TheDarknessPortalShape(LevelAccessor p_77695_, BlockPos p_77696_, Direction.Axis p_77697_) {
-		this.level = p_77695_;
+	public TheDarknessPortalShape(LevelAccessor accessor, BlockPos p_77696_, Direction.Axis p_77697_) {
+		this.level = accessor;
 		this.axis = p_77697_;
 		this.rightDir = p_77697_ == Direction.Axis.X ? Direction.WEST : Direction.SOUTH;
 		this.bottomLeft = this.calculateBottomLeft(p_77696_);
@@ -71,12 +69,12 @@ public class TheDarknessPortalShape {
 	}
 
 	@Nullable
-	private BlockPos calculateBottomLeft(BlockPos p_77734_) {
-		for (int i = Math.max(this.level.getMinBuildHeight(), p_77734_.getY() - 21); p_77734_.getY() > i && isEmpty(this.level.getBlockState(p_77734_.below())); p_77734_ = p_77734_.below()) {
+	private BlockPos calculateBottomLeft(BlockPos pos) {
+		for (int i = Math.max(this.level.getMinBuildHeight(), pos.getY() - 21); pos.getY() > i && isEmpty(this.level.getBlockState(pos.below())); pos = pos.below()) {
 		}
 		Direction direction = this.rightDir.getOpposite();
-		int j = this.getDistanceUntilEdgeAboveFrame(p_77734_, direction) - 1;
-		return j < 0 ? null : p_77734_.relative(direction, j);
+		int j = this.getDistanceUntilEdgeAboveFrame(pos, direction) - 1;
+		return j < 0 ? null : pos.relative(direction, j);
 	}
 
 	private int calculateWidth() {
@@ -84,10 +82,10 @@ public class TheDarknessPortalShape {
 		return i >= 2 && i <= 21 ? i : 0;
 	}
 
-	private int getDistanceUntilEdgeAboveFrame(BlockPos p_77736_, Direction p_77737_) {
+	private int getDistanceUntilEdgeAboveFrame(BlockPos pos, Direction direction) {
 		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 		for (int i = 0; i <= 21; ++i) {
-			blockpos$mutableblockpos.set(p_77736_).move(p_77737_, i);
+			blockpos$mutableblockpos.set(pos).move(direction, i);
 			BlockState blockstate = this.level.getBlockState(blockpos$mutableblockpos);
 			if (!isEmpty(blockstate)) {
 				if (FRAME.test(blockstate, this.level, blockpos$mutableblockpos)) {

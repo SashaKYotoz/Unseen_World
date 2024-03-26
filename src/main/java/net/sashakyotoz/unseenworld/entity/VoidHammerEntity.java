@@ -168,7 +168,4 @@ public class VoidHammerEntity extends AbstractArrow {
         super.defineSynchedData();
         this.entityData.define(ID_LOYALTY, (byte) 0);
     }
-
-    public static void init() {
-    }
 }

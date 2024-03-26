@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.sashakyotoz.unseenworld.managers.TreasureWeaponOnBeaconClick;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.context.UseOnContext;
@@ -17,8 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionResult;
 
-import net.sashakyotoz.unseenworld.managers.LightTulvarRightClickedOnBlockProcedure;
-import net.sashakyotoz.unseenworld.managers.HeavyClaymoreLivingEntityIsHitWithToolProcedure;
+import net.sashakyotoz.unseenworld.managers.LivingEntityIsHitWithTreasureWeaponProcedure;
 
 import java.util.UUID;
 
@@ -64,14 +64,14 @@ public class LightTulvarItem extends SwordItem {
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-		HeavyClaymoreLivingEntityIsHitWithToolProcedure.execute(entity, itemstack);
+		LivingEntityIsHitWithTreasureWeaponProcedure.onHit(entity, itemstack);
 		return retval;
 	}
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		super.useOn(context);
-		LightTulvarRightClickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer(), context.getItemInHand());
+		TreasureWeaponOnBeaconClick.onClick(context.getLevel(), context.getClickedPos(), context.getPlayer(), context.getItemInHand());
 		return InteractionResult.SUCCESS;
 	}
 }

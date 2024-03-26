@@ -18,8 +18,8 @@ public class TheWitherKnightBlockEntityCollidesInTheBlockProcedure {
 			world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
 			world.addParticle(ParticleTypes.ANGRY_VILLAGER, x, y, z, 0, 1, 0);
 			UnseenWorldMod.queueServerWork(10, () -> {
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = UnseenWorldModEntities.THE_WITHER_KNIGHT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+				if (world instanceof ServerLevel level) {
+					Entity entityToSpawn = UnseenWorldModEntities.THE_WITHER_KNIGHT.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 					}
 				}

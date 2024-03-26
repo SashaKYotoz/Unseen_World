@@ -11,7 +11,7 @@
     },
     "additions_sound": {
       "sound": "ambient.basalt_deltas.additions",
-      "tick_chance": 0.0111
+      "tick_chance": 0.015
     },
     "particle": {
       "options": {
@@ -19,17 +19,17 @@
       },
       "probability": 0.001
     },
-    "foliage_color": -16777216,
-    "grass_color": -16777216,
-    "sky_color": -16777216,
-    "fog_color": -16777216,
-    "water_color": -16777216,
-    "water_fog_color": -16777216
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
   },
   "spawners": {
     "monster": [
       {
-        "type": "unseen_world:darkskeleton",
+        "type": "unseen_world:dark_skeleton",
         "weight": 5,
         "minCount": 1,
         "maxCount": 1

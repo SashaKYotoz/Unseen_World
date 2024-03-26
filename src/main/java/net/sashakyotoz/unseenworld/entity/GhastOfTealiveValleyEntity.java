@@ -86,12 +86,12 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		return !isReflectedFireball(damageSource) && super.isInvulnerableTo(damageSource);
 	}
 
-	public boolean hurt(DamageSource damageSource, float p_32731_) {
+	public boolean hurt(DamageSource damageSource, float amount) {
 		if (isReflectedFireball(damageSource)) {
 			super.hurt(damageSource, 1000.0F);
 			return true;
 		} else {
-			return !this.isInvulnerableTo(damageSource) && super.hurt(damageSource, p_32731_);
+			return !this.isInvulnerableTo(damageSource) && super.hurt(damageSource, amount);
 		}
 	}
 
@@ -143,8 +143,8 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 	static class GhastLookGoal extends Goal {
 		private final GhastOfTealiveValleyEntity ghast;
 
-		public GhastLookGoal(GhastOfTealiveValleyEntity p_32762_) {
-			this.ghast = p_32762_;
+		public GhastLookGoal(GhastOfTealiveValleyEntity ghast) {
+			this.ghast = ghast;
 			this.setFlags(EnumSet.of(Goal.Flag.LOOK));
 		}
 
@@ -214,8 +214,8 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		private final GhastOfTealiveValleyEntity ghast;
 		public int chargeTime;
 
-		public GhastShootFireballGoal(GhastOfTealiveValleyEntity p_32776_) {
-			this.ghast = p_32776_;
+		public GhastShootFireballGoal(GhastOfTealiveValleyEntity ghast) {
+			this.ghast = ghast;
 		}
 
 		public boolean canUse() {
@@ -273,8 +273,8 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 	static class RandomFloatAroundGoal extends Goal {
 		private final GhastOfTealiveValleyEntity ghast;
 
-		public RandomFloatAroundGoal(GhastOfTealiveValleyEntity p_32783_) {
-			this.ghast = p_32783_;
+		public RandomFloatAroundGoal(GhastOfTealiveValleyEntity ghast) {
+			this.ghast = ghast;
 			this.setFlags(EnumSet.of(Goal.Flag.MOVE));
 		}
 

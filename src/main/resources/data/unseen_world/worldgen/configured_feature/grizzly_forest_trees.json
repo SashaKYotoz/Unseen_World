@@ -7,7 +7,7 @@
       "type": "minecraft:two_layers_feature_size",
       "min_clipped_height": 3,
       "limit": 0,
-      "lower_size": 0,
+      "lower_size": 1,
       "upper_size": 0
     },
     "dirt_provider": {

@@ -21,14 +21,14 @@ public class BossesHealthOverlayHooks {
         if (!events.isEmpty()) {
             int i = minecraft.getWindow().getGuiScaledWidth();
             int j = 12;
-            for (LerpingBossEvent clientbossinfo : events.values()) {
+            for (LerpingBossEvent clientBossInfo : events.values()) {
                 int k = i / 2 - 91;
-                if (shouldDisplayFrame(clientbossinfo)) {
-                    if(clientbossinfo.getName().getString().contains("Warrior of") || clientbossinfo.getName().contains(Component.translatable("entity.unseen_world.dark_golem")))
+                if (shouldDisplayFrame(clientBossInfo)) {
+                    if(clientBossInfo.getName().getString().contains("Warrior of") || clientBossInfo.getName().contains(Component.translatable("entity.unseen_world.dark_golem")))
                         graphics.blit(DARK_WARRIOR_BOSSBAR_FRAMES, k, j - 2, 0, 0, 183, 9, 183, 9);
-                    if(clientbossinfo.getName().getString().contains("Blazer") || clientbossinfo.getName().getString().contains("Блейзер"))
+                    if(clientBossInfo.getName().getString().contains("Blazer") || clientBossInfo.getName().getString().contains("Блейзер"))
                         graphics.blit(BLAZER_BOSSBAR_FRAMES, k, j - 2, 0, 0, 183, 9, 183, 9);
-                    if(clientbossinfo.getName().getString().contains("Knight") || clientbossinfo.getName().getString().contains("Лицар Візер"))
+                    if(clientBossInfo.getName().getString().contains("Knight") || clientBossInfo.getName().getString().contains("Лицар Візер"))
                         graphics.blit(KNIGHT_BOSSBAR_FRAMES, k, j - 2, 0, 0, 183, 9, 183, 9);
                 }
                 j += 10 + 9;
@@ -37,11 +37,11 @@ public class BossesHealthOverlayHooks {
                 }
             }
         }
-
     }
 
     private static boolean shouldDisplayFrame(LerpingBossEvent info) {
-        return info.getName().getString().contains("Warrior of the Chimeric Darkness") ||
-                info.getName().getString().contains("The Blazer") || info.getName().getString().contains("The Wither Knight");
+        return (info.getName().getString().contains("Warrior of the Chimeric Darkness") ||
+                info.getName().getString().contains("The Blazer") || info.getName().getString().contains("The Wither Knight")) || (info.getName().getString().contains("Воїн химерної темряви") ||
+                info.getName().getString().contains("Блейзер") || info.getName().getString().contains("Лицар Візер"));
     }
 }

@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:amethyst_fields",
+    "unseen_world:darkcrimsonforest",
+    "unseen_world:tealive_luminous_valley",
+    "unseen_world:greenish_valley",
+    "unseen_world:grizzly_steppe"
+  ],
+  "features": "unseen_world:gloworchid_patch",
+  "step": "vegetal_decoration"
+}

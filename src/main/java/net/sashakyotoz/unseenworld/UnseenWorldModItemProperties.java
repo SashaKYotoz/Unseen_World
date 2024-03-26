@@ -14,17 +14,17 @@ public class UnseenWorldModItemProperties {
 	}
 
 	private static void makeBow(Item item) {
-		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, livingEntity, p_174638_) -> {
+		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, livingEntity, i) -> {
 			if (livingEntity == null) {
 				return 0.0F;
 			} else {
 				return livingEntity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
 			}
 		});
-		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, livingEntity, p_174633_) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
 	private static void makeShield(Item item) {
-		ItemProperties.register(item, new ResourceLocation("blocking"), (stack, level, livingEntity, p_174593_) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(item, new ResourceLocation("blocking"), (stack, level, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 }

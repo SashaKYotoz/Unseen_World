@@ -6,13 +6,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModTags;
 
 import java.util.HashMap;
 
@@ -70,63 +73,50 @@ public class AdvancementManager {
 		}
 	}
 
-	public static void everyTickCheckingAdvancements(LevelAccessor world, Player entity) {
+	public static void everyTickCheckingAdvancements(Level level, Player entity) {
 		if (entity == null)
 			return;
 		if (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.NATURERIUM_INGOT.get()))) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,NATURERIUM_INGOT_ADV);
-			}
 		}
 		if (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.VOID_INGOT.get()))) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,VOID_INGOT_ADV);
-			}
 		}
 		if (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.RED_TITANIUM_INGOT.get()))) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,RED_TITANIUM_INGOT_ADV);
-			}
 		}
 		if (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.NETHERIUM_STAFF.get()))) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,STAFF_OF_FIRE_ADV);
-			}
 		}
-		if (entity.getY() <= 0 && (world instanceof Level _lvl ? _lvl.dimension() : Level.OVERWORLD) == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")))) {
-			if (entity instanceof ServerPlayer player) {
+		if (entity.getY() <= 0 && level.dimension() == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")))) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UNDER_THE_CHIMERIC_DARKNESS_ADV);
-			}
 		}
-		if ((world instanceof Level _lvl ? _lvl.dimension() : Level.OVERWORLD) == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")))) {
-			if (entity instanceof ServerPlayer player) {
+		if (level.dimension() == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")))) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UNSEEN_WORLD_ADV);
-			}
 		}
-		if ((entity.getInventory().contains(new ItemStack(UnseenWorldModItems.FIERY_SABER.get())))
-				|| (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.LIGHT_TULVAR.get())))
-				|| (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get())))) {
-			if (entity instanceof ServerPlayer player) {
+		if (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.FIERY_SABER.get())) ||entity.getInventory().contains(new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get())) ||
+				entity.getInventory().contains(new ItemStack(UnseenWorldModItems.BLASTING_LANCER.get())) || entity.getInventory().contains(new ItemStack(UnseenWorldModItems.LIGHT_TULVAR.get()))) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,FOUND_TREASURE_ADV);
-			}
 		}
-		if ((entity.getMainHandItem().getItem() == UnseenWorldModItems.LIGHT_TULVAR.get())
-				|| (entity.getMainHandItem().getItem() == UnseenWorldModItems.FIERY_SABER.get())
-				|| (entity.getMainHandItem().getItem() == UnseenWorldModItems.HEAVY_CLAYMORE.get())
+		if (entity.getMainHandItem().is(UnseenWorldModTags.Items.TREASURE_WEAPONS)
 				&& entity.getMainHandItem().getOrCreateTag().getDouble("CustomModelData") > 0) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UPGRADE_YOUR_SET_ADV);
-			}
 		}
 		if (entity.hasEffect(UnseenWorldModMobEffects.METEORITESTROPHY.get())) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,METEORITESTROPHY_ADV);
-			}
 		}
 		if (entity.hasEffect(UnseenWorldModMobEffects.REDUCED_OF_GRAVITY.get())) {
-			if (entity instanceof ServerPlayer player) {
+			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,FLIGHT_OF_FANTASIES_ADV);
-			}
 		}
 	}
 }

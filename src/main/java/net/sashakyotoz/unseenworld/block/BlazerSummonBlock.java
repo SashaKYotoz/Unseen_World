@@ -49,9 +49,9 @@ public class BlazerSummonBlock extends Block {
 	}
 
 	@Override
-	public void stepOn(Level world, BlockPos pos, BlockState blockstate, Entity entity) {
-		super.stepOn(world, pos, blockstate, entity);
-		BlazerSummonBlockEntityCollidesInTheBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+	public void stepOn(Level level, BlockPos pos, BlockState blockstate, Entity entity) {
+		super.stepOn(level, pos, blockstate, entity);
+		BlazerSummonBlockEntityCollidesInTheBlockProcedure.execute(level, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override

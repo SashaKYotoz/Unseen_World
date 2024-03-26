@@ -28,10 +28,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModTags;
 import org.jetbrains.annotations.Nullable;
 
 public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlock {
-	protected static final float AABB_OFFSET = 3.0F;
 	protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 	public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
 
@@ -45,19 +45,19 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 	public int getAge(BlockState p_52306_) {
 		return p_52306_.getValue(this.getAgeProperty());
 	}
-	public VoxelShape getShape(BlockState p_53517_, BlockGetter p_53518_, BlockPos p_53519_, CollisionContext p_53520_) {
-		Vec3 vec3 = p_53517_.getOffset(p_53518_, p_53519_);
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+		Vec3 vec3 = state.getOffset(getter, pos);
 		return SHAPE.move(vec3.x, vec3.y, vec3.z);
 	}
-	public BlockState getStateForAge(int p_52290_) {
-		return this.defaultBlockState().setValue(this.getAgeProperty(), p_52290_);
+	public BlockState getStateForAge(int i) {
+		return this.defaultBlockState().setValue(this.getAgeProperty(), i);
 	}
-	public final boolean isMaxAge(BlockState p_52308_) {
-		return this.getAge(p_52308_) > 0;
+	public final boolean isMaxAge(BlockState state) {
+		return this.getAge(state) > 0;
 	}
 
-	public boolean isRandomlyTicking(BlockState p_52288_) {
-		return !this.isMaxAge(p_52288_);
+	public boolean isRandomlyTicking(BlockState state) {
+		return !this.isMaxAge(state);
 	}
 
 	@Override
@@ -66,8 +66,7 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 	}
 	@Override
 	public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-		return groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.MOSS_BLOCK)
-				|| groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get()) || groundState.is(UnseenWorldModBlocks.RED_OOZE.get());
+		return groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.MOSS_BLOCK);
 	}
 
 	@Override
@@ -78,45 +77,36 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 	}
 
 	@Override
-	public void randomTick(BlockState p_221050_, ServerLevel p_221051_, BlockPos p_221052_, RandomSource p_221053_) {
-		if (!p_221051_.isAreaLoaded(p_221052_, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-		if (p_221051_.getRawBrightness(p_221052_, 0) >= 3) {
-			int i = this.getAge(p_221050_);
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
+		if (!level.isAreaLoaded(pos, 1)) return;
+		if (level.getRawBrightness(pos, 0) >= 3) {
+			int i = this.getAge(state);
 			if (i < 1) {
 				if (Math.random() > 0.75) {
-					p_221051_.setBlock(p_221052_, this.getStateForAge(i + 1), 2);
+					level.setBlock(pos, this.getStateForAge(i + 1), 2);
 				}
 			}
 		}
 	}
 
-	public void playerDestroy(Level p_49827_, Player p_49828_, BlockPos p_49829_, BlockState p_49830_, @Nullable BlockEntity p_49831_, ItemStack p_49832_) {
-		super.playerDestroy(p_49827_, p_49828_, p_49829_, p_49830_, p_49831_, p_49832_);
-		execute(p_49827_,p_49829_.getX(),p_49829_.getY(),p_49829_.getZ(),p_49830_);
-	}
-
-	public void execute(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
-		if (isMaxAge(blockstate)) {
-			for (int index0 = 0; index0 < (int) Mth.nextDouble(RandomSource.create(), 1, 4); index0++) {
-				if (world instanceof ServerLevel _level) {
-					ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(UnseenWorldModItems.OUTGROWTHAPPLE.get()));
-					entityToSpawn.setPickUpDelay(10);
-					_level.addFreshEntity(entityToSpawn);
-					world.setBlock(new BlockPos((int)x,(int)y,(int)z), this.getStateForAge(getAge(blockstate) - 1), 2);
-				}
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity entity, ItemStack p_49832_) {
+		super.playerDestroy(level, player, pos, state, entity, p_49832_);
+		if (isMaxAge(state)) {
+			for (int i = 0; i < (int) Mth.nextDouble(RandomSource.create(), 1, 4); i++) {
+				player.spawnAtLocation(new ItemStack(UnseenWorldModItems.OUTGROWTHAPPLE.get()));
 			}
 		}
 	}
 
-	public boolean isValidBonemealTarget(LevelReader p_255715_, BlockPos p_52259_, BlockState p_52260_, boolean p_52261_) {
-		return !this.isMaxAge(p_52260_);
+	public boolean isValidBonemealTarget(LevelReader reader, BlockPos p_52259_, BlockState state, boolean p_52261_) {
+		return !this.isMaxAge(state);
 	}
 
-	public boolean isBonemealSuccess(Level p_221045_, RandomSource p_221046_, BlockPos p_221047_, BlockState p_221048_) {
+	public boolean isBonemealSuccess(Level level, RandomSource p_221046_, BlockPos p_221047_, BlockState p_221048_) {
 		return true;
 	}
 
-	public void performBonemeal(ServerLevel p_221040_, RandomSource p_221041_, BlockPos p_221042_, BlockState p_221043_) {
-		p_221040_.setBlock(p_221042_, this.getStateForAge(getAge(p_221043_) + 1), 2);
+	public void performBonemeal(ServerLevel level, RandomSource source, BlockPos pos, BlockState state) {
+		level.setBlock(pos, this.getStateForAge(getAge(state) + 1), 2);
 	}
 }

@@ -25,51 +25,53 @@ public class SpikesFeature extends Feature<BlockStateConfiguration> {
 
     public boolean place(FeaturePlaceContext<BlockStateConfiguration> context) {
         BlockPos blockpos = context.origin();
-        WorldGenLevel worldgenlevel = context.level();
+        WorldGenLevel level = context.level();
         blockpos = new BlockPos(blockpos.getX(), context.chunkGenerator().getSeaLevel(), blockpos.getZ());
-        RandomSource randomsource = context.random();
-        boolean flag = randomsource.nextDouble() > 0.7D;
-        blockState = context.config().state;
-        double d0 = randomsource.nextDouble() * 2.0D * Math.PI;
-        int i = 11 - randomsource.nextInt(5);
-        int j = 3 + randomsource.nextInt(3);
-        boolean flag1 = randomsource.nextDouble() > 0.65;
-        int l = flag1 ? randomsource.nextInt(7) + 6 : randomsource.nextInt(15) + 3;
-        if (!flag1 && randomsource.nextDouble() > 0.9D) {
-            l += randomsource.nextInt(19) + 8;
-        }
-        int i1 = Math.min(l + randomsource.nextInt(11), 18);
-        int j1 = Math.min(l + randomsource.nextInt(7) - randomsource.nextInt(5), 11);
-        int k1 = flag1 ? i : 11;
-        for(int l1 = -k1; l1 < k1; ++l1) {
-            for(int i2 = -k1; i2 < k1; ++i2) {
-                for(int j2 = 0; j2 < l; ++j2) {
-                    int k2 = flag1 ? this.heightDependentRadiusEllipse(j2, l, j1) : this.heightDependentRadiusRound(randomsource, j2, l, j1);
-                    if (flag1 || l1 < k2) {
-                        this.generateIcebergBlock(worldgenlevel, randomsource, blockpos, l, l1, j2, i2, k2, k1, flag1, j, d0, flag, blockState);
+        RandomSource random = context.random();
+        if (level.getBlockState(blockpos.below()).canOcclude() && !level.getBiome(blockpos).is(UnseenWorldModTags.Biomes.ICEBERGS_BLACKLIST_BIOMES)){
+            boolean flag = random.nextDouble() > 0.7D;
+            blockState = context.config().state;
+            double d0 = random.nextDouble() * 2.0D * Math.PI;
+            int i = 11 - random.nextInt(5);
+            int j = 3 + random.nextInt(3);
+            boolean flag1 = random.nextDouble() > 0.65;
+            int l = flag1 ? random.nextInt(7) + 6 : random.nextInt(15) + 3;
+            if (!flag1 && random.nextDouble() > 0.9D) {
+                l += random.nextInt(19) + 8;
+            }
+            int i1 = Math.min(l + random.nextInt(11), 18);
+            int j1 = Math.min(l + random.nextInt(7) - random.nextInt(5), 11);
+            int k1 = flag1 ? i : 11;
+            for(int l1 = -k1; l1 < k1; ++l1) {
+                for(int i2 = -k1; i2 < k1; ++i2) {
+                    for(int j2 = 0; j2 < l; ++j2) {
+                        int k2 = flag1 ? this.heightDependentRadiusEllipse(j2, l, j1) : this.heightDependentRadiusRound(random, j2, l, j1);
+                        if (flag1 || l1 < k2) {
+                            this.generateIcebergBlock(level, random, blockpos, l, l1, j2, i2, k2, k1, flag1, j, d0, flag, blockState);
+                        }
                     }
                 }
             }
-        }
-        this.smooth(worldgenlevel, blockpos, j1, l, flag1, i);
-        for(int i3 = -k1; i3 < k1; ++i3) {
-            for(int j3 = -k1; j3 < k1; ++j3) {
-                for(int k3 = -1; k3 > -i1; --k3) {
-                    int l3 = flag1 ? Mth.ceil((float)k1 * (1.0F - (float)Math.pow(k3, 2.0D) / ((float)i1 * 8.0F))) : k1;
-                    int l2 = this.heightDependentRadiusSteep(randomsource, -k3, i1, j1);
-                    if (i3 < l2) {
-                        this.generateIcebergBlock(worldgenlevel, randomsource, blockpos, i1, i3, k3, j3, l2, l3, flag1, j, d0, flag, blockState);
+            this.smooth(level, blockpos, j1, l, flag1, i);
+            for(int i3 = -k1; i3 < k1; ++i3) {
+                for(int j3 = -k1; j3 < k1; ++j3) {
+                    for(int k3 = -1; k3 > -i1; --k3) {
+                        int l3 = flag1 ? Mth.ceil((float)k1 * (1.0F - (float)Math.pow(k3, 2.0D) / ((float)i1 * 8.0F))) : k1;
+                        int l2 = this.heightDependentRadiusSteep(random, -k3, i1, j1);
+                        if (i3 < l2) {
+                            this.generateIcebergBlock(level, random, blockpos, i1, i3, k3, j3, l2, l3, flag1, j, d0, flag, blockState);
+                        }
                     }
                 }
             }
-        }
 
-        boolean flag2 = flag1 ? randomsource.nextDouble() > 0.1D : randomsource.nextDouble() > 0.7D;
-        if (flag2) {
-            this.generateCutOut(randomsource, worldgenlevel, j1, l, blockpos, flag1, i, d0, j);
-        }
-
-        return true;
+            boolean flag2 = flag1 ? random.nextDouble() > 0.1D : random.nextDouble() > 0.7D;
+            if (flag2) {
+                this.generateCutOut(random, level, j1, l, blockpos, flag1, i, d0, j);
+            }
+            return true;
+        }else
+            return false;
     }
 
     private void generateCutOut(RandomSource randomSource, LevelAccessor accessor, int p_225102_, int p_225103_, BlockPos p_225104_, boolean p_225105_, int p_225106_, double p_225107_, int p_225108_) {

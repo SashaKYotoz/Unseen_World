@@ -1,5 +1,6 @@
 package net.sashakyotoz.unseenworld.util;
 
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,12 +20,12 @@ import net.sashakyotoz.unseenworld.managers.DarkPearlRightClickedProcedure;
 
 public class UnseenWorldModItems {
 	public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, UnseenWorldMod.MODID);
-	public static final RegistryObject<Item> MUSICDISC_PIANO = REGISTRY.register("musicdisc_piano", MusicdiscPianoItem::new);
+	public static final RegistryObject<Item> MUSIC_DISC_PIANO = REGISTRY.register("musicdisc_piano", MusicdiscPianoItem::new);
 	public static final RegistryObject<Item> MUSIC_DISC_HAPPY_PLACE = REGISTRY.register("music_disc_happy_place", MusicDiscHappyPlaceItem::new);
 	public static final RegistryObject<Item> DARK_WATER_BUCKET = REGISTRY.register("dark_water_bucket", () -> new BucketItem(UnseenWorldModFluids.DARK_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> LIQUID_OF_CHIMERY_BUCKET = REGISTRY.register("liquid_of_chimery_bucket", () -> new BucketItem(UnseenWorldModFluids.LIQUID_OF_CHIMERY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> MOON_FISHIN_BUCKET = REGISTRY.register("moon_fishin_bucket", () -> new MoonFishinBucketItem());
-	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_BUCKET = REGISTRY.register("dusty_pink_maxor_fish_bucket", () -> new DustyPinkMaxorFishBucketItem());
+	public static final RegistryObject<Item> MOON_FISHIN_BUCKET = REGISTRY.register("moon_fishin_bucket", () -> new MobBucketItem(UnseenWorldModEntities.MOONFISH,() -> Fluids.WATER,()-> SoundEvents.BUCKET_EMPTY_FISH,(new Item.Properties()).stacksTo(1)));
+	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_BUCKET = REGISTRY.register("dusty_pink_maxor_fish_bucket", () -> new MobBucketItem(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH,() -> Fluids.WATER,()-> SoundEvents.BUCKET_EMPTY_FISH,(new Item.Properties()).stacksTo(1)));
 	public static final RegistryObject<Item> DEEP_GEM_SWORD = REGISTRY.register("deep_gem_sword", () -> new DeepGemSwordItem());
 	public static final RegistryObject<Item> VOID_INGOT_SWORD = REGISTRY.register("void_ingot_sword", () -> new VoidIngotSwordItem());
 	public static final RegistryObject<Item> RED_TITANIUM_SWORD = REGISTRY.register("red_titanium_sword", () -> new RedTitaniumSwordItem());
@@ -33,6 +35,7 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> VOID_ENDERMEN_SWORD = REGISTRY.register("void_endermen_sword", () -> new VoidEndermenSwordItem());
 	public static final RegistryObject<Item> HEAVY_CLAYMORE = REGISTRY.register("heavy_claymore", HeavyClaymoreItem::new);
 	public static final RegistryObject<Item> LIGHT_TULVAR = REGISTRY.register("light_tulvar", LightTulvarItem::new);
+	public static final RegistryObject<Item> BLASTING_LANCER = REGISTRY.register("blasting_lancer", BlastingLancer::new);
 	public static final RegistryObject<Item> FIERY_SABER = REGISTRY.register("fiery_saber", FierySaberItem::new);
 	public static final RegistryObject<Item> VOID_HAMMER = REGISTRY.register("void_hammer", () -> new SwordItem(new Tier() {
 		public int getUses() {
@@ -157,11 +160,12 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> STREDER_SPAWN_EGG = REGISTRY.register("streder_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.STREDER, -9671553, -13421773, new Item.Properties()));
 	public static final RegistryObject<Item> GHAST_OF_TEALIVE_VALLEY_SPAWN_EGG = REGISTRY.register("ghast_of_tealive_valley_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY, -16724839, -16724788, new Item.Properties()));
 	public static final RegistryObject<Item> TANZANITE_GUARDIAN_SPAWN_EGG = REGISTRY.register("tanzanite_guardian_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TANZANITE_GUARDIAN, -10092442, -39220, new Item.Properties()));
-	public static final RegistryObject<Item> DARKSPIRITWOLF_SPAWN_EGG = REGISTRY.register("darkspiritwolf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARKSPIRITWOLF, -13421773, -16724737, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_SPIRIT_WOLF_SPAWN_EGG = REGISTRY.register("dark_spirit_wolf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARKSPIRITWOLF, -13421773, -16724737, new Item.Properties()));
 	public static final RegistryObject<Item> VOID_ENDERMEN_SPAWN_EGG = REGISTRY.register("void_endermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.VOID_ENDERMEN, -13877415, -9846858, new Item.Properties()));
 	public static final RegistryObject<Item> TEALIVE_SKELETON_SPAWN_EGG = REGISTRY.register("tealive_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TEALIVE_SKELETON, -16764109, -16737946, new Item.Properties()));
 	public static final RegistryObject<Item> RED_RAVENGER_SPAWN_EGG = REGISTRY.register("red_ravenger_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_RAVENGER, -9297374, -49408, new Item.Properties()));
 	public static final RegistryObject<Item> DARK_HOGLIN_SPAWN_EGG = REGISTRY.register("dark_hoglin_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_HOGLIN, -3355393, -16777216, new Item.Properties()));
+	public static final RegistryObject<Item> SNOWDRIFTER_SPAWN_EGG = REGISTRY.register("snowdrifter_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.SNOWDRIFTER, 8496292, 14283506, new Item.Properties()));
 	public static final RegistryObject<Item> DEEP_GEM_PICKAXE = REGISTRY.register("deep_gem_pickaxe", () -> new DeepGemPickaxeItem());
 	public static final RegistryObject<Item> DEEP_GEM_AXE = REGISTRY.register("deep_gem_axe", () -> new DeepGemAxeItem());
 	public static final RegistryObject<Item> DEEP_GEM_SHOVEL = REGISTRY.register("deep_gem_shovel", () -> new DeepGemShovelItem());
@@ -197,6 +201,7 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> DEEP_GEM = REGISTRY.register("deep_gem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> SMALL_CRIMSERRY_SOUL_BERRY = block(UnseenWorldModBlocks.SMALL_CRIMSERRY_SOUL_BERRY);
 	public static final RegistryObject<Item> MISTERYFLOWER_SAPLING = block(UnseenWorldModBlocks.MISTERYFLOWER_SAPLING);
+	public static final RegistryObject<Item> GLOWORCHID = block(UnseenWorldModBlocks.GLOWORCHID);
 	public static final RegistryObject<Item> DARK_CRIMSON_FENCE = block(UnseenWorldModBlocks.DARK_CRIMSON_FENCE);
 	public static final RegistryObject<Item> GRIZZLY_FENCE = block(UnseenWorldModBlocks.GRIZZLY_FENCE);
 	public static final RegistryObject<Item> AMETHYST_FENCE = block(UnseenWorldModBlocks.AMETHYST_FENCE);
@@ -376,7 +381,7 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> MISTERYFLOWER_BERRIES = block(UnseenWorldModBlocks.MISTERYFLOWER_BERRIES);
 	public static final RegistryObject<Item> ANCIENT_TRANSIENT_BLOCK_OPEN = block(UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_OPEN);
 	public static final RegistryObject<Item> UNDEAD_WARRIOR_OF_THE_CHIMERIC_DARKNESS = block(UnseenWorldModBlocks.UNDEAD_WARRIOR_OF_THE_CHIMERIC_DARKNESS);
-	public static final RegistryObject<Item> TOTEMOF_GUDDY_BLAZE = block(UnseenWorldModBlocks.TOTEMOF_GUDDY_BLAZE);
+	public static final RegistryObject<Item> TOTEMOF_GUDDY_BLAZE = block(UnseenWorldModBlocks.TOTEM_OF_GUDDY_BLAZE);
 
 	private static RegistryObject<Item> block(RegistryObject<Block> block) {
 		return REGISTRY.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));

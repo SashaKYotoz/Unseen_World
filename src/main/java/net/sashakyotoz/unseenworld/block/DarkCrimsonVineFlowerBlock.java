@@ -74,8 +74,8 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		return new ItemStack(Items.GLOW_BERRIES);
 	}
 
-	public InteractionResult use(BlockState p_152980_, Level p_152981_, BlockPos p_152982_, Player p_152983_, InteractionHand p_152984_, BlockHitResult p_152985_) {
-		return DarkCrimsonVine.use(p_152983_, p_152980_, p_152981_, p_152982_);
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+		return DarkCrimsonVine.use(player, state, level, pos);
 	}
 
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -83,15 +83,15 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		builder.add(BERRIES);
 	}
 
-	public boolean isValidBonemealTarget(LevelReader p_256026_, BlockPos p_152971_, BlockState p_152972_, boolean p_152973_) {
-		return !p_152972_.getValue(BERRIES);
+	public boolean isValidBonemealTarget(LevelReader reader, BlockPos pos, BlockState state, boolean p_152973_) {
+		return !state.getValue(BERRIES);
 	}
 
 	public boolean isBonemealSuccess(Level p_220930_, RandomSource p_220931_, BlockPos p_220932_, BlockState p_220933_) {
 		return true;
 	}
 
-	public void performBonemeal(ServerLevel p_220923_, RandomSource p_220924_, BlockPos p_220925_, BlockState p_220926_) {
-		p_220923_.setBlock(p_220925_, p_220926_.setValue(BERRIES, Boolean.TRUE), 2);
+	public void performBonemeal(ServerLevel level, RandomSource p_220924_, BlockPos pos, BlockState state) {
+		level.setBlock(pos, state.setValue(BERRIES, Boolean.TRUE), 2);
 	}
 }

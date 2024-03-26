@@ -40,6 +40,7 @@ public class UnseenWorldModModels {
 		event.registerLayerDefinition(ModelGhast_Of_Tealive_Valley.LAYER_LOCATION, ModelGhast_Of_Tealive_Valley::createBodyLayer);
 		event.registerLayerDefinition(ModelStrederWithSaddle.LAYER_LOCATION, ModelStrederWithSaddle::createBodyLayer);
 		event.registerLayerDefinition(ModelThe_Wither_Knight.LAYER_LOCATION, ModelThe_Wither_Knight::createBodyLayer);
+		event.registerLayerDefinition(ModelSnowdrifter.LAYER_LOCATION, ModelSnowdrifter::createBodyLayer);
 		event.registerLayerDefinition(ModelBeaconOfWeapons.LAYER_LOCATION,ModelBeaconOfWeapons::createBodyLayer);
 		event.registerLayerDefinition(ModelVoidHammer.LAYER_LOCATION,ModelVoidHammer::createBodyLayer);
 	}

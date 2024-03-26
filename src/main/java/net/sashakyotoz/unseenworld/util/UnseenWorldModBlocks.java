@@ -1,7 +1,3 @@
-
-/*
- *    MCreator note: This file will be REGENERATED on each build.
- */
 package net.sashakyotoz.unseenworld.util;
 
 import net.minecraft.core.BlockPos;
@@ -53,7 +49,7 @@ import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.block.*;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
 import net.sashakyotoz.unseenworld.entity.DustyPinkMaxorFishEntity;
-import net.sashakyotoz.unseenworld.entity.MoonfishEntity;
+import net.sashakyotoz.unseenworld.entity.MoonFishEntity;
 import net.sashakyotoz.unseenworld.entity.StrederEntity;
 import net.sashakyotoz.unseenworld.world.treegrowers.*;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +60,7 @@ import java.util.List;
 public class UnseenWorldModBlocks {
     public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, UnseenWorldMod.MODID);
     public static final RegistryObject<Block> SMALL_CRIMSERRY_SOUL_BERRY = REGISTRY.register("small_crimserry_soul_berry", SmallCrimserrySoulBerryBlock::new);
-    public static final RegistryObject<Block> MISTERYFLOWER_SAPLING = REGISTRY.register("misteryflower_sapling", MisteryflowerSaplingBlock::new);
+    public static final RegistryObject<Block> MISTERYFLOWER_SAPLING = REGISTRY.register("misteryflower_sapling", MisteryFlowerBlock::new);
     public static final RegistryObject<Block> DARK_CRIMSON_FENCE = REGISTRY.register("dark_crimson_fence", () -> new FenceBlock(BlockBehaviour.Properties.of().ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(4f, 6f).requiresCorrectToolForDrops().dynamicShape()){
         @Override
         public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
@@ -110,49 +106,63 @@ public class UnseenWorldModBlocks {
             return Collections.singletonList(new ItemStack(this, 1));
         }
     });
-    public static final RegistryObject<Block> NIGHTDEW_OF_CHIMERIC_DARKNESS = REGISTRY.register("nightdew_of_chimeric_darkness", () -> new NightdewOfChimericDarknessBlock());
+    public static final RegistryObject<Block> NIGHTDEW_OF_CHIMERIC_DARKNESS = REGISTRY.register("nightdew_of_chimeric_darkness", NightdewOfChimericDarknessBlock::new);
     public static final RegistryObject<Block> OUT_GROWT_APPLE_BUSH = REGISTRY.register("out_growt_apple_bush", OutGrowtAppleBushBlock::new);
-    public static final RegistryObject<Block> DARK_CRIMSON_FLOWING_AZALIA = REGISTRY.register("dark_crimson_flowing_azalia", () -> new DarkCrimsonFlowingAzaliaBlock());
-    public static final RegistryObject<Block> DARK_CRIMSON_AZALEA = REGISTRY.register("dark_crimson_azalea", () -> new DarkCrimsonAzaleaBlock());
-    public static final RegistryObject<Block> DARK_CRIMSON_VINE_FLOWER = REGISTRY.register("dark_crimson_vine_flower", () -> new DarkCrimsonVineFlowerBlock());
+    public static final RegistryObject<Block> DARK_CRIMSON_FLOWING_AZALIA = REGISTRY.register("dark_crimson_flowing_azalia", DarkCrimsonFlowingAzaliaBlock::new);
+    public static final RegistryObject<Block> DARK_CRIMSON_AZALEA = REGISTRY.register("dark_crimson_azalea", DarkCrimsonAzaleaBlock::new);
+    public static final RegistryObject<Block> DARK_CRIMSON_VINE_FLOWER = REGISTRY.register("dark_crimson_vine_flower", DarkCrimsonVineFlowerBlock::new);
     public static final RegistryObject<Block> LUMINOUSAMETHYSTVINE = REGISTRY.register("luminousamethystvine", LuminousamethystvineBlock::new);
+    public static final RegistryObject<Block> GLOWORCHID = REGISTRY.register("gloworchid", () -> new FlowerBlock(() -> MobEffects.GLOWING,200,BlockBehaviour.Properties.copy(Blocks.ORANGE_TULIP).emissiveRendering((bs, br, bp) -> true).lightLevel((blockState) -> 12)){
+        @Override
+        public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
+            return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
+                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS) || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(Blocks.CLAY);
+        }
+        @Override
+        public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+            List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+            if (!dropsOriginal.isEmpty())
+                return dropsOriginal;
+            return Collections.singletonList(new ItemStack(this, 1));
+        }
+    });
     public static final RegistryObject<Block> DARKCRIMSONSAPLING = REGISTRY.register("darkcrimsonsapling", () -> new SaplingBlock(new DarkcrimsonTreeGrower(),BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)){
         @Override
         public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-            return groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
-                    || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(Blocks.MOSS_BLOCK);
+            return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
+                     || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS);
         }
     });
     public static final RegistryObject<Block> AMETHYST_TREE_SAPLING = REGISTRY.register("amethyst_tree_sapling", () -> new SaplingBlock(new AmethystTreeGrower(),BlockBehaviour.Properties.copy(DARKCRIMSONSAPLING.get())){
         @Override
         public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-            return groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
-                    || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(Blocks.MOSS_BLOCK);
+            return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
+                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS);
         }
     });
     public static final RegistryObject<Block> TEALIVY_TREE_SAPLING = REGISTRY.register("tealivy_tree_sapling", () -> new SaplingBlock(new TealivyTreeGrower(),BlockBehaviour.Properties.copy(AMETHYST_TREE_SAPLING.get())){
         @Override
         public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-            return groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
-                    || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(Blocks.MOSS_BLOCK);
+            return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
+                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS);
         }
     });
     public static final RegistryObject<Block> GREENISH_BURLYWOOD_SAPLING = REGISTRY.register("greenish_burlywood_sapling", () -> new SaplingBlock(new GreenishBurlywoodTreeGrower(),BlockBehaviour.Properties.copy(AMETHYST_TREE_SAPLING.get())){
         @Override
         public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-            return groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
-                    || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(Blocks.MOSS_BLOCK);
+            return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
+                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS);
         }
     });
     public static final RegistryObject<Block> GRIZZLY_SAPLING = REGISTRY.register("grizzly_sapling", () -> new SaplingBlock(new GrizzlyTreeGrower(),BlockBehaviour.Properties.copy(GREENISH_BURLYWOOD_SAPLING.get())){
         @Override
         public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-            return groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
-                    || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(Blocks.MOSS_BLOCK);
+            return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
+                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS);
         }
     });
     public static final RegistryObject<Block> GROWN_CRIMSERRY_SOUL_BERRY = REGISTRY.register("grown_crimserry_soul_berry", GrownCrimserrySoulBerryBlock::new);
-    public static final RegistryObject<Block> AMETHYST_GRASS = REGISTRY.register("amethyst_grass", AmethystGrassBlock::new);
+    public static final RegistryObject<Block> AMETHYST_GRASS = REGISTRY.register("amethyst_grass", AmethystGrass::new);
     public static final RegistryObject<Block> TEALIVY_PLUMERIA = REGISTRY.register("tealivy_plumeria", TealivyPlumeriaBlock::new);
     public static final RegistryObject<Block> TEALIVY_JADE_VINE_FLOWER = REGISTRY.register("tealivy_jade_vine_flower", TealivyJadeVineFlowerBlock::new);
     public static final RegistryObject<Block> TANZASHROOM = REGISTRY.register("tanzashroom", TanzashroomBlock::new);
@@ -175,7 +185,7 @@ public class UnseenWorldModBlocks {
 			BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(100f).lightLevel(s -> 8).noCollission().noLootTable().liquid().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY).replaceable()){
 		@Override
 		public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-			if (!(entity instanceof MoonfishEntity || entity instanceof DustyPinkMaxorFishEntity || entity instanceof StrederEntity
+			if (!(entity instanceof MoonFishEntity || entity instanceof DustyPinkMaxorFishEntity || entity instanceof StrederEntity
 					|| isHelmetProtected(entity)
                     || entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(UnseenWorldModMobEffects.DARK_IMMUNITE.get())
                     || entity instanceof Projectile)) {
@@ -294,7 +304,7 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> COLD_DARK_BRICKS = REGISTRY.register("cold_dark_bricks", ColdDarkBricksBlock::new);
     public static final RegistryObject<Block> GRASS_BLOCK_OF_SHINY_REDLIGHT = REGISTRY.register("grass_block_of_shiny_redlight", GrassBlockOfShinyRedlightBlock::new);
     public static final RegistryObject<Block> DARK_GRASS = REGISTRY.register("dark_grass", DarkGrassBlock::new);
-    public static final RegistryObject<Block> AMETHYST_GRASS_BLOCK = REGISTRY.register("amethyst_grass_block", AmethystGrassBlockBlock::new);
+    public static final RegistryObject<Block> AMETHYST_GRASS_BLOCK = REGISTRY.register("amethyst_grass_block", AmethystGrassBlock::new);
     public static final RegistryObject<Block> RED_OOZE = REGISTRY.register("red_ooze", RedOozeBlock::new);
     public static final RegistryObject<Block> CRYSTALLIZED_DARK_SAND = REGISTRY.register("crystallized_dark_sand", CrystallizedDarkSandBlock::new);
     public static final RegistryObject<Block> TEALIVE_LUMINOUS_GRASS_BLOCK = REGISTRY.register("tealive_luminous_grass_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN)
@@ -620,13 +630,13 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> MISTERYFLOWER_BERRIES = REGISTRY.register("misteryflower_berries", () -> new MisteryflowerBerriesBlock());
     public static final RegistryObject<Block> ANCIENT_TRANSIENT_BLOCK_OPEN = REGISTRY.register("ancient_transient_block_open", () -> new AncientTransientBlockOpenBlock());
     public static final RegistryObject<Block> UNDEAD_WARRIOR_OF_THE_CHIMERIC_DARKNESS = REGISTRY.register("undead_warrior_of_the_chimeric_darkness", UndeadWarriorOfTheChimericDarknessBlock::new);
-    public static final RegistryObject<Block> TOTEMOF_GUDDY_BLAZE = REGISTRY.register("totemof_guddy_blaze", TotemofGuddyBlazeBlock::new);
+    public static final RegistryObject<Block> TOTEM_OF_GUDDY_BLAZE = REGISTRY.register("totemof_guddy_blaze", TotemOfGuddyBlazeBlock::new);
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientSideHandler {
         @SubscribeEvent
         public static void blockColorLoad(RegisterColorHandlersEvent.Block event) {
-            AmethystGrassBlock.blockColorLoad(event);
+            AmethystGrass.blockColorLoad(event);
             TanzashroomBlock.blockColorLoad(event);
             TanzashroomStemBlock.blockColorLoad(event);
             CrystallizedDarkSandBlock.blockColorLoad(event);

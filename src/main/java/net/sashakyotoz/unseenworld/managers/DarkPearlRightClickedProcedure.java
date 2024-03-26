@@ -11,10 +11,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
 
 public class DarkPearlRightClickedProcedure {
-    public static void execute(Entity entity) {
-        if (entity == null)
+    public static void execute(Player player) {
+        if (player == null)
             return;
-        Level projectileLevel = entity.level();
+        Level projectileLevel = player.level();
         if (!projectileLevel.isClientSide()) {
             Projectile arrow = new Object() {
                 public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
@@ -25,14 +25,12 @@ public class DarkPearlRightClickedProcedure {
                     entityToSpawn.setSilent(true);
                     return entityToSpawn;
                 }
-            }.getArrow(projectileLevel, entity, 0, 0);
-            arrow.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
-            arrow.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 1.5, 0);
+            }.getArrow(projectileLevel, player, 0, 0);
+            arrow.setPos(player.getX(), player.getEyeY() - 0.1, player.getZ());
+            arrow.shoot(player.getLookAngle().x, player.getLookAngle().y, player.getLookAngle().z, (float) 1.5, 0);
             projectileLevel.addFreshEntity(arrow);
         }
-        if (entity instanceof Player _player) {
-            ItemStack _stktoremove = new ItemStack(UnseenWorldModItems.DARKPEARL.get());
-            _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
-        }
+        ItemStack stack = new ItemStack(UnseenWorldModItems.DARKPEARL.get());
+        player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
     }
 }

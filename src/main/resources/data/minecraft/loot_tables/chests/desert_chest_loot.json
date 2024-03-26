@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "unseen_world:dakness_ancient_bricks",
+          "name": "unseen_world:darkness_ancient_bricks",
           "weight": 20,
           "functions": [
             {

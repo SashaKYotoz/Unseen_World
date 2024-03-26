@@ -18,11 +18,11 @@ public class ReducedOfGravityMobEffect extends MobEffect {
 		return "effect.unseen_world.reduced_of_gravity";
 	}
 	@Override
-	public double getAttributeModifierValue(int p_19457_, AttributeModifier p_19458_) {
-		if (p_19457_ > 1)
-		return p_19458_.getAmount() * (p_19457_ + 0.5f);
+	public double getAttributeModifierValue(int i, AttributeModifier modifier) {
+		if (i > 1)
+		return modifier.getAmount() * (i + 0.5f);
 		else
-			return p_19458_.getAmount() * (p_19457_ + 1f);
+			return modifier.getAmount() * (i + 1f);
 	}
 
 	@Override

@@ -70,9 +70,10 @@
           ]
         },
         {
-          "type": "minecraft:item",
+          "type": "minecraft:tag",
           "weight": 6,
-          "name": "unseen_world:fiery_saber",
+          "name": "unseen_world:treasure_weapons",
+          "expand": true,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -85,7 +86,7 @@
               "function": "minecraft:enchant_with_levels",
               "levels": {
                 "min": 3,
-                "max": 6
+                "max": 8
               },
               "treasure": true
             }

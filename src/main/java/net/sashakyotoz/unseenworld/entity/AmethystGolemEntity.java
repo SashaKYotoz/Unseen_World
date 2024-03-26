@@ -46,12 +46,7 @@ public class AmethystGolemEntity extends TamableAnimal {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 4.0 + entity.getBbWidth() * entity.getBbWidth();
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
         this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
@@ -109,53 +104,53 @@ public class AmethystGolemEntity extends TamableAnimal {
     }
 
     @Override
-    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-        ItemStack itemstack = sourceentity.getItemInHand(hand);
-        InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        InteractionResult result = InteractionResult.sidedSuccess(this.level().isClientSide());
         Item item = itemstack.getItem();
         if (itemstack.getItem() instanceof SpawnEggItem) {
-            retval = super.mobInteract(sourceentity, hand);
+            result = super.mobInteract(player, hand);
         } else if (this.level().isClientSide()) {
-            retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
+            result = (this.isTame() && this.isOwnedBy(player) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
         } else {
             if (this.isTame()) {
-                if (this.isOwnedBy(sourceentity)) {
+                if (this.isOwnedBy(player)) {
                     if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
-                        this.usePlayerItem(sourceentity, hand, itemstack);
+                        this.usePlayerItem(player, hand, itemstack);
                         this.heal((float) item.getFoodProperties().getNutrition());
-                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                        result = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
-                        this.usePlayerItem(sourceentity, hand, itemstack);
+                        this.usePlayerItem(player, hand, itemstack);
                         this.heal(4);
-                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                        result = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else {
-                        retval = super.mobInteract(sourceentity, hand);
+                        result = super.mobInteract(player, hand);
                     }
                 }
             } else if (this.isFood(itemstack)) {
-                this.usePlayerItem(sourceentity, hand, itemstack);
-                if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, sourceentity)) {
-                    this.tame(sourceentity);
+                this.usePlayerItem(player, hand, itemstack);
+                if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                    this.tame(player);
                     this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
                     this.level().broadcastEntityEvent(this, (byte) 6);
                 }
                 this.setPersistenceRequired();
-                retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                result = InteractionResult.sidedSuccess(this.level().isClientSide());
             } else {
-                retval = super.mobInteract(sourceentity, hand);
-                if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
+                result = super.mobInteract(player, hand);
+                if (result == InteractionResult.SUCCESS || result == InteractionResult.CONSUME)
                     this.setPersistenceRequired();
             }
         }
-        return retval;
+        return result;
     }
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-        AmethystGolemEntity retval = UnseenWorldModEntities.AMETHYST_GOLEM.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
-        return retval;
+        AmethystGolemEntity entity = UnseenWorldModEntities.AMETHYST_GOLEM.get().create(serverWorld);
+        entity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
+        return entity;
     }
 
     @Override

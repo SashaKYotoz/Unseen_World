@@ -13,7 +13,7 @@ import net.sashakyotoz.unseenworld.entity.TealiveSkeletonEntity;
 public class TealiveSkeletonRenderer extends MobRenderer<TealiveSkeletonEntity, ModelTealive_Skeleton<TealiveSkeletonEntity>> {
 	public TealiveSkeletonRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelTealive_Skeleton(context.bakeLayer(ModelTealive_Skeleton.LAYER_LOCATION)), 0.5f);
-		this.addLayer(new EyesLayer<TealiveSkeletonEntity, ModelTealive_Skeleton<TealiveSkeletonEntity>>(this) {
+		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
 				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/glow_tealive_skeleton.png"));

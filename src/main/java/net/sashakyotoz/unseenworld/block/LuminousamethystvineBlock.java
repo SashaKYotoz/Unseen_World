@@ -7,6 +7,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -24,7 +26,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.managers.LuminousamethystvineBlockDestroyedByPlayerProcedure;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 
 public class LuminousamethystvineBlock extends Block implements SimpleWaterloggedBlock {
@@ -113,9 +114,15 @@ public class LuminousamethystvineBlock extends Block implements SimpleWaterlogge
 			world.setBlock(pos.below(), UnseenWorldModBlocks.LUMINOUSAMETHYSTVINE.get().defaultBlockState(),3);
 		}
 	}
-	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
-		boolean retval = super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
-		LuminousamethystvineBlockDestroyedByPlayerProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), entity);
-		return retval;
+	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+		boolean onDestroyedByPlayer = super.onDestroyedByPlayer(blockstate, world, pos, player, willHarvest, fluid);
+		if (!(player.getMainHandItem().is(Items.SHEARS))) {
+			for (int index0 = 0; index0 < 3; index0++) {
+				if (player.getRandom().nextBoolean())
+					player.spawnAtLocation(new ItemStack(Items.AMETHYST_SHARD));
+			}
+		} else
+			player.spawnAtLocation(new ItemStack(UnseenWorldModBlocks.LUMINOUSAMETHYSTVINE.get()));
+		return onDestroyedByPlayer;
 	}
 }

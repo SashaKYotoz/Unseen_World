@@ -23,13 +23,16 @@ public class UnseenWorldItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(UnseenWorldModTags.Items.DARK_WATER_PROTECTED_HELMETS).add(
-                UnseenWorldModItems.DEEP_GEM_ARMOR_HELMET.get(),
-                UnseenWorldModItems.NATURERIUM_ARMOR_HELMET.get(),
-                UnseenWorldModItems.UNSEEN_ARMOR_HELMET.get(),
-                UnseenWorldModItems.VOIDINGOT_ARMOR_HELMET.get(),
-                UnseenWorldModItems.RED_TITANIUM_ARMOR_HELMET.get(),
-                UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get(),
-                UnseenWorldModItems.BLAZER_HELMET.get()
+                UnseenWorldModItems.REGISTRY.getEntries().stream()
+                        .filter(itemRegistryObject -> itemRegistryObject.get().getDescriptionId().contains("helmet"))
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new)
+        );
+        this.tag(UnseenWorldModTags.Items.TREASURE_WEAPONS).add(
+                UnseenWorldModItems.FIERY_SABER.get(),
+                UnseenWorldModItems.HEAVY_CLAYMORE.get(),
+                UnseenWorldModItems.BLASTING_LANCER.get(),
+                UnseenWorldModItems.LIGHT_TULVAR.get()
         );
         this.tag(ItemTags.PLANKS).add(
                 UnseenWorldModItems.REGISTRY.getEntries().stream()

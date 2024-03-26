@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.client.renderer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.sashakyotoz.unseenworld.client.model.ModelDarkHoglin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
@@ -27,6 +28,15 @@ public class DarkHoglinRenderer extends MobRenderer<DarkHoglinEntity, ModelDarkH
 		if (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 20 && calendar.get(Calendar.DATE) <= 30) {
 			this.xmasTexture = true;
 		}
+	}
+
+	@Override
+	protected void scale(DarkHoglinEntity hoglinEntity, PoseStack stack, float size) {
+		if (hoglinEntity.isBaby())
+			stack.scale(0.5f,0.5f,0.5f);
+		else
+			stack.scale(1,1,1);
+		super.scale(hoglinEntity, stack, size);
 	}
 
 	@Override

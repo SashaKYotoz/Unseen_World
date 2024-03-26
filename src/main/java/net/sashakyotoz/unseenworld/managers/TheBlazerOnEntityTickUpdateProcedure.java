@@ -54,10 +54,8 @@ public class TheBlazerOnEntityTickUpdateProcedure {
             }
         } else if (Math.random() < 0.01) {
             if (world.getEntitiesOfClass(RedBlazeEntity.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = UnseenWorldModEntities.RED_BLAZE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                    }
+                if (world instanceof ServerLevel level) {
+                    UnseenWorldModEntities.RED_BLAZE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 }
             }
         } else if (Math.random() < 0.015) {

@@ -17,37 +17,37 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.client.Minecraft;
 
 public class BlazerHelmetTickEventProcedure {
-	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
+	public static void execute(Level level, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == UnseenWorldModItems.BLAZER_HELMET.get()) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 60, 1));
+		if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.HEAD).getItem() == UnseenWorldModItems.BLAZER_HELMET.get()) {
+			if (!level.isClientSide())
+				livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 60, 1));
 			UnseenWorldMod.queueServerWork(50, () -> {
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 160, 1));
-				if (world instanceof Level _level && !_level.isClientSide())
-					_level.explode(null, x, y, z, 2, Level.ExplosionInteraction.NONE);
+				if (!level.isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 160, 1));
+				if (!level.isClientSide())
+					level.explode(null, x, y, z, 2, Level.ExplosionInteraction.NONE);
 				entity.setDeltaMovement(new Vec3(0, 0.25, 0));
-				if (entity instanceof Player _player) {
-					_player.getAbilities().invulnerable = true;
-					_player.onUpdateAbilities();
+				if (entity instanceof Player player) {
+					player.getAbilities().invulnerable = true;
+					player.onUpdateAbilities();
 				}
 				if (new Object() {
 					public boolean checkGamemode(Entity _ent) {
-						if (_ent instanceof ServerPlayer _serverPlayer) {
-							return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SURVIVAL;
-						} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-							return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-									&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SURVIVAL;
+						if (_ent instanceof ServerPlayer player) {
+							return player.gameMode.getGameModeForPlayer() == GameType.SURVIVAL;
+						} else if (_ent.level().isClientSide() && _ent instanceof Player player) {
+							return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+									&& Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.SURVIVAL;
 						}
 						return false;
 					}
 				}.checkGamemode(entity)) {
 					UnseenWorldMod.queueServerWork(50, () -> {
-						if (entity instanceof Player _player) {
-							_player.getAbilities().invulnerable = false;
-							_player.onUpdateAbilities();
+						if (entity instanceof Player player) {
+							player.getAbilities().invulnerable = false;
+							player.onUpdateAbilities();
 						}
 					});
 				}

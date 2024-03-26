@@ -1,14 +1,17 @@
 
 package net.sashakyotoz.unseenworld.effects;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
-import net.sashakyotoz.unseenworld.managers.MeteoritestrophyOnEffectActiveTickProcedure;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.level.Level;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 
 public class MeteoritestrophyMobEffect extends MobEffect {
 	public MeteoritestrophyMobEffect() {
@@ -22,7 +25,20 @@ public class MeteoritestrophyMobEffect extends MobEffect {
 
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
-		MeteoritestrophyOnEffectActiveTickProcedure.execute(entity.level(), entity.getX(), entity.getY(), entity.getZ());
+		Level level = entity.level();
+		double x = entity.getX();
+		double y = entity.getY();
+		double z = entity.getZ();
+		if (Math.random() < 0.25) {
+			for (int i = 0; i < (int) Mth.nextDouble(RandomSource.create(), 1, 3); i++) {
+				if (Math.random() < 0.125) {
+					if (!level.isClientSide())
+						level.explode(null, (x + Mth.nextDouble(RandomSource.create(), -5, 5)), y, (z + Mth.nextDouble(RandomSource.create(), -5, 5)), 2, Level.ExplosionInteraction.BLOCK);
+					if (level instanceof ServerLevel serverLevel)
+						serverLevel.sendParticles(UnseenWorldModParticleTypes.REDNESS.get(), (x + Mth.nextDouble(RandomSource.create(), -5, 5)), (y + 5), (z + Mth.nextDouble(RandomSource.create(), -5, 5)), 9, 5, 5, 5, 1);
+				}
+			}
+		}
 	}
 
 	@Override

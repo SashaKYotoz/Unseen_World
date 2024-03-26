@@ -21,12 +21,12 @@
       },
       "probability": 0.001
     },
-    "foliage_color": -6750107,
-    "grass_color": -6750107,
-    "sky_color": -6750107,
-    "fog_color": -6750107,
-    "water_color": -14213088,
-    "water_fog_color": -6750107
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": -4605011
   },
   "spawners": {
     "monster": [],
@@ -71,7 +71,9 @@
     [],
     [],
     [
-      "minecraft:freeze_top_layer"
+      "minecraft:freeze_top_layer",
+      "unseen_world:amethyst_grass",
+      "unseen_world:gloworchid_patch"
     ]
   ]
 }

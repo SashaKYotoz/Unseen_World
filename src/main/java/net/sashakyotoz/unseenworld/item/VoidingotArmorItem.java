@@ -78,7 +78,7 @@ public abstract class VoidingotArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/void_ingot___layer_1.png";
+			return "unseen_world:textures/models/armor/void_ingot_layer_1.png";
 		}
 	}
 
@@ -97,7 +97,7 @@ public abstract class VoidingotArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/void_ingot___layer_1.png";
+			return "unseen_world:textures/models/armor/void_ingot_layer_1.png";
 		}
 
 		@Override
@@ -121,7 +121,7 @@ public abstract class VoidingotArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/void_ingot___layer_2.png";
+			return "unseen_world:textures/models/armor/void_ingot_layer_2.png";
 		}
 	}
 
@@ -140,7 +140,7 @@ public abstract class VoidingotArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/void_ingot___layer_1.png";
+			return "unseen_world:textures/models/armor/void_ingot_layer_1.png";
 		}
 	}
 }

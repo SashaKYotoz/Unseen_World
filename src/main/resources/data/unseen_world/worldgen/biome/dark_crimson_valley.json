@@ -25,12 +25,12 @@
       },
       "probability": 0.0005
     },
-    "foliage_color": 10387789,
-    "grass_color": -15138816,
-    "sky_color": -8429793,
-    "fog_color": -8429793,
-    "water_color": 4159204,
-    "water_fog_color": 329011
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
   },
   "spawners": {
     "monster": [],
@@ -56,9 +56,6 @@
       "minecraft:lake_lava_underground"
     ],
     [],
-    [],
-    [],
-    [],
     [
       "minecraft:ore_redstone",
       "minecraft:ore_redstone_lower",
@@ -70,7 +67,8 @@
     ],
     [
       "minecraft:patch_grass_forest",
-      "unseen_world:currantslate_spikes"
+      "unseen_world:currantslate_spikes",
+      "unseen_world:darkness_ooze_vegetation"
     ],
     [
       "minecraft:freeze_top_layer"

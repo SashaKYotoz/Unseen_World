@@ -13,7 +13,7 @@ import net.sashakyotoz.unseenworld.entity.NethermanEntity;
 public class NethermenRenderer extends MobRenderer<NethermanEntity, ModelLava_Enderman<NethermanEntity>> {
 	public NethermenRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelLava_Enderman(context.bakeLayer(ModelLava_Enderman.LAYER_LOCATION)), 0.5f);
-		this.addLayer(new EyesLayer<NethermanEntity, ModelLava_Enderman<NethermanEntity>>(this) {
+		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
 				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/lava_endermen_glow.png"));

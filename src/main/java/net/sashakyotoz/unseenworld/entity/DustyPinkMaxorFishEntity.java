@@ -3,6 +3,10 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
@@ -22,6 +26,7 @@ import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
@@ -39,10 +44,10 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.util.*;
-import net.sashakyotoz.unseenworld.managers.DustyPinkMaxorFishRightClickedOnEntityProcedure;
 import org.jetbrains.annotations.NotNull;
 
-public class DustyPinkMaxorFishEntity extends WaterAnimal {
+public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable {
+	private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(DustyPinkMaxorFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public DustyPinkMaxorFishEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), world);
 	}
@@ -172,15 +177,6 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 	}
 
 	@Override
-	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-		super.mobInteract(sourceentity, hand);
-		Entity entity = this;
-		DustyPinkMaxorFishRightClickedOnEntityProcedure.execute(entity, sourceentity);
-		return retval;
-	}
-
-	@Override
 	public boolean canBreatheUnderwater() {
 		return true;
 	}
@@ -204,9 +200,9 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 		return pos.getY() >= j && pos.getY() <= i && accessor.getFluidState(pos.below()).is(FluidTags.WATER) || accessor.getFluidState(pos.below()).is(UnseenWorldModFluids.DARK_WATER.get()) && accessor.getBlockState(pos.above()).is(Blocks.WATER) || accessor.getBlockState(pos.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) && accessor.getDifficulty() == Difficulty.EASY;
 	}
 	@Override
-	protected void handleAirSupply(int p_30344_) {
+	protected void handleAirSupply(int i) {
 		if (this.isAlive() && !this.isInWaterOrBubble() && !this.level().getFluidState(new BlockPos(new Vec3i((int) this.getX(),(int) this.getY(),(int) this.getZ())).below()).is(UnseenWorldModFluids.DARK_WATER.get())) {
-			this.setAirSupply(p_30344_ - 1);
+			this.setAirSupply(i - 1);
 			if (this.getAirSupply() == -20) {
 				this.setAirSupply(0);
 				this.hurt(this.damageSources().drown(), 2.0F);
@@ -232,5 +228,48 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(ForgeMod.SWIM_SPEED.get(), 0.3);
 		return builder;
+	}
+
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(FROM_BUCKET, false);
+	}
+
+	public boolean fromBucket() {
+		return this.entityData.get(FROM_BUCKET);
+	}
+
+	public void setFromBucket(boolean set) {
+		this.entityData.set(FROM_BUCKET, set);
+	}
+
+	public void addAdditionalSaveData(CompoundTag p_27485_) {
+		super.addAdditionalSaveData(p_27485_);
+		p_27485_.putBoolean("FromBucket", this.fromBucket());
+	}
+
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
+		this.setFromBucket(tag.getBoolean("FromBucket"));
+	}
+	protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+		return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
+	}
+
+	public void saveToBucketTag(ItemStack stack) {
+		Bucketable.saveDefaultDataToBucketTag(this, stack);
+	}
+
+	public void loadFromBucketTag(CompoundTag tag) {
+		Bucketable.loadDefaultDataFromBucketTag(this, tag);
+	}
+
+	public SoundEvent getPickupSound() {
+		return SoundEvents.BUCKET_FILL_FISH;
+	}
+
+	@Override
+	public ItemStack getBucketItemStack() {
+		return new ItemStack(UnseenWorldModItems.DUSTY_PINK_MAXOR_FISH_BUCKET.get());
 	}
 }

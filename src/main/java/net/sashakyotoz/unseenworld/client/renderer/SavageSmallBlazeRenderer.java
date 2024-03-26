@@ -13,7 +13,7 @@ import net.sashakyotoz.unseenworld.entity.SavageSmallBlazeEntity;
 public class SavageSmallBlazeRenderer extends MobRenderer<SavageSmallBlazeEntity, ModelSavage_Small_Blaze<SavageSmallBlazeEntity>> {
 	public SavageSmallBlazeRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelSavage_Small_Blaze(context.bakeLayer(ModelSavage_Small_Blaze.LAYER_LOCATION)), 0.5f);
-		this.addLayer(new EyesLayer<SavageSmallBlazeEntity, ModelSavage_Small_Blaze<SavageSmallBlazeEntity>>(this) {
+		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
 				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/savage_small_blaze.png"));

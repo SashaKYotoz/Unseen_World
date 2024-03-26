@@ -5,12 +5,12 @@
   "effects": {
     "additions_sound": {
       "sound": "item.nether_wart.plant",
-      "tick_chance": 0.0111
+      "tick_chance": 0.0115
     },
-    "foliage_color": -16724941,
+    "foliage_color": -16066550,
     "grass_color": -16066550,
-    "sky_color": 7972607,
-    "fog_color": 12638463,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
     "water_color": 4159204,
     "water_fog_color": 329011
   },
@@ -60,9 +60,6 @@
     [
       "minecraft:forest_rock"
     ],
-    [],
-    [],
-    [],
     [
       "minecraft:ore_iron_upper",
       "minecraft:ore_iron_middle",
@@ -77,9 +74,8 @@
       "minecraft:ore_copper",
       "minecraft:underwater_magma"
     ],
-    [],
-    [],
     [
+      "unseen_world:gloworchid_patch",
       "minecraft:patch_grass_forest",
       "minecraft:bamboo_light",
       "minecraft:lush_caves_ceiling_vegetation",
@@ -89,7 +85,6 @@
       "minecraft:rooted_azalea_tree",
       "minecraft:spore_blossom",
       "minecraft:classic_vines_cave_feature"
-    ],
-    []
+    ]
   ]
 }

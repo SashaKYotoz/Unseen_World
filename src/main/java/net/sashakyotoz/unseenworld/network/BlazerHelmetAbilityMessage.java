@@ -37,23 +37,19 @@ public class BlazerHelmetAbilityMessage {
 
 	public static void handler(BlazerHelmetAbilityMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
 		NetworkEvent.Context context = contextSupplier.get();
-		context.enqueueWork(() -> {
-			pressAction(Objects.requireNonNull(context.getSender()), message.type, message.pressedms);
-		});
+		context.enqueueWork(() -> pressAction(Objects.requireNonNull(context.getSender()), message.type));
 		context.setPacketHandled(true);
 	}
 
-	public static void pressAction(Player entity, int type, int pressedms) {
-		Level world = entity.level();
+	public static void pressAction(Player entity, int type) {
+		Level level = entity.level();
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		if (!world.hasChunkAt(entity.blockPosition()))
+		if (!level.hasChunkAt(entity.blockPosition()))
 			return;
-		if (type == 1) {
-
-			BlazerHelmetTickEventProcedure.execute(world, x, y, z, entity);
-		}
+		if (type == 1)
+			BlazerHelmetTickEventProcedure.execute(level, x, y, z, entity);
 	}
 
 	@SubscribeEvent

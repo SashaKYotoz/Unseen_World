@@ -114,11 +114,10 @@ public class DarkGolemEntity extends Monster implements Enemy {
 
     public void tick() {
         if (this.level().isClientSide()) {
-            if (this.isMovingOnLand()) {
+            if (this.isMovingOnLand())
                 this.walkAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.walkAnimationState.stop();
-            }
         }
         if (this.isAttacking() && attackAnimationTimeout <= 0) {
             attackAnimationTimeout = 30;
@@ -132,7 +131,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
             this.attackAnimationState.stop();
             this.attackWithHammerAnimationState.stop();
         }
-        if(this.isThrowingHammer()){
+        if (this.isThrowingHammer()) {
             this.navigation.stop();
             this.walkAnimationState.stop();
             this.attackAnimationState.stop();
@@ -149,8 +148,9 @@ public class DarkGolemEntity extends Monster implements Enemy {
         setThrowingHammer();
         super.tick();
     }
+
     private void throwHammer() {
-        UnseenWorldMod.queueServerWork(20,()->{
+        UnseenWorldMod.queueServerWork(20, () -> {
             VoidHammerEntity thrownHammer = new VoidHammerEntity(this.level(), this);
             thrownHammer.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 4F, 1.0F);
             this.level().addFreshEntity(thrownHammer);
@@ -159,6 +159,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
         });
         UnseenWorldMod.queueServerWork(100, () -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldModItems.VOID_HAMMER.get())));
     }
+
     @Override
     public void animateHurt(float amount) {
         super.animateHurt(amount);
@@ -220,7 +221,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Player.class, false, true));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
     }
 
     @Override
@@ -276,11 +277,11 @@ public class DarkGolemEntity extends Monster implements Enemy {
         super.die(source);
         this.deathTime = -50;
         this.tickDeath();
-        if(source.getEntity() instanceof Player player)
-            AdvancementManager.addAdvancement(player,AdvancementManager.DARK_WARRIOR_ADV);
+        if (source.getEntity() instanceof Player player)
+            AdvancementManager.addAdvancement(player, AdvancementManager.DARK_WARRIOR_ADV);
         this.spawnAtLocation(new ItemStack(UnseenWorldModItems.VOID_HAMMER.get()));
-        int tmp = this.getRandom().nextInt(1,4)+1;
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.VOID_INGOT.get(),tmp));
+        int tmp = this.getRandom().nextInt(1, 4) + 1;
+        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.VOID_INGOT.get(), tmp));
     }
 
     @Override

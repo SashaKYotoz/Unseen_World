@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.util;
 
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
-import net.sashakyotoz.unseenworld.block.entity.GoldenchestBlockEntity;
+import net.sashakyotoz.unseenworld.block.entity.GoldenChestBlockEntity;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.DeferredRegister;
@@ -13,7 +13,7 @@ import net.sashakyotoz.unseenworld.UnseenWorldMod;
 
 public class UnseenWorldModBlockEntities {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, UnseenWorldMod.MODID);
-	public static final RegistryObject<BlockEntityType<?>> GOLDENCHEST = register("goldenchest", UnseenWorldModBlocks.GOLDENCHEST, GoldenchestBlockEntity::new);
+	public static final RegistryObject<BlockEntityType<?>> GOLDENCHEST = register("goldenchest", UnseenWorldModBlocks.GOLDENCHEST, GoldenChestBlockEntity::new);
 	public static final RegistryObject<BlockEntityType<BeaconOfWeaponsBlockEntity>> BEACON_OF_WEAPONS =
 			REGISTRY.register("beacon_of_weapons", () ->
 					BlockEntityType.Builder.of(BeaconOfWeaponsBlockEntity::new,

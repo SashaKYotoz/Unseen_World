@@ -17,9 +17,9 @@
     "type": "minecraft:uniform",
     "value": {
       "min_inclusive": 0,
-      "max_inclusive": 6
+      "max_inclusive": 3
     }
   },
-  "monster_spawn_block_light_limit": 4,
-  "effects": "minecraft:the_nether"
+  "monster_spawn_block_light_limit": 3,
+  "effects": "unseen_world:the_darkness"
 }

@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
+import net.minecraft.sounds.SoundEvents;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -75,17 +76,17 @@ public class SavageSmallBlazeEntity extends Monster {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.blaze.ambient"));
+		return SoundEvents.BLAZE_AMBIENT;
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.blaze.burn"));
+		return SoundEvents.BLAZE_BURN;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break"));
+		return SoundEvents.SHIELD_BREAK;
 	}
 
 	@Override

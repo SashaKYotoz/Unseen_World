@@ -35,16 +35,16 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 8).setValue(PERSISTENT, Boolean.FALSE).setValue(WATERLOGGED, Boolean.FALSE));
     }
 
-    public boolean isRandomlyTicking(BlockState p_54449_) {
-        return p_54449_.getValue(DISTANCE) == 9 && !p_54449_.getValue(PERSISTENT);
+    public boolean isRandomlyTicking(BlockState state) {
+        return state.getValue(DISTANCE) == 9 && !state.getValue(PERSISTENT);
     }
 
-    private boolean decaying(BlockState p_221386_) {
-        return !p_221386_.getValue(PERSISTENT) && p_221386_.getValue(DISTANCE) == 9;
+    private boolean decaying(BlockState state) {
+        return !state.getValue(PERSISTENT) && state.getValue(DISTANCE) == 9;
     }
 
-    public void tick(BlockState p_221369_, ServerLevel p_221370_, BlockPos p_221371_, RandomSource p_221372_) {
-        p_221370_.setBlock(p_221371_, updateDistance(p_221369_, p_221370_, p_221371_), 3);
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
+        level.setBlock(pos, updateDistance(state, level, pos), 3);
     }
 
     public int getLightBlock(BlockState p_54460_, BlockGetter p_54461_, BlockPos p_54462_) {

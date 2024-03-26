@@ -11,7 +11,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;
 
-import net.sashakyotoz.unseenworld.managers.DishwithBerriesFoodEatenProcedure;
+import net.sashakyotoz.unseenworld.managers.DishWithBerriesFoodEatenProcedure;
 
 public class DishVegetableWithPorkItem extends Item {
 	public DishVegetableWithPorkItem() {
@@ -30,15 +30,15 @@ public class DishVegetableWithPorkItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = new ItemStack(Items.BOWL);
+		ItemStack stack = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
-		DishwithBerriesFoodEatenProcedure.execute(entity);
+		DishWithBerriesFoodEatenProcedure.onEaten(entity);
 		if (itemstack.isEmpty()) {
-			return retval;
+			return stack;
 		} else {
 			if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				if (!player.getInventory().add(retval))
-					player.drop(retval, false);
+				if (!player.getInventory().add(stack))
+					player.drop(stack, false);
 			}
 			return itemstack;
 		}

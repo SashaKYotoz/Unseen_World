@@ -1,10 +1,12 @@
 package net.sashakyotoz.unseenworld.world.features.underground;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -22,62 +24,35 @@ public class ShinyCavernsLightFeature extends Feature<NoneFeatureConfiguration> 
         WorldGenLevel level = context.level();
         RandomSource random = context.random();
         if(level.getBiome(blockPos).is(new ResourceLocation(UnseenWorldMod.MODID,"shiny_caverns"))){
-            for (int y = -7; y < 7; y++) {
-                for (int x = -7; x < 7; x++) {
-                    for (int z = -7; z < 7; z++) {
-                        BlockPos tmpPos = blockPos.offset(x,y,z);
-                        if(ceilingLight(level,tmpPos)){
-                            ceilingLightSetter(level,tmpPos);
-                            break;
-                        }else if(sideVerticalLight(level,tmpPos)){
-                            sideVerticalLightSetter(level,tmpPos);
-                            break;
-                        }else if(sideVerticalLightEastWest(level,tmpPos)){
-                            sideVerticalLightEastWestSetter(level,tmpPos);
-                            break;
-                        }
+            int height = 5 + random.nextIntBetweenInclusive(5,17);
+            for (int y = 0; y < height; y++) {
+                Direction direction = Direction.getRandom(random);
+                BlockState state;
+                int modifier = 1;
+                if(y % 2 == 0){
+                    modifier = random.nextIntBetweenInclusive(-2,2);
+                    if (random.nextBoolean())
+                        state = Blocks.CALCITE.defaultBlockState();
+                    else{
+                        if (random.nextBoolean())
+                            state = UnseenWorldModBlocks.TANZANITE_BLOCK.get().defaultBlockState();
+                        else
+                            state = UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get().defaultBlockState();
                     }
+                    int x = 0;
+                    int z = 0;
+                    x += direction.getStepX();
+                    z += direction.getStepZ();
+                    level.setBlock(blockPos.offset(x, y, z), state, 2);
+                    level.setBlock(blockPos.offset(x*modifier, y, z*modifier), state, 2);
+                    level.setBlock(blockPos.offset(x*modifier/2, y, z*modifier/2), state, 2);
+                    level.setBlock(blockPos.offset(x, y-1, z), state, 2);
+                    level.setBlock(blockPos.offset(x*modifier, y-1, z*modifier), state, 2);
                 }
             }
             return true;
         }
-        else{
+        else
             return false;
-        }
-    }
-    private void ceilingLightSetter(WorldGenLevel level,BlockPos blockPos){
-        for (int x = -1; x < 1; x++) {
-            for (int z = -1; z < 1; z++) {
-                level.setBlock(blockPos.offset(x,0,z),Blocks.CALCITE.defaultBlockState(),2);
-            }
-        }
-        level.setBlock(blockPos,UnseenWorldModBlocks.TANZASHROOM_LIGHT.get().defaultBlockState(),2);
-    }
-    private void sideVerticalLightEastWestSetter(WorldGenLevel level,BlockPos blockPos){
-        for (int x = -1; x < 1; x++) {
-            for (int y = -1; y < 1; y++) {
-                level.setBlock(blockPos.offset(x,y,0),Blocks.CALCITE.defaultBlockState(),2);
-            }
-        }
-        level.setBlock(blockPos,UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get().defaultBlockState(),2);
-    }
-    private void sideVerticalLightSetter(WorldGenLevel level,BlockPos blockPos){
-        for (int z = -1; z < 1; z++) {
-            for (int y = -1; y < 1; y++) {
-                level.setBlock(blockPos.offset(0,y,z),Blocks.CALCITE.defaultBlockState(),2);
-            }
-        }
-        level.setBlock(blockPos,UnseenWorldModBlocks.TANZASHROOM_LIGHT.get().defaultBlockState(),2);
-    }
-    private boolean ceilingLight(WorldGenLevel level, BlockPos pos){
-        return !level.getBlockState(pos.above()).isAir() && level.getBlockState(pos.below()).isAir();
-    }
-    private boolean sideVerticalLight(WorldGenLevel level,BlockPos pos){
-        return (level.getBlockState(pos.north()).isAir() && !level.getBlockState(pos.south()).isAir())
-                || (level.getBlockState(pos.south()).isAir() && !level.getBlockState(pos.north()).isAir());
-    }
-    private boolean sideVerticalLightEastWest(WorldGenLevel level,BlockPos pos){
-        return (level.getBlockState(pos.west()).isAir() && !level.getBlockState(pos.east()).isAir())
-                || (level.getBlockState(pos.east()).isAir() && !level.getBlockState(pos.west()).isAir());
     }
 }

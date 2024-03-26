@@ -33,9 +33,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import net.sashakyotoz.unseenworld.block.entity.GoldenchestBlockEntity;
-import net.sashakyotoz.unseenworld.managers.GoldenchestOnBlockRightClickedProcedure;
+import net.sashakyotoz.unseenworld.block.entity.GoldenChestBlockEntity;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
+import net.sashakyotoz.unseenworld.managers.GoldenChestGUIUpdate;
 
 import java.util.Collections;
 import java.util.List;
@@ -109,8 +109,8 @@ public class GoldenchestBlock extends Block implements EntityBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult use(BlockState blockstate, Level level, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.use(blockstate, level, pos, entity, hand, hit);
 		if (entity instanceof ServerPlayer player) {
 			NetworkHooks.openScreen(player, new MenuProvider() {
 				@Override
@@ -127,7 +127,7 @@ public class GoldenchestBlock extends Block implements EntityBlock {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		GoldenchestOnBlockRightClickedProcedure.execute(world, x, y, z);
+		GoldenChestGUIUpdate.execute(level, x, y, z);
 		return InteractionResult.SUCCESS;
 	}
 
@@ -139,7 +139,7 @@ public class GoldenchestBlock extends Block implements EntityBlock {
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new GoldenchestBlockEntity(pos, state);
+		return new GoldenChestBlockEntity(pos, state);
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class GoldenchestBlock extends Block implements EntityBlock {
 	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof GoldenchestBlockEntity be) {
+			if (blockEntity instanceof GoldenChestBlockEntity be) {
 				Containers.dropContents(world, pos, be);
 				world.updateNeighbourForOutputSignal(pos, this);
 			}

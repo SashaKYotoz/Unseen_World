@@ -28,7 +28,7 @@ public class UnseenWorldModKeyMappings {
 			} else if (isDownOld != isDown && !isDown) {
 				int dt = (int) (System.currentTimeMillis() - BLAZER_HELMET_ABILITY_LASTPRESS);
 				UnseenWorldMod.PACKET_HANDLER.sendToServer(new BlazerHelmetAbilityMessage(1, dt));
-				BlazerHelmetAbilityMessage.pressAction(Minecraft.getInstance().player, 1, dt);
+				BlazerHelmetAbilityMessage.pressAction(Minecraft.getInstance().player, 1);
 			}
 			isDownOld = isDown;
 		}

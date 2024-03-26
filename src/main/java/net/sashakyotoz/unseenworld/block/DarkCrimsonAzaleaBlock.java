@@ -1,33 +1,29 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.util.RandomSource;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 
-import net.sashakyotoz.unseenworld.managers.DarkCrimsonAzaleaRandomTickProcedure;
-
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class DarkCrimsonAzaleaBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -55,12 +51,7 @@ public class DarkCrimsonAzaleaBlock extends Block {
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return switch (state.getValue(FACING)) {
-			default -> Shapes.or(box(4, 0, 4, 12, 6, 12), box(0, 6, 0, 16, 16, 16));
-			case NORTH -> Shapes.or(box(4, 0, 4, 12, 6, 12), box(0, 6, 0, 16, 16, 16));
-			case EAST -> Shapes.or(box(4, 0, 4, 12, 6, 12), box(0, 6, 0, 16, 16, 16));
-			case WEST -> Shapes.or(box(4, 0, 4, 12, 6, 12), box(0, 6, 0, 16, 16, 16));
-		};
+		return Shapes.or(box(4, 0, 4, 12, 6, 12), box(0, 6, 0, 16, 16, 16));
 	}
 
 	@Override
@@ -99,9 +90,10 @@ public class DarkCrimsonAzaleaBlock extends Block {
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		DarkCrimsonAzaleaRandomTickProcedure.execute(world, x, y, z);
+		if (Math.random() < 0.0025) {
+			world.addParticle(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(), pos.getX(), pos.getY(), pos.getZ(), 0.25, 1, 0.25);
+			BlockState state = UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALIA.get().defaultBlockState();
+			world.setBlock(pos, state, 3);
+		}
 	}
 }

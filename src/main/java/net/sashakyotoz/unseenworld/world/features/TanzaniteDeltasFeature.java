@@ -38,15 +38,11 @@ public class TanzaniteDeltasFeature extends Feature<NoneFeatureConfiguration> {
             BlockPos blockpos1 = blockpos.offset(randomsource.nextInt(8) - randomsource.nextInt(8), -randomsource.nextInt(12), randomsource.nextInt(8) - randomsource.nextInt(8));
             if (worldgenlevel.getBlockState(blockpos1).isAir()) {
                 int j = 0;
-
                 for (Direction direction : Direction.values()) {
-                    if (worldgenlevel.getBlockState(blockpos1.relative(direction)).is(UnseenWorldModBlocks.TANZASHROOM_LIGHT.get())) {
+                    if (worldgenlevel.getBlockState(blockpos1.relative(direction)).is(UnseenWorldModBlocks.TANZASHROOM_LIGHT.get()))
                         ++j;
-                    }
-
-                    if (j > 1) {
+                    if (j > 1)
                         break;
-                    }
                 }
                 if (j == 1) {
                     worldgenlevel.setBlock(blockpos1, UnseenWorldModBlocks.TANZASHROOM_LIGHT.get().defaultBlockState(), 2);

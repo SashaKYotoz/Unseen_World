@@ -10,33 +10,29 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
 
 public class AncientTransientBlockCloseOnBlockRightClickedProcedure {
-	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		double sx = 0;
-		double sy = 0;
-		double sz = 0;
-		if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.DARK_GOLEM_HEART.get()
-				|| (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.DARK_GOLEM_HEART.get()) {
-			sx = -3;
-			for (int index0 = 0; index0 < 6; index0++) {
-				sy = -3;
-				for (int index1 = 0; index1 < 6; index1++) {
-					sz = -3;
-					for (int index2 = 0; index2 < 6; index2++) {
-						if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_CLOSE.get()) {
-							{
-								BlockPos _bp = BlockPos.containing(x + sx, y + sy, z + sz);
-								BlockState _bs = UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_OPEN.get().defaultBlockState();
-								world.setBlock(_bp, _bs, 3);
-							}
-						}
-						sz = sz + 1;
-					}
-					sy = sy + 1;
-				}
-				sx = sx + 1;
-			}
-		}
-	}
+    public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
+        if (entity == null)
+            return;
+        double sx, sy, sz;
+        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.DARK_GOLEM_HEART.get()
+                || (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.DARK_GOLEM_HEART.get()) {
+            sx = -3;
+            for (int index0 = 0; index0 < 6; index0++) {
+                sy = -3;
+                for (int index1 = 0; index1 < 6; index1++) {
+                    sz = -3;
+                    for (int index2 = 0; index2 < 6; index2++) {
+                        if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_CLOSE.get()) {
+                            BlockPos pos = BlockPos.containing(x + sx, y + sy, z + sz);
+                            BlockState state = UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_OPEN.get().defaultBlockState();
+                            world.setBlock(pos, state, 3);
+                        }
+                        sz = sz + 1;
+                    }
+                    sy = sy + 1;
+                }
+                sx = sx + 1;
+            }
+        }
+    }
 }

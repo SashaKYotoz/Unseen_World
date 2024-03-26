@@ -11,8 +11,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionResult;
 
-import net.sashakyotoz.unseenworld.managers.HeavyClaymoreRightclickedOnBlockProcedure;
-import net.sashakyotoz.unseenworld.managers.HeavyClaymoreLivingEntityIsHitWithToolProcedure;
+import net.sashakyotoz.unseenworld.managers.LivingEntityIsHitWithTreasureWeaponProcedure;
+import net.sashakyotoz.unseenworld.managers.TreasureWeaponOnBeaconClick;
 
 public class HeavyClaymoreItem extends SwordItem {
 	public HeavyClaymoreItem() {
@@ -46,7 +46,7 @@ public class HeavyClaymoreItem extends SwordItem {
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-		HeavyClaymoreLivingEntityIsHitWithToolProcedure.execute(entity, itemstack);
+		LivingEntityIsHitWithTreasureWeaponProcedure.onHit(entity, itemstack);
 		return retval;
 	}
 
@@ -68,7 +68,7 @@ public class HeavyClaymoreItem extends SwordItem {
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		super.useOn(context);
-		HeavyClaymoreRightclickedOnBlockProcedure.execute(context.getLevel(), context.getClickedPos().getX(), context.getClickedPos().getY(), context.getClickedPos().getZ(), context.getPlayer(), context.getItemInHand());
+		TreasureWeaponOnBeaconClick.onClick(context.getLevel(), context.getClickedPos(), context.getPlayer(), context.getItemInHand());
 		return InteractionResult.SUCCESS;
 	}
 }

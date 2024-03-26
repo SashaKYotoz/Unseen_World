@@ -24,7 +24,7 @@ public class UnseenWorldModEntityRenderers {
 		event.registerEntityRenderer(UnseenWorldModEntities.AMETHYST_GOLEM.get(), AmethystGolemRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.DARK_PHANTOM.get(), DarkPhantomRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), DustyPinkMaxorFishRenderer::new);
-		event.registerEntityRenderer(UnseenWorldModEntities.MOONFISH.get(), MoonfishRenderer::new);
+		event.registerEntityRenderer(UnseenWorldModEntities.MOONFISH.get(), MoonFishRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.CAVERN_SCARECROW.get(), CavernScarecrowRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.SAVAGE_SMALL_BLAZE.get(), SavageSmallBlazeRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get(), ChimericPurplemarerRenderer::new);
@@ -36,6 +36,7 @@ public class UnseenWorldModEntityRenderers {
 		event.registerEntityRenderer(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY.get(), GhastOfTealiveValleyRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.TANZANITE_GUARDIAN.get(), TanzaniteGuardianRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.DARKSPIRITWOLF.get(), DarkSpiritWolfRenderer::new);
+		event.registerEntityRenderer(UnseenWorldModEntities.SNOWDRIFTER.get(), SnowdrifterRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.VOID_ENDERMEN.get(), VoidEndermenRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.TEALIVE_SKELETON.get(), TealiveSkeletonRenderer::new);
 		event.registerEntityRenderer(UnseenWorldModEntities.RED_RAVENGER.get(), RedRavengerRenderer::new);

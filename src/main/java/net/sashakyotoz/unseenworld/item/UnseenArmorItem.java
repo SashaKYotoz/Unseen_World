@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
+import net.minecraft.sounds.SoundEvents;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.managers.UnseenArmorBodyTickEventProcedure;
 import net.minecraft.ChatFormatting;
@@ -44,7 +45,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 
 			@Override
 			public SoundEvent getEquipSound() {
-				return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.elytra.flying"));
+				return SoundEvents.SOUL_ESCAPE;
 			}
 
 			@Override
@@ -85,7 +86,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/unseenium_armor__layer_1.png";
+			return "unseen_world:textures/models/armor/unseenium_armor_layer_1.png";
 		}
 	}
 
@@ -105,7 +106,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/unseenium_armor__layer_1.png";
+			return "unseen_world:textures/models/armor/unseenium_armor_layer_1.png";
 		}
 
 		@Override
@@ -130,7 +131,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/unseenium_armor__layer_2.png";
+			return "unseen_world:textures/models/armor/unseenium_armor_layer_2.png";
 		}
 	}
 
@@ -150,7 +151,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "unseen_world:textures/models/armor/unseenium_armor__layer_1.png";
+			return "unseen_world:textures/models/armor/unseenium_armor_layer_1.png";
 		}
 	}
 }

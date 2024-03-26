@@ -1,9 +1,6 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.managers.SmallCrimserrySoulBerryPlantDestroyedByPlayerProcedure;
-import net.sashakyotoz.unseenworld.managers.SmallCrimserrySoulBerryPlantRightClickedProcedure;
-import net.sashakyotoz.unseenworld.managers.SmallCrimserrySoulBerryUpdateTickProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -13,8 +10,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -27,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 
 import java.util.Collections;
 import java.util.List;
@@ -83,20 +83,65 @@ public class SmallCrimserrySoulBerryBlock extends FlowerBlock {
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		SmallCrimserrySoulBerryUpdateTickProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), blockstate);
+		execute(world, pos, blockstate);
 	}
-
+	private void execute(LevelAccessor world, BlockPos pos, BlockState blockstate) {
+		if (Math.random() < 0.25) {
+			if (blockstate.getBlock().getStateDefinition().getProperty("age") instanceof IntegerProperty property) {
+				switch (blockstate.getValue(property)){
+					case 0 -> {
+						BlockState state = world.getBlockState(pos);
+						if (property.getPossibleValues().contains(1))
+							world.setBlock(pos, state.setValue(property, 1), 3);
+					}
+					case 1 ->{
+						BlockState blockState = world.getBlockState(pos);
+						if (property.getPossibleValues().contains(2))
+							world.setBlock(pos, blockState.setValue(property, 2), 3);
+					}
+				}
+			}
+		}
+	}
 	@Override
-	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
-		boolean retval = super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
-		SmallCrimserrySoulBerryPlantDestroyedByPlayerProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), blockstate);
-		return retval;
+	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+		boolean onDestroyedByPlayer = super.onDestroyedByPlayer(blockstate, world, pos, player, willHarvest, fluid);
+		if (blockstate.getBlock().getStateDefinition().getProperty("age") instanceof IntegerProperty property && blockstate.getValue(property) > 1){
+			int randomCountOfBerries = player.getRandom().nextIntBetweenInclusive(1,3) + blockstate.getValue(property);
+			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY_FOOD.get(),randomCountOfBerries));
+		}else
+			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.SMALL_CRIMSERRY_SOUL_BERRY.get()));
+		return onDestroyedByPlayer;
 	}
 
 	@Override
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.use(blockstate, world, pos, entity, hand, hit);
-		SmallCrimserrySoulBerryPlantRightClickedProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), blockstate, entity);
+		onClick(world, pos, blockstate, entity);
 		return InteractionResult.SUCCESS;
+	}
+	public static void onClick(LevelAccessor world, BlockPos pos, BlockState blockstate, Player player) {
+		if (player == null)
+			return;
+		if (player.getMainHandItem().is(Items.BONE_MEAL)) {
+			ItemStack stack = new ItemStack(Items.BONE_MEAL);
+			player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
+			if (Math.random() < 0.25) {
+				if (blockstate.getBlock().getStateDefinition().getProperty("age") instanceof IntegerProperty property) {
+					switch (blockstate.getValue(property)){
+						case 0 -> {
+							BlockState state = world.getBlockState(pos);
+							if (property.getPossibleValues().contains(1))
+								world.setBlock(pos, state.setValue(property, 1), 3);
+						}
+						case 1 ->{
+							BlockState blockState = world.getBlockState(pos);
+							if (property.getPossibleValues().contains(2))
+								world.setBlock(pos, blockState.setValue(property, 2), 3);
+						}
+					}
+				}
+			}
+		}
 	}
 }

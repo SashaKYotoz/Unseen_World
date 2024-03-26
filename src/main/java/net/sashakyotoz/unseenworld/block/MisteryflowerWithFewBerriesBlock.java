@@ -1,36 +1,33 @@
 
 package net.sashakyotoz.unseenworld.block;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.BlockHitResult;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
 
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.FlowerBlock;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.util.RandomSource;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-
-import net.sashakyotoz.unseenworld.managers.MisteryflowerWithFewBerriesUpdateTickProcedure;
-import net.sashakyotoz.unseenworld.managers.MisteryflowerWithFewBerriesPlantRightClickedProcedure;
-
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class MisteryflowerWithFewBerriesBlock extends FlowerBlock {
 	public MisteryflowerWithFewBerriesBlock() {
@@ -76,15 +73,22 @@ public class MisteryflowerWithFewBerriesBlock extends FlowerBlock {
 	}
 
 	@Override
-	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
-		super.tick(blockstate, world, pos, random);
-		MisteryflowerWithFewBerriesUpdateTickProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+	public void tick(BlockState blockstate, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (Math.random() < 0.05) {
+			BlockState state = UnseenWorldModBlocks.MISTERYFLOWER_BERRIES.get().defaultBlockState();
+			level.setBlock(pos, state, 3);
+			level.sendParticles(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(), pos.getX(), pos.getY(), pos.getZ(), 12, 3, 3, 3, 1);
+		}
+		super.tick(blockstate, level, pos, random);
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
-		MisteryflowerWithFewBerriesPlantRightClickedProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		super.use(blockstate, world, pos, player, hand, hit);
+		BlockState state = UnseenWorldModBlocks.MISTERYFLOWER_SAPLING.get().defaultBlockState();
+		world.setBlock(pos, state, 3);
+		int randomCount = player.getRandom().nextIntBetweenInclusive(1,4)+1;
+		player.spawnAtLocation(new ItemStack(UnseenWorldModItems.PURPLE_BERRIES.get()),randomCount);
 		return InteractionResult.SUCCESS;
 	}
 }

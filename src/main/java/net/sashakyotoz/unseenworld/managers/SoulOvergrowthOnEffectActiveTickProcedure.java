@@ -14,9 +14,7 @@ public class SoulOvergrowthOnEffectActiveTickProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		double sx = 0;
-		double sy = 0;
-		double sz = 0;
+		double sx, sy, sz;
 		sx = -3;
 		for (int index0 = 0; index0 < 5; index0++) {
 			sy = -1;

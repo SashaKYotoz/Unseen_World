@@ -2,6 +2,7 @@
   "type": "forge:add_features",
   "biomes": [
     "unseen_world:dark_crimson_valley",
+    "unseen_world:darkcrimsonforest",
     "unseen_world:dark_wasteland"
   ],
   "features": "unseen_world:misteryflower_berries",

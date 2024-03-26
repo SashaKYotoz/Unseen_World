@@ -15,11 +15,12 @@ public class RedRavengerRenderer extends MobRenderer<RedRavengerEntity, ModelRed
 	public RedRavengerRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelRed_Ravager(context.bakeLayer(ModelRed_Ravager.LAYER_LOCATION)), 0.8f);
 	}
-	protected void scale(RedRavengerEntity p_116066_, PoseStack p_116067_, float p_116068_) {
-		if (p_116066_.isBaby()) {
-			p_116067_.scale(0.5F, 0.5F, 0.5F);
+	protected void scale(RedRavengerEntity ravengerEntity, PoseStack stack, float p_116068_) {
+		if (ravengerEntity.isBaby()) {
+			stack.scale(0.5F, 0.5F, 0.5F);
 			this.shadowRadius = 0.25F;
 		} else {
+			stack.scale(1F, 1F, 1F);
 			this.shadowRadius = 0.5F;
 		}
 	}

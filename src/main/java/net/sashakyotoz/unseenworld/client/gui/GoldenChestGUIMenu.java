@@ -18,7 +18,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.util.UnseenWorldModMenus;
-import net.sashakyotoz.unseenworld.managers.GoldenChestGUIIsClosedProcedure;
+import net.sashakyotoz.unseenworld.managers.GoldenChestGUIUpdate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -216,16 +216,16 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
     }
 
     @Override
-    protected boolean moveItemStackTo(ItemStack p_38904_, int p_38905_, int p_38906_, boolean p_38907_) {
+    protected boolean moveItemStackTo(ItemStack stack, int index, int p_38906_, boolean p_38907_) {
         boolean flag = false;
-        int i = p_38905_;
+        int i = index;
         if (p_38907_) {
             i = p_38906_ - 1;
         }
-        if (p_38904_.isStackable()) {
-            while (!p_38904_.isEmpty()) {
+        if (stack.isStackable()) {
+            while (!stack.isEmpty()) {
                 if (p_38907_) {
-                    if (i < p_38905_) {
+                    if (i < index) {
                         break;
                     }
                 } else if (i >= p_38906_) {
@@ -233,16 +233,16 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
                 }
                 Slot slot = this.slots.get(i);
                 ItemStack itemstack = slot.getItem();
-                if (slot.mayPlace(itemstack) && !itemstack.isEmpty() && ItemStack.isSameItemSameTags(p_38904_, itemstack)) {
-                    int j = itemstack.getCount() + p_38904_.getCount();
-                    int maxSize = Math.min(slot.getMaxStackSize(), p_38904_.getMaxStackSize());
+                if (slot.mayPlace(itemstack) && !itemstack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack)) {
+                    int j = itemstack.getCount() + stack.getCount();
+                    int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
                     if (j <= maxSize) {
-                        p_38904_.setCount(0);
+                        stack.setCount(0);
                         itemstack.setCount(j);
                         slot.set(itemstack);
                         flag = true;
                     } else if (itemstack.getCount() < maxSize) {
-                        p_38904_.shrink(maxSize - itemstack.getCount());
+                        stack.shrink(maxSize - itemstack.getCount());
                         itemstack.setCount(maxSize);
                         slot.set(itemstack);
                         flag = true;
@@ -255,15 +255,15 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
                 }
             }
         }
-        if (!p_38904_.isEmpty()) {
+        if (!stack.isEmpty()) {
             if (p_38907_) {
                 i = p_38906_ - 1;
             } else {
-                i = p_38905_;
+                i = index;
             }
             while (true) {
                 if (p_38907_) {
-                    if (i < p_38905_) {
+                    if (i < index) {
                         break;
                     }
                 } else if (i >= p_38906_) {
@@ -271,11 +271,11 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
                 }
                 Slot slot1 = this.slots.get(i);
                 ItemStack itemstack1 = slot1.getItem();
-                if (itemstack1.isEmpty() && slot1.mayPlace(p_38904_)) {
-                    if (p_38904_.getCount() > slot1.getMaxStackSize()) {
-                        slot1.setByPlayer(p_38904_.split(slot1.getMaxStackSize()));
+                if (itemstack1.isEmpty() && slot1.mayPlace(stack)) {
+                    if (stack.getCount() > slot1.getMaxStackSize()) {
+                        slot1.setByPlayer(stack.split(slot1.getMaxStackSize()));
                     } else {
-                        slot1.setByPlayer(p_38904_.split(p_38904_.getCount()));
+                        slot1.setByPlayer(stack.split(stack.getCount()));
                     }
                     slot1.setChanged();
                     flag = true;
@@ -294,7 +294,7 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
     @Override
     public void removed(Player playerIn) {
         super.removed(playerIn);
-        GoldenChestGUIIsClosedProcedure.execute(world, x, y, z);
+        GoldenChestGUIUpdate.execute(world, x, y, z);
         if (!bound && playerIn instanceof ServerPlayer serverPlayer) {
             if (!serverPlayer.isAlive() || serverPlayer.hasDisconnected()) {
                 for (int j = 0; j < internal.getSlots(); ++j) {

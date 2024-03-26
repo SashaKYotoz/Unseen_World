@@ -17,6 +17,7 @@ public class UnseenWorldDataGenerator {
         BlockTagsProvider blocktags = new UnseenWorldBlockTagProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper());
         event.getGenerator().addProvider(event.includeServer(), blocktags);
         event.getGenerator().addProvider(event.includeServer(), new UnseenWorldItemTagProvider(event.getGenerator().getPackOutput(),event.getLookupProvider(),blocktags,event.getExistingFileHelper()));
+        event.getGenerator().addProvider(event.includeServer(), new UnseenWorldBiomeTagProvider(event.getGenerator().getPackOutput(),event.getLookupProvider(),event.getExistingFileHelper()));
 //        generator.addProvider(true,new HumbledlessWorldLangProvider(packOutput,"en_us",false));
     }
 }

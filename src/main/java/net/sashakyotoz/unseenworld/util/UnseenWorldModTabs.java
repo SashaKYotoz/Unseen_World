@@ -69,7 +69,7 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModItems.DARK_FREE_SOUL.get());
 				tabData.accept(UnseenWorldModItems.DARK_WATER_BUCKET.get());
 				tabData.accept(UnseenWorldModItems.LIQUID_OF_CHIMERY_BUCKET.get());
-			}).withSearchBar().build());
+			}).build());
 	public static final RegistryObject<CreativeModeTab> UNSEEN_WORLD_COMBAT = REGISTRY.register("unseen_world_combat",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.unseen_world.unseen_world_combat").withStyle(ChatFormatting.DARK_RED)).icon(() -> new ItemStack(UnseenWorldModItems.RED_TITANIUM_SWORD.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(UnseenWorldModItems.DEEP_GEM_SWORD.get());
@@ -81,6 +81,7 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModItems.VOID_ENDERMEN_SWORD.get());
 				tabData.accept(UnseenWorldModItems.HEAVY_CLAYMORE.get());
 				tabData.accept(UnseenWorldModItems.LIGHT_TULVAR.get());
+				tabData.accept(UnseenWorldModItems.BLASTING_LANCER.get());
 				tabData.accept(UnseenWorldModItems.FIERY_SABER.get());
 				tabData.accept(UnseenWorldModItems.VOID_HAMMER.get());
 				tabData.accept(UnseenWorldModItems.REDNESS_HAMMER.get());
@@ -133,14 +134,15 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModItems.STREDER_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.GHAST_OF_TEALIVE_VALLEY_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.TANZANITE_GUARDIAN_SPAWN_EGG.get());
-				tabData.accept(UnseenWorldModItems.DARKSPIRITWOLF_SPAWN_EGG.get());
+				tabData.accept(UnseenWorldModItems.DARK_SPIRIT_WOLF_SPAWN_EGG.get());
+				tabData.accept(UnseenWorldModItems.SNOWDRIFTER_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.VOID_ENDERMEN_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.TEALIVE_SKELETON_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.RED_RAVENGER_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.DARK_HOGLIN_SPAWN_EGG.get());
 				tabData.accept(UnseenWorldModItems.MOON_FISHIN_BUCKET.get());
 				tabData.accept(UnseenWorldModItems.DUSTY_PINK_MAXOR_FISH_BUCKET.get());
-			}).withSearchBar().build());
+			}).build());
 	public static final RegistryObject<CreativeModeTab> UNSEEN_WORLD_BLOCKS = REGISTRY.register("unseen_world_blocks",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.unseen_world.unseen_world_blocks")).icon(() -> new ItemStack(UnseenWorldModBlocks.COLD_DARK_BRICKS.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(UnseenWorldModBlocks.COLD_DARK_BRICKS.get().asItem());
@@ -259,20 +261,20 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_SAPLING.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GROWN_CRIMSERRY_SOUL_BERRY.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.AMETHYST_GRASS.get().asItem());
+				tabData.accept(UnseenWorldModBlocks.GLOWORCHID.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.TEALIVY_PLUMERIA.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.TEALIVY_JADE_VINE_FLOWER.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.TANZASHROOM.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.TANZASHROOM_BLOCK.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.TANZASHROOM_STEM.get().asItem());
-			}).withSearchBar().build());
+			}).build());
 
 	@SubscribeEvent
 	public static void buildTabContentsVanilla(BuildCreativeModeTabContentsEvent tabData) {
 		if (tabData.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-			tabData.accept(UnseenWorldModItems.MUSICDISC_PIANO.get());
+			tabData.accept(UnseenWorldModItems.MUSIC_DISC_PIANO.get());
 			tabData.accept(UnseenWorldModItems.MUSIC_DISC_HAPPY_PLACE.get());
 		}
-
 		if (tabData.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
 			tabData.accept(UnseenWorldModItems.OUTGROWTHAPPLE.get());
 			tabData.accept(UnseenWorldModItems.CHIMERIC_BLUE_PEPPER.get());

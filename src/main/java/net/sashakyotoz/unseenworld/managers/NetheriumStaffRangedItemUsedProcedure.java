@@ -9,11 +9,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
 
 public class NetheriumStaffRangedItemUsedProcedure {
-    public static void execute(LevelAccessor world, double x, double y, double z, ServerPlayer entity, ItemStack itemstack) {
-        if (entity == null)
+    public static void execute(LevelAccessor world, double x, double y, double z, ServerPlayer player, ItemStack itemstack) {
+        if (player == null)
             return;
         if (world instanceof ServerLevel serverLevel)
             serverLevel.sendParticles(UnseenWorldModParticleTypes.FIRE_PARTICLE.get(), x, y, z, 24, 4, 3, 4, 1);
-        entity.getCooldowns().addCooldown(itemstack.getItem(), 30);
+        player.getCooldowns().addCooldown(itemstack.getItem(), 30);
     }
 }

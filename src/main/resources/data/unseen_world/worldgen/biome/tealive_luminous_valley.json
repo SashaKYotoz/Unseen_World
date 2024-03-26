@@ -19,12 +19,12 @@
       "max_delay": 12000,
       "replace_current_music": true
     },
-    "foliage_color": -16724839,
-    "grass_color": -13182773,
-    "sky_color": -12071744,
-    "fog_color": -12071744,
-    "water_color": -16724839,
-    "water_fog_color": -16724839
+    "foliage_color": 4605011,
+    "grass_color": -16066550,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
   },
   "spawners": {
     "monster": [],
@@ -50,9 +50,6 @@
       "minecraft:lake_lava_underground"
     ],
     [],
-    [],
-    [],
-    [],
     [
       "minecraft:ore_diamond",
       "minecraft:ore_diamond_large",
@@ -61,12 +58,9 @@
       "minecraft:ore_lapis_buried",
       "minecraft:underwater_magma"
     ],
-    [],
-    [],
     [
       "minecraft:lush_caves_ceiling_vegetation",
       "minecraft:cave_vines",
-      "minecraft:lush_caves_clay",
       "minecraft:lush_caves_vegetation",
       "minecraft:rooted_azalea_tree",
       "minecraft:spore_blossom",

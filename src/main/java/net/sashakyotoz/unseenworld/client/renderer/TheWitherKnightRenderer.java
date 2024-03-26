@@ -22,16 +22,16 @@ public class TheWitherKnightRenderer extends MobRenderer<TheWitherKnightEntity, 
 	public TheWitherKnightRenderer(EntityRendererProvider.Context context) {
 		super(context, new ModelThe_Wither_Knight<>(context.bakeLayer(ModelThe_Wither_Knight.LAYER_LOCATION)), 0.5f);
 		this.ordinary = new ModelThe_Wither_Knight<>(context.bakeLayer(ModelThe_Wither_Knight.LAYER_LOCATION));
-		this.advanced = new ModelThe_Wither_Knight_Advanced(context.bakeLayer(ModelThe_Wither_Knight_Advanced.LAYER_LOCATION));
+		this.advanced = new ModelThe_Wither_Knight_Advanced<>(context.bakeLayer(ModelThe_Wither_Knight_Advanced.LAYER_LOCATION));
 		this.addLayer(new ItemInHandLayer<>(this,context.getItemInHandRenderer()));
 	}
-	public void render(TheWitherKnightEntity entity, float p_115778_, float p_115779_, PoseStack p_115780_, MultiBufferSource p_115781_, int p_115782_) {
+	public void render(TheWitherKnightEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
 		if (entity.isAdvanced())
 			this.model = this.advanced;
 		else {
 			this.model = this.ordinary;
 		}
-		super.render(entity, p_115778_, p_115779_, p_115780_, p_115781_, p_115782_);
+		super.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
 
 	@Override

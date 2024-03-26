@@ -37,9 +37,7 @@ public class MiningBootsAbilityMessage {
 
 	public static void handler(MiningBootsAbilityMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
 		NetworkEvent.Context context = contextSupplier.get();
-		context.enqueueWork(() -> {
-			pressAction(Objects.requireNonNull(context.getSender()), message.type, message.pressedms);
-		});
+		context.enqueueWork(() -> pressAction(Objects.requireNonNull(context.getSender()), message.type, message.pressedms));
 		context.setPacketHandled(true);
 	}
 
