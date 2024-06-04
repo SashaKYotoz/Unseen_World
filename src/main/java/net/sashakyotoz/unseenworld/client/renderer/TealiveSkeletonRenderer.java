@@ -16,13 +16,13 @@ public class TealiveSkeletonRenderer extends MobRenderer<TealiveSkeletonEntity, 
 		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
-				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/glow_tealive_skeleton.png"));
+				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/skeletons/glow_tealive_skeleton.png"));
 			}
 		});
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(TealiveSkeletonEntity entity) {
-		return new ResourceLocation("unseen_world:textures/entities/tealive_skeleton.png");
+		return new ResourceLocation("unseen_world:textures/entities/skeletons/tealive_skeleton.png");
 	}
 }

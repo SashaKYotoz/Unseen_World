@@ -5,9 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.managers.TealivyFireStaffProjectileHitsBlockProcedure;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,7 +25,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
 
 import net.sashakyotoz.unseenworld.managers.NetheriumStaffWhileProjectileFlyingTickProcedure;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModSounds;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModSounds;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplier {
@@ -74,12 +73,6 @@ public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplie
     protected void doPostHurtEffects(LivingEntity entity) {
         super.doPostHurtEffects(entity);
         entity.setArrowCount(entity.getArrowCount() - 1);
-    }
-
-    @Override
-    public void onHitBlock(BlockHitResult blockHitResult) {
-        super.onHitBlock(blockHitResult);
-        TealivyFireStaffProjectileHitsBlockProcedure.execute(this.level(), blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ());
     }
 
     @Override

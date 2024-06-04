@@ -2,10 +2,10 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModFluids;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModFluids;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -59,7 +59,7 @@ import java.util.Set;
 
 public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.DEEP_WATER_ANFELTSIA.get());
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModBlocks.DEEP_WATER_ANFELTSIA.get());
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);

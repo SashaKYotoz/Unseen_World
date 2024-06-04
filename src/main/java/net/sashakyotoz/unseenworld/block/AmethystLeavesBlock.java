@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 
 import java.util.OptionalInt;
 
@@ -47,24 +47,24 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
         level.setBlock(pos, updateDistance(state, level, pos), 3);
     }
 
-    public int getLightBlock(BlockState p_54460_, BlockGetter p_54461_, BlockPos p_54462_) {
+    public int getLightBlock(BlockState state, BlockGetter p_54461_, BlockPos p_54462_) {
         return 1;
     }
 
-    public BlockState updateShape(BlockState p_54440_, Direction p_54441_, BlockState p_54442_, LevelAccessor p_54443_, BlockPos p_54444_, BlockPos p_54445_) {
-        if (p_54440_.getValue(WATERLOGGED)) {
+    public BlockState updateShape(BlockState state, Direction p_54441_, BlockState p_54442_, LevelAccessor p_54443_, BlockPos p_54444_, BlockPos p_54445_) {
+        if (state.getValue(WATERLOGGED)) {
             p_54443_.scheduleTick(p_54444_, Fluids.WATER, Fluids.WATER.getTickDelay(p_54443_));
         }
 
         int i = getDistanceAt(p_54442_) + 1;
-        if (i != 1 || p_54440_.getValue(DISTANCE) != i) {
+        if (i != 1 || state.getValue(DISTANCE) != i) {
             p_54443_.scheduleTick(p_54444_, this, 1);
         }
 
-        return p_54440_;
+        return state;
     }
 
-    private static BlockState updateDistance(BlockState p_54436_, LevelAccessor p_54437_, BlockPos p_54438_) {
+    private static BlockState updateDistance(BlockState state, LevelAccessor p_54437_, BlockPos p_54438_) {
         int i = 9;
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
@@ -76,18 +76,18 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
             }
         }
 
-        return p_54436_.setValue(DISTANCE, Integer.valueOf(i));
+        return state.setValue(DISTANCE, i);
     }
 
-    private static int getDistanceAt(BlockState p_54464_) {
-        return getOptionalDistanceAt(p_54464_).orElse(9);
+    private static int getDistanceAt(BlockState state) {
+        return getOptionalDistanceAt(state).orElse(9);
     }
 
-    public static OptionalInt getOptionalDistanceAt(BlockState p_277868_) {
-        if (p_277868_.is(BlockTags.LOGS) || p_277868_.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) || p_277868_.is(Blocks.AMETHYST_BLOCK)) {
+    public static OptionalInt getOptionalDistanceAt(BlockState state) {
+        if (state.is(BlockTags.LOGS) || state.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) || state.is(Blocks.AMETHYST_BLOCK)) {
             return OptionalInt.of(0);
         } else {
-            return p_277868_.hasProperty(DISTANCE) ? OptionalInt.of(p_277868_.getValue(DISTANCE)) : OptionalInt.empty();
+            return state.hasProperty(DISTANCE) ? OptionalInt.of(state.getValue(DISTANCE)) : OptionalInt.empty();
         }
     }
 
@@ -115,7 +115,7 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
     }
 
     @Override
-    public void performBonemeal(ServerLevel p_221427_, RandomSource p_221428_, BlockPos p_221429_, BlockState p_221430_) {
-        p_221427_.setBlock(p_221429_.below(), UnseenWorldModBlocks.LUMINOUSAMETHYSTVINE.get().defaultBlockState(), 3);
+    public void performBonemeal(ServerLevel level, RandomSource p_221428_, BlockPos p_221429_, BlockState p_221430_) {
+        level.setBlock(p_221429_.below(), UnseenWorldModBlocks.LUMINOUS_AMETHYST_VINE.get().defaultBlockState(), 3);
     }
 }

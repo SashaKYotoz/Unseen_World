@@ -1,0 +1,35 @@
+{
+  "key": "unseen_world_void_ingot",
+  "category": "metal",
+  "primary": 24,
+  "secondary": 4.5,
+  "tertiary": 2,
+  "durability": 2380,
+  "integrityCost": 3,
+  "integrityGain": 6,
+  "magicCapacity": 50,
+  "toolLevel": "tetra:maxed_forge_hammer",
+  "toolEfficiency": 13,
+  "tints": {
+    "glyph": "93adc0",
+    "texture": "93adc0"
+  },
+  "textures": [
+    "metal",
+    "default"
+  ],
+  "material": {
+    "items": [
+      "unseen_world:void_ingot"
+    ]
+  },
+  "requiredTools": {
+    "hammer_dig": "tetra:maxed_forge_hammer"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "unseen_world"
+    }
+  ]
+}

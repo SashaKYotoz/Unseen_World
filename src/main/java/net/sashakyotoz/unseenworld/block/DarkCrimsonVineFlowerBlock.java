@@ -10,7 +10,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -25,7 +24,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import org.jetbrains.annotations.NotNull;
 
 public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements BonemealableBlock,DarkCrimsonVine {
 
@@ -50,7 +51,7 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		return Shapes.empty();
 	}
 
-	protected int getBlocksToGrowWhenBonemealed(RandomSource p_220928_) {
+	protected int getBlocksToGrowWhenBonemealed(RandomSource source) {
 		return 1;
 	}
 
@@ -58,20 +59,20 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		return p_152998_.isAir();
 	}
 
-	protected Block getBodyBlock() {
+	protected @NotNull Block getBodyBlock() {
 		return UnseenWorldModBlocks.DARK_CRIMSON_BLOOMING_VINE.get();
 	}
 
-	protected BlockState updateBodyAfterConvertedFromHead(BlockState p_152987_, BlockState p_152988_) {
-		return p_152988_.setValue(BERRIES, p_152987_.getValue(BERRIES));
+	protected @NotNull BlockState updateBodyAfterConvertedFromHead(BlockState state, BlockState p_152988_) {
+		return p_152988_.setValue(BERRIES, state.getValue(BERRIES));
 	}
 
-	protected BlockState getGrowIntoState(BlockState p_220935_, RandomSource p_220936_) {
-		return super.getGrowIntoState(p_220935_, p_220936_).setValue(BERRIES, p_220936_.nextFloat() < 0.15F);
+	protected @NotNull BlockState getGrowIntoState(BlockState state, RandomSource source) {
+		return super.getGrowIntoState(state, source).setValue(BERRIES, source.nextFloat() < 0.15F);
 	}
 
-	public ItemStack getCloneItemStack(BlockGetter p_152966_, BlockPos p_152967_, BlockState p_152968_) {
-		return new ItemStack(Items.GLOW_BERRIES);
+	public @NotNull ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
+		return new ItemStack(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get());
 	}
 
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
@@ -87,7 +88,7 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		return !state.getValue(BERRIES);
 	}
 
-	public boolean isBonemealSuccess(Level p_220930_, RandomSource p_220931_, BlockPos p_220932_, BlockState p_220933_) {
+	public boolean isBonemealSuccess(Level level, RandomSource p_220931_, BlockPos p_220932_, BlockState p_220933_) {
 		return true;
 	}
 

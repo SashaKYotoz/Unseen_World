@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "unseen_world:item/void_blasting_lancer_2d"
+  }
+}

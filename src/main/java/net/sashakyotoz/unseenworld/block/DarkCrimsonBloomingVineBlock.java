@@ -4,7 +4,6 @@ package net.sashakyotoz.unseenworld.block;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -22,8 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implements BonemealableBlock,DarkCrimsonVine {
 	public DarkCrimsonBloomingVineBlock() {
@@ -56,27 +55,27 @@ public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implemen
 	}
 
 	public ItemStack getCloneItemStack(BlockGetter p_153007_, BlockPos p_153008_, BlockState p_153009_) {
-		return new ItemStack(UnseenWorldModItems.BERRIESFROM_BLOOMING_VINE.get());
+		return new ItemStack(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get());
 	}
 
-	public InteractionResult use(BlockState p_153021_, Level p_153022_, BlockPos p_153023_, Player p_153024_, InteractionHand p_153025_, BlockHitResult p_153026_) {
-		return DarkCrimsonVine.use(p_153024_, p_153021_, p_153022_, p_153023_);
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_153025_, BlockHitResult p_153026_) {
+		return DarkCrimsonVine.use(player, state, level, pos);
 	}
 
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_153031_) {
-		p_153031_.add(BERRIES);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BERRIES);
 	}
 
-	public boolean isValidBonemealTarget(LevelReader p_255942_, BlockPos p_153012_, BlockState p_153013_, boolean p_153014_) {
-		return !p_153013_.getValue(BERRIES);
+	public boolean isValidBonemealTarget(LevelReader p_255942_, BlockPos p_153012_, BlockState state, boolean p_153014_) {
+		return !state.getValue(BERRIES);
 	}
 
 	public boolean isBonemealSuccess(Level p_220943_, RandomSource p_220944_, BlockPos p_220945_, BlockState p_220946_) {
 		return true;
 	}
 
-	public void performBonemeal(ServerLevel p_220938_, RandomSource p_220939_, BlockPos p_220940_, BlockState p_220941_) {
-		p_220938_.setBlock(p_220940_, p_220941_.setValue(BERRIES, Boolean.valueOf(true)), 2);
+	public void performBonemeal(ServerLevel level, RandomSource p_220939_, BlockPos p_220940_, BlockState state) {
+		level.setBlock(p_220940_, state.setValue(BERRIES, Boolean.TRUE), 2);
 	}
 
 	@Override

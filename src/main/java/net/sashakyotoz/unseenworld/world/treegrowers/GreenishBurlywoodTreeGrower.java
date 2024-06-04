@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.grower.AbstractMegaTreeGrower;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModFeatures;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModFeatures;
 import org.jetbrains.annotations.Nullable;
 
 public class GreenishBurlywoodTreeGrower extends AbstractMegaTreeGrower {

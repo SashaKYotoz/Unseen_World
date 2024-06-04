@@ -25,9 +25,10 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 import java.util.List;
 
@@ -129,7 +130,7 @@ public class AmethystGolemEntity extends TamableAnimal {
                 }
             } else if (this.isFood(itemstack)) {
                 this.usePlayerItem(player, hand, itemstack);
-                if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                if (this.random.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.tame(player);
                     this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
@@ -163,7 +164,6 @@ public class AmethystGolemEntity extends TamableAnimal {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Level world = this.level();
         for (int l = 0; l < 1; ++l) {
             double x0 = x + random.nextFloat();
             double y0 = y + random.nextFloat();
@@ -171,7 +171,7 @@ public class AmethystGolemEntity extends TamableAnimal {
             double dx = (random.nextFloat() - 0.5D) * 0.75D;
             double dy = (random.nextFloat() - 0.5D) * 0.75D;
             double dz = (random.nextFloat() - 0.5D) * 0.75D;
-            world.addParticle(ParticleTypes.MYCELIUM, x0, y0, z0, dx, dy, dz);
+            this.level().addParticle(ParticleTypes.MYCELIUM, x0, y0, z0, dx, dy, dz);
         }
     }
 

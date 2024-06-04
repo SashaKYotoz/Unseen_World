@@ -1,8 +1,6 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import org.checkerframework.checker.units.qual.s;
-
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,8 +9,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
@@ -22,7 +18,7 @@ import java.util.Collections;
 
 public class TanzashroomLightBlock extends Block {
 	public TanzashroomLightBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.SHROOMLIGHT).strength(3f, 10f).lightLevel(s -> 12).requiresCorrectToolForDrops());
+		super(BlockBehaviour.Properties.of().sound(SoundType.SHROOMLIGHT).strength(3f, 5).lightLevel(s -> 12).requiresCorrectToolForDrops());
 	}
 
 	@Override
@@ -48,13 +44,6 @@ public class TanzashroomLightBlock extends Block {
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
 		return true;
-	}
-
-	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof HoeItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 0;
-		return false;
 	}
 
 	@Override

@@ -4,24 +4,27 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,20 +33,30 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
-import net.sashakyotoz.unseenworld.util.*;
+import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
+import net.sashakyotoz.unseenworld.registries.*;
 
 @Mod.EventBusSubscriber
 public class EventManager {
     public static int shakingTime = 0;
+    public static Vec3 vec3 = new Vec3(0,-256,0);
 
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         if (event.getHand() != event.getEntity().getUsedItemHand())
             return;
-        claymoreAbility(event.getLevel(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), event.getEntity());
+        claymoreAbility(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), event.getEntity());
+    }
+    @SubscribeEvent
+    public static void furnaceFuelBurnTimeEvent(FurnaceFuelBurnTimeEvent event) {
+        ItemStack itemstack = event.getItemStack();
+        if (itemstack.getItem() == UnseenWorldModItems.DARK_WATER_BUCKET.get())
+            event.setBurnTime(2400);
+        else if (itemstack.getItem() == UnseenWorldModBlocks.CRIMSERRY_SOUL_CROP.get().asItem())
+            event.setBurnTime(60);
     }
 
     @SubscribeEvent
@@ -68,6 +81,7 @@ public class EventManager {
         if (event.getHand() != event.getEntity().getUsedItemHand())
             return;
         netheriumStaffCharging(event.getEntity());
+        voidEndermanSwordClick(event.getLevel(),event.getPos(),event.getEntity());
     }
 
     @SubscribeEvent
@@ -81,12 +95,11 @@ public class EventManager {
             AdvancementManager.everyTickCheckingAdvancements(event.player.level(), event.player);
         }
     }
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.getCameraEntity() instanceof Player player && !player.isSpectator()) {
+        if (minecraft.getCameraEntity() instanceof Player player && !player.isSpectator() && player.distanceToSqr(vec3) < 12){
             float delta = Minecraft.getInstance().getFrameTime();
             float ticksExistedDelta = player.tickCount + delta;
             float intensity = 0.025f;
@@ -95,17 +108,38 @@ public class EventManager {
                 event.setYaw((float) (event.getYaw() + intensity * Math.cos(ticksExistedDelta * 5 + 1) * 25));
                 event.setRoll((float) (event.getRoll() + intensity * Math.cos(ticksExistedDelta * 4) * 25));
             }
+            else if (shakingTime <= 0)
+                vec3 = new Vec3(0,-256,0);
         }
     }
-
-    private static void claymoreAbility(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (entity == null)
+    public static void diggingParticles(LivingEntity entity,boolean flag) {
+        if (flag) {
+            RandomSource randomsource = entity.getRandom();
+            BlockState blockstate = entity.level().getBlockState(entity.getOnPos().below(2));
+            if (blockstate.getRenderShape() != RenderShape.INVISIBLE) {
+                for (int i = 0; i < 30; ++i) {
+                    double d0 = entity.getX() + (double) Mth.randomBetween(randomsource, -0.7F, 0.7F);
+                    double d1 = entity.getY() + 0.5f;
+                    double d2 = entity.getZ() + (double) Mth.randomBetween(randomsource, -0.7F, 0.7F);
+                    entity.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate), d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                }
+            }
+        }
+    }
+    private static void claymoreAbility(double x, double y, double z, Player player) {
+        if (player == null)
             return;
-        if ((entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.HEAVY_CLAYMORE.get()
-                || (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == UnseenWorldModItems.HEAVY_CLAYMORE.get()) {
-            if (world instanceof ServerLevel level)
+        if (player.getMainHandItem().is(UnseenWorldModItems.HEAVY_CLAYMORE.get()) || player.getOffhandItem().is(UnseenWorldModItems.HEAVY_CLAYMORE.get())) {
+            shakingTime +=30;
+            vec3 = new Vec3(player.getOnPos().getX(),player.getOnPos().getY(),player.getOnPos().getZ());
+            if (player.onGround()){
+                for (int i = 0; i < 10 && player.tickCount % 10 == 0; i++) {
+                    diggingParticles(player,i < 9);
+                }
+            }
+            if (player.level() instanceof ServerLevel level)
                 level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, new Vec3(x, y, z), Vec2.ZERO, level, 4, "", Component.literal(""), level.getServer(), null).withSuppressedOutput(),
-                        "/effect give @e[distance=..7,type=!minecraft:player,type=!minecraft:wolf] minecraft:levitation 2 2");
+                        "/effect give @e[distance=..7,type=!minecraft:player,type=!minecraft:wolf] minecraft:levitation 2 3");
         }
     }
 
@@ -144,11 +178,11 @@ public class EventManager {
         double sy;
         double sz;
         sx = -2;
-        for (int index0 = 0; index0 < 4; index0++) {
+        for (int i = 0; i < 4; i++) {
             sy = -2;
-            for (int index1 = 0; index1 < 4; index1++) {
+            for (int j = 0; j < 4; j++) {
                 sz = -2;
-                for (int index2 = 0; index2 < 4; index2++) {
+                for (int k = 0; k < 4; k++) {
                     if ((level.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.TOTEM_OF_GUDDY_BLAZE.get()) {
                         level.destroyBlock(BlockPos.containing(x + sx, y + sy, z + sz), false);
                         if (level instanceof ServerLevel serverLevel) {
@@ -168,7 +202,7 @@ public class EventManager {
 
     private static void savageBlazeMonumentClicked(LevelAccessor world, double x, double y, double z) {
         if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == UnseenWorldModBlocks.TOTEM_OF_GUDDY_BLAZE.get()) {
-            world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
+            world.removeBlock(BlockPos.containing(x,y,z),true);
             world.addParticle(UnseenWorldModParticleTypes.REDNESS.get(), x, y, z, 0, 1, 0);
             if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = UnseenWorldModEntities.SAVAGE_SMALL_BLAZE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
@@ -179,15 +213,15 @@ public class EventManager {
         }
     }
 
-    private static void shinyBladeAction(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (entity == null)
+    private static void shinyBladeAction(LevelAccessor world, double x, double y, double z, Player player) {
+        if (player == null)
             return;
-        if (!UnseenWorldModConfigs.DEACTIVATE_SHINING_BLADE.get()) {
-            double shiningPower = (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get());
+        if (!UnseenWorldConfigs.DEACTIVATE_SHINING_BLADE.get()) {
+            double shiningPower = (player.getMainHandItem().getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()));
             if (shiningPower > 0) {
                 if (world instanceof ServerLevel level)
                     level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, new Vec3(x, y, z), Vec2.ZERO, level, 4, "", Component.literal(""), level.getServer(), null).withSuppressedOutput(),
-                            "/effect give @e[distance=.." + shiningPower + UnseenWorldModConfigs.SHINING_BLADE_POWER.get() + " ,type=!minecraft:player] minecraft:glowing 5");
+                            "/effect give @e[distance=.." + shiningPower * 2 + UnseenWorldConfigs.SHINING_BLADE_POWER.get() + " ,type=!minecraft:player] minecraft:glowing 5");
             }
         }
     }
@@ -195,10 +229,10 @@ public class EventManager {
     private static void gravityThornsAction(Entity entity, Entity sourceentity) {
         if (entity == null || sourceentity == null)
             return;
-        if (!UnseenWorldModConfigs.DEACTIVATE_GRAVITY_SPIKES.get()) {
+        if (!UnseenWorldConfigs.DEACTIVATE_GRAVITY_SPIKES.get()) {
             double enchantLevel = (entity instanceof LivingEntity living ? living.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.GRAVITY_SPIKE.get());
             if (enchantLevel > 0) {
-                sourceentity.setDeltaMovement(new Vec3(0, ((enchantLevel / 2.5f + UnseenWorldModConfigs.GRAVITY_SPIKES_POWER.get())), 0));
+                sourceentity.setDeltaMovement(new Vec3(0, ((enchantLevel / 2.5f + UnseenWorldConfigs.GRAVITY_SPIKES_POWER.get())), 0));
             }
         }
     }
@@ -206,11 +240,11 @@ public class EventManager {
     private static void lifeSteelAction(LivingEntity entity, Entity sourceentity) {
         if (entity == null || sourceentity == null)
             return;
-        if (!UnseenWorldModConfigs.DEACTIVATE_LIFE_STEELING.get()) {
+        if (!UnseenWorldConfigs.DEACTIVATE_LIFE_STEELING.get()) {
             int lifeSteel = (sourceentity instanceof LivingEntity livingEntity ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.LIFE_STEEL.get());
             if (lifeSteel > 0) {
                 if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60 + UnseenWorldModConfigs.LIFE_STEELING_POWER.get() * 10, lifeSteel + UnseenWorldModConfigs.LIFE_STEELING_POWER.get()));
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60 + UnseenWorldConfigs.LIFE_STEELING_POWER.get() * 10, lifeSteel + UnseenWorldConfigs.LIFE_STEELING_POWER.get()));
                     if (!entity.hasEffect(MobEffects.HARM))
                         entity.addEffect(new MobEffectInstance(MobEffects.HARM, 1, -1 + (lifeSteel > 2 ? 3 : 1)));
                 }
@@ -221,11 +255,11 @@ public class EventManager {
     private static void randomEffectGiving(LevelAccessor world, Player player) {
         if (player == null)
             return;
-        if ((world instanceof Level level ? level.dimension() : Level.OVERWORLD) == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness"))) && Math.random() < 0.0025 && UnseenWorldModConfigs.SPEC.isLoaded()) {
-            if (Math.random() < UnseenWorldModConfigs.METEORITESTROPHY_CHANCE.get()) {
+        if ((world instanceof Level level ? level.dimension() : Level.OVERWORLD) == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness"))) && Math.random() < 0.0025 && UnseenWorldConfigs.SPEC.isLoaded()) {
+            if (Math.random() < UnseenWorldConfigs.METEORITESTROPHY_CHANCE.get()) {
                 if (!player.level().isClientSide())
                     player.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.METEORITESTROPHY.get(), 100, 1));
-            } else if (Math.random() < UnseenWorldModConfigs.REDUCING_OF_GRAVITY_CHANCE.get()) {
+            } else if (Math.random() < UnseenWorldConfigs.REDUCING_OF_GRAVITY_CHANCE.get()) {
                 if (!player.level().isClientSide())
                     player.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.REDUCED_OF_GRAVITY.get(), 600, 0));
             }
@@ -248,9 +282,19 @@ public class EventManager {
     private static void netheriumStaffCharging(Player player) {
         if (player == null)
             return;
-        if (player.getMainHandItem().is(Items.BLAZE_POWDER) && player.getOffhandItem().is(UnseenWorldModItems.NETHERIUM_STAFF.get())) {
+        if ((player.getMainHandItem().is(Items.BLAZE_POWDER) && player.getOffhandItem().is(UnseenWorldModItems.NETHERIUM_STAFF.get())) ||
+                player.getMainHandItem().is(UnseenWorldModItems.TEALIVE_STONY_SHARD.get()) && player.getOffhandItem().is(UnseenWorldModItems.TEALIVY_FIRE_STAFF.get())) {
             player.getOffhandItem().setDamageValue(player.getOffhandItem().getDamageValue() - 1);
             player.getMainHandItem().setCount(player.getMainHandItem().getCount() - 1);
+        }
+    }
+    private static void voidEndermanSwordClick(LevelAccessor world, BlockPos pos, LivingEntity entity){
+        double speed = 0.75;
+        double Yaw = entity.getYRot();
+        entity.setDeltaMovement(new Vec3((speed * Math.cos((Yaw + 90) * (Math.PI / 180))), (entity.getXRot() * (-0.025)), (speed * Math.sin((Yaw + 90) * (Math.PI / 180)))));
+        if (world.getBlockState(pos.below(2)).canOcclude() || world.getBlockState(pos.below(3)).canOcclude() || world.getBlockState(pos.below(4)).canOcclude()) {
+            if (!entity.level().isClientSide())
+                entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0));
         }
     }
 }

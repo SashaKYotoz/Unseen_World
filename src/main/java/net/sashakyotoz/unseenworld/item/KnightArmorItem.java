@@ -38,7 +38,7 @@ public abstract class KnightArmorItem extends ArmorItem {
 
 			@Override
 			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{9, 12, 14, 9}[type.getSlot().getIndex()];
+				return new int[]{8, 11, 13, 8}[type.getSlot().getIndex()];
 			}
 
 			@Override

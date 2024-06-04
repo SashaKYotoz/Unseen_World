@@ -2,18 +2,13 @@
 package net.sashakyotoz.unseenworld.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,13 +17,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
 import org.jetbrains.annotations.Nullable;
 
 public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlock {
@@ -93,7 +86,7 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 		super.playerDestroy(level, player, pos, state, entity, p_49832_);
 		if (isMaxAge(state)) {
 			for (int i = 0; i < (int) Mth.nextDouble(RandomSource.create(), 1, 4); i++) {
-				player.spawnAtLocation(new ItemStack(UnseenWorldModItems.OUTGROWTHAPPLE.get()));
+				player.spawnAtLocation(new ItemStack(UnseenWorldModItems.OUTGROWTH_APPLE.get()));
 			}
 		}
 	}

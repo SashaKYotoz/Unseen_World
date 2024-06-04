@@ -14,11 +14,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.unseenworld.client.model.ModelBeaconOfWeapons;
 import net.sashakyotoz.unseenworld.client.renderer.BeaconOfWeaponsRenderer;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,20 +26,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockEntityWithoutLevelRendererMixin {
 @Unique
 public ModelBeaconOfWeapons unseenworld$beacon;
+@Mutable
+@Final
 @Shadow
 @NotNull
 private final EntityModelSet entityModelSet;
-    public BlockEntityWithoutLevelRendererMixin(EntityModelSet entityModelSet) {
+    public BlockEntityWithoutLevelRendererMixin(@NotNull EntityModelSet entityModelSet) {
         this.entityModelSet = entityModelSet;
     }
-    @Inject(method = "onResourceManagerReload", at = @At("RETURN"))
+    @Inject(method = "onResourceManagerReload", at = @At("HEAD"))
     public void onResourceManagerReloadUnseenWorld(ResourceManager resourceManager, CallbackInfo ci) {
         this.unseenworld$beacon = new ModelBeaconOfWeapons(this.entityModelSet.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
     }
     @Inject(method = "renderByItem", at = @At("RETURN"))
     public void renderByItemUnseenWorld(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
         Minecraft minecraft =  Minecraft.getInstance();
-        if (itemStack.is(UnseenWorldModItems.BEACON_OF_WEAPONS.get()) && minecraft.level != null) {
+        if (itemStack.is(UnseenWorldModBlocks.BEACON_OF_WEAPONS.get().asItem()) && minecraft.level != null) {
             long gameTime = minecraft.level.getGameTime();
             float test = (float)(gameTime % 360) * 0.5F;
             float e = ++test;

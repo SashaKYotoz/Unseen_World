@@ -35,12 +35,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
 import net.sashakyotoz.unseenworld.managers.TheBlazerOnEntityTickUpdateProcedure;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -70,9 +70,9 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
         super.onAddedToWorld();
         spawnAnimationState.start(this.tickCount);
         spawnFoundParticles();
-        if (!Objects.equals(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get(), UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.getDefault())) {
-            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get());
-            this.setHealth(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get().floatValue());
+        if (!Objects.equals(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get(), UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.getDefault())) {
+            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get());
+            this.setHealth(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get().floatValue());
         }
     }
 
@@ -105,8 +105,8 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
         private final TheBlazerEntity blazer;
         public int chargeTime;
 
-        public TheBlazerisBlockingGoal(TheBlazerEntity p_32776_) {
-            this.blazer = p_32776_;
+        public TheBlazerisBlockingGoal(TheBlazerEntity entity) {
+            this.blazer = entity;
         }
 
         public boolean canUse() {
@@ -169,20 +169,24 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
             @Override
             public void start() {
                 LivingEntity livingentity = TheBlazerEntity.this.getTarget();
-                Vec3 vec3d = livingentity.getEyePosition(1);
-                TheBlazerEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.5);
+                if (livingentity != null){
+                    Vec3 vec3d = livingentity.getEyePosition(1);
+                    TheBlazerEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.5);
+                }
             }
 
             @Override
             public void tick() {
                 LivingEntity livingentity = TheBlazerEntity.this.getTarget();
-                if (TheBlazerEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
-                    TheBlazerEntity.this.doHurtTarget(livingentity);
-                } else {
-                    double d0 = TheBlazerEntity.this.distanceToSqr(livingentity);
-                    if (d0 < 32) {
-                        Vec3 vec3d = livingentity.getEyePosition(1);
-                        TheBlazerEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.5);
+                if (livingentity != null){
+                    if (TheBlazerEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
+                        TheBlazerEntity.this.doHurtTarget(livingentity);
+                    } else {
+                        double d0 = TheBlazerEntity.this.distanceToSqr(livingentity);
+                        if (d0 < 32) {
+                            Vec3 vec3d = livingentity.getEyePosition(1);
+                            TheBlazerEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.5);
+                        }
                     }
                 }
             }

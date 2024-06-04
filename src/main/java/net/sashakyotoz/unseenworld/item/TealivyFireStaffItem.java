@@ -17,7 +17,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerPlayer;
 
-import net.sashakyotoz.unseenworld.managers.NetheriumStaffRangedItemUsedProcedure;
 import net.sashakyotoz.unseenworld.entity.TealivyFireStaffEntity;
 
 import com.google.common.collect.Multimap;
@@ -57,15 +56,12 @@ public class TealivyFireStaffItem extends Item {
 	}
 
 	@Override
-	public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityLiving, int timeLeft) {
-		if (!world.isClientSide() && entityLiving instanceof ServerPlayer entity) {
-			double x = entity.getX();
-			double y = entity.getY();
-			double z = entity.getZ();
-			TealivyFireStaffEntity entityarrow = TealivyFireStaffEntity.shoot(world, entity, world.getRandom(), 2.5f, 3.5, 2);
-			itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
+	public void releaseUsing(ItemStack itemstack, Level level, LivingEntity entityLiving, int timeLeft) {
+		if (!level.isClientSide() && entityLiving instanceof ServerPlayer player) {
+			TealivyFireStaffEntity entityarrow = TealivyFireStaffEntity.shoot(level, player, level.getRandom(), 2.5f, 3.5, 2);
+			itemstack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
 			entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
-			NetheriumStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
+			player.getCooldowns().addCooldown(itemstack.getItem(),20);
 		}
 	}
 }

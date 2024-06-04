@@ -25,8 +25,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 	private int attackAnimationRemainingTicks;
@@ -99,8 +100,8 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 		return SoundEvents.HOGLIN_DEATH;
 	}
 
-	public boolean isFood(ItemStack p_34562_) {
-		return p_34562_.is(UnseenWorldModItems.TANZASHROOM.get());
+	public boolean isFood(ItemStack stack) {
+		return stack.is(UnseenWorldModBlocks.TANZASHROOM.get().asItem());
 	}
 
 	@Override

@@ -161,6 +161,7 @@ public class DarkGolemAttackGoal extends Goal {
                     case "armed"->{
                         if (this.mob.getHealth() > 20){
                             EventManager.shakingTime +=200;
+                            EventManager.vec3 = this.mob.getEyePosition();
                             final Vec3 center = new Vec3(this.mob.getX(), entity.getY(), this.mob.getZ());
                             List<Entity> entityList = this.mob.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                             for (Entity entityiterator : entityList) {

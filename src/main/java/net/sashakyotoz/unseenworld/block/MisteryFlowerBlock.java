@@ -11,34 +11,27 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FlowerBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import org.checkerframework.checker.units.qual.A;
 
-public class MisteryFlowerBlock extends FlowerBlock {
-	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 2);
+public class MisteryFlowerBlock extends CropBlock {
+	private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(3.0D, 0.0D, 3.0D, 13.0D, 6.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 6.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 8.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 12.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 15.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D), Block.box(3.0D, 0.0D, 3.0D, 13.0D, 16.0D, 13.0D)};
 
 	public MisteryFlowerBlock() {
-		super(() -> MobEffects.MOVEMENT_SPEED, 100, BlockBehaviour.Properties.copy(Blocks.PEONY).sound(SoundType.GRASS)
+		super(BlockBehaviour.Properties.of().sound(SoundType.GRASS)
 				.instabreak().lightLevel(s -> 1).noLootTable().noCollission());
 		this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
-	}
-
-	@Override
-	public int getEffectDuration() {
-		return 100;
 	}
 
 	@Override
@@ -50,7 +43,25 @@ public class MisteryFlowerBlock extends FlowerBlock {
 	public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return 60;
 	}
+	public VoxelShape getShape(BlockState pState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext context) {
+		return SHAPE_BY_AGE[this.getAge(pState)];
+	}
 
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (state.getValue(AGE) > 3){
+			player.spawnAtLocation(UnseenWorldModItems.PURPLE_BERRIES.get());
+			level.setBlock(pos,this.getStateForAge(getAge(state) -1),2);
+		}
+		return state.getValue(AGE) > 0 ? InteractionResult.SUCCESS : super.use(state, level, pos, player, hand, hitResult);
+	}
+	public BlockState getStateForAge(int i) {
+		return this.defaultBlockState().setValue(this.getAgeProperty(), i);
+	}
+	@Override
+	protected ItemLike getBaseSeedId() {
+		return new ItemStack(UnseenWorldModBlocks.MISTERY_CROP_FLOWER.get()).getItem();
+	}
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(AGE);
@@ -66,56 +77,5 @@ public class MisteryFlowerBlock extends FlowerBlock {
 		BlockPos blockpos = pos.below();
 		BlockState groundState = worldIn.getBlockState(blockpos);
 		return this.mayPlaceOn(groundState, worldIn, blockpos);
-	}
-
-	@Override
-	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
-		super.tick(blockstate, world, pos, random);
-		if (Math.random() < 0.025) {
-			if (blockstate.getBlock().getStateDefinition().getProperty("age") instanceof IntegerProperty property)
-				world.setBlock(pos,blockstate.setValue(property,blockstate.getValue(property) == 0 ? 1 : 2),3);
-		}
-	}
-
-	@Override
-	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		boolean onDestroyedByPlayer = super.onDestroyedByPlayer(blockstate, world, pos, player, willHarvest, fluid);
-		if (blockstate.getBlock().getStateDefinition().getProperty("age") instanceof IntegerProperty property && blockstate.getValue(property) > 0){
-			int randomCountOfBerries = player.getRandom().nextIntBetweenInclusive(1,3) + blockstate.getValue(property);
-			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.PURPLE_BERRIES.get(),randomCountOfBerries));
-		}else
-			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.PURPLE_BERRIES.get()));
-		return onDestroyedByPlayer;
-	}
-
-	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, player, hand, hit);
-		onClick(world, pos, blockstate, player);
-		return InteractionResult.SUCCESS;
-	}
-	private void onClick(LevelAccessor world, BlockPos pos, BlockState blockstate, Player player) {
-		if (player == null)
-			return;
-		if (player.getMainHandItem().is(Items.BONE_MEAL)) {
-			ItemStack stack = new ItemStack(Items.BONE_MEAL);
-			player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
-			if (Math.random() < 0.25) {
-				if (blockstate.getBlock().getStateDefinition().getProperty("age") instanceof IntegerProperty property) {
-					switch (blockstate.getValue(property)){
-						case 0 -> {
-							BlockState state = world.getBlockState(pos);
-							if (property.getPossibleValues().contains(1))
-								world.setBlock(pos, state.setValue(property, 1), 3);
-						}
-						case 1 ->{
-							BlockState blockState = world.getBlockState(pos);
-							if (property.getPossibleValues().contains(2))
-								world.setBlock(pos, blockState.setValue(property, 2), 3);
-						}
-					}
-				}
-			}
-		}
 	}
 }

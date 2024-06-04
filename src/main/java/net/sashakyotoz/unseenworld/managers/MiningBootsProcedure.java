@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEnchantments;
+import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEnchantments;
 import net.minecraftforge.common.TierSortingRegistry;
 
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +23,7 @@ public class MiningBootsProcedure {
         if (entity == null)
             return;
         double sx, sy, sz;
-        if (!UnseenWorldModConfigs.DEACTIVATE_MINING_BOOTS.get()) {
+        if (!UnseenWorldConfigs.DEACTIVATE_MINING_BOOTS.get()) {
             if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.MININGBOOTS.get()) > 0) {
                 sx = -1;
                 for (int index0 = 0; index0 < 3; index0++) {
@@ -35,7 +35,7 @@ public class MiningBootsProcedure {
                                 public int getHarvestLevel(BlockState _bs) {
                                     return TierSortingRegistry.getSortedTiers().stream().filter(t -> t.getTag() != null && _bs.is(t.getTag())).map(Tier::getLevel).findFirst().orElse(0);
                                 }
-                            }.getHarvestLevel(world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))) <= 5
+                            }.getHarvestLevel(world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))) <= 4
                                     && !((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == Blocks.BEDROCK || (world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == Blocks.END_PORTAL_FRAME)) {
                                 {
                                     BlockPos _pos = BlockPos.containing(x + sx, y + sy, z + sz);

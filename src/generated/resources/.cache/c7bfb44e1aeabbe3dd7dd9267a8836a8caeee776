@@ -1,9 +1,11 @@
-// 1.20.1	2024-01-25T19:21:03.7360815	Tags for minecraft:block mod id unseen_world
+// 1.20.1	2024-06-04T16:06:11.826754	Tags for minecraft:block mod id unseen_world
 25dfd7cb4294e283a166eca3640274023a801beb data/forge/tags/blocks/chests.json
 5b35b50c267185fb0f790d51d713ae0daa5c6301 data/forge/tags/blocks/needs_netherite_tool.json
-f81e830245d61750ad8b73f0f7a0d1913493687f data/forge/tags/blocks/needs_wood_tool.json
+935cd6533bf1ba1759c89d28991a0efb426022ae data/forge/tags/blocks/needs_wood_tool.json
 611df901df070349ec449eb9263a4beb2e12272f data/forge/tags/blocks/ores.json
 fa96b0ebe70ebe1b9ca708e25a277f142def0422 data/minecraft/tags/blocks/dirt.json
+c56a7ad1c404afec1ce352839672374a13441feb data/minecraft/tags/blocks/needs_diamond_tool.json
 dee6c6fd19c289408521fb10903e812e954963aa data/minecraft/tags/blocks/sand.json
 fa96b0ebe70ebe1b9ca708e25a277f142def0422 data/unseen_world/tags/blocks/dirt_the_darkness.json
+d4a57112480df70c52e87afc27243f413abea982 data/unseen_world/tags/blocks/dripstone_of_amethyst_can_grow_on.json
 7517a714e44dd2a43f48263c01fa743028fb3abd data/unseen_world/tags/blocks/stone_the_darkness.json

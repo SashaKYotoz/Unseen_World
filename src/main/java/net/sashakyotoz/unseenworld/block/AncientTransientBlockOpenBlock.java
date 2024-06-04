@@ -19,7 +19,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.managers.AncientTransientBlockOpenEntityCollidesInTheBlockProcedure;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 
 import java.util.Collections;
 import java.util.List;
@@ -57,18 +57,8 @@ public class AncientTransientBlockOpenBlock extends Block {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-		List<ItemStack> dropsOriginal = super.getDrops(state, builder);
-		if (!dropsOriginal.isEmpty())
-			return dropsOriginal;
-		return Collections.singletonList(new ItemStack(UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_CLOSE.get()));
-	}
-
-	@Override
 	public void entityInside(BlockState blockstate, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockstate, world, pos, entity);
-		UnseenWorldMod.queueServerWork(60, () -> {
-			AncientTransientBlockOpenEntityCollidesInTheBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
-		});
+		UnseenWorldMod.queueServerWork(60, () -> AncientTransientBlockOpenEntityCollidesInTheBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ()));
 	}
 }

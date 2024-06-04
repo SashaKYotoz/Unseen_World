@@ -12,9 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
 
 public class SpikesFeature extends Feature<BlockStateConfiguration> {
     private BlockState blockState;

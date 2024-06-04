@@ -15,8 +15,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.unseenworld.client.model.ModelThe_Wither_Knight_Armor_Rods;
-import net.sashakyotoz.unseenworld.entity.TheWitherKnightEntity;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 public class KnightArmorRodsLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
     private static final ResourceLocation RODS_LOCATION = new ResourceLocation("unseen_world:textures/entities/the_wither_knight_armor.png");

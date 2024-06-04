@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class LifeSteelEnchantment extends Enchantment {
     @Override
     public void doPostAttack(LivingEntity livingEntity, Entity entity, int amount) {
         if (entity instanceof LivingEntity livingEntity1)
-            livingEntity1.hurt(livingEntity.damageSources().mobAttack(livingEntity1), 1 + UnseenWorldModConfigs.LIFE_STEELING_POWER.get());
+            livingEntity1.hurt(livingEntity.damageSources().mobAttack(livingEntity1), 1 + UnseenWorldConfigs.LIFE_STEELING_POWER.get());
     }
 
     @Override

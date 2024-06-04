@@ -2,8 +2,8 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,12 +23,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.Packet;
 
-import net.sashakyotoz.unseenworld.managers.DarkPearlRangedItemProjectileHitsLivingEntityProcedure;
+import net.sashakyotoz.unseenworld.managers.DarkPearlHitsLivingEntityProcedure;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupplier {
 	public DarkPearlRangedItemEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(UnseenWorldModEntities.DARK_PEARL_RANGED_ITEM.get(), world);
+		super(UnseenWorldModEntities.DARK_PEARL.get(), world);
 	}
 
 	public DarkPearlRangedItemEntity(EntityType<? extends DarkPearlRangedItemEntity> type, Level world) {
@@ -47,7 +47,7 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
-		return new ItemStack(UnseenWorldModItems.DARKPEARL.get());
+		return new ItemStack(UnseenWorldModItems.DARK_PEARL.get());
 	}
 
 	@Override
@@ -64,19 +64,19 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 	@Override
 	public void playerTouch(Player entity) {
 		super.playerTouch(entity);
-		DarkPearlRangedItemProjectileHitsLivingEntityProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), entity);
+		DarkPearlHitsLivingEntityProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), entity);
 	}
 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		DarkPearlRangedItemProjectileHitsLivingEntityProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), entityHitResult.getEntity());
+		DarkPearlHitsLivingEntityProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), entityHitResult.getEntity());
 	}
 
 	@Override
 	public void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-		DarkPearlRangedItemProjectileHitsLivingEntityProcedure.execute(this.level(), blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ(), this.getOwner());
+		DarkPearlHitsLivingEntityProcedure.execute(this.level(), blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ(), this.getOwner());
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 	}
 
 	public static DarkPearlRangedItemEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		DarkPearlRangedItemEntity entityarrow = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL_RANGED_ITEM.get(), entity, world);
+		DarkPearlRangedItemEntity entityarrow = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -99,7 +99,7 @@ public class DarkPearlRangedItemEntity extends AbstractArrow implements ItemSupp
 	}
 
 	public static DarkPearlRangedItemEntity shoot(LivingEntity entity, LivingEntity target) {
-		DarkPearlRangedItemEntity entityarrow = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL_RANGED_ITEM.get(), entity, entity.level());
+		DarkPearlRangedItemEntity entityarrow = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

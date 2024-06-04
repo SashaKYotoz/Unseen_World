@@ -7,8 +7,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
 
 public class VoidBowProjectileHitsPlayerProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
@@ -25,8 +25,7 @@ public class VoidBowProjectileHitsPlayerProcedure {
 			}
 		}
 		while (loop < particleAmount) {
-			world.addParticle(UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get(), (x + Math.cos(((Math.PI * 2) / particleAmount) * loop) * xRadius), y, (z + Math.sin(((Math.PI * 2) / particleAmount) * loop) * zRadius), 0, 0.05,
-					0);
+			world.addParticle(UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(), (x + Math.cos(((Math.PI * 2) / particleAmount) * loop) * xRadius), y, (z + Math.sin(((Math.PI * 2) / particleAmount) * loop) * zRadius), 0, 0.05, 0);
 			loop = loop + 1;
 		}
 	}

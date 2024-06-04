@@ -1,5 +1,6 @@
 package net.sashakyotoz.unseenworld.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -10,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -24,13 +26,14 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -61,7 +64,10 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
         this.entityData.define(UNDER_SNOW, false);
     }
     public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.SNOWDRIFTER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+        SpawnPlacements.register(UnseenWorldModEntities.SNOWDRIFTER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, SnowdrifterEntity::checkAnyLightSpawnRules);
+    }
+    public static boolean checkAnyLightSpawnRules(EntityType<? extends SnowdrifterEntity> type, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource checked) {
+        return checkMobSpawnRules(type, accessor, spawnType, pos, checked);
     }
     @Nullable
     @Override
@@ -88,8 +94,8 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
     }
 
     @Override
-    public int calculateFallDamage(float p_21237_, float p_21238_) {
-        return super.calculateFallDamage(p_21237_, p_21238_) / 2;
+    public int calculateFallDamage(float fallDistance, float damageModifier) {
+        return super.calculateFallDamage(fallDistance, damageModifier) / 2;
     }
 
     @Override

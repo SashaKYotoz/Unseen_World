@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "unseen_world:item/deep_gem_armor_chestplate",
+    "layer1": "minecraft:trims/items/chestplate_trim_iron"
+  }
+}

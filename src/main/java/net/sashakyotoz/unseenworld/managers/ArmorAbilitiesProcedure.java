@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffects;
 
 public class ArmorAbilitiesProcedure {
     public static void execute(Entity entity) {
-        if (entity == null || !(entity instanceof LivingEntity livingEntity))
+        if (!(entity instanceof LivingEntity livingEntity))
             return;
         ItemStack headSlot = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
         ItemStack chestSlot = livingEntity.getItemBySlot(EquipmentSlot.CHEST);

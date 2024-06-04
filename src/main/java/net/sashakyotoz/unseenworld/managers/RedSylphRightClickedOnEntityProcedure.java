@@ -5,26 +5,26 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.sashakyotoz.unseenworld.entity.RedSlylfEntity;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
 
 public class RedSylphRightClickedOnEntityProcedure {
     public static void execute(LevelAccessor world, double x, double y, double z, Player player, RedSlylfEntity slylfEntity) {
         if (player == null || slylfEntity == null)
             return;
-        if (player.getMainHandItem().is(UnseenWorldModItems.OUTGROWTHAPPLE.get()) && slylfEntity.getMainHandItem().isEmpty()) {
-            ItemStack stack = new ItemStack(UnseenWorldModItems.OUTGROWTHAPPLE.get());
+        if (player.getMainHandItem().is(UnseenWorldModItems.OUTGROWTH_APPLE.get()) && slylfEntity.getMainHandItem().isEmpty()) {
+            ItemStack stack = new ItemStack(UnseenWorldModItems.OUTGROWTH_APPLE.get());
             player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
             slylfEntity.setItemInHand(InteractionHand.MAIN_HAND, stack);
             if (Math.random() < 0.5) {
-                slylfEntity.spawnAtLocation(new ItemStack(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY_FOOD.get()));
+                slylfEntity.spawnAtLocation(new ItemStack(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get()));
                 world.addParticle(UnseenWorldModParticleTypes.GOLDEN.get(), x, y, z, 0, 1, 0);
             } else if (Math.random() < 0.35) {
-                slylfEntity.spawnAtLocation(new ItemStack(UnseenWorldModItems.BERRIESFROM_BLOOMING_VINE.get()));
-                world.addParticle(UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get(), x, y, z, 0, 1, 0);
+                slylfEntity.spawnAtLocation(new ItemStack(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get()));
+                world.addParticle(UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(), x, y, z, 0, 1, 0);
             }
-        } else if (player.getMainHandItem().is(UnseenWorldModItems.GRIZZLY_LIGHT_BLOCK.get())) {
+        } else if (player.getMainHandItem().is(UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get().asItem())) {
             ItemStack stack = new ItemStack(UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get());
             player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
             slylfEntity.setItemInHand(InteractionHand.MAIN_HAND,stack);

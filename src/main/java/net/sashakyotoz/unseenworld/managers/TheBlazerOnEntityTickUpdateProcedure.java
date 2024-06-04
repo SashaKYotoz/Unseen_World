@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 
 import net.sashakyotoz.unseenworld.entity.TheBlazerEntity;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.entity.RedBlazeEntity;
 import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
@@ -39,7 +39,7 @@ public class TheBlazerOnEntityTickUpdateProcedure {
                 if (!projectileLevel.isClientSide()) {
                     Projectile entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            AbstractArrow entityToSpawn = new NetheriumStaffEntity(UnseenWorldModEntities.NETHERIUM_STAFF.get(), level);
+                            NetheriumStaffEntity entityToSpawn = new NetheriumStaffEntity(UnseenWorldModEntities.NETHERIUM_STAFF.get(), level);
                             entityToSpawn.setOwner(shooter);
                             entityToSpawn.setBaseDamage(damage);
                             entityToSpawn.setKnockback(knockback);

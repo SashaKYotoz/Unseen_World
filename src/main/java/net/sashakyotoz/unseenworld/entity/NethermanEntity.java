@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -37,7 +37,7 @@ public class NethermanEntity extends EnderMan {
 	private int attackAnimationRemainingTicks;
 
 	public NethermanEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.NETHERMEN.get(), world);
+		this(UnseenWorldModEntities.NETHERMAN.get(), world);
 	}
 
 	public NethermanEntity(EntityType<NethermanEntity> type, Level world) {
@@ -124,7 +124,7 @@ public class NethermanEntity extends EnderMan {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.NETHERMEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+		SpawnPlacements.register(UnseenWorldModEntities.NETHERMAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 

@@ -15,6 +15,6 @@ public class DustyPinkMaxorFishRenderer extends MobRenderer<DustyPinkMaxorFishEn
 
 	@Override
 	public ResourceLocation getTextureLocation(DustyPinkMaxorFishEntity entity) {
-		return new ResourceLocation("unseen_world:textures/entities/dusty_pink_maxor_fish.png");
+		return new ResourceLocation("unseen_world:textures/entities/fish/dusty_pink_maxor_fish.png");
 	}
 }

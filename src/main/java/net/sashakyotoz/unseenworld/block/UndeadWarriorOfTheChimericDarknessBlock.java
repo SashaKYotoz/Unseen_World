@@ -25,7 +25,7 @@ public class UndeadWarriorOfTheChimericDarknessBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public UndeadWarriorOfTheChimericDarknessBlock() {
-		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.NYLIUM).strength(-1, 3600000).requiresCorrectToolForDrops().noOcclusion().isRedstoneConductor((bs, br, bp) -> false).noLootTable());
+		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.NYLIUM).strength(-1, 3500000).requiresCorrectToolForDrops().noOcclusion().noLootTable());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 
@@ -46,12 +46,7 @@ public class UndeadWarriorOfTheChimericDarknessBlock extends Block {
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return switch (state.getValue(FACING)) {
-			default -> box(-4, 0, -4, 20, 32, 20);
-			case NORTH -> box(-4, 0, -4, 20, 32, 20);
-			case EAST -> box(-4, 0, -4, 20, 32, 20);
-			case WEST -> box(-4, 0, -4, 20, 32, 20);
-		};
+        return box(-4, 0, -4, 20, 32, 20);
 	}
 
 	@Override
@@ -70,12 +65,5 @@ public class UndeadWarriorOfTheChimericDarknessBlock extends Block {
 
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
-	}
-
-	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 0;
-		return false;
 	}
 }

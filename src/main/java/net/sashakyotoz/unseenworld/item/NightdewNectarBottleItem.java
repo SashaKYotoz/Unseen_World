@@ -30,15 +30,15 @@ public class NightdewNectarBottleItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = new ItemStack(Items.GLASS_BOTTLE);
+		ItemStack stack = new ItemStack(Items.GLASS_BOTTLE);
 		super.finishUsingItem(itemstack, world, entity);
 		entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 2400, 0));
 		if (itemstack.isEmpty()) {
-			return retval;
+			return stack;
 		} else {
 			if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				if (!player.getInventory().add(retval))
-					player.drop(retval, false);
+				if (!player.getInventory().add(stack))
+					player.drop(stack, false);
 			}
 			return itemstack;
 		}

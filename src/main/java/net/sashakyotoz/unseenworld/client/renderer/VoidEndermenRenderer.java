@@ -16,13 +16,13 @@ public class VoidEndermenRenderer extends MobRenderer<VoidEndermanEntity, ModelV
 		this.addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
-				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/void_endermen_glow.png"));
+				return RenderType.eyes(new ResourceLocation("unseen_world:textures/entities/endermen/void_enderman_glow.png"));
 			}
 		});
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(VoidEndermanEntity entity) {
-		return new ResourceLocation("unseen_world:textures/entities/void_endermen.png");
+		return new ResourceLocation("unseen_world:textures/entities/endermen/void_enderman.png");
 	}
 }

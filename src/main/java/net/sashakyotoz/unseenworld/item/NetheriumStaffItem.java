@@ -17,7 +17,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerPlayer;
 
-import net.sashakyotoz.unseenworld.managers.NetheriumStaffRangedItemUsedProcedure;
 import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
 import com.google.common.collect.Multimap;
@@ -58,14 +57,11 @@ public class NetheriumStaffItem extends Item {
 
 	@Override
 	public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityLiving, int timeLeft) {
-		if (!world.isClientSide() && entityLiving instanceof ServerPlayer entity) {
-			double x = entity.getX();
-			double y = entity.getY();
-			double z = entity.getZ();
-			NetheriumStaffEntity entityarrow = NetheriumStaffEntity.shoot(world, entity, world.getRandom(), 3f, 2, 2);
-			itemstack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(entity.getUsedItemHand()));
+		if (!world.isClientSide() && entityLiving instanceof ServerPlayer player) {
+			NetheriumStaffEntity entityarrow = NetheriumStaffEntity.shoot(world, player, world.getRandom(), 3f, 2, 2);
+			itemstack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
 			entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
-			NetheriumStaffRangedItemUsedProcedure.execute(world, x, y, z, entity, itemstack);
+			player.getCooldowns().addCooldown(itemstack.getItem(),20);
 		}
 	}
 }

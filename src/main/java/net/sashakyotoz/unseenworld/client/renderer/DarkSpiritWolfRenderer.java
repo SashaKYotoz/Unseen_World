@@ -10,7 +10,7 @@ import net.sashakyotoz.unseenworld.entity.DarkSpiritWolfEntity;
 
 public class DarkSpiritWolfRenderer extends MobRenderer<DarkSpiritWolfEntity, ModelSpiritOfWolf<DarkSpiritWolfEntity>> {
 	public DarkSpiritWolfRenderer(EntityRendererProvider.Context context) {
-		super(context, new ModelSpiritOfWolf(context.bakeLayer(ModelSpiritOfWolf.LAYER_LOCATION)), 0.5f);
+		super(context, new ModelSpiritOfWolf<>(context.bakeLayer(ModelSpiritOfWolf.LAYER_LOCATION)), 0.5f);
 	}
 
 	@Override

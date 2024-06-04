@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:blocks/soul_bush2",
-    "particle": "unseen_world:blocks/soul_bush2"
-  },
-  "render_type": "cutout"
-}

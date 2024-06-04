@@ -12,8 +12,8 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModPotions;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModPotions;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DarkImmunitePotionRecipeBrewingRecipe implements IBrewingRecipe {

@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.block.entity;
 
 import io.netty.buffer.Unpooled;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlockEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlockEntities;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

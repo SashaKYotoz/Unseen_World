@@ -33,11 +33,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -68,9 +68,9 @@ public class TheWitherKnightEntity extends Monster {
     }
     public void onAddedToWorld() {
         super.onAddedToWorld();
-        if(!Objects.equals(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get(), UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.getDefault())){
-            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get());
-            this.setHealth(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get().floatValue());
+        if(!Objects.equals(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get(), UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.getDefault())){
+            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get());
+            this.setHealth(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_WITHER_KNIGHT.get().floatValue());
         }
     }
 
@@ -316,7 +316,7 @@ public class TheWitherKnightEntity extends Monster {
         super.die(source);
         if(source.getEntity() instanceof Player player)
             AdvancementManager.addAdvancement(player,AdvancementManager.THE_WITHER_KNIGHT_ADV);
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.GOLDENCHEST.get()));
+        this.spawnAtLocation(new ItemStack(UnseenWorldModBlocks.GOLDEN_CHEST.get()));
         if(this.getRandom().nextBoolean()){
             this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get()));
             this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get()));

@@ -19,7 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.BlockUtil;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 import java.util.Optional;
 
 public class TheDarknessPortalShape {
-	private static final BlockBehaviour.StatePredicate FRAME = (state, getter, pos) -> state.getBlock() == UnseenWorldModBlocks.COLD_DARK_BRICKS.get();
+	private static final BlockBehaviour.StatePredicate FRAME = (state, getter, pos) -> state.is(UnseenWorldModBlocks.COLD_DARK_BRICKS.get());
 	private final LevelAccessor level;
 	private final Direction.Axis axis;
 	private final Direction rightDir;
@@ -37,27 +37,27 @@ public class TheDarknessPortalShape {
 	private int height;
 	private final int width;
 
-	public static Optional<TheDarknessPortalShape> findEmptyPortalShape(LevelAccessor accessor, BlockPos p_77710_, Direction.Axis p_77711_) {
-		return findPortalShape(accessor, p_77710_, (p_77727_) -> p_77727_.isValid() && p_77727_.numPortalBlocks == 0, p_77711_);
+	public static Optional<TheDarknessPortalShape> findEmptyPortalShape(LevelAccessor accessor, BlockPos pos, Direction.Axis axis) {
+		return findPortalShape(accessor, pos, (shape) -> shape.isValid() && shape.numPortalBlocks == 0, axis);
 	}
 
-	public static Optional<TheDarknessPortalShape> findPortalShape(LevelAccessor accessor, BlockPos p_77714_, Predicate<TheDarknessPortalShape> p_77715_, Direction.Axis p_77716_) {
-		Optional<TheDarknessPortalShape> optional = Optional.of(new TheDarknessPortalShape(accessor, p_77714_, p_77716_)).filter(p_77715_);
+	public static Optional<TheDarknessPortalShape> findPortalShape(LevelAccessor accessor, BlockPos pos, Predicate<TheDarknessPortalShape> predicate, Direction.Axis axis) {
+		Optional<TheDarknessPortalShape> optional = Optional.of(new TheDarknessPortalShape(accessor, pos, axis)).filter(predicate);
 		if (optional.isPresent()) {
 			return optional;
 		} else {
-			Direction.Axis direction$axis = p_77716_ == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-			return Optional.of(new TheDarknessPortalShape(accessor, p_77714_, direction$axis)).filter(p_77715_);
+			Direction.Axis direction$axis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
+			return Optional.of(new TheDarknessPortalShape(accessor, pos, direction$axis)).filter(predicate);
 		}
 	}
 
-	public TheDarknessPortalShape(LevelAccessor accessor, BlockPos p_77696_, Direction.Axis p_77697_) {
+	public TheDarknessPortalShape(LevelAccessor accessor, BlockPos pos, Direction.Axis axis) {
 		this.level = accessor;
-		this.axis = p_77697_;
-		this.rightDir = p_77697_ == Direction.Axis.X ? Direction.WEST : Direction.SOUTH;
-		this.bottomLeft = this.calculateBottomLeft(p_77696_);
+		this.axis = axis;
+		this.rightDir = axis == Direction.Axis.X ? Direction.WEST : Direction.SOUTH;
+		this.bottomLeft = this.calculateBottomLeft(pos);
 		if (this.bottomLeft == null) {
-			this.bottomLeft = p_77696_;
+			this.bottomLeft = pos;
 			this.width = 1;
 			this.height = 1;
 		} else {
@@ -79,7 +79,7 @@ public class TheDarknessPortalShape {
 
 	private int calculateWidth() {
 		int i = this.getDistanceUntilEdgeAboveFrame(this.bottomLeft, this.rightDir);
-		return i >= 2 && i <= 21 ? i : 0;
+		return i >= 3 && i <= 21 ? i : 0;
 	}
 
 	private int getDistanceUntilEdgeAboveFrame(BlockPos pos, Direction direction) {
@@ -107,9 +107,9 @@ public class TheDarknessPortalShape {
 		return i >= 3 && i <= 21 && this.hasTopFrame(blockpos$mutableblockpos, i) ? i : 0;
 	}
 
-	private boolean hasTopFrame(BlockPos.MutableBlockPos p_77731_, int p_77732_) {
+	private boolean hasTopFrame(BlockPos.MutableBlockPos pos, int k) {
 		for (int i = 0; i < this.width; ++i) {
-			BlockPos.MutableBlockPos blockpos$mutableblockpos = p_77731_.set(this.bottomLeft).move(Direction.UP, p_77732_).move(this.rightDir, i);
+			BlockPos.MutableBlockPos blockpos$mutableblockpos = pos.set(this.bottomLeft).move(Direction.UP, k).move(this.rightDir, i);
 			if (!FRAME.test(this.level.getBlockState(blockpos$mutableblockpos), this.level, blockpos$mutableblockpos)) {
 				return false;
 			}
@@ -117,19 +117,19 @@ public class TheDarknessPortalShape {
 		return true;
 	}
 
-	private int getDistanceUntilTop(BlockPos.MutableBlockPos p_77729_) {
+	private int getDistanceUntilTop(BlockPos.MutableBlockPos pos) {
 		for (int i = 0; i < 21; ++i) {
-			p_77729_.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, -1);
-			if (!FRAME.test(this.level.getBlockState(p_77729_), this.level, p_77729_)) {
+			pos.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, -1);
+			if (!FRAME.test(this.level.getBlockState(pos), this.level, pos)) {
 				return i;
 			}
-			p_77729_.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, this.width);
-			if (!FRAME.test(this.level.getBlockState(p_77729_), this.level, p_77729_)) {
+			pos.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, this.width);
+			if (!FRAME.test(this.level.getBlockState(pos), this.level, pos)) {
 				return i;
 			}
 			for (int j = 0; j < this.width; ++j) {
-				p_77729_.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, j);
-				BlockState blockstate = this.level.getBlockState(p_77729_);
+				pos.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, j);
+				BlockState blockstate = this.level.getBlockState(pos);
 				if (!isEmpty(blockstate)) {
 					return i;
 				}
@@ -141,20 +141,20 @@ public class TheDarknessPortalShape {
 		return 21;
 	}
 
-	private static boolean isEmpty(BlockState p_77718_) {
-		return p_77718_.isAir() || p_77718_.getBlock() == UnseenWorldModBlocks.THE_DARKNESS_PORTAL.get();
+	private static boolean isEmpty(BlockState state) {
+		return state.isAir() || state.is(UnseenWorldModBlocks.THE_DARKNESS_PORTAL.get());
 	}
 
 	public boolean isValid() {
-		return this.bottomLeft != null && this.width >= 2 && this.width <= 21 && this.height >= 3 && this.height <= 21;
+		return this.bottomLeft != null && this.width >= 3 && this.width <= 21 && this.height >= 3 && this.height <= 21;
 	}
 
 	public void createPortalBlocks() {
 		BlockState blockstate = UnseenWorldModBlocks.THE_DARKNESS_PORTAL.get().defaultBlockState().setValue(NetherPortalBlock.AXIS, this.axis);
-		BlockPos.betweenClosed(this.bottomLeft, this.bottomLeft.relative(Direction.UP, this.height - 1).relative(this.rightDir, this.width - 1)).forEach((p_77725_) -> {
-			this.level.setBlock(p_77725_, blockstate, 18);
+		BlockPos.betweenClosed(this.bottomLeft, this.bottomLeft.relative(Direction.UP, this.height - 1).relative(this.rightDir, this.width - 1)).forEach((pos) -> {
+			this.level.setBlock(pos, blockstate, 18);
 			if (this.level instanceof ServerLevel)
-				((ServerLevel) this.level).getPoiManager().add(p_77725_, TheDarknessTeleporter.poi);
+				((ServerLevel) this.level).getPoiManager().add(pos, TheDarknessTeleporter.poi);
 		});
 	}
 
@@ -162,59 +162,57 @@ public class TheDarknessPortalShape {
 		return this.isValid() && this.numPortalBlocks == this.width * this.height;
 	}
 
-	public static Vec3 getRelativePosition(BlockUtil.FoundRectangle p_77739_, Direction.Axis p_77740_, Vec3 p_77741_, EntityDimensions p_77742_) {
-		double d0 = (double) p_77739_.axis1Size - (double) p_77742_.width;
-		double d1 = (double) p_77739_.axis2Size - (double) p_77742_.height;
-		BlockPos blockpos = p_77739_.minCorner;
+	public static Vec3 getRelativePosition(BlockUtil.FoundRectangle rectangle, Direction.Axis axis, Vec3 vec3, EntityDimensions dimensions) {
+		double d0 = (double) rectangle.axis1Size - (double) dimensions.width;
+		double d1 = (double) rectangle.axis2Size - (double) dimensions.height;
+		BlockPos blockpos = rectangle.minCorner;
 		double d2;
 		if (d0 > 0.0D) {
-			float f = (float) blockpos.get(p_77740_) + p_77742_.width / 2.0F;
-			d2 = Mth.clamp(Mth.inverseLerp(p_77741_.get(p_77740_) - (double) f, 0.0D, d0), 0.0D, 1.0D);
+			float f = (float) blockpos.get(axis) + dimensions.width / 2.0F;
+			d2 = Mth.clamp(Mth.inverseLerp(vec3.get(axis) - (double) f, 0.0D, d0), 0.0D, 1.0D);
 		} else {
 			d2 = 0.5D;
 		}
 		double d4;
 		if (d1 > 0.0D) {
 			Direction.Axis direction$axis = Direction.Axis.Y;
-			d4 = Mth.clamp(Mth.inverseLerp(p_77741_.get(direction$axis) - (double) blockpos.get(direction$axis), 0.0D, d1), 0.0D, 1.0D);
+			d4 = Mth.clamp(Mth.inverseLerp(vec3.get(direction$axis) - (double) blockpos.get(direction$axis), 0.0D, d1), 0.0D, 1.0D);
 		} else {
 			d4 = 0.0D;
 		}
-		Direction.Axis direction$axis1 = p_77740_ == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-		double d3 = p_77741_.get(direction$axis1) - ((double) blockpos.get(direction$axis1) + 0.5D);
+		Direction.Axis direction$axis1 = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
+		double d3 = vec3.get(direction$axis1) - ((double) blockpos.get(direction$axis1) + 0.5D);
 		return new Vec3(d2, d4, d3);
 	}
 
-	public static PortalInfo createPortalInfo(ServerLevel p_259301_, BlockUtil.FoundRectangle p_259931_, Direction.Axis p_259901_, Vec3 p_259630_, Entity p_259166_, Vec3 p_260043_, float p_259853_, float p_259667_) {
-		BlockPos blockpos = p_259931_.minCorner;
-		BlockState blockstate = p_259301_.getBlockState(blockpos);
+	public static PortalInfo createPortalInfo(ServerLevel level, BlockUtil.FoundRectangle rectangle, Direction.Axis axis, Vec3 vec33, Entity entity, Vec3 vec34, float p_259853_, float p_259667_) {
+		BlockPos blockpos = rectangle.minCorner;
+		BlockState blockstate = level.getBlockState(blockpos);
 		Direction.Axis direction$axis = blockstate.getOptionalValue(BlockStateProperties.HORIZONTAL_AXIS).orElse(Direction.Axis.X);
-		double d0 = (double) p_259931_.axis1Size;
-		double d1 = (double) p_259931_.axis2Size;
-		EntityDimensions entitydimensions = p_259166_.getDimensions(p_259166_.getPose());
-		int i = p_259901_ == direction$axis ? 0 : 90;
-		Vec3 vec3 = p_259901_ == direction$axis ? p_260043_ : new Vec3(p_260043_.z, p_260043_.y, -p_260043_.x);
-		double d2 = (double) entitydimensions.width / 2.0D + (d0 - (double) entitydimensions.width) * p_259630_.x();
-		double d3 = (d1 - (double) entitydimensions.height) * p_259630_.y();
-		double d4 = 0.5D + p_259630_.z();
+		double d0 = rectangle.axis1Size;
+		double d1 = rectangle.axis2Size;
+		EntityDimensions entitydimensions = entity.getDimensions(entity.getPose());
+		int i = axis == direction$axis ? 0 : 90;
+		Vec3 vec3 = axis == direction$axis ? vec34 : new Vec3(vec34.z, vec34.y, -vec34.x);
+		double d2 = (double) entitydimensions.width / 2.0D + (d0 - (double) entitydimensions.width) * vec33.x();
+		double d3 = (d1 - (double) entitydimensions.height) * vec33.y();
+		double d4 = 0.5D + vec33.z();
 		boolean flag = direction$axis == Direction.Axis.X;
 		Vec3 vec31 = new Vec3((double) blockpos.getX() + (flag ? d2 : d4), (double) blockpos.getY() + d3, (double) blockpos.getZ() + (flag ? d4 : d2));
-		Vec3 vec32 = findCollisionFreePosition(vec31, p_259301_, p_259166_, entitydimensions);
+		Vec3 vec32 = findCollisionFreePosition(vec31, level, entity, entitydimensions);
 		return new PortalInfo(vec32, vec3, p_259853_ + (float) i, p_259667_);
 	}
 
-	private static Vec3 findCollisionFreePosition(Vec3 p_260315_, ServerLevel p_259704_, Entity p_259626_, EntityDimensions p_259816_) {
-		if (!(p_259816_.width > 4.0F) && !(p_259816_.height > 4.0F)) {
-			double d0 = (double) p_259816_.height / 2.0D;
-			Vec3 vec3 = p_260315_.add(0.0D, d0, 0.0D);
-			VoxelShape voxelshape = Shapes.create(AABB.ofSize(vec3, (double) p_259816_.width, 0.0D, (double) p_259816_.width).expandTowards(0.0D, 1.0D, 0.0D).inflate(1.0E-6D));
-			Optional<Vec3> optional = p_259704_.findFreePosition(p_259626_, voxelshape, vec3, (double) p_259816_.width, (double) p_259816_.height, (double) p_259816_.width);
-			Optional<Vec3> optional1 = optional.map((p_259019_) -> {
-				return p_259019_.subtract(0.0D, d0, 0.0D);
-			});
-			return optional1.orElse(p_260315_);
+	private static Vec3 findCollisionFreePosition(Vec3 vec31, ServerLevel level, Entity entity, EntityDimensions dimensions) {
+		if (!(dimensions.width > 4.0F) && !(dimensions.height > 4.0F)) {
+			double d0 = (double) dimensions.height / 2.0D;
+			Vec3 vec3 = vec31.add(0.0D, d0, 0.0D);
+			VoxelShape voxelshape = Shapes.create(AABB.ofSize(vec3, dimensions.width, 0.0D, dimensions.width).expandTowards(0.0D, 1.0D, 0.0D).inflate(1.0E-6D));
+			Optional<Vec3> optional = level.findFreePosition(entity, voxelshape, vec3, dimensions.width, dimensions.height, dimensions.width);
+			Optional<Vec3> optional1 = optional.map((vec32) -> vec32.subtract(0.0D, d0, 0.0D));
+			return optional1.orElse(vec31);
 		} else {
-			return p_260315_;
+			return vec31;
 		}
 	}
 }

@@ -4,5 +4,5 @@
     "cross": "unseen_world:block/luminousamethyst_vine",
     "particle": "unseen_world:block/luminousamethyst_vine"
   },
-  "render_type": "translucent"
+  "render_type": "cutout"
 }

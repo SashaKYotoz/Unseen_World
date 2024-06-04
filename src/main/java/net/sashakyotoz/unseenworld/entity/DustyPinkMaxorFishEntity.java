@@ -43,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.util.*;
+import net.sashakyotoz.unseenworld.registries.*;
 import org.jetbrains.annotations.NotNull;
 
 public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable {

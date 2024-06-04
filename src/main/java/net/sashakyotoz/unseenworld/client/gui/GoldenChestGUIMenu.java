@@ -16,8 +16,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModMenus;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModMenus;
 import net.sashakyotoz.unseenworld.managers.GoldenChestGUIUpdate;
 
 import java.util.HashMap;
@@ -25,9 +25,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplier<Map<Integer, Slot>> {
-    public final static HashMap<String, Object> guistate = new HashMap<>();
     public final Level world;
-    public final Player entity;
+    public final Player player;
     public int x, y, z;
     private IItemHandler internal;
     private final Map<Integer, Slot> customSlots = new HashMap<>();
@@ -35,7 +34,7 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
 
     public GoldenChestGUIMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         super(UnseenWorldModMenus.GOLDEN_CHEST_GUI.get(), id);
-        this.entity = inv.player;
+        this.player = inv.player;
         this.world = inv.player.level();
         this.internal = new ItemStackHandler(30);
         BlockPos pos = null;
@@ -50,9 +49,9 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
                 byte hand = extraData.readByte();
                 ItemStack itemstack;
                 if (hand == 0)
-                    itemstack = this.entity.getMainHandItem();
+                    itemstack = this.player.getMainHandItem();
                 else
-                    itemstack = this.entity.getOffhandItem();
+                    itemstack = this.player.getOffhandItem();
                 itemstack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(capability -> {
                     this.internal = capability;
                     this.bound = true;

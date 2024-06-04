@@ -1,6 +1,9 @@
 {
   "type": "minecraft:jigsaw",
-  "biomes": "unseen_world:amethyst_forest",
+  "biomes": [
+    "unseen_world:amethyst_forest",
+    "unseen_world:amethyst_fields"
+  ],
   "step": "top_layer_modification",
   "spawn_overrides": {},
   "start_pool": "unseen_world:world_features/amethyst_trees",

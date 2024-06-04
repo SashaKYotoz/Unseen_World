@@ -2,8 +2,8 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -60,26 +60,26 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         xpReward = 2;
         setNoAi(false);
     }
-    protected void tickRidden(Player p_278331_, Vec3 p_278234_) {
-        this.setRot(p_278331_.getYRot(), p_278331_.getXRot() * 0.5F);
+    protected void tickRidden(Player player, Vec3 vec3) {
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         this.steering.tickBoost();
-        super.tickRidden(p_278331_, p_278234_);
+        super.tickRidden(player, vec3);
     }
 
-    protected Vec3 getRiddenInput(Player p_278251_, Vec3 p_275578_) {
+    protected Vec3 getRiddenInput(Player player, Vec3 vec3) {
         return new Vec3(0.0D, 0.0D, 1.0D);
     }
 
-    protected float getRiddenSpeed(Player p_278317_) {
+    protected float getRiddenSpeed(Player player) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double)(this.isSuffocating() ? 0.35F : 0.55F) * (double)this.steering.boostFactor());
     }
 
-    public void onSyncedDataUpdated(EntityDataAccessor<?> p_33900_) {
-        if (DATA_BOOST_TIME.equals(p_33900_) && this.level().isClientSide) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> accessor) {
+        if (DATA_BOOST_TIME.equals(accessor) && this.level().isClientSide) {
             this.steering.onSynced();
         }
-        super.onSyncedDataUpdated(p_33900_);
+        super.onSyncedDataUpdated(accessor);
     }
 
     protected void defineSynchedData() {
@@ -89,14 +89,14 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         this.entityData.define(DATA_IS_SADDLED, false);
     }
 
-    public void addAdditionalSaveData(CompoundTag p_33918_) {
-        super.addAdditionalSaveData(p_33918_);
-        this.steering.addAdditionalSaveData(p_33918_);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        this.steering.addAdditionalSaveData(tag);
     }
 
-    public void readAdditionalSaveData(CompoundTag p_33898_) {
-        super.readAdditionalSaveData(p_33898_);
-        this.steering.readAdditionalSaveData(p_33898_);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.steering.readAdditionalSaveData(tag);
     }
 
     public boolean isSaddled() {
@@ -107,10 +107,10 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return this.isAlive() && !this.isBaby();
     }
 
-    public void equipSaddle(@javax.annotation.Nullable SoundSource p_33878_) {
+    public void equipSaddle(@javax.annotation.Nullable SoundSource source) {
         this.steering.setSaddle(true);
-        if (p_33878_ != null) {
-            this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, p_33878_, 0.5F, 1.0F);
+        if (source != null) {
+            this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, source, 0.5F, 1.0F);
         }
     }
 
@@ -128,8 +128,8 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         this.goalSelector.addGoal(11, new FollowOwnerGoal(this, 1.25, (float) 9, (float) 3, false));
     }
 
-    public void setSuffocating(boolean p_33952_) {
-        this.entityData.set(DATA_SUFFOCATING, p_33952_);
+    public void setSuffocating(boolean set) {
+        this.entityData.set(DATA_SUFFOCATING, set);
         AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
     }
 
@@ -159,12 +159,12 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return null;
     }
 
-    public Vec3 getDismountLocationForPassenger(LivingEntity p_33908_) {
-        Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot()),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 22.5F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() + 22.5F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 45.0F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() + 45.0F)};
+    public Vec3 getDismountLocationForPassenger(LivingEntity entity) {
+        Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot()),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() - 22.5F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() + 22.5F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() - 45.0F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() + 45.0F)};
         Set<BlockPos> set = Sets.newLinkedHashSet();
         double d0 = this.getBoundingBox().maxY;
         double d1 = this.getBoundingBox().minY - 0.5D;
@@ -179,11 +179,11 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return new Vec3(this.getX(), this.getBoundingBox().maxY, this.getZ());
     }
 
-    protected void tickRidden(LivingEntity p_275272_, Vec3 p_275517_) {
-        this.setRot(p_275272_.getYRot(), p_275272_.getXRot() * 0.5F);
+    protected void tickRidden(LivingEntity entity, Vec3 vec3) {
+        this.setRot(entity.getYRot(), entity.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         this.steering.tickBoost();
-        super.tickRidden((Player) p_275272_, p_275517_);
+        super.tickRidden((Player) entity, vec3);
     }
 
     protected float nextStep() {
@@ -228,12 +228,12 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
 
 
     @javax.annotation.Nullable
-    public ChimericPurplemarerEntity getBreedOffspring(ServerLevel p_149861_, AgeableMob p_149862_) {
-        return UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(p_149861_);
+    public ChimericPurplemarerEntity getBreedOffspring(ServerLevel level, AgeableMob p_149862_) {
+        return UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(level);
     }
 
-    public boolean isFood(ItemStack p_33946_) {
-        return FOOD_ITEMS.test(p_33946_);
+    public boolean isFood(ItemStack stack) {
+        return FOOD_ITEMS.test(stack);
     }
 
     protected void dropEquipment() {
@@ -243,18 +243,18 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         }
     }
 
-    public InteractionResult mobInteract(Player p_33910_, InteractionHand p_33911_) {
-        boolean flag = this.isFood(p_33910_.getItemInHand(p_33911_));
-        if (!flag && this.isSaddled() && !this.isVehicle() && !p_33910_.isSecondaryUseActive()) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        boolean flag = this.isFood(player.getItemInHand(hand));
+        if (!flag && this.isSaddled() && !this.isVehicle() && !player.isSecondaryUseActive()) {
             if (!this.level().isClientSide) {
-                p_33910_.startRiding(this);
+                player.startRiding(this);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
-            InteractionResult interactionresult = super.mobInteract(p_33910_, p_33911_);
+            InteractionResult interactionresult = super.mobInteract(player, hand);
             if (!interactionresult.consumesAction()) {
-                ItemStack itemstack = p_33910_.getItemInHand(p_33911_);
-                return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(p_33910_, this, p_33911_) : InteractionResult.PASS;
+                ItemStack itemstack = player.getItemInHand(hand);
+                return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(player, this, hand) : InteractionResult.PASS;
             } else {
                 if (flag && !this.isSilent()) {
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FOX_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
@@ -269,32 +269,32 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     }
 
     @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33887_, DifficultyInstance p_33888_, MobSpawnType p_33889_, @javax.annotation.Nullable SpawnGroupData p_33890_, @javax.annotation.Nullable CompoundTag p_33891_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance instance, MobSpawnType p_33889_, @javax.annotation.Nullable SpawnGroupData p_33890_, @javax.annotation.Nullable CompoundTag p_33891_) {
         if (!this.isBaby()) {
-            RandomSource randomsource = p_33887_.getRandom();
+            RandomSource randomsource = accessor.getRandom();
             if (randomsource.nextInt(30) == 0) {
-                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(p_33887_.getLevel());
+                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(accessor.getLevel());
                 if (mob != null) {
-                    p_33890_ = this.spawnJockey(p_33887_, p_33888_, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
+                    p_33890_ = this.spawnJockey(accessor, instance, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
                     this.equipSaddle(null);
                 }
             } else if (randomsource.nextInt(10) == 0) {
-                AgeableMob ageablemob = UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(p_33887_.getLevel());
+                AgeableMob ageablemob = UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(accessor.getLevel());
                 if (ageablemob != null) {
                     ageablemob.setAge(-24000);
-                    p_33890_ = this.spawnJockey(p_33887_, p_33888_, ageablemob, null);
+                    p_33890_ = this.spawnJockey(accessor, instance, ageablemob, null);
                 }
             } else {
                 p_33890_ = new AgeableMobGroupData(0.5F);
             }
         }
-        return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
+        return super.finalizeSpawn(accessor, instance, p_33889_, p_33890_, p_33891_);
     }
 
-    private SpawnGroupData spawnJockey(ServerLevelAccessor p_33882_, DifficultyInstance p_33883_, Mob p_33884_, @Nullable SpawnGroupData p_33885_) {
-        p_33884_.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-        p_33884_.finalizeSpawn(p_33882_, p_33883_, MobSpawnType.JOCKEY, p_33885_, null);
-        p_33884_.startRiding(this, true);
+    private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance p_33883_, Mob mob, @Nullable SpawnGroupData p_33885_) {
+        mob.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+        mob.finalizeSpawn(accessor, p_33883_, MobSpawnType.JOCKEY, p_33885_, null);
+        mob.startRiding(this, true);
         return new AgeableMob.AgeableMobGroupData(0.0F);
     }
 

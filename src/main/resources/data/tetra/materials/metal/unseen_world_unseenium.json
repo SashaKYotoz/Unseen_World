@@ -1,0 +1,35 @@
+{
+  "key": "unseen_world_unseenium",
+  "category": "metal",
+  "primary": 24,
+  "secondary": 4.5,
+  "tertiary": 2,
+  "durability": 1263,
+  "integrityCost": 3,
+  "integrityGain": 5,
+  "magicCapacity": 40,
+  "toolLevel": "tetra:maxed_forge_hammer",
+  "toolEfficiency": 12,
+  "tints": {
+    "glyph": "ffffff",
+    "texture": "ffffff"
+  },
+  "textures": [
+    "metal",
+    "default"
+  ],
+  "material": {
+    "items": [
+      "unseen_world:unseen_ingot"
+    ]
+  },
+  "requiredTools": {
+    "hammer_dig": "minecraft:diamond"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "unseen_world"
+    }
+  ]
+}

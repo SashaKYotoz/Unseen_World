@@ -15,7 +15,7 @@ public class DarkSkeletonRenderer extends MobRenderer<DarkSkeletonEntity, ModelA
 
 	@Override
 	public ResourceLocation getTextureLocation(DarkSkeletonEntity entity) {
-		return new ResourceLocation("unseen_world:textures/entities/armored_skeleton" + entity.texture + ".png");
+		return new ResourceLocation("unseen_world:textures/entities/skeletons/armored_skeleton" + entity.texture + ".png");
 
 	}
 }

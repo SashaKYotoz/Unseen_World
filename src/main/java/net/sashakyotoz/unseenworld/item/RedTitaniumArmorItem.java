@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
@@ -29,7 +29,7 @@ public abstract class RedTitaniumArmorItem extends ArmorItem {
 
 			@Override
 			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{7, 11, 13, 7}[type.getSlot().getIndex()];
+				return new int[]{7, 10, 12, 7}[type.getSlot().getIndex()];
 			}
 
 			@Override

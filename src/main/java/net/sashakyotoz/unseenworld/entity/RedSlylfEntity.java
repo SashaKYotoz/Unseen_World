@@ -3,8 +3,8 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.*;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -187,7 +187,7 @@ public class RedSlylfEntity extends TamableAnimal {
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return List.of(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY_FOOD.get(), UnseenWorldModItems.OUTGROWTHAPPLE.get(), UnseenWorldModItems.PURPLE_BERRIES.get(), UnseenWorldModItems.CHIMERIC_BLUE_PEPPER.get()).contains(stack.getItem());
+		return List.of(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get(), UnseenWorldModItems.OUTGROWTH_APPLE.get(), UnseenWorldModItems.PURPLE_BERRIES.get(), UnseenWorldModItems.CHIMERIC_BLUE_PEPPER.get()).contains(stack.getItem());
 	}
 
 	@Override

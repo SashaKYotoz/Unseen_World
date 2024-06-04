@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 
 import net.minecraftforge.common.PlantType;
 
@@ -61,7 +61,7 @@ public class TealivyPlumeriaBlock extends FlowerBlock {
 
 	@Override
 	public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-		return groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.DARK_GRASS.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK)
+		return groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(Blocks.GRASS_BLOCK)
 				|| groundState.is(Blocks.MYCELIUM) || groundState.is(UnseenWorldModBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get()) || groundState.is(Blocks.DEEPSLATE) || groundState.is(UnseenWorldModBlocks.VOID_INGOT_ORE.get());
 	}
 

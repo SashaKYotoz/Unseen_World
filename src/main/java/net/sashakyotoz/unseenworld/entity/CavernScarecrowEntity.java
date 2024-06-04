@@ -2,9 +2,8 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraftforge.network.PlayMessages;
 
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -39,7 +38,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 
 import java.util.List;

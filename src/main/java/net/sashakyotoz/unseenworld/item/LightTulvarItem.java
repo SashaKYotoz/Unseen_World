@@ -7,8 +7,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.fml.common.Mod;
 import net.sashakyotoz.unseenworld.managers.TreasureWeaponOnBeaconClick;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.Tier;
@@ -25,31 +26,7 @@ import java.util.UUID;
 public class LightTulvarItem extends SwordItem {
 	public static final UUID KNOCKBACK = UUID.fromString("27f95289-09cd-40bf-9f1e-2eb9ac2bb130");
 	public LightTulvarItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 1683;
-			}
-
-			public float getSpeed() {
-				return 5f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 4;
-			}
-
-			public int getLevel() {
-				return 5;
-			}
-
-			public int getEnchantmentValue() {
-				return 20;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(UnseenWorldModItems.UNSEEN_INGOT.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get()));
-			}
-		}, 3, -2, new Item.Properties().fireResistant());
+		super(ModTiers.LIGHT_TULVAR, 3, -2, new Item.Properties().fireResistant());
 	}
 	@Override
 	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
@@ -63,9 +40,8 @@ public class LightTulvarItem extends SwordItem {
 	}
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
 		LivingEntityIsHitWithTreasureWeaponProcedure.onHit(entity, itemstack);
-		return retval;
+		return super.hurtEnemy(itemstack, entity, sourceentity);
 	}
 
 	@Override

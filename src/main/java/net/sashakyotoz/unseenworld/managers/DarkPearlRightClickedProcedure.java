@@ -1,8 +1,8 @@
 package net.sashakyotoz.unseenworld.managers;
 
 import net.sashakyotoz.unseenworld.entity.DarkPearlRangedItemEntity;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -18,7 +18,7 @@ public class DarkPearlRightClickedProcedure {
         if (!projectileLevel.isClientSide()) {
             Projectile arrow = new Object() {
                 public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                    AbstractArrow entityToSpawn = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL_RANGED_ITEM.get(), level);
+                    AbstractArrow entityToSpawn = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL.get(), level);
                     entityToSpawn.setOwner(shooter);
                     entityToSpawn.setBaseDamage(damage);
                     entityToSpawn.setKnockback(knockback);
@@ -30,7 +30,7 @@ public class DarkPearlRightClickedProcedure {
             arrow.shoot(player.getLookAngle().x, player.getLookAngle().y, player.getLookAngle().z, (float) 1.5, 0);
             projectileLevel.addFreshEntity(arrow);
         }
-        ItemStack stack = new ItemStack(UnseenWorldModItems.DARKPEARL.get());
+        ItemStack stack = new ItemStack(UnseenWorldModItems.DARK_PEARL.get());
         player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
     }
 }

@@ -10,8 +10,6 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.HashMap;
 
 public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUIMenu> {
-	private final static HashMap<String, Object> guistate = GoldenChestGUIMenu.guistate;
-
 	public GoldenChestGUIScreen(GoldenChestGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
 		this.imageWidth = 197;

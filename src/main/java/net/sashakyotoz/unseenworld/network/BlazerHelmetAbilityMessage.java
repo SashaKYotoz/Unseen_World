@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
 
-import net.sashakyotoz.unseenworld.managers.BlazerHelmetTickEventProcedure;
+import net.sashakyotoz.unseenworld.managers.BlazerHelmetShiftEventProcedure;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -49,7 +49,7 @@ public class BlazerHelmetAbilityMessage {
 		if (!level.hasChunkAt(entity.blockPosition()))
 			return;
 		if (type == 1)
-			BlazerHelmetTickEventProcedure.execute(level, x, y, z, entity);
+			BlazerHelmetShiftEventProcedure.execute(level, x, y, z, entity);
 	}
 
 	@SubscribeEvent

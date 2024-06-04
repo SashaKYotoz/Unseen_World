@@ -29,7 +29,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIScreen;
 import net.sashakyotoz.unseenworld.client.renderer.BeaconOfWeaponsRenderer;
 import net.sashakyotoz.unseenworld.client.renderer.layers.KnightArmorRodsLayer;
-import net.sashakyotoz.unseenworld.util.*;
+import net.sashakyotoz.unseenworld.registries.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,9 +51,9 @@ public class UnseenWorldMod {
         MinecraftForge.EVENT_BUS.register(this);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         UnseenWorldModSounds.REGISTRY.register(bus);
-        UnseenWorldModBlocks.REGISTRY.register(bus);
+        UnseenWorldModBlocks.BLOCKS.register(bus);
         UnseenWorldModBlockEntities.REGISTRY.register(bus);
-        UnseenWorldModItems.REGISTRY.register(bus);
+        UnseenWorldModItems.ITEMS.register(bus);
         UnseenWorldModEntities.REGISTRY.register(bus);
         UnseenWorldModEnchantments.REGISTRY.register(bus);
         UnseenWorldModTabs.REGISTRY.register(bus);
@@ -66,7 +66,7 @@ public class UnseenWorldMod {
         UnseenWorldModMenus.REGISTRY.register(bus);
         UnseenWorldModFluids.REGISTRY.register(bus);
         UnseenWorldModFluidTypes.REGISTRY.register(bus);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, UnseenWorldModConfigs.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, UnseenWorldConfigs.SPEC);
         if (FMLEnvironment.dist.isClient()) {
             bus.addListener(this::registerLayer);
             bus.addListener(this::commonSetup);
@@ -117,12 +117,11 @@ public class UnseenWorldMod {
 
     @OnlyIn(Dist.CLIENT)
     private void commonSetup(final FMLCommonSetupEvent event) {
-        UnseenWorldModItemProperties.addCustomItemProperties();
+        ModItemProperties.addCustomItemProperties();
         event.enqueueWork(() -> MenuScreens.register(UnseenWorldModMenus.GOLDEN_CHEST_GUI.get(), GoldenChestGUIScreen::new));
-        BlockEntityRenderers.register(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(), BeaconOfWeaponsRenderer::new);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.SMALL_CRIMSERRY_SOUL_BERRY.get().asItem(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERYFLOWER_SAPLING.get().asItem(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY_FOOD.get().asItem(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIESFROM_BLOOMING_VINE.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.CRIMSERRY_SOUL_CROP.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERY_CROP_FLOWER.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get().asItem(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get().asItem(), 0.2f);
     }
 }

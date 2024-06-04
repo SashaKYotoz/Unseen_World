@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 import net.sashakyotoz.unseenworld.entity.MoonFishEntity;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 
 public class MoonFishRenderer extends MobRenderer<MoonFishEntity, ModelMoonFish<MoonFishEntity>> {
 	public MoonFishRenderer(EntityRendererProvider.Context context) {
@@ -16,7 +16,7 @@ public class MoonFishRenderer extends MobRenderer<MoonFishEntity, ModelMoonFish<
 
 	@Override
 	public ResourceLocation getTextureLocation(MoonFishEntity entity) {
-		return new ResourceLocation("unseen_world:textures/entities/moon_fish" + entity.texture + ".png");
+		return new ResourceLocation("unseen_world:textures/entities/fish/moon_fish" + entity.texture + ".png");
 	}
 
 	@Override

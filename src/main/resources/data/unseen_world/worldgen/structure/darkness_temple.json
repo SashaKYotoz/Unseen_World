@@ -2,6 +2,7 @@
   "type": "minecraft:jigsaw",
   "biomes": [
     "unseen_world:dark_wasteland",
+    "unseen_world:dark_crimson_valley",
     "unseen_world:tanzanite_above_ground_cavern"
   ],
   "step": "surface_structures",

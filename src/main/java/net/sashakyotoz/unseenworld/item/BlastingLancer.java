@@ -8,7 +8,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,17 +26,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.jarjar.nio.util.Lazy;
+import net.sashakyotoz.unseenworld.managers.LivingEntityIsHitWithTreasureWeaponProcedure;
 import net.sashakyotoz.unseenworld.managers.TreasureWeaponOnBeaconClick;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Consumer;
 public class BlastingLancer extends SwordItem implements Vanishable {
@@ -46,31 +43,7 @@ public class BlastingLancer extends SwordItem implements Vanishable {
     private boolean flag;
 
     public BlastingLancer() {
-        super(new Tier() {
-            public int getUses() {
-                return 1297;
-            }
-
-            public float getSpeed() {
-                return 5f;
-            }
-
-            public float getAttackDamageBonus() {
-                return 5;
-            }
-
-            public int getLevel() {
-                return 5;
-            }
-
-            public int getEnchantmentValue() {
-                return 24;
-            }
-
-            public Ingredient getRepairIngredient() {
-                return Ingredient.of(new ItemStack(UnseenWorldModItems.BLAZE_SHIELD_SHARD.get()), new ItemStack(UnseenWorldModItems.RED_TITANIUM_INGOT.get()));
-            }
-        }, 10, -2.8f, new Item.Properties().fireResistant());
+        super(ModTiers.BLASTING_LANCER, 10, -2.8f, new Item.Properties().fireResistant());
     }
 
     @Override
@@ -95,7 +68,11 @@ public class BlastingLancer extends SwordItem implements Vanishable {
         }
         return super.onEntitySwing(stack, entity);
     }
-
+    @Override
+    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
+        LivingEntityIsHitWithTreasureWeaponProcedure.onHit(entity, itemstack);
+        return super.hurtEnemy(itemstack, entity, sourceentity);
+    }
     public static Lazy<? extends Multimap<Attribute, AttributeModifier>> ATTRIBUTE_LAZY_MAP = Lazy.of(() -> {
         Multimap<Attribute, AttributeModifier> map;
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
@@ -156,7 +133,7 @@ public class BlastingLancer extends SwordItem implements Vanishable {
                 if (abilityDelta > -20)
                     abilityDelta--;
                 if (abilityDelta == 0){
-                    ItemStack stack1 = this.createFirework(stack);
+                    ItemStack stack1 = this.createFirework(stack.copy());
                     Projectile projectile = new FireworkRocketEntity(level, stack1, player,player.getX(), player.getEyeY() - (double)0.15F, player.getZ(), true);
                     Vec3 vec31 = player.getUpVector(1.0F);
                     Quaternionf quaternionf = (new Quaternionf()).setAngleAxis(0, vec31.x, vec31.y, vec31.z);

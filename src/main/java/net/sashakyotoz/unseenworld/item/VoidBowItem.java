@@ -13,24 +13,24 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.entity.VoidBowEntity;
+import net.sashakyotoz.unseenworld.entity.VoidArrowEntity;
 
 public class VoidBowItem extends BowItem {
 	public VoidBowItem() {
 		super(new Item.Properties().durability(750));
 	}
 
-	public InteractionResultHolder<ItemStack> use(Level p_40672_, Player p_40673_, InteractionHand p_40674_) {
-		ItemStack itemstack = p_40673_.getItemInHand(p_40674_);
-		boolean flag = !p_40673_.getProjectile(itemstack).isEmpty();
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack itemstack = player.getItemInHand(hand);
+		boolean flag = !player.getProjectile(itemstack).isEmpty();
 
-		InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, p_40672_, p_40673_, p_40674_, flag);
+		InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, level, player, hand, flag);
 		if (ret != null) return ret;
 
-		if (!p_40673_.getAbilities().instabuild && !flag) {
+		if (!player.getAbilities().instabuild && !flag) {
 			return InteractionResultHolder.fail(itemstack);
 		} else {
-			p_40673_.startUsingItem(p_40674_);
+			player.startUsingItem(hand);
 			return InteractionResultHolder.consume(itemstack);
 		}
 	}
@@ -42,12 +42,12 @@ public class VoidBowItem extends BowItem {
 		return 72000;
 	}
 
-	public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
-		if (p_40669_ instanceof Player player) {
-			boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getTagEnchantmentLevel(Enchantments.INFINITY_ARROWS, p_40667_) > 0;
-			ItemStack itemstack = player.getProjectile(p_40667_);
-			int i = this.getUseDuration(p_40667_) - p_40670_;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(p_40667_, p_40668_, player, i, !itemstack.isEmpty() || flag);
+	public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int l) {
+		if (entity instanceof Player player) {
+			boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getTagEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
+			ItemStack itemstack = player.getProjectile(stack);
+			int i = this.getUseDuration(stack) - l;
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, level, player, i, !itemstack.isEmpty() || flag);
 			if (i < 0)
 				return;
 			if (!itemstack.isEmpty() || flag) {
@@ -56,32 +56,31 @@ public class VoidBowItem extends BowItem {
 				}
 				float f = getPowerForTime(i);
 				if (!((double) f < 0.1D)) {
-					boolean flag1 = player.getAbilities().instabuild || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem) itemstack.getItem()).isInfinite(itemstack, p_40667_, player));
-					if (!p_40668_.isClientSide) {
-						VoidBowEntity entityarrow = VoidBowEntity.shoot(p_40668_, player, p_40668_.getRandom(), 2.5f * f, 2.5, 1);
+					boolean flag1 = player.getAbilities().instabuild || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem) itemstack.getItem()).isInfinite(itemstack, stack, player));
+					if (!level.isClientSide) {
+						VoidArrowEntity voidArrow = VoidArrowEntity.shoot(level, player, level.getRandom(), 2.5f * f, 2.5, 1,itemstack);
 						if (f == 1.0F) {
-							entityarrow.setCritArrow(true);
+							voidArrow.setCritArrow(true);
 						}
-						int j = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.POWER_ARROWS, p_40667_);
+						int j = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
 						if (j > 0) {
-							entityarrow.setBaseDamage(entityarrow.getBaseDamage() + (double) j * 0.5D + 0.5D);
+							voidArrow.setBaseDamage(voidArrow.getBaseDamage() + (double) j * 0.5D + 0.5D);
 						}
-						int k = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.PUNCH_ARROWS, p_40667_);
+						int k = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
 						if (k > 0) {
-							entityarrow.setKnockback(k);
+							voidArrow.setKnockback(k);
 						}
-						if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FLAMING_ARROWS, p_40667_) > 0) {
-							entityarrow.setSecondsOnFire(100);
+						if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0) {
+							voidArrow.setSecondsOnFire(100);
 						}
-						p_40667_.hurtAndBreak(1, player, (p_40665_) -> {
-							p_40665_.broadcastBreakEvent(player.getUsedItemHand());
+						stack.hurtAndBreak(1, player, (event) -> {event.broadcastBreakEvent(player.getUsedItemHand());
 						});
 						if (flag1 || player.getAbilities().instabuild && (itemstack.is(Items.SPECTRAL_ARROW) || itemstack.is(Items.TIPPED_ARROW))) {
-							entityarrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+							voidArrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 						}
-						p_40668_.addFreshEntity(entityarrow);
+						level.addFreshEntity(voidArrow);
 					}
-					p_40668_.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+					level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 					if (!flag1 && !player.getAbilities().instabuild) {
 						itemstack.shrink(1);
 						if (itemstack.isEmpty()) {
@@ -94,8 +93,8 @@ public class VoidBowItem extends BowItem {
 		}
 	}
 
-	public static float getPowerForTime(int p_40662_) {
-		float f = (float) p_40662_ / 20.0F;
+	public static float getPowerForTime(int i) {
+		float f = (float) i / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
 		if (f > 1.0F) {
 			f = 1.0F;

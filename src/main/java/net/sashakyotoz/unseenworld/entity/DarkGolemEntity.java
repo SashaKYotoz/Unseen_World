@@ -31,11 +31,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.UnseenWorldModConfigs;
+import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.entity.ai_goals.DarkGolemAttackGoal;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -313,9 +313,9 @@ public class DarkGolemEntity extends Monster implements Enemy {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         this.spawnAnimationState.start(this.tickCount);
-        if (!Objects.equals(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.get(), UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.getDefault()))
-            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.get());
-        this.setHealth(UnseenWorldModConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.get().floatValue());
+        if (!Objects.equals(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.get(), UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.getDefault()))
+            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.get());
+        this.setHealth(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_DARK_WARRIOR.get().floatValue());
     }
 
     public static AttributeSupplier.Builder createAttributes() {

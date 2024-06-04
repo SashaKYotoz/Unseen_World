@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.sashakyotoz.unseenworld.util.*;
+import net.sashakyotoz.unseenworld.registries.*;
 
 public abstract class DarkWaterFluid extends ForgeFlowingFluid {
 	public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldModFluidTypes.DARK_WATER_TYPE, UnseenWorldModFluids.DARK_WATER, UnseenWorldModFluids.FLOWING_DARK_WATER)
@@ -19,7 +19,7 @@ public abstract class DarkWaterFluid extends ForgeFlowingFluid {
 
 	@Override
 	public ParticleOptions getDripParticle() {
-		return UnseenWorldModParticleTypes.BLUEVOIDPARTICLE.get();
+		return UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get();
 	}
 
 	public static class Source extends DarkWaterFluid {

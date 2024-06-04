@@ -42,20 +42,12 @@ public class AncientTransientBlockCloseBlock extends Block {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-		List<ItemStack> dropsOriginal = super.getDrops(state, builder);
-		if (!dropsOriginal.isEmpty())
-			return dropsOriginal;
-		return Collections.singletonList(new ItemStack(this, 1));
-	}
-
-	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		super.use(blockstate, world, pos, player, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		AncientTransientBlockCloseOnBlockRightClickedProcedure.execute(world, x, y, z, entity);
+		AncientTransientBlockCloseOnBlockRightClickedProcedure.execute(world, x, y, z, player);
 		return InteractionResult.SUCCESS;
 	}
 }

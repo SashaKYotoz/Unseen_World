@@ -23,10 +23,10 @@ public class DarkFreeSoulItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		InteractionResultHolder<ItemStack> ar = super.use(world, player, hand);
 		ItemStack itemstack = ar.getObject();
-		DarkFreeSoulRightClickProcedure.execute(entity, itemstack);
+		DarkFreeSoulRightClickProcedure.execute(player, itemstack);
 		return ar;
 	}
 }

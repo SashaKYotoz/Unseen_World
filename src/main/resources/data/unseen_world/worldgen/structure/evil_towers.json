@@ -3,7 +3,8 @@
   "biomes": [
     "unseen_world:dark_wasteland",
     "unseen_world:tanzanite_above_ground_cavern",
-    "unseen_world:grizzly_forest"
+    "unseen_world:grizzly_forest",
+    "unseen_world:grizzly_steppe"
   ],
   "step": "surface_structures",
   "spawn_overrides": {},

@@ -33,14 +33,34 @@
     "water_fog_color": 4605011
   },
   "spawners": {
-    "monster": [],
+    "monster": [
+      {
+        "type": "unseen_world:dark_spirit_wolf",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
     "creature": [],
     "ambient": [],
     "axolotls": [],
     "underground_water_creature": [],
     "water_creature": [],
     "water_ambient": [],
-    "misc": []
+    "misc": [
+      {
+        "type": "unseen_world:dark_phantom",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "unseen_world:snowdrifter",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ]
   },
   "spawn_costs": {},
   "carvers": {

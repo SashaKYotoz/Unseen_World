@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.core.BlockPos;
@@ -11,11 +11,11 @@ public class AncientTransientBlockOpenEntityCollidesInTheBlockProcedure {
 		double sy;
 		double sz;
 		sx = -4;
-		for (int index0 = 0; index0 < 8; index0++) {
+		for (int i = 0; i < 8; i++) {
 			sy = -4;
-			for (int index1 = 0; index1 < 8; index1++) {
+			for (int j = 0; j < 8; j++) {
 				sz = -4;
-				for (int index2 = 0; index2 < 8; index2++) {
+				for (int k = 0; k < 8; k++) {
 					if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_OPEN.get()) {
 							BlockPos _bp = BlockPos.containing(x + sx, y + sy, z + sz);
 							BlockState _bs = UnseenWorldModBlocks.ANCIENT_TRANSIENT_BLOCK_CLOSE.get().defaultBlockState();

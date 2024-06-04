@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlockEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,6 @@ public class BeaconOfWeaponsBlockEntity extends BlockEntity implements WorldlyCo
     public boolean canPlaceItemThroughFace(int p_19235_, ItemStack p_19236_, @Nullable Direction p_19237_) {
         return false;
     }
-
     @Override
     public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
         return false;

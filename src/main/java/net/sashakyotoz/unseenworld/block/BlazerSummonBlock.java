@@ -11,14 +11,13 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.managers.BlazerSummonBlockEntityCollidesInTheBlockProcedure;
+import net.sashakyotoz.unseenworld.managers.EntityInteractWithBlazerSummonBlockProcedure;
 
 public class BlazerSummonBlock extends Block {
 	public BlazerSummonBlock() {
@@ -36,22 +35,15 @@ public class BlazerSummonBlock extends Block {
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 2;
-		return false;
-	}
-
-	@Override
 	public void entityInside(BlockState blockstate, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockstate, world, pos, entity);
-		BlazerSummonBlockEntityCollidesInTheBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		EntityInteractWithBlazerSummonBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
 	public void stepOn(Level level, BlockPos pos, BlockState blockstate, Entity entity) {
 		super.stepOn(level, pos, blockstate, entity);
-		BlazerSummonBlockEntityCollidesInTheBlockProcedure.execute(level, pos.getX(), pos.getY(), pos.getZ());
+		EntityInteractWithBlazerSummonBlockProcedure.execute(level, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -60,7 +52,7 @@ public class BlazerSummonBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		BlazerSummonBlockEntityCollidesInTheBlockProcedure.execute(world, x, y, z);
+		EntityInteractWithBlazerSummonBlockProcedure.execute(world, x, y, z);
 		return InteractionResult.SUCCESS;
 	}
 }

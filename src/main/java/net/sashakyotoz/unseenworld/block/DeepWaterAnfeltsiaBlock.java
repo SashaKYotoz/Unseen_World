@@ -5,8 +5,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.*;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModFluids;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModFluids;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,12 +33,12 @@ public class DeepWaterAnfeltsiaBlock extends BushBlock implements SimpleWaterlog
 		return SHAPE;
 	}
 
-	protected boolean mayPlaceOn(BlockState p_154539_, BlockGetter blockGetter, BlockPos blockPos) {
+	protected boolean mayPlaceOn(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
 		return (blockGetter.getBlockState(blockPos.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) || blockGetter.getBlockState(blockPos.above()).is(Blocks.WATER)) && blockGetter.getBlockState(blockPos.below()).isSolid();
 	}
 
-	public BlockState updateShape(BlockState p_154530_, Direction p_154531_, BlockState p_154532_, LevelAccessor p_154533_, BlockPos p_154534_, BlockPos p_154535_) {
-		BlockState blockstate = super.updateShape(p_154530_, p_154531_, p_154532_, p_154533_, p_154534_, p_154535_);
+	public BlockState updateShape(BlockState state, Direction direction, BlockState p_154532_, LevelAccessor p_154533_, BlockPos p_154534_, BlockPos p_154535_) {
+		BlockState blockstate = super.updateShape(state, direction, p_154532_, p_154533_, p_154534_, p_154535_);
 		if (!blockstate.isAir()) {
 			p_154533_.scheduleTick(p_154534_, UnseenWorldModFluids.DARK_WATER.get(), UnseenWorldModFluids.DARK_WATER.get().getTickDelay(p_154533_));
 		}

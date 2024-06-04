@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.util.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -36,7 +36,7 @@ import net.minecraft.core.BlockPos;
 
 public class DarkSpiritWolfEntity extends Wolf {
 	public DarkSpiritWolfEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.DARKSPIRITWOLF.get(), world);
+		this(UnseenWorldModEntities.DARK_SPIRIT_WOLF.get(), world);
 	}
 
 	public DarkSpiritWolfEntity(EntityType<DarkSpiritWolfEntity> type, Level world) {
@@ -109,7 +109,7 @@ public class DarkSpiritWolfEntity extends Wolf {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.DARKSPIRITWOLF.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+		SpawnPlacements.register(UnseenWorldModEntities.DARK_SPIRIT_WOLF.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
