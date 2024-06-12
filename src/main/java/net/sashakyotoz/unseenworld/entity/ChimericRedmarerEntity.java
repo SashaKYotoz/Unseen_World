@@ -58,6 +58,7 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         xpReward = 2;
         setNoAi(false);
     }
+
     protected void tickRidden(Player p_278331_, Vec3 vec3) {
         this.setRot(p_278331_.getYRot(), p_278331_.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
@@ -65,12 +66,12 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         super.tickRidden(p_278331_, vec3);
     }
 
-    protected Vec3 getRiddenInput(Player p_278251_, Vec3 p_275578_) {
-        return new Vec3(0.0D, 0.0D, 1.0D);
+    protected Vec3 getRiddenInput(Player player, Vec3 vec3) {
+        return super.getRiddenInput(player,vec3);
     }
 
-    protected float getRiddenSpeed(Player p_278317_) {
-        return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double)(this.isSuffocating() ? 0.35F : 0.55F) * (double)this.steering.boostFactor());
+    protected float getRiddenSpeed(Player player) {
+        return (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double) (this.isSuffocating() ? 0.35F : 0.55F) * (double) this.steering.boostFactor());
     }
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_33900_) {
@@ -87,14 +88,14 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         this.entityData.define(DATA_IS_SADDLED, false);
     }
 
-    public void addAdditionalSaveData(CompoundTag p_33918_) {
-        super.addAdditionalSaveData(p_33918_);
-        this.steering.addAdditionalSaveData(p_33918_);
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        this.steering.addAdditionalSaveData(tag);
     }
 
-    public void readAdditionalSaveData(CompoundTag p_33898_) {
-        super.readAdditionalSaveData(p_33898_);
-        this.steering.readAdditionalSaveData(p_33898_);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.steering.readAdditionalSaveData(tag);
     }
 
     public boolean isSaddled() {
@@ -105,10 +106,10 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return this.isAlive() && !this.isBaby();
     }
 
-    public void equipSaddle(@javax.annotation.Nullable SoundSource p_33878_) {
+    public void equipSaddle(@javax.annotation.Nullable SoundSource source) {
         this.steering.setSaddle(true);
-        if (p_33878_ != null) {
-            this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, p_33878_, 0.5F, 1.0F);
+        if (source != null) {
+            this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, source, 0.5F, 1.0F);
         }
     }
 
@@ -150,12 +151,13 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         }
         return null;
     }
-    public Vec3 getDismountLocationForPassenger(LivingEntity p_33908_) {
-        Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot()),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 22.5F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() + 22.5F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() - 45.0F),
-                getCollisionHorizontalEscapeVector(this.getBbWidth(), p_33908_.getBbWidth(), p_33908_.getYRot() + 45.0F)};
+
+    public Vec3 getDismountLocationForPassenger(LivingEntity entity) {
+        Vec3[] avec3 = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot()),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() - 22.5F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() + 22.5F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() - 45.0F),
+                getCollisionHorizontalEscapeVector(this.getBbWidth(), entity.getBbWidth(), entity.getYRot() + 45.0F)};
         Set<BlockPos> set = Sets.newLinkedHashSet();
         double d0 = this.getBoundingBox().maxY;
         double d1 = this.getBoundingBox().minY - 0.5D;
@@ -252,26 +254,26 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
     }
 
     @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33887_, DifficultyInstance p_33888_, MobSpawnType p_33889_, @javax.annotation.Nullable SpawnGroupData p_33890_, @javax.annotation.Nullable CompoundTag p_33891_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance instance, MobSpawnType type, @javax.annotation.Nullable SpawnGroupData data, @javax.annotation.Nullable CompoundTag p_33891_) {
         if (!this.isBaby()) {
-            RandomSource randomsource = p_33887_.getRandom();
+            RandomSource randomsource = levelAccessor.getRandom();
             if (randomsource.nextInt(30) == 0) {
-                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(p_33887_.getLevel());
+                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(levelAccessor.getLevel());
                 if (mob != null) {
-                    p_33890_ = this.spawnJockey(p_33887_, p_33888_, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
+                    data = this.spawnJockey(levelAccessor, instance, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
                     this.equipSaddle(null);
                 }
             } else if (randomsource.nextInt(10) == 0) {
-                AgeableMob ageablemob = UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(p_33887_.getLevel());
+                AgeableMob ageablemob = UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(levelAccessor.getLevel());
                 if (ageablemob != null) {
                     ageablemob.setAge(-24000);
-                    p_33890_ = this.spawnJockey(p_33887_, p_33888_, ageablemob, null);
+                    data = this.spawnJockey(levelAccessor, instance, ageablemob, null);
                 }
             } else {
-                p_33890_ = new AgeableMobGroupData(0.5F);
+                data = new AgeableMobGroupData(0.5F);
             }
         }
-        return super.finalizeSpawn(p_33887_, p_33888_, p_33889_, p_33890_, p_33891_);
+        return super.finalizeSpawn(levelAccessor, instance, type, data, p_33891_);
     }
 
     private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance instance, Mob mob, @Nullable SpawnGroupData p_33885_) {

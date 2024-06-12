@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundSource;
@@ -15,21 +16,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.managers.NetheriumStaffWhileProjectileFlyingTickProcedure;
+import net.sashakyotoz.unseenworld.managers.FireLikeStaffProjectileFlyingTick;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModSounds;
-
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier {
-	public NetheriumStaffEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(UnseenWorldModEntities.NETHERIUM_STAFF.get(), world);
-	}
 
 	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, Level world) {
-		super(type, world);
+		super(UnseenWorldModEntities.NETHERIUM_STAFF.get(), world);
 	}
 
 	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, LivingEntity entity, Level world) {
@@ -41,15 +37,10 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ItemStack getItem() {
-		return new ItemStack(UnseenWorldModItems.FIRE_PEARL.get());
-	}
 
 	@Override
 	protected ItemStack getPickupItem() {
-		return ItemStack.EMPTY;
+		return new ItemStack(UnseenWorldModItems.FIRE_PEARL.get());
 	}
 
 	@Override
@@ -69,7 +60,7 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void tick() {
 		super.tick();
-		NetheriumStaffWhileProjectileFlyingTickProcedure.onTickParticles(this.level(), this.getX(), this.getY(), this.getZ());
+		FireLikeStaffProjectileFlyingTick.onTickParticles(ParticleTypes.FALLING_LAVA,this.level(), this.getX(), this.getY(), this.getZ(),1,1,1);
 		if (this.inGround)
 			this.discard();
 	}
@@ -102,5 +93,10 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldModSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
+	}
+
+	@Override
+	public ItemStack getItem() {
+		return UnseenWorldModItems.FIRE_PEARL.get().getDefaultInstance();
 	}
 }

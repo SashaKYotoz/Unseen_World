@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -171,9 +172,9 @@ public class DarkGolemEntity extends Monster implements Enemy {
         if (!(entity instanceof LivingEntity)) {
             return false;
         } else {
-            if (random.nextBoolean())
+            if (random.nextBoolean() || !this.getItemInHand(InteractionHand.MAIN_HAND).is(UnseenWorldModItems.VOID_HAMMER.get()))
                 setAttackType("unarmed");
-            else {
+            else{
                 setAttackType("armed");
                 spawnParticle(this.level(), this.getX() - 0.25, this.getY(), this.getZ() - 0.25);
             }

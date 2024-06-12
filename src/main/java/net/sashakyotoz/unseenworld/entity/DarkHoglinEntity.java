@@ -38,7 +38,7 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 
 	public DarkHoglinEntity(EntityType<DarkHoglinEntity> type, Level world) {
 		super(type, world);
-		xpReward = 5;
+		xpReward = XP_REWARD_MEDIUM;
 		setNoAi(false);
 	}
 

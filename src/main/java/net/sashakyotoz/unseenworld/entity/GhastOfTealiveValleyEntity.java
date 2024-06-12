@@ -57,9 +57,7 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 		this.goalSelector.addGoal(5, new GhastOfTealiveValleyEntity.RandomFloatAroundGoal(this));
 		this.goalSelector.addGoal(7, new GhastOfTealiveValleyEntity.GhastLookGoal(this));
 		this.goalSelector.addGoal(7, new GhastOfTealiveValleyEntity.GhastShootFireballGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (p_32755_) -> {
-			return Math.abs(p_32755_.getY() - this.getY()) <= 4.0D;
-		}));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (y) -> Math.abs(y.getY() - this.getY()) <= 4.0D));
 	}
 
 	public boolean isCharging() {

@@ -43,7 +43,6 @@ public class DarkPhantomEntity extends Monster {
 		super(type, world);
 		setMaxUpStep(0.6f);
 		xpReward = 8;
-		setNoAi(false);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
@@ -105,7 +104,7 @@ public class DarkPhantomEntity extends Monster {
 				return new Vec3(dir_x, dir_y, dir_z);
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, false, true));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
 		this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, (float) 8));
 		this.goalSelector.addGoal(6, new FollowMobGoal(this, 1, (float) 8, (float) 5));
@@ -168,11 +167,6 @@ public class DarkPhantomEntity extends Monster {
 	@Override
 	public void setNoGravity(boolean ignored) {
 		super.setNoGravity(true);
-	}
-
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
 	}
 
 	public static void init() {

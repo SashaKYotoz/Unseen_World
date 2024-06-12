@@ -25,11 +25,11 @@ public class UnseenWorldModEntities {
     public static final RegistryObject<EntityType<VoidHammerEntity>> VOID_HAMMER = register("projectile_void_hammer", EntityType.Builder.<VoidHammerEntity>of(VoidHammerEntity::new, MobCategory.MISC)
             .setCustomClientFactory(VoidHammerEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(20).sized(0.75f, 0.75f));
     public static final RegistryObject<EntityType<NetheriumStaffEntity>> NETHERIUM_STAFF = register("projectile_netherium_staff",
-            EntityType.Builder.<NetheriumStaffEntity>of(NetheriumStaffEntity::new, MobCategory.MISC).setCustomClientFactory(NetheriumStaffEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
+            EntityType.Builder.<NetheriumStaffEntity>of(NetheriumStaffEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<VoidStaffEntity>> VOID_STAFF = register("projectile_void_staff",
-            EntityType.Builder.<VoidStaffEntity>of(VoidStaffEntity::new, MobCategory.MISC).setCustomClientFactory(VoidStaffEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
+            EntityType.Builder.<VoidStaffEntity>of(VoidStaffEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<TealivyFireStaffEntity>> TEALIVY_FIRE_STAFF = register("projectile_tealivy_fire_staff", EntityType.Builder.<TealivyFireStaffEntity>of(TealivyFireStaffEntity::new, MobCategory.MISC)
-            .setCustomClientFactory(TealivyFireStaffEntity::new).setShouldReceiveVelocityUpdates(true).clientTrackingRange(16).setUpdateInterval(1).sized(0.5f, 0.5f));
+            .setShouldReceiveVelocityUpdates(true).clientTrackingRange(16).setUpdateInterval(1).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<VoidArrowEntity>> VOID_BOW = register("projectile_void_bow",
             EntityType.Builder.<VoidArrowEntity>of(VoidArrowEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<DarkSkeletonEntity>> DARK_SKELETON = register("dark_skeleton",
@@ -84,8 +84,8 @@ public class UnseenWorldModEntities {
             .setCustomClientFactory(TheBlazerEntity::new).fireImmune().sized(0.7f, 2.3f));
     public static final RegistryObject<EntityType<TheWitherKnightEntity>> THE_WITHER_KNIGHT = register("the_wither_knight", EntityType.Builder.<TheWitherKnightEntity>of(TheWitherKnightEntity::new, MobCategory.MONSTER)
             .setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setCustomClientFactory(TheWitherKnightEntity::new).fireImmune().sized(0.6f, 2f));
-    public static final RegistryObject<EntityType<DarkPearlRangedItemEntity>> DARK_PEARL = register("projectile_dark_pearl_ranged_item", EntityType.Builder.<DarkPearlRangedItemEntity>of(DarkPearlRangedItemEntity::new, MobCategory.MISC)
-            .setCustomClientFactory(DarkPearlRangedItemEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(20).sized(0.5f, 0.5f));
+    public static final RegistryObject<EntityType<DarkPearlEntity>> DARK_PEARL = register("projectile_dark_pearl_ranged_item", EntityType.Builder.<DarkPearlEntity>of(DarkPearlEntity::new, MobCategory.MISC)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(20).sized(0.5f, 0.5f));
 
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String registryname, EntityType.Builder<T> entityTypeBuilder) {
         return REGISTRY.register(registryname, () -> entityTypeBuilder.build(registryname));
@@ -100,12 +100,10 @@ public class UnseenWorldModEntities {
             DustyPinkMaxorFishEntity.init();
             MoonFishEntity.init();
             CavernScarecrowEntity.init();
-            SavageSmallBlazeEntity.init();
             ChimericPurplemarerEntity.init();
             ChimericRedmarerEntity.init();
             NethermanEntity.init();
             RedSlylfEntity.init();
-            RedBlazeEntity.init();
             StrederEntity.init();
             GhastOfTealiveValleyEntity.init();
             TanzaniteGuardianEntity.init();

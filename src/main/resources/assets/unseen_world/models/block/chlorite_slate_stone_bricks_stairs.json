@@ -1,5 +1,5 @@
 {
-  "parent": "block/slab",
+  "parent": "block/stairs",
   "textures": {
     "bottom": "unseen_world:block/chlorite_slate_stone_bricks_with_animation",
     "top": "unseen_world:block/chlorite_slate_stone_bricks_with_animation",

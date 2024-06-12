@@ -1,9 +1,11 @@
 
 package net.sashakyotoz.unseenworld.enchantment;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 public class ShiningBladeEnchantment extends Enchantment {
 	public ShiningBladeEnchantment(EquipmentSlot... slots) {
@@ -18,5 +20,10 @@ public class ShiningBladeEnchantment extends Enchantment {
 	@Override
 	public boolean isTradeable() {
 		return false;
+	}
+
+	@Override
+	public boolean canEnchant(ItemStack stack) {
+		return super.canEnchant(stack) || stack.is(UnseenWorldModItems.TANZANITE_STAFF.get());
 	}
 }

@@ -65,11 +65,6 @@ public class NethermanEntity extends EnderMan {
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
 	public int getAttackAnimationRemainingTicks() {
 		return this.attackAnimationRemainingTicks;
 	}

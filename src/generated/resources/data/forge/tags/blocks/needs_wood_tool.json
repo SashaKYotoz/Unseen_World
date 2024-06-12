@@ -1,5 +1,6 @@
 {
   "values": [
+    "unseen_world:cold_dark_bricks",
     "unseen_world:tanzanite_block",
     "unseen_world:tanzanite_block_budding",
     "unseen_world:tanzanite_cluster",
@@ -23,6 +24,13 @@
     "unseen_world:chlorite_slate_stone_bricks",
     "unseen_world:chlorite_slate_stone_bricks_stairs",
     "unseen_world:chlorite_slate_stone_bricks_slab",
-    "unseen_world:chlorite_slate_stone_bricks_wall"
-  ]
+    "unseen_world:chlorite_slate_stone_bricks_wall",
+    "unseen_world:reinforced_polished_blackstone_bricks",
+    "unseen_world:reinforced_polished_blackstone_bricks_slab",
+    "unseen_world:ancient_transient_block_close",
+    "unseen_world:reinforced_red_anient_bricks",
+    "unseen_world:dripstone_of_amethyst_overgrowth",
+    "unseen_world:ancient_transient_block_open"
+  ],
+  "replace": false
 }

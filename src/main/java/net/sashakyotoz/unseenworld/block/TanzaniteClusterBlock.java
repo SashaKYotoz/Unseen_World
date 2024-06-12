@@ -33,8 +33,7 @@ public class TanzaniteClusterBlock extends AmethystBlock implements SimpleWaterl
 	protected final VoxelShape downAabb;
 
 	public TanzaniteClusterBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.AMETHYST_CLUSTER).strength(1f, 4f).lightLevel(s -> 2).requiresCorrectToolForDrops().noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
-				.emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.copy(Blocks.AMETHYST_CLUSTER).strength(1f).lightLevel(s -> 2).noCollission().requiresCorrectToolForDrops().noOcclusion().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true));
 		int p_152015_ = 7;
 		int p_152016_ = 3;
 		this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, Boolean.FALSE).setValue(FACING, Direction.UP));
@@ -46,7 +45,7 @@ public class TanzaniteClusterBlock extends AmethystBlock implements SimpleWaterl
 		this.westAabb = Block.box(16 - p_152015_, p_152016_, p_152016_, 16.0D, 16 - p_152016_, 16 - p_152016_);
 	}
 
-	public VoxelShape getShape(BlockState state, BlockGetter p_152022_, BlockPos p_152023_, CollisionContext p_152024_) {
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos p_152023_, CollisionContext p_152024_) {
 		Direction direction = state.getValue(FACING);
 		switch (direction) {
 			case NORTH :
@@ -82,7 +81,7 @@ public class TanzaniteClusterBlock extends AmethystBlock implements SimpleWaterl
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		LevelAccessor levelaccessor = context.getLevel();
 		BlockPos blockpos = context.getClickedPos();
-		return this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(levelaccessor.getFluidState(blockpos).getType() == Fluids.WATER)).setValue(FACING, context.getClickedFace());
+		return this.defaultBlockState().setValue(WATERLOGGED, levelaccessor.getFluidState(blockpos).getType() == Fluids.WATER).setValue(FACING, context.getClickedFace());
 	}
 
 	public BlockState rotate(BlockState state, Rotation p_152034_) {

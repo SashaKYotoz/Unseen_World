@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements BonemealableBlock,DarkCrimsonVine {
 
 	public DarkCrimsonVineFlowerBlock() {
-		super(BlockBehaviour.Properties.of().mapColor(DyeColor.CYAN).sound(SoundType.SWEET_BERRY_BUSH).randomTicks().instabreak().lightLevel(s -> 3).requiresCorrectToolForDrops().noCollission().noOcclusion().randomTicks()
+		super(BlockBehaviour.Properties.of().mapColor(DyeColor.CYAN).sound(SoundType.SWEET_BERRY_BUSH).randomTicks().instabreak().lightLevel(s -> 3).noCollission().noOcclusion().randomTicks()
 				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true), Direction.DOWN, SHAPE, false, 0.15D);
 		this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0).setValue(BERRIES, Boolean.FALSE));
 	}
@@ -55,8 +55,8 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		return 1;
 	}
 
-	protected boolean canGrowInto(BlockState p_152998_) {
-		return p_152998_.isAir();
+	protected boolean canGrowInto(BlockState state) {
+		return state.isAir();
 	}
 
 	protected @NotNull Block getBodyBlock() {
@@ -88,11 +88,11 @@ public class DarkCrimsonVineFlowerBlock extends GrowingPlantHeadBlock implements
 		return !state.getValue(BERRIES);
 	}
 
-	public boolean isBonemealSuccess(Level level, RandomSource p_220931_, BlockPos p_220932_, BlockState p_220933_) {
+	public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
 		return true;
 	}
 
-	public void performBonemeal(ServerLevel level, RandomSource p_220924_, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerLevel level, RandomSource source, BlockPos pos, BlockState state) {
 		level.setBlock(pos, state.setValue(BERRIES, Boolean.TRUE), 2);
 	}
 }

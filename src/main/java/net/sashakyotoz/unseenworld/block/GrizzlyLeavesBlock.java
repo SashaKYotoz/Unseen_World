@@ -16,10 +16,6 @@ public class GrizzlyLeavesBlock extends LeavesBlock {
 	public GrizzlyLeavesBlock() {
 		super(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).sound(SoundType.NETHER_WART).strength(0.6f).requiresCorrectToolForDrops().noOcclusion());
 	}
-	@Override
-	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
-		return 1;
-	}
 	public void animateTick(BlockState p_221374_, Level p_221375_, BlockPos p_221376_, RandomSource p_221377_) {
 		if (p_221377_.nextInt(15) == 1) {
 			double d0 = (double) p_221376_.getX() + p_221377_.nextDouble();

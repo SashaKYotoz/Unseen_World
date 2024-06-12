@@ -7,16 +7,20 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
-import net.sashakyotoz.unseenworld.managers.VoidBowProjectileHitsPlayerProcedure;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
 
 public class VoidArrowEntity extends AbstractArrow {
@@ -24,7 +28,7 @@ public class VoidArrowEntity extends AbstractArrow {
 
 	public VoidArrowEntity(EntityType<? extends VoidArrowEntity> type, Level world) {
 		super(type, world);
-		projectile = ItemStack.EMPTY;
+		projectile = Items.ARROW.getDefaultInstance();
 	}
 
 	public VoidArrowEntity(EntityType<? extends VoidArrowEntity> type, LivingEntity entity, Level world,ItemStack stack) {
@@ -51,7 +55,11 @@ public class VoidArrowEntity extends AbstractArrow {
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		VoidBowProjectileHitsPlayerProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), entityHitResult.getEntity(), this.getOwner());
+		Entity entity = entityHitResult.getEntity();
+		Entity sourceEntity = this.getOwner();
+		if (entity != sourceEntity && entity instanceof LivingEntity livingEntity && !this.level().isClientSide()){
+			livingEntity.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.DARK_VOID.get(), 40, 1));
+		}
 	}
 
 	@Override

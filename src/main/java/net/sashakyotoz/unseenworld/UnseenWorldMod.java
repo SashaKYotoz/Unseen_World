@@ -1,18 +1,10 @@
 package net.sashakyotoz.unseenworld;
 
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,15 +12,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.sashakyotoz.anitexlib.utils.TextureAnimator;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIScreen;
-import net.sashakyotoz.unseenworld.client.renderer.BeaconOfWeaponsRenderer;
-import net.sashakyotoz.unseenworld.client.renderer.layers.KnightArmorRodsLayer;
 import net.sashakyotoz.unseenworld.registries.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,9 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Mod("unseen_world")
 public class UnseenWorldMod {
@@ -67,34 +52,11 @@ public class UnseenWorldMod {
         UnseenWorldModFluids.REGISTRY.register(bus);
         UnseenWorldModFluidTypes.REGISTRY.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, UnseenWorldConfigs.SPEC);
-        if (FMLEnvironment.dist.isClient()) {
-            bus.addListener(this::registerLayer);
-            bus.addListener(this::commonSetup);
-        }
+        TextureAnimator.addEntityToAnimate(UnseenWorldMod.class,MODID,"particle/portal_like","void_portal");
+        TextureAnimator.addEntityToAnimate(UnseenWorldMod.class,MODID,"particle/fireball","fireball_particle");
+        bus.addListener(this::commonSetup);
+        bus.addListener(this::clientSetup);
     }
-
-    @OnlyIn(Dist.CLIENT)
-    private void registerLayer(EntityRenderersEvent event) {
-        if (event instanceof EntityRenderersEvent.AddLayers addLayersEvent) {
-            EntityModelSet entityModels = addLayersEvent.getEntityModels();
-            addLayersEvent.getSkins().forEach((s) -> {
-                LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>> livingEntityRenderer = addLayersEvent.getSkin(s);
-                if (livingEntityRenderer instanceof PlayerRenderer playerRenderer) {
-                    playerRenderer.addLayer(new KnightArmorRodsLayer<>(playerRenderer, entityModels));
-                }
-            });
-        }
-    }
-
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
-    private static int messageID = 0;
-
-    public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
-        PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
-        messageID++;
-    }
-
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
     public static void queueServerWork(int tick, Runnable action) {
@@ -114,14 +76,16 @@ public class UnseenWorldMod {
             workQueue.removeAll(actions);
         }
     }
-
-    @OnlyIn(Dist.CLIENT)
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private void commonSetup(FMLCommonSetupEvent event) {
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.CRIMSERRY_SOUL_CROP.get(), 0.1f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERY_CROP_FLOWER.get(), 0.1f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get(), 0.2f);
+        PotionBrewing.addMix(Potions.AWKWARD,UnseenWorldModItems.TEALIVE_STONY_SHARD.get(),Potions.LONG_NIGHT_VISION);
+        PotionBrewing.addMix(Potions.AWKWARD,UnseenWorldModItems.DARK_FREE_SOUL.get(),UnseenWorldModPotions.DARK_IMMUNITE_POTION.get());
+    }
+    private void clientSetup(final FMLClientSetupEvent event){
         ModItemProperties.addCustomItemProperties();
         event.enqueueWork(() -> MenuScreens.register(UnseenWorldModMenus.GOLDEN_CHEST_GUI.get(), GoldenChestGUIScreen::new));
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.CRIMSERRY_SOUL_CROP.get().asItem(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERY_CROP_FLOWER.get().asItem(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get().asItem(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get().asItem(), 0.2f);
     }
 }

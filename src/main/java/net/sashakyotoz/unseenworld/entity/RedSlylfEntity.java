@@ -179,9 +179,9 @@ public class RedSlylfEntity extends TamableAnimal {
 	}
 
 	@Override
-	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		RedSlylfEntity entity = UnseenWorldModEntities.RED_SLYLF.get().create(serverWorld);
-		entity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
+	public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageable) {
+		RedSlylfEntity entity = UnseenWorldModEntities.RED_SLYLF.get().create(serverLevel);
+		entity.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return entity;
 	}
 

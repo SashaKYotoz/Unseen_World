@@ -3,6 +3,7 @@ package net.sashakyotoz.unseenworld.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.world.item.*;
 import net.sashakyotoz.unseenworld.entity.UnseenTitaniumSpearEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -25,10 +26,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +37,7 @@ import net.minecraftforge.jarjar.nio.util.Lazy;
 
 import java.util.UUID;
 
-public class UnseenTitaniumSpearItem extends Item implements Vanishable {
+public class UnseenTitaniumSpearItem extends TridentItem {
     public static final UUID REACH_MOD = UUID.fromString("dccd59ec-6391-436d-9e00-47f2e6005e20");
     public static double reach = 3;
     public static int damage = 12;
@@ -90,14 +87,6 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.SPEAR;
-    }
-
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
-    }
-
     public void releaseUsing(ItemStack itemStack, Level level, LivingEntity livingEntity, int j) {
         if (livingEntity instanceof Player player) {
             int i = this.getUseDuration(itemStack) - j;
@@ -151,32 +140,16 @@ public class UnseenTitaniumSpearItem extends Item implements Vanishable {
         }
     }
 
-    public InteractionResultHolder<ItemStack> use(Level p_43405_, Player p_43406_, InteractionHand p_43407_) {
-        ItemStack itemstack = p_43406_.getItemInHand(p_43407_);
+    public InteractionResultHolder<ItemStack> use(Level p_43405_, Player player, InteractionHand p_43407_) {
+        ItemStack itemstack = player.getItemInHand(p_43407_);
         if (itemstack.getDamageValue() >= itemstack.getMaxDamage() - 1) {
             return InteractionResultHolder.fail(itemstack);
-        } else if (EnchantmentHelper.getRiptide(itemstack) > 0 && !p_43406_.isInWaterOrRain()) {
+        } else if (EnchantmentHelper.getRiptide(itemstack) > 0 && !player.isInWaterOrRain()) {
             return InteractionResultHolder.fail(itemstack);
         } else {
-            p_43406_.startUsingItem(p_43407_);
+            player.startUsingItem(p_43407_);
             return InteractionResultHolder.consume(itemstack);
         }
-    }
-
-    public boolean hurtEnemy(ItemStack p_43390_, LivingEntity p_43391_, LivingEntity p_43392_) {
-        p_43390_.hurtAndBreak(1, p_43392_, (p_43414_) -> {
-            p_43414_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-        });
-        return true;
-    }
-
-    public boolean mineBlock(ItemStack p_43399_, Level p_43400_, BlockState p_43401_, BlockPos p_43402_, LivingEntity p_43403_) {
-        if ((double) p_43401_.getDestroySpeed(p_43400_, p_43402_) != 0.0D) {
-            p_43399_.hurtAndBreak(2, p_43403_, (p_43385_) -> {
-                p_43385_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            });
-        }
-        return true;
     }
 
     @Override

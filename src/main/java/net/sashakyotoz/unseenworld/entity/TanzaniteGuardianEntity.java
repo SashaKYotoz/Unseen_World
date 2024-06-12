@@ -55,20 +55,15 @@ public class TanzaniteGuardianEntity extends Monster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-			}
-		});
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
 		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(3, new FollowMobGoal(this, 1.2, (float) 12, (float) 6));
 		this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(6, new LeapAtTargetGoal(this, (float) 0.25));
 		this.goalSelector.addGoal(7, new FloatGoal(this));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Player.class, false, true));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal(this, AgeableMob.class, false, true));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, AgeableMob.class, false, true));
 	}
 
 	@Override
@@ -110,8 +105,7 @@ public class TanzaniteGuardianEntity extends Monster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.TANZANITE_GUARDIAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
+		SpawnPlacements.register(UnseenWorldModEntities.TANZANITE_GUARDIAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

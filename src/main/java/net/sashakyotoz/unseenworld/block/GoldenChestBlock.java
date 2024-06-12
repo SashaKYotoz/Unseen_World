@@ -45,18 +45,13 @@ public class GoldenChestBlock extends BaseEntityBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public GoldenChestBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).mapColor(DyeColor.YELLOW).sound(SoundType.METAL).strength(5f, 10f).requiresCorrectToolForDrops().noOcclusion());
+		super(BlockBehaviour.Properties.of().mapColor(DyeColor.YELLOW).sound(SoundType.METAL).strength(7.5f).requiresCorrectToolForDrops());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
 	}
 
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
 		return true;
-	}
-
-	@Override
-	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
-		return 0;
 	}
 
 	@Override
@@ -89,18 +84,8 @@ public class GoldenChestBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 2;
-		return false;
-	}
-
-	@Override
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-		List<ItemStack> dropsOriginal = super.getDrops(state, builder);
-		if (!dropsOriginal.isEmpty())
-			return dropsOriginal;
-		return Collections.singletonList(new ItemStack(this, 1));
+	public RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
 	}
 
 	@Override
@@ -124,12 +109,6 @@ public class GoldenChestBlock extends BaseEntityBlock {
 		int z = pos.getZ();
 		GoldenChestGUIUpdate.execute(level, x, y, z);
 		return InteractionResult.SUCCESS;
-	}
-
-	@Override
-	public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {
-		BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-		return tileEntity instanceof MenuProvider menuProvider ? menuProvider : null;
 	}
 
 	@Override

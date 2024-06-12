@@ -40,7 +40,6 @@ public class AmethystGolemEntity extends TamableAnimal {
     public AmethystGolemEntity(EntityType<AmethystGolemEntity> type, Level world) {
         super(type, world);
         xpReward = 5;
-        setNoAi(false);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldModItems.AMETHYST_HAMMER.get()));
     }
 

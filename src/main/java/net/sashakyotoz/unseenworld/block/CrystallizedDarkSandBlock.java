@@ -26,7 +26,7 @@ public class CrystallizedDarkSandBlock extends FallingBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public CrystallizedDarkSandBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.SAND).sound(SoundType.SAND).strength(0.5f, 0.2f).requiresCorrectToolForDrops());
+		super(BlockBehaviour.Properties.copy(Blocks.SAND).sound(SoundType.SAND).strength(0.5f).requiresCorrectToolForDrops());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 		this.dustColor = 24001590;
 	}

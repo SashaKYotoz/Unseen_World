@@ -28,7 +28,7 @@ import java.util.Collections;
 public class TealivyPlumeriaBlock extends FlowerBlock {
 	public TealivyPlumeriaBlock() {
 		super(() -> MobEffects.GLOWING, 6000,
-				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).sound(SoundType.GRASS).strength(0f, 1f).lightLevel(s -> 12).noCollission().offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
+				BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).sound(SoundType.GRASS).instabreak().lightLevel(s -> 12).noCollission().offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
 	}
 
 	@Override

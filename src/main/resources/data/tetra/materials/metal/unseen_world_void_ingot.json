@@ -1,13 +1,13 @@
 {
   "key": "unseen_world_void_ingot",
   "category": "metal",
-  "primary": 24,
+  "primary": 14,
   "secondary": 4.5,
-  "tertiary": 2,
+  "tertiary": 3.5,
   "durability": 2380,
   "integrityCost": 3,
-  "integrityGain": 6,
-  "magicCapacity": 50,
+  "integrityGain": 7,
+  "magicCapacity": 65,
   "toolLevel": "tetra:maxed_forge_hammer",
   "toolEfficiency": 13,
   "tints": {

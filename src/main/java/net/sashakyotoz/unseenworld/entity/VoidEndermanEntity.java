@@ -38,7 +38,6 @@ public class VoidEndermanEntity extends EnderMan {
 	public VoidEndermanEntity(EntityType<VoidEndermanEntity> type, Level world) {
 		super(type, world);
 		xpReward = 6;
-		setNoAi(false);
 	}
 
 	static boolean hurtAndThrowTarget(LivingEntity living, LivingEntity p_34644_) {
@@ -70,12 +69,7 @@ public class VoidEndermanEntity extends EnderMan {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-			}
-		});
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false));
 		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
@@ -92,18 +86,13 @@ public class VoidEndermanEntity extends EnderMan {
 		super.aiStep();
 	}
 
-	public void handleEntityEvent(byte p_34496_) {
-		if (p_34496_ == 4) {
+	public void handleEntityEvent(byte bytes) {
+		if (bytes == 4) {
 			this.attackAnimationRemainingTicks = 100;
 			this.playSound(SoundEvents.ENDERMAN_HURT, 1.0F, this.getVoicePitch());
 		} else {
-			super.handleEntityEvent(p_34496_);
+			super.handleEntityEvent(bytes);
 		}
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
 	}
 
 	@Override

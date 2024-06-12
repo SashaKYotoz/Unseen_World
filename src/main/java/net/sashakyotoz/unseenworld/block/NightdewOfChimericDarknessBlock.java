@@ -39,11 +39,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class NightdewOfChimericDarknessBlock extends Block implements SimpleWaterloggedBlock {
-    public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 1);
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public NightdewOfChimericDarknessBlock() {
-        super(BlockBehaviour.Properties.copy(Blocks.CACTUS).sound(SoundType.SWEET_BERRY_BUSH).strength(1f, 1f).requiresCorrectToolForDrops().noOcclusion().randomTicks().isRedstoneConductor((bs, br, bp) -> false));
+        super(BlockBehaviour.Properties.copy(Blocks.CACTUS).sound(SoundType.SWEET_BERRY_BUSH).strength(1f, 1f).noOcclusion().randomTicks().isRedstoneConductor((bs, br, bp) -> false));
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(AGE, 0));
     }
 
@@ -97,14 +97,6 @@ public class NightdewOfChimericDarknessBlock extends Block implements SimpleWate
         if (player.getInventory().getSelected().getItem() instanceof HoeItem tieredItem)
             return tieredItem.getTier().getLevel() >= 1;
         return false;
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-        List<ItemStack> dropsOriginal = super.getDrops(state, builder);
-        if (!dropsOriginal.isEmpty())
-            return dropsOriginal;
-        return Collections.singletonList(new ItemStack(this, 1));
     }
 
     @Override

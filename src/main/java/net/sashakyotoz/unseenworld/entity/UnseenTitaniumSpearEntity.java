@@ -19,23 +19,19 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.PlayMessages;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 	private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(UnseenTitaniumSpearEntity.class, EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(UnseenTitaniumSpearEntity.class, EntityDataSerializers.BOOLEAN);
-	private ItemStack tridentItem = new ItemStack(UnseenWorldModItems.UNSEEN_TITANIUM_SPEAR.get());
+	private ItemStack spearItem = new ItemStack(UnseenWorldModItems.UNSEEN_TITANIUM_SPEAR.get());
 	private boolean dealtDamage;
 	public int clientSideReturnTridentTickCount;
 
@@ -88,15 +84,15 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 	}
 
 	@Nullable
-	protected EntityHitResult findHitEntity(Vec3 vec3, Vec3 p_37576_) {
-		return this.dealtDamage ? null : super.findHitEntity(vec3, p_37576_);
+	protected EntityHitResult findHitEntity(Vec3 vec3, Vec3 vec31) {
+		return this.dealtDamage ? null : super.findHitEntity(vec3, vec31);
 	}
 
 	protected void onHitEntity(EntityHitResult p_37573_) {
 		Entity entity = p_37573_.getEntity();
 		float f = 8.0F;
 		if (entity instanceof LivingEntity livingentity) {
-			f += EnchantmentHelper.getDamageBonus(this.tridentItem, livingentity.getMobType());
+			f += EnchantmentHelper.getDamageBonus(this.spearItem, livingentity.getMobType());
 		}
 
 		Entity entity1 = this.getOwner();
@@ -138,7 +134,7 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 	}
 
 	public boolean isChanneling() {
-		return EnchantmentHelper.hasChanneling(this.tridentItem);
+		return EnchantmentHelper.hasChanneling(this.spearItem);
 	}
 
 	protected boolean tryPickup(Player player) {
@@ -156,20 +152,20 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 
 	}
 
-	public void readAdditionalSaveData(CompoundTag p_37578_) {
-		super.readAdditionalSaveData(p_37578_);
-		if (p_37578_.contains("Trident", 10)) {
-			this.tridentItem = ItemStack.of(p_37578_.getCompound("Trident"));
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
+		if (tag.contains("Trident", 10)) {
+			this.spearItem = ItemStack.of(tag.getCompound("Trident"));
 		}
 
-		this.dealtDamage = p_37578_.getBoolean("DealtDamage");
-		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(this.tridentItem));
+		this.dealtDamage = tag.getBoolean("DealtDamage");
+		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(this.spearItem));
 	}
 
-	public void addAdditionalSaveData(CompoundTag p_37582_) {
-		super.addAdditionalSaveData(p_37582_);
-		p_37582_.put("Trident", this.tridentItem.save(new CompoundTag()));
-		p_37582_.putBoolean("DealtDamage", this.dealtDamage);
+	public void addAdditionalSaveData(CompoundTag tag) {
+		super.addAdditionalSaveData(tag);
+		tag.put("Trident", this.spearItem.save(new CompoundTag()));
+		tag.putBoolean("DealtDamage", this.dealtDamage);
 	}
 
 	public void tickDespawn() {
@@ -190,7 +186,7 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 
 	public UnseenTitaniumSpearEntity(Level p_37569_, LivingEntity p_37570_, ItemStack p_37571_) {
 		super(UnseenWorldModEntities.UNSEEN_TITANIUM_SPEAR.get(), p_37570_, p_37569_);
-		this.tridentItem = p_37571_.copy();
+		this.spearItem = p_37571_.copy();
 		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(p_37571_));
 		this.entityData.set(ID_FOIL, p_37571_.hasFoil());
 	}
@@ -206,6 +202,6 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 
 	@Override
 	protected ItemStack getPickupItem() {
-		return this.tridentItem.copy();
+		return this.spearItem.copy();
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -44,7 +45,6 @@ public class RedBlazeEntity extends Blaze implements RangedAttackMob {
 		super(type, world);
 		setMaxUpStep(0.6f);
 		xpReward = 5;
-		setNoAi(false);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
@@ -61,7 +61,7 @@ public class RedBlazeEntity extends Blaze implements RangedAttackMob {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, Player.class, false, false));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false, false));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(3, new Goal() {
 			{
@@ -98,27 +98,8 @@ public class RedBlazeEntity extends Blaze implements RangedAttackMob {
 				}
 			}
 		});
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.25, 20) {
-			@Override
-			protected Vec3 getPosition() {
-				RandomSource random = RedBlazeEntity.this.getRandom();
-				double dir_x = RedBlazeEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_y = RedBlazeEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_z = RedBlazeEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-				return new Vec3(dir_x, dir_y, dir_z);
-			}
-		});
-		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 50, 10f) {
-			@Override
-			public boolean canContinueToUse() {
-				return this.canUse();
-			}
-		});
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
+		this.goalSelector.addGoal(4, new WaterAvoidingRandomFlyingGoal(this, 1.25));
+		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 50, 10f));
 	}
 
 	@Override
@@ -173,14 +154,6 @@ public class RedBlazeEntity extends Blaze implements RangedAttackMob {
 	@Override
 	public void setNoGravity(boolean ignored) {
 		super.setNoGravity(true);
-	}
-
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
-	}
-
-	public static void init() {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

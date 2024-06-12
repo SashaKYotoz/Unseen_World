@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.block.TheDarknessPortalBlock;
+import net.sashakyotoz.unseenworld.block.DarknessPortalBlock;
 
 public class TheDarknessItem extends Item {
 	public TheDarknessItem() {
@@ -27,7 +27,7 @@ public class TheDarknessItem extends Item {
 		} else {
 			boolean success = false;
 			if (world.isEmptyBlock(pos)) {
-				TheDarknessPortalBlock.portalSpawn(world, pos);
+				DarknessPortalBlock.portalSpawn(world, pos);
 				itemstack.hurtAndBreak(1, player, c -> c.broadcastBreakEvent(context.getHand()));
 				success = true;
 			}

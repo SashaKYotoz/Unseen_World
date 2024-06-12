@@ -47,8 +47,8 @@ public class DeepWaterAnfeltsiaBlock extends BushBlock implements SimpleWaterlog
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_56388_) {
 		p_56388_.add(WATERLOGGED);
 	}
-	public FluidState getFluidState(BlockState p_154537_) {
-		return UnseenWorldModFluids.DARK_WATER.get().getSource(false);
+	public FluidState getFluidState(BlockState state) {
+		return state.getValue(WATERLOGGED) ? UnseenWorldModFluids.DARK_WATER.get().getSource(false) : super.getFluidState(state);
 	}
 
 	@OnlyIn(Dist.CLIENT)

@@ -1,6 +1,0 @@
-// 1.20.1	2024-06-04T16:06:11.826754	Tags for minecraft:item mod id unseen_world
-3a0f0d3a1e39481e272c2961504bd57cbe319b77 data/minecraft/tags/items/planks.json
-04ede23e98539ad98ba2c11fb9f8fe4b04d3a345 data/minecraft/tags/items/stone_tool_materials.json
-d122da4c5af1ef1b604f3cece8e5a4d19fd8cc6d data/minecraft/tags/items/trimmable_armor.json
-e6e70359e7abdabbd71dffac440aa710af5cd6fc data/unseen_world/tags/items/dark_water_protected_helmets.json
-01eb9913eeab384db07ff69420236fd82b35a492 data/unseen_world/tags/items/treasure_weapons.json

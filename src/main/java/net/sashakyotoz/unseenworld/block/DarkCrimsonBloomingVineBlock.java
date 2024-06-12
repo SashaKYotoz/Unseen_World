@@ -26,8 +26,8 @@ import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 
 public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implements BonemealableBlock,DarkCrimsonVine {
 	public DarkCrimsonBloomingVineBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.TWISTING_VINES_PLANT).strength(1f, 5f).randomTicks().requiresCorrectToolForDrops().noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
-				.emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false),Direction.DOWN, SHAPE, false);
+		super(BlockBehaviour.Properties.copy(Blocks.TWISTING_VINES_PLANT).strength(1f, 5f).randomTicks().noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
+				.emissiveRendering((bs, br, bp) -> true),Direction.DOWN, SHAPE, false);
 		this.registerDefaultState(this.stateDefinition.any().setValue(BERRIES, Boolean.FALSE));
 	}
 
@@ -50,8 +50,8 @@ public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implemen
 		return (GrowingPlantHeadBlock) UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get();
 	}
 
-	protected BlockState updateHeadAfterConvertedFromBody(BlockState p_153028_, BlockState p_153029_) {
-		return p_153029_.setValue(BERRIES, p_153028_.getValue(BERRIES));
+	protected BlockState updateHeadAfterConvertedFromBody(BlockState state, BlockState state1) {
+		return state1.setValue(BERRIES, state.getValue(BERRIES));
 	}
 
 	public ItemStack getCloneItemStack(BlockGetter p_153007_, BlockPos p_153008_, BlockState p_153009_) {
@@ -74,8 +74,8 @@ public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implemen
 		return true;
 	}
 
-	public void performBonemeal(ServerLevel level, RandomSource p_220939_, BlockPos p_220940_, BlockState state) {
-		level.setBlock(p_220940_, state.setValue(BERRIES, Boolean.TRUE), 2);
+	public void performBonemeal(ServerLevel level, RandomSource p_220939_, BlockPos pos, BlockState state) {
+		level.setBlock(pos, state.setValue(BERRIES, Boolean.TRUE), 2);
 	}
 
 	@Override

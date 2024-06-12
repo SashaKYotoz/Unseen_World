@@ -1,5 +1,6 @@
 package net.sashakyotoz.unseenworld.managers;
 
+import net.minecraft.world.level.Level;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModEnchantments;
 import net.minecraftforge.common.TierSortingRegistry;
@@ -19,29 +20,31 @@ import net.minecraft.util.Mth;
 import net.minecraft.core.BlockPos;
 
 public class MiningBootsProcedure {
-    public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
+    public static void execute(Entity entity) {
         if (entity == null)
             return;
+        double x = entity.getX();
+        double y = entity.getY();
+        double z = entity.getZ();
         double sx, sy, sz;
+        Level level = entity.level();
         if (!UnseenWorldConfigs.DEACTIVATE_MINING_BOOTS.get()) {
-            if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).getEnchantmentLevel(UnseenWorldModEnchantments.MININGBOOTS.get()) > 0) {
+            if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getEnchantmentLevel(UnseenWorldModEnchantments.MININGBOOTS.get()) > 0) {
                 sx = -1;
-                for (int index0 = 0; index0 < 3; index0++) {
+                for (int i = 0; i < 3; i++) {
                     sy = -1;
-                    for (int index1 = 0; index1 < 3; index1++) {
+                    for (int j = 0; j < 3; j++) {
                         sz = -1;
-                        for (int index2 = 0; index2 < 3; index2++) {
+                        for (int k = 0; k < 3; k++) {
                             if (new Object() {
                                 public int getHarvestLevel(BlockState _bs) {
                                     return TierSortingRegistry.getSortedTiers().stream().filter(t -> t.getTag() != null && _bs.is(t.getTag())).map(Tier::getLevel).findFirst().orElse(0);
                                 }
-                            }.getHarvestLevel(world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))) <= 4
-                                    && !((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == Blocks.BEDROCK || (world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == Blocks.END_PORTAL_FRAME)) {
-                                {
-                                    BlockPos _pos = BlockPos.containing(x + sx, y + sy, z + sz);
-                                    Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-                                    world.destroyBlock(_pos, false);
-                                }
+                            }.getHarvestLevel(level.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))) <= 4
+                                    && !(level.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz)).getBlock().defaultDestroyTime() <= -1)) {
+                                BlockPos pos = BlockPos.containing(x + sx, y + sy, z + sz);
+                                Block.dropResources(level.getBlockState(pos), level, BlockPos.containing(x, y, z), null);
+                                level.destroyBlock(pos, false);
                             }
                             sz = sz + 1;
                         }
@@ -49,8 +52,8 @@ public class MiningBootsProcedure {
                     }
                     sx = sx + 1;
                 }
-                ItemStack stack = (entity instanceof LivingEntity livingEntity ? livingEntity.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY);
-                if (stack.hurt((int) (Mth.nextDouble(RandomSource.create(), 1, 6) - (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.UNBREAKING)),
+                ItemStack stack = livingEntity.getItemBySlot(EquipmentSlot.FEET);
+                if (stack.hurt((int) (Mth.nextDouble(RandomSource.create(), 1, 6) - stack.getEnchantmentLevel(Enchantments.UNBREAKING)),
                         RandomSource.create(), null)) {
                     stack.shrink(1);
                     stack.setDamageValue(0);

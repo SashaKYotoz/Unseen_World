@@ -30,8 +30,7 @@ public class DarkCrimsonFlowingAzaleaBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public DarkCrimsonFlowingAzaleaBlock() {
-		super(BlockBehaviour.Properties.of().ignitedByLava().sound(SoundType.AZALEA).strength(2f, 3f).lightLevel(s -> 8).noOcclusion().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true)
-				.isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().ignitedByLava().sound(SoundType.AZALEA).strength(1.5f).lightLevel(s -> 8).noOcclusion().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 

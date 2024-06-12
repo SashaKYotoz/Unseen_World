@@ -78,7 +78,7 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModItems.RED_TITANIUM_POISONOUS_SWORD.get());
 				tabData.accept(UnseenWorldModItems.NATURERIUM_SWORD.get());
 				tabData.accept(UnseenWorldModItems.UNSEEN_SWORD.get());
-				tabData.accept(UnseenWorldModItems.VOID_ENDERMEN_SWORD.get());
+				tabData.accept(UnseenWorldModItems.VOID_ENDERMAN_SWORD.get());
 				tabData.accept(UnseenWorldModItems.HEAVY_CLAYMORE.get());
 				tabData.accept(UnseenWorldModItems.LIGHT_TULVAR.get());
 				tabData.accept(UnseenWorldModItems.BLASTING_LANCER.get());
@@ -164,10 +164,10 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_TRAPDOOR.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_PRESSURE_PLATE.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_BUTTON.get().asItem());
+				tabData.accept(UnseenWorldModBlocks.GRIZZLY_LEAVES.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_WOOD.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_LOG.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_PLANKS.get().asItem());
-				tabData.accept(UnseenWorldModBlocks.GRIZZLY_LEAVES.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_STAIRS.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_SLAB.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.GRIZZLY_FENCE.get().asItem());
@@ -231,8 +231,8 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModBlocks.RED_DEEPSLATE_BRICKS_WALL.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.CHLORITE_SLATE_STONE.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.CHLORITE_SLATE_STONE_BRICKS.get().asItem());
-				tabData.accept(UnseenWorldModBlocks.CHLORITE_SLATE_STONE_BRICKS_SLAB.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.CHLORITE_SLATE_STONE_BRICKS_STAIRS.get().asItem());
+				tabData.accept(UnseenWorldModBlocks.CHLORITE_SLATE_STONE_BRICKS_SLAB.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.CHLORITE_SLATE_STONE_BRICKS_WALL.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.DARK_CURRANTSLATE.get());
 				tabData.accept(UnseenWorldModBlocks.DARK_CURRANTSLATE_STAIRS.get());
@@ -250,7 +250,7 @@ public class UnseenWorldModTabs {
 				tabData.accept(UnseenWorldModBlocks.MISTERY_CROP_FLOWER.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.OUT_GROWT_APPLE_BUSH.get().asItem());
-				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALIA.get().asItem());
+				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALEA.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_AZALEA.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get().asItem());
 				tabData.accept(UnseenWorldModBlocks.LUMINOUS_AMETHYST_VINE.get().asItem());

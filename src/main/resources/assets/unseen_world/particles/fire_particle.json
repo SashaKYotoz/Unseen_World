@@ -1,13 +1,5 @@
 {
   "textures": [
-    "unseen_world:fire_particle_1",
-    "unseen_world:fire_particle_2",
-    "unseen_world:fire_particle_3",
-    "unseen_world:fire_particle_4",
-    "unseen_world:fire_particle_5",
-    "unseen_world:fire_particle_6",
-    "unseen_world:fire_particle_7",
-    "unseen_world:fire_particle_8",
-    "unseen_world:fire_particle_9"
+    "unseen_world:fireball/fireball_particle0"
   ]
 }

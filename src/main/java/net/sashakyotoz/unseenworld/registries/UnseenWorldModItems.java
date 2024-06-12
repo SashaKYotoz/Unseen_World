@@ -14,6 +14,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.sashakyotoz.anitexlib.registries.ModParticleTypes;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.item.*;
 import net.sashakyotoz.unseenworld.managers.DarkPearlRightClickedProcedure;
@@ -32,7 +33,7 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> RED_TITANIUM_POISONOUS_SWORD = ITEMS.register("red_titanium_poisonous_sword", RedTitaniumPoisonousSwordItem::new);
 	public static final RegistryObject<Item> NATURERIUM_SWORD = ITEMS.register("naturerium_sword", () -> new SwordItem(ModTiers.NATURERIUM,3, -2.4f, new Item.Properties()));
 	public static final RegistryObject<Item> UNSEEN_SWORD = ITEMS.register("unseen_sword", () -> new SwordItem(ModTiers.UNSEENIUM,3, -2.4f, new Item.Properties().fireResistant()));
-	public static final RegistryObject<Item> VOID_ENDERMEN_SWORD = ITEMS.register("void_endermen_sword", () -> new SwordItem(ModTiers.VOID,3, -2.4f, new Item.Properties().fireResistant()));
+	public static final RegistryObject<Item> VOID_ENDERMAN_SWORD = ITEMS.register("void_endermen_sword", () -> new SwordItem(ModTiers.VOID,3, -2.4f, new Item.Properties().fireResistant()));
 	public static final RegistryObject<Item> HEAVY_CLAYMORE = ITEMS.register("heavy_claymore", HeavyClaymoreItem::new);
 	public static final RegistryObject<Item> LIGHT_TULVAR = ITEMS.register("light_tulvar", LightTulvarItem::new);
 	public static final RegistryObject<Item> BLASTING_LANCER = ITEMS.register("blasting_lancer", BlastingLancer::new);
@@ -106,11 +107,11 @@ public class UnseenWorldModItems {
 	});
 	public static final RegistryObject<Item> FIRE_PEARL = ITEMS.register("fire_pearl", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> DEEP_GEM = ITEMS.register("deep_gem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
-	public static final RegistryObject<Item> BLUE_VOID = ITEMS.register("blue_void", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> BLUE_VOID = ITEMS.register("blue_void", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), ModParticleTypes.WISP_LIKE_PARTICLE.get()));
 	public static final RegistryObject<Item> VOID_INGOT = ITEMS.register("void_ingot_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> RAW_RED_TITANIUM = ITEMS.register("raw_red_titanium", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> RAW_RED_TITANIUM = ITEMS.register("raw_red_titanium", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON),UnseenWorldModParticleTypes.REDNESS.get()));
 	public static final RegistryObject<Item> RED_TITANIUM_INGOT = ITEMS.register("red_titanium_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> RAW_UNSEENIUM = ITEMS.register("raw_unseenium", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)));
+	public static final RegistryObject<Item> RAW_UNSEENIUM = ITEMS.register("raw_unseenium", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON),ModParticleTypes.SPARK_LIKE_PARTICLE.get()));
 	public static final RegistryObject<Item> UNSEEN_INGOT = ITEMS.register("unseen_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> NATURERIUM_INGOT = ITEMS.register("naturerium_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> RED_BLAZE_ROD = ITEMS.register("red_blaze_rod", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
@@ -119,11 +120,11 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> CHLORITE_SLATE_STONE_SHARD = ITEMS.register("chlorite_slate_stone_shard", ()-> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> TEALIVE_STONY_SHARD = ITEMS.register("tealive_stony_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> DARK_FREE_SOUL = ITEMS.register("dark_free_soul", DarkFreeSoulItem::new);
-	public static final RegistryObject<Item> OUTGROWTH_APPLE = ITEMS.register("outgrowthapple", OutgrowthAppleItem::new);
+	public static final RegistryObject<Item> OUTGROWTH_APPLE = ITEMS.register("outgrowthapple", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(2f).build()),new MobEffectInstance(MobEffects.REGENERATION, 100, 1)));
 	public static final RegistryObject<Item> CHIMERIC_BLUE_PEPPER = ITEMS.register("chimeric_blue_pepper", () -> new Item(new Item.Properties().rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(2).fast().saturationMod(2f).build())));
 	public static final RegistryObject<Item> PURPLE_BERRIES = ITEMS.register("purple_berries",()->new ModFoodItem(new Item.Properties().rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1f).build()),new MobEffectInstance(MobEffects.HEAL, 60, 1)));
-	public static final RegistryObject<Item> LUMINOUS_PORKCHOP = ITEMS.register("luminousporkchop", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.3f).meat().build()),new MobEffectInstance(MobEffects.GLOWING, 600, 1, (false), (false))));
-	public static final RegistryObject<Item> LUMINOUS_COOKED_PORKCHOP = ITEMS.register("luminouscookedporkchop", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationMod(4f).meat().build()),new MobEffectInstance(MobEffects.GLOWING, 600, 1, (false), (false))));
+	public static final RegistryObject<Item> LUMINOUS_PORKCHOP = ITEMS.register("luminousporkchop", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.3f).meat().build()),new MobEffectInstance(MobEffects.GLOWING, 600, 1, false, false)));
+	public static final RegistryObject<Item> LUMINOUS_COOKED_PORKCHOP = ITEMS.register("luminouscookedporkchop", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationMod(4f).meat().build()),new MobEffectInstance(MobEffects.GLOWING, 600, 1, false, false)));
 	public static final RegistryObject<Item> BERRIES_OF_BLOOMING_VINE = ITEMS.register("berriesfrom_blooming_vine", () -> new ItemNameBlockItem(UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1.5f).build())){
 		@Override
 		public int getUseDuration(ItemStack itemstack) {

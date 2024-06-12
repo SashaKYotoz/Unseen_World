@@ -25,7 +25,7 @@ import java.util.Collections;
 
 public class AncientTransientBlockCloseBlock extends Block {
 	public AncientTransientBlockCloseBlock() {
-		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.SHROOMLIGHT).strength(10f, 15f).lightLevel(s -> 1).requiresCorrectToolForDrops().hasPostProcess((bs, br, bp) -> true)
+		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.SHROOMLIGHT).requiresCorrectToolForDrops().strength(10f).lightLevel(s -> 1).hasPostProcess((bs, br, bp) -> true)
 				.emissiveRendering((bs, br, bp) -> true));
 	}
 

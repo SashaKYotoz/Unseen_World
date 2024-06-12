@@ -1,7 +1,18 @@
 {
-  "parent": "unseen_world:custom/void_staff",
-  "textures": {
-    "0": "unseen_world:block/void_staff",
-    "particle": "unseen_world:item/void_staff"
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "unseen_world:item/void_staff_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "unseen_world:item/void_staff_2d"
+    },
+    "ground": {
+      "parent": "unseen_world:item/void_staff_3d"
+    },
+    "fixed": {
+      "parent": "unseen_world:item/void_staff_2d"
+    }
   }
 }

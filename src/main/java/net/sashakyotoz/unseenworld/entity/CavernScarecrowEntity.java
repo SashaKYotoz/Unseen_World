@@ -2,6 +2,7 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraftforge.network.PlayMessages;
@@ -134,7 +135,7 @@ public class CavernScarecrowEntity extends TamableAnimal {
 				}
 			} else if (this.isFood(itemstack)) {
 				this.usePlayerItem(player, hand, itemstack);
-				if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+				if (this.random.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
 					this.tame(player);
 					this.level().broadcastEntityEvent(this, (byte) 7);
 				} else {
@@ -152,9 +153,9 @@ public class CavernScarecrowEntity extends TamableAnimal {
 	}
 
 	@Override
-	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		CavernScarecrowEntity entity = UnseenWorldModEntities.CAVERN_SCARECROW.get().create(serverWorld);
-		entity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
+	public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageable) {
+		CavernScarecrowEntity entity = UnseenWorldModEntities.CAVERN_SCARECROW.get().create(serverLevel);
+		entity.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return entity;
 	}
 

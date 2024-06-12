@@ -7,7 +7,8 @@
   "mixins": [],
   "client": [
     "BlockEntityWithoutLevelRendererMixin",
-    "BossesHealthOverMixin"
+    "BossesHealthOverMixin",
+    "ItemInHandRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

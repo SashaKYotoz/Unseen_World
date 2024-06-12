@@ -29,8 +29,8 @@ public class DarkCrimsonAzaleaBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public DarkCrimsonAzaleaBlock() {
-		super(BlockBehaviour.Properties.of().ignitedByLava().sound(SoundType.AZALEA).strength(2f, 3f).lightLevel(s -> 8).requiresCorrectToolForDrops().noOcclusion().randomTicks().hasPostProcess((bs, br, bp) -> true)
-				.emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().ignitedByLava().sound(SoundType.AZALEA).strength(1.5f).lightLevel(s -> 8).noOcclusion().randomTicks().hasPostProcess((bs, br, bp) -> true)
+				.emissiveRendering((bs, br, bp) -> true));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 
@@ -73,13 +73,6 @@ public class DarkCrimsonAzaleaBlock extends Block {
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof HoeItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 1;
-		return false;
-	}
-
-	@Override
 	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 		List<ItemStack> dropsOriginal = super.getDrops(state, builder);
 		if (!dropsOriginal.isEmpty())
@@ -92,7 +85,7 @@ public class DarkCrimsonAzaleaBlock extends Block {
 		super.tick(blockstate, world, pos, random);
 		if (Math.random() < 0.0025) {
 			world.addParticle(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(), pos.getX(), pos.getY(), pos.getZ(), 0.25, 1, 0.25);
-			BlockState state = UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALIA.get().defaultBlockState();
+			BlockState state = UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALEA.get().defaultBlockState();
 			world.setBlock(pos, state, 3);
 		}
 	}

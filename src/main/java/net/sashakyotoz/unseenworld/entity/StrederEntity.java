@@ -66,7 +66,6 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     @Nullable
     private TemptGoal temptGoal;
 
-    @Nullable
     public StrederEntity(PlayMessages.SpawnEntity packet, Level world) {
         this(UnseenWorldModEntities.STREDER.get(), world);
     }
@@ -74,13 +73,11 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         super(type, world);
         xpReward = 0;
         setMaxUpStep(1f);
-        setNoAi(false);
     }
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> dataAccessor) {
-        if (DATA_BOOST_TIME.equals(dataAccessor) && this.level().isClientSide) {
+        if (DATA_BOOST_TIME.equals(dataAccessor) && this.level().isClientSide)
             this.steering.onSynced();
-        }
         super.onSyncedDataUpdated(dataAccessor);
     }
 
@@ -122,8 +119,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         super.tickRidden(player, p_278234_);
     }
 
-    protected Vec3 getRiddenInput(Player player, Vec3 p_275578_) {
-        return new Vec3(0.0D, 0.0D, 1.0D);
+    protected Vec3 getRiddenInput(Player player, Vec3 vec3) {
+        return super.getRiddenInput(player,vec3);
     }
 
     protected float getRiddenSpeed(Player player) {
@@ -141,8 +138,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, StrederEntity.class, 8.0F));
     }
 
-    public void setSuffocating(boolean p_33952_) {
-        this.entityData.set(DATA_SUFFOCATING, p_33952_);
+    public void setSuffocating(boolean b) {
+        this.entityData.set(DATA_SUFFOCATING, b);
         AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
     }
 

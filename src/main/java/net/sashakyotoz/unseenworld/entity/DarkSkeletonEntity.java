@@ -39,17 +39,12 @@ public class DarkSkeletonEntity extends Monster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return (double) (4.0 + entity.getBbWidth() * entity.getBbWidth());
-			}
-		});
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.8));
 		this.goalSelector.addGoal(4, new FloatGoal(this));
 		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, Player.class, false, true));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
 		this.goalSelector.addGoal(7, new RestrictSunGoal(this));
 	}
 

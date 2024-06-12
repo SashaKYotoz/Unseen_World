@@ -35,7 +35,7 @@ public class UnseenWorldModTrades {
             trades.get(3).add(new BasicItemListing(new ItemStack(Items.EMERALD, 3),
 
                     new ItemStack(UnseenWorldModItems.DEEP_GEM.get()), 8, 5, 0.05f));
-            trades.get(4).add(new BasicItemListing(new ItemStack(UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALIA.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 2), new ItemStack(Blocks.FLOWERING_AZALEA), 10, 5, 0.05f));
+            trades.get(4).add(new BasicItemListing(new ItemStack(UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALEA.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 2), new ItemStack(Blocks.FLOWERING_AZALEA), 10, 5, 0.05f));
             trades.get(5).add(new BasicItemListing(new ItemStack(UnseenWorldModItems.DARK_PEARL.get()), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 4), new ItemStack(Items.ENDER_PEARL), 10, 5, 0.05f));
             trades.get(1).add(new BasicItemListing(new ItemStack(Blocks.DEEPSLATE_BRICKS), new ItemStack(UnseenWorldModItems.DEEP_GEM.get(), 6), new ItemStack(UnseenWorldModBlocks.COLD_DARK_BRICKS.get()), 10, 5, 0.05f));
         }

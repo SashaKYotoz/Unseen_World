@@ -175,7 +175,6 @@ public class DarkGolemAttackGoal extends Goal {
                 }
             });
         }
-
     }
 
     protected void resetAttackCooldown() {

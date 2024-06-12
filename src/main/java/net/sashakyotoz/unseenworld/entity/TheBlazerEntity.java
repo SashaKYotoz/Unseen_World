@@ -37,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
+import net.sashakyotoz.unseenworld.managers.EventManager;
 import net.sashakyotoz.unseenworld.managers.TheBlazerOnEntityTickUpdateProcedure;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
@@ -69,17 +70,10 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         spawnAnimationState.start(this.tickCount);
-        spawnFoundParticles();
+        EventManager.addParticles(UnseenWorldModParticleTypes.FIRE_PARTICLE.get(),this.level(),this.getX(),this.getY(),this.getZ(),2);
         if (!Objects.equals(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get(), UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.getDefault())) {
             Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get());
             this.setHealth(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get().floatValue());
-        }
-    }
-
-    private void spawnFoundParticles() {
-        for (int i = 0; i < 360; i++) {
-            if (i % 20 == 0)
-                this.level().addParticle(UnseenWorldModParticleTypes.FIRE_PARTICLE.get(), this.getX() + 0.5d, this.getY() + 1, this.getZ() + 0.5d, Math.cos(i) * 0.15d, 0.15d, Math.sin(i) * 0.15d);
         }
     }
 
@@ -87,8 +81,8 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
         return this.entityData.get(DATA_IS_BLOCKED);
     }
 
-    public void setBlocking(boolean p_32759_) {
-        this.entityData.set(DATA_IS_BLOCKED, p_32759_);
+    public void setBlocking(boolean blocking) {
+        this.entityData.set(DATA_IS_BLOCKED, blocking);
     }
 
     protected void defineSynchedData() {
@@ -150,7 +144,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, Player.class, false, false));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false, false));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(3, new Goal() {
             {
@@ -284,7 +278,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
     @Override
     public void tick() {
         super.tick();
-        if (!(blazer.getTarget() == null) && Math.random() > 0.5)
+        if (blazer.getTarget() != null && this.getRandom().nextBoolean())
             TheBlazerOnEntityTickUpdateProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
     }
 

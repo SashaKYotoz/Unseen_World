@@ -27,22 +27,18 @@ public class ModelBeaconOfWeapons extends Model {
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-
         PartDefinition base = partdefinition.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0).addBox(-16.0F, -8.0F, 0.0F, 16.0F, 8.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 24.0F, -8.0F));
-
         PartDefinition top = partdefinition.addOrReplaceChild("top", CubeListBuilder.create().texOffs(-16, 48).addBox(-8.0F, -2.98F, -8.0F, 16.0F, 0.0F, 16.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 38).mirror().addBox(-7.0F, -3.0F, 6.98F, 14.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(0, 38).addBox(-7.0F, -3.0F, -6.98F, 14.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 24).addBox(-6.98F, -3.0F, -7.0F, 0.0F, 4.0F, 14.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 24).addBox(6.98F, -3.0F, -7.0F, 0.0F, 4.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
-
         PartDefinition beacon = partdefinition.addOrReplaceChild("beacon", CubeListBuilder.create().texOffs(96, 44).addBox(-8.0F, -16.0F, -8.0F, 0.0F, 4.0F, 16.0F, new CubeDeformation(0.0F))
                 .texOffs(96, 44).addBox(8.0F, -16.0F, -8.0F, 0.0F, 4.0F, 16.0F, new CubeDeformation(0.0F))
                 .texOffs(96, 60).addBox(-8.0F, -16.0F, -8.0F, 16.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(96, 60).addBox(-8.0F, -16.0F, 8.0F, 16.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(16, 48).addBox(-8.0F, -15.98F, -8.0F, 16.0F, 0.0F, 16.0F, new CubeDeformation(0.0F))
                 .texOffs(24, 40).addBox(-4.0F, -14.0F, -4.0F, 8.0F, 0.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 25.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
-
         return LayerDefinition.create(meshdefinition, 128, 64);
     }
     @Override

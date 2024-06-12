@@ -1,16 +1,7 @@
 {
   "variants": {
-    "axis=x": {
-      "model": "unseen_world:block/dark_crimson_leaves",
-      "x": 90,
-      "y": 90
-    },
-    "axis=y": {
+    "": {
       "model": "unseen_world:block/dark_crimson_leaves"
-    },
-    "axis=z": {
-      "model": "unseen_world:block/dark_crimson_leaves",
-      "x": 90
     }
   }
 }

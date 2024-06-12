@@ -38,7 +38,6 @@ public class SavageSmallBlazeEntity extends Monster {
 		super(type, world);
 		setMaxUpStep(0.6f);
 		xpReward = 10;
-		setNoAi(false);
 	}
 
 	@Override
@@ -49,22 +48,12 @@ public class SavageSmallBlazeEntity extends Monster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, Player.class, false, true));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-			}
-		});
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5, false));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.2));
 		this.goalSelector.addGoal(5, new FollowMobGoal(this, 2, (float) 8, (float) 6));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
 	}
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
@@ -100,9 +89,6 @@ public class SavageSmallBlazeEntity extends Monster {
 		if (source.is(DamageTypes.WITHER_SKULL))
 			return false;
 		return super.hurt(source, amount);
-	}
-
-	public static void init() {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

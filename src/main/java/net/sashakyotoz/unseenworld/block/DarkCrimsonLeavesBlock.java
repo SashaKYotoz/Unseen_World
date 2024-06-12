@@ -1,6 +1,8 @@
 
 package net.sashakyotoz.unseenworld.block;
 
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,81 +29,92 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class DarkCrimsonLeavesBlock extends Block implements SimpleWaterloggedBlock,BonemealableBlock {
-	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
+import java.util.OptionalInt;
+
+public class DarkCrimsonLeavesBlock extends Block implements BonemealableBlock, SimpleWaterloggedBlock, net.minecraftforge.common.IForgeShearable {
+	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, 9);
+	public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
-	public DarkCrimsonLeavesBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).mapColor(MapColor.COLOR_BLACK).sound(SoundType.GRASS).strength(0.3f).requiresCorrectToolForDrops().noOcclusion().randomTicks().isRedstoneConductor((bs, br, bp) -> false));
-		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Y).setValue(WATERLOGGED, false));
+	public DarkCrimsonLeavesBlock(Properties properties) {
+		super(properties);
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Y).setValue(DISTANCE, 8).setValue(PERSISTENT, Boolean.FALSE).setValue(WATERLOGGED, Boolean.FALSE));
 	}
 
-	@Override
-	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
-		return 1;
+	public boolean isRandomlyTicking(BlockState state) {
+		return state.getValue(DISTANCE) >= 8 && !state.getValue(PERSISTENT);
 	}
 
-	@Override
-	public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return Shapes.empty();
+	private boolean decaying(BlockState state) {
+		return !state.getValue(PERSISTENT) && state.getValue(DISTANCE) == 8;
 	}
 
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(AXIS, WATERLOGGED);
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
+		level.setBlock(pos, updateDistance(state, level, pos), 3);
 	}
-
-	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		boolean flag = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
-		return this.defaultBlockState().setValue(AXIS, context.getClickedFace().getAxis()).setValue(WATERLOGGED, flag);
-	}
-
-	@Override
-	public BlockState rotate(BlockState state, Rotation rot) {
-		if (rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90) {
-			if (state.getValue(AXIS) == Direction.Axis.X) {
-				return state.setValue(AXIS, Direction.Axis.Z);
-			} else if (state.getValue(AXIS) == Direction.Axis.Z) {
-				return state.setValue(AXIS, Direction.Axis.X);
-			}
-		}
+	public BlockState updateShape(BlockState state, Direction direction, BlockState blockState, LevelAccessor accessor, BlockPos blockPos, BlockPos p_54445_) {
+		if (state.getValue(WATERLOGGED))
+			accessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
+		int i = getDistanceAt(blockState) + 1;
+		if (i != 1 || state.getValue(DISTANCE) != i)
+			accessor.scheduleTick(blockPos, this, 1);
 		return state;
 	}
 
+	private static BlockState updateDistance(BlockState state, LevelAccessor accessor, BlockPos pos) {
+		int i = 9;
+		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+		for (Direction direction : Direction.values()) {
+			blockpos$mutableblockpos.setWithOffset(pos, direction);
+			i = Math.min(i, getDistanceAt(accessor.getBlockState(blockpos$mutableblockpos)) + 1);
+			if (i == 1) {
+				break;
+			}
+		}
+		return state.setValue(DISTANCE, i);
+	}
+
+	private static int getDistanceAt(BlockState state) {
+		return getOptionalDistanceAt(state).orElse(9);
+	}
 	@Override
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
+		if (this.decaying(state)) {
+			dropResources(state, level, pos);
+			level.removeBlock(pos, false);
+		}
+	}
+
+	public static OptionalInt getOptionalDistanceAt(BlockState state) {
+		if (state.is(BlockTags.LOGS)) {
+			return OptionalInt.of(0);
+		} else {
+			return state.hasProperty(DISTANCE) ? OptionalInt.of(state.getValue(DISTANCE)) : OptionalInt.empty();
+		}
+	}
+
 	public FluidState getFluidState(BlockState state) {
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
-
-	@Override
-	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos) {
-		if (state.getValue(WATERLOGGED)) {
-			world.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
-		}
-		return super.updateShape(state, facing, facingState, world, currentPos, facingPos);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(DISTANCE, PERSISTENT, WATERLOGGED,AXIS);
 	}
 
-	@Override
-	public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-		return 60;
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+		BlockState blockstate = this.defaultBlockState().setValue(PERSISTENT, Boolean.TRUE).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+		return updateDistance(blockstate, context.getLevel(), context.getClickedPos());
 	}
-
 	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof TieredItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 0;
-		return false;
-	}
-
-	public boolean isValidBonemealTarget(LevelReader reader, BlockPos pos, BlockState p_255926_, boolean p_255711_) {
+	public boolean isValidBonemealTarget(LevelReader reader, BlockPos pos, BlockState state, boolean p_255711_) {
 		return reader.getBlockState(pos.below()).isAir();
 	}
-
-	public boolean isBonemealSuccess(Level level, RandomSource p_221438_, BlockPos p_221439_, BlockState p_221440_) {
-		return true;
+	@Override
+	public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+		return level.getBlockState(pos.below()).isAir();
 	}
-
+	@Override
 	public void performBonemeal(ServerLevel level, RandomSource source, BlockPos pos, BlockState state) {
 		level.setBlock(pos.below(), UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get().defaultBlockState(),3);
 	}

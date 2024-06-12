@@ -1,0 +1,13 @@
+{
+  "values": [
+    "unseen_world:deep_gem_sword",
+    "unseen_world:void_ingot_sword",
+    "unseen_world:red_titanium_sword",
+    "unseen_world:red_titanium_poisonous_sword",
+    "unseen_world:naturerium_sword",
+    "unseen_world:unseen_sword",
+    "unseen_world:void_endermen_sword",
+    "#unseen_world:treasure_weapons"
+  ],
+  "replace": false
+}

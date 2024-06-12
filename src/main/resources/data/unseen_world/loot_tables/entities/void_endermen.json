@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "unseen_world:darkpearl",
+          "name": "unseen_world:dark_pearl",
           "functions": [
             {
               "function": "minecraft:set_count",

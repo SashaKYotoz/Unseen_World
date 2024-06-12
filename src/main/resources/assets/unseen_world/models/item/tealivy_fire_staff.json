@@ -1,8 +1,18 @@
 {
-  "parent": "unseen_world:custom/tealivy_fire_staff",
-  "textures": {
-    "0": "unseen_world:block/tealivy_fire_staff",
-    "1": "unseen_world:block/tealivy_fire",
-    "particle": "unseen_world:item/tealivy_fire_staff"
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "unseen_world:item/tealive_staff_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "unseen_world:item/tealive_staff_2d"
+    },
+    "ground": {
+      "parent": "unseen_world:item/tealive_staff_3d"
+    },
+    "fixed": {
+      "parent": "unseen_world:item/tealive_staff_2d"
+    }
   }
 }

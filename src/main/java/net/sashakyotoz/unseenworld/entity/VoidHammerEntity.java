@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-@OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class VoidHammerEntity extends AbstractArrow {
     private int timer;
     private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(VoidHammerEntity.class, EntityDataSerializers.BYTE);
@@ -114,9 +113,8 @@ public class VoidHammerEntity extends AbstractArrow {
         DamageSource damagesource = this.damageSources().trident(this, entity1 == null ? this : entity1);
         this.dealtDamage = true;
         if (entity.hurt(damagesource, f)) {
-            if (entity.getType() == EntityType.ENDERMAN) {
+            if (entity.getType() == EntityType.ENDERMAN)
                 return;
-            }
             if (entity instanceof LivingEntity livingentity1) {
                 if (entity1 instanceof LivingEntity) {
                     EnchantmentHelper.doPostHurtEffects(livingentity1, entity1);
@@ -151,7 +149,7 @@ public class VoidHammerEntity extends AbstractArrow {
     }
 
     protected float getWaterInertia() {
-        return 0.99F;
+        return 0.95F;
     }
 
     public boolean shouldRender(double p_37588_, double p_37589_, double p_37590_) {

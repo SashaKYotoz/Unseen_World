@@ -4,8 +4,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
+import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
+import net.sashakyotoz.anitexlib.client.particles.parents.GlowingParticleRenderType;
 
-public class TanzaniteRayParticle extends TextureSheetParticle {
+public class TanzaniteRayParticle extends GlowingLikeParticle {
     public static TanzaniteRayParticle.TanzaniteParticleProvider provider(SpriteSet spriteSet) {
         return new TanzaniteRayParticle.TanzaniteParticleProvider(spriteSet);
     }
@@ -25,13 +27,14 @@ public class TanzaniteRayParticle extends TextureSheetParticle {
     private final float angularAcceleration;
 
     protected TanzaniteRayParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
-        super(world, x, y, z);
+        super(world, x, y, z,1f,0,0.75f,spriteSet);
         this.setSize(0.3f, 0.3f);
         this.lifetime = 50;
         this.hasPhysics = true;
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
+        this.quadSize = 0.35f;
         this.angularVelocity = 0.1f;
         this.angularAcceleration = 0f;
         this.setSpriteFromAge(spriteSet);
@@ -39,7 +42,7 @@ public class TanzaniteRayParticle extends TextureSheetParticle {
 
     @Override
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return GlowingParticleRenderType.INSTANCE;
     }
 
     @Override
@@ -52,12 +55,10 @@ public class TanzaniteRayParticle extends TextureSheetParticle {
         fadeOut();
     }
     private void fadeOut(){
-        float ratio = (float) (this.getLifetime() - this.age) / this.getLifetime();
-        this.setAlpha(ratio);
-        this.rCol = this.rCol + (RandomSource.create().nextInt(16)-15)*10f;
-        this.bCol = this.bCol + (RandomSource.create().nextInt(16)-15)*10f;
-        this.gCol = this.gCol + (RandomSource.create().nextInt(16)-15)*10f;
-        if(!this.removed || quadSize > 0)
-            this.quadSize = 0.5f + (float) age/20;
+        this.rCol = this.rCol + (RandomSource.create().nextInt(16)-12)/10f;
+        this.bCol = this.bCol + (RandomSource.create().nextInt(16)-12)/10f;
+        this.gCol = this.gCol + (RandomSource.create().nextInt(16)-12)/10f;
+        if(!this.removed && quadSize < 1)
+            this.quadSize = 0.35f + (float) age/20;
     }
 }

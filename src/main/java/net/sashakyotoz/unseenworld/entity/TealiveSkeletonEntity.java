@@ -54,19 +54,14 @@ public class TealiveSkeletonEntity extends Monster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-			}
-		});
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.75));
 		this.goalSelector.addGoal(4, new FloatGoal(this));
 		this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, (float) 0.5));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Player.class, false, true));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, AgeableMob.class, false, true));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, AgeableMob.class, false, true));
 	}
 
 	@Override

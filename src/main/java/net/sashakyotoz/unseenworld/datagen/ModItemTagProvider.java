@@ -27,6 +27,37 @@ public class ModItemTagProvider extends ItemTagsProvider {
                         .map(RegistryObject::get)
                         .toArray(Item[]::new)
         );
+        this.tag(ItemTags.SWORDS).replace(false).add(
+                UnseenWorldModItems.ITEMS.getEntries().stream()
+                        .filter(itemRegistryObject -> itemRegistryObject.get().getDescriptionId().contains("sword"))
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new)
+        ).addTag(UnseenWorldModTags.Items.TREASURE_WEAPONS);
+        this.tag(ItemTags.PICKAXES).replace(false).add(
+                UnseenWorldModItems.ITEMS.getEntries().stream()
+                        .filter(itemRegistryObject -> itemRegistryObject.get().getDescriptionId().contains("pickaxe"))
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new)
+        );
+        this.tag(ItemTags.AXES).replace(false).add(
+                UnseenWorldModItems.ITEMS.getEntries().stream()
+                        .filter(itemRegistryObject -> !itemRegistryObject.get().getDescriptionId().contains("pickaxe"))
+                        .filter(itemRegistryObject -> itemRegistryObject.get().getDescriptionId().contains("axe"))
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new)
+        );
+        this.tag(ItemTags.SHOVELS).replace(false).add(
+                UnseenWorldModItems.ITEMS.getEntries().stream()
+                        .filter(itemRegistryObject -> !itemRegistryObject.get().getDescriptionId().contains("shovel"))
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new)
+        );
+        this.tag(ItemTags.HOES).replace(false).add(
+                UnseenWorldModItems.ITEMS.getEntries().stream()
+                        .filter(itemRegistryObject -> !itemRegistryObject.get().getDescriptionId().contains("hoe"))
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new)
+        );
         this.tag(UnseenWorldModTags.Items.TREASURE_WEAPONS).add(
                 UnseenWorldModItems.FIERY_SABER.get(),
                 UnseenWorldModItems.HEAVY_CLAYMORE.get(),

@@ -87,8 +87,8 @@ public class TheWitherKnightEntity extends Monster {
         this.entityData.define(DATA_IS_ADVANCED, false);
     }
 
-    public void handleEntityEvent(byte p_219360_) {
-        if (p_219360_ >= 4 && p_219360_ <= 20) {
+    public void handleEntityEvent(byte bytes) {
+        if (bytes >= 4 && bytes <= 20) {
             if (!isAdvanced()) {
                 int randomAttack = (int) Math.round(Math.random());
                 if (randomAttack == 0)
@@ -99,7 +99,7 @@ public class TheWitherKnightEntity extends Monster {
                 this.flyingAttackAnimationState.start(this.tickCount);
             }
         } else {
-            super.handleEntityEvent(p_219360_);
+            super.handleEntityEvent(bytes);
         }
     }
     public boolean doHurtTarget(Entity entity) {
@@ -110,12 +110,12 @@ public class TheWitherKnightEntity extends Monster {
             return TheWitherKnightEntity.hurtAndThrowTarget(this, (LivingEntity) entity);
         }
     }
-    static boolean hurtAndThrowTarget(LivingEntity livingEntity, LivingEntity p_34644_) {
+    static boolean hurtAndThrowTarget(LivingEntity livingEntity, LivingEntity target) {
         float f = (float) livingEntity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        boolean flag = p_34644_.hurt(livingEntity.damageSources().mobAttack(livingEntity), f);
+        boolean flag = target.hurt(livingEntity.damageSources().mobAttack(livingEntity), f);
         if (flag) {
-            livingEntity.doEnchantDamageEffects(livingEntity, p_34644_);
-            throwTarget(livingEntity, p_34644_);
+            livingEntity.doEnchantDamageEffects(livingEntity, target);
+            throwTarget(livingEntity, target);
         }
         return flag;
     }
@@ -244,7 +244,7 @@ public class TheWitherKnightEntity extends Monster {
             }
         });
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Player.class, false, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, false, true));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(6, new FloatGoal(this));
     }

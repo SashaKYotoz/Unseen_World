@@ -34,11 +34,11 @@ private final EntityModelSet entityModelSet;
     public BlockEntityWithoutLevelRendererMixin(@NotNull EntityModelSet entityModelSet) {
         this.entityModelSet = entityModelSet;
     }
-    @Inject(method = "onResourceManagerReload", at = @At("HEAD"))
+    @Inject(method = "onResourceManagerReload", at = @At("RETURN"))
     public void onResourceManagerReloadUnseenWorld(ResourceManager resourceManager, CallbackInfo ci) {
         this.unseenworld$beacon = new ModelBeaconOfWeapons(this.entityModelSet.bakeLayer(ModelBeaconOfWeapons.LAYER_LOCATION));
     }
-    @Inject(method = "renderByItem", at = @At("RETURN"))
+    @Inject(method = "renderByItem", at = @At("HEAD"))
     public void renderByItemUnseenWorld(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
         Minecraft minecraft =  Minecraft.getInstance();
         if (itemStack.is(UnseenWorldModBlocks.BEACON_OF_WEAPONS.get().asItem()) && minecraft.level != null) {

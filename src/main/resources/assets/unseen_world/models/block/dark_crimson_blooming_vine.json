@@ -4,5 +4,5 @@
     "cross": "unseen_world:block/dark_crimson_flower_tube",
     "particle": "unseen_world:block/dark_crimson_flower_tube"
   },
-  "render_type": "translucent"
+  "render_type": "cutout"
 }

@@ -24,7 +24,7 @@ import net.sashakyotoz.unseenworld.entity.VoidStaffEntity;
 
 public class VoidStaffItem extends Item {
 	public VoidStaffItem() {
-		super(new Item.Properties().durability(350));
+		super(new Item.Properties().durability(368));
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class VoidStaffItem extends Item {
 
 	@Override
 	public UseAnim getUseAnimation(ItemStack itemstack) {
-		return UseAnim.BOW;
+		return UseAnim.CROSSBOW;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class VoidStaffItem extends Item {
 		if (slot == EquipmentSlot.MAINHAND) {
 			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 			builder.putAll(super.getDefaultAttributeModifiers(slot));
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Ranged item modifier", 1, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Ranged item modifier", 2, AttributeModifier.Operation.ADDITION));
 			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Ranged item modifier", -2.4, AttributeModifier.Operation.ADDITION));
 			return builder.build();
 		}
@@ -63,7 +63,7 @@ public class VoidStaffItem extends Item {
 			double z = player.getZ();
 			VoidStaffEntity staffEntity = VoidStaffEntity.shoot(world, player, world.getRandom(), 1.5f, 4, 2);
 			itemstack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
-			player.getCooldowns().addCooldown(itemstack.getItem(), 60);
+			player.getCooldowns().addCooldown(itemstack.getItem(), 70);
 			if (world instanceof ServerLevel level)
 				level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 24, 3, 3, 3, 1);
 			staffEntity.pickup = AbstractArrow.Pickup.DISALLOWED;

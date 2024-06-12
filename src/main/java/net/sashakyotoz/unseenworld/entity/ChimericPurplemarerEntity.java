@@ -58,7 +58,6 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         super(type, world);
         setMaxUpStep(1.25f);
         xpReward = 2;
-        setNoAi(false);
     }
     protected void tickRidden(Player player, Vec3 vec3) {
         this.setRot(player.getYRot(), player.getXRot() * 0.5F);
@@ -68,7 +67,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     }
 
     protected Vec3 getRiddenInput(Player player, Vec3 vec3) {
-        return new Vec3(0.0D, 0.0D, 1.0D);
+        return super.getRiddenInput(player,vec3);
     }
 
     protected float getRiddenSpeed(Player player) {
@@ -107,7 +106,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return this.isAlive() && !this.isBaby();
     }
 
-    public void equipSaddle(@javax.annotation.Nullable SoundSource source) {
+    public void equipSaddle(@Nullable SoundSource source) {
         this.steering.setSaddle(true);
         if (source != null) {
             this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, source, 0.5F, 1.0F);
@@ -148,7 +147,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return p_33880_.isUnobstructed(this);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getFirstPassenger();
         if (entity instanceof Player player) {
@@ -190,7 +189,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return this.moveDist + 0.5F;
     }
 
-    protected void playStepSound(BlockPos p_33915_, BlockState p_33916_) {
+    protected void playStepSound(BlockPos pos, BlockState state) {
         this.playSound(SoundEvents.FOX_BITE, 1.0F, 1.0F);
     }
 
@@ -227,8 +226,8 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     }
 
 
-    @javax.annotation.Nullable
-    public ChimericPurplemarerEntity getBreedOffspring(ServerLevel level, AgeableMob p_149862_) {
+    @Nullable
+    public ChimericPurplemarerEntity getBreedOffspring(ServerLevel level, AgeableMob mob) {
         return UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(level);
     }
 
@@ -268,7 +267,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return new Vec3(0.0D, 0.6F * this.getEyeHeight(), this.getBbWidth() * 0.4F);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance instance, MobSpawnType p_33889_, @javax.annotation.Nullable SpawnGroupData p_33890_, @javax.annotation.Nullable CompoundTag p_33891_) {
         if (!this.isBaby()) {
             RandomSource randomsource = accessor.getRandom();
@@ -291,9 +290,9 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return super.finalizeSpawn(accessor, instance, p_33889_, p_33890_, p_33891_);
     }
 
-    private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance p_33883_, Mob mob, @Nullable SpawnGroupData p_33885_) {
+    private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance instance, Mob mob, @Nullable SpawnGroupData p_33885_) {
         mob.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-        mob.finalizeSpawn(accessor, p_33883_, MobSpawnType.JOCKEY, p_33885_, null);
+        mob.finalizeSpawn(accessor, instance, MobSpawnType.JOCKEY, p_33885_, null);
         mob.startRiding(this, true);
         return new AgeableMob.AgeableMobGroupData(0.0F);
     }

@@ -3,6 +3,7 @@ package net.sashakyotoz.unseenworld.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.world.item.*;
 import net.sashakyotoz.unseenworld.entity.TealivyVoidSpearEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -25,10 +26,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +37,7 @@ import net.minecraftforge.jarjar.nio.util.Lazy;
 
 import java.util.UUID;
 
-public class TealivyVoidSpearItem extends Item implements Vanishable {
+public class TealivyVoidSpearItem extends TridentItem {
 	public static final UUID REACH_MOD = UUID.fromString("dccd59ec-6391-436d-9e00-47f2e6005e20");
 	public static double reach = 3;
 	public static int damage = 9;
@@ -74,11 +71,10 @@ public class TealivyVoidSpearItem extends Item implements Vanishable {
 		Vec3 targetVec = eyeVec.add(viewVec.x * reach, viewVec.y * reach, viewVec.z * reach);
 		AABB viewBB = entity.getBoundingBox().expandTowards(viewVec.scale(reach)).inflate(4.0D, 4.0D, 4.0D);
 		EntityHitResult result = ProjectileUtil.getEntityHitResult(world, entity, eyeVec, targetVec, viewBB, EntitySelector.NO_CREATIVE_OR_SPECTATOR, 4f);
-		if (result == null || !(result.getEntity() instanceof LivingEntity))
+		if (result == null || !(result.getEntity() instanceof LivingEntity target))
 			return false;
-		LivingEntity target = (LivingEntity) result.getEntity();
-		double distanceToTargetSqr = entity.distanceToSqr(target);
-		boolean hitResult = (result != null ? target : null) != null;
+        double distanceToTargetSqr = entity.distanceToSqr(target);
+		boolean hitResult = true;
 		if (hitResult) {
 			if (entity instanceof Player) {
 				if (reachSqr >= distanceToTargetSqr) {
@@ -89,39 +85,30 @@ public class TealivyVoidSpearItem extends Item implements Vanishable {
 		return super.onEntitySwing(stack, entity);
 	}
 
-	public boolean canAttackBlock(BlockState p_43409_, Level p_43410_, BlockPos p_43411_, Player p_43412_) {
-		return !p_43412_.isCreative();
+	public boolean canAttackBlock(BlockState p_43409_, Level p_43410_, BlockPos p_43411_, Player creative) {
+		return !creative.isCreative();
 	}
-
 	@Override
-	public UseAnim getUseAnimation(ItemStack p_43417_) {
-		return UseAnim.SPEAR;
-	}
-
-	public int getUseDuration(ItemStack p_43419_) {
-		return 72000;
-	}
-
-	public void releaseUsing(ItemStack p_43394_, Level p_43395_, LivingEntity p_43396_, int p_43397_) {
-		if (p_43396_ instanceof Player player) {
-			int i = this.getUseDuration(p_43394_) - p_43397_;
+	public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int k) {
+		if (entity instanceof Player player) {
+			int i = this.getUseDuration(stack) - k;
 			if (i >= 10) {
-				int j = EnchantmentHelper.getRiptide(p_43394_);
+				int j = EnchantmentHelper.getRiptide(stack);
 				if (j <= 0 || player.isInWaterOrRain()) {
-					if (!p_43395_.isClientSide) {
-						p_43394_.hurtAndBreak(1, player, (p_43388_) -> {
-							p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand());
+					if (!level.isClientSide) {
+						stack.hurtAndBreak(1, player, (p_43388_) -> {
+							p_43388_.broadcastBreakEvent(entity.getUsedItemHand());
 						});
 						if (j == 0) {
-							TealivyVoidSpearEntity throwntrident = new TealivyVoidSpearEntity(p_43395_, player, p_43394_);
+							TealivyVoidSpearEntity throwntrident = new TealivyVoidSpearEntity(level, player, stack);
 							throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F + (float) j * 0.5F, 1.0F);
 							if (player.getAbilities().instabuild) {
 								throwntrident.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 							}
-							p_43395_.addFreshEntity(throwntrident);
-							p_43395_.playSound((Player) null, throwntrident, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+							level.addFreshEntity(throwntrident);
+							level.playSound(null, throwntrident, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
 							if (!player.getAbilities().instabuild) {
-								player.getInventory().removeItem(p_43394_);
+								player.getInventory().removeItem(stack);
 							}
 						}
 					}
@@ -137,11 +124,11 @@ public class TealivyVoidSpearItem extends Item implements Vanishable {
 						f1 *= f5 / f4;
 						f2 *= f5 / f4;
 						f3 *= f5 / f4;
-						player.push((double) f1, (double) f2, (double) f3);
+						player.push(f1, f2, f3);
 						player.startAutoSpinAttack(20);
 						if (player.onGround()) {
 							float f6 = 1.2F;
-							player.move(MoverType.SELF, new Vec3(0.0D, (double) 1.2F, 0.0D));
+							player.move(MoverType.SELF, new Vec3(0.0D, 1.2F, 0.0D));
 						}
 						SoundEvent soundevent;
 						if (j >= 3) {
@@ -151,39 +138,23 @@ public class TealivyVoidSpearItem extends Item implements Vanishable {
 						} else {
 							soundevent = SoundEvents.TRIDENT_RIPTIDE_1;
 						}
-						p_43395_.playSound((Player) null, player, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
+						level.playSound(null, player, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
 			}
 		}
 	}
 
-	public InteractionResultHolder<ItemStack> use(Level p_43405_, Player p_43406_, InteractionHand p_43407_) {
-		ItemStack itemstack = p_43406_.getItemInHand(p_43407_);
+	public InteractionResultHolder<ItemStack> use(Level p_43405_, Player player, InteractionHand p_43407_) {
+		ItemStack itemstack = player.getItemInHand(p_43407_);
 		if (itemstack.getDamageValue() >= itemstack.getMaxDamage() - 1) {
 			return InteractionResultHolder.fail(itemstack);
-		} else if (EnchantmentHelper.getRiptide(itemstack) > 0 && !p_43406_.isInWaterOrRain()) {
+		} else if (EnchantmentHelper.getRiptide(itemstack) > 0 && !player.isInWaterOrRain()) {
 			return InteractionResultHolder.fail(itemstack);
 		} else {
-			p_43406_.startUsingItem(p_43407_);
+			player.startUsingItem(p_43407_);
 			return InteractionResultHolder.consume(itemstack);
 		}
-	}
-
-	public boolean hurtEnemy(ItemStack p_43390_, LivingEntity p_43391_, LivingEntity p_43392_) {
-		p_43390_.hurtAndBreak(1, p_43392_, (p_43414_) -> {
-			p_43414_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-		});
-		return true;
-	}
-
-	public boolean mineBlock(ItemStack p_43399_, Level p_43400_, BlockState p_43401_, BlockPos p_43402_, LivingEntity p_43403_) {
-		if ((double) p_43401_.getDestroySpeed(p_43400_, p_43402_) != 0.0D) {
-			p_43399_.hurtAndBreak(2, p_43403_, (p_43385_) -> {
-				p_43385_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-			});
-		}
-		return true;
 	}
 
 	@Override

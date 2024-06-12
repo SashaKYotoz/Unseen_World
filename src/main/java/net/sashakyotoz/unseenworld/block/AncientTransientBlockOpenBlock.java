@@ -26,7 +26,7 @@ import java.util.List;
 
 public class AncientTransientBlockOpenBlock extends Block {
 	public AncientTransientBlockOpenBlock() {
-		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.SHROOMLIGHT).strength(10f).lightLevel(s -> 1).requiresCorrectToolForDrops().noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
+		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.SHROOMLIGHT).strength(10f).lightLevel(s -> 1).noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
 				.emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
 	}
 	@Override

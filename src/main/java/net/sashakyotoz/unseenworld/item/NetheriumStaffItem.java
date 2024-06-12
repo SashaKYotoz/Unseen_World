@@ -58,9 +58,9 @@ public class NetheriumStaffItem extends Item {
 	@Override
 	public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityLiving, int timeLeft) {
 		if (!world.isClientSide() && entityLiving instanceof ServerPlayer player) {
-			NetheriumStaffEntity entityarrow = NetheriumStaffEntity.shoot(world, player, world.getRandom(), 3f, 2, 2);
+			NetheriumStaffEntity entity = NetheriumStaffEntity.shoot(world, player, world.getRandom(), 3f, 2, 2);
 			itemstack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
-			entityarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+			entity.pickup = AbstractArrow.Pickup.DISALLOWED;
 			player.getCooldowns().addCooldown(itemstack.getItem(),20);
 		}
 	}

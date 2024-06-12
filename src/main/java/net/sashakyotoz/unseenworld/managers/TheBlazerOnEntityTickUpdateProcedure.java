@@ -19,12 +19,12 @@ import net.sashakyotoz.unseenworld.entity.RedBlazeEntity;
 import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
 public class TheBlazerOnEntityTickUpdateProcedure {
-    public static void execute(LevelAccessor world, double x, double y, double z, TheBlazerEntity entity) {
+    public static void execute(LevelAccessor accessor, double x, double y, double z, TheBlazerEntity entity) {
         if (entity == null)
             return;
         double speed = 0.8;
         double Yaw;
-        if (Math.random() < 0.005) {
+        if (Math.random() < 0.005 && !entity.level().isClientSide()) {
                 entity.strikeAnimationState.start(entity.tickCount);
             for (int index0 = 0; index0 < 4; index0++) {
                 entity.setYRot(entity.getYRot() + 90);
@@ -53,8 +53,8 @@ public class TheBlazerOnEntityTickUpdateProcedure {
                 }
             }
         } else if (Math.random() < 0.01) {
-            if (world.getEntitiesOfClass(RedBlazeEntity.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
-                if (world instanceof ServerLevel level) {
+            if (accessor.getEntitiesOfClass(RedBlazeEntity.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
+                if (accessor instanceof ServerLevel level) {
                     UnseenWorldModEntities.RED_BLAZE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 }
             }

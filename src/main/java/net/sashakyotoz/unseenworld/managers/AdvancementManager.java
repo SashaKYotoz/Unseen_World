@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.block.DarknessPortalBlock;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
@@ -89,16 +90,15 @@ public class AdvancementManager {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,STAFF_OF_FIRE_ADV);
 		}
-		if (entity.getY() <= 0 && level.dimension() == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")))) {
+		if (entity.getY() <= 0 && level.dimension().equals(DarknessPortalBlock.CHIMERIC_DARKNESS)) {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UNDER_THE_CHIMERIC_DARKNESS_ADV);
 		}
-		if (level.dimension() == (ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")))) {
+		if (level.dimension().equals(DarknessPortalBlock.CHIMERIC_DARKNESS)) {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UNSEEN_WORLD_ADV);
 		}
-		if (entity.getInventory().contains(new ItemStack(UnseenWorldModItems.FIERY_SABER.get())) ||entity.getInventory().contains(new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get())) ||
-				entity.getInventory().contains(new ItemStack(UnseenWorldModItems.BLASTING_LANCER.get())) || entity.getInventory().contains(new ItemStack(UnseenWorldModItems.LIGHT_TULVAR.get()))) {
+		if (entity.getInventory().contains(UnseenWorldModTags.Items.TREASURE_WEAPONS)) {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,FOUND_TREASURE_ADV);
 		}

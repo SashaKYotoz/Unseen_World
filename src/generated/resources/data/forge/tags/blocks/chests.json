@@ -1,5 +1,6 @@
 {
   "values": [
     "unseen_world:goldenchest"
-  ]
+  ],
+  "replace": false
 }

@@ -1,6 +1,6 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.entity.DarkPearlRangedItemEntity;
+import net.sashakyotoz.unseenworld.entity.DarkPearlEntity;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ public class DarkPearlRightClickedProcedure {
         if (!projectileLevel.isClientSide()) {
             Projectile arrow = new Object() {
                 public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                    AbstractArrow entityToSpawn = new DarkPearlRangedItemEntity(UnseenWorldModEntities.DARK_PEARL.get(), level);
+                    AbstractArrow entityToSpawn = new DarkPearlEntity(UnseenWorldModEntities.DARK_PEARL.get(), level);
                     entityToSpawn.setOwner(shooter);
                     entityToSpawn.setBaseDamage(damage);
                     entityToSpawn.setKnockback(knockback);

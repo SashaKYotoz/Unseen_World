@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.managers.FierySaberRightClickedProcedure;
+import net.sashakyotoz.unseenworld.managers.FierySaberRightClick;
 import net.sashakyotoz.unseenworld.managers.LivingEntityIsHitWithTreasureWeaponProcedure;
 import net.sashakyotoz.unseenworld.managers.TreasureWeaponOnBeaconClick;
 
@@ -23,7 +23,7 @@ public class FierySaberItem extends SwordItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		FierySaberRightClickedProcedure.execute(world, entity, ar.getObject());
+		FierySaberRightClick.execute(world, entity, ar.getObject());
 		return ar;
 	}
 	@Override

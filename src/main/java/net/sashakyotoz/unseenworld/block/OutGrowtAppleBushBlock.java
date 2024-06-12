@@ -85,17 +85,17 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity entity, ItemStack p_49832_) {
 		super.playerDestroy(level, player, pos, state, entity, p_49832_);
 		if (isMaxAge(state)) {
-			for (int i = 0; i < (int) Mth.nextDouble(RandomSource.create(), 1, 4); i++) {
+			for (int i = 0; i < (int) Mth.nextDouble(RandomSource.create(), 1, 3); i++) {
 				player.spawnAtLocation(new ItemStack(UnseenWorldModItems.OUTGROWTH_APPLE.get()));
 			}
 		}
 	}
 
-	public boolean isValidBonemealTarget(LevelReader reader, BlockPos p_52259_, BlockState state, boolean p_52261_) {
+	public boolean isValidBonemealTarget(LevelReader reader, BlockPos pos, BlockState state, boolean p_52261_) {
 		return !this.isMaxAge(state);
 	}
 
-	public boolean isBonemealSuccess(Level level, RandomSource p_221046_, BlockPos p_221047_, BlockState p_221048_) {
+	public boolean isBonemealSuccess(Level level, RandomSource source, BlockPos pos, BlockState state) {
 		return true;
 	}
 

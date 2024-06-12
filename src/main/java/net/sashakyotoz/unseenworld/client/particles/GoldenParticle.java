@@ -11,6 +11,7 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.sashakyotoz.anitexlib.client.particles.parents.FluidParticleRenderType;
 
 @OnlyIn(Dist.CLIENT)
 public class GoldenParticle extends TextureSheetParticle {
@@ -32,14 +33,14 @@ public class GoldenParticle extends TextureSheetParticle {
 
 	private final SpriteSet spriteSet;
 	private float angularVelocity;
-	private float angularAcceleration;
+	private final float angularAcceleration;
 
 	protected GoldenParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
 		super(world, x, y, z);
 		this.spriteSet = spriteSet;
-		this.setSize(0.2f, 0.2f);
+		this.setSize(0.25f, 0.25f);
 		this.quadSize *= 0.5f;
-		this.lifetime = (int) Math.max(1, 25 + (this.random.nextInt(10) - 5));
+		this.lifetime = Math.max(1, 35 + (this.random.nextInt(10) - 5));
 		this.gravity = -0.1f;
 		this.hasPhysics = true;
 		this.xd = vx * 1;
@@ -47,7 +48,6 @@ public class GoldenParticle extends TextureSheetParticle {
 		this.zd = vz * 1;
 		this.angularVelocity = 0.25f;
 		this.angularAcceleration = 0.1f;
-		this.setSpriteFromAge(spriteSet);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class GoldenParticle extends TextureSheetParticle {
 
 	@Override
 	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_LIT;
+		return FluidParticleRenderType.INSTANCE;
 	}
 
 	@Override
@@ -66,8 +66,7 @@ public class GoldenParticle extends TextureSheetParticle {
 		this.oRoll = this.roll;
 		this.roll += this.angularVelocity;
 		this.angularVelocity += this.angularAcceleration;
-		if (!this.removed) {
-			this.setSprite(this.spriteSet.get((this.age / 2) % 1 + 1, 1));
-		}
+		if (this.lifetime % 3 == 0)
+			this.setSpriteFromAge(spriteSet);
 	}
 }

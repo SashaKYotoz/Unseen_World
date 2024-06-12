@@ -51,7 +51,7 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
         return 1;
     }
 
-    public BlockState updateShape(BlockState state, Direction p_54441_, BlockState p_54442_, LevelAccessor p_54443_, BlockPos p_54444_, BlockPos p_54445_) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState p_54442_, LevelAccessor p_54443_, BlockPos p_54444_, BlockPos p_54445_) {
         if (state.getValue(WATERLOGGED)) {
             p_54443_.scheduleTick(p_54444_, Fluids.WATER, Fluids.WATER.getTickDelay(p_54443_));
         }
@@ -78,7 +78,13 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
 
         return state.setValue(DISTANCE, i);
     }
-
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource source) {
+        if (this.decaying(state)) {
+            dropResources(state, level, pos);
+            level.removeBlock(pos, false);
+        }
+    }
     private static int getDistanceAt(BlockState state) {
         return getOptionalDistanceAt(state).orElse(9);
     }
@@ -105,8 +111,8 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_256559_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
-        return p_256559_.getBlockState(p_50898_.below()).isAir();
+    public boolean isValidBonemealTarget(LevelReader state, BlockPos pos, BlockState p_50899_, boolean p_50900_) {
+        return state.getBlockState(pos.below()).isAir();
     }
 
     @Override

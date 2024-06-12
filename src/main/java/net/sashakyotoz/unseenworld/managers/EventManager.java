@@ -3,14 +3,17 @@ package net.sashakyotoz.unseenworld.managers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -22,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
@@ -36,8 +39,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.registries.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Mod.EventBusSubscriber
 public class EventManager {
@@ -81,7 +90,8 @@ public class EventManager {
         if (event.getHand() != event.getEntity().getUsedItemHand())
             return;
         netheriumStaffCharging(event.getEntity());
-        voidEndermanSwordClick(event.getLevel(),event.getPos(),event.getEntity());
+        if (event.getItemStack().is(UnseenWorldModItems.VOID_ENDERMAN_SWORD.get()))
+            voidEndermanSwordClick(event.getLevel(),event.getPos(),event.getEntity());
     }
 
     @SubscribeEvent
@@ -124,6 +134,18 @@ public class EventManager {
                     entity.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate), d0, d1, d2, 0.0D, 0.0D, 0.0D);
                 }
             }
+        }
+    }
+    public static void waveFlaming(ParticleOptions options,Level level, BlockPos pos){
+        for (int i = 0; i < 3; i++) {
+            int finalI = i;
+            UnseenWorldMod.queueServerWork(20 + 10 * i,()-> addParticles(options,level,pos.getX(),pos.getY(),pos.getZ(),2 * finalI));
+        }
+    }
+    public static void addParticles(ParticleOptions type, Level level, double x, double y, double z, float modifier) {
+        for (int i = 0; i < 360; i++) {
+            if (i % 20 == 0)
+                level.addParticle(type, x + 0.25, y, z + 0.25, Math.cos(i) * 0.25d * modifier, 0.2d, Math.sin(i) * 0.25d * modifier);
         }
     }
     private static void claymoreAbility(double x, double y, double z, Player player) {
@@ -219,6 +241,8 @@ public class EventManager {
         if (!UnseenWorldConfigs.DEACTIVATE_SHINING_BLADE.get()) {
             double shiningPower = (player.getMainHandItem().getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()));
             if (shiningPower > 0) {
+                if (player.getMainHandItem().is(UnseenWorldModItems.TANZANITE_STAFF.get()) || player.getOffhandItem().is(UnseenWorldModItems.TANZANITE_STAFF.get()))
+                    shiningPower += 3;
                 if (world instanceof ServerLevel level)
                     level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, new Vec3(x, y, z), Vec2.ZERO, level, 4, "", Component.literal(""), level.getServer(), null).withSuppressedOutput(),
                             "/effect give @e[distance=.." + shiningPower * 2 + UnseenWorldConfigs.SHINING_BLADE_POWER.get() + " ,type=!minecraft:player] minecraft:glowing 5");

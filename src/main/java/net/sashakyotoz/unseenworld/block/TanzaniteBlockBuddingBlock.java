@@ -21,7 +21,7 @@ public class TanzaniteBlockBuddingBlock extends Block {
 	private static final Direction[] DIRECTIONS = Direction.values();
 
 	public TanzaniteBlockBuddingBlock() {
-		super(BlockBehaviour.Properties.copy(Blocks.BUDDING_AMETHYST).randomTicks().strength(4f, 4f).lightLevel(s -> 5).requiresCorrectToolForDrops().noLootTable());
+		super(BlockBehaviour.Properties.copy(Blocks.BUDDING_AMETHYST).randomTicks().strength(4f, 4f).requiresCorrectToolForDrops().lightLevel(s -> 5).noLootTable());
 	}
 
 	public PushReaction getPistonPushReaction(BlockState p_152733_) {

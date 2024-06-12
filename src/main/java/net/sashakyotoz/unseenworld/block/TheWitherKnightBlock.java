@@ -30,18 +30,13 @@ public class TheWitherKnightBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public TheWitherKnightBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(-1, 360000).noOcclusion().isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(-1, 360000).noOcclusion());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
 	}
 
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
 		return true;
-	}
-
-	@Override
-	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
-		return 0;
 	}
 
 	@Override
@@ -75,25 +70,25 @@ public class TheWitherKnightBlock extends Block {
 	@Override
 	public void attack(BlockState blockstate, Level world, BlockPos pos, Player entity) {
 		super.attack(blockstate, world, pos, entity);
-		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos);
 	}
 
 	@Override
 	public void entityInside(BlockState blockstate, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockstate, world, pos, entity);
-		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos);
 	}
 
 	@Override
 	public void stepOn(Level world, BlockPos pos, BlockState blockstate, Entity entity) {
 		super.stepOn(world, pos, blockstate, entity);
-		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos);
 	}
 
 	@Override
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.use(blockstate, world, pos, entity, hand, hit);
-		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		EntityInteractWithWitherKnightBlockProcedure.execute(world, pos);
 		return InteractionResult.SUCCESS;
 	}
 }

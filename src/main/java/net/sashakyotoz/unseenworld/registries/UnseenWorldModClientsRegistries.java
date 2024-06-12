@@ -1,16 +1,22 @@
 package net.sashakyotoz.unseenworld.registries;
 
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +24,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.sashakyotoz.unseenworld.client.model.*;
 import net.sashakyotoz.unseenworld.client.particles.*;
 import net.sashakyotoz.unseenworld.client.renderer.*;
+import net.sashakyotoz.unseenworld.client.renderer.layers.KnightArmorRodsLayer;
+import net.sashakyotoz.unseenworld.network.keys.ModKeyMappings;
 
 import javax.annotation.Nullable;
 
@@ -30,14 +38,17 @@ public class UnseenWorldModClientsRegistries {
             public Vec3 getBrightnessDependentFogColor(Vec3 color, float sunHeight) {
                 return color.scale(0.15f);
             }
+
             @Override
             public boolean isFoggyAt(int x, int y) {
                 return true;
             }
+
             @Override
             public boolean renderSnowAndRain(ClientLevel level, int ticks, float partialTick, LightTexture lightTexture, double camX, double camY, double camZ) {
                 return true;
             }
+
             @Nullable
             public float[] getSunriseColor(float p_108888_, float p_108889_) {
                 return null;
@@ -45,6 +56,7 @@ public class UnseenWorldModClientsRegistries {
         };
         event.register(new ResourceLocation("unseen_world:the_darkness"), customEffect);
     }
+
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.DARK_WATER.get(), RenderType.translucent());
@@ -52,6 +64,18 @@ public class UnseenWorldModClientsRegistries {
         ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.LIQUID_OF_CHIMERY.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.FLOWING_LIQUID_OF_CHIMERY.get(), RenderType.translucent());
     }
+
+    @SubscribeEvent
+    public static void registerLayer(EntityRenderersEvent.AddLayers event) {
+        EntityModelSet entityModels = event.getEntityModels();
+        event.getSkins().forEach((s) -> {
+            LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>> livingEntityRenderer = event.getSkin(s);
+            if (livingEntityRenderer instanceof PlayerRenderer playerRenderer) {
+                playerRenderer.addLayer(new KnightArmorRodsLayer<>(playerRenderer, entityModels));
+            }
+        });
+    }
+
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(UnseenWorldModEntities.TEALIVY_VOID_SPEAR.get(), TealivyVoidSpearRenderer::new);
@@ -86,8 +110,9 @@ public class UnseenWorldModClientsRegistries {
         event.registerEntityRenderer(UnseenWorldModEntities.THE_BLAZER.get(), TheBlazerRenderer::new);
         event.registerEntityRenderer(UnseenWorldModEntities.THE_WITHER_KNIGHT.get(), TheWitherKnightRenderer::new);
         event.registerEntityRenderer(UnseenWorldModEntities.DARK_PEARL.get(), ThrownItemRenderer::new);
-        event.registerBlockEntityRenderer(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(),BeaconOfWeaponsRenderer::new);
+        event.registerBlockEntityRenderer(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(), BeaconOfWeaponsRenderer::new);
     }
+
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(), BlueVoidParticle::provider);
@@ -98,9 +123,12 @@ public class UnseenWorldModClientsRegistries {
         event.registerSpriteSet(UnseenWorldModParticleTypes.LIQUID_OF_CHIMERY_PARTICLE.get(), LiquidOfChimeryParticle::provider);
         event.registerSpriteSet(UnseenWorldModParticleTypes.GRIZZLY_PARTICLE.get(), GrizzlyParticle::provider);
         event.registerSpriteSet(UnseenWorldModParticleTypes.TANZANITE_RAY.get(), TanzaniteRayParticle::provider);
+        event.registerSpriteSet(UnseenWorldModParticleTypes.VOID_PORTAL.get(), VoidPortalParticle::provider);
     }
+
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(ModelBeaconOfWeapons.LAYER_LOCATION, ModelBeaconOfWeapons::createBodyLayer);
         event.registerLayerDefinition(ModelVoid_Arrow.LAYER_LOCATION, ModelVoid_Arrow::createBodyLayer);
         event.registerLayerDefinition(ModelRed_Sylph.LAYER_LOCATION, ModelRed_Sylph::createBodyLayer);
         event.registerLayerDefinition(ModelAmethystGolem.LAYER_LOCATION, ModelAmethystGolem::createBodyLayer);
@@ -131,7 +159,14 @@ public class UnseenWorldModClientsRegistries {
         event.registerLayerDefinition(ModelStrederWithSaddle.LAYER_LOCATION, ModelStrederWithSaddle::createBodyLayer);
         event.registerLayerDefinition(ModelThe_Wither_Knight.LAYER_LOCATION, ModelThe_Wither_Knight::createBodyLayer);
         event.registerLayerDefinition(ModelSnowdrifter.LAYER_LOCATION, ModelSnowdrifter::createBodyLayer);
-        event.registerLayerDefinition(ModelBeaconOfWeapons.LAYER_LOCATION,ModelBeaconOfWeapons::createBodyLayer);
-        event.registerLayerDefinition(ModelVoidHammer.LAYER_LOCATION,ModelVoidHammer::createBodyLayer);
+        event.registerLayerDefinition(ModelVoidHammer.LAYER_LOCATION, ModelVoidHammer::createBodyLayer);
+        event.registerLayerDefinition(ModelPortalLikeParticleModel.LAYER_LOCATION, ModelPortalLikeParticleModel::createBodyLayer);
+        event.registerLayerDefinition(ModelFireParticle.LAYER_LOCATION, ModelFireParticle::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
+        event.register(ModKeyMappings.BLAZER_HELMET_ABILITY);
+        event.register(ModKeyMappings.MINING_BOOTS_ABILITY);
     }
 }

@@ -24,7 +24,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.damagesource.DamageSource;
@@ -54,12 +53,7 @@ public class DarkSpiritWolfEntity extends Wolf {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-			}
-		});
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, DarkSkeletonEntity.class, false, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TealiveSkeletonEntity.class, false, true));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
@@ -68,11 +62,6 @@ public class DarkSpiritWolfEntity extends Wolf {
 		this.goalSelector.addGoal(7, new LeapAtTargetGoal(this, (float) 0.5));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(9, new FloatGoal(this));
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
 	}
 
 	@Override

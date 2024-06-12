@@ -18,7 +18,7 @@ import java.util.Collections;
 
 public class TanzashroomLightBlock extends Block {
 	public TanzashroomLightBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.SHROOMLIGHT).strength(3f, 5).lightLevel(s -> 12).requiresCorrectToolForDrops());
+		super(BlockBehaviour.Properties.of().sound(SoundType.SHROOMLIGHT).strength(3f, 5).lightLevel(s -> 12));
 	}
 
 	@Override
@@ -40,7 +40,6 @@ public class TanzashroomLightBlock extends Block {
 	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter world, BlockPos pos, Mob entity) {
 		return BlockPathTypes.DAMAGE_FIRE;
 	}
-
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
 		return true;
