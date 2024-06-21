@@ -91,7 +91,6 @@ public class BeaconOfWeaponsBlockEntity extends BlockEntity implements WorldlyCo
             item = ItemStack.of(compoundTag.getCompound("item"));
         }
     }
-
     protected void saveAdditional(@NotNull CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         if (!item.isEmpty()) {

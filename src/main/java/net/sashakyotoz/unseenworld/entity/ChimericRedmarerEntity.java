@@ -59,11 +59,11 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         setNoAi(false);
     }
 
-    protected void tickRidden(Player p_278331_, Vec3 vec3) {
-        this.setRot(p_278331_.getYRot(), p_278331_.getXRot() * 0.5F);
+    protected void tickRidden(Player player, Vec3 vec3) {
+        this.setRot(player.getYRot(), player.getXRot() * 0.5F);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
         this.steering.tickBoost();
-        super.tickRidden(p_278331_, vec3);
+        super.tickRidden(player, vec3);
     }
 
     protected Vec3 getRiddenInput(Player player, Vec3 vec3) {

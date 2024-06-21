@@ -92,7 +92,7 @@ public class DarknessPortalBlock extends NetherPortalBlock {
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
 		if (entity.canChangeDimensions() && !entity.level().isClientSide()) {
 			if (entity.isOnPortalCooldown()) {
 				entity.setPortalCooldown();

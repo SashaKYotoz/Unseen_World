@@ -1,6 +1,7 @@
 
 package net.sashakyotoz.unseenworld.item;
 
+import net.minecraft.sounds.SoundEvents;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
 import net.minecraft.ChatFormatting;
@@ -39,7 +40,7 @@ public abstract class RedTitaniumArmorItem extends ArmorItem {
 
 			@Override
 			public SoundEvent getEquipSound() {
-				return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_iron"));
+				return SoundEvents.ARMOR_EQUIP_NETHERITE;
 			}
 
 			@Override

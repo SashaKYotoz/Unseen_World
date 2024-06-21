@@ -2,6 +2,7 @@
   "type": "forge:add_spawns",
   "biomes": [
     "unseen_world:amethyst_forest",
+    "unseen_world:amethyst_fields",
     "unseen_world:tanzanite_above_ground_cavern"
   ],
   "spawners": {

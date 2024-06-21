@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.client.model.*;
 import net.sashakyotoz.unseenworld.client.particles.*;
 import net.sashakyotoz.unseenworld.client.renderer.*;
@@ -29,7 +30,7 @@ import net.sashakyotoz.unseenworld.network.keys.ModKeyMappings;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = UnseenWorldMod.MODID,bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class UnseenWorldModClientsRegistries {
     @SubscribeEvent
     public static void registerDimensionSpecialEffects(RegisterDimensionSpecialEffectsEvent event) {

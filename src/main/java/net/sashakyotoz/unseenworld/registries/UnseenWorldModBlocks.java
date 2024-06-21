@@ -37,6 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.ForgeSoundType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -262,53 +263,21 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> REINFORCED_POLISHED_BLACKSTONE_BRICKS_SLAB = registerBlock("reinforced_polished_blackstone_bricks_slab", () -> new SlabBlock(REINFORCED_POLISHED_BLACKSTONE));
     public static final RegistryObject<Block> ANCIENT_TRANSIENT_BLOCK_CLOSE = registerBlock("ancient_transient_block_close", AncientTransientBlockCloseBlock::new);
     public static final RegistryObject<Block> REINFORCED_RED_ANCIENT_BRICKS = registerBlock("reinforced_red_anient_bricks", () -> new ModRotatedPillarBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().sound(SoundType.METAL).strength(20f)));
-    public static final RegistryObject<Block> BEACON_RUNE = registerBlock("beacon_rune", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).sound(SoundType.LODESTONE).strength(10f).requiresCorrectToolForDrops().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true)));
-    public static final RegistryObject<Block> BEACON_OF_WEAPONS = registerBlock("beacon_of_weapons", () -> new BaseEntityBlock(BlockBehaviour.Properties.of().sound(UnseenWorldModSounds.BEACON_OF_WEAPONS).strength(15f).lightLevel(s -> 5).speedFactor(0.5f).jumpFactor(0.5f).noOcclusion().hasPostProcess((bs, br, bp) -> true).requiresCorrectToolForDrops().emissiveRendering((bs, br, bp) -> true)) {
-        public static final List<BlockPos> BOOKSHELF_OFFSETS = BlockPos.betweenClosedStream(-2, 0, -2, 2, 1, 2).filter((pos) -> Math.abs(pos.getX()) == 2 || Math.abs(pos.getZ()) == 2).map(BlockPos::immutable).toList();
-        public static boolean isValidRune(Level level, BlockPos pos, BlockPos pos1) {
-            return level.getBlockState(pos.offset(pos1)).is(BEACON_RUNE.get()) && level.getBlockState(pos.offset(pos1.getX() / 2, pos1.getY(), pos1.getZ() / 2)).is(BlockTags.REPLACEABLE);
-        }
-        public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource source) {
-            super.animateTick(state, level, pos, source);
-            for(BlockPos blockpos : BOOKSHELF_OFFSETS) {
-                if (source.nextInt(16) == 0 && isValidRune(level, pos, blockpos))
-                    level.addParticle(level.getBiome(pos).get().getBaseTemperature() > 0.5f ? UnseenWorldModParticleTypes.REDNESS.get() : ModParticleTypes.WISP_LIKE_PARTICLE.get(),
-                            pos.getX() + 0.5D, pos.getY() + 2.0D, pos.getZ() + 0.5D, ((float)blockpos.getX() + source.nextFloat()) - 0.5D, (float)blockpos.getY() - source.nextFloat() - 1.0F, ((float)blockpos.getZ() + source.nextFloat()) - 0.5D);
-            }
-        }
-        @Override
-        public RenderShape getRenderShape(BlockState state) {
-            return RenderShape.MODEL;
-        }
-        @Override
-        public @NotNull BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-            return new BeaconOfWeaponsBlockEntity(pos,state);
-        }
-        public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-            BlockEntity tileentity = worldIn.getBlockEntity(pos);
-            if (tileentity instanceof BeaconOfWeaponsBlockEntity beacon) {
-                Containers.dropContents(worldIn, pos, beacon);
-                worldIn.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
-        }
-        @Override
-        public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-            return Shapes.empty();
-        }
-        @Override
-        public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-            return box(0, 0, 0, 16, 14, 16);
-        }
-    });
     public static final RegistryObject<Block> DRIPSTONE_OF_AMETHYST_OVERGROWTH = registerBlock("dripstone_of_amethyst_overgrowth", DripstoneOfAmethystOvergrowthBlock::new);
     public static final RegistryObject<Block> DEEP_WATER_ANFELTSIA = registerBlock("deep_water_anfeltsia", DeepWaterAnfeltsiaBlock::new);
     public static final RegistryObject<Block> GOLDEN_CHEST = registerBlock("goldenchest", GoldenChestBlock::new);
     public static final RegistryObject<Block> BLAZER_SUMMON_BLOCK = registerBlock("blazer_summon_block", BlazerSummonBlock::new);
     public static final RegistryObject<Block> THE_WITHER_KNIGHT_BLOCK = registerBlock("the_wither_knight_block", TheWitherKnightBlock::new);
     public static final RegistryObject<Block> ANCIENT_TRANSIENT_BLOCK_OPEN = registerBlock("ancient_transient_block_open", AncientTransientBlockOpenBlock::new);
-    public static final RegistryObject<Block> UNDEAD_WARRIOR_OF_THE_CHIMERIC_DARKNESS = registerBlock("undead_warrior_of_the_chimeric_darkness", UndeadWarriorOfTheChimericDarknessBlock::new);
+    public static final RegistryObject<Block> UNDEAD_WARRIOR_OF_THE_CHIMERIC_DARKNESS = registerBlock("undead_warrior_of_the_chimeric_darkness", ()-> new ModFacingableBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.NYLIUM).strength(-1, 3500000).noOcclusion().noLootTable()){
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+            return box(-4, 0, -4, 20, 32, 20);
+        }
+    });
     public static final RegistryObject<Block> TOTEM_OF_GUDDY_BLAZE = registerBlock("totemof_guddy_blaze", TotemOfGuddyBlazeBlock::new);
+    public static final RegistryObject<Block> BEACON_RUNE = registerBlock("beacon_rune", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).sound(SoundType.LODESTONE).strength(10f).requiresCorrectToolForDrops().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true)));
+    public static final RegistryObject<Block> BEACON_OF_WEAPONS = registerBlock("beacon_of_weapons", () -> new BeaconOfWeaponsBlock(BlockBehaviour.Properties.of().sound(UnseenWorldModSounds.BEACON_OF_WEAPONS).strength(15f).lightLevel(s -> 5).speedFactor(0.5f).jumpFactor(0.5f).noOcclusion().hasPostProcess((bs, br, bp) -> true).requiresCorrectToolForDrops().emissiveRendering((bs, br, bp) -> true)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

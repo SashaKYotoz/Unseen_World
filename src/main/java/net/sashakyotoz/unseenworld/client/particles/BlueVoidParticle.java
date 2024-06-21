@@ -33,8 +33,8 @@ public class BlueVoidParticle extends TextureSheetParticle {
 	private float angularVelocity;
 	private final float angularAcceleration;
 
-	protected BlueVoidParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
-		super(world, x, y, z);
+	protected BlueVoidParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
+		super(level, x, y, z);
 		this.setSize(0.2f, 0.2f);
 		this.quadSize *= 0.5f;
 		this.lifetime = Math.max(1, 16 + (this.random.nextInt(2) - 1));
