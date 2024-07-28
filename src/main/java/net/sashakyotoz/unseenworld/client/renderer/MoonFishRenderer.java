@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 import net.sashakyotoz.unseenworld.entity.MoonFishEntity;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 public class MoonFishRenderer extends MobRenderer<MoonFishEntity, ModelMoonFish<MoonFishEntity>> {
 	public MoonFishRenderer(EntityRendererProvider.Context context) {
@@ -21,6 +21,6 @@ public class MoonFishRenderer extends MobRenderer<MoonFishEntity, ModelMoonFish<
 
 	@Override
 	protected boolean isShaking(MoonFishEntity entity) {
-		return !(entity.isInWater() || entity.level().getBlockState(entity.getOnPos()).is(UnseenWorldModBlocks.DARK_WATER.get()));
+		return !(entity.isInWater() || entity.level().getBlockState(entity.getOnPos()).is(UnseenWorldBlocks.DARK_WATER.get()));
 	}
 }

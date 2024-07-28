@@ -11,7 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class UnseenWorldModEnchantments {
+public class UnseenWorldEnchantments {
 	public static final DeferredRegister<Enchantment> REGISTRY = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, UnseenWorldMod.MODID);
 	public static final RegistryObject<Enchantment> GRAVITY_SPIKE = REGISTRY.register("gravity_spike", GravitySpikeEnchantment::new);
 	public static final RegistryObject<Enchantment> LIFE_STEEL = REGISTRY.register("life_steel", LifeSteelEnchantment::new);

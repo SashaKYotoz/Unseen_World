@@ -23,8 +23,8 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class TealivyJadeVineFlowerBlock extends DoublePlantBlock {
 	public TealivyJadeVineFlowerBlock() {
@@ -43,8 +43,8 @@ public class TealivyJadeVineFlowerBlock extends DoublePlantBlock {
 
 	@Override
 	public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-		return groundState.is(UnseenWorldModBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get())
-				|| groundState.is(UnseenWorldModBlocks.RED_OOZE.get()) || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL);
+		return groundState.is(UnseenWorldBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(UnseenWorldBlocks.AMETHYST_GRASS_BLOCK.get()) || groundState.is(UnseenWorldBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get())
+				|| groundState.is(UnseenWorldBlocks.RED_OOZE.get()) || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL);
 	}
 
 	@Override
@@ -69,9 +69,9 @@ public class TealivyJadeVineFlowerBlock extends DoublePlantBlock {
 			ItemStack stack = new ItemStack(Items.GLASS_BOTTLE);
 			player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
 			if (player.getInventory().contains(ItemStack.EMPTY)) {
-				ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(UnseenWorldModItems.NIGHTDEW_NECTAR_BOTTLE.get()));
+				ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(UnseenWorldItems.NIGHTDEW_NECTAR_BOTTLE.get()));
 			} else
-				player.spawnAtLocation(new ItemStack(UnseenWorldModItems.NIGHTDEW_NECTAR_BOTTLE.get()));
+				player.spawnAtLocation(new ItemStack(UnseenWorldItems.NIGHTDEW_NECTAR_BOTTLE.get()));
 			Block.dropResources(level.getBlockState(pos), level, pos, null);
 			level.destroyBlock(pos, false);
 		}

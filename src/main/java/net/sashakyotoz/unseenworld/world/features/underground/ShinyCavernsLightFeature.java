@@ -11,7 +11,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 public class ShinyCavernsLightFeature extends Feature<NoneFeatureConfiguration> {
     public ShinyCavernsLightFeature() {
@@ -35,9 +35,9 @@ public class ShinyCavernsLightFeature extends Feature<NoneFeatureConfiguration> 
                         state = Blocks.CALCITE.defaultBlockState();
                     else{
                         if (random.nextBoolean())
-                            state = UnseenWorldModBlocks.TANZANITE_BLOCK.get().defaultBlockState();
+                            state = UnseenWorldBlocks.TANZANITE_BLOCK.get().defaultBlockState();
                         else
-                            state = UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get().defaultBlockState();
+                            state = UnseenWorldBlocks.GRIZZLY_LIGHT_BLOCK.get().defaultBlockState();
                     }
                     int x = 0;
                     int z = 0;

@@ -18,6 +18,6 @@ public class ParticleAnimatedItem extends Item implements IParticleItem {
     public void addParticles(Level level, ItemEntity entity) {
         RandomSource random = RandomSource.create();
         if (random.nextFloat() < 0.1)
-            level.addParticle(particleOptions,entity.getX() + (random.nextDouble() - 0.5) * 0.25, entity.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.25, entity.getZ() + (random.nextDouble() - 0.5) * 0.25, 1.0, 1.0, 1.0);
+            level.addParticle(particleOptions,entity.getX(), entity.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.25, entity.getZ(), 1.0, 1.0, 1.0);
     }
 }

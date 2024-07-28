@@ -5,9 +5,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraftforge.network.NetworkHooks;
 
 import net.minecraft.world.phys.EntityHitResult;
@@ -42,7 +41,7 @@ public class DarkPearlEntity extends AbstractArrow implements ItemSupplier {
 
 	@Override
 	protected ItemStack getPickupItem() {
-		return new ItemStack(UnseenWorldModItems.DARK_PEARL.get());
+		return new ItemStack(UnseenWorldItems.DARK_PEARL.get());
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class DarkPearlEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static DarkPearlEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		DarkPearlEntity pearl = new DarkPearlEntity(UnseenWorldModEntities.DARK_PEARL.get(), entity, world);
+		DarkPearlEntity pearl = new DarkPearlEntity(UnseenWorldEntities.DARK_PEARL.get(), entity, world);
 		pearl.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		pearl.setSilent(true);
 		pearl.setCritArrow(false);
@@ -89,7 +88,7 @@ public class DarkPearlEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static DarkPearlEntity shoot(LivingEntity entity, LivingEntity target) {
-		DarkPearlEntity pearl = new DarkPearlEntity(UnseenWorldModEntities.DARK_PEARL.get(), entity, entity.level());
+		DarkPearlEntity pearl = new DarkPearlEntity(UnseenWorldEntities.DARK_PEARL.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();
@@ -102,6 +101,6 @@ public class DarkPearlEntity extends AbstractArrow implements ItemSupplier {
 	}
 	@Override
 	public ItemStack getItem() {
-		return UnseenWorldModItems.DARK_PEARL.get().getDefaultInstance();
+		return UnseenWorldItems.DARK_PEARL.get().getDefaultInstance();
 	}
 }

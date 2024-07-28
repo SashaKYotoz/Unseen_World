@@ -2,8 +2,12 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.LevelAccessor;
+import net.sashakyotoz.unseenworld.managers.AdvancementManager;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,20 +42,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 
 import javax.annotation.Nullable;
 import java.util.Set;
 
 public class ChimericPurplemarerEntity extends TamableAnimal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(ChimericPurplemarerEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), UnseenWorldModItems.LUMINOUS_COOKED_PORKCHOP.get());
-    private static final Ingredient TEMPT_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), Items.WARPED_FUNGUS_ON_A_STICK);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldItems.LUMINOUS_PORKCHOP.get(), UnseenWorldItems.LUMINOUS_COOKED_PORKCHOP.get());
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(ChimericPurplemarerEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(ChimericPurplemarerEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);
 
     public ChimericPurplemarerEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get(), world);
+        this(UnseenWorldEntities.CHIMERIC_PURPLEMARER.get(), world);
     }
 
     public ChimericPurplemarerEntity(EntityType<ChimericPurplemarerEntity> type, Level world) {
@@ -71,7 +75,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     }
 
     protected float getRiddenSpeed(Player player) {
-        return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double)(this.isSuffocating() ? 0.35F : 0.55F) * (double)this.steering.boostFactor());
+        return (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double) (this.isSuffocating() ? 0.65F : 0.95F) * (double) this.steering.boostFactor());
     }
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> accessor) {
@@ -114,22 +118,17 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new BreedGoal(this, 1.0D));
         TemptGoal temptGoal = new TemptGoal(this, 1.4D, Ingredient.of(Items.WARPED_FUNGUS_ON_A_STICK), false);
-        this.goalSelector.addGoal(3, temptGoal);
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0D, 60));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, ChimericPurplemarerEntity.class, 8.0F));
-        this.goalSelector.addGoal(9, new OwnerHurtByTargetGoal(this));
-        this.goalSelector.addGoal(10, new FloatGoal(this));
-        this.goalSelector.addGoal(11, new FollowOwnerGoal(this, 1.25, (float) 9, (float) 3, false));
-    }
-
-    public void setSuffocating(boolean set) {
-        this.entityData.set(DATA_SUFFOCATING, set);
-        AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        this.goalSelector.addGoal(2, temptGoal);
+        this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0D, 60));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, ChimericPurplemarerEntity.class, 8.0F));
+        this.goalSelector.addGoal(8, new OwnerHurtByTargetGoal(this));
+        this.goalSelector.addGoal(9, new FloatGoal(this));
+        this.goalSelector.addGoal(10, new FollowOwnerGoal(this, 1.25, (float) 9, (float) 3, false));
     }
 
     public boolean isSuffocating() {
@@ -143,15 +142,12 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return (double) this.getBbHeight() - 0.42D + (double) (0.12F * Mth.cos(f1 * 1.5F) * 2.0F * f);
     }
 
-    public boolean checkSpawnObstruction(LevelReader p_33880_) {
-        return p_33880_.isUnobstructed(this);
-    }
-
     @Nullable
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getFirstPassenger();
         if (entity instanceof Player player) {
             if ((player.getMainHandItem().is(Items.WARPED_FUNGUS_ON_A_STICK) && (player.getMainHandItem().getOrCreateTag().getDouble("CustomModelData") == 1)) || (player.getOffhandItem().is(Items.WARPED_FUNGUS_ON_A_STICK) && (player.getOffhandItem().getOrCreateTag().getDouble("CustomModelData") == 1))) {
+                AdvancementManager.addAdvancement(player, AdvancementManager.PETIFICATE_THE_WAYWARD);
                 return player;
             }
         }
@@ -178,13 +174,6 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return new Vec3(this.getX(), this.getBoundingBox().maxY, this.getZ());
     }
 
-    protected void tickRidden(LivingEntity entity, Vec3 vec3) {
-        this.setRot(entity.getYRot(), entity.getXRot() * 0.5F);
-        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
-        this.steering.tickBoost();
-        super.tickRidden((Player) entity, vec3);
-    }
-
     protected float nextStep() {
         return this.moveDist + 0.5F;
     }
@@ -205,7 +194,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return SoundEvents.FOX_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound(DamageSource p_33934_) {
+    protected SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.FOX_HURT;
     }
 
@@ -213,7 +202,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         return SoundEvents.FOX_DEATH;
     }
 
-    protected boolean canAddPassenger(Entity p_33950_) {
+    protected boolean canAddPassenger(Entity entity) {
         return !this.isVehicle();
     }
 
@@ -228,7 +217,7 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
 
     @Nullable
     public ChimericPurplemarerEntity getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        return UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(level);
+        return UnseenWorldEntities.CHIMERIC_PURPLEMARER.get().create(level);
     }
 
     public boolean isFood(ItemStack stack) {
@@ -245,9 +234,8 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         boolean flag = this.isFood(player.getItemInHand(hand));
         if (!flag && this.isSaddled() && !this.isVehicle() && !player.isSecondaryUseActive()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide)
                 player.startRiding(this);
-            }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             InteractionResult interactionresult = super.mobInteract(player, hand);
@@ -255,9 +243,8 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
                 ItemStack itemstack = player.getItemInHand(hand);
                 return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(player, this, hand) : InteractionResult.PASS;
             } else {
-                if (flag && !this.isSilent()) {
+                if (flag && !this.isSilent())
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FOX_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                }
                 return interactionresult;
             }
         }
@@ -268,26 +255,26 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
     }
 
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance instance, MobSpawnType p_33889_, @javax.annotation.Nullable SpawnGroupData p_33890_, @javax.annotation.Nullable CompoundTag p_33891_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance instance, MobSpawnType type,SpawnGroupData data,CompoundTag tag) {
         if (!this.isBaby()) {
             RandomSource randomsource = accessor.getRandom();
             if (randomsource.nextInt(30) == 0) {
                 Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(accessor.getLevel());
                 if (mob != null) {
-                    p_33890_ = this.spawnJockey(accessor, instance, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
+                    data = this.spawnJockey(accessor, instance, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
                     this.equipSaddle(null);
                 }
             } else if (randomsource.nextInt(10) == 0) {
-                AgeableMob ageablemob = UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(accessor.getLevel());
+                AgeableMob ageablemob = UnseenWorldEntities.CHIMERIC_PURPLEMARER.get().create(accessor.getLevel());
                 if (ageablemob != null) {
                     ageablemob.setAge(-24000);
-                    p_33890_ = this.spawnJockey(accessor, instance, ageablemob, null);
+                    data = this.spawnJockey(accessor, instance, ageablemob, null);
                 }
             } else {
-                p_33890_ = new AgeableMobGroupData(0.5F);
+                data = new AgeableMobGroupData(0.5F);
             }
         }
-        return super.finalizeSpawn(accessor, instance, p_33889_, p_33890_, p_33891_);
+        return super.finalizeSpawn(accessor, instance, type, data, tag);
     }
 
     private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance instance, Mob mob, @Nullable SpawnGroupData p_33885_) {
@@ -296,16 +283,14 @@ public class ChimericPurplemarerEntity extends TamableAnimal implements ItemStee
         mob.startRiding(this, true);
         return new AgeableMob.AgeableMobGroupData(0.0F);
     }
-
-    public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Mob::checkMobSpawnRules);
+    public static boolean checkChimericAnimalsSpawnRules(EntityType<? extends Animal> type, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource checked) {
+        return spawnType == MobSpawnType.SPAWNER || (accessor.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) || accessor.getBlockState(pos.below()).is(UnseenWorldTags.Blocks.DIRT_THE_DARKNESS));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 15);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.4);
+        builder = builder.add(Attributes.MAX_HEALTH, 24);
         builder = builder.add(Attributes.ARMOR, 1.5);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);

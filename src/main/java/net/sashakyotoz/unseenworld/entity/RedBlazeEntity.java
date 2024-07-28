@@ -6,18 +6,15 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -32,13 +29,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 
 import java.util.EnumSet;
 
 public class RedBlazeEntity extends Blaze implements RangedAttackMob {
 	public RedBlazeEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.RED_BLAZE.get(), world);
+		this(UnseenWorldEntities.RED_BLAZE.get(), world);
 	}
 
 	public RedBlazeEntity(EntityType<RedBlazeEntity> type, Level world) {

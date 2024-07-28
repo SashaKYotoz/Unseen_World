@@ -26,4 +26,5 @@ public class CustomLogoRenderer extends LogoRenderer {
         guiGraphics.blit(UNSEEN_WORLD_LOGO, i, height, 0.0F, 0.0F, 256, 64, 256, 64);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
+    /*Provided method of render custom logo and button implemented from github of Wizard's Reborn*/
 }

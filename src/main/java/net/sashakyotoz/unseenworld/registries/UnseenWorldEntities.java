@@ -1,5 +1,10 @@
 package net.sashakyotoz.unseenworld.registries;
 
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -9,14 +14,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Entity;
-
 import net.sashakyotoz.unseenworld.entity.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class UnseenWorldModEntities {
+public class UnseenWorldEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, UnseenWorldMod.MODID);
     public static final RegistryObject<EntityType<TealivyVoidSpearEntity>> TEALIVY_VOID_SPEAR = register("projectile_tealivy_void_spear", EntityType.Builder.<TealivyVoidSpearEntity>of(TealivyVoidSpearEntity::new, MobCategory.MISC)
             .setCustomClientFactory(TealivyVoidSpearEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(20).sized(0.5f, 0.5f));
@@ -92,31 +93,49 @@ public class UnseenWorldModEntities {
     }
 
     @SubscribeEvent
-    public static void init(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            DarkSkeletonEntity.init();
-            AmethystGolemEntity.init();
-            DarkPhantomEntity.init();
-            DustyPinkMaxorFishEntity.init();
-            MoonFishEntity.init();
-            CavernScarecrowEntity.init();
-            ChimericPurplemarerEntity.init();
-            ChimericRedmarerEntity.init();
-            NethermanEntity.init();
-            RedSlylfEntity.init();
-            StrederEntity.init();
-            GhastOfTealiveValleyEntity.init();
-            TanzaniteGuardianEntity.init();
-            DarkSpiritWolfEntity.init();
-            VoidEndermanEntity.init();
-            TealiveSkeletonEntity.init();
-            RedRavengerEntity.init();
-            DarkHoglinEntity.init();
-            SnowdrifterEntity.init();
-            DarkGolemEntity.init();
-            TheBlazerEntity.init();
-            TheWitherKnightEntity.init();
-        });
+    public static void setUpSpawns(SpawnPlacementRegisterEvent event) {
+        event.register(UnseenWorldEntities.DARK_SKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.AMETHYST_GOLEM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.DARK_PHANTOM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.DUSTY_PINK_MAXOR_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                DustyPinkMaxorFishEntity::checkSurfaceWaterAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.MOONFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                MoonFishEntity::checkSurfaceWaterAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.CAVERN_SCARECROW.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.CHIMERIC_PURPLEMARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                ChimericPurplemarerEntity::checkChimericAnimalsSpawnRules, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.CHIMERIC_REDMARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                ChimericPurplemarerEntity::checkChimericAnimalsSpawnRules, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.NETHERMAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.RED_SLYLF.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.STREDER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.GHAST_OF_TEALIVE_VALLEY.get(), SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL
+                        && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.TANZANITE_GUARDIAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.DARK_SPIRIT_WOLF.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random)
+                        && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.VOID_ENDERMEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random)
+                        && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(UnseenWorldEntities.TEALIVE_SKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random)
+                        && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.RED_RAVENGER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.DARK_HOGLIN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), SpawnPlacementRegisterEvent.Operation.AND);
+        event.register(UnseenWorldEntities.SNOWDRIFTER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                SnowdrifterEntity::checkAnyLightSpawnRules, SpawnPlacementRegisterEvent.Operation.AND);
     }
 
     @SubscribeEvent

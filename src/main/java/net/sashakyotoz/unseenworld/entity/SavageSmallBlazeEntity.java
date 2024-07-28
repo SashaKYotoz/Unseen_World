@@ -2,8 +2,8 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -19,9 +19,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.FollowMobGoal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.damagesource.DamageSource;
@@ -31,7 +29,7 @@ import net.minecraft.network.protocol.Packet;
 
 public class SavageSmallBlazeEntity extends Monster {
 	public SavageSmallBlazeEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.SAVAGE_SMALL_BLAZE.get(), world);
+		this(UnseenWorldEntities.SAVAGE_SMALL_BLAZE.get(), world);
 	}
 
 	public SavageSmallBlazeEntity(EntityType<SavageSmallBlazeEntity> type, Level world) {
@@ -58,7 +56,7 @@ public class SavageSmallBlazeEntity extends Monster {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(UnseenWorldModItems.BLAZE_SHIELD_SHARD.get()));
+		this.spawnAtLocation(new ItemStack(UnseenWorldItems.BLAZE_SHIELD_SHARD.get()));
 	}
 
 	@Override

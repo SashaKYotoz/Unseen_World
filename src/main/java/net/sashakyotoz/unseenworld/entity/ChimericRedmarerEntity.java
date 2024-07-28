@@ -2,8 +2,9 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.managers.AdvancementManager;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -43,13 +44,13 @@ import java.util.Set;
 
 public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(ChimericRedmarerEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), UnseenWorldModItems.LUMINOUS_COOKED_PORKCHOP.get());
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldItems.LUMINOUS_PORKCHOP.get(), UnseenWorldItems.LUMINOUS_COOKED_PORKCHOP.get());
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(ChimericRedmarerEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(ChimericRedmarerEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);
 
     public ChimericRedmarerEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.CHIMERIC_REDMARER.get(), world);
+        this(UnseenWorldEntities.CHIMERIC_REDMARER.get(), world);
     }
 
     public ChimericRedmarerEntity(EntityType<ChimericRedmarerEntity> type, Level world) {
@@ -71,14 +72,14 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
     }
 
     protected float getRiddenSpeed(Player player) {
-        return (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double) (this.isSuffocating() ? 0.35F : 0.55F) * (double) this.steering.boostFactor());
+        return (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (double) (this.isSuffocating() ? 0.95F : 1.15F) * (double) this.steering.boostFactor());
     }
 
-    public void onSyncedDataUpdated(EntityDataAccessor<?> p_33900_) {
-        if (DATA_BOOST_TIME.equals(p_33900_) && this.level().isClientSide) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> accessor) {
+        if (DATA_BOOST_TIME.equals(accessor) && this.level().isClientSide) {
             this.steering.onSynced();
         }
-        super.onSyncedDataUpdated(p_33900_);
+        super.onSyncedDataUpdated(accessor);
     }
 
     protected void defineSynchedData() {
@@ -137,15 +138,12 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return (double) this.getBbHeight() - 0.42D + (double) (0.12F * Mth.cos(f1 * 1.5F) * 2.0F * f);
     }
 
-    public boolean checkSpawnObstruction(LevelReader p_33880_) {
-        return p_33880_.isUnobstructed(this);
-    }
-
     @Nullable
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getFirstPassenger();
         if (entity instanceof Player player) {
             if ((player.getMainHandItem().is(Items.WARPED_FUNGUS_ON_A_STICK) && (player.getMainHandItem().getOrCreateTag().getDouble("CustomModelData") == 1)) || (player.getOffhandItem().is(Items.WARPED_FUNGUS_ON_A_STICK) && (player.getOffhandItem().getOrCreateTag().getDouble("CustomModelData") == 1))) {
+                AdvancementManager.addAdvancement(player, AdvancementManager.PETIFICATE_THE_WAYWARD);
                 return player;
             }
         }
@@ -214,7 +212,7 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
 
     @javax.annotation.Nullable
     public ChimericRedmarerEntity getBreedOffspring(ServerLevel serverLevel, AgeableMob mob) {
-        return UnseenWorldModEntities.CHIMERIC_REDMARER.get().create(serverLevel);
+        return UnseenWorldEntities.CHIMERIC_REDMARER.get().create(serverLevel);
     }
 
     public boolean isFood(ItemStack stack) {
@@ -241,9 +239,8 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
                 ItemStack itemstack = player.getItemInHand(interactionHand);
                 return itemstack.is(Items.SADDLE) ? itemstack.interactLivingEntity(player, this, interactionHand) : InteractionResult.PASS;
             } else {
-                if (flag && !this.isSilent()) {
+                if (flag && !this.isSilent())
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FOX_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                }
                 return interactionresult;
             }
         }
@@ -253,43 +250,9 @@ public class ChimericRedmarerEntity extends TamableAnimal implements ItemSteerab
         return new Vec3(0.0D, 0.6F * this.getEyeHeight(), this.getBbWidth() * 0.4F);
     }
 
-    @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance instance, MobSpawnType type, @javax.annotation.Nullable SpawnGroupData data, @javax.annotation.Nullable CompoundTag p_33891_) {
-        if (!this.isBaby()) {
-            RandomSource randomsource = levelAccessor.getRandom();
-            if (randomsource.nextInt(30) == 0) {
-                Mob mob = EntityType.ZOMBIFIED_PIGLIN.create(levelAccessor.getLevel());
-                if (mob != null) {
-                    data = this.spawnJockey(levelAccessor, instance, mob, new Zombie.ZombieGroupData(Zombie.getSpawnAsBabyOdds(randomsource), false));
-                    this.equipSaddle(null);
-                }
-            } else if (randomsource.nextInt(10) == 0) {
-                AgeableMob ageablemob = UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get().create(levelAccessor.getLevel());
-                if (ageablemob != null) {
-                    ageablemob.setAge(-24000);
-                    data = this.spawnJockey(levelAccessor, instance, ageablemob, null);
-                }
-            } else {
-                data = new AgeableMobGroupData(0.5F);
-            }
-        }
-        return super.finalizeSpawn(levelAccessor, instance, type, data, p_33891_);
-    }
-
-    private SpawnGroupData spawnJockey(ServerLevelAccessor accessor, DifficultyInstance instance, Mob mob, @Nullable SpawnGroupData p_33885_) {
-        mob.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-        mob.finalizeSpawn(accessor, instance, MobSpawnType.JOCKEY, p_33885_, null);
-        mob.startRiding(this, true);
-        return new AgeableMob.AgeableMobGroupData(0.0F);
-    }
-
-    public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.CHIMERIC_REDMARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.4);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
         builder = builder.add(Attributes.MAX_HEALTH, 18);
         builder = builder.add(Attributes.ARMOR, 1);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);

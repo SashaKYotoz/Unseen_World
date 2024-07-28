@@ -28,15 +28,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-
-import java.util.Collections;
-import java.util.List;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class NightdewOfChimericDarknessBlock extends Block implements SimpleWaterloggedBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
@@ -114,9 +110,9 @@ public class NightdewOfChimericDarknessBlock extends Block implements SimpleWate
                 }
             }else{
                 if (Math.random() < 0.05 && (world.getBlockState(pos.above()).getBlock() == Blocks.AIR
-                        && !((world.getBlockState(pos.below()).getBlock() == UnseenWorldModBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get()
-                        && (world.getBlockState(pos.below(2)).getBlock() == UnseenWorldModBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get()))))) {
-                    world.setBlock(pos.above(), UnseenWorldModBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get().defaultBlockState(), 3);
+                        && !((world.getBlockState(pos.below()).getBlock() == UnseenWorldBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get()
+                        && (world.getBlockState(pos.below(2)).getBlock() == UnseenWorldBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get()))))) {
+                    world.setBlock(pos.above(), UnseenWorldBlocks.NIGHTDEW_OF_CHIMERIC_DARKNESS.get().defaultBlockState(), 3);
                 }
             }
         }
@@ -129,7 +125,7 @@ public class NightdewOfChimericDarknessBlock extends Block implements SimpleWate
                 && player.getMainHandItem().is(Items.GLASS_BOTTLE)) {
             ItemStack stack = new ItemStack(Items.GLASS_BOTTLE);
             player.getInventory().clearOrCountMatchingItems(p -> stack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
-            player.spawnAtLocation(new ItemStack(UnseenWorldModItems.NIGHTDEW_NECTAR_BOTTLE.get()));
+            player.spawnAtLocation(new ItemStack(UnseenWorldItems.NIGHTDEW_NECTAR_BOTTLE.get()));
             BlockState blockState = world.getBlockState(pos);
             if (property.getPossibleValues().contains(0))
                 world.setBlock(pos, blockState.setValue(property, 0), 3);

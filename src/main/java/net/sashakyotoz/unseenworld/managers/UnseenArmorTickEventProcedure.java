@@ -8,14 +8,14 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.util.RandomSource;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class UnseenArmorTickEventProcedure {
     public static void execute(Entity entity) {
         if (entity == null)
             return;
-        if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.HEAD).is(UnseenWorldModItems.UNSEEN_ARMOR_HELMET.get()) && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(UnseenWorldModItems.UNSEEN_ARMOR_CHESTPLATE.get())
-                && livingEntity.getItemBySlot(EquipmentSlot.LEGS).is(UnseenWorldModItems.UNSEEN_ARMOR_LEGGINGS.get()) && livingEntity.getItemBySlot(EquipmentSlot.FEET).is(UnseenWorldModItems.UNSEEN_ARMOR_BOOTS.get())) {
+        if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.HEAD).is(UnseenWorldItems.UNSEEN_ARMOR_HELMET.get()) && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(UnseenWorldItems.UNSEEN_ARMOR_CHESTPLATE.get())
+                && livingEntity.getItemBySlot(EquipmentSlot.LEGS).is(UnseenWorldItems.UNSEEN_ARMOR_LEGGINGS.get()) && livingEntity.getItemBySlot(EquipmentSlot.FEET).is(UnseenWorldItems.UNSEEN_ARMOR_BOOTS.get())) {
             if (livingEntity.isShiftKeyDown() && !livingEntity.hasEffect(MobEffects.INVISIBILITY)) {
                 if (!livingEntity.level().isClientSide())
                     livingEntity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 100, 0));

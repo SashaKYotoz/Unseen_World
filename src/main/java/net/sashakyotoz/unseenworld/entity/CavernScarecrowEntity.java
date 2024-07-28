@@ -3,8 +3,8 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraftforge.network.PlayMessages;
 
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -47,14 +47,13 @@ public class CavernScarecrowEntity extends TamableAnimal {
 	public int texture;
 
 	public CavernScarecrowEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.CAVERN_SCARECROW.get(), world);
+		this(UnseenWorldEntities.CAVERN_SCARECROW.get(), world);
 	}
 
 	public CavernScarecrowEntity(EntityType<CavernScarecrowEntity> type, Level world) {
 		super(type, world);
 		xpReward = 1;
-		setNoAi(false);
-		texture = (int) Math.round((Math.random()) * 2);
+		texture = this.getRandom().nextInt(3);
 	}
 
 	@Override
@@ -154,19 +153,14 @@ public class CavernScarecrowEntity extends TamableAnimal {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageable) {
-		CavernScarecrowEntity entity = UnseenWorldModEntities.CAVERN_SCARECROW.get().create(serverLevel);
+		CavernScarecrowEntity entity = UnseenWorldEntities.CAVERN_SCARECROW.get().create(serverLevel);
 		entity.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return entity;
 	}
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return List.of(UnseenWorldModItems.MOON_FISH_FOOD.get(), UnseenWorldModItems.COOKED_MOON_FISH.get(), Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH, Items.COOKED_COD, Items.COOKED_SALMON).contains(stack.getItem());
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.CAVERN_SCARECROW.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				Mob::checkMobSpawnRules);
+		return List.of(UnseenWorldItems.MOON_FISH_FOOD.get(), UnseenWorldItems.COOKED_MOON_FISH.get(), Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH, Items.COOKED_COD, Items.COOKED_SALMON).contains(stack.getItem());
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 
 public class WildMisteryFlowerBerriesBlock extends FlowerBlock {
 	public WildMisteryFlowerBerriesBlock() {
@@ -37,9 +37,9 @@ public class WildMisteryFlowerBerriesBlock extends FlowerBlock {
 
 	@Override
 	public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-		return  groundState.is(Blocks.SNOW_BLOCK) || groundState.is(Blocks.POWDER_SNOW) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS)
+		return  groundState.is(Blocks.SNOW_BLOCK) || groundState.is(Blocks.POWDER_SNOW) || groundState.is(UnseenWorldTags.Blocks.DIRT_THE_DARKNESS)
 				|| groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.DIRT) || groundState.is(Blocks.PODZOL)
-				|| groundState.is(Blocks.ROOTED_DIRT) || groundState.is(Blocks.BLACKSTONE) || groundState.is(UnseenWorldModBlocks.RED_OOZE.get());
+				|| groundState.is(Blocks.ROOTED_DIRT) || groundState.is(Blocks.BLACKSTONE) || groundState.is(UnseenWorldBlocks.RED_OOZE.get());
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class WildMisteryFlowerBerriesBlock extends FlowerBlock {
 		super.use(blockstate, level, pos, player, hand, hit);
 		int randomCountOfBerries = player.getRandom().nextIntBetweenInclusive(1,4) + 1;
 		for (int i = 0; i < randomCountOfBerries; i++) {
-			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.PURPLE_BERRIES.get()));
+			player.spawnAtLocation(new ItemStack(UnseenWorldItems.PURPLE_BERRIES.get()));
 		}
 		level.removeBlock(pos,true);
 		return InteractionResult.SUCCESS;

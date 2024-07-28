@@ -3,7 +3,7 @@ package net.sashakyotoz.unseenworld.block;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,7 +67,7 @@ public class CrystallizedDarkSandBlock extends FallingBlock {
 			} else {
 				return 8562943;
 			}
-		}, UnseenWorldModBlocks.CRYSTALLIZED_DARK_SAND.get());
+		}, UnseenWorldBlocks.CRYSTALLIZED_DARK_SAND.get());
 	}
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {

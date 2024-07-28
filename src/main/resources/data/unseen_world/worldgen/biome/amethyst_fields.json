@@ -31,7 +31,14 @@
   "spawners": {
     "monster": [],
     "creature": [],
-    "ambient": [],
+    "ambient": [
+      {
+        "type": "unseen_world:chimeric_purplemarer",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
     "axolotls": [],
     "underground_water_creature": [],
     "water_creature": [],

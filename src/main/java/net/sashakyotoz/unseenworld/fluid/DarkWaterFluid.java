@@ -10,8 +10,8 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.sashakyotoz.unseenworld.registries.*;
 
 public abstract class DarkWaterFluid extends ForgeFlowingFluid {
-	public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldModFluidTypes.DARK_WATER_TYPE, UnseenWorldModFluids.DARK_WATER, UnseenWorldModFluids.FLOWING_DARK_WATER)
-			.explosionResistance(100f).slopeFindDistance(5).bucket(UnseenWorldModItems.DARK_WATER_BUCKET).block(() -> (LiquidBlock) UnseenWorldModBlocks.DARK_WATER.get());
+	public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldFluids.DARK_WATER_TYPE, UnseenWorldFluids.DARK_WATER, UnseenWorldFluids.FLOWING_DARK_WATER)
+			.explosionResistance(100f).slopeFindDistance(5).bucket(UnseenWorldItems.DARK_WATER_BUCKET).block(() -> (LiquidBlock) UnseenWorldBlocks.DARK_WATER.get());
 
 	private DarkWaterFluid() {
 		super(PROPERTIES);
@@ -19,7 +19,7 @@ public abstract class DarkWaterFluid extends ForgeFlowingFluid {
 
 	@Override
 	public ParticleOptions getDripParticle() {
-		return UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get();
+		return UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get();
 	}
 
 	public static class Source extends DarkWaterFluid {

@@ -14,7 +14,7 @@ import net.sashakyotoz.unseenworld.effects.MeteoritestrophyMobEffect;
 import net.sashakyotoz.unseenworld.effects.DarkVoidMobEffect;
 import net.sashakyotoz.unseenworld.effects.DarkImmuniteMobEffect;
 
-public class UnseenWorldModMobEffects {
+public class UnseenWorldMobEffects {
 	public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, UnseenWorldMod.MODID);
 	public static final RegistryObject<MobEffect> DARK_VOID = REGISTRY.register("dark_void", DarkVoidMobEffect::new);
 	public static final RegistryObject<MobEffect> UNSEENIUM = REGISTRY.register("unseenium", UnseeniumMobEffect::new);

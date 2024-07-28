@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.item;
 
 import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.managers.UnseenArmorTickEventProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
@@ -49,7 +49,7 @@ public abstract class UnseenArmorItem extends ArmorItem {
 
             @Override
             public Ingredient getRepairIngredient() {
-                return Ingredient.of(new ItemStack(UnseenWorldModItems.UNSEEN_INGOT.get()));
+                return Ingredient.of(new ItemStack(UnseenWorldItems.UNSEEN_INGOT.get()));
             }
 
             @Override

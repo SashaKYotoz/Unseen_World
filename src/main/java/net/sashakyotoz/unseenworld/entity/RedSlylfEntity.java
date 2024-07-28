@@ -3,8 +3,8 @@ package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.*;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -45,7 +45,7 @@ import java.util.List;
 
 public class RedSlylfEntity extends TamableAnimal {
 	public RedSlylfEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.RED_SLYLF.get(), world);
+		this(UnseenWorldEntities.RED_SLYLF.get(), world);
 	}
 
 	public RedSlylfEntity(EntityType<RedSlylfEntity> type, Level world) {
@@ -180,14 +180,14 @@ public class RedSlylfEntity extends TamableAnimal {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageable) {
-		RedSlylfEntity entity = UnseenWorldModEntities.RED_SLYLF.get().create(serverLevel);
+		RedSlylfEntity entity = UnseenWorldEntities.RED_SLYLF.get().create(serverLevel);
 		entity.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return entity;
 	}
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return List.of(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get(), UnseenWorldModItems.OUTGROWTH_APPLE.get(), UnseenWorldModItems.PURPLE_BERRIES.get(), UnseenWorldModItems.CHIMERIC_BLUE_PEPPER.get()).contains(stack.getItem());
+		return List.of(UnseenWorldItems.CRIMSERRY_SOUL_BERRY.get(), UnseenWorldItems.OUTGROWTH_APPLE.get(), UnseenWorldItems.PURPLE_BERRIES.get(), UnseenWorldItems.CHIMERIC_BLUE_PEPPER.get()).contains(stack.getItem());
 	}
 
 	@Override
@@ -202,10 +202,6 @@ public class RedSlylfEntity extends TamableAnimal {
 	public void aiStep() {
 		super.aiStep();
 		this.setNoGravity(true);
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.RED_SLYLF.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

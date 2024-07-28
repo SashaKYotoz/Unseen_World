@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.OptionalInt;
 
@@ -90,7 +90,7 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
     }
 
     public static OptionalInt getOptionalDistanceAt(BlockState state) {
-        if (state.is(BlockTags.LOGS) || state.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) || state.is(Blocks.AMETHYST_BLOCK)) {
+        if (state.is(BlockTags.LOGS) || state.is(UnseenWorldBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) || state.is(Blocks.AMETHYST_BLOCK)) {
             return OptionalInt.of(0);
         } else {
             return state.hasProperty(DISTANCE) ? OptionalInt.of(state.getValue(DISTANCE)) : OptionalInt.empty();
@@ -122,6 +122,6 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource p_221428_, BlockPos p_221429_, BlockState p_221430_) {
-        level.setBlock(p_221429_.below(), UnseenWorldModBlocks.LUMINOUS_AMETHYST_VINE.get().defaultBlockState(), 3);
+        level.setBlock(p_221429_.below(), UnseenWorldBlocks.LUMINOUS_AMETHYST_VINE.get().defaultBlockState(), 3);
     }
 }

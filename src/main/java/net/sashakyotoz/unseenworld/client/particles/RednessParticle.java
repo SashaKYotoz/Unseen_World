@@ -8,10 +8,8 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.sashakyotoz.anitexlib.client.particles.parents.FluidParticleRenderType;
 import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
-import net.sashakyotoz.anitexlib.client.particles.parents.GlowingParticleRenderType;
-import net.sashakyotoz.anitexlib.client.particles.types.SparkleLikeParticle;
+import net.sashakyotoz.anitexlib.client.particles.parents.rendertypes.GlowingParticleRenderType;
 import org.antlr.v4.runtime.misc.Triple;
 
 @OnlyIn(Dist.CLIENT)

@@ -8,14 +8,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlockEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BeaconOfWeaponsBlockEntity extends BlockEntity implements WorldlyContainer {
     public static ItemStack item;
     public BeaconOfWeaponsBlockEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(), pWorldPosition, pBlockState);
+        super(UnseenWorldBlockEntities.BEACON_OF_WEAPONS.get(), pWorldPosition, pBlockState);
         item = ItemStack.EMPTY;
     }
     @Override

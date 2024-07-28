@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.minecraftforge.network.PlayMessages;
 
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -16,7 +16,6 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
@@ -32,7 +31,7 @@ public class VoidEndermanEntity extends EnderMan {
 	private int attackAnimationRemainingTicks;
 
 	public VoidEndermanEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.VOID_ENDERMEN.get(), world);
+		this(UnseenWorldEntities.VOID_ENDERMEN.get(), world);
 	}
 
 	public VoidEndermanEntity(EntityType<VoidEndermanEntity> type, Level world) {
@@ -124,11 +123,6 @@ public class VoidEndermanEntity extends EnderMan {
 		if (source.is(DamageTypes.EXPLOSION))
 			return false;
 		return super.hurt(source, amount);
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.VOID_ENDERMEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

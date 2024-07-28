@@ -15,7 +15,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.unseenworld.client.model.ModelThe_Wither_Knight_Armor_Rods;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class KnightArmorRodsLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
     private static final ResourceLocation RODS_LOCATION = new ResourceLocation("unseen_world:textures/entities/the_wither_knight_armor.png");
@@ -42,7 +42,7 @@ public class KnightArmorRodsLayer<T extends LivingEntity, M extends EntityModel<
     }
 
     public boolean shouldRender(ItemStack stack, T entity) {
-        return stack.getItem() == UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get() && entity.isShiftKeyDown();
+        return stack.getItem() == UnseenWorldItems.KNIGHT_ARMOR_CHESTPLATE.get() && entity.isShiftKeyDown();
     }
 
     public ResourceLocation getRodsLocation(ItemStack stack, T entity) {

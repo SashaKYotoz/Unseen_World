@@ -15,7 +15,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import java.util.LinkedHashMap;
 
@@ -40,22 +40,22 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        trimmedArmorItem(UnseenWorldModItems.DEEP_GEM_ARMOR_HELMET);
-        trimmedArmorItem(UnseenWorldModItems.DEEP_GEM_ARMOR_CHESTPLATE);
-        trimmedArmorItem(UnseenWorldModItems.DEEP_GEM_ARMOR_LEGGINGS);
-        trimmedArmorItem(UnseenWorldModItems.DEEP_GEM_ARMOR_BOOTS);
-        trimmedArmorItem(UnseenWorldModItems.UNSEEN_ARMOR_HELMET);
-        trimmedArmorItem(UnseenWorldModItems.UNSEEN_ARMOR_CHESTPLATE);
-        trimmedArmorItem(UnseenWorldModItems.UNSEEN_ARMOR_LEGGINGS);
-        trimmedArmorItem(UnseenWorldModItems.UNSEEN_ARMOR_BOOTS);
-        trimmedArmorItem(UnseenWorldModItems.NATURERIUM_ARMOR_HELMET);
-        trimmedArmorItem(UnseenWorldModItems.NATURERIUM_ARMOR_CHESTPLATE);
-        trimmedArmorItem(UnseenWorldModItems.NATURERIUM_ARMOR_LEGGINGS);
-        trimmedArmorItem(UnseenWorldModItems.NATURERIUM_ARMOR_BOOTS);
-        trimmedArmorItem(UnseenWorldModItems.VOIDINGOT_ARMOR_HELMET);
-        trimmedArmorItem(UnseenWorldModItems.VOIDINGOT_ARMOR_CHESTPLATE);
-        trimmedArmorItem(UnseenWorldModItems.VOIDINGOT_ARMOR_LEGGINGS);
-        trimmedArmorItem(UnseenWorldModItems.VOIDINGOT_ARMOR_BOOTS);
+        trimmedArmorItem(UnseenWorldItems.DEEP_GEM_ARMOR_HELMET);
+        trimmedArmorItem(UnseenWorldItems.DEEP_GEM_ARMOR_CHESTPLATE);
+        trimmedArmorItem(UnseenWorldItems.DEEP_GEM_ARMOR_LEGGINGS);
+        trimmedArmorItem(UnseenWorldItems.DEEP_GEM_ARMOR_BOOTS);
+        trimmedArmorItem(UnseenWorldItems.UNSEEN_ARMOR_HELMET);
+        trimmedArmorItem(UnseenWorldItems.UNSEEN_ARMOR_CHESTPLATE);
+        trimmedArmorItem(UnseenWorldItems.UNSEEN_ARMOR_LEGGINGS);
+        trimmedArmorItem(UnseenWorldItems.UNSEEN_ARMOR_BOOTS);
+        trimmedArmorItem(UnseenWorldItems.NATURERIUM_ARMOR_HELMET);
+        trimmedArmorItem(UnseenWorldItems.NATURERIUM_ARMOR_CHESTPLATE);
+        trimmedArmorItem(UnseenWorldItems.NATURERIUM_ARMOR_LEGGINGS);
+        trimmedArmorItem(UnseenWorldItems.NATURERIUM_ARMOR_BOOTS);
+        trimmedArmorItem(UnseenWorldItems.VOIDINGOT_ARMOR_HELMET);
+        trimmedArmorItem(UnseenWorldItems.VOIDINGOT_ARMOR_CHESTPLATE);
+        trimmedArmorItem(UnseenWorldItems.VOIDINGOT_ARMOR_LEGGINGS);
+        trimmedArmorItem(UnseenWorldItems.VOIDINGOT_ARMOR_BOOTS);
     }
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
         final String MOD_ID = UnseenWorldMod.MODID;

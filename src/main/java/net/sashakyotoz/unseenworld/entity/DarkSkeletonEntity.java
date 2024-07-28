@@ -20,13 +20,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 
 public class DarkSkeletonEntity extends Monster {
 	public int texture;
 
 	public DarkSkeletonEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.DARK_SKELETON.get(), world);
+		this(UnseenWorldEntities.DARK_SKELETON.get(), world);
 	}
 
 	public DarkSkeletonEntity(EntityType<DarkSkeletonEntity> type, Level world) {
@@ -84,11 +84,6 @@ public class DarkSkeletonEntity extends Monster {
 		if (source.getMsgId().equals("witherSkull"))
 			return false;
 		return super.hurt(source, amount);
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.DARK_SKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

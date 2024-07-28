@@ -25,10 +25,10 @@ import java.util.HashMap;
 import com.google.common.collect.ImmutableSet;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class UnseenWorldModVillagerProfessions {
+public class UnseenWorldVillagerProfessions {
 	private static final Map<String, ProfessionPoiType> POI_TYPES = new HashMap<>();
 	public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, UnseenWorldMod.MODID);
-	public static final RegistryObject<VillagerProfession> SEEKER_WAYFARER = registerProfession("seeker_wayfarer", () -> UnseenWorldModBlocks.BEACON_OF_WEAPONS.get(),
+	public static final RegistryObject<VillagerProfession> SEEKER_WAYFARER = registerProfession("seeker_wayfarer", () -> UnseenWorldBlocks.BEACON_OF_WEAPONS.get(),
 			() -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("unseen_world:fire_staff_shot")));
 
 	private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<Block> block, Supplier<SoundEvent> soundEvent) {

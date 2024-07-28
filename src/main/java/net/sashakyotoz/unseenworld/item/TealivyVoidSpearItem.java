@@ -4,6 +4,7 @@ package net.sashakyotoz.unseenworld.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.world.item.*;
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.entity.TealivyVoidSpearEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -40,11 +41,10 @@ import java.util.UUID;
 public class TealivyVoidSpearItem extends TridentItem {
 	public static final UUID REACH_MOD = UUID.fromString("dccd59ec-6391-436d-9e00-47f2e6005e20");
 	public static double reach = 3;
-	public static int damage = 9;
 	public static Lazy<? extends Multimap<Attribute, AttributeModifier>> ATTRIBUTE_LAZY_MAP = Lazy.of(() -> {
 		Multimap<Attribute, AttributeModifier> map;
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", damage, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 9, AttributeModifier.Operation.ADDITION));
 		builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.8, AttributeModifier.Operation.ADDITION));
 		if (ForgeMod.ENTITY_REACH.isPresent()) {
 			builder.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier(REACH_MOD, "Weapon modifier", reach, AttributeModifier.Operation.ADDITION));
@@ -126,10 +126,8 @@ public class TealivyVoidSpearItem extends TridentItem {
 						f3 *= f5 / f4;
 						player.push(f1, f2, f3);
 						player.startAutoSpinAttack(20);
-						if (player.onGround()) {
-							float f6 = 1.2F;
+						if (player.onGround())
 							player.move(MoverType.SELF, new Vec3(0.0D, 1.2F, 0.0D));
-						}
 						SoundEvent soundevent;
 						if (j >= 3) {
 							soundevent = SoundEvents.TRIDENT_RIPTIDE_3;
@@ -145,14 +143,14 @@ public class TealivyVoidSpearItem extends TridentItem {
 		}
 	}
 
-	public InteractionResultHolder<ItemStack> use(Level p_43405_, Player player, InteractionHand p_43407_) {
-		ItemStack itemstack = player.getItemInHand(p_43407_);
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack itemstack = player.getItemInHand(hand);
 		if (itemstack.getDamageValue() >= itemstack.getMaxDamage() - 1) {
 			return InteractionResultHolder.fail(itemstack);
 		} else if (EnchantmentHelper.getRiptide(itemstack) > 0 && !player.isInWaterOrRain()) {
 			return InteractionResultHolder.fail(itemstack);
 		} else {
-			player.startUsingItem(p_43407_);
+			player.startUsingItem(hand);
 			return InteractionResultHolder.consume(itemstack);
 		}
 	}

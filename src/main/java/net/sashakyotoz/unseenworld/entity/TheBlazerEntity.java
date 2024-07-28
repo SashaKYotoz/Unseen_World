@@ -39,9 +39,9 @@ import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
 import net.sashakyotoz.unseenworld.managers.EventManager;
 import net.sashakyotoz.unseenworld.managers.TheBlazerOnEntityTickUpdateProcedure;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -54,7 +54,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
     private final ServerBossEvent bossInfo = new ServerBossEvent(Component.translatable("entity.unseen_world.the_blazer").withStyle(ChatFormatting.GOLD), BossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
     public TheBlazerEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.THE_BLAZER.get(), world);
+        this(UnseenWorldEntities.THE_BLAZER.get(), world);
     }
 
     public TheBlazerEntity(EntityType<TheBlazerEntity> type, Level world) {
@@ -70,7 +70,7 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         spawnAnimationState.start(this.tickCount);
-        EventManager.addParticles(UnseenWorldModParticleTypes.FIRE_PARTICLE.get(),this.level(),this.getX(),this.getY(),this.getZ(),2);
+        EventManager.addParticles(UnseenWorldParticleTypes.FIRE_PARTICLE.get(),this.level(),this.getX(),this.getY(),this.getZ(),2);
         if (!Objects.equals(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get(), UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.getDefault())) {
             Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get());
             this.setHealth(UnseenWorldConfigs.HEALTH_ATTRIBUTE_OF_BLAZER.get().floatValue());
@@ -270,9 +270,9 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
             if (!player.level().isClientSide())
                 player.displayClientMessage(Component.translatable("entity.unseen_world.the_blazer.death_message"), true);
         }
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.VOID_HAMMER.get()));
+        this.spawnAtLocation(new ItemStack(UnseenWorldItems.VOID_HAMMER.get()));
         int tmp = this.getRandom().nextInt(1,4)+1;
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.RED_TITANIUM_INGOT.get(),tmp));
+        this.spawnAtLocation(new ItemStack(UnseenWorldItems.RED_TITANIUM_INGOT.get(),tmp));
     }
 
     @Override
@@ -322,9 +322,6 @@ public class TheBlazerEntity extends Blaze implements RangedAttackMob {
     public void aiStep() {
         super.aiStep();
         this.setNoGravity(true);
-    }
-
-    public static void init() {
     }
 
     public static AttributeSupplier.Builder createAttributes() {

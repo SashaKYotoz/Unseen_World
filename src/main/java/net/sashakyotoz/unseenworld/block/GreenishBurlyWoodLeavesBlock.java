@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 public class GreenishBurlyWoodLeavesBlock extends Block {
 	public GreenishBurlyWoodLeavesBlock() {
@@ -50,7 +50,7 @@ public class GreenishBurlyWoodLeavesBlock extends Block {
 			BlockPos blockpos = blockPos.below();
 			BlockState blockstate = level.getBlockState(blockpos);
 			if (!isFaceFull(blockstate.getCollisionShape(level, blockpos), Direction.UP)) {
-				ParticleUtils.spawnParticleBelow(level, blockPos, source, UnseenWorldModParticleTypes.GREENISH_PARTICLE.get());
+				ParticleUtils.spawnParticleBelow(level, blockPos, source, UnseenWorldParticleTypes.GREENISH_PARTICLE.get());
 			}
 		}
 	}

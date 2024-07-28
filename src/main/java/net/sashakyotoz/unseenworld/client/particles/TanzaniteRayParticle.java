@@ -5,7 +5,7 @@ import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
-import net.sashakyotoz.anitexlib.client.particles.parents.GlowingParticleRenderType;
+import net.sashakyotoz.anitexlib.client.particles.parents.rendertypes.GlowingParticleRenderType;
 
 public class TanzaniteRayParticle extends GlowingLikeParticle {
     public static TanzaniteRayParticle.TanzaniteParticleProvider provider(SpriteSet spriteSet) {

@@ -1,8 +1,8 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -31,12 +31,12 @@ import javax.annotation.Nullable;
 public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 	private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(UnseenTitaniumSpearEntity.class, EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(UnseenTitaniumSpearEntity.class, EntityDataSerializers.BOOLEAN);
-	private ItemStack spearItem = new ItemStack(UnseenWorldModItems.UNSEEN_TITANIUM_SPEAR.get());
+	private ItemStack spearItem = new ItemStack(UnseenWorldItems.UNSEEN_TITANIUM_SPEAR.get());
 	private boolean dealtDamage;
 	public int clientSideReturnTridentTickCount;
 
 	public UnseenTitaniumSpearEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(UnseenWorldModEntities.UNSEEN_TITANIUM_SPEAR.get(), world);
+		super(UnseenWorldEntities.UNSEEN_TITANIUM_SPEAR.get(), world);
 	}
 
 	public UnseenTitaniumSpearEntity(EntityType<UnseenTitaniumSpearEntity> type, Level world) {
@@ -185,7 +185,7 @@ public class UnseenTitaniumSpearEntity  extends AbstractArrow {
 	}
 
 	public UnseenTitaniumSpearEntity(Level p_37569_, LivingEntity p_37570_, ItemStack p_37571_) {
-		super(UnseenWorldModEntities.UNSEEN_TITANIUM_SPEAR.get(), p_37570_, p_37569_);
+		super(UnseenWorldEntities.UNSEEN_TITANIUM_SPEAR.get(), p_37570_, p_37569_);
 		this.spearItem = p_37571_.copy();
 		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(p_37571_));
 		this.entityData.set(ID_FOIL, p_37571_.hasFoil());

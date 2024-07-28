@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.Set;
 
@@ -32,22 +32,22 @@ public class GrizzlyLightBlockFeature extends OreFeature {
 		int y = context.origin().getY();
 		int z = context.origin().getZ();
 		double sx, sy, sz;
-		if ((world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == UnseenWorldModBlocks.GRIZZLY_LEAVES.get() && (world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == Blocks.AIR) {
+		if ((world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == UnseenWorldBlocks.GRIZZLY_LEAVES.get() && (world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == Blocks.AIR) {
 			sx = -3;
 			for (int x1 = 0; x1 < 6; x1++) {
 				sy = -3;
 				for (int y1 = 0; y1 < 6; y1++) {
 					sz = -3;
 					for (int z1 = 0; z1 < 6; z1++) {
-						if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.GRIZZLY_LEAVES.get()
+						if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldBlocks.GRIZZLY_LEAVES.get()
 								&& (world.getBlockState(BlockPos.containing(x + sx, (y + sy) - 1, z + sz))).getBlock() == Blocks.AIR) {
 							BlockPos pos = BlockPos.containing(x + sx, (y + sy) - 1, z + sz);
-							BlockState blockState = UnseenWorldModBlocks.GRIZZLY_LEAVES.get().defaultBlockState();
+							BlockState blockState = UnseenWorldBlocks.GRIZZLY_LEAVES.get().defaultBlockState();
 							world.setBlock(pos, blockState, 3);
 							if (Math.random() < 0.25) {
 								if ((world.getBlockState(BlockPos.containing(x + sx, (y + sy) - 2, z + sz))).getBlock() == Blocks.AIR) {
 									BlockPos blockPos = BlockPos.containing(x + sx, (y + sy) - 2, z + sz);
-									BlockState state = UnseenWorldModBlocks.GRIZZLY_LIGHT_BLOCK.get().defaultBlockState();
+									BlockState state = UnseenWorldBlocks.GRIZZLY_LIGHT_BLOCK.get().defaultBlockState();
 									world.setBlock(blockPos, state, 3);
 								}
 							}

@@ -30,13 +30,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 
 import java.util.EnumSet;
 
 public class DarkPhantomEntity extends Monster {
 	public DarkPhantomEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.DARK_PHANTOM.get(), world);
+		this(UnseenWorldEntities.DARK_PHANTOM.get(), world);
 	}
 
 	public DarkPhantomEntity(EntityType<DarkPhantomEntity> type, Level world) {
@@ -167,11 +167,6 @@ public class DarkPhantomEntity extends Monster {
 	@Override
 	public void setNoGravity(boolean ignored) {
 		super.setNoGravity(true);
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.DARK_PHANTOM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

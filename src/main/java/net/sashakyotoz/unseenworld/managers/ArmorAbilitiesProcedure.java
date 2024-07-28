@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,8 +17,8 @@ public class ArmorAbilitiesProcedure {
         ItemStack chestSlot = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
         ItemStack legsSlot = livingEntity.getItemBySlot(EquipmentSlot.LEGS);
         ItemStack feetSlot = livingEntity.getItemBySlot(EquipmentSlot.FEET);
-        if (isVoidIngotArmorSet(headSlot, chestSlot, legsSlot, feetSlot) && livingEntity.hasEffect(UnseenWorldModMobEffects.DARK_VOID.get())) {
-            livingEntity.removeEffect(UnseenWorldModMobEffects.DARK_VOID.get());
+        if (isVoidIngotArmorSet(headSlot, chestSlot, legsSlot, feetSlot) && livingEntity.hasEffect(UnseenWorldMobEffects.DARK_VOID.get())) {
+            livingEntity.removeEffect(UnseenWorldMobEffects.DARK_VOID.get());
         } else if (isRedTitaniumArmorSet(headSlot, chestSlot, legsSlot, feetSlot) && !(livingEntity.hasEffect(MobEffects.FIRE_RESISTANCE))) {
             if (!livingEntity.level().isClientSide()) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
@@ -31,23 +31,23 @@ public class ArmorAbilitiesProcedure {
     }
 
     private static boolean isVoidIngotArmorSet(ItemStack head, ItemStack chest, ItemStack legs, ItemStack feet) {
-        return head.getItem() == UnseenWorldModItems.VOIDINGOT_ARMOR_HELMET.get()
-                && chest.getItem() == UnseenWorldModItems.VOIDINGOT_ARMOR_CHESTPLATE.get()
-                && legs.getItem() == UnseenWorldModItems.VOIDINGOT_ARMOR_LEGGINGS.get()
-                && feet.getItem() == UnseenWorldModItems.VOIDINGOT_ARMOR_BOOTS.get();
+        return head.getItem() == UnseenWorldItems.VOIDINGOT_ARMOR_HELMET.get()
+                && chest.getItem() == UnseenWorldItems.VOIDINGOT_ARMOR_CHESTPLATE.get()
+                && legs.getItem() == UnseenWorldItems.VOIDINGOT_ARMOR_LEGGINGS.get()
+                && feet.getItem() == UnseenWorldItems.VOIDINGOT_ARMOR_BOOTS.get();
     }
 
     private static boolean isRedTitaniumArmorSet(ItemStack headSlot, ItemStack chestSlot, ItemStack legsSlot, ItemStack feetSlot) {
-        return feetSlot.getItem() == UnseenWorldModItems.RED_TITANIUM_ARMOR_BOOTS.get()
-                && legsSlot.getItem() == UnseenWorldModItems.RED_TITANIUM_ARMOR_LEGGINGS.get()
-                && chestSlot.getItem() == UnseenWorldModItems.RED_TITANIUM_ARMOR_CHESTPLATE.get()
-                && headSlot.getItem() == UnseenWorldModItems.RED_TITANIUM_ARMOR_HELMET.get();
+        return feetSlot.getItem() == UnseenWorldItems.RED_TITANIUM_ARMOR_BOOTS.get()
+                && legsSlot.getItem() == UnseenWorldItems.RED_TITANIUM_ARMOR_LEGGINGS.get()
+                && chestSlot.getItem() == UnseenWorldItems.RED_TITANIUM_ARMOR_CHESTPLATE.get()
+                && headSlot.getItem() == UnseenWorldItems.RED_TITANIUM_ARMOR_HELMET.get();
     }
 
     private static boolean isKnightArmorSet(ItemStack headSlot, ItemStack chestSlot, ItemStack legsSlot, ItemStack feetSlot) {
-        return feetSlot.getItem() == UnseenWorldModItems.KNIGHT_ARMOR_BOOTS.get()
-                && legsSlot.getItem() == UnseenWorldModItems.KNIGHT_ARMOR_LEGGINGS.get()
-                && chestSlot.getItem() == UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get()
-                && headSlot.getItem() == UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get();
+        return feetSlot.getItem() == UnseenWorldItems.KNIGHT_ARMOR_BOOTS.get()
+                && legsSlot.getItem() == UnseenWorldItems.KNIGHT_ARMOR_LEGGINGS.get()
+                && chestSlot.getItem() == UnseenWorldItems.KNIGHT_ARMOR_CHESTPLATE.get()
+                && headSlot.getItem() == UnseenWorldItems.KNIGHT_ARMOR_HELMET.get();
     }
 }

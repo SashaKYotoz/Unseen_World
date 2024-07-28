@@ -3,16 +3,15 @@ package net.sashakyotoz.unseenworld.registries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.Containers;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -32,12 +30,10 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.ForgeSoundType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -45,21 +41,15 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.tags.ITag;
-import net.sashakyotoz.anitexlib.registries.ModParticleTypes;
 import net.sashakyotoz.unseenworld.block.ModSaplingBlock;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.block.*;
-import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
-import net.sashakyotoz.unseenworld.entity.DustyPinkMaxorFishEntity;
-import net.sashakyotoz.unseenworld.entity.MoonFishEntity;
-import net.sashakyotoz.unseenworld.entity.StrederEntity;
+import net.sashakyotoz.unseenworld.entity.*;
 import net.sashakyotoz.unseenworld.world.treegrowers.*;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Supplier;
 
-public class UnseenWorldModBlocks {
+public class UnseenWorldBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, UnseenWorldMod.MODID);
     public static final RegistryObject<Block> CRIMSERRY_SOUL_CROP = registerBlock("small_crimserry_soul_berry", CrimserrySoulCropBlock::new);
     public static final RegistryObject<Block> MISTERY_CROP_FLOWER = registerBlock("misteryflower_sapling", MisteryFlowerBlock::new);
@@ -74,7 +64,7 @@ public class UnseenWorldModBlocks {
         @Override
         public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
             return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL)
-                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS) || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(Blocks.CLAY);
+                    || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(UnseenWorldTags.Blocks.DIRT_THE_DARKNESS) || groundState.is(Blocks.MOSS_BLOCK) || groundState.is(Blocks.CLAY);
         }
     });
     public static final RegistryObject<Block> DARK_CRIMSON_SAPLING = registerBlock("darkcrimsonsapling", () -> new ModSaplingBlock(new DarkcrimsonTreeGrower(),BlockBehaviour.Properties.copy(Blocks.CHERRY_SAPLING)));
@@ -95,13 +85,13 @@ public class UnseenWorldModBlocks {
         }
     });
     public static final RegistryObject<Block> TANZASHROOM_STEM = registerBlock("tanzashroom_stem", TanzashroomStemBlock::new);
-    public static final RegistryObject<Block> DARK_WATER = registerBlock("dark_water", () -> new LiquidBlock(UnseenWorldModFluids.DARK_WATER,
+    public static final RegistryObject<Block> DARK_WATER = registerBlock("dark_water", () -> new LiquidBlock(UnseenWorldFluids.DARK_WATER,
 			BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(100f).lightLevel(s -> 8).noCollission().noLootTable().liquid().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY).replaceable()){
 		@Override
 		public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
 			if (!(entity instanceof MoonFishEntity || entity instanceof DustyPinkMaxorFishEntity || entity instanceof StrederEntity
 					|| isHelmetProtected(entity) || entity instanceof ItemEntity
-                    || entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(UnseenWorldModMobEffects.DARK_IMMUNITE.get())
+                    || entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(UnseenWorldMobEffects.DARK_IMMUNITE.get())
                     || entity instanceof Projectile)) {
 				entity.setDeltaMovement(new Vec3(0, 0.05, 0));
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -112,14 +102,20 @@ public class UnseenWorldModBlocks {
         private boolean isHelmetProtected(Entity entity) {
             if (entity instanceof LivingEntity livingEntity) {
                 ItemStack headSlotItem = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-                ITag<Item> helmetTag = ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(UnseenWorldModTags.Items.DARK_WATER_PROTECTED_HELMETS.location()));
+                ITag<Item> helmetTag = ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(UnseenWorldTags.Items.DARK_WATER_PROTECTED_HELMETS.location()));
                 return helmetTag.contains(headSlotItem.getItem());
             }
             return false;
         }
 	});
-    public static final RegistryObject<Block> LIQUID_OF_CHIMERY = registerBlock("liquid_of_chimery", () -> new LiquidBlock(UnseenWorldModFluids.LIQUID_OF_CHIMERY, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).strength(100f).hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).lightLevel(s -> 6).noCollission()
-			.noLootTable().liquid().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY).replaceable()));
+    public static final RegistryObject<Block> LIQUID_OF_CHIMERY = registerBlock("liquid_of_chimery", () -> new LiquidBlock(UnseenWorldFluids.LIQUID_OF_CHIMERY, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).strength(100f).hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).lightLevel(s -> 6).noCollission()
+			.noLootTable().liquid().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY).replaceable()){
+        @Override
+        public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+            if ((entity instanceof ChimericPurplemarerEntity || entity instanceof ChimericRedmarerEntity) && entity.tickCount % 5 == 0)
+                ((TamableAnimal) entity).heal(2);
+        }
+    });
     public static final RegistryObject<Block> THE_DARKNESS_PORTAL = registerBlock("the_darkness_portal", DarknessPortalBlock::new);
     public static final RegistryObject<Block> DEEP_GEM_ORE = registerBlock("deep_gem_ore", () -> new Block(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.DEEPSLATE).strength(6f).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> DEEP_GEM_BLOCK = registerBlock("deep_gem_block", () -> new Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(5f, 10f).requiresCorrectToolForDrops()));
@@ -224,7 +220,7 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> GREENISH_BURLY_WOOD_BUTTON = registerBlock("greenish_burly_wood_button", () -> new ButtonBlock(PLANKLIKE_GREENISH_BURLY_WOOD,BlockSetType.DARK_OAK,40,true));
     public static final RegistryObject<Block> GREENISH_BURLY_WOOD_FENCE = registerBlock("greenish_burly_wood_fence", () -> new FenceBlock(PLANKLIKE_GREENISH_BURLY_WOOD));
     public static final RegistryObject<Block> TANZASHROOM_LIGHT = registerBlock("tanzashroom_light", TanzashroomLightBlock::new);
-    private static final BlockBehaviour.Properties TANZANITE = BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(UnseenWorldModSounds.TANZANITE).requiresCorrectToolForDrops().strength(5f).lightLevel(s -> 3);
+    private static final BlockBehaviour.Properties TANZANITE = BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(UnseenWorldSounds.TANZANITE).requiresCorrectToolForDrops().strength(5f).lightLevel(s -> 3);
     public static final RegistryObject<Block> TANZANITE_BLOCK = registerBlock("tanzanite_block", () -> new Block(TANZANITE));
     public static final RegistryObject<Block> TANZANITE_BLOCK_BUDDING = registerBlock("tanzanite_block_budding", TanzaniteBlockBuddingBlock::new);
     public static final RegistryObject<Block> TANZANITE_CLUSTER = registerBlock("tanzanite_cluster", TanzaniteClusterBlock::new);
@@ -251,7 +247,7 @@ public class UnseenWorldModBlocks {
     public static final RegistryObject<Block> CHLORITE_SLATE_STONE = registerBlock("chlorite_slate_stone", () -> new Block(CHLORITE) {
         @Override
         public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
-            return new ItemStack(UnseenWorldModItems.CHLORITE_SLATE_STONE_SHARD.get());
+            return new ItemStack(UnseenWorldItems.CHLORITE_SLATE_STONE_SHARD.get());
         }
     });
     public static final RegistryObject<Block> CHLORITE_SLATE_STONE_BRICKS = registerBlock("chlorite_slate_stone_bricks", () -> new Block(CHLORITE));
@@ -277,7 +273,7 @@ public class UnseenWorldModBlocks {
     });
     public static final RegistryObject<Block> TOTEM_OF_GUDDY_BLAZE = registerBlock("totemof_guddy_blaze", TotemOfGuddyBlazeBlock::new);
     public static final RegistryObject<Block> BEACON_RUNE = registerBlock("beacon_rune", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).sound(SoundType.LODESTONE).strength(10f).requiresCorrectToolForDrops().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true)));
-    public static final RegistryObject<Block> BEACON_OF_WEAPONS = registerBlock("beacon_of_weapons", () -> new BeaconOfWeaponsBlock(BlockBehaviour.Properties.of().sound(UnseenWorldModSounds.BEACON_OF_WEAPONS).strength(15f).lightLevel(s -> 5).speedFactor(0.5f).jumpFactor(0.5f).noOcclusion().hasPostProcess((bs, br, bp) -> true).requiresCorrectToolForDrops().emissiveRendering((bs, br, bp) -> true)));
+    public static final RegistryObject<Block> BEACON_OF_WEAPONS = registerBlock("beacon_of_weapons", () -> new BeaconOfWeaponsBlock(BlockBehaviour.Properties.of().sound(UnseenWorldSounds.BEACON_OF_WEAPONS).strength(15f).lightLevel(s -> 5).speedFactor(0.5f).jumpFactor(0.5f).noOcclusion().hasPostProcess((bs, br, bp) -> true).requiresCorrectToolForDrops().emissiveRendering((bs, br, bp) -> true)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
@@ -290,10 +286,10 @@ public class UnseenWorldModBlocks {
         return toReturn;
     }
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
-        return UnseenWorldModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        return UnseenWorldItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
     private static <T extends Block> RegistryObject<Item> registerDoubleBlockItem(String name, RegistryObject<T> block) {
-        return UnseenWorldModItems.ITEMS.register(name, () -> new DoubleHighBlockItem(block.get(), new Item.Properties()));
+        return UnseenWorldItems.ITEMS.register(name, () -> new DoubleHighBlockItem(block.get(), new Item.Properties()));
     }
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientSideHandler {

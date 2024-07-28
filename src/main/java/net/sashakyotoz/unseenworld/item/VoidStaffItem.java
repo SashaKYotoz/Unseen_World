@@ -20,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.entity.VoidStaffEntity;
 
 public class VoidStaffItem extends Item {
@@ -53,6 +54,13 @@ public class VoidStaffItem extends Item {
 			return builder.build();
 		}
 		return super.getDefaultAttributeModifiers(slot);
+	}
+	@Override
+	public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+		super.onUseTick(level, user, stack, remainingUseTicks);
+		float sin = (float) Math.sin(remainingUseTicks * Math.PI / 10);
+		float cos = (float) Math.cos(remainingUseTicks * Math.PI / 10);
+		level.addParticle(new ColorableParticleOption("sparkle",0.25f,0.25f,1f), user.getX() + sin, user.getEyeY() - 0.5, user.getZ() + cos, 0, 0, 0);
 	}
 
 	@Override

@@ -5,8 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -19,8 +17,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 import java.util.Collections;
 import java.util.List;
@@ -84,8 +82,8 @@ public class DarkCrimsonAzaleaBlock extends Block {
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
 		if (Math.random() < 0.0025) {
-			world.addParticle(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(), pos.getX(), pos.getY(), pos.getZ(), 0.25, 1, 0.25);
-			BlockState state = UnseenWorldModBlocks.DARK_CRIMSON_FLOWING_AZALEA.get().defaultBlockState();
+			world.addParticle(UnseenWorldParticleTypes.GREENISH_PARTICLE.get(), pos.getX(), pos.getY(), pos.getZ(), 0.25, 1, 0.25);
+			BlockState state = UnseenWorldBlocks.DARK_CRIMSON_FLOWING_AZALEA.get().defaultBlockState();
 			world.setBlock(pos, state, 3);
 		}
 	}

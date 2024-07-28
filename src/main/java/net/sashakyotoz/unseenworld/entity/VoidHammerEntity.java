@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -21,10 +20,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -37,7 +34,7 @@ public class VoidHammerEntity extends AbstractArrow {
     public int clientSideReturnTridentTickCount;
 
     public VoidHammerEntity(PlayMessages.SpawnEntity packet, Level world) {
-        super(UnseenWorldModEntities.VOID_HAMMER.get(), world);
+        super(UnseenWorldEntities.VOID_HAMMER.get(), world);
         timer = 150;
     }
 
@@ -157,7 +154,7 @@ public class VoidHammerEntity extends AbstractArrow {
     }
 
     public VoidHammerEntity(Level level, LivingEntity livingEntity) {
-        super(UnseenWorldModEntities.VOID_HAMMER.get(), livingEntity, level);
+        super(UnseenWorldEntities.VOID_HAMMER.get(), livingEntity, level);
         this.entityData.set(ID_LOYALTY, (byte) 2);
         timer = 160;
     }

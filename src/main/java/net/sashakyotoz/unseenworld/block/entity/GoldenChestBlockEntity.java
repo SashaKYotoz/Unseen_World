@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.block.entity;
 
 import io.netty.buffer.Unpooled;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlockEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlockEntities;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,7 +31,7 @@ public class GoldenChestBlockEntity extends RandomizableContainerBlockEntity imp
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
 	public GoldenChestBlockEntity(BlockPos position, BlockState state) {
-		super(UnseenWorldModBlockEntities.GOLDENCHEST.get(), position, state);
+		super(UnseenWorldBlockEntities.GOLDENCHEST.get(), position, state);
 	}
 
 	@Override

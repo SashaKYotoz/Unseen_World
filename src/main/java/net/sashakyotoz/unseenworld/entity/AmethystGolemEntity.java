@@ -27,20 +27,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import java.util.List;
 
 public class AmethystGolemEntity extends TamableAnimal {
     public AmethystGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.AMETHYST_GOLEM.get(), world);
+        this(UnseenWorldEntities.AMETHYST_GOLEM.get(), world);
     }
 
     public AmethystGolemEntity(EntityType<AmethystGolemEntity> type, Level world) {
         super(type, world);
         xpReward = 5;
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldModItems.AMETHYST_HAMMER.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldItems.AMETHYST_HAMMER.get()));
     }
 
     @Override
@@ -97,7 +97,7 @@ public class AmethystGolemEntity extends TamableAnimal {
         super.die(source);
         int tmp = this.getRandom().nextInt(1, 6) + 1;
         if (this.getRandom().nextFloat() > 0.825)
-            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.AMETHYST_HAMMER.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldItems.AMETHYST_HAMMER.get()));
         if (this.getRandom().nextBoolean()) {
             this.spawnAtLocation(new ItemStack(Items.AMETHYST_SHARD,tmp));
         }
@@ -148,14 +148,14 @@ public class AmethystGolemEntity extends TamableAnimal {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-        AmethystGolemEntity entity = UnseenWorldModEntities.AMETHYST_GOLEM.get().create(serverWorld);
+        AmethystGolemEntity entity = UnseenWorldEntities.AMETHYST_GOLEM.get().create(serverWorld);
         entity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
         return entity;
     }
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of(Items.AMETHYST_SHARD, UnseenWorldModItems.TANZANITE_SHARD.get()).contains(stack.getItem());
+        return List.of(Items.AMETHYST_SHARD, UnseenWorldItems.TANZANITE_SHARD.get()).contains(stack.getItem());
     }
 
     public void aiStep() {
@@ -172,10 +172,6 @@ public class AmethystGolemEntity extends TamableAnimal {
             double dz = (random.nextFloat() - 0.5D) * 0.75D;
             this.level().addParticle(ParticleTypes.MYCELIUM, x0, y0, z0, dx, dy, dz);
         }
-    }
-
-    public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.AMETHYST_GOLEM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

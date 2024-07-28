@@ -1,13 +1,11 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -19,9 +17,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 public class VoidArrowEntity extends AbstractArrow {
 	private final ItemStack projectile;
@@ -58,22 +56,21 @@ public class VoidArrowEntity extends AbstractArrow {
 		Entity entity = entityHitResult.getEntity();
 		Entity sourceEntity = this.getOwner();
 		if (entity != sourceEntity && entity instanceof LivingEntity livingEntity && !this.level().isClientSide()){
-			livingEntity.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.DARK_VOID.get(), 40, 1));
+			livingEntity.addEffect(new MobEffectInstance(UnseenWorldMobEffects.DARK_VOID.get(), 40, 1));
 		}
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		this.level().addParticle(ParticleTypes.ENCHANT, this.getX(), this.getY(), this.getZ(), 0, 1, 0);
 		if (this.level() instanceof ServerLevel level && this.tickCount % 5 == 0)
-			level.sendParticles(UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(),this.getX(), this.getY(), this.getZ(), 9, 3, 3, 3, 1);
+			level.sendParticles(UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get(),this.getX(), this.getY(), this.getZ(), 9, 3, 3, 3, 1);
 		if (this.inGround && projectile.isEmpty())
 			this.discard();
 	}
 
 	public static VoidArrowEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback,ItemStack arrow) {
-		VoidArrowEntity voidArrow = new VoidArrowEntity(UnseenWorldModEntities.VOID_BOW.get(), entity, world,arrow);
+		VoidArrowEntity voidArrow = new VoidArrowEntity(UnseenWorldEntities.VOID_BOW.get(), entity, world,arrow);
 		voidArrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		voidArrow.setSilent(true);
 		voidArrow.setCritArrow(false);
@@ -85,7 +82,7 @@ public class VoidArrowEntity extends AbstractArrow {
 	}
 
 	public static VoidArrowEntity shoot(LivingEntity entity, LivingEntity target) {
-		VoidArrowEntity voidArrow = new VoidArrowEntity(UnseenWorldModEntities.VOID_BOW.get(), entity, entity.level(),ItemStack.EMPTY);
+		VoidArrowEntity voidArrow = new VoidArrowEntity(UnseenWorldEntities.VOID_BOW.get(), entity, entity.level(),ItemStack.EMPTY);
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

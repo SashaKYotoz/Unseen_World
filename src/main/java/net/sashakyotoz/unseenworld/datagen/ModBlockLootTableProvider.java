@@ -1,24 +1,17 @@
 package net.sashakyotoz.unseenworld.datagen;
 
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.Set;
 
@@ -203,7 +196,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     public Iterable<Block> getKnownBlocks() {
-        return UnseenWorldModBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get).filter(block -> block.getDescriptionId().contains("misteryflower_sapling"))::iterator;
+        return UnseenWorldBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get).filter(block -> block.getDescriptionId().contains("misteryflower_sapling"))::iterator;
     }
 }
 //Block[] allBlocks = UnseenWorldModBlocks.BLOCKS.getEntries().stream()

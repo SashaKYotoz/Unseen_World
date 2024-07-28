@@ -5,8 +5,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.GameRules;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import net.sashakyotoz.unseenworld.world.teleporter.TheDarknessPortalShape;
 import net.sashakyotoz.unseenworld.world.teleporter.TheDarknessTeleporter;
 
@@ -46,8 +46,8 @@ public class DarknessPortalBlock extends NetherPortalBlock {
 				pos = pos.below();
 			}
 
-			if (level.getBlockState(pos).isValidSpawn(level, pos, UnseenWorldModEntities.DARK_SKELETON.get())) {
-				Entity entity =UnseenWorldModEntities.DARK_SKELETON.get().spawn(level, pos.above(), MobSpawnType.STRUCTURE);
+			if (level.getBlockState(pos).isValidSpawn(level, pos, UnseenWorldEntities.DARK_SKELETON.get())) {
+				Entity entity = UnseenWorldEntities.DARK_SKELETON.get().spawn(level, pos.above(), MobSpawnType.STRUCTURE);
 				if (entity != null)
 					entity.setPortalCooldown();
 			}
@@ -85,7 +85,7 @@ public class DarknessPortalBlock extends NetherPortalBlock {
 				pz = pos.getZ() + 0.5 + 0.25 * j;
 				vz = random.nextFloat() * 2 * j;
 			}
-			level.addParticle(UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(), px, py, pz, vx, vy, vz);
+			level.addParticle(UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get(), px, py, pz, vx, vy, vz);
 		}
 		if (random.nextInt(110) == 0)
 			level.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.5f, random.nextFloat() * 0.4f + 0.8f);

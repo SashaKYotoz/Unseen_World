@@ -2,8 +2,8 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -32,12 +32,12 @@ import javax.annotation.Nullable;
 public class TealivyVoidSpearEntity extends AbstractArrow {
 	private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(TealivyVoidSpearEntity.class, EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(TealivyVoidSpearEntity.class, EntityDataSerializers.BOOLEAN);
-	private ItemStack spearItem = new ItemStack(UnseenWorldModItems.TEALIVY_VOID_SPEAR.get());
+	private ItemStack spearItem = new ItemStack(UnseenWorldItems.TEALIVY_VOID_SPEAR.get());
 	private boolean dealtDamage;
 	public int clientSideReturnTridentTickCount;
 
 	public TealivyVoidSpearEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(UnseenWorldModEntities.TEALIVY_VOID_SPEAR.get(), world);
+		super(UnseenWorldEntities.TEALIVY_VOID_SPEAR.get(), world);
 	}
 
 	public TealivyVoidSpearEntity(EntityType<TealivyVoidSpearEntity> type, Level world) {
@@ -186,7 +186,7 @@ public class TealivyVoidSpearEntity extends AbstractArrow {
 	}
 
 	public TealivyVoidSpearEntity(Level level, LivingEntity entity, ItemStack stack) {
-		super(UnseenWorldModEntities.TEALIVY_VOID_SPEAR.get(), entity, level);
+		super(UnseenWorldEntities.TEALIVY_VOID_SPEAR.get(), entity, level);
 		this.spearItem = stack.copy();
 		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(stack));
 		this.entityData.set(ID_FOIL, stack.hasFoil());

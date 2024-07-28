@@ -5,14 +5,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 
-public class UnseenWorldModTags {
+public class UnseenWorldTags {
     public static class Blocks {
         public static final TagKey<Block> STONE_THE_DARKNESS = tag("stone_the_darkness");
         public static final TagKey<Block> DIRT_THE_DARKNESS = tag("dirt_the_darkness");

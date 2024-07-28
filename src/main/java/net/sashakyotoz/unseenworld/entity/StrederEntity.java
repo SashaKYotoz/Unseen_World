@@ -2,10 +2,9 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModFluids;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -59,7 +58,7 @@ import java.util.Set;
 
 public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldModBlocks.DEEP_WATER_ANFELTSIA.get());
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(UnseenWorldBlocks.DEEP_WATER_ANFELTSIA.get());
     private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_SUFFOCATING = SynchedEntityData.defineId(StrederEntity.class, EntityDataSerializers.BOOLEAN);
     private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, DATA_BOOST_TIME, DATA_IS_SADDLED);
@@ -67,7 +66,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     private TemptGoal temptGoal;
 
     public StrederEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.STREDER.get(), world);
+        this(UnseenWorldEntities.STREDER.get(), world);
     }
     public StrederEntity(EntityType<StrederEntity> type, Level world) {
         super(type, world);
@@ -149,7 +148,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
 
     @Override
     public boolean canStandOnFluid(FluidState state) {
-        return state.is(FluidTags.LAVA) || state.is(UnseenWorldModFluids.DARK_WATER.get());
+        return state.is(FluidTags.LAVA) || state.is(UnseenWorldFluids.DARK_WATER.get());
     }
     @Override
     public float nextStep() {
@@ -240,7 +239,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
             {
                 BlockState blockstate = this.level().getBlockState(this.blockPosition());
                 BlockState stateOnLegacy = this.getBlockStateOnLegacy();
-                flag = blockstate.is(BlockTags.STRIDER_WARM_BLOCKS) || stateOnLegacy.is(UnseenWorldModBlocks.DARK_WATER.get()) || stateOnLegacy.is(BlockTags.STRIDER_WARM_BLOCKS) || this.getFluidHeight(FluidTags.LAVA) > 0.0D;
+                flag = blockstate.is(BlockTags.STRIDER_WARM_BLOCKS) || stateOnLegacy.is(UnseenWorldBlocks.DARK_WATER.get()) || stateOnLegacy.is(BlockTags.STRIDER_WARM_BLOCKS) || this.getFluidHeight(FluidTags.LAVA) > 0.0D;
                 Entity entity = this.getVehicle();
                 if (entity instanceof StrederEntity strider) {
                     if (strider.isSuffocating()) {
@@ -270,7 +269,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         if (this.isInLava()) {
             CollisionContext collisioncontext = CollisionContext.of(this);
             if (collisioncontext.isAbove(LiquidBlock.STABLE_SHAPE, this.blockPosition(), true)
-                    && (!this.level().getFluidState(this.blockPosition().above()).is(FluidTags.LAVA) || !this.level().getFluidState(this.blockPosition().above()).is(UnseenWorldModFluids.DARK_WATER.get()))) {
+                    && (!this.level().getFluidState(this.blockPosition().above()).is(FluidTags.LAVA) || !this.level().getFluidState(this.blockPosition().above()).is(UnseenWorldFluids.DARK_WATER.get()))) {
                 this.setOnGround(true);
             } else {
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.5D).add(0.0D, 0.05D, 0.0D));
@@ -303,7 +302,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
     }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader reader) {
-        if (reader.getBlockState(pos).getFluidState().is(FluidTags.LAVA) || reader.getBlockState(pos).getFluidState().is(UnseenWorldModFluids.DARK_WATER.get())) {
+        if (reader.getBlockState(pos).getFluidState().is(FluidTags.LAVA) || reader.getBlockState(pos).getFluidState().is(UnseenWorldFluids.DARK_WATER.get())) {
             return 10.0F;
         } else {
             return this.isInLava() ? Float.NEGATIVE_INFINITY : 0.0F;
@@ -312,7 +311,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
 
     @Nullable
     public StrederEntity getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        return UnseenWorldModEntities.STREDER.get().create(level);
+        return UnseenWorldEntities.STREDER.get().create(level);
     }
 
     public boolean isFood(ItemStack stack) {
@@ -363,7 +362,7 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
                     this.equipSaddle(null);
                 }
             } else if (randomsource.nextInt(10) == 0) {
-                AgeableMob ageablemob = UnseenWorldModEntities.STREDER.get().create(accessor.getLevel());
+                AgeableMob ageablemob = UnseenWorldEntities.STREDER.get().create(accessor.getLevel());
                 if (ageablemob != null) {
                     ageablemob.setAge(-24000);
                     data = this.spawnJockey(accessor, instance, ageablemob, null);
@@ -401,12 +400,8 @@ public class StrederEntity extends Animal implements ItemSteerable, Saddleable {
         }
 
         public boolean isStableDestination(BlockPos pos) {
-            return this.level.getBlockState(pos).is(Blocks.LAVA) || super.isStableDestination(pos) || this.level.getBlockState(pos).is(UnseenWorldModBlocks.DARK_WATER.get());
+            return this.level.getBlockState(pos).is(Blocks.LAVA) || super.isStableDestination(pos) || this.level.getBlockState(pos).is(UnseenWorldBlocks.DARK_WATER.get());
         }
-    }
-
-    public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.STREDER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

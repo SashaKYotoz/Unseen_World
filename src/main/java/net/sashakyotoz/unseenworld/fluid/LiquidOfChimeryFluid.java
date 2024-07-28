@@ -15,9 +15,9 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.sashakyotoz.unseenworld.registries.*;
 
 public abstract class LiquidOfChimeryFluid extends ForgeFlowingFluid {
-    public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldModFluidTypes.LIQUID_OF_CHIMERY_TYPE::get, () -> UnseenWorldModFluids.LIQUID_OF_CHIMERY.get(),
-            UnseenWorldModFluids.FLOWING_LIQUID_OF_CHIMERY::get).explosionResistance(100f).slopeFindDistance(6).bucket(() -> UnseenWorldModItems.LIQUID_OF_CHIMERY_BUCKET.get())
-            .block(() -> (LiquidBlock) UnseenWorldModBlocks.LIQUID_OF_CHIMERY.get());
+    public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldFluids.LIQUID_OF_CHIMERY_TYPE::get, () -> UnseenWorldFluids.LIQUID_OF_CHIMERY.get(),
+            UnseenWorldFluids.FLOWING_LIQUID_OF_CHIMERY::get).explosionResistance(100f).slopeFindDistance(6).bucket(() -> UnseenWorldItems.LIQUID_OF_CHIMERY_BUCKET.get())
+            .block(() -> (LiquidBlock) UnseenWorldBlocks.LIQUID_OF_CHIMERY.get());
 
     private LiquidOfChimeryFluid() {
         super(PROPERTIES);
@@ -25,7 +25,7 @@ public abstract class LiquidOfChimeryFluid extends ForgeFlowingFluid {
 
     @Override
     public ParticleOptions getDripParticle() {
-        return UnseenWorldModParticleTypes.LIQUID_OF_CHIMERY_PARTICLE.get();
+        return UnseenWorldParticleTypes.LIQUID_OF_CHIMERY_PARTICLE.get();
     }
 
     public static class Source extends LiquidOfChimeryFluid {
@@ -60,7 +60,7 @@ public abstract class LiquidOfChimeryFluid extends ForgeFlowingFluid {
     protected void spreadTo(LevelAccessor p_76220_, BlockPos p_76221_, BlockState p_76222_, Direction p_76223_, FluidState p_76224_) {
         if (p_76223_ == Direction.DOWN) {
             FluidState fluidstate = p_76220_.getFluidState(p_76221_);
-            if (fluidstate.is(UnseenWorldModFluids.DARK_WATER.get())) {
+            if (fluidstate.is(UnseenWorldFluids.DARK_WATER.get())) {
                 if (p_76222_.getBlock() instanceof LiquidBlock) {
                     p_76220_.setBlock(p_76221_, net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(p_76220_, p_76221_, p_76221_, Blocks.BASALT.defaultBlockState()), 3);
                 }

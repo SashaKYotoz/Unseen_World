@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerPlayer;
 
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
 import com.google.common.collect.Multimap;
@@ -48,13 +49,19 @@ public class NetheriumStaffItem extends Item {
 		if (slot == EquipmentSlot.MAINHAND) {
 			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 			builder.putAll(super.getDefaultAttributeModifiers(slot));
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Ranged item modifier", (double) 3, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Ranged item modifier", 3, AttributeModifier.Operation.ADDITION));
 			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Ranged item modifier", -2.4, AttributeModifier.Operation.ADDITION));
 			return builder.build();
 		}
 		return super.getDefaultAttributeModifiers(slot);
 	}
-
+	@Override
+	public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+		super.onUseTick(level, user, stack, remainingUseTicks);
+		float sin = (float) Math.sin(remainingUseTicks * Math.PI / 10);
+		float cos = (float) Math.cos(remainingUseTicks * Math.PI / 10);
+		level.addParticle(new ColorableParticleOption("sparkle",1f,0.5f,0.1f), user.getX() + sin, user.getEyeY() - 0.5, user.getZ() + cos, 0, 0, 0);
+	}
 	@Override
 	public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityLiving, int timeLeft) {
 		if (!world.isClientSide() && entityLiving instanceof ServerPlayer player) {

@@ -9,7 +9,7 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 
 import net.minecraft.world.inventory.MenuType;
 
-public class UnseenWorldModMenus {
+public class UnseenWorldMenus {
 	public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.MENU_TYPES, UnseenWorldMod.MODID);
 	public static final RegistryObject<MenuType<GoldenChestGUIMenu>> GOLDEN_CHEST_GUI = REGISTRY.register("golden_chest_gui", () -> IForgeMenuType.create(GoldenChestGUIMenu::new));
 }

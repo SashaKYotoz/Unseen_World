@@ -20,7 +20,7 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import org.apache.commons.lang3.mutable.MutableObject;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
@@ -38,7 +38,7 @@ public class UnseenWorldMenuButton extends Button {
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
-        if (icon == null) icon = new ItemStack(UnseenWorldModItems.VOID_INGOT_PICKAXE.get());
+        if (icon == null) icon = new ItemStack(UnseenWorldItems.VOID_INGOT_PICKAXE.get());
         guiGraphics.renderItem(icon, this.getX() + 2, this.getY() + 2);
     }
 

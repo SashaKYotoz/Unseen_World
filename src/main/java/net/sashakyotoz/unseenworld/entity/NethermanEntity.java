@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -18,7 +18,6 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
@@ -37,7 +36,7 @@ public class NethermanEntity extends EnderMan {
 	private int attackAnimationRemainingTicks;
 
 	public NethermanEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.NETHERMAN.get(), world);
+		this(UnseenWorldEntities.NETHERMAN.get(), world);
 	}
 
 	public NethermanEntity(EntityType<NethermanEntity> type, Level world) {
@@ -116,11 +115,6 @@ public class NethermanEntity extends EnderMan {
 		if (source.is(DamageTypes.EXPLOSION))
 			return false;
 		return super.hurt(source, amount);
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.NETHERMAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
 	public static AttributeSupplier.@NotNull Builder createAttributes() {

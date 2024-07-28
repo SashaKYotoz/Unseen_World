@@ -2,8 +2,8 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.nbt.CompoundTag;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -47,7 +47,7 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
     private static final EntityDataAccessor<Boolean> DATA_IS_SADDLED = SynchedEntityData.defineId(RedRavengerEntity.class, EntityDataSerializers.BOOLEAN);
 
     public RedRavengerEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.RED_RAVENGER.get(), world);
+        this(UnseenWorldEntities.RED_RAVENGER.get(), world);
     }
 
     public RedRavengerEntity(EntityType<RedRavengerEntity> type, Level world) {
@@ -202,7 +202,7 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-        RedRavengerEntity entity = UnseenWorldModEntities.RED_RAVENGER.get().create(serverWorld);
+        RedRavengerEntity entity = UnseenWorldEntities.RED_RAVENGER.get().create(serverWorld);
         entity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
         return entity;
     }
@@ -239,7 +239,7 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of(UnseenWorldModItems.LUMINOUS_PORKCHOP.get(), Items.BEEF, Items.MUTTON, Items.PORKCHOP).contains(stack.getItem());
+        return List.of(UnseenWorldItems.LUMINOUS_PORKCHOP.get(), Items.BEEF, Items.MUTTON, Items.PORKCHOP).contains(stack.getItem());
     }
 
 
@@ -271,9 +271,6 @@ public class RedRavengerEntity extends TamableAnimal implements RiderShieldingMo
             return;
         }
         super.travel(dir);
-    }
-
-    public static void init() {
     }
 
     public static AttributeSupplier.Builder createAttributes() {

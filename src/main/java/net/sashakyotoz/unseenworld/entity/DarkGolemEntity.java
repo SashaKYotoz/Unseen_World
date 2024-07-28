@@ -35,8 +35,8 @@ import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.entity.ai_goals.DarkGolemAttackGoal;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -57,7 +57,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
     private final ServerBossEvent bossInfo = new ServerBossEvent(Component.translatable("entity.unseen_world.dark_golem").withStyle(ChatFormatting.DARK_AQUA), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
     public DarkGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.DARK_GOLEM.get(), world);
+        this(UnseenWorldEntities.DARK_GOLEM.get(), world);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
         this.setMaxUpStep(1.5f);
         setNoAi(false);
         setPersistenceRequired();
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldModItems.VOID_HAMMER.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldItems.VOID_HAMMER.get()));
     }
 
     static boolean hurtAndThrowTarget(LivingEntity darkGolem, LivingEntity entity) {
@@ -158,7 +158,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
             this.level().playSound(null, thrownHammer, SoundEvents.ANVIL_BREAK, SoundSource.VOICE, 1.0F, 1.0F);
             this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         });
-        UnseenWorldMod.queueServerWork(100, () -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldModItems.VOID_HAMMER.get())));
+        UnseenWorldMod.queueServerWork(100, () -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldItems.VOID_HAMMER.get())));
     }
 
     @Override
@@ -172,7 +172,7 @@ public class DarkGolemEntity extends Monster implements Enemy {
         if (!(entity instanceof LivingEntity)) {
             return false;
         } else {
-            if (random.nextBoolean() || !this.getItemInHand(InteractionHand.MAIN_HAND).is(UnseenWorldModItems.VOID_HAMMER.get()))
+            if (random.nextBoolean() || !this.getItemInHand(InteractionHand.MAIN_HAND).is(UnseenWorldItems.VOID_HAMMER.get()))
                 setAttackType("unarmed");
             else{
                 setAttackType("armed");
@@ -280,9 +280,9 @@ public class DarkGolemEntity extends Monster implements Enemy {
         this.tickDeath();
         if (source.getEntity() instanceof Player player)
             AdvancementManager.addAdvancement(player, AdvancementManager.DARK_WARRIOR_ADV);
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.VOID_HAMMER.get()));
+        this.spawnAtLocation(new ItemStack(UnseenWorldItems.VOID_HAMMER.get()));
         int tmp = this.getRandom().nextInt(1, 4) + 1;
-        this.spawnAtLocation(new ItemStack(UnseenWorldModItems.VOID_INGOT.get(), tmp));
+        this.spawnAtLocation(new ItemStack(UnseenWorldItems.VOID_INGOT.get(), tmp));
     }
 
     @Override
@@ -306,9 +306,6 @@ public class DarkGolemEntity extends Monster implements Enemy {
     public void customServerAiStep() {
         super.customServerAiStep();
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
-    public static void init() {
     }
 
     public void onAddedToWorld() {

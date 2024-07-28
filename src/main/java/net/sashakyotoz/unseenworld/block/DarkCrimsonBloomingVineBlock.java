@@ -21,8 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implements BonemealableBlock,DarkCrimsonVine {
 	public DarkCrimsonBloomingVineBlock() {
@@ -47,7 +47,7 @@ public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implemen
 	}
 
 	protected GrowingPlantHeadBlock getHeadBlock() {
-		return (GrowingPlantHeadBlock) UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get();
+		return (GrowingPlantHeadBlock) UnseenWorldBlocks.DARK_CRIMSON_VINE_FLOWER.get();
 	}
 
 	protected BlockState updateHeadAfterConvertedFromBody(BlockState state, BlockState state1) {
@@ -55,7 +55,7 @@ public class DarkCrimsonBloomingVineBlock extends GrowingPlantBodyBlock implemen
 	}
 
 	public ItemStack getCloneItemStack(BlockGetter p_153007_, BlockPos p_153008_, BlockState p_153009_) {
-		return new ItemStack(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get());
+		return new ItemStack(UnseenWorldItems.BERRIES_OF_BLOOMING_VINE.get());
 	}
 
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand p_153025_, BlockHitResult p_153026_) {

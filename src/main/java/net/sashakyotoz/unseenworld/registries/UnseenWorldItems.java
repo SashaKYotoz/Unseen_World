@@ -14,19 +14,19 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.anitexlib.registries.ModParticleTypes;
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.item.*;
 import net.sashakyotoz.unseenworld.managers.DarkPearlRightClickedProcedure;
 
-public class UnseenWorldModItems {
+public class UnseenWorldItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, UnseenWorldMod.MODID);
-	public static final RegistryObject<Item> MUSIC_DISC_PIANO = ITEMS.register("musicdisc_piano",()-> new RecordItem(3,()-> UnseenWorldModSounds.CHAOTIC,new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 600));
-	public static final RegistryObject<Item> MUSIC_DISC_HAPPY_PLACE = ITEMS.register("music_disc_happy_place", ()-> new RecordItem(5,()->UnseenWorldModSounds.HAPPY_PLACE,new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 800));
-	public static final RegistryObject<Item> DARK_WATER_BUCKET = ITEMS.register("dark_water_bucket", () -> new BucketItem(UnseenWorldModFluids.DARK_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.UNCOMMON)));
-	public static final RegistryObject<Item> LIQUID_OF_CHIMERY_BUCKET = ITEMS.register("liquid_of_chimery_bucket", () -> new BucketItem(UnseenWorldModFluids.LIQUID_OF_CHIMERY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> MOON_FISHIN_BUCKET = ITEMS.register("moon_fishin_bucket", () -> new MobBucketItem(UnseenWorldModEntities.MOONFISH,() -> Fluids.WATER,()-> SoundEvents.BUCKET_EMPTY_FISH,(new Item.Properties()).stacksTo(1)));
-	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_BUCKET = ITEMS.register("dusty_pink_maxor_fish_bucket", () -> new MobBucketItem(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH,() -> Fluids.WATER,()-> SoundEvents.BUCKET_EMPTY_FISH,(new Item.Properties()).stacksTo(1)));
+	public static final RegistryObject<Item> MUSIC_DISC_PIANO = ITEMS.register("musicdisc_piano",()-> new RecordItem(3,()-> UnseenWorldSounds.CHAOTIC,new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 600));
+	public static final RegistryObject<Item> MUSIC_DISC_HAPPY_PLACE = ITEMS.register("music_disc_happy_place", ()-> new RecordItem(5,()-> UnseenWorldSounds.HAPPY_PLACE,new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 800));
+	public static final RegistryObject<Item> DARK_WATER_BUCKET = ITEMS.register("dark_water_bucket", () -> new BucketItem(UnseenWorldFluids.DARK_WATER, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> LIQUID_OF_CHIMERY_BUCKET = ITEMS.register("liquid_of_chimery_bucket", () -> new BucketItem(UnseenWorldFluids.LIQUID_OF_CHIMERY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> MOON_FISHIN_BUCKET = ITEMS.register("moon_fishin_bucket", () -> new MobBucketItem(UnseenWorldEntities.MOONFISH,() -> Fluids.WATER,()-> SoundEvents.BUCKET_EMPTY_FISH,(new Item.Properties()).stacksTo(1)));
+	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_BUCKET = ITEMS.register("dusty_pink_maxor_fish_bucket", () -> new MobBucketItem(UnseenWorldEntities.DUSTY_PINK_MAXOR_FISH,() -> Fluids.WATER,()-> SoundEvents.BUCKET_EMPTY_FISH,(new Item.Properties()).stacksTo(1)));
 	public static final RegistryObject<Item> DEEP_GEM_SWORD = ITEMS.register("deep_gem_sword", () -> new SwordItem(ModTiers.DEEP_GEM,3, -2.4f, new Item.Properties().fireResistant()));
 	public static final RegistryObject<Item> VOID_INGOT_SWORD = ITEMS.register("void_ingot_sword", () -> new SwordItem(ModTiers.VOID,3, -2.4f, new Item.Properties().fireResistant()));
 	public static final RegistryObject<Item> RED_TITANIUM_SWORD = ITEMS.register("red_titanium_sword", () -> new SwordItem(ModTiers.TITANIUM,3, -2.4f, new Item.Properties().fireResistant()));
@@ -107,11 +107,11 @@ public class UnseenWorldModItems {
 	});
 	public static final RegistryObject<Item> FIRE_PEARL = ITEMS.register("fire_pearl", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> DEEP_GEM = ITEMS.register("deep_gem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
-	public static final RegistryObject<Item> BLUE_VOID = ITEMS.register("blue_void", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), ModParticleTypes.WISP_LIKE_PARTICLE.get()));
+	public static final RegistryObject<Item> BLUE_VOID = ITEMS.register("blue_void", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), new ColorableParticleOption("wisp",0.25f,0.25f,1f)));
 	public static final RegistryObject<Item> VOID_INGOT = ITEMS.register("void_ingot_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> RAW_RED_TITANIUM = ITEMS.register("raw_red_titanium", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON),UnseenWorldModParticleTypes.REDNESS.get()));
+	public static final RegistryObject<Item> RAW_RED_TITANIUM = ITEMS.register("raw_red_titanium", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), UnseenWorldParticleTypes.REDNESS.get()));
 	public static final RegistryObject<Item> RED_TITANIUM_INGOT = ITEMS.register("red_titanium_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> RAW_UNSEENIUM = ITEMS.register("raw_unseenium", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON),ModParticleTypes.SPARK_LIKE_PARTICLE.get()));
+	public static final RegistryObject<Item> RAW_UNSEENIUM = ITEMS.register("raw_unseenium", () -> new ParticleAnimatedItem(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON),new ColorableParticleOption("sparkle",0.75f,1f,0.75f)));
 	public static final RegistryObject<Item> UNSEEN_INGOT = ITEMS.register("unseen_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> NATURERIUM_INGOT = ITEMS.register("naturerium_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> RED_BLAZE_ROD = ITEMS.register("red_blaze_rod", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
@@ -125,13 +125,13 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> PURPLE_BERRIES = ITEMS.register("purple_berries",()->new ModFoodItem(new Item.Properties().rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1f).build()),new MobEffectInstance(MobEffects.HEAL, 60, 1)));
 	public static final RegistryObject<Item> LUMINOUS_PORKCHOP = ITEMS.register("luminousporkchop", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.3f).meat().build()),new MobEffectInstance(MobEffects.GLOWING, 600, 1, false, false)));
 	public static final RegistryObject<Item> LUMINOUS_COOKED_PORKCHOP = ITEMS.register("luminouscookedporkchop", ()->new ModFoodItem(new Item.Properties().rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationMod(4f).meat().build()),new MobEffectInstance(MobEffects.GLOWING, 600, 1, false, false)));
-	public static final RegistryObject<Item> BERRIES_OF_BLOOMING_VINE = ITEMS.register("berriesfrom_blooming_vine", () -> new ItemNameBlockItem(UnseenWorldModBlocks.DARK_CRIMSON_VINE_FLOWER.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1.5f).build())){
+	public static final RegistryObject<Item> BERRIES_OF_BLOOMING_VINE = ITEMS.register("berriesfrom_blooming_vine", () -> new ItemNameBlockItem(UnseenWorldBlocks.DARK_CRIMSON_VINE_FLOWER.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1.5f).build())){
 		@Override
 		public int getUseDuration(ItemStack itemstack) {
 			return 64;
 		}
 	});
-	public static final RegistryObject<Item> CRIMSERRY_SOUL_BERRY = ITEMS.register("crimserry_soul_berry_food", ()-> new ModFoodItem(new Item.Properties().rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(1f).build()),new MobEffectInstance(UnseenWorldModMobEffects.SOUL_OVERGROWTH.get(), 100, 1)));
+	public static final RegistryObject<Item> CRIMSERRY_SOUL_BERRY = ITEMS.register("crimserry_soul_berry_food", ()-> new ModFoodItem(new Item.Properties().rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(1f).build()),new MobEffectInstance(UnseenWorldMobEffects.SOUL_OVERGROWTH.get(), 100, 1)));
 	public static final RegistryObject<Item> DISHWITH_BERRIES = ITEMS.register("dishwith_berries", DishWithBerriesItem::new);
 	public static final RegistryObject<Item> BOWL_WITH_BERRIES_WITHOUT_EFFECT = ITEMS.register("bowlwith_berrieswithout_effect", BowlWithBerriesWithoutEffectItem::new);
 	public static final RegistryObject<Item> MOON_FISH_FOOD = ITEMS.register("moon_fish_food", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(1f).build())){
@@ -151,25 +151,25 @@ public class UnseenWorldModItems {
 	public static final RegistryObject<Item> COOKED_DUSTY_PINK_MAXOR_FISH = ITEMS.register("cooked_dusty_pink_maxor_fish", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(3f).build())));
 	public static final RegistryObject<Item> DISH_VEGETABLE_WITH_PORK = ITEMS.register("dish_vegetable_with_pork", DishVegetableWithPorkItem::new);
 	//spawn eggs
-	public static final RegistryObject<Item> DARK_SKELETON_SPAWN_EGG = ITEMS.register("dark_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_SKELETON, -14935012, -3355393, new Item.Properties()));
-	public static final RegistryObject<Item> AMETHYST_GOLEM_SPAWN_EGG = ITEMS.register("amethyst_golem_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.AMETHYST_GOLEM, -10066330, -26113, new Item.Properties()));
-	public static final RegistryObject<Item> DARK_PHANTOM_SPAWN_EGG = ITEMS.register("dark_phantom_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_PHANTOM, -16777216, -1, new Item.Properties()));
-	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_SPAWN_EGG = ITEMS.register("dusty_pink_maxor_fish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH, -26113, -13421773, new Item.Properties()));
-	public static final RegistryObject<Item> MOONFISH_SPAWN_EGG = ITEMS.register("moonfish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.MOONFISH, -11770241, -3355393, new Item.Properties()));
-	public static final RegistryObject<Item> CAVERN_SCARECROW_SPAWN_EGG = ITEMS.register("cavern_scarecrow_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CAVERN_SCARECROW, -8355712, -27648, new Item.Properties()));
-	public static final RegistryObject<Item> SAVAGE_SMALL_BLAZE_SPAWN_EGG = ITEMS.register("savage_small_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.SAVAGE_SMALL_BLAZE, -39424, -13434880, new Item.Properties()));
-	public static final RegistryObject<Item> CHIMERIC_PURPLEMARER_SPAWN_EGG = ITEMS.register("chimeric_purplemarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CHIMERIC_PURPLEMARER, -13434829, -6750055, new Item.Properties()));
-	public static final RegistryObject<Item> CHIMERIC_REDMARER_SPAWN_EGG = ITEMS.register("chimeric_redmarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.CHIMERIC_REDMARER, -6750208, -6737152, new Item.Properties()));
-	public static final RegistryObject<Item> NETHERMEN_SPAWN_EGG = ITEMS.register("nethermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.NETHERMAN, -33024, -41153, new Item.Properties()));
-	public static final RegistryObject<Item> RED_SLYLF_SPAWN_EGG = ITEMS.register("red_slylf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_SLYLF, -6737152, -39373, new Item.Properties()));
-	public static final RegistryObject<Item> RED_BLAZE_SPAWN_EGG = ITEMS.register("red_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_BLAZE, -11010048, -29184, new Item.Properties()));
-	public static final RegistryObject<Item> STREDER_SPAWN_EGG = ITEMS.register("streder_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.STREDER, -9671553, -13421773, new Item.Properties()));
-	public static final RegistryObject<Item> GHAST_OF_TEALIVE_VALLEY_SPAWN_EGG = ITEMS.register("ghast_of_tealive_valley_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY, -16724839, -16724788, new Item.Properties()));
-	public static final RegistryObject<Item> TANZANITE_GUARDIAN_SPAWN_EGG = ITEMS.register("tanzanite_guardian_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TANZANITE_GUARDIAN, -10092442, -39220, new Item.Properties()));
-	public static final RegistryObject<Item> DARK_SPIRIT_WOLF_SPAWN_EGG = ITEMS.register("dark_spirit_wolf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_SPIRIT_WOLF, -13421773, -16724737, new Item.Properties()));
-	public static final RegistryObject<Item> VOID_ENDERMEN_SPAWN_EGG = ITEMS.register("void_endermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.VOID_ENDERMEN, -13877415, -9846858, new Item.Properties()));
-	public static final RegistryObject<Item> TEALIVE_SKELETON_SPAWN_EGG = ITEMS.register("tealive_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.TEALIVE_SKELETON, -16764109, -16737946, new Item.Properties()));
-	public static final RegistryObject<Item> RED_RAVENGER_SPAWN_EGG = ITEMS.register("red_ravenger_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.RED_RAVENGER, -9297374, -49408, new Item.Properties()));
-	public static final RegistryObject<Item> DARK_HOGLIN_SPAWN_EGG = ITEMS.register("dark_hoglin_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.DARK_HOGLIN, -3355393, -16777216, new Item.Properties()));
-	public static final RegistryObject<Item> SNOWDRIFTER_SPAWN_EGG = ITEMS.register("snowdrifter_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldModEntities.SNOWDRIFTER, 8496292, 14283506, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_SKELETON_SPAWN_EGG = ITEMS.register("dark_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.DARK_SKELETON, -14935012, -3355393, new Item.Properties()));
+	public static final RegistryObject<Item> AMETHYST_GOLEM_SPAWN_EGG = ITEMS.register("amethyst_golem_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.AMETHYST_GOLEM, -10066330, -26113, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_PHANTOM_SPAWN_EGG = ITEMS.register("dark_phantom_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.DARK_PHANTOM, -16777216, -1, new Item.Properties()));
+	public static final RegistryObject<Item> DUSTY_PINK_MAXOR_FISH_SPAWN_EGG = ITEMS.register("dusty_pink_maxor_fish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.DUSTY_PINK_MAXOR_FISH, -26113, -13421773, new Item.Properties()));
+	public static final RegistryObject<Item> MOONFISH_SPAWN_EGG = ITEMS.register("moonfish_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.MOONFISH, -11770241, -3355393, new Item.Properties()));
+	public static final RegistryObject<Item> CAVERN_SCARECROW_SPAWN_EGG = ITEMS.register("cavern_scarecrow_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.CAVERN_SCARECROW, -8355712, -27648, new Item.Properties()));
+	public static final RegistryObject<Item> SAVAGE_SMALL_BLAZE_SPAWN_EGG = ITEMS.register("savage_small_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.SAVAGE_SMALL_BLAZE, -39424, -13434880, new Item.Properties()));
+	public static final RegistryObject<Item> CHIMERIC_PURPLEMARER_SPAWN_EGG = ITEMS.register("chimeric_purplemarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.CHIMERIC_PURPLEMARER, -13434829, -6750055, new Item.Properties()));
+	public static final RegistryObject<Item> CHIMERIC_REDMARER_SPAWN_EGG = ITEMS.register("chimeric_redmarer_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.CHIMERIC_REDMARER, -6750208, -6737152, new Item.Properties()));
+	public static final RegistryObject<Item> NETHERMEN_SPAWN_EGG = ITEMS.register("nethermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.NETHERMAN, -33024, -41153, new Item.Properties()));
+	public static final RegistryObject<Item> RED_SLYLF_SPAWN_EGG = ITEMS.register("red_slylf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.RED_SLYLF, -6737152, -39373, new Item.Properties()));
+	public static final RegistryObject<Item> RED_BLAZE_SPAWN_EGG = ITEMS.register("red_blaze_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.RED_BLAZE, -11010048, -29184, new Item.Properties()));
+	public static final RegistryObject<Item> STREDER_SPAWN_EGG = ITEMS.register("streder_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.STREDER, -9671553, -13421773, new Item.Properties()));
+	public static final RegistryObject<Item> GHAST_OF_TEALIVE_VALLEY_SPAWN_EGG = ITEMS.register("ghast_of_tealive_valley_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.GHAST_OF_TEALIVE_VALLEY, -16724839, -16724788, new Item.Properties()));
+	public static final RegistryObject<Item> TANZANITE_GUARDIAN_SPAWN_EGG = ITEMS.register("tanzanite_guardian_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.TANZANITE_GUARDIAN, -10092442, -39220, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_SPIRIT_WOLF_SPAWN_EGG = ITEMS.register("dark_spirit_wolf_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.DARK_SPIRIT_WOLF, -13421773, -16724737, new Item.Properties()));
+	public static final RegistryObject<Item> VOID_ENDERMEN_SPAWN_EGG = ITEMS.register("void_endermen_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.VOID_ENDERMEN, -13877415, -9846858, new Item.Properties()));
+	public static final RegistryObject<Item> TEALIVE_SKELETON_SPAWN_EGG = ITEMS.register("tealive_skeleton_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.TEALIVE_SKELETON, -16764109, -16737946, new Item.Properties()));
+	public static final RegistryObject<Item> RED_RAVENGER_SPAWN_EGG = ITEMS.register("red_ravenger_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.RED_RAVENGER, -9297374, -49408, new Item.Properties()));
+	public static final RegistryObject<Item> DARK_HOGLIN_SPAWN_EGG = ITEMS.register("dark_hoglin_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.DARK_HOGLIN, -3355393, -16777216, new Item.Properties()));
+	public static final RegistryObject<Item> SNOWDRIFTER_SPAWN_EGG = ITEMS.register("snowdrifter_spawn_egg", () -> new ForgeSpawnEggItem(UnseenWorldEntities.SNOWDRIFTER, 8496292, 14283506, new Item.Properties()));
 }

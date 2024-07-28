@@ -25,15 +25,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 
 public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 	private int attackAnimationRemainingTicks;
 
 	public DarkHoglinEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.DARK_HOGLIN.get(), world);
+		this(UnseenWorldEntities.DARK_HOGLIN.get(), world);
 	}
 
 	public DarkHoglinEntity(EntityType<DarkHoglinEntity> type, Level world) {
@@ -101,7 +100,7 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 	}
 
 	public boolean isFood(ItemStack stack) {
-		return stack.is(UnseenWorldModBlocks.TANZASHROOM.get().asItem());
+		return stack.is(UnseenWorldBlocks.TANZASHROOM.get().asItem());
 	}
 
 	@Override
@@ -111,11 +110,6 @@ public class DarkHoglinEntity extends Hoglin implements Enemy, HoglinBase {
 		if (source.getMsgId().equals("witherSkull"))
 			return false;
 		return super.hurt(source, amount);
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.DARK_HOGLIN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

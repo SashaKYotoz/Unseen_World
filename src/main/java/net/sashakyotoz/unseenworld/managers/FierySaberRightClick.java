@@ -1,10 +1,9 @@
 package net.sashakyotoz.unseenworld.managers;
 
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.anitexlib.AniTexLib;
 import net.sashakyotoz.anitexlib.ModConfig;
-import net.sashakyotoz.anitexlib.registries.ModParticleTypes;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.LevelAccessor;
@@ -58,19 +57,19 @@ public class FierySaberRightClick {
                 }
             }
             if (itemstack.getOrCreateTag().getDouble("CustomModelData") == 0 || itemstack.getOrCreateTag().getDouble("CustomModelData") == 3) {
-                world.addParticle(UnseenWorldModParticleTypes.REDNESS.get(),
+                world.addParticle(UnseenWorldParticleTypes.REDNESS.get(),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getX()),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getY()),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getZ()),
                         0, 0.25, 0);
             } else if (itemstack.getOrCreateTag().getDouble("CustomModelData") == 1) {
-                world.addParticle(ModConfig.USE_ADVANCED_PARTICLE_RENDERER.get() ? ModParticleTypes.WISP_LIKE_PARTICLE.get() : UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(),
+                world.addParticle(ModConfig.USE_ADVANCED_PARTICLE_RENDERER.get() ? new ColorableParticleOption("wisp",0f,0f,1f) : UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get(),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getX()),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getY()),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getZ()),
                         0, 0.25, 0);
             } else if (itemstack.getOrCreateTag().getDouble("CustomModelData") == 2) {
-                world.addParticle(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(),
+                world.addParticle(UnseenWorldParticleTypes.GREENISH_PARTICLE.get(),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getX()),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getY()),
                         (level.clip(new ClipContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos().getZ()),

@@ -29,8 +29,9 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEnchantments;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEnchantments;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -68,7 +69,13 @@ public class TanzaniteStaffItem extends Item {
         }
         return super.getDefaultAttributeModifiers(slot);
     }
-
+    @Override
+    public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        super.onUseTick(level, user, stack, remainingUseTicks);
+        float sin = (float) Math.sin(remainingUseTicks * Math.PI / 10);
+        float cos = (float) Math.cos(remainingUseTicks * Math.PI / 10);
+        level.addParticle(new ColorableParticleOption("wisp",0.75f,0.125f,0.5f), user.getX() + sin, user.getEyeY() - 0.5, user.getZ() + cos, 0, 0, 0);
+    }
     @Override
     public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
@@ -83,7 +90,7 @@ public class TanzaniteStaffItem extends Item {
                                 player.level().clip(new ClipContext(player.getEyePosition(1f), player.getEyePosition(1f).add(player.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player)).getBlockPos().getZ()))
                         .canOcclude())
                     scaling = scaling + 1;
-                player.level().addParticle(UnseenWorldModParticleTypes.TANZANITE_RAY.get(),
+                player.level().addParticle(UnseenWorldParticleTypes.TANZANITE_RAY.get(),
                         (player.level().clip(new ClipContext(player.getEyePosition(1f), player.getEyePosition(1f).add(player.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player)).getBlockPos().getX()),
                         (player.level().clip(new ClipContext(player.getEyePosition(1f), player.getEyePosition(1f).add(player.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player)).getBlockPos().getY()),
                         (player.level().clip(new ClipContext(player.getEyePosition(1f), player.getEyePosition(1f).add(player.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player)).getBlockPos().getZ()),
@@ -97,8 +104,8 @@ public class TanzaniteStaffItem extends Item {
                     if (!(entityiterator == player)) {
                         if (entityiterator instanceof LivingEntity target) {
                             int damage = RandomSource.create().nextInt(5, 11);
-                            if (itemstack.getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()) > 0)
-                                damage += itemstack.getEnchantmentLevel(UnseenWorldModEnchantments.SHINING_BLADE.get()) * 2;
+                            if (itemstack.getEnchantmentLevel(UnseenWorldEnchantments.SHINING_BLADE.get()) > 0)
+                                damage += itemstack.getEnchantmentLevel(UnseenWorldEnchantments.SHINING_BLADE.get()) * 2;
                             target.hurt(new DamageSource(target.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
                                 @Override
                                 public Component getLocalizedDeathMessage(@NotNull LivingEntity _msgEntity) {

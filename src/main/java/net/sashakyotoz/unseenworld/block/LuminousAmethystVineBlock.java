@@ -26,7 +26,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 public class LuminousAmethystVineBlock extends Block implements SimpleWaterloggedBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -110,7 +110,7 @@ public class LuminousAmethystVineBlock extends Block implements SimpleWaterlogge
 		if(!this.canSurvive(blockstate,world,pos))
 			world.destroyBlock(pos,true);
 		if(this.canSurvive(blockstate,world,pos) && world.getBlockState(pos.below()).isAir() && Math.random() < 0.25) {
-			world.setBlock(pos.below(), UnseenWorldModBlocks.LUMINOUS_AMETHYST_VINE.get().defaultBlockState(),3);
+			world.setBlock(pos.below(), UnseenWorldBlocks.LUMINOUS_AMETHYST_VINE.get().defaultBlockState(),3);
 		}
 	}
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
@@ -120,7 +120,7 @@ public class LuminousAmethystVineBlock extends Block implements SimpleWaterlogge
 					player.spawnAtLocation(new ItemStack(Items.AMETHYST_SHARD));
 			}
 		} else
-			player.spawnAtLocation(new ItemStack(UnseenWorldModBlocks.LUMINOUS_AMETHYST_VINE.get()));
+			player.spawnAtLocation(new ItemStack(UnseenWorldBlocks.LUMINOUS_AMETHYST_VINE.get()));
 		return super.onDestroyedByPlayer(blockstate, world, pos, player, willHarvest, fluid);
 	}
 }

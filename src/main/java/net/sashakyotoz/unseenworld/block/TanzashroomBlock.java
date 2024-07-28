@@ -9,7 +9,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -56,9 +56,9 @@ public class TanzashroomBlock extends FlowerBlock implements BonemealableBlock {
 
     @Override
     public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-        return groundState.is(UnseenWorldModBlocks.TANZANITE_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.TANZANITE_BLOCK_BUDDING.get()) || groundState.is(UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get())
-                || groundState.is(UnseenWorldModBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(Blocks.BLACKSTONE) || groundState.is(UnseenWorldModBlocks.RED_OOZE.get()) || groundState.is(Blocks.DEEPSLATE)
-                || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get());
+        return groundState.is(UnseenWorldBlocks.TANZANITE_BLOCK.get()) || groundState.is(UnseenWorldBlocks.TANZANITE_BLOCK_BUDDING.get()) || groundState.is(UnseenWorldBlocks.AMETHYST_GRASS_BLOCK.get())
+                || groundState.is(UnseenWorldBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(Blocks.BLACKSTONE) || groundState.is(UnseenWorldBlocks.RED_OOZE.get()) || groundState.is(Blocks.DEEPSLATE)
+                || groundState.is(UnseenWorldBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get());
     }
 
     @Override
@@ -86,12 +86,12 @@ public class TanzashroomBlock extends FlowerBlock implements BonemealableBlock {
 
     @OnlyIn(Dist.CLIENT)
     public static void blockColorLoad(RegisterColorHandlersEvent.Block event) {
-        event.getBlockColors().register((bs, world, pos, index) -> world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.get(0.5D, 1.0D), UnseenWorldModBlocks.TANZASHROOM.get());
+        event.getBlockColors().register((bs, world, pos, index) -> world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.get(0.5D, 1.0D), UnseenWorldBlocks.TANZASHROOM.get());
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void itemColorLoad(RegisterColorHandlersEvent.Item event) {
-        event.getItemColors().register((stack, index) -> GrassColor.get(0.5D, 1.0D), UnseenWorldModBlocks.TANZASHROOM.get());
+        event.getItemColors().register((stack, index) -> GrassColor.get(0.5D, 1.0D), UnseenWorldBlocks.TANZASHROOM.get());
     }
 
     @Override

@@ -10,7 +10,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,7 +30,7 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(UnseenWorldModTags.Biomes.ICEBERGS_BLACKLIST_BIOMES).add(
+        this.tag(UnseenWorldTags.Biomes.ICEBERGS_BLACKLIST_BIOMES).add(
                 DARK_OCEAN,
                 DARK_LIFELESS_OCEAN,
                 GREYNISH_BEACH

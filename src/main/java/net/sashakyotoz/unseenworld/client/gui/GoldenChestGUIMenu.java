@@ -16,8 +16,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModMenus;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldMenus;
 import net.sashakyotoz.unseenworld.managers.GoldenChestGUIUpdate;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
     private boolean bound = false;
 
     public GoldenChestGUIMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        super(UnseenWorldModMenus.GOLDEN_CHEST_GUI.get(), id);
+        super(UnseenWorldMenus.GOLDEN_CHEST_GUI.get(), id);
         this.player = inv.player;
         this.world = inv.player.level();
         this.internal = new ItemStackHandler(30);
@@ -130,44 +130,44 @@ public class GoldenChestGUIMenu extends AbstractContainerMenu implements Supplie
 
             @Override
             public boolean mayPlace(ItemStack stack) {
-                if(UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get() == stack.getItem()) {
+                if(UnseenWorldItems.KNIGHT_ARMOR_HELMET.get() == stack.getItem()) {
                     if(stack.isDamaged())
                         stack.setDamageValue(0);
                 }
-                return UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get() == stack.getItem();
+                return UnseenWorldItems.KNIGHT_ARMOR_HELMET.get() == stack.getItem();
             }
         }));
         this.customSlots.put(27, this.addSlot(new SlotItemHandler(internal, 27, 72, 64) {
 
             @Override
             public boolean mayPlace(ItemStack stack) {
-                if(UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get() == stack.getItem()) {
+                if(UnseenWorldItems.KNIGHT_ARMOR_CHESTPLATE.get() == stack.getItem()) {
                     if(stack.isDamaged())
                         stack.setDamageValue(0);
                 }
-                return UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get() == stack.getItem();
+                return UnseenWorldItems.KNIGHT_ARMOR_CHESTPLATE.get() == stack.getItem();
             }
         }));
         this.customSlots.put(28, this.addSlot(new SlotItemHandler(internal, 28, 108, 64) {
 
             @Override
             public boolean mayPlace(ItemStack stack) {
-                if(UnseenWorldModItems.KNIGHT_ARMOR_LEGGINGS.get() == stack.getItem()) {
+                if(UnseenWorldItems.KNIGHT_ARMOR_LEGGINGS.get() == stack.getItem()) {
                     if(stack.isDamaged())
                         stack.setDamageValue(0);
                 }
-                return UnseenWorldModItems.KNIGHT_ARMOR_LEGGINGS.get() == stack.getItem();
+                return UnseenWorldItems.KNIGHT_ARMOR_LEGGINGS.get() == stack.getItem();
             }
         }));
         this.customSlots.put(29, this.addSlot(new SlotItemHandler(internal, 29, 135, 64) {
 
             @Override
             public boolean mayPlace(ItemStack stack) {
-                if(UnseenWorldModItems.KNIGHT_ARMOR_BOOTS.get() == stack.getItem()) {
+                if(UnseenWorldItems.KNIGHT_ARMOR_BOOTS.get() == stack.getItem()) {
                     if(stack.isDamaged())
                         stack.setDamageValue(0);
                 }
-                return UnseenWorldModItems.KNIGHT_ARMOR_BOOTS.get() == stack.getItem();
+                return UnseenWorldItems.KNIGHT_ARMOR_BOOTS.get() == stack.getItem();
             }
         }));
         for (int si = 0; si < 3; ++si)

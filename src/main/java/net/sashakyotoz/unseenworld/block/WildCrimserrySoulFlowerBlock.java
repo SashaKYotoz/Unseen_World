@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.effect.MobEffects;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class WildCrimserrySoulFlowerBlock extends FlowerBlock {
 	public WildCrimserrySoulFlowerBlock() {
@@ -42,8 +42,8 @@ public class WildCrimserrySoulFlowerBlock extends FlowerBlock {
 
 	@Override
 	public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-		return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(UnseenWorldModBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL) || groundState.is(Blocks.ROOTED_DIRT) || groundState.is(Blocks.STONE)
-				|| groundState.is(UnseenWorldModBlocks.RED_OOZE.get()) || groundState.is(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(UnseenWorldModBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get());
+		return groundState.is(Blocks.GRASS_BLOCK) || groundState.is(UnseenWorldBlocks.DARK_GRASS_BLOCK.get()) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.PODZOL) || groundState.is(Blocks.ROOTED_DIRT) || groundState.is(Blocks.STONE)
+				|| groundState.is(UnseenWorldBlocks.RED_OOZE.get()) || groundState.is(UnseenWorldBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get()) || groundState.is(UnseenWorldBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get());
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class WildCrimserrySoulFlowerBlock extends FlowerBlock {
 		super.use(blockstate, level, pos, player, hand, hit);
 		int randomCountOfBerries = player.getRandom().nextIntBetweenInclusive(1,4) + 1;
 		for (int i = 0; i < randomCountOfBerries; i++) {
-			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get()));
+			player.spawnAtLocation(new ItemStack(UnseenWorldItems.CRIMSERRY_SOUL_BERRY.get()));
 		}
 		level.removeBlock(pos,true);
 		return InteractionResult.SUCCESS;

@@ -35,9 +35,9 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -56,7 +56,7 @@ public class TheWitherKnightEntity extends Monster {
     private final ServerBossEvent bossInfo = new ServerBossEvent(Component.translatable("entity.unseen_world.the_wither_knight").withStyle(ChatFormatting.YELLOW), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
     public TheWitherKnightEntity(PlayMessages.SpawnEntity packet, Level world) {
-        this(UnseenWorldModEntities.THE_WITHER_KNIGHT.get(), world);
+        this(UnseenWorldEntities.THE_WITHER_KNIGHT.get(), world);
     }
     public TheWitherKnightEntity(EntityType<TheWitherKnightEntity> type, Level world) {
         super(type, world);
@@ -64,7 +64,7 @@ public class TheWitherKnightEntity extends Monster {
         setMaxUpStep(1.5f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 16, true);
-        setItemSlotAndDropWhenKilled(EquipmentSlot.OFFHAND,new ItemStack(UnseenWorldModItems.HEAVY_CLAYMORE.get()));
+        setItemSlotAndDropWhenKilled(EquipmentSlot.OFFHAND,new ItemStack(UnseenWorldItems.HEAVY_CLAYMORE.get()));
     }
     public void onAddedToWorld() {
         super.onAddedToWorld();
@@ -316,13 +316,13 @@ public class TheWitherKnightEntity extends Monster {
         super.die(source);
         if(source.getEntity() instanceof Player player)
             AdvancementManager.addAdvancement(player,AdvancementManager.THE_WITHER_KNIGHT_ADV);
-        this.spawnAtLocation(new ItemStack(UnseenWorldModBlocks.GOLDEN_CHEST.get()));
+        this.spawnAtLocation(new ItemStack(UnseenWorldBlocks.GOLDEN_CHEST.get()));
         if(this.getRandom().nextBoolean()){
-            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_HELMET.get()));
-            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_CHESTPLATE.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldItems.KNIGHT_ARMOR_HELMET.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldItems.KNIGHT_ARMOR_CHESTPLATE.get()));
         }else{
-            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_LEGGINGS.get()));
-            this.spawnAtLocation(new ItemStack(UnseenWorldModItems.KNIGHT_ARMOR_BOOTS.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldItems.KNIGHT_ARMOR_LEGGINGS.get()));
+            this.spawnAtLocation(new ItemStack(UnseenWorldItems.KNIGHT_ARMOR_BOOTS.get()));
         }
     }
 
@@ -342,9 +342,6 @@ public class TheWitherKnightEntity extends Monster {
     public void customServerAiStep() {
         super.customServerAiStep();
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
-    public static void init() {
     }
 
     public static AttributeSupplier.Builder createAttributes() {

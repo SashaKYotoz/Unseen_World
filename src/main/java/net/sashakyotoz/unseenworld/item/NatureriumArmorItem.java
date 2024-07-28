@@ -2,19 +2,17 @@
 package net.sashakyotoz.unseenworld.item;
 
 import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -45,7 +43,7 @@ public abstract class NatureriumArmorItem extends ArmorItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(UnseenWorldModItems.NATURERIUM_INGOT.get()));
+				return Ingredient.of(new ItemStack(UnseenWorldItems.NATURERIUM_INGOT.get()));
 			}
 
 			@Override

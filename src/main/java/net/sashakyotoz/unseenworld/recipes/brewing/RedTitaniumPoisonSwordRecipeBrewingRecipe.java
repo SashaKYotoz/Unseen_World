@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class RedTitaniumPoisonSwordRecipeBrewingRecipe implements IBrewingRecipe {
@@ -31,13 +31,13 @@ public class RedTitaniumPoisonSwordRecipeBrewingRecipe implements IBrewingRecipe
 
 	@Override
 	public boolean isIngredient(ItemStack ingredient) {
-		return Ingredient.of(new ItemStack(UnseenWorldModItems.RED_TITANIUM_SWORD.get())).test(ingredient);
+		return Ingredient.of(new ItemStack(UnseenWorldItems.RED_TITANIUM_SWORD.get())).test(ingredient);
 	}
 
 	@Override
 	public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
 		if (isInput(input) && isIngredient(ingredient)) {
-			return new ItemStack(UnseenWorldModItems.RED_TITANIUM_POISONOUS_SWORD.get());
+			return new ItemStack(UnseenWorldItems.RED_TITANIUM_POISONOUS_SWORD.get());
 		}
 		return ItemStack.EMPTY;
 	}

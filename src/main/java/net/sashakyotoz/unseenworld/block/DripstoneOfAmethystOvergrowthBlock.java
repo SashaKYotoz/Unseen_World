@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.block;
 
 import com.google.common.annotations.VisibleForTesting;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -34,8 +34,8 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModFluids;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldFluids;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -73,7 +73,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
             if (accessor.getFluidState(pos).is(Fluids.WATER)){
                 accessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
             }else{
-                accessor.scheduleTick(pos, UnseenWorldModFluids.DARK_WATER.get(), UnseenWorldModFluids.DARK_WATER.get().getTickDelay(accessor));
+                accessor.scheduleTick(pos, UnseenWorldFluids.DARK_WATER.get(), UnseenWorldFluids.DARK_WATER.get().getTickDelay(accessor));
             }
         }
 
@@ -201,7 +201,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
         } else {
             boolean flag = !p_154040_.isSecondaryUseActive();
             DripstoneThickness dripstonethickness = calculateDripstoneThickness(levelaccessor, blockpos, direction1, flag);
-            return dripstonethickness == null ? null : this.defaultBlockState().setValue(TIP_DIRECTION, direction1).setValue(THICKNESS, dripstonethickness).setValue(WATERLOGGED, (levelaccessor.getFluidState(blockpos).getType().isSame(Fluids.WATER) || levelaccessor.getFluidState(blockpos).getType().isSame(UnseenWorldModFluids.DARK_WATER.get())));
+            return dripstonethickness == null ? null : this.defaultBlockState().setValue(TIP_DIRECTION, direction1).setValue(THICKNESS, dripstonethickness).setValue(WATERLOGGED, (levelaccessor.getFluidState(blockpos).getType().isSame(Fluids.WATER) || levelaccessor.getFluidState(blockpos).getType().isSame(UnseenWorldFluids.DARK_WATER.get())));
         }
     }
 
@@ -331,7 +331,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
     }
 
     private static void createDripstone(LevelAccessor state, BlockPos pos, Direction direction, DripstoneThickness thickness) {
-        BlockState blockstate = UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get().defaultBlockState().setValue(TIP_DIRECTION, direction).setValue(THICKNESS, thickness).setValue(WATERLOGGED, (state.getFluidState(pos).getType().isSame(Fluids.WATER) || (state.getFluidState(pos).getType().isSame(UnseenWorldModFluids.DARK_WATER.get()))));
+        BlockState blockstate = UnseenWorldBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get().defaultBlockState().setValue(TIP_DIRECTION, direction).setValue(THICKNESS, thickness).setValue(WATERLOGGED, (state.getFluidState(pos).getType().isSame(Fluids.WATER) || (state.getFluidState(pos).getType().isSame(UnseenWorldFluids.DARK_WATER.get()))));
         state.setBlock(pos, blockstate, 3);
     }
 
@@ -366,7 +366,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
             return p_154133_;
         } else {
             Direction direction = p_154131_.getValue(TIP_DIRECTION);
-            BiPredicate<BlockPos, BlockState> bipredicate = (p_202023_, p_202024_) -> p_202024_.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) && p_202024_.getValue(TIP_DIRECTION) == direction;
+            BiPredicate<BlockPos, BlockState> bipredicate = (p_202023_, p_202024_) -> p_202024_.is(UnseenWorldBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) && p_202024_.getValue(TIP_DIRECTION) == direction;
             return findBlockVertical(p_154132_, p_154133_, direction.getAxisDirection(), bipredicate, (p_154168_) -> isTip(p_154168_, p_154135_), p_154134_).orElse(null);
         }
     }
@@ -433,7 +433,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
     }
 
     private static boolean isTip(BlockState p_154154_, boolean p_154155_) {
-        if (!p_154154_.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get())) {
+        if (!p_154154_.is(UnseenWorldBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get())) {
             return false;
         } else {
             DripstoneThickness dripstonethickness = p_154154_.getValue(THICKNESS);
@@ -454,7 +454,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
     }
 
     private static boolean isStalactiteStartPos(BlockState p_154204_, LevelReader p_154205_, BlockPos p_154206_) {
-        return isStalactite(p_154204_) && !p_154205_.getBlockState(p_154206_.above()).is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get());
+        return isStalactite(p_154204_) && !p_154205_.getBlockState(p_154206_.above()).is(UnseenWorldBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get());
     }
 
     public boolean isPathfindable(BlockState p_154112_, BlockGetter p_154113_, BlockPos p_154114_, PathComputationType p_154115_) {
@@ -462,7 +462,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
     }
 
     private static boolean isPointedDripstoneWithDirection(BlockState p_154208_, Direction p_154209_) {
-        return p_154208_.is(UnseenWorldModBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) && p_154208_.getValue(TIP_DIRECTION) == p_154209_;
+        return p_154208_.is(UnseenWorldBlocks.DRIPSTONE_OF_AMETHYST_OVERGROWTH.get()) && p_154208_.getValue(TIP_DIRECTION) == p_154209_;
     }
 
     @Nullable
@@ -492,7 +492,7 @@ public class DripstoneOfAmethystOvergrowthBlock extends Block implements Fallabl
     }
 
     private static boolean canGrow(BlockState state, BlockState blockState) {
-        return state.is(UnseenWorldModTags.Blocks.DRIPSTONE_OF_AMETHYST_CAN_GROW_ON) && (blockState.is(Blocks.WATER) || blockState.is(UnseenWorldModBlocks.DARK_WATER.get())) && blockState.getFluidState().isSource();
+        return state.is(UnseenWorldTags.Blocks.DRIPSTONE_OF_AMETHYST_CAN_GROW_ON) && (blockState.is(Blocks.WATER) || blockState.is(UnseenWorldBlocks.DARK_WATER.get())) && blockState.getFluidState().isSource();
     }
 
     private static Fluid getDripFluid(Level level, Fluid fluid) {

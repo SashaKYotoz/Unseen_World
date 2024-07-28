@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.managers;
 
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ public class EntityInteractWithBlazerSummonBlockProcedure {
 						level.destroyBlock(pos, false);
 				}
 				if (level instanceof ServerLevel serverLevel) {
-					Entity entityToSpawn = UnseenWorldModEntities.THE_BLAZER.get().spawn(serverLevel, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+					Entity entityToSpawn = UnseenWorldEntities.THE_BLAZER.get().spawn(serverLevel, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(level.getRandom().nextFloat() * 360F);
 					}

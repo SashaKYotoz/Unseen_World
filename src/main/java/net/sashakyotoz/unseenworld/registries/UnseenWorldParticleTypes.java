@@ -8,7 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.ParticleType;
 
-public class UnseenWorldModParticleTypes {
+public class UnseenWorldParticleTypes {
 	public static final DeferredRegister<ParticleType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, UnseenWorldMod.MODID);
 	public static final RegistryObject<SimpleParticleType> BLUE_VOID_PARTICLE = REGISTRY.register("blue_void_particle", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> REDNESS = REGISTRY.register("redness", () -> new SimpleParticleType(true));

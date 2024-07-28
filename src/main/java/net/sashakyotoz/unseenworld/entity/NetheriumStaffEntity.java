@@ -17,15 +17,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 import net.sashakyotoz.unseenworld.managers.FireLikeStaffProjectileFlyingTick;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModSounds;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldSounds;
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier {
 
 	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, Level world) {
-		super(UnseenWorldModEntities.NETHERIUM_STAFF.get(), world);
+		super(UnseenWorldEntities.NETHERIUM_STAFF.get(), world);
 	}
 
 	public NetheriumStaffEntity(EntityType<? extends NetheriumStaffEntity> type, LivingEntity entity, Level world) {
@@ -40,7 +40,7 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 
 	@Override
 	protected ItemStack getPickupItem() {
-		return new ItemStack(UnseenWorldModItems.FIRE_PEARL.get());
+		return new ItemStack(UnseenWorldItems.FIRE_PEARL.get());
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 		super.onHitBlock(blockHitResult);
 		if (!this.level().isClientSide())
 			this.level().explode(null, blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ(), 1, Level.ExplosionInteraction.BLOCK);
-		this.level().addParticle(UnseenWorldModParticleTypes.REDNESS.get(), blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ(), 0, 1, 0);
+		this.level().addParticle(UnseenWorldParticleTypes.REDNESS.get(), blockHitResult.getBlockPos().getX(), blockHitResult.getBlockPos().getY(), blockHitResult.getBlockPos().getZ(), 0, 1, 0);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public static NetheriumStaffEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		NetheriumStaffEntity entityarrow = new NetheriumStaffEntity(UnseenWorldModEntities.NETHERIUM_STAFF.get(), entity, world);
+		NetheriumStaffEntity entityarrow = new NetheriumStaffEntity(UnseenWorldEntities.NETHERIUM_STAFF.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -74,12 +74,12 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.setKnockback(knockback);
 		entityarrow.setSecondsOnFire(100);
 		world.addFreshEntity(entityarrow);
-		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldModSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
 	}
 
 	public static NetheriumStaffEntity shoot(LivingEntity entity, LivingEntity target) {
-		NetheriumStaffEntity entityarrow = new NetheriumStaffEntity(UnseenWorldModEntities.NETHERIUM_STAFF.get(), entity, entity.level());
+		NetheriumStaffEntity entityarrow = new NetheriumStaffEntity(UnseenWorldEntities.NETHERIUM_STAFF.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();
@@ -90,13 +90,13 @@ public class NetheriumStaffEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.setCritArrow(false);
 		entityarrow.setSecondsOnFire(100);
 		entity.level().addFreshEntity(entityarrow);
-		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldModSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1,
+		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
 	}
 
 	@Override
 	public ItemStack getItem() {
-		return UnseenWorldModItems.FIRE_PEARL.get().getDefaultInstance();
+		return UnseenWorldItems.FIRE_PEARL.get().getDefaultInstance();
 	}
 }

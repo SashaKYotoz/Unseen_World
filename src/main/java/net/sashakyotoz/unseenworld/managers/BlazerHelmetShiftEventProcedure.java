@@ -1,7 +1,7 @@
 package net.sashakyotoz.unseenworld.managers;
 
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.GameType;
@@ -22,7 +22,7 @@ public class BlazerHelmetShiftEventProcedure {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.HEAD).is(UnseenWorldModItems.BLAZER_HELMET.get())) {
+        if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.HEAD).is(UnseenWorldItems.BLAZER_HELMET.get())) {
             if (!level.isClientSide()) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 60, 1));
                 UnseenWorldMod.queueServerWork(50, () -> {

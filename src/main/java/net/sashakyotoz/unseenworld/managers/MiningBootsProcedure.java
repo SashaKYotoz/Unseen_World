@@ -2,13 +2,11 @@ package net.sashakyotoz.unseenworld.managers;
 
 import net.minecraft.world.level.Level;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEnchantments;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEnchantments;
 import net.minecraftforge.common.TierSortingRegistry;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +27,7 @@ public class MiningBootsProcedure {
         double sx, sy, sz;
         Level level = entity.level();
         if (!UnseenWorldConfigs.DEACTIVATE_MINING_BOOTS.get()) {
-            if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getEnchantmentLevel(UnseenWorldModEnchantments.MININGBOOTS.get()) > 0) {
+            if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).getEnchantmentLevel(UnseenWorldEnchantments.MININGBOOTS.get()) > 0) {
                 sx = -1;
                 for (int i = 0; i < 3; i++) {
                     sy = -1;

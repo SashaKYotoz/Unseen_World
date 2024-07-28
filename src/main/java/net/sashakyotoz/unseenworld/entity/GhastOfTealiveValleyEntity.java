@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.minecraftforge.network.PlayMessages;
 
 import net.minecraft.world.phys.Vec3;
@@ -44,7 +44,7 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 	private int explosionPower = 1;
 
 	public GhastOfTealiveValleyEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY.get(), world);
+		this(UnseenWorldEntities.GHAST_OF_TEALIVE_VALLEY.get(), world);
 	}
 
 	public GhastOfTealiveValleyEntity(EntityType<GhastOfTealiveValleyEntity> type, Level world) {
@@ -260,12 +260,6 @@ public class GhastOfTealiveValleyEntity extends FlyingMob implements Enemy {
 				this.ghast.setCharging(this.chargeTime > 10);
 			}
 		}
-	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY.get(), SpawnPlacements.Type.ON_GROUND,
-				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL
-						&& Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 
 	static class RandomFloatAroundGoal extends Goal {

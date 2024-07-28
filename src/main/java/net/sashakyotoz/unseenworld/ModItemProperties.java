@@ -5,12 +5,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.item.ItemProperties;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class ModItemProperties {
 	public static void addCustomItemProperties() {
-		makeBow(UnseenWorldModItems.VOID_BOW.get());
-		makeShield(UnseenWorldModItems.BLAZER_SHIELD.get());
+		makeBow(UnseenWorldItems.VOID_BOW.get());
+		makeShield(UnseenWorldItems.BLAZER_SHIELD.get());
 	}
 
 	private static void makeBow(Item item) {

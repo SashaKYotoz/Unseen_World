@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 
 public class SpikesFeature extends Feature<BlockStateConfiguration> {
     private BlockState blockState;
@@ -26,7 +26,7 @@ public class SpikesFeature extends Feature<BlockStateConfiguration> {
         WorldGenLevel level = context.level();
         blockpos = new BlockPos(blockpos.getX(), context.chunkGenerator().getSeaLevel(), blockpos.getZ());
         RandomSource random = context.random();
-        if (level.getBlockState(blockpos.below()).canOcclude() && !level.getBiome(blockpos).is(UnseenWorldModTags.Biomes.ICEBERGS_BLACKLIST_BIOMES)){
+        if (level.getBlockState(blockpos.below()).canOcclude() && !level.getBiome(blockpos).is(UnseenWorldTags.Biomes.ICEBERGS_BLACKLIST_BIOMES)){
             boolean flag = random.nextDouble() > 0.7D;
             blockState = context.config().state;
             double d0 = random.nextDouble() * 2.0D * Math.PI;
@@ -205,7 +205,7 @@ public class SpikesFeature extends Feature<BlockStateConfiguration> {
     }
 
     private static boolean isSpikeState(BlockState blockState) {
-        return blockState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS) || blockState.is(UnseenWorldModTags.Blocks.STONE_THE_DARKNESS);
+        return blockState.is(UnseenWorldTags.Blocks.DIRT_THE_DARKNESS) || blockState.is(UnseenWorldTags.Blocks.STONE_THE_DARKNESS);
     }
 
     private boolean belowIsAir(BlockGetter getter, BlockPos blockPos) {

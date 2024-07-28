@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerPlayer;
 
+import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.entity.TealivyFireStaffEntity;
 
 import com.google.common.collect.Multimap;
@@ -53,6 +54,13 @@ public class TealivyFireStaffItem extends Item {
 			return builder.build();
 		}
 		return super.getDefaultAttributeModifiers(slot);
+	}
+	@Override
+	public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+		super.onUseTick(level, user, stack, remainingUseTicks);
+		float sin = (float) Math.sin(remainingUseTicks * Math.PI / 10);
+		float cos = (float) Math.cos(remainingUseTicks * Math.PI / 10);
+		level.addParticle(new ColorableParticleOption("cube",0.15f,0.5f,1f), user.getX() + sin, user.getEyeY() - 1, user.getZ() + cos, 0, 0, 0);
 	}
 
 	@Override

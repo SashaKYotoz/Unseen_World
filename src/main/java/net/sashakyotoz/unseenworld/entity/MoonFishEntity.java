@@ -48,7 +48,7 @@ public class MoonFishEntity extends WaterAnimal implements Bucketable {
 	public int texture;
 
 	public MoonFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.MOONFISH.get(), world);
+		this(UnseenWorldEntities.MOONFISH.get(), world);
 	}
 
 	public void travel(Vec3 vec3) {
@@ -138,7 +138,7 @@ public class MoonFishEntity extends WaterAnimal implements Bucketable {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(UnseenWorldModItems.MOON_FISH_FOOD.get()));
+		this.spawnAtLocation(new ItemStack(UnseenWorldItems.MOON_FISH_FOOD.get()));
 	}
 
 	@Override
@@ -186,18 +186,14 @@ public class MoonFishEntity extends WaterAnimal implements Bucketable {
 	public boolean isPushedByFluid() {
 		return false;
 	}
-
-	public static void init() {
-		SpawnPlacements.register(UnseenWorldModEntities.MOONFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MoonFishEntity::checkSurfaceWaterAnimalSpawnRules);
-	}
 	public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<? extends WaterAnimal> p_218283_, LevelAccessor accessor, MobSpawnType p_218285_, BlockPos pos, RandomSource p_218287_) {
 		int i = accessor.getSeaLevel();
 		int j = i - 8;
-		return pos.getY() >= j && pos.getY() <= i && accessor.getFluidState(pos.below()).is(FluidTags.WATER) || accessor.getFluidState(pos.below()).is(UnseenWorldModFluids.DARK_WATER.get()) && accessor.getBlockState(pos.above()).is(Blocks.WATER) || accessor.getBlockState(pos.above()).is(UnseenWorldModBlocks.DARK_WATER.get());
+		return pos.getY() >= j && pos.getY() <= i && accessor.getFluidState(pos.below()).is(FluidTags.WATER) || accessor.getFluidState(pos.below()).is(UnseenWorldFluids.DARK_WATER.get()) && accessor.getBlockState(pos.above()).is(Blocks.WATER) || accessor.getBlockState(pos.above()).is(UnseenWorldBlocks.DARK_WATER.get());
 	}
 	@Override
 	protected void handleAirSupply(int i) {
-		if (this.isAlive() && !this.isInWaterOrBubble() && !this.level().getFluidState(new BlockPos(new Vec3i((int) this.getX(),(int) this.getY(),(int) this.getZ())).below()).is(UnseenWorldModFluids.DARK_WATER.get())) {
+		if (this.isAlive() && !this.isInWaterOrBubble() && !this.level().getFluidState(new BlockPos(new Vec3i((int) this.getX(),(int) this.getY(),(int) this.getZ())).below()).is(UnseenWorldFluids.DARK_WATER.get())) {
 			this.setAirSupply(i - 1);
 			if (this.getAirSupply() == -20) {
 				this.setAirSupply(0);
@@ -228,7 +224,7 @@ public class MoonFishEntity extends WaterAnimal implements Bucketable {
 
 	@Override
 	public boolean canSwimInFluidType(FluidType type) {
-		return super.canSwimInFluidType(UnseenWorldModFluidTypes.DARK_WATER_TYPE.get()) || super.canSwimInFluidType(Fluids.WATER.getFluidType());
+		return super.canSwimInFluidType(UnseenWorldFluids.DARK_WATER_TYPE.get()) || super.canSwimInFluidType(Fluids.WATER.getFluidType());
 	}
 
 	protected void defineSynchedData() {
@@ -272,7 +268,7 @@ public class MoonFishEntity extends WaterAnimal implements Bucketable {
 
 	@Override
 	public ItemStack getBucketItemStack() {
-		return new ItemStack(UnseenWorldModItems.MOON_FISHIN_BUCKET.get());
+		return new ItemStack(UnseenWorldItems.MOON_FISHIN_BUCKET.get());
 	}
 
 }

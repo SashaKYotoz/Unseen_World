@@ -15,16 +15,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-
-import java.util.Collections;
-import java.util.List;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class DarkCrimsonFlowingAzaleaBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -74,9 +70,9 @@ public class DarkCrimsonFlowingAzaleaBlock extends Block {
 		super.use(blockstate, level, pos, player, hand, hit);
 		int randomCountOfPeppers = player.getRandom().nextIntBetweenInclusive(1,5) + 1;
 		for (int i = 0; i < randomCountOfPeppers; i++) {
-			player.spawnAtLocation(new ItemStack(UnseenWorldModItems.CHIMERIC_BLUE_PEPPER.get()));
+			player.spawnAtLocation(new ItemStack(UnseenWorldItems.CHIMERIC_BLUE_PEPPER.get()));
 		}
-		level.setBlock(pos, UnseenWorldModBlocks.DARK_CRIMSON_AZALEA.get().defaultBlockState(),3);
+		level.setBlock(pos, UnseenWorldBlocks.DARK_CRIMSON_AZALEA.get().defaultBlockState(),3);
 		return InteractionResult.SUCCESS;
 	}
 }

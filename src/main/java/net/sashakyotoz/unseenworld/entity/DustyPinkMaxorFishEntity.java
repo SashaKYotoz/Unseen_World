@@ -49,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
 public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable {
 	private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(DustyPinkMaxorFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public DustyPinkMaxorFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), world);
+		this(UnseenWorldEntities.DUSTY_PINK_MAXOR_FISH.get(), world);
 	}
 
 	public void travel(@NotNull Vec3 vec3) {
@@ -66,7 +66,7 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable 
 	}
 	@Override
 	public boolean canSwimInFluidType(FluidType type) {
-		return super.canSwimInFluidType(UnseenWorldModFluidTypes.DARK_WATER_TYPE.get()) || super.canSwimInFluidType(Fluids.WATER.getFluidType());
+		return super.canSwimInFluidType(UnseenWorldFluids.DARK_WATER_TYPE.get()) || super.canSwimInFluidType(Fluids.WATER.getFluidType());
 	}
 
 	public DustyPinkMaxorFishEntity(EntityType<DustyPinkMaxorFishEntity> type, Level world) {
@@ -135,7 +135,7 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable 
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(UnseenWorldModItems.DUSTY_PINK_MAXOR_FISH_FOOD.get()));
+		this.spawnAtLocation(new ItemStack(UnseenWorldItems.DUSTY_PINK_MAXOR_FISH_FOOD.get()));
 	}
 
 	@Override
@@ -190,18 +190,14 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable 
 	public boolean isPushedByFluid() {
 		return false;
 	}
-
-	public static void init() {
-			SpawnPlacements.register(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DustyPinkMaxorFishEntity::checkSurfaceWaterAnimalSpawnRules);
-	}
 	public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<? extends WaterAnimal> entityType, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource source) {
 		int i = accessor.getSeaLevel();
 		int j = i - 8;
-		return pos.getY() >= j && pos.getY() <= i && accessor.getFluidState(pos.below()).is(FluidTags.WATER) || accessor.getFluidState(pos.below()).is(UnseenWorldModFluids.DARK_WATER.get()) && accessor.getBlockState(pos.above()).is(Blocks.WATER) || accessor.getBlockState(pos.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) && accessor.getDifficulty() == Difficulty.EASY;
+		return pos.getY() >= j && pos.getY() <= i && accessor.getFluidState(pos.below()).is(FluidTags.WATER) || accessor.getFluidState(pos.below()).is(UnseenWorldFluids.DARK_WATER.get()) && accessor.getBlockState(pos.above()).is(Blocks.WATER) || accessor.getBlockState(pos.above()).is(UnseenWorldBlocks.DARK_WATER.get()) && accessor.getDifficulty() == Difficulty.EASY;
 	}
 	@Override
 	protected void handleAirSupply(int i) {
-		if (this.isAlive() && !this.isInWaterOrBubble() && !this.level().getFluidState(new BlockPos(new Vec3i((int) this.getX(),(int) this.getY(),(int) this.getZ())).below()).is(UnseenWorldModFluids.DARK_WATER.get())) {
+		if (this.isAlive() && !this.isInWaterOrBubble() && !this.level().getFluidState(new BlockPos(new Vec3i((int) this.getX(),(int) this.getY(),(int) this.getZ())).below()).is(UnseenWorldFluids.DARK_WATER.get())) {
 			this.setAirSupply(i - 1);
 			if (this.getAirSupply() == -20) {
 				this.setAirSupply(0);
@@ -270,6 +266,6 @@ public class DustyPinkMaxorFishEntity extends WaterAnimal implements Bucketable 
 
 	@Override
 	public ItemStack getBucketItemStack() {
-		return new ItemStack(UnseenWorldModItems.DUSTY_PINK_MAXOR_FISH_BUCKET.get());
+		return new ItemStack(UnseenWorldItems.DUSTY_PINK_MAXOR_FISH_BUCKET.get());
 	}
 }

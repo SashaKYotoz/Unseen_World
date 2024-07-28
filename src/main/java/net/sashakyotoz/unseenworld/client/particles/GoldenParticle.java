@@ -11,7 +11,7 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.sashakyotoz.anitexlib.client.particles.parents.FluidParticleRenderType;
+import net.sashakyotoz.anitexlib.client.particles.parents.rendertypes.FluidParticleRenderType;
 
 @OnlyIn(Dist.CLIENT)
 public class GoldenParticle extends TextureSheetParticle {

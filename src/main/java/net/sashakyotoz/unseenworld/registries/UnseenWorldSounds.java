@@ -11,7 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.resources.ResourceLocation;
 
-public class UnseenWorldModSounds {
+public class UnseenWorldSounds {
 	public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, UnseenWorldMod.MODID);
 	public static final SoundEvent BIOME_AMETHYST_FOREST = create("biome.amethyst_forest");
 	public static final SoundEvent BIOME_TEALIVE_VALLEY = create("biome.tealivy_valley");

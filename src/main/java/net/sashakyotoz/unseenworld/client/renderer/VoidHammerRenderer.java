@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.sashakyotoz.anitexlib.utils.TextureAnimator;
 import net.sashakyotoz.unseenworld.client.model.ModelVoidHammer;
 import net.sashakyotoz.unseenworld.entity.VoidHammerEntity;
 
@@ -24,15 +25,18 @@ public class VoidHammerRenderer extends EntityRenderer<VoidHammerEntity> {
 
     @Override
     public void render(VoidHammerEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-        VertexConsumer vb = bufferIn.getBuffer(RenderType.entityCutout(this.getTextureLocation(entityIn)));
+        VertexConsumer consumer = bufferIn.getBuffer(RenderType.entityCutout(this.getTextureLocation(entityIn)));
+        float ageInTicks = getBob(entityIn,partialTicks);
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90));
         poseStack.mulPose(Axis.ZP.rotationDegrees(90 + Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
-        model.renderToBuffer(poseStack, vb, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 0.0625f);
+        model.renderToBuffer(poseStack, consumer, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, TextureAnimator.simpleAlphaFunction(0.1f,ageInTicks));
         poseStack.popPose();
         super.render(entityIn, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
     }
-
+    protected float getBob(VoidHammerEntity pLivingBase, float pPartialTick) {
+        return (float)pLivingBase.tickCount + pPartialTick;
+    }
     @Override
     public ResourceLocation getTextureLocation(VoidHammerEntity entity) {
         return texture;

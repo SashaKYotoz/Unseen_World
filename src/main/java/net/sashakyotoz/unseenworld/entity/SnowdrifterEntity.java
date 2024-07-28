@@ -7,11 +7,11 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -33,7 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -49,46 +49,55 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
     private UUID persistentAngerTarget;
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(SnowdrifterEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> UNDER_SNOW = SynchedEntityData.defineId(SnowdrifterEntity.class, EntityDataSerializers.BOOLEAN);
+
     public SnowdrifterEntity(EntityType<? extends SnowdrifterEntity> type, Level level) {
         super(type, level);
         setMaxUpStep(1f);
         this.xpReward = 5;
         this.underSnowTimer = UNDER_SNOW_COOLDOWN.sample(this.getRandom());
     }
+
     public SnowdrifterEntity(PlayMessages.SpawnEntity spawnEntity, Level level) {
-        super(UnseenWorldModEntities.SNOWDRIFTER.get(), level);
+        super(UnseenWorldEntities.SNOWDRIFTER.get(), level);
     }
+
     public void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_REMAINING_ANGER_TIME, 0);
         this.entityData.define(UNDER_SNOW, false);
     }
-    public static void init() {
-        SpawnPlacements.register(UnseenWorldModEntities.SNOWDRIFTER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, SnowdrifterEntity::checkAnyLightSpawnRules);
+
+    @Override
+    public boolean checkSpawnRules(LevelAccessor accessor, MobSpawnType spawnType) {
+        return true;
     }
+
     public static boolean checkAnyLightSpawnRules(EntityType<? extends SnowdrifterEntity> type, LevelAccessor accessor, MobSpawnType spawnType, BlockPos pos, RandomSource checked) {
-        return checkMobSpawnRules(type, accessor, spawnType, pos, checked);
+        return accessor.getBlockState(pos.below()).is(BlockTags.SNOW) || accessor.getBlockState(pos.below(2)).is(BlockTags.SNOW);
     }
+
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        return UnseenWorldModEntities.SNOWDRIFTER.get().create(level);
+        return UnseenWorldEntities.SNOWDRIFTER.get().create(level);
     }
-    public boolean isUnderSnow(){
+
+    public boolean isUnderSnow() {
         return this.entityData.get(UNDER_SNOW);
     }
+
     public EntityDimensions getDimensions(Pose pose) {
         return this.isUnderSnow() ? UNDER_SNOW_DIMENSION.scale(this.getScale()) : super.getDimensions(pose);
     }
-    private void setUnderSnow(boolean b){
-        if (!b){
-            this.setDeltaMovement(0,0.5f,0);
-            this.entityData.set(UNDER_SNOW,false);
-        }
-        else {
-            if (this.level().getBlockState(this.getOnPos().below()).is(Blocks.SNOW_BLOCK)){
+
+    private void setUnderSnow(boolean b) {
+        if (!b) {
+            this.setDeltaMovement(0, 0.5f, 0);
+            this.entityData.set(UNDER_SNOW, false);
+        } else {
+            if (this.level().getBlockState(this.getOnPos().below()).is(Blocks.SNOW_BLOCK)) {
                 this.digging.start(this.tickCount);
-                UnseenWorldMod.queueServerWork(20,()-> this.entityData.set(UNDER_SNOW,true));
+                UnseenWorldMod.queueServerWork(20, () -> this.entityData.set(UNDER_SNOW, true));
             }
         }
     }
@@ -100,9 +109,9 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getHealth() < 6 && !this.hasEffect(MobEffects.REGENERATION)){
+        if (this.getHealth() < 6 && !this.hasEffect(MobEffects.REGENERATION)) {
             this.underSnowTimer = 0;
-            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION,100,2,false,false));
+            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 2, false, false));
         }
         return !this.isUnderSnow() && super.hurt(source, amount);
     }
@@ -121,13 +130,13 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
             }
         }
     }
+
     @Override
     public void baseTick() {
         if (this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 8 && !this.attack.isStarted())
             this.attack.start(this.tickCount);
-        if (this.isUnderSnow() && this.tickCount % 5 == 0){
+        if (this.isUnderSnow() && this.tickCount % 5 == 0)
             clientDiggingParticles();
-        }
         if (this.underSnowTimer > 0)
             this.underSnowTimer--;
         else {
@@ -136,11 +145,12 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
         }
         super.baseTick();
     }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreedGoal(this, 1.0));
-        this.goalSelector.addGoal(1,new FollowParentGoal(this,1.0));
-        this.goalSelector.addGoal(2,new RandomStrollGoal(this,1.5){
+        this.goalSelector.addGoal(1, new FollowParentGoal(this, 1.0));
+        this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1.5) {
             @Override
             public void setInterval(int i) {
                 super.setInterval(SnowdrifterEntity.this.isUnderSnow() ? 30 : i);
@@ -148,7 +158,7 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
         });
         this.targetSelector.addGoal(1, new ResetUniversalAngerTargetGoal<>(this, true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new MeleeAttackGoal(this,1,true));
+        this.targetSelector.addGoal(3, new MeleeAttackGoal(this, 1, true));
         super.registerGoals();
     }
 
@@ -164,6 +174,7 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
     public void startPersistentAngerTimer() {
         this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.getRandom()));
     }
+
     @Nullable
     public UUID getPersistentAngerTarget() {
         return this.persistentAngerTarget;
@@ -172,6 +183,7 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
     public void setPersistentAngerTarget(@Nullable UUID uuid) {
         this.persistentAngerTarget = uuid;
     }
+
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);

@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.Set;
 import java.util.List;
@@ -31,7 +31,7 @@ public class TealivyTreeFeature extends Feature<NoneFeatureConfiguration> {
 
 	public TealivyTreeFeature() {
 		super(NoneFeatureConfiguration.CODEC);
-		base_blocks = List.of(UnseenWorldModBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get());
+		base_blocks = List.of(UnseenWorldBlocks.TEALIVE_LUMINOUS_GRASS_BLOCK.get());
 	}
 
 	@Override

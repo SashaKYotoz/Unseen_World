@@ -31,7 +31,7 @@ import net.sashakyotoz.unseenworld.network.keys.ModKeyMappings;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = UnseenWorldMod.MODID,bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class UnseenWorldModClientsRegistries {
+public class UnseenWorldClientsRegistries {
     @SubscribeEvent
     public static void registerDimensionSpecialEffects(RegisterDimensionSpecialEffectsEvent event) {
         DimensionSpecialEffects customEffect = new DimensionSpecialEffects(Float.NaN, true, DimensionSpecialEffects.SkyType.NONE, false, false) {
@@ -60,10 +60,10 @@ public class UnseenWorldModClientsRegistries {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.DARK_WATER.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.FLOWING_DARK_WATER.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.LIQUID_OF_CHIMERY.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(UnseenWorldModFluids.FLOWING_LIQUID_OF_CHIMERY.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(UnseenWorldFluids.DARK_WATER.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(UnseenWorldFluids.FLOWING_DARK_WATER.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(UnseenWorldFluids.LIQUID_OF_CHIMERY.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(UnseenWorldFluids.FLOWING_LIQUID_OF_CHIMERY.get(), RenderType.translucent());
     }
 
     @SubscribeEvent
@@ -79,52 +79,52 @@ public class UnseenWorldModClientsRegistries {
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(UnseenWorldModEntities.TEALIVY_VOID_SPEAR.get(), TealivyVoidSpearRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.UNSEEN_TITANIUM_SPEAR.get(), UnseenTitaniumSpearRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.VOID_HAMMER.get(), VoidHammerRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.NETHERIUM_STAFF.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.VOID_STAFF.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.TEALIVY_FIRE_STAFF.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.VOID_BOW.get(), VoidArrowRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DARK_SKELETON.get(), DarkSkeletonRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.AMETHYST_GOLEM.get(), AmethystGolemRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DARK_PHANTOM.get(), DarkPhantomRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DUSTY_PINK_MAXOR_FISH.get(), DustyPinkMaxorFishRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.MOONFISH.get(), MoonFishRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.CAVERN_SCARECROW.get(), CavernScarecrowRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.SAVAGE_SMALL_BLAZE.get(), SavageSmallBlazeRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.CHIMERIC_PURPLEMARER.get(), ChimericPurplemarerRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.CHIMERIC_REDMARER.get(), ChimericRedmarerRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.NETHERMAN.get(), NethermanRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.RED_SLYLF.get(), RedSlylfRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.RED_BLAZE.get(), RedblazeRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.STREDER.get(), StrederRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.GHAST_OF_TEALIVE_VALLEY.get(), GhastOfTealiveValleyRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.TANZANITE_GUARDIAN.get(), TanzaniteGuardianRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DARK_SPIRIT_WOLF.get(), DarkSpiritWolfRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.SNOWDRIFTER.get(), SnowdrifterRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.VOID_ENDERMEN.get(), VoidEndermenRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.TEALIVE_SKELETON.get(), TealiveSkeletonRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.RED_RAVENGER.get(), RedRavengerRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DARK_HOGLIN.get(), DarkHoglinRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DARK_GOLEM.get(), DarkGolemRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.THE_BLAZER.get(), TheBlazerRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.THE_WITHER_KNIGHT.get(), TheWitherKnightRenderer::new);
-        event.registerEntityRenderer(UnseenWorldModEntities.DARK_PEARL.get(), ThrownItemRenderer::new);
-        event.registerBlockEntityRenderer(UnseenWorldModBlockEntities.BEACON_OF_WEAPONS.get(), BeaconOfWeaponsRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.TEALIVY_VOID_SPEAR.get(), TealivyVoidSpearRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.UNSEEN_TITANIUM_SPEAR.get(), UnseenTitaniumSpearRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.VOID_HAMMER.get(), VoidHammerRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.NETHERIUM_STAFF.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.VOID_STAFF.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.TEALIVY_FIRE_STAFF.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.VOID_BOW.get(), VoidArrowRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DARK_SKELETON.get(), DarkSkeletonRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.AMETHYST_GOLEM.get(), AmethystGolemRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DARK_PHANTOM.get(), DarkPhantomRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DUSTY_PINK_MAXOR_FISH.get(), DustyPinkMaxorFishRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.MOONFISH.get(), MoonFishRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.CAVERN_SCARECROW.get(), CavernScarecrowRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.SAVAGE_SMALL_BLAZE.get(), SavageSmallBlazeRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.CHIMERIC_PURPLEMARER.get(), ChimericPurplemarerRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.CHIMERIC_REDMARER.get(), ChimericRedmarerRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.NETHERMAN.get(), NethermanRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.RED_SLYLF.get(), RedSlylfRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.RED_BLAZE.get(), RedblazeRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.STREDER.get(), StrederRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.GHAST_OF_TEALIVE_VALLEY.get(), GhastOfTealiveValleyRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.TANZANITE_GUARDIAN.get(), TanzaniteGuardianRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DARK_SPIRIT_WOLF.get(), DarkSpiritWolfRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.SNOWDRIFTER.get(), SnowdrifterRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.VOID_ENDERMEN.get(), VoidEndermenRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.TEALIVE_SKELETON.get(), TealiveSkeletonRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.RED_RAVENGER.get(), RedRavengerRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DARK_HOGLIN.get(), DarkHoglinRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DARK_GOLEM.get(), DarkGolemRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.THE_BLAZER.get(), TheBlazerRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.THE_WITHER_KNIGHT.get(), TheWitherKnightRenderer::new);
+        event.registerEntityRenderer(UnseenWorldEntities.DARK_PEARL.get(), ThrownItemRenderer::new);
+        event.registerBlockEntityRenderer(UnseenWorldBlockEntities.BEACON_OF_WEAPONS.get(), BeaconOfWeaponsRenderer::new);
     }
 
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(UnseenWorldModParticleTypes.BLUE_VOID_PARTICLE.get(), BlueVoidParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.REDNESS.get(), RednessParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.GOLDEN.get(), GoldenParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.GREENISH_PARTICLE.get(), GreenishParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.FIRE_PARTICLE.get(), FireParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.LIQUID_OF_CHIMERY_PARTICLE.get(), LiquidOfChimeryParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.GRIZZLY_PARTICLE.get(), GrizzlyParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.TANZANITE_RAY.get(), TanzaniteRayParticle::provider);
-        event.registerSpriteSet(UnseenWorldModParticleTypes.VOID_PORTAL.get(), VoidPortalParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get(), BlueVoidParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.REDNESS.get(), RednessParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.GOLDEN.get(), GoldenParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.GREENISH_PARTICLE.get(), GreenishParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.FIRE_PARTICLE.get(), FireParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.LIQUID_OF_CHIMERY_PARTICLE.get(), LiquidOfChimeryParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.GRIZZLY_PARTICLE.get(), GrizzlyParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.TANZANITE_RAY.get(), TanzaniteRayParticle::provider);
+        event.registerSpriteSet(UnseenWorldParticleTypes.VOID_PORTAL.get(), VoidPortalParticle::provider);
     }
 
     @SubscribeEvent

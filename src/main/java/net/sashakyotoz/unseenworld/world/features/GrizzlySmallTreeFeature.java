@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.BlockPos;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.Set;
 import java.util.List;
@@ -30,7 +30,7 @@ public class GrizzlySmallTreeFeature extends Feature<NoneFeatureConfiguration> {
 
 	public GrizzlySmallTreeFeature() {
 		super(NoneFeatureConfiguration.CODEC);
-		base_blocks = List.of(Blocks.BLACKSTONE, UnseenWorldModBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get());
+		base_blocks = List.of(Blocks.BLACKSTONE, UnseenWorldBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get());
 	}
 
 	@Override

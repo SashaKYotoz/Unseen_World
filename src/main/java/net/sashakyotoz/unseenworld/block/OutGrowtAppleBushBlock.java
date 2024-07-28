@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 import org.jetbrains.annotations.Nullable;
 
 public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlock {
@@ -59,7 +59,7 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 	}
 	@Override
 	public boolean mayPlaceOn(BlockState groundState, BlockGetter worldIn, BlockPos pos) {
-		return groundState.is(UnseenWorldModTags.Blocks.DIRT_THE_DARKNESS) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.MOSS_BLOCK);
+		return groundState.is(UnseenWorldTags.Blocks.DIRT_THE_DARKNESS) || groundState.is(Blocks.GRASS_BLOCK) || groundState.is(Blocks.MYCELIUM) || groundState.is(Blocks.MOSS_BLOCK);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class OutGrowtAppleBushBlock extends BushBlock implements BonemealableBlo
 		super.playerDestroy(level, player, pos, state, entity, p_49832_);
 		if (isMaxAge(state)) {
 			for (int i = 0; i < (int) Mth.nextDouble(RandomSource.create(), 1, 3); i++) {
-				player.spawnAtLocation(new ItemStack(UnseenWorldModItems.OUTGROWTH_APPLE.get()));
+				player.spawnAtLocation(new ItemStack(UnseenWorldItems.OUTGROWTH_APPLE.get()));
 			}
 		}
 	}

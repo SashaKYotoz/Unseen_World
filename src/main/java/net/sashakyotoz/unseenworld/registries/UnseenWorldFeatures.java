@@ -12,7 +12,7 @@ import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.world.features.*;
 import net.sashakyotoz.unseenworld.world.features.underground.*;
 
-public class UnseenWorldModFeatures {
+public class UnseenWorldFeatures {
 	public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, UnseenWorldMod.MODID);
 	public static final RegistryObject<Feature<?>> GRASS_BLOCK_OF_SHINY_REDLIGHT = REGISTRY.register("grass_block_of_shiny_redlight", GrassBlockOfShinyRedlightFeature::new);
 	public static final RegistryObject<Feature<?>> GRIZZLY_LIGHT_BLOCK = REGISTRY.register("grizzly_light_block", GrizzlyLightBlockFeature::new);

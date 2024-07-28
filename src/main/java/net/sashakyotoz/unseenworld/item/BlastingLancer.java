@@ -21,7 +21,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -31,7 +30,6 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.jarjar.nio.util.Lazy;
 import net.sashakyotoz.unseenworld.managers.LivingEntityIsHitWithTreasureWeaponProcedure;
 import net.sashakyotoz.unseenworld.managers.TreasureWeaponOnBeaconClick;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 

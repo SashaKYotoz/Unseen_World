@@ -11,7 +11,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public abstract class VoidArmorItem extends ArmorItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(Items.NETHERITE_INGOT), new ItemStack(UnseenWorldModItems.VOID_INGOT.get()));
+				return Ingredient.of(new ItemStack(Items.NETHERITE_INGOT), new ItemStack(UnseenWorldItems.VOID_INGOT.get()));
 			}
 
 			@Override

@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModMobEffects;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
 
 public class DarkFreeSoulItem extends Item {
 	public DarkFreeSoulItem() {
@@ -30,13 +30,13 @@ public class DarkFreeSoulItem extends Item {
 		player.getCooldowns().addCooldown(itemStack.getItem(), 20);
 		if (!player.level().isClientSide()) {
 			if (Math.random() < 0.75)
-				player.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.DARK_IMMUNITE.get(), 100, 0, true, true));
+				player.addEffect(new MobEffectInstance(UnseenWorldMobEffects.DARK_IMMUNITE.get(), 100, 0, true, true));
 			else if (Math.random() < 0.5)
-				player.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.REDUCED_OF_GRAVITY.get(), 80, 0, true, true));
+				player.addEffect(new MobEffectInstance(UnseenWorldMobEffects.REDUCED_OF_GRAVITY.get(), 80, 0, true, true));
 			else if (Math.random() < 0.25)
-				player.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.SOUL_OVERGROWTH.get(), 60, 0, true, true));
+				player.addEffect(new MobEffectInstance(UnseenWorldMobEffects.SOUL_OVERGROWTH.get(), 60, 0, true, true));
 			else if (Math.random() < 0.125)
-				player.addEffect(new MobEffectInstance(UnseenWorldModMobEffects.METEORITESTROPHY.get(), 40, 0, true, true));
+				player.addEffect(new MobEffectInstance(UnseenWorldMobEffects.METEORITESTROPHY.get(), 40, 0, true, true));
 		}
 		return super.use(world, player, hand);
 	}

@@ -19,7 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.BlockUtil;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 import java.util.Optional;
 
 public class TheDarknessPortalShape {
-	private static final BlockBehaviour.StatePredicate FRAME = (state, getter, pos) -> state.is(UnseenWorldModBlocks.COLD_DARK_BRICKS.get());
+	private static final BlockBehaviour.StatePredicate FRAME = (state, getter, pos) -> state.is(UnseenWorldBlocks.COLD_DARK_BRICKS.get());
 	private final LevelAccessor level;
 	private final Direction.Axis axis;
 	private final Direction rightDir;
@@ -133,7 +133,7 @@ public class TheDarknessPortalShape {
 				if (!isEmpty(blockstate)) {
 					return i;
 				}
-				if (blockstate.getBlock() == UnseenWorldModBlocks.THE_DARKNESS_PORTAL.get()) {
+				if (blockstate.getBlock() == UnseenWorldBlocks.THE_DARKNESS_PORTAL.get()) {
 					++this.numPortalBlocks;
 				}
 			}
@@ -142,7 +142,7 @@ public class TheDarknessPortalShape {
 	}
 
 	private static boolean isEmpty(BlockState state) {
-		return state.isAir() || state.is(UnseenWorldModBlocks.THE_DARKNESS_PORTAL.get());
+		return state.isAir() || state.is(UnseenWorldBlocks.THE_DARKNESS_PORTAL.get());
 	}
 
 	public boolean isValid() {
@@ -150,7 +150,7 @@ public class TheDarknessPortalShape {
 	}
 
 	public void createPortalBlocks() {
-		BlockState blockstate = UnseenWorldModBlocks.THE_DARKNESS_PORTAL.get().defaultBlockState().setValue(NetherPortalBlock.AXIS, this.axis);
+		BlockState blockstate = UnseenWorldBlocks.THE_DARKNESS_PORTAL.get().defaultBlockState().setValue(NetherPortalBlock.AXIS, this.axis);
 		BlockPos.betweenClosed(this.bottomLeft, this.bottomLeft.relative(Direction.UP, this.height - 1).relative(this.rightDir, this.width - 1)).forEach((pos) -> {
 			this.level.setBlock(pos, blockstate, 18);
 			if (this.level instanceof ServerLevel)

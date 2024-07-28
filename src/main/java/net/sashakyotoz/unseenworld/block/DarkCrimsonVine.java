@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import javax.annotation.Nullable;
 import java.util.function.ToIntFunction;
@@ -26,7 +26,7 @@ public interface DarkCrimsonVine {
 
     static InteractionResult use(@Nullable Entity entity, BlockState state, Level level, BlockPos blockPos) {
         if (state.getValue(BERRIES)) {
-            Block.popResource(level, blockPos, new ItemStack(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get(), RandomSource.create().nextInt(2,4)));
+            Block.popResource(level, blockPos, new ItemStack(UnseenWorldItems.BERRIES_OF_BLOOMING_VINE.get(), RandomSource.create().nextInt(2,4)));
             float f = Mth.randomBetween(level.random, 0.8F, 1.2F);
             level.playSound(null, blockPos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, f);
             BlockState blockstate = state.setValue(BERRIES, Boolean.FALSE);

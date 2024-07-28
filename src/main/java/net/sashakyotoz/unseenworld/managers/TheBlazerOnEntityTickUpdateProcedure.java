@@ -5,7 +5,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.util.RandomSource;
@@ -14,7 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 
 import net.sashakyotoz.unseenworld.entity.TheBlazerEntity;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.sashakyotoz.unseenworld.entity.RedBlazeEntity;
 import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
@@ -39,7 +38,7 @@ public class TheBlazerOnEntityTickUpdateProcedure {
                 if (!projectileLevel.isClientSide()) {
                     Projectile entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            NetheriumStaffEntity entityToSpawn = new NetheriumStaffEntity(UnseenWorldModEntities.NETHERIUM_STAFF.get(), level);
+                            NetheriumStaffEntity entityToSpawn = new NetheriumStaffEntity(UnseenWorldEntities.NETHERIUM_STAFF.get(), level);
                             entityToSpawn.setOwner(shooter);
                             entityToSpawn.setBaseDamage(damage);
                             entityToSpawn.setKnockback(knockback);
@@ -55,7 +54,7 @@ public class TheBlazerOnEntityTickUpdateProcedure {
         } else if (Math.random() < 0.01) {
             if (accessor.getEntitiesOfClass(RedBlazeEntity.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
                 if (accessor instanceof ServerLevel level) {
-                    UnseenWorldModEntities.RED_BLAZE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    UnseenWorldEntities.RED_BLAZE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 }
             }
         } else if (Math.random() < 0.015) {

@@ -17,7 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.sashakyotoz.unseenworld.client.model.ModelBlazerHelmet;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +50,7 @@ public abstract class BlazerItem extends ArmorItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(UnseenWorldModItems.RED_TITANIUM_INGOT.get()));
+				return Ingredient.of(new ItemStack(UnseenWorldItems.RED_TITANIUM_INGOT.get()));
 			}
 
 			@Override

@@ -1,7 +1,7 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +35,7 @@ public class TanzaniteBlockBuddingBlock extends Block {
 			BlockState blockstate = level.getBlockState(blockpos);
 			Block block = null;
 			if (canClusterGrowAtState(blockstate)) {
-				block = UnseenWorldModBlocks.TANZANITE_CLUSTER.get();
+				block = UnseenWorldBlocks.TANZANITE_CLUSTER.get();
 			}
 			if (block != null) {
 				BlockState blockstate1 = block.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction).setValue(AmethystClusterBlock.WATERLOGGED, Boolean.valueOf(blockstate.getFluidState().getType() == Fluids.WATER));

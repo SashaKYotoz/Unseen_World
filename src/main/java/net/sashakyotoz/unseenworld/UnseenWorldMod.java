@@ -1,7 +1,6 @@
 package net.sashakyotoz.unseenworld;
 
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.ComposterBlock;
@@ -35,22 +34,21 @@ public class UnseenWorldMod {
     public UnseenWorldMod() {
         MinecraftForge.EVENT_BUS.register(this);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        UnseenWorldModSounds.REGISTRY.register(bus);
-        UnseenWorldModBlocks.BLOCKS.register(bus);
-        UnseenWorldModBlockEntities.REGISTRY.register(bus);
-        UnseenWorldModItems.ITEMS.register(bus);
-        UnseenWorldModEntities.REGISTRY.register(bus);
-        UnseenWorldModEnchantments.REGISTRY.register(bus);
-        UnseenWorldModTabs.REGISTRY.register(bus);
-        UnseenWorldModFeatures.REGISTRY.register(bus);
-        UnseenWorldModMobEffects.REGISTRY.register(bus);
-        UnseenWorldModPotions.REGISTRY.register(bus);
-        UnseenWorldModPaintings.REGISTRY.register(bus);
-        UnseenWorldModParticleTypes.REGISTRY.register(bus);
-        UnseenWorldModVillagerProfessions.PROFESSIONS.register(bus);
-        UnseenWorldModMenus.REGISTRY.register(bus);
-        UnseenWorldModFluids.REGISTRY.register(bus);
-        UnseenWorldModFluidTypes.REGISTRY.register(bus);
+        UnseenWorldSounds.REGISTRY.register(bus);
+        UnseenWorldBlocks.BLOCKS.register(bus);
+        UnseenWorldBlockEntities.REGISTRY.register(bus);
+        UnseenWorldItems.ITEMS.register(bus);
+        UnseenWorldEntities.REGISTRY.register(bus);
+        UnseenWorldEnchantments.REGISTRY.register(bus);
+        UnseenWorldTabs.REGISTRY.register(bus);
+        UnseenWorldFeatures.REGISTRY.register(bus);
+        UnseenWorldMobEffects.REGISTRY.register(bus);
+        UnseenWorldPotions.REGISTRY.register(bus);
+        UnseenWorldPaintings.REGISTRY.register(bus);
+        UnseenWorldParticleTypes.REGISTRY.register(bus);
+        UnseenWorldVillagerProfessions.PROFESSIONS.register(bus);
+        UnseenWorldMenus.REGISTRY.register(bus);
+        UnseenWorldFluids.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, UnseenWorldConfigs.SPEC);
         TextureAnimator.addEntityToAnimate(UnseenWorldMod.class,MODID,"particle/portal_like","void_portal");
         TextureAnimator.addEntityToAnimate(UnseenWorldMod.class,MODID,"particle/fireball","fireball_particle");
@@ -77,15 +75,15 @@ public class UnseenWorldMod {
         }
     }
     private void commonSetup(FMLCommonSetupEvent event) {
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.CRIMSERRY_SOUL_CROP.get(), 0.1f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModBlocks.MISTERY_CROP_FLOWER.get(), 0.1f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.CRIMSERRY_SOUL_BERRY.get(), 0.2f);
-        ComposterBlock.COMPOSTABLES.put(UnseenWorldModItems.BERRIES_OF_BLOOMING_VINE.get(), 0.2f);
-        PotionBrewing.addMix(Potions.AWKWARD,UnseenWorldModItems.TEALIVE_STONY_SHARD.get(),Potions.LONG_NIGHT_VISION);
-        PotionBrewing.addMix(Potions.AWKWARD,UnseenWorldModItems.DARK_FREE_SOUL.get(),UnseenWorldModPotions.DARK_IMMUNITE_POTION.get());
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldBlocks.CRIMSERRY_SOUL_CROP.get(), 0.1f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldBlocks.MISTERY_CROP_FLOWER.get(), 0.1f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldItems.CRIMSERRY_SOUL_BERRY.get(), 0.2f);
+        ComposterBlock.COMPOSTABLES.put(UnseenWorldItems.BERRIES_OF_BLOOMING_VINE.get(), 0.2f);
+        PotionBrewing.addMix(Potions.AWKWARD, UnseenWorldItems.TEALIVE_STONY_SHARD.get(),Potions.LONG_NIGHT_VISION);
+        PotionBrewing.addMix(Potions.AWKWARD, UnseenWorldItems.DARK_FREE_SOUL.get(), UnseenWorldPotions.DARK_IMMUNITE_POTION.get());
     }
     private void clientSetup(final FMLClientSetupEvent event){
         ModItemProperties.addCustomItemProperties();
-        event.enqueueWork(() -> MenuScreens.register(UnseenWorldModMenus.GOLDEN_CHEST_GUI.get(), GoldenChestGUIScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(UnseenWorldMenus.GOLDEN_CHEST_GUI.get(), GoldenChestGUIScreen::new));
     }
 }

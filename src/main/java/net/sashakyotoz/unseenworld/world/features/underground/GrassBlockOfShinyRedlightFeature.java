@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.Set;
 
@@ -40,12 +40,12 @@ public class GrassBlockOfShinyRedlightFeature extends OreFeature {
 				for (int j = 0; j < 3; j++) {
 					sz = -3;
 					for (int k = 0; k < 6; k++) {
-						if (((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.DARK_GRASS_BLOCK.get()
-								|| (world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldModBlocks.AMETHYST_GRASS_BLOCK.get())
+						if (((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldBlocks.DARK_GRASS_BLOCK.get()
+								|| (world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldBlocks.AMETHYST_GRASS_BLOCK.get())
 								&& !world.getBlockState(BlockPos.containing(x + sx, y + sy + 1, z + sz)).canOcclude()) {
 							if (Math.random() < 0.5) {
 								BlockPos blockPos = BlockPos.containing(x + sx, y + sy, z + sz);
-								BlockState _bs = UnseenWorldModBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get().defaultBlockState();
+								BlockState _bs = UnseenWorldBlocks.GRASS_BLOCK_OF_SHINY_REDLIGHT.get().defaultBlockState();
 								world.setBlock(blockPos, _bs, 3);
 							}
 						}

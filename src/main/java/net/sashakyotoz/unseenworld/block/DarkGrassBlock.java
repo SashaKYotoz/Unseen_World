@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,11 +24,9 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraftforge.common.IPlantable;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModTags;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +52,7 @@ public class DarkGrassBlock extends SpreadingSnowyDirtBlock implements Bonemeala
 
     @Override
     public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
-        return (level.getBlockState(pos.above()).isAir() || !level.getBlockState(pos.above()).canOcclude()) && entityType.is(UnseenWorldModTags.Entities.ON_DARK_GRASS_SPAWN_WHITELIST);
+        return (level.getBlockState(pos.above()).isAir() || !level.getBlockState(pos.above()).canOcclude()) && entityType.is(UnseenWorldTags.Entities.ON_DARK_GRASS_SPAWN_WHITELIST);
     }
 
     @Override

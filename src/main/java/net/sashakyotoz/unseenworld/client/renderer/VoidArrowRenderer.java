@@ -60,11 +60,11 @@ public class VoidArrowRenderer<T extends VoidArrowEntity> extends EntityRenderer
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T p_114482_) {
+    public ResourceLocation getTextureLocation(T entity) {
         return new ResourceLocation(UnseenWorldMod.MODID,"textures/entities/void_arrow.png");
     }
 
-    public void vertex(Matrix4f matrix4f, Matrix3f matrix3f, VertexConsumer consumer, int p_254058_, int p_254338_, int p_254196_, float p_254003_, float p_254165_, int p_253982_, int p_254037_, int p_254038_, int p_254271_) {
-        consumer.vertex(matrix4f, (float)p_254058_, (float)p_254338_, (float)p_254196_).color(255, 255, 255, 255).uv(p_254003_, p_254165_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_254271_).normal(matrix3f, (float)p_253982_, (float)p_254038_, (float)p_254037_).endVertex();
+    public void vertex(Matrix4f pMatrix, Matrix3f pNormal, VertexConsumer pConsumer, int pX, int pY, int pZ, float pU, float pV, int pNormalX, int pNormalZ, int pNormalY, int pPackedLight) {
+        pConsumer.vertex(pMatrix, (float)pX, (float)pY, (float)pZ).color(255, 255, 255, 255).uv(pU, pV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(pPackedLight).normal(pNormal, (float)pNormalX, (float)pNormalY, (float)pNormalZ).endVertex();
     }
 }

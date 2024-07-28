@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:warped_fungus_on_a_stick"
+    },
+    "title": {
+      "translate": "advancements.petificate_the_wayward.title"
+    },
+    "description": {
+      "translate": "advancements.petificate_the_wayward.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "under_the_chimeric_darkness": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "unseen_world:goto_darkness"
+}

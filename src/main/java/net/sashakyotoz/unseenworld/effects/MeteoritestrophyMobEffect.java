@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModParticleTypes;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 public class MeteoritestrophyMobEffect extends MobEffect {
 	public MeteoritestrophyMobEffect() {
@@ -35,7 +35,7 @@ public class MeteoritestrophyMobEffect extends MobEffect {
 					if (!level.isClientSide())
 						level.explode(null, (x + Mth.nextDouble(RandomSource.create(), -5, 5)), y, (z + Mth.nextDouble(RandomSource.create(), -5, 5)), 2, Level.ExplosionInteraction.BLOCK);
 					if (level instanceof ServerLevel serverLevel)
-						serverLevel.sendParticles(UnseenWorldModParticleTypes.REDNESS.get(), (x + Mth.nextDouble(RandomSource.create(), -5, 5)), (y + 5), (z + Mth.nextDouble(RandomSource.create(), -5, 5)), 9, 5, 5, 5, 1);
+						serverLevel.sendParticles(UnseenWorldParticleTypes.REDNESS.get(), (x + Mth.nextDouble(RandomSource.create(), -5, 5)), (y + 5), (z + Mth.nextDouble(RandomSource.create(), -5, 5)), 9, 5, 5, 5, 1);
 				}
 			}
 		}

@@ -5,8 +5,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.*;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldModFluids;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldFluids;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,13 +34,13 @@ public class DeepWaterAnfeltsiaBlock extends BushBlock implements SimpleWaterlog
 	}
 
 	protected boolean mayPlaceOn(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
-		return (blockGetter.getBlockState(blockPos.above()).is(UnseenWorldModBlocks.DARK_WATER.get()) || blockGetter.getBlockState(blockPos.above()).is(Blocks.WATER)) && blockGetter.getBlockState(blockPos.below()).isSolid();
+		return (blockGetter.getBlockState(blockPos.above()).is(UnseenWorldBlocks.DARK_WATER.get()) || blockGetter.getBlockState(blockPos.above()).is(Blocks.WATER)) && blockGetter.getBlockState(blockPos.below()).isSolid();
 	}
 
 	public BlockState updateShape(BlockState state, Direction direction, BlockState p_154532_, LevelAccessor p_154533_, BlockPos p_154534_, BlockPos p_154535_) {
 		BlockState blockstate = super.updateShape(state, direction, p_154532_, p_154533_, p_154534_, p_154535_);
 		if (!blockstate.isAir()) {
-			p_154533_.scheduleTick(p_154534_, UnseenWorldModFluids.DARK_WATER.get(), UnseenWorldModFluids.DARK_WATER.get().getTickDelay(p_154533_));
+			p_154533_.scheduleTick(p_154534_, UnseenWorldFluids.DARK_WATER.get(), UnseenWorldFluids.DARK_WATER.get().getTickDelay(p_154533_));
 		}
 		return blockstate;
 	}
@@ -48,11 +48,11 @@ public class DeepWaterAnfeltsiaBlock extends BushBlock implements SimpleWaterlog
 		p_56388_.add(WATERLOGGED);
 	}
 	public FluidState getFluidState(BlockState state) {
-		return state.getValue(WATERLOGGED) ? UnseenWorldModFluids.DARK_WATER.get().getSource(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? UnseenWorldFluids.DARK_WATER.get().getSource(false) : super.getFluidState(state);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void blockColorLoad(RegisterColorHandlersEvent.Block event) {
-		event.getBlockColors().register((bs, world, pos, index) -> world != null && pos != null ? BiomeColors.getAverageWaterColor(world, pos) : -1, UnseenWorldModBlocks.DEEP_WATER_ANFELTSIA.get());
+		event.getBlockColors().register((bs, world, pos, index) -> world != null && pos != null ? BiomeColors.getAverageWaterColor(world, pos) : -1, UnseenWorldBlocks.DEEP_WATER_ANFELTSIA.get());
 	}
 }
