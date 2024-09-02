@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "unseen_world:block/dark_currantslate",
+    "side": "unseen_world:block/dark_currantslate",
+    "top": "unseen_world:block/dark_currantslate"
+  }
+}

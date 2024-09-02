@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/polished_tanzanite_slab"
+    },
+    "type=double": {
+      "model": "unseen_world:block/polished_tanzanite"
+    },
+    "type=top": {
+      "model": "unseen_world:block/polished_tanzanite_slab_top"
+    }
+  }
+}

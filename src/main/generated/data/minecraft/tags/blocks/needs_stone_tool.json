@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:dark_frost_bricks",
+    "unseen_world:dark_currantslate",
+    "unseen_world:dark_currantslate_slab",
+    "unseen_world:dark_currantslate_stairs",
+    "unseen_world:dark_currantslate_wall",
+    "unseen_world:dark_currantslate_bricks",
+    "unseen_world:dark_currantslate_bricks_slab",
+    "unseen_world:dark_currantslate_bricks_stairs",
+    "unseen_world:dark_currantslate_bricks_wall",
+    "unseen_world:glaciemite",
+    "unseen_world:glaciemite_slab",
+    "unseen_world:glaciemite_stairs",
+    "unseen_world:glaciemite_wall",
+    "unseen_world:glaciemite_bricks",
+    "unseen_world:glaciemite_bricks_slab",
+    "unseen_world:glaciemite_bricks_stairs",
+    "unseen_world:glaciemite_bricks_wall",
+    "unseen_world:tanzanite_block",
+    "unseen_world:polished_tanzanite",
+    "unseen_world:polished_tanzanite_slab",
+    "unseen_world:polished_tanzanite_stairs"
+  ]
+}

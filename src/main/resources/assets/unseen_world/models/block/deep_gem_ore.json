@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/deep_gem_ore",
-    "particle": "unseen_world:block/deep_gem_ore"
-  },
-  "render_type": "solid"
-}

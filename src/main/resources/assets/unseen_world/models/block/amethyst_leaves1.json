@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/leaves_from_dark_of_chimeries1",
-    "particle": "unseen_world:block/leaves_from_dark_of_chimeries1"
-  },
-  "render_type": "translucent"
-}

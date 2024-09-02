@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "unseen_world:shiny_caverns",
-  "features": "unseen_world:shiny_caverns_light",
-  "step": "local_modifications"
-}

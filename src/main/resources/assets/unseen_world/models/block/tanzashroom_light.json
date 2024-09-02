@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/tanzashroomlight",
-    "particle": "unseen_world:block/tanzashroomlight"
-  },
-  "render_type": "solid"
-}

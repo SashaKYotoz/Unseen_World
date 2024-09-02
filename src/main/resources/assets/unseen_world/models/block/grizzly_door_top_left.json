@@ -1,8 +1,0 @@
-{
-  "parent": "block/door_top_left",
-  "textures": {
-    "bottom": "unseen_world:block/grizzly_door_down",
-    "top": "unseen_world:block/grizzly_door_up"
-  },
-  "render_type": "translucent"
-}

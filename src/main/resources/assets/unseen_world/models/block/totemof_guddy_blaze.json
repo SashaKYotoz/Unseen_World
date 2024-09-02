@@ -1,9 +1,0 @@
-{
-  "parent": "unseen_world:custom/giddy_statue",
-  "textures": {
-    "all": "unseen_world:block/giddy_statue",
-    "particle": "unseen_world:block/giddy_statue",
-    "0": "unseen_world:block/giddy_statue"
-  },
-  "render_type": "solid"
-}

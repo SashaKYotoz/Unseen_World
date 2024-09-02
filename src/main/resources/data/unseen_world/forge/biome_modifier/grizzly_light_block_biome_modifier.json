@@ -1,9 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": [
-    "unseen_world:grizzly_forest",
-    "unseen_world:grizzly_steppe"
-  ],
-  "features": "unseen_world:grizzly_light_block",
-  "step": "underground_ores"
-}

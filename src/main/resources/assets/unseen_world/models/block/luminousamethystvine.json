@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:block/luminousamethyst_vine",
-    "particle": "unseen_world:block/luminousamethyst_vine"
-  },
-  "render_type": "cutout"
-}

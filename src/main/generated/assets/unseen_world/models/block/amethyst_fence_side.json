@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_side",
+  "textures": {
+    "texture": "unseen_world:block/amethyst_planks"
+  }
+}

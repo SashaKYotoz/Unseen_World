@@ -1,8 +1,0 @@
-{
-  "type": "unseen_world:spike_feature",
-  "config": {
-    "state": {
-      "Name": "minecraft:packed_ice"
-    }
-  }
-}

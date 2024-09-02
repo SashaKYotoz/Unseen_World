@@ -1,15 +1,11 @@
 {
   "required": true,
-  "minVersion": "0.8",
-  "package": "net.sashakyotoz.unseenworld.mixin",
+  "package": "net.sashakyotoz.mixin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "unseen_world.refmap.json",
-  "mixins": [],
-  "client": [
-    "BossesHealthOverMixin",
-    "ItemInHandRendererMixin"
+  "mixins": [
+    "BlockEntityTypeMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+	}
 }

@@ -1,8 +1,0 @@
-{
-  "parent": "block/tinted_cross",
-  "textures": {
-    "cross": "unseen_world:block/tanzashroom",
-    "particle": "unseen_world:block/tanzashroom"
-  },
-  "render_type": "cutout"
-}

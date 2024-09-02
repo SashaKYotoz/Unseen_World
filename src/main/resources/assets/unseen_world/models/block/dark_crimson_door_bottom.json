@@ -1,7 +1,0 @@
-{
-  "parent": "block/door_bottom",
-  "textures": {
-    "bottom": "unseen_world:blocks/dark_crimson_door_down",
-    "top": "unseen_world:blocks/dark_crimson_door_up"
-  }
-}

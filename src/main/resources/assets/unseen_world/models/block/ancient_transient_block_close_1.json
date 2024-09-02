@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/ancient_transient_block_close_1",
-    "particle": "unseen_world:block/ancient_transient_block_close_1"
-  }
-}

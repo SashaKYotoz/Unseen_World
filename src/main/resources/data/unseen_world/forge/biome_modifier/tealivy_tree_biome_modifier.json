@@ -1,9 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "unseen_world:tealive_luminous_valley",
-  "features": [
-    "unseen_world:tealivy_tree",
-    "unseen_world:tealivy_tree_1"
-  ],
-  "step": "surface_structures"
-}
