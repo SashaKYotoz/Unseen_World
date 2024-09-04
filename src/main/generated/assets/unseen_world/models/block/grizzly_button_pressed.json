@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_pressed",
+  "textures": {
+    "texture": "unseen_world:block/grizzly_planks"
+  }
+}

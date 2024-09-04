@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
+<<<<<<< Updated upstream
     "unseen_world:amethyst_pressure_plate"
+=======
+    "unseen_world:amethyst_pressure_plate",
+    "unseen_world:grizzly_pressure_plate",
+    "unseen_world:tealive_pressure_plate",
+    "unseen_world:burlywood_pressure_plate",
+    "unseen_world:crimsonveil_pressure_plate"
+>>>>>>> Stashed changes
   ]
 }

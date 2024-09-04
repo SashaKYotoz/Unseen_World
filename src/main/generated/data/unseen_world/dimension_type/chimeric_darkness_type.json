@@ -3,7 +3,11 @@
   "bed_works": false,
   "coordinate_scale": 16.0,
   "effects": "minecraft:the_nether",
+<<<<<<< Updated upstream
   "fixed_time": 23000,
+=======
+  "fixed_time": 0,
+>>>>>>> Stashed changes
   "has_ceiling": false,
   "has_raids": false,
   "has_skylight": false,
@@ -19,7 +23,11 @@
       "min_inclusive": 0
     }
   },
+<<<<<<< Updated upstream
   "natural": true,
+=======
+  "natural": false,
+>>>>>>> Stashed changes
   "piglin_safe": false,
   "respawn_anchor_works": true,
   "ultrawarm": false

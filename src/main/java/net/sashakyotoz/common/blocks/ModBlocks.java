@@ -19,24 +19,49 @@ import net.sashakyotoz.common.blocks.custom.HangingFruitBlock;
 import net.sashakyotoz.common.blocks.custom.fluids.DarkWaterFluid;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
+<<<<<<< Updated upstream
 import net.sashakyotoz.common.world.features.trees.AmethystSaplingGenerator;
+=======
+import net.sashakyotoz.common.world.features.trees.*;
+>>>>>>> Stashed changes
 
 import java.util.Map;
 
 public class ModBlocks {
     public static void register() {
         UnseenWorld.log("Registering Blocks for modid : " + UnseenWorld.MOD_ID);
+<<<<<<< Updated upstream
 
         ModRegistry.addDrop(AMETHYST_SIGN, ModItems.AMETHYST_SIGN);
         ModRegistry.addDrop(AMETHYST_WALL_SIGN, ModItems.AMETHYST_SIGN);
         ModRegistry.addDrop(AMETHYST_HANGING_SIGN, ModItems.AMETHYST_HANGING_SIGN);
         ModRegistry.addDrop(AMETHYST_WALL_HANGING_SIGN, ModItems.AMETHYST_HANGING_SIGN);
 
+=======
+>>>>>>> Stashed changes
         ModRegistry.BlockBuilder.registerBricksSet(DARK_CURRANTSLATE,DARK_CURRANTSLATE_STAIRS,DARK_CURRANTSLATE_SLAB,DARK_CURRANTSLATE_WALL);
         ModRegistry.BlockBuilder.registerBricksSet(DARK_CURRANTSLATE_BRICKS,DARK_CURRANTSLATE_BRICKS_STAIRS,DARK_CURRANTSLATE_BRICKS_SLAB,DARK_CURRANTSLATE_BRICKS_WALL);
         ModRegistry.BlockBuilder.registerBricksSet(GLACIEMITE,GLACIEMITE_STAIRS,GLACIEMITE_SLAB,GLACIEMITE_WALL);
         ModRegistry.BlockBuilder.registerBricksSet(GLACIEMITE_BRICKS,GLACIEMITE_BRICKS_STAIRS,GLACIEMITE_BRICKS_SLAB,GLACIEMITE_BRICKS_WALL);
         ModRegistry.BlockBuilder.registerPolishedSet(POLISHED_TANZANITE,POLISHED_TANZANITE_STAIRS,POLISHED_TANZANITE_SLAB);
+<<<<<<< Updated upstream
+=======
+        ModRegistry.addDrop(ModItems.AMETHYST_SIGN, ModItems.AMETHYST_SIGN);
+        ModRegistry.addDrop(ModItems.AMETHYST_WALL_SIGN, ModItems.AMETHYST_SIGN);
+        ModRegistry.addDrop(ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_HANGING_SIGN);
+        ModRegistry.addDrop(ModItems.AMETHYST_WALL_HANGING_SIGN, ModItems.AMETHYST_HANGING_SIGN);
+
+        ModRegistry.addDrop(ModItems.GRIZZLY_SIGN, ModItems.GRIZZLY_SIGN);
+        ModRegistry.addDrop(ModItems.GRIZZLY_WALL_SIGN, ModItems.GRIZZLY_SIGN);
+        ModRegistry.addDrop(ModItems.GRIZZLY_HANGING_SIGN, ModItems.GRIZZLY_HANGING_SIGN);
+        ModRegistry.addDrop(ModItems.GRIZZLY_WALL_HANGING_SIGN, ModItems.GRIZZLY_HANGING_SIGN);
+
+        ModRegistry.addDrop(ModItems.TEALIVE_SIGN, ModItems.TEALIVE_SIGN);
+        ModRegistry.addDrop(ModItems.TEALIVE_WALL_SIGN, ModItems.TEALIVE_SIGN);
+        ModRegistry.addDrop(ModItems.TEALIVE_HANGING_SIGN, ModItems.TEALIVE_HANGING_SIGN);
+        ModRegistry.addDrop(ModItems.TEALIVE_WALL_HANGING_SIGN, ModItems.TEALIVE_HANGING_SIGN);
+
+>>>>>>> Stashed changes
         ModRegistry.registerSet(AMETHYST_PLANKS, Map.of(
                 ModRegistry.Models.STAIRS, AMETHYST_STAIRS,
                 ModRegistry.Models.SLAB, AMETHYST_SLAB,
@@ -44,10 +69,65 @@ public class ModBlocks {
                 ModRegistry.Models.PRESSURE_PLATE, AMETHYST_PRESSURE_PLATE,
                 ModRegistry.Models.FENCE, AMETHYST_FENCE,
                 ModRegistry.Models.FENCE_GATE, AMETHYST_FENCE_GATE,
+<<<<<<< Updated upstream
                 ModRegistry.Models.SIGN, AMETHYST_SIGN,
                 ModRegistry.Models.WALL_SIGN, AMETHYST_WALL_SIGN,
                 ModRegistry.Models.HANGING_SIGN, AMETHYST_HANGING_SIGN,
                 ModRegistry.Models.WALL_HANGING_SIGN, AMETHYST_WALL_HANGING_SIGN
+=======
+                ModRegistry.Models.SIGN, ModItems.AMETHYST_SIGN,
+                ModRegistry.Models.WALL_SIGN, ModItems.AMETHYST_WALL_SIGN,
+                ModRegistry.Models.HANGING_SIGN, ModItems.AMETHYST_HANGING_SIGN,
+                ModRegistry.Models.WALL_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN
+        ));
+        ModRegistry.registerSet(GRIZZLY_PLANKS, Map.of(
+                ModRegistry.Models.STAIRS, GRIZZLY_STAIRS,
+                ModRegistry.Models.SLAB, GRIZZLY_SLAB,
+                ModRegistry.Models.BUTTON, GRIZZLY_BUTTON,
+                ModRegistry.Models.PRESSURE_PLATE, GRIZZLY_PRESSURE_PLATE,
+                ModRegistry.Models.FENCE, GRIZZLY_FENCE,
+                ModRegistry.Models.FENCE_GATE, GRIZZLY_FENCE_GATE,
+                ModRegistry.Models.SIGN, ModItems.GRIZZLY_SIGN,
+                ModRegistry.Models.WALL_SIGN, ModItems.GRIZZLY_WALL_SIGN,
+                ModRegistry.Models.HANGING_SIGN, ModItems.GRIZZLY_HANGING_SIGN,
+                ModRegistry.Models.WALL_HANGING_SIGN, ModItems.GRIZZLY_WALL_HANGING_SIGN
+        ));
+        ModRegistry.registerSet(TEALIVE_PLANKS, Map.of(
+                ModRegistry.Models.STAIRS, TEALIVE_STAIRS,
+                ModRegistry.Models.SLAB, TEALIVE_SLAB,
+                ModRegistry.Models.BUTTON, TEALIVE_BUTTON,
+                ModRegistry.Models.PRESSURE_PLATE, TEALIVE_PRESSURE_PLATE,
+                ModRegistry.Models.FENCE, TEALIVE_FENCE,
+                ModRegistry.Models.FENCE_GATE, TEALIVE_FENCE_GATE,
+                ModRegistry.Models.SIGN, ModItems.TEALIVE_SIGN,
+                ModRegistry.Models.WALL_SIGN, ModItems.TEALIVE_WALL_SIGN,
+                ModRegistry.Models.HANGING_SIGN, ModItems.TEALIVE_HANGING_SIGN,
+                ModRegistry.Models.WALL_HANGING_SIGN, ModItems.TEALIVE_WALL_HANGING_SIGN
+        ));
+        ModRegistry.registerSet(BURLYWOOD_PLANKS, Map.of(
+                ModRegistry.Models.STAIRS, BURLYWOOD_STAIRS,
+                ModRegistry.Models.SLAB, BURLYWOOD_SLAB,
+                ModRegistry.Models.BUTTON, BURLYWOOD_BUTTON,
+                ModRegistry.Models.PRESSURE_PLATE, BURLYWOOD_PRESSURE_PLATE,
+                ModRegistry.Models.FENCE, BURLYWOOD_FENCE,
+                ModRegistry.Models.FENCE_GATE, BURLYWOOD_FENCE_GATE,
+                ModRegistry.Models.SIGN, ModItems.BURLYWOOD_SIGN,
+                ModRegistry.Models.WALL_SIGN, ModItems.BURLYWOOD_WALL_SIGN,
+                ModRegistry.Models.HANGING_SIGN, ModItems.BURLYWOOD_HANGING_SIGN,
+                ModRegistry.Models.WALL_HANGING_SIGN, ModItems.BURLYWOOD_WALL_HANGING_SIGN
+        ));
+        ModRegistry.registerSet(CRIMSONVEIL_PLANKS, Map.of(
+                ModRegistry.Models.STAIRS, CRIMSONVEIL_STAIRS,
+                ModRegistry.Models.SLAB, CRIMSONVEIL_SLAB,
+                ModRegistry.Models.BUTTON, CRIMSONVEIL_BUTTON,
+                ModRegistry.Models.PRESSURE_PLATE, CRIMSONVEIL_PRESSURE_PLATE,
+                ModRegistry.Models.FENCE, CRIMSONVEIL_FENCE,
+                ModRegistry.Models.FENCE_GATE, CRIMSONVEIL_FENCE_GATE,
+                ModRegistry.Models.SIGN, ModItems.CRIMSONVEIL_SIGN,
+                ModRegistry.Models.WALL_SIGN, ModItems.CRIMSONVEIL_WALL_SIGN,
+                ModRegistry.Models.HANGING_SIGN, ModItems.CRIMSONVEIL_HANGING_SIGN,
+                ModRegistry.Models.WALL_HANGING_SIGN, ModItems.CRIMSONVEIL_WALL_HANGING_SIGN
+>>>>>>> Stashed changes
         ));
     }
     private static FabricBlockSettings copy(FabricBlockSettings original) {
@@ -64,6 +144,7 @@ public class ModBlocks {
     private static final FabricBlockSettings TanzaniteMaterial =
             FabricBlockSettings.create().hardness(2f).luminance(5).instrument(Instrument.BELL).mapColor(MapColor.TERRACOTTA_PURPLE).sounds(BlockSoundGroup.AMETHYST_BLOCK);
 
+<<<<<<< Updated upstream
     private static final FabricBlockSettings AmethystTreeMaterial =
             FabricBlockSettings.create().hardness(2.5f).luminance(3).mapColor(MapColor.PURPLE).sounds(BlockSoundGroup.AMETHYST_BLOCK);
     private static final FabricBlockSettings AmethystPassableTreeMaterial = copy(Blocks.OAK_SIGN);
@@ -77,11 +158,34 @@ public class ModBlocks {
     private static final FabricBlockSettings GrizzlyTreeMaterial =
             FabricBlockSettings.create().hardness(3.5f).mapColor(MapColor.GRAY).sounds(BlockSoundGroup.NETHER_WOOD);
 
+=======
+    private static final FabricBlockSettings PassableTreeMaterial = copy(Blocks.OAK_SIGN);
+    private static final FabricBlockSettings AmethystTreeMaterial =
+            FabricBlockSettings.create().hardness(2.5f).luminance(3).mapColor(MapColor.PURPLE).sounds(BlockSoundGroup.AMETHYST_BLOCK);
+    private static final FabricBlockSettings AmethystLeafMaterial = copy(AmethystTreeMaterial.nonOpaque().breakInstantly());
+    private static final FabricBlockSettings BurlywoodTreeMaterial =
+            FabricBlockSettings.create().hardness(3f).luminance(3).mapColor(MapColor.DARK_GREEN).sounds(BlockSoundGroup.BAMBOO_WOOD);
+    private static final FabricBlockSettings BurlywoodLeafMaterial = copy(FabricBlockSettings.create().luminance(3).mapColor(MapColor.DARK_GREEN).sounds(BlockSoundGroup.BAMBOO_WOOD).nonOpaque().breakInstantly());
+    private static final FabricBlockSettings TealiveTreeMaterial =
+            FabricBlockSettings.create().hardness(1.5f).luminance(5).mapColor(MapColor.CYAN).sounds(BlockSoundGroup.NETHER_WOOD);
+    private static final FabricBlockSettings TealiveLeafMaterial = copy(TealiveTreeMaterial.nonOpaque().breakInstantly());
+    private static final FabricBlockSettings CrimsonveilTreeMaterial =
+            FabricBlockSettings.create().hardness(2f).luminance(2).mapColor(MapColor.TERRACOTTA_ORANGE).sounds(BlockSoundGroup.WOOD);
+    private static final FabricBlockSettings CrimsonveilLeafMaterial = copy(CrimsonveilTreeMaterial.nonOpaque().breakInstantly());
+    private static final FabricBlockSettings GrizzlyTreeMaterial =
+            FabricBlockSettings.create().hardness(3.5f).mapColor(MapColor.GRAY).sounds(BlockSoundGroup.NETHER_WOOD);
+    private static final FabricBlockSettings GrizzlyLeafMaterial = copy(GrizzlyTreeMaterial.nonOpaque().breakInstantly());
+>>>>>>> Stashed changes
 
     public static final WoodType GRIZZLY = new WoodTypeBuilder().register(UnseenWorld.makeID("grizzly"), BlockSetType.DARK_OAK);
     public static final WoodType AMETHYST = new WoodTypeBuilder().register(UnseenWorld.makeID("amethyst"), BlockSetType.BIRCH);
     public static final WoodType BURLYWOOD = new WoodTypeBuilder().register(UnseenWorld.makeID("burlywood"), BlockSetType.MANGROVE);
+<<<<<<< Updated upstream
     public static final WoodType TEALIVY = new WoodTypeBuilder().register(UnseenWorld.makeID("tealivy"), BlockSetType.JUNGLE);
+=======
+    public static final WoodType TEALIVE = new WoodTypeBuilder().register(UnseenWorld.makeID("tealive"), BlockSetType.JUNGLE);
+    public static final WoodType CRIMSONVEIL = new WoodTypeBuilder().register(UnseenWorld.makeID("crimsonveil"), BlockSetType.CRIMSON);
+>>>>>>> Stashed changes
     //stones
     public static final Block DARK_FROST_BRICKS = ModRegistry.ofBlock("dark_frost_bricks",
                     new Block(copy(Blocks.POLISHED_BLACKSTONE_BRICKS)))
@@ -183,10 +287,17 @@ public class ModBlocks {
     public static final Block UNSEENIUM_INGOT_BLOCK = ModRegistry.ofBlock("unseenium_ingot_block",
             new Block(FabricBlockSettings.create().hardness(4).requiresTool())).model().drop().tool("diamond_pickaxe").build();
     //grass
+<<<<<<< Updated upstream
     public static final Block NIGHTDARK_GRASS_BLOCK = ModRegistry.ofBlock("nightdark_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.BLACK))).tool("_hoe").model(ModRegistry.Models.GRASS).build();
     public static final Block TEALIVY_GRASS_BLOCK = ModRegistry.ofBlock("tealivy_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.CYAN))).tool("_hoe").model(ModRegistry.Models.GRASS).build();
     public static final Block AMETHYST_GRASS_BLOCK = ModRegistry.ofBlock("amethyst_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PURPLE))).tool("_hoe").model(ModRegistry.Models.GRASS).build();
     public static final Block GRIMWOOD_GRASS_BLOCK = ModRegistry.ofBlock("grimwood_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.RED))).tool("_hoe").model(ModRegistry.Models.GRASS).build();
+=======
+    public static final Block NIGHTDARK_GRASS_BLOCK = ModRegistry.ofBlock("nightdark_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.BLACK))).tool("_hoe").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block TEALIVY_GRASS_BLOCK = ModRegistry.ofBlock("tealivy_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.CYAN))).tool("_hoe").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block AMETHYST_GRASS_BLOCK = ModRegistry.ofBlock("amethyst_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PURPLE))).tool("_hoe").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block GRIMWOOD_GRASS_BLOCK = ModRegistry.ofBlock("grimwood_grass_block",new GrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.RED))).tool("_hoe").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+>>>>>>> Stashed changes
     public static final Block ASHEN_OOZE = ModRegistry.ofBlock("ashen_ooze",new Block(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PALE_YELLOW))).tool("_shovel").model().build();
     public static final Block GLIMMERGRAIN_SAND = ModRegistry.ofBlock("glimmergrain_sand",new FallingBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.GRAY))).tool("_shovel").model().build();
     //woods
@@ -221,7 +332,11 @@ public class ModBlocks {
                     new HangingFruitBlock(copy(AmethystLeafMaterial).collidable(false).breakInstantly(),
                             () -> ModItems.CRYSTIE_APPLE,
                             ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON,
+<<<<<<< Updated upstream
                             Block.createCuboidShape(0, 8, 0, 16, 16, 16)))
+=======
+                            Block.createCuboidShape(0, 0, 0, 16, 16, 16)))
+>>>>>>> Stashed changes
             .tag(BlockTags.LEAVES, ModTags.Blocks.AMETHYST_BLOCKS)
             .tool("_hoe").flammable(5, 30)
             .cutout().build();
@@ -243,13 +358,21 @@ public class ModBlocks {
             .flammable(5, 20).fuel(300).drop().build();
 
     public static final Block AMETHYST_PRESSURE_PLATE = ModRegistry.ofBlock("amethyst_pressure_plate",
+<<<<<<< Updated upstream
                     new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, AmethystPassableTreeMaterial, BlockSetType.OAK))
+=======
+                    new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, PassableTreeMaterial, BlockSetType.OAK))
+>>>>>>> Stashed changes
             .tool("_axe")
             .tag(BlockTags.WOODEN_PRESSURE_PLATES, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.AMETHYST_BLOCKS)
             .tagitem(ItemTags.WOODEN_PRESSURE_PLATES)
             .fuel(300).drop().build();
     public static final Block AMETHYST_BUTTON = ModRegistry.ofBlock("amethyst_button",
+<<<<<<< Updated upstream
                     new ButtonBlock(AmethystPassableTreeMaterial, BlockSetType.OAK, 10, true))
+=======
+                    new ButtonBlock(PassableTreeMaterial, BlockSetType.OAK, 10, true))
+>>>>>>> Stashed changes
             .tool("_axe")
             .tag(BlockTags.WOODEN_BUTTONS, ModTags.Blocks.AMETHYST_BLOCKS).tagitem(ItemTags.WOODEN_BUTTONS)
             .fuel(100).drop().build();
@@ -280,6 +403,7 @@ public class ModBlocks {
             .tagitem(ItemTags.WOODEN_TRAPDOORS)
             .model(ModRegistry.Models.TRAPDOOR).cutout()
             .drop().build();
+<<<<<<< Updated upstream
 
     public static final Block AMETHYST_SIGN = ModRegistry.ofBlock("amethyst_sign",
                     new SignBlock(AmethystPassableTreeMaterial, AMETHYST), false)
@@ -299,17 +423,380 @@ public class ModBlocks {
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, ModTags.Blocks.AMETHYST_BLOCKS)
             .tool("_axe").build();
 
+=======
+>>>>>>> Stashed changes
     public static final Block AMETHYST_SAPLING = ModRegistry.ofBlock("amethyst_sapling",
                     new SaplingBlock(new AmethystSaplingGenerator(), copy(Blocks.OAK_SAPLING).mapColor(MapColor.PURPLE).hardness(0)))
             .model(ModRegistry.Models.CROSS).cutout()
             .tag(BlockTags.SAPLINGS, ModTags.Blocks.AMETHYST_BLOCKS).tagitem(ItemTags.SAPLINGS)
             .fuel(100).drop().build();
+<<<<<<< Updated upstream
     //fluids
     public static final FlowableFluid DARK_FLOWING_WATER = register("dark_flowing_water", new DarkWaterFluid.Flowing());
     public static final FlowableFluid DARK_WATER = register("dark_water", new DarkWaterFluid.Still());
 
     private static <T extends Fluid> T register(String id, T value) {
         return Registry.register(Registries.FLUID, id, value);
+=======
+
+    public static final Block STRIPPED_GRIZZLY_LOG = ModRegistry.ofBlock("stripped_grizzly_log",
+                    new PillarBlock(GrizzlyTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.GRIZZLY_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+    public static final Block GRIZZLY_LOG = ModRegistry.ofBlock("grizzly_log",
+                    new PillarBlock(GrizzlyTreeMaterial))
+            .tool("_axe").strip(STRIPPED_GRIZZLY_LOG)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.GRIZZLY_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+
+    public static final Block STRIPPED_GRIZZLY_WOOD = ModRegistry.ofBlock("stripped_grizzly_wood",
+                    new PillarBlock(GrizzlyTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.GRIZZLY_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+    public static final Block GRIZZLY_WOOD = ModRegistry.ofBlock("grizzly_wood",
+                    new PillarBlock(GrizzlyTreeMaterial))
+            .tool("_axe").strip(STRIPPED_GRIZZLY_WOOD)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.GRIZZLY_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+
+    public static final Block GRIZZLY_LEAVES = ModRegistry.ofBlock("grizzly_leaves",
+                    new LeavesBlock(GrizzlyLeafMaterial))
+            .tag(BlockTags.LEAVES, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
+            .tool("_hoe").flammable(5, 30)
+            .model().cutout().build();
+
+    public static final Block GRIZZLY_PLANKS = ModRegistry.ofBlock("grizzly_planks",
+                    new Block(GrizzlyTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.PLANKS, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.PLANKS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block GRIZZLY_STAIRS = ModRegistry.ofBlock("grizzly_stairs",
+                    new StairsBlock(GRIZZLY_PLANKS.getDefaultState(), GrizzlyTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_STAIRS, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.WOODEN_STAIRS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block GRIZZLY_SLAB = ModRegistry.ofBlock("grizzly_slab",
+                    new SlabBlock(GrizzlyTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_SLABS, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.WOODEN_SLABS)
+            .flammable(5, 20).fuel(300).drop().build();
+
+    public static final Block GRIZZLY_PRESSURE_PLATE = ModRegistry.ofBlock("grizzly_pressure_plate",
+                    new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, PassableTreeMaterial, BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_PRESSURE_PLATES, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.GRIZZLY_BLOCKS)
+            .tagitem(ItemTags.WOODEN_PRESSURE_PLATES)
+            .fuel(300).drop().build();
+    public static final Block GRIZZLY_BUTTON = ModRegistry.ofBlock("grizzly_button",
+                    new ButtonBlock(PassableTreeMaterial, BlockSetType.OAK, 10, true))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_BUTTONS, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.WOODEN_BUTTONS)
+            .fuel(100).drop().build();
+
+    public static final Block GRIZZLY_FENCE = ModRegistry.ofBlock("grizzly_fence",
+                    new FenceBlock(GrizzlyTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.WOODEN_FENCES)
+            .flammable(5, 5).fuel(300).drop().build();
+    public static final Block GRIZZLY_FENCE_GATE = ModRegistry.ofBlock("grizzly_fence_gate",
+                    new FenceGateBlock(GrizzlyTreeMaterial, GRIZZLY))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, BlockTags.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, ModTags.Blocks.GRIZZLY_BLOCKS)
+            .tagitem(ItemTags.WOODEN_FENCES, ItemTags.FENCE_GATES)
+            .flammable(5, 5).fuel(300).drop().build();
+
+    public static final Block GRIZZLY_DOOR = ModRegistry.ofBlock("grizzly_door",
+                    new DoorBlock(copy(Blocks.OAK_DOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_DOORS, ModTags.Blocks.GRIZZLY_BLOCKS)
+            .tagitem(ItemTags.WOODEN_DOORS)
+            .model(ModRegistry.Models.DOOR).cutout()
+            .drop().build();
+    public static final Block GRIZZLY_TRAPDOOR = ModRegistry.ofBlock("grizzly_trapdoor",
+                    new TrapdoorBlock(copy(Blocks.OAK_TRAPDOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_TRAPDOORS, ModTags.Blocks.GRIZZLY_BLOCKS)
+            .tagitem(ItemTags.WOODEN_TRAPDOORS)
+            .model(ModRegistry.Models.TRAPDOOR).cutout()
+            .drop().build();
+    public static final Block GRIZZLY_SAPLING = ModRegistry.ofBlock("grizzly_sapling",
+                    new SaplingBlock(new GrizzlySaplingGenerator(), copy(Blocks.OAK_SAPLING).mapColor(MapColor.PURPLE).hardness(0)))
+            .model(ModRegistry.Models.CROSS).cutout()
+            .tag(BlockTags.SAPLINGS, ModTags.Blocks.GRIZZLY_BLOCKS).tagitem(ItemTags.SAPLINGS)
+            .fuel(100).drop().build();
+
+    public static final Block STRIPPED_TEALIVE_LOG = ModRegistry.ofBlock("stripped_tealive_log",
+                    new PillarBlock(TealiveTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.TEALIVE_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+    public static final Block TEALIVE_LOG = ModRegistry.ofBlock("tealive_log",
+                    new PillarBlock(TealiveTreeMaterial))
+            .tool("_axe").strip(STRIPPED_TEALIVE_LOG)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.TEALIVE_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+
+    public static final Block STRIPPED_TEALIVE_WOOD = ModRegistry.ofBlock("stripped_tealive_wood",
+                    new PillarBlock(TealiveTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.TEALIVE_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+    public static final Block TEALIVE_WOOD = ModRegistry.ofBlock("tealive_wood",
+                    new PillarBlock(TealiveTreeMaterial))
+            .tool("_axe").strip(STRIPPED_TEALIVE_WOOD)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.TEALIVE_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+
+    public static final Block TEALIVE_LEAVES = ModRegistry.ofBlock("tealive_leaves",
+                    new LeavesBlock(TealiveLeafMaterial))
+            .tag(BlockTags.LEAVES, ModTags.Blocks.TEALIVE_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
+            .tool("_hoe").flammable(5, 30)
+            .model().cutout().build();
+
+    public static final Block TEALIVE_PLANKS = ModRegistry.ofBlock("tealive_planks",
+                    new Block(TealiveTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.PLANKS, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.PLANKS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block TEALIVE_STAIRS = ModRegistry.ofBlock("tealive_stairs",
+                    new StairsBlock(TEALIVE_PLANKS.getDefaultState(), TealiveTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_STAIRS, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.WOODEN_STAIRS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block TEALIVE_SLAB = ModRegistry.ofBlock("tealive_slab",
+                    new SlabBlock(TealiveTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_SLABS, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.WOODEN_SLABS)
+            .flammable(5, 20).fuel(300).drop().build();
+
+    public static final Block TEALIVE_PRESSURE_PLATE = ModRegistry.ofBlock("tealive_pressure_plate",
+                    new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, PassableTreeMaterial, BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_PRESSURE_PLATES, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.TEALIVE_BLOCKS)
+            .tagitem(ItemTags.WOODEN_PRESSURE_PLATES)
+            .fuel(300).drop().build();
+    public static final Block TEALIVE_BUTTON = ModRegistry.ofBlock("tealive_button",
+                    new ButtonBlock(PassableTreeMaterial, BlockSetType.OAK, 10, true))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_BUTTONS, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.WOODEN_BUTTONS)
+            .fuel(100).drop().build();
+
+    public static final Block TEALIVE_FENCE = ModRegistry.ofBlock("tealive_fence",
+                    new FenceBlock(TealiveTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.WOODEN_FENCES)
+            .flammable(5, 5).fuel(300).drop().build();
+    public static final Block TEALIVE_FENCE_GATE = ModRegistry.ofBlock("tealive_fence_gate",
+                    new FenceGateBlock(TealiveTreeMaterial, TEALIVE))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, BlockTags.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, ModTags.Blocks.TEALIVE_BLOCKS)
+            .tagitem(ItemTags.WOODEN_FENCES, ItemTags.FENCE_GATES)
+            .flammable(5, 5).fuel(300).drop().build();
+
+    public static final Block TEALIVE_DOOR = ModRegistry.ofBlock("tealive_door",
+                    new DoorBlock(copy(Blocks.OAK_DOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_DOORS, ModTags.Blocks.TEALIVE_BLOCKS)
+            .tagitem(ItemTags.WOODEN_DOORS)
+            .model(ModRegistry.Models.DOOR).cutout()
+            .drop().build();
+    public static final Block TEALIVE_TRAPDOOR = ModRegistry.ofBlock("tealive_trapdoor",
+                    new TrapdoorBlock(copy(Blocks.OAK_TRAPDOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_TRAPDOORS, ModTags.Blocks.TEALIVE_BLOCKS)
+            .tagitem(ItemTags.WOODEN_TRAPDOORS)
+            .model(ModRegistry.Models.TRAPDOOR).cutout()
+            .drop().build();
+    public static final Block TEALIVE_SAPLING = ModRegistry.ofBlock("tealive_sapling",
+                    new SaplingBlock(new TealiveSaplingGenerator(), copy(Blocks.OAK_SAPLING).mapColor(MapColor.PURPLE).breakInstantly()))
+            .model(ModRegistry.Models.CROSS).cutout()
+            .tag(BlockTags.SAPLINGS, ModTags.Blocks.TEALIVE_BLOCKS).tagitem(ItemTags.SAPLINGS)
+            .fuel(100).drop().build();
+
+    public static final Block STRIPPED_BURLYWOOD_LOG = ModRegistry.ofBlock("stripped_burlywood_log",
+                    new PillarBlock(BurlywoodTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.BURLYWOOD_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+    public static final Block BURLYWOOD_LOG = ModRegistry.ofBlock("burlywood_log",
+                    new PillarBlock(BurlywoodTreeMaterial))
+            .tool("_axe").strip(STRIPPED_BURLYWOOD_LOG)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.BURLYWOOD_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+
+    public static final Block STRIPPED_BURLYWOOD_WOOD = ModRegistry.ofBlock("stripped_burlywood_wood",
+                    new PillarBlock(BurlywoodTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.BURLYWOOD_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+    public static final Block BURLYWOOD_WOOD = ModRegistry.ofBlock("burlywood_wood",
+                    new PillarBlock(BurlywoodTreeMaterial))
+            .tool("_axe").strip(STRIPPED_BURLYWOOD_WOOD)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.BURLYWOOD_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+
+    public static final Block BURLYWOOD_LEAVES = ModRegistry.ofBlock("burlywood_leaves",
+                    new LeavesBlock(BurlywoodLeafMaterial))
+            .tag(BlockTags.LEAVES, ModTags.Blocks.BURLYWOOD_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
+            .tool("_hoe").flammable(5, 30)
+            .model().cutout().build();
+
+    public static final Block BURLYWOOD_PLANKS = ModRegistry.ofBlock("burlywood_planks",
+                    new Block(BurlywoodTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.PLANKS, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.PLANKS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block BURLYWOOD_STAIRS = ModRegistry.ofBlock("burlywood_stairs",
+                    new StairsBlock(BURLYWOOD_PLANKS.getDefaultState(), BurlywoodTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_STAIRS, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.WOODEN_STAIRS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block BURLYWOOD_SLAB = ModRegistry.ofBlock("burlywood_slab",
+                    new SlabBlock(BurlywoodTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_SLABS, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.WOODEN_SLABS)
+            .flammable(5, 20).fuel(300).drop().build();
+
+    public static final Block BURLYWOOD_PRESSURE_PLATE = ModRegistry.ofBlock("burlywood_pressure_plate",
+                    new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, PassableTreeMaterial, BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_PRESSURE_PLATES, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.BURLYWOOD_BLOCKS)
+            .tagitem(ItemTags.WOODEN_PRESSURE_PLATES)
+            .fuel(300).drop().build();
+    public static final Block BURLYWOOD_BUTTON = ModRegistry.ofBlock("burlywood_button",
+                    new ButtonBlock(PassableTreeMaterial, BlockSetType.OAK, 10, true))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_BUTTONS, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.WOODEN_BUTTONS)
+            .fuel(100).drop().build();
+
+    public static final Block BURLYWOOD_FENCE = ModRegistry.ofBlock("burlywood_fence",
+                    new FenceBlock(BurlywoodTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.WOODEN_FENCES)
+            .flammable(5, 5).fuel(300).drop().build();
+    public static final Block BURLYWOOD_FENCE_GATE = ModRegistry.ofBlock("burlywood_fence_gate",
+                    new FenceGateBlock(BurlywoodTreeMaterial, BURLYWOOD))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, BlockTags.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, ModTags.Blocks.BURLYWOOD_BLOCKS)
+            .tagitem(ItemTags.WOODEN_FENCES, ItemTags.FENCE_GATES)
+            .flammable(5, 5).fuel(300).drop().build();
+
+    public static final Block BURLYWOOD_DOOR = ModRegistry.ofBlock("burlywood_door",
+                    new DoorBlock(copy(Blocks.OAK_DOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_DOORS, ModTags.Blocks.BURLYWOOD_BLOCKS)
+            .tagitem(ItemTags.WOODEN_DOORS)
+            .model(ModRegistry.Models.DOOR).cutout()
+            .drop().build();
+    public static final Block BURLYWOOD_TRAPDOOR = ModRegistry.ofBlock("burlywood_trapdoor",
+                    new TrapdoorBlock(copy(Blocks.OAK_TRAPDOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_TRAPDOORS, ModTags.Blocks.BURLYWOOD_BLOCKS)
+            .tagitem(ItemTags.WOODEN_TRAPDOORS)
+            .model(ModRegistry.Models.TRAPDOOR).cutout()
+            .drop().build();
+    public static final Block BURLYWOOD_SAPLING = ModRegistry.ofBlock("burlywood_sapling",
+                    new SaplingBlock(new BurlywoodSaplingGenerator(), copy(Blocks.OAK_SAPLING).mapColor(MapColor.PURPLE).breakInstantly()))
+            .model(ModRegistry.Models.CROSS).cutout()
+            .tag(BlockTags.SAPLINGS, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.SAPLINGS)
+            .fuel(100).drop().build();
+
+    public static final Block STRIPPED_CRIMSONVEIL_LOG = ModRegistry.ofBlock("stripped_crimsonveil_log",
+                    new PillarBlock(CrimsonveilTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.CRIMSONVEIL_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+    public static final Block CRIMSONVEIL_LOG = ModRegistry.ofBlock("crimsonveil_log",
+                    new PillarBlock(CrimsonveilTreeMaterial))
+            .tool("_axe").strip(STRIPPED_CRIMSONVEIL_LOG)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.CRIMSONVEIL_LOGS)
+            .flammable(5, 5).fuel(300).drop().model(ModRegistry.Models.PILLAR).build();
+
+    public static final Block STRIPPED_CRIMSONVEIL_WOOD = ModRegistry.ofBlock("stripped_crimsonveil_wood",
+                    new PillarBlock(CrimsonveilTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.CRIMSONVEIL_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+    public static final Block CRIMSONVEIL_WOOD = ModRegistry.ofBlock("crimsonveil_wood",
+                    new PillarBlock(CrimsonveilTreeMaterial))
+            .tool("_axe").strip(STRIPPED_CRIMSONVEIL_WOOD)
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.CRIMSONVEIL_LOGS)
+            .flammable(5, 5).fuel(300).drop().model().build();
+
+    public static final Block CRIMSONVEIL_LEAVES = ModRegistry.ofBlock("crimsonveil_leaves",
+                    new LeavesBlock(CrimsonveilLeafMaterial))
+            .tag(BlockTags.LEAVES, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
+            .tool("_hoe").flammable(5, 30)
+            .model().cutout().build();
+
+    public static final Block CRIMSONVEIL_PLANKS = ModRegistry.ofBlock("crimsonveil_planks",
+                    new Block(CrimsonveilTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.PLANKS, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.PLANKS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block CRIMSONVEIL_STAIRS = ModRegistry.ofBlock("crimsonveil_stairs",
+                    new StairsBlock(CRIMSONVEIL_PLANKS.getDefaultState(), CrimsonveilTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_STAIRS, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.WOODEN_STAIRS)
+            .flammable(5, 20).fuel(300).drop().build();
+    public static final Block CRIMSONVEIL_SLAB = ModRegistry.ofBlock("crimsonveil_slab",
+                    new SlabBlock(CrimsonveilTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_SLABS, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.WOODEN_SLABS)
+            .flammable(5, 20).fuel(300).drop().build();
+
+    public static final Block CRIMSONVEIL_PRESSURE_PLATE = ModRegistry.ofBlock("crimsonveil_pressure_plate",
+                    new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, PassableTreeMaterial, BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_PRESSURE_PLATES, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
+            .tagitem(ItemTags.WOODEN_PRESSURE_PLATES)
+            .fuel(300).drop().build();
+    public static final Block CRIMSONVEIL_BUTTON = ModRegistry.ofBlock("crimsonveil_button",
+                    new ButtonBlock(PassableTreeMaterial, BlockSetType.OAK, 10, true))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_BUTTONS, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.WOODEN_BUTTONS)
+            .fuel(100).drop().build();
+
+    public static final Block CRIMSONVEIL_FENCE = ModRegistry.ofBlock("crimsonveil_fence",
+                    new FenceBlock(CrimsonveilTreeMaterial))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.WOODEN_FENCES)
+            .flammable(5, 5).fuel(300).drop().build();
+    public static final Block CRIMSONVEIL_FENCE_GATE = ModRegistry.ofBlock("crimsonveil_fence_gate",
+                    new FenceGateBlock(CrimsonveilTreeMaterial, CRIMSONVEIL))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_FENCES, BlockTags.FENCE_GATES, BlockTags.UNSTABLE_BOTTOM_CENTER, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
+            .tagitem(ItemTags.WOODEN_FENCES, ItemTags.FENCE_GATES)
+            .flammable(5, 5).fuel(300).drop().build();
+
+    public static final Block CRIMSONVEIL_DOOR = ModRegistry.ofBlock("crimsonveil_door",
+                    new DoorBlock(copy(Blocks.OAK_DOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_DOORS, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
+            .tagitem(ItemTags.WOODEN_DOORS)
+            .model(ModRegistry.Models.DOOR).cutout()
+            .drop().build();
+    public static final Block CRIMSONVEIL_TRAPDOOR = ModRegistry.ofBlock("crimsonveil_trapdoor",
+                    new TrapdoorBlock(copy(Blocks.OAK_TRAPDOOR).mapColor(MapColor.TERRACOTTA_YELLOW), BlockSetType.OAK))
+            .tool("_axe")
+            .tag(BlockTags.WOODEN_TRAPDOORS, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
+            .tagitem(ItemTags.WOODEN_TRAPDOORS)
+            .model(ModRegistry.Models.TRAPDOOR).cutout()
+            .drop().build();
+    public static final Block CRIMSONVEIL_SAPLING = ModRegistry.ofBlock("crimsonveil_sapling",
+                    new SaplingBlock(new CrimsonveilSaplingGenerator(), copy(Blocks.OAK_SAPLING).mapColor(MapColor.PURPLE).breakInstantly()))
+            .model(ModRegistry.Models.CROSS).cutout()
+            .tag(BlockTags.SAPLINGS, ModTags.Blocks.CRIMSONVEIL_BLOCKS).tagitem(ItemTags.SAPLINGS)
+            .fuel(100).drop().build();
+    //fluids
+    public static final FlowableFluid DARK_FLOWING_WATER = registerFluid("dark_flowing_water", new DarkWaterFluid.Flowing());
+    public static final FlowableFluid DARK_WATER = registerFluid("dark_water", new DarkWaterFluid.Still());
+
+    private static <T extends Fluid> T registerFluid(String id, T value) {
+        return Registry.register(Registries.FLUID, UnseenWorld.makeID(id), value);
+>>>>>>> Stashed changes
     }
     public static final Block DARK_WATER_BLOCK = ModRegistry.ofBlock("dark_water",
                     new DarkWaterBlock(DARK_WATER,

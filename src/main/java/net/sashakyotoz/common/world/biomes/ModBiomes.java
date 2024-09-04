@@ -30,12 +30,22 @@ public class ModBiomes {
             UnseenWorld.makeID("greenish_valley"));
     public static final RegistryKey<Biome> GREENISH_MEADOW = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("greenish_meadow"));
+<<<<<<< Updated upstream
+=======
+    public static final RegistryKey<Biome> BURLYWOOD_JUNGLE = RegistryKey.of(RegistryKeys.BIOME,
+            UnseenWorld.makeID("burlywood_jungle"));
+>>>>>>> Stashed changes
     public static final RegistryKey<Biome> TEALIVY_VALLEY = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("tealivy_valley"));
     public static final RegistryKey<Biome> GRIZZLY_THICKET  = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("grizzly_thicket"));
     public static final RegistryKey<Biome> CRIMSONVEIL_WOODS  = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("crimsonveil_woods"));
+<<<<<<< Updated upstream
+=======
+    public static final RegistryKey<Biome> OLD_GROWTH_CRIMSONVEIL_WOODS  = RegistryKey.of(RegistryKeys.BIOME,
+            UnseenWorld.makeID("old_growth_crimsonveil_woods"));
+>>>>>>> Stashed changes
     public static final RegistryKey<Biome> DARK_WASTELAND  = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("dark_wasteland"));
     public static final RegistryKey<Biome> CRIMSONVEIL_PLATEAU  = RegistryKey.of(RegistryKeys.BIOME,
@@ -50,6 +60,11 @@ public class ModBiomes {
             UnseenWorld.makeID("tanzanite_caves"));
     public static final RegistryKey<Biome> DARK_RIVER  = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("dark_river"));
+<<<<<<< Updated upstream
+=======
+    public static final RegistryKey<Biome> LUKEWARM_DARK_RIVER  = RegistryKey.of(RegistryKeys.BIOME,
+            UnseenWorld.makeID("lukewarm_dark_river"));
+>>>>>>> Stashed changes
 
     public static void boostrap(Registerable<Biome> context) {
         context.register(AMETHYST_FOREST, amethystBiome(context));
@@ -57,10 +72,18 @@ public class ModBiomes {
         context.register(DARK_OCEAN, ocean(context));
         context.register(DARK_LIFELESS_OCEAN, ocean(context));
         context.register(DARK_RIVER, ocean(context));
+<<<<<<< Updated upstream
+=======
+        context.register(LUKEWARM_DARK_RIVER, ocean(context));
+>>>>>>> Stashed changes
         context.register(GREYNISH_SHORE, ocean(context));
         context.register(GRIZZLY_THICKET, theDarkness(context));
         context.register(GRIZZLY_HIGHLANDS, theDarkness(context));
         context.register(CRIMSONVEIL_WOODS, theDarkness(context));
+<<<<<<< Updated upstream
+=======
+        context.register(OLD_GROWTH_CRIMSONVEIL_WOODS, theDarkness(context));
+>>>>>>> Stashed changes
         context.register(THE_DARKNESS, theDarkness(context));
         context.register(CRIMSONVEIL_PLATEAU, theDarkness(context));
         context.register(DARK_WASTELAND, theDarkness(context));
@@ -68,6 +91,10 @@ public class ModBiomes {
         context.register(TEALIVY_HIGHLANDS, tealivyBiome(context));
         context.register(GREENISH_VALLEY,greenishBiome(context));
         context.register(GREENISH_MEADOW,greenishBiome(context));
+<<<<<<< Updated upstream
+=======
+        context.register(BURLYWOOD_JUNGLE,greenishBiome(context));
+>>>>>>> Stashed changes
         context.register(SHINY_CAVERNS,cavernBiome(context));
         context.register(TANZANITE_CAVES,cavernBiome(context));
     }
@@ -90,11 +117,19 @@ public class ModBiomes {
                 .effects((new BiomeEffects.Builder())
                         .waterColor(13061821)
                         .waterFogColor(13061821)
+<<<<<<< Updated upstream
                         .skyColor(13061821)
                         .grassColor(13061821)
                         .foliageColor(13061821)
                         .moodSound(BiomeMoodSound.CAVE)
                         .fogColor(13061821)
+=======
+                        .skyColor(4605011)
+                        .grassColor(13061821)
+                        .foliageColor(13061821)
+                        .moodSound(BiomeMoodSound.CAVE)
+                        .fogColor(4605011)
+>>>>>>> Stashed changes
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
                 .build();
     }
@@ -113,10 +148,17 @@ public class ModBiomes {
                 .effects((new BiomeEffects.Builder())
                         .waterColor(0x000)
                         .waterFogColor(0x000)
+<<<<<<< Updated upstream
                         .skyColor(0x000)
                         .grassColor(0x000)
                         .foliageColor(0x000)
                         .fogColor(0x000)
+=======
+                        .skyColor(4605011)
+                        .grassColor(0x000)
+                        .foliageColor(0x000)
+                        .fogColor(4605011)
+>>>>>>> Stashed changes
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_UNDER_WATER.value()))).build())
                 .build();
     }
@@ -135,10 +177,17 @@ public class ModBiomes {
                 .effects((new BiomeEffects.Builder())
                         .waterColor(0x000)
                         .waterFogColor(0x000)
+<<<<<<< Updated upstream
                         .skyColor(0x000)
                         .grassColor(0x000)
                         .foliageColor(0x000)
                         .fogColor(0x000)
+=======
+                        .skyColor(4605011)
+                        .grassColor(0x000)
+                        .foliageColor(0x000)
+                        .fogColor(4605011)
+>>>>>>> Stashed changes
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_END.value()))).build())
                 .build();
     }
@@ -157,10 +206,17 @@ public class ModBiomes {
                 .effects((new BiomeEffects.Builder())
                         .waterColor(5013401)
                         .waterFogColor(5013401)
+<<<<<<< Updated upstream
                         .skyColor(5013401)
                         .grassColor(5013401)
                         .foliageColor(5013401)
                         .fogColor(5013401)
+=======
+                        .skyColor(4605011)
+                        .grassColor(5013401)
+                        .foliageColor(5013401)
+                        .fogColor(4605011)
+>>>>>>> Stashed changes
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_MENU.value()))).build())
                 .build();
     }
@@ -179,10 +235,17 @@ public class ModBiomes {
                 .effects((new BiomeEffects.Builder())
                         .waterColor(6717235)
                         .waterFogColor(6717235)
+<<<<<<< Updated upstream
                         .skyColor(6717235)
                         .grassColor(6717235)
                         .foliageColor(6717235)
                         .fogColor(6717235)
+=======
+                        .skyColor(4605011)
+                        .grassColor(6717235)
+                        .foliageColor(6717235)
+                        .fogColor(4605011)
+>>>>>>> Stashed changes
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_MENU.value()))).build())
                 .build();
     }
@@ -201,10 +264,17 @@ public class ModBiomes {
                 .effects((new BiomeEffects.Builder())
                         .waterColor(6579300)
                         .waterFogColor(6579300)
+<<<<<<< Updated upstream
                         .skyColor(6579300)
                         .grassColor(6579300)
                         .foliageColor(6579300)
                         .fogColor(6579300)
+=======
+                        .skyColor(4605011)
+                        .grassColor(6579300)
+                        .foliageColor(6579300)
+                        .fogColor(4605011)
+>>>>>>> Stashed changes
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_OVERWORLD_LUSH_CAVES.value()))).build())
                 .build();
     }

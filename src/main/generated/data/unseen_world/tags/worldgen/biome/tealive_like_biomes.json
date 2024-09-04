@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "unseen_world:tealivy_valley",
+<<<<<<< Updated upstream
     "unseen_world:tealivy_valley"
+=======
+    "unseen_world:tealivy_highlands"
+>>>>>>> Stashed changes
   ]
 }

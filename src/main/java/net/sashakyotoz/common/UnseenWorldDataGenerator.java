@@ -24,6 +24,10 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
 		pack.addProvider(ModBlockTagProvider::new);
+<<<<<<< Updated upstream
+=======
+		pack.addProvider(ModFluidTagProvider::new);
+>>>>>>> Stashed changes
 		pack.addProvider(ModBiomeTagProvider::new);
 		pack.addProvider(ModItemTagProvider::new);
 		pack.addProvider(ModLootTableProvider::new);

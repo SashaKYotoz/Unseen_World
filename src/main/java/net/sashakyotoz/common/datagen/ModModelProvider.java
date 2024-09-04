@@ -11,6 +11,10 @@ import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
+<<<<<<< Updated upstream
+=======
+import net.sashakyotoz.common.items.ModItems;
+>>>>>>> Stashed changes
 
 import java.util.Arrays;
 import java.util.List;
@@ -77,8 +81,21 @@ public class ModModelProvider extends FabricModelProvider {
                 }
             }
         }
+<<<<<<< Updated upstream
 //        generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
 //                ModBlocks.AMETHYST_HANGING_SIGN, ModBlocks.AMETHYST_WALL_HANGING_SIGN);
+=======
+        generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
+                ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN);
+        generator.registerHangingSign(ModBlocks.STRIPPED_GRIZZLY_LOG,
+                ModItems.GRIZZLY_HANGING_SIGN, ModItems.GRIZZLY_WALL_HANGING_SIGN);
+        generator.registerHangingSign(ModBlocks.STRIPPED_TEALIVE_LOG,
+                ModItems.TEALIVE_HANGING_SIGN, ModItems.TEALIVE_WALL_HANGING_SIGN);
+        generator.registerHangingSign(ModBlocks.STRIPPED_BURLYWOOD_LOG,
+                ModItems.BURLYWOOD_HANGING_SIGN, ModItems.BURLYWOOD_WALL_HANGING_SIGN);
+        generator.registerHangingSign(ModBlocks.STRIPPED_CRIMSONVEIL_LOG,
+                ModItems.CRIMSONVEIL_HANGING_SIGN, ModItems.CRIMSONVEIL_WALL_HANGING_SIGN);
+>>>>>>> Stashed changes
     }
 
     @Override

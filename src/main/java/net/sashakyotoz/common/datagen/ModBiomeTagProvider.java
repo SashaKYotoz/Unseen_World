@@ -30,10 +30,18 @@ public class ModBiomeTagProvider extends VanillaBiomeTagProvider {
         );
         this.getOrCreateTagBuilder(ModTags.Biomes.TEALIVE_LIKE_BIOMES).add(
                 ModBiomes.TEALIVY_VALLEY,
+<<<<<<< Updated upstream
                 ModBiomes.TEALIVY_VALLEY
         );
         this.getOrCreateTagBuilder(ModTags.Biomes.DARK_WATERFUL_BIOMES).add(
                 ModBiomes.DARK_RIVER,
+=======
+                ModBiomes.TEALIVY_HIGHLANDS
+        );
+        this.getOrCreateTagBuilder(ModTags.Biomes.DARK_WATERFUL_BIOMES).add(
+                ModBiomes.DARK_RIVER,
+                ModBiomes.LUKEWARM_DARK_RIVER,
+>>>>>>> Stashed changes
                 ModBiomes.DARK_OCEAN,
                 ModBiomes.DARK_LIFELESS_OCEAN
         );

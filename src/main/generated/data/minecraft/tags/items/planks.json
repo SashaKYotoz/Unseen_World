@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
+<<<<<<< Updated upstream
     "unseen_world:amethyst_planks"
+=======
+    "unseen_world:amethyst_planks",
+    "unseen_world:grizzly_planks",
+    "unseen_world:tealive_planks",
+    "unseen_world:burlywood_planks",
+    "unseen_world:crimsonveil_planks"
+>>>>>>> Stashed changes
   ]
 }

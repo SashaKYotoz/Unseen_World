@@ -6,6 +6,14 @@
     "unseen_world:amethyst_grass_block",
     "unseen_world:grimwood_grass_block",
     "unseen_world:amethyst_leaves",
+<<<<<<< Updated upstream
     "unseen_world:hanging_amethyst_leaves"
+=======
+    "unseen_world:hanging_amethyst_leaves",
+    "unseen_world:grizzly_leaves",
+    "unseen_world:tealive_leaves",
+    "unseen_world:burlywood_leaves",
+    "unseen_world:crimsonveil_leaves"
+>>>>>>> Stashed changes
   ]
 }

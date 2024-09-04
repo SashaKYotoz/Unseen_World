@@ -9,6 +9,10 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.items.ModItemGroups;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.ModWorldGeneration;
+<<<<<<< Updated upstream
+=======
+import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
+>>>>>>> Stashed changes
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +29,20 @@ public class UnseenWorld implements ModInitializer {
 				.tintColor(0x000)
 				.registerPortal();
 		ModItems.register();
+<<<<<<< Updated upstream
 		ModBlocks.register();
 		ModItemGroups.register();
 		UnseenWorldDataGenerator.registerBurnable();
 		UnseenWorldDataGenerator.registerFuels();
 		UnseenWorldDataGenerator.registerStripped();
+=======
+		ModItemGroups.register();
+		ModBlocks.register();
+		UnseenWorldDataGenerator.registerBurnable();
+		UnseenWorldDataGenerator.registerFuels();
+		UnseenWorldDataGenerator.registerStripped();
+		ModTreePlacerTypes.register();
+>>>>>>> Stashed changes
 		ModWorldGeneration.register();
 	}
 	public static Identifier makeID(String id) {

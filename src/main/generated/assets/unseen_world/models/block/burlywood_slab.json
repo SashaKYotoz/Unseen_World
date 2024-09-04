@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "unseen_world:block/burlywood_planks",
+    "side": "unseen_world:block/burlywood_planks",
+    "top": "unseen_world:block/burlywood_planks"
+  }
+}

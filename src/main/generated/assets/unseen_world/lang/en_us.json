@@ -7,16 +7,57 @@
   "block.unseen_world.amethyst_fence": "Amethyst Fence",
   "block.unseen_world.amethyst_fence_gate": "Amethyst Fence Gate",
   "block.unseen_world.amethyst_grass_block": "Amethyst Grass Block",
+<<<<<<< Updated upstream
+=======
+  "block.unseen_world.amethyst_hanging_sign": "Amethyst Hanging Sign",
+>>>>>>> Stashed changes
   "block.unseen_world.amethyst_leaves": "Amethyst Leaves",
   "block.unseen_world.amethyst_log": "Amethyst Log",
   "block.unseen_world.amethyst_planks": "Amethyst Planks",
   "block.unseen_world.amethyst_pressure_plate": "Amethyst Pressure Plate",
   "block.unseen_world.amethyst_sapling": "Amethyst Sapling",
+<<<<<<< Updated upstream
+=======
+  "block.unseen_world.amethyst_sign": "Amethyst Sign",
+>>>>>>> Stashed changes
   "block.unseen_world.amethyst_slab": "Amethyst Slab",
   "block.unseen_world.amethyst_stairs": "Amethyst Stairs",
   "block.unseen_world.amethyst_trapdoor": "Amethyst Trapdoor",
   "block.unseen_world.amethyst_wood": "Amethyst Wood",
   "block.unseen_world.ashen_ooze": "Ashen Ooze",
+<<<<<<< Updated upstream
+=======
+  "block.unseen_world.burlywood_button": "Burlywood Button",
+  "block.unseen_world.burlywood_door": "Burlywood Door",
+  "block.unseen_world.burlywood_fence": "Burlywood Fence",
+  "block.unseen_world.burlywood_fence_gate": "Burlywood Fence Gate",
+  "block.unseen_world.burlywood_hanging_sign": "Burlywood Hanging Sign",
+  "block.unseen_world.burlywood_leaves": "Burlywood Leaves",
+  "block.unseen_world.burlywood_log": "Burlywood Log",
+  "block.unseen_world.burlywood_planks": "Burlywood Planks",
+  "block.unseen_world.burlywood_pressure_plate": "Burlywood Pressure Plate",
+  "block.unseen_world.burlywood_sapling": "Burlywood Sapling",
+  "block.unseen_world.burlywood_sign": "Burlywood Sign",
+  "block.unseen_world.burlywood_slab": "Burlywood Slab",
+  "block.unseen_world.burlywood_stairs": "Burlywood Stairs",
+  "block.unseen_world.burlywood_trapdoor": "Burlywood Trapdoor",
+  "block.unseen_world.burlywood_wood": "Burlywood Wood",
+  "block.unseen_world.crimsonveil_button": "Crimsonveil Button",
+  "block.unseen_world.crimsonveil_door": "Crimsonveil Door",
+  "block.unseen_world.crimsonveil_fence": "Crimsonveil Fence",
+  "block.unseen_world.crimsonveil_fence_gate": "Crimsonveil Fence Gate",
+  "block.unseen_world.crimsonveil_hanging_sign": "Crimsonveil Hanging Sign",
+  "block.unseen_world.crimsonveil_leaves": "Crimsonveil Leaves",
+  "block.unseen_world.crimsonveil_log": "Crimsonveil Log",
+  "block.unseen_world.crimsonveil_planks": "Crimsonveil Planks",
+  "block.unseen_world.crimsonveil_pressure_plate": "Crimsonveil Pressure Plate",
+  "block.unseen_world.crimsonveil_sapling": "Crimsonveil Sapling",
+  "block.unseen_world.crimsonveil_sign": "Crimsonveil Sign",
+  "block.unseen_world.crimsonveil_slab": "Crimsonveil Slab",
+  "block.unseen_world.crimsonveil_stairs": "Crimsonveil Stairs",
+  "block.unseen_world.crimsonveil_trapdoor": "Crimsonveil Trapdoor",
+  "block.unseen_world.crimsonveil_wood": "Crimsonveil Wood",
+>>>>>>> Stashed changes
   "block.unseen_world.dark_currantslate": "Dark Currantslate",
   "block.unseen_world.dark_currantslate_bricks": "Dark Currantslate Bricks",
   "block.unseen_world.dark_currantslate_bricks_slab": "Dark Currantslate Bricks Slab",
@@ -37,6 +78,24 @@
   "block.unseen_world.glaciemite_wall": "Glaciemite Wall",
   "block.unseen_world.glimmergrain_sand": "Glimmergrain Sand",
   "block.unseen_world.grimwood_grass_block": "Grimwood Grass Block",
+<<<<<<< Updated upstream
+=======
+  "block.unseen_world.grizzly_button": "Grizzly Button",
+  "block.unseen_world.grizzly_door": "Grizzly Door",
+  "block.unseen_world.grizzly_fence": "Grizzly Fence",
+  "block.unseen_world.grizzly_fence_gate": "Grizzly Fence Gate",
+  "block.unseen_world.grizzly_hanging_sign": "Grizzly Hanging Sign",
+  "block.unseen_world.grizzly_leaves": "Grizzly Leaves",
+  "block.unseen_world.grizzly_log": "Grizzly Log",
+  "block.unseen_world.grizzly_planks": "Grizzly Planks",
+  "block.unseen_world.grizzly_pressure_plate": "Grizzly Pressure Plate",
+  "block.unseen_world.grizzly_sapling": "Grizzly Sapling",
+  "block.unseen_world.grizzly_sign": "Grizzly Sign",
+  "block.unseen_world.grizzly_slab": "Grizzly Slab",
+  "block.unseen_world.grizzly_stairs": "Grizzly Stairs",
+  "block.unseen_world.grizzly_trapdoor": "Grizzly Trapdoor",
+  "block.unseen_world.grizzly_wood": "Grizzly Wood",
+>>>>>>> Stashed changes
   "block.unseen_world.hanging_amethyst_leaves": "Hanging Amethyst Leaves",
   "block.unseen_world.nightdark_grass_block": "Nightdark Grass Block",
   "block.unseen_world.polished_tanzanite": "Polished Tanzanite",
@@ -47,7 +106,34 @@
   "block.unseen_world.red_titanium_ore_in_glaciemite": "Red Titanium Ore In Glaciemite",
   "block.unseen_world.stripped_amethyst_log": "Stripped Amethyst Log",
   "block.unseen_world.stripped_amethyst_wood": "Stripped Amethyst Wood",
+<<<<<<< Updated upstream
   "block.unseen_world.tanzanite_block": "Tanzanite Block",
+=======
+  "block.unseen_world.stripped_burlywood_log": "Stripped Burlywood Log",
+  "block.unseen_world.stripped_burlywood_wood": "Stripped Burlywood Wood",
+  "block.unseen_world.stripped_crimsonveil_log": "Stripped Crimsonveil Log",
+  "block.unseen_world.stripped_crimsonveil_wood": "Stripped Crimsonveil Wood",
+  "block.unseen_world.stripped_grizzly_log": "Stripped Grizzly Log",
+  "block.unseen_world.stripped_grizzly_wood": "Stripped Grizzly Wood",
+  "block.unseen_world.stripped_tealive_log": "Stripped Tealive Log",
+  "block.unseen_world.stripped_tealive_wood": "Stripped Tealive Wood",
+  "block.unseen_world.tanzanite_block": "Tanzanite Block",
+  "block.unseen_world.tealive_button": "Tealive Button",
+  "block.unseen_world.tealive_door": "Tealive Door",
+  "block.unseen_world.tealive_fence": "Tealive Fence",
+  "block.unseen_world.tealive_fence_gate": "Tealive Fence Gate",
+  "block.unseen_world.tealive_hanging_sign": "Tealive Hanging Sign",
+  "block.unseen_world.tealive_leaves": "Tealive Leaves",
+  "block.unseen_world.tealive_log": "Tealive Log",
+  "block.unseen_world.tealive_planks": "Tealive Planks",
+  "block.unseen_world.tealive_pressure_plate": "Tealive Pressure Plate",
+  "block.unseen_world.tealive_sapling": "Tealive Sapling",
+  "block.unseen_world.tealive_sign": "Tealive Sign",
+  "block.unseen_world.tealive_slab": "Tealive Slab",
+  "block.unseen_world.tealive_stairs": "Tealive Stairs",
+  "block.unseen_world.tealive_trapdoor": "Tealive Trapdoor",
+  "block.unseen_world.tealive_wood": "Tealive Wood",
+>>>>>>> Stashed changes
   "block.unseen_world.tealivy_grass_block": "Tealivy Grass Block",
   "block.unseen_world.unseenium_ingot_block": "Unseenium Ingot Block",
   "block.unseen_world.unseenium_ore_in_dark_currantslate": "Unseenium Ore In Dark Currantslate",
@@ -62,5 +148,9 @@
   "item.unseen_world.red_titanium_ingot": "Red titanium ingot",
   "item.unseen_world.unseenium_ingot": "Unseenium ingot",
   "itemgroup.unseen_world.blocks": "Unseen World: Blocks",
+<<<<<<< Updated upstream
   "itemgroup.unseen_world.equipment": "Unseen World: Equipment"
+=======
+  "itemgroup.unseen_world.items": "Unseen World: Items"
+>>>>>>> Stashed changes
 }

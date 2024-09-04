@@ -2,7 +2,11 @@
   "carvers": {},
   "downfall": 0.0,
   "effects": {
+<<<<<<< Updated upstream
     "fog_color": 13061821,
+=======
+    "fog_color": 4605011,
+>>>>>>> Stashed changes
     "foliage_color": 13061821,
     "grass_color": 13061821,
     "mood_sound": {
@@ -19,7 +23,11 @@
         "sound_id": "minecraft:music.nether.crimson_forest"
       }
     },
+<<<<<<< Updated upstream
     "sky_color": 13061821,
+=======
+    "sky_color": 4605011,
+>>>>>>> Stashed changes
     "water_color": 13061821,
     "water_fog_color": 13061821
   },

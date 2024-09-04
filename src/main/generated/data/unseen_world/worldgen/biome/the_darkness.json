@@ -2,7 +2,11 @@
   "carvers": {},
   "downfall": 0.0,
   "effects": {
+<<<<<<< Updated upstream
     "fog_color": 0,
+=======
+    "fog_color": 4605011,
+>>>>>>> Stashed changes
     "foliage_color": 0,
     "grass_color": 0,
     "music": {
@@ -13,7 +17,11 @@
         "sound_id": "minecraft:music.end"
       }
     },
+<<<<<<< Updated upstream
     "sky_color": 0,
+=======
+    "sky_color": 4605011,
+>>>>>>> Stashed changes
     "water_color": 0,
     "water_fog_color": 0
   },

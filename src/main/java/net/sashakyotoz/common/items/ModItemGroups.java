@@ -13,7 +13,11 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 
 public class ModItemGroups {
     public static final ItemGroup UNSEEN_WORLD_EQUIPMENT = register("equipment",
+<<<<<<< Updated upstream
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.unseen_world.equipment"))
+=======
+            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.unseen_world.items"))
+>>>>>>> Stashed changes
                     .icon(() -> new ItemStack(ModItems.ECLIPSE_KEYSTONE))
                     .entries((displayContext, entries) -> {
                         ModRegistry.ITEMS.forEach(item -> {
@@ -35,9 +39,24 @@ public class ModItemGroups {
 
     public static void register() {
         UnseenWorld.log("Registering ItemGroups for modid : " + UnseenWorld.MOD_ID);
+<<<<<<< Updated upstream
 //        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
 //            entries.addAfter(Items.WARPED_HANGING_SIGN, ModItems.AMETHYST_SIGN);
 //            entries.addAfter(ModItems.AMETHYST_SIGN, ModItems.AMETHYST_HANGING_SIGN);
 //        });
+=======
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
+            entries.addAfter(Items.WARPED_HANGING_SIGN, ModItems.AMETHYST_SIGN_ITEM);
+            entries.addAfter(ModItems.AMETHYST_SIGN, ModItems.AMETHYST_HANGING_SIGN_ITEM);
+            entries.addAfter(ModItems.AMETHYST_HANGING_SIGN_ITEM, ModItems.GRIZZLY_SIGN_ITEM);
+            entries.addAfter(ModItems.GRIZZLY_SIGN_ITEM, ModItems.GRIZZLY_HANGING_SIGN_ITEM);
+            entries.addAfter(ModItems.GRIZZLY_HANGING_SIGN_ITEM, ModItems.TEALIVE_SIGN_ITEM);
+            entries.addAfter(ModItems.TEALIVE_SIGN_ITEM, ModItems.TEALIVE_HANGING_SIGN_ITEM);
+            entries.addAfter(ModItems.TEALIVE_HANGING_SIGN_ITEM, ModItems.BURLYWOOD_SIGN_ITEM);
+            entries.addAfter(ModItems.BURLYWOOD_SIGN_ITEM, ModItems.BURLYWOOD_HANGING_SIGN_ITEM);
+            entries.addAfter(ModItems.BURLYWOOD_HANGING_SIGN_ITEM, ModItems.CRIMSONVEIL_SIGN_ITEM);
+            entries.addAfter(ModItems.CRIMSONVEIL_SIGN_ITEM, ModItems.CRIMSONVEIL_HANGING_SIGN_ITEM);
+        });
+>>>>>>> Stashed changes
     }
 }

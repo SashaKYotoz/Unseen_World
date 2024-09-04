@@ -3,7 +3,13 @@
   "package": "net.sashakyotoz.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+<<<<<<< Updated upstream
     "BlockEntityTypeMixin"
+=======
+    "BlockEntityTypeMixin",
+    "access.FoliagePlacerTypeInvoker",
+    "access.TrunkPlacerTypeInvoker"
+>>>>>>> Stashed changes
   ],
   "injectors": {
     "defaultRequire": 1

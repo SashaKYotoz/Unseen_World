@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_burlywood_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:burlywood_planks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:burlywood_button_from_burlywood_planks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_burlywood_planks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:burlywood_button_from_burlywood_planks"
+    ]
+  },
+  "sends_telemetry_event": false
+}

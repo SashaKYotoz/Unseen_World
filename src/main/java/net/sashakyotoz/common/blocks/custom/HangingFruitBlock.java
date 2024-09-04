@@ -3,6 +3,10 @@ package net.sashakyotoz.common.blocks.custom;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Fertilizable;
+<<<<<<< Updated upstream
+=======
+import net.minecraft.block.ShapeContext;
+>>>>>>> Stashed changes
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemConvertible;
@@ -17,9 +21,17 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
+<<<<<<< Updated upstream
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.sashakyotoz.common.blocks.ModBlocks;
+=======
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.tags.ModTags;
+>>>>>>> Stashed changes
 
 public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable {
     public ItemConvertible drop;
@@ -29,9 +41,13 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
     public HangingFruitBlock(Settings settings, ItemConvertible drop, TagKey<Block> growable_on, VoxelShape shape) {
         super(settings.ticksRandomly(), growable_on, shape);
         this.drop = drop;
+<<<<<<< Updated upstream
         this.setDefaultState(this.getDefaultState()
                 .with(HAS_FRUIT, false)
         );
+=======
+        this.setDefaultState(this.getDefaultState().with(HAS_FRUIT, false));
+>>>>>>> Stashed changes
     }
 
     @Override
@@ -41,13 +57,29 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
 
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+<<<<<<< Updated upstream
         if (state.get(HAS_FRUIT)) return;
 
+=======
+>>>>>>> Stashed changes
         if (random.nextDouble() < 0.05 && this.canGrow(world, random, pos, state))
             this.grow(world, random, pos, state);
     }
 
     @Override
+<<<<<<< Updated upstream
+=======
+    public boolean hasRandomTicks(BlockState state) {
+        return !state.get(HAS_FRUIT);
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return state.get(HAS_FRUIT) ? Block.createCuboidShape(0, 8, 0, 16, 16, 16) : super.getOutlineShape(state, world, pos, context);
+    }
+
+    @Override
+>>>>>>> Stashed changes
     public void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack tool, boolean dropExperience) {
         if (state.get(HAS_FRUIT))
             world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop)));
@@ -57,7 +89,11 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (state.get(HAS_FRUIT)) {
+<<<<<<< Updated upstream
             world.spawnEntity(new ItemEntity(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, new ItemStack(this.drop)));
+=======
+            world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(this.drop)));
+>>>>>>> Stashed changes
             world.setBlockState(pos, state.with(HAS_FRUIT, false));
 
             return ActionResult.SUCCESS;
@@ -78,6 +114,7 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
 
     @Override
     public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+<<<<<<< Updated upstream
         if (random.nextInt(3) == 0)
             world.setBlockState(pos, state.with(HAS_FRUIT, true));
 
@@ -85,5 +122,13 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
             world.setBlockState(pos.down(), this.getDefaultState());
         else if (state.isOf(ModBlocks.HANGING_AMETHYST_LEAVES) && random.nextInt(5) == 0 && world.getBlockState(pos.down()).isAir())
             world.setBlockState(pos.down(), ModBlocks.HANGING_AMETHYST_LEAVES.getDefaultState().with(HAS_FRUIT,true));
+=======
+        if (random.nextInt(3) == 0 && world.getBlockState(pos.down()).isAir())
+            world.setBlockState(pos, state.with(HAS_FRUIT, true));
+
+        if (state.isIn(ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.down()).isAir())
+            world.setBlockState(pos.down(), random.nextBoolean() ? ModBlocks.HANGING_AMETHYST_LEAVES.getDefaultState().with(HAS_FRUIT, true) :
+                    this.getDefaultState());
+>>>>>>> Stashed changes
     }
 }

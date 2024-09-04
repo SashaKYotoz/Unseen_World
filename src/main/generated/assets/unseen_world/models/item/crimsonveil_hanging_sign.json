@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "unseen_world:item/crimsonveil_hanging_sign"
+  }
+}

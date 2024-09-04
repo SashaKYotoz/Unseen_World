@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:stripped_crimsonveil_log",
+    "unseen_world:crimsonveil_log",
+    "unseen_world:stripped_crimsonveil_wood",
+    "unseen_world:crimsonveil_wood"
+  ]
+}

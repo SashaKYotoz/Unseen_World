@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
+<<<<<<< Updated upstream
     "unseen_world:amethyst_wall_sign"
+=======
+    "unseen_world:amethyst_wall_sign",
+    "unseen_world:grizzly_wall_sign",
+    "unseen_world:tealive_wall_sign",
+    "unseen_world:burlywood_wall_sign",
+    "unseen_world:crimsonveil_wall_sign"
+>>>>>>> Stashed changes
   ]
 }
