@@ -3,15 +3,21 @@
   "package": "net.sashakyotoz.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-<<<<<<< Updated upstream
-    "BlockEntityTypeMixin"
-=======
     "BlockEntityTypeMixin",
+    "PlayerMixin",
+    "ServerWorldMixin",
     "access.FoliagePlacerTypeInvoker",
     "access.TrunkPlacerTypeInvoker"
->>>>>>> Stashed changes
   ],
   "injectors": {
     "defaultRequire": 1
-	}
+  },
+  "client": [
+    "ArmorFeatureRendererMixin",
+    "BossBarHudMixin",
+    "BuiltinModelItemRendererMixin",
+    "DimensionEffectsMixin",
+    "HeldItemRendererMixin",
+    "LightmapTextureManagerMixin"
+  ]
 }

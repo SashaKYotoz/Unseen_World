@@ -1,9 +1,6 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:grizzly_sign",
-    "unseen_world:grizzly_hanging_sign",
-    "unseen_world:grizzly_wall_hanging_sign",
     "unseen_world:grizzly_log",
     "unseen_world:stripped_grizzly_wood",
     "unseen_world:grizzly_wood",
@@ -17,6 +14,9 @@
     "unseen_world:grizzly_fence_gate",
     "unseen_world:grizzly_door",
     "unseen_world:grizzly_trapdoor",
-    "unseen_world:grizzly_sapling"
+    "unseen_world:grizzly_sapling",
+    "unseen_world:grizzly_sign",
+    "unseen_world:grizzly_hanging_sign",
+    "unseen_world:grizzly_wall_hanging_sign"
   ]
 }

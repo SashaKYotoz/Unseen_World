@@ -1,14 +1,10 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_hanging_sign"
-=======
     "unseen_world:amethyst_hanging_sign",
     "unseen_world:grizzly_hanging_sign",
     "unseen_world:tealive_hanging_sign",
     "unseen_world:burlywood_hanging_sign",
     "unseen_world:crimsonveil_hanging_sign"
->>>>>>> Stashed changes
   ]
 }

@@ -1,12 +1,6 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
-=======
-    "unseen_world:amethyst_sign",
-    "unseen_world:amethyst_hanging_sign",
-    "unseen_world:amethyst_wall_hanging_sign",
->>>>>>> Stashed changes
     "unseen_world:amethyst_log",
     "unseen_world:stripped_amethyst_wood",
     "unseen_world:amethyst_wood",
@@ -21,12 +15,9 @@
     "unseen_world:amethyst_fence_gate",
     "unseen_world:amethyst_door",
     "unseen_world:amethyst_trapdoor",
-<<<<<<< Updated upstream
+    "unseen_world:amethyst_sapling",
     "unseen_world:amethyst_sign",
     "unseen_world:amethyst_hanging_sign",
-    "unseen_world:amethyst_wall_hanging_sign",
-=======
->>>>>>> Stashed changes
-    "unseen_world:amethyst_sapling"
+    "unseen_world:amethyst_wall_hanging_sign"
   ]
 }

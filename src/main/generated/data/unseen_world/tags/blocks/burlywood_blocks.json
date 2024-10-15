@@ -1,9 +1,6 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:burlywood_sign",
-    "unseen_world:burlywood_hanging_sign",
-    "unseen_world:burlywood_wall_hanging_sign",
     "unseen_world:burlywood_log",
     "unseen_world:stripped_burlywood_wood",
     "unseen_world:burlywood_wood",
@@ -17,6 +14,9 @@
     "unseen_world:burlywood_fence_gate",
     "unseen_world:burlywood_door",
     "unseen_world:burlywood_trapdoor",
-    "unseen_world:burlywood_sapling"
+    "unseen_world:burlywood_sapling",
+    "unseen_world:burlywood_sign",
+    "unseen_world:burlywood_hanging_sign",
+    "unseen_world:burlywood_wall_hanging_sign"
   ]
 }

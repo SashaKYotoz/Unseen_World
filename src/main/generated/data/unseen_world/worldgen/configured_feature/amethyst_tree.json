@@ -11,7 +11,7 @@
               "data": {
                 "Name": "unseen_world:hanging_amethyst_leaves",
                 "Properties": {
-                  "has_fruit": "false"
+                  "has_fruit": "true"
                 }
               },
               "weight": 1
@@ -37,13 +37,7 @@
       }
     },
     "foliage_placer": {
-<<<<<<< Updated upstream
-      "type": "minecraft:random_spread_foliage_placer",
-      "foliage_height": 2,
-      "leaf_placement_attempts": 52,
-=======
       "type": "minecraft:acacia_foliage_placer",
->>>>>>> Stashed changes
       "offset": {
         "type": "minecraft:uniform",
         "value": {
@@ -54,12 +48,8 @@
       "radius": {
         "type": "minecraft:uniform",
         "value": {
-<<<<<<< Updated upstream
-          "max_inclusive": 4,
-=======
-          "max_inclusive": 3,
->>>>>>> Stashed changes
-          "min_inclusive": 2
+          "max_inclusive": 2,
+          "min_inclusive": 1
         }
       }
     },
@@ -79,80 +69,14 @@
     "minimum_size": {
       "type": "minecraft:two_layers_feature_size",
       "limit": 1,
-      "lower_size": 1,
+      "lower_size": 2,
       "upper_size": 1
     },
-<<<<<<< Updated upstream
-    "root_placer": {
-      "type": "minecraft:mangrove_root_placer",
-      "above_root_placement": {
-        "above_root_placement_chance": 0.25,
-        "above_root_provider": {
-          "type": "minecraft:simple_state_provider",
-          "state": {
-            "Name": "unseen_world:amethyst_log",
-            "Properties": {
-              "axis": "y"
-            }
-          }
-        }
-      },
-      "mangrove_root_placement": {
-        "can_grow_through": "#minecraft:mangrove_roots_can_grow_through",
-        "max_root_length": 3,
-        "max_root_width": 2,
-        "muddy_roots_in": [
-          "minecraft:mud",
-          "minecraft:muddy_mangrove_roots"
-        ],
-        "muddy_roots_provider": {
-          "type": "minecraft:simple_state_provider",
-          "state": {
-            "Name": "minecraft:muddy_mangrove_roots",
-            "Properties": {
-              "axis": "y"
-            }
-          }
-        },
-        "random_skew_chance": 0.2
-      },
-      "root_provider": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "unseen_world:amethyst_wood",
-          "Properties": {
-            "axis": "y"
-          }
-        }
-      },
-      "trunk_offset_y": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 7,
-          "min_inclusive": 3
-        }
-      }
-    },
-    "trunk_placer": {
-      "type": "minecraft:bending_trunk_placer",
-      "base_height": 5,
-      "bend_length": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 2,
-          "min_inclusive": 1
-        }
-      },
-      "height_rand_a": 2,
-      "height_rand_b": 1,
-      "min_height_for_leaves": 4
-=======
     "trunk_placer": {
       "type": "minecraft:grizzly_trunk_placer",
       "base_height": 5,
       "height_rand_a": 2,
       "height_rand_b": 2
->>>>>>> Stashed changes
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

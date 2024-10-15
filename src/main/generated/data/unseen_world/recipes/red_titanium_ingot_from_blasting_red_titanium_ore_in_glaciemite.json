@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 500,
+  "experience": 10.0,
+  "group": "titanium_ore",
+  "ingredient": {
+    "item": "unseen_world:red_titanium_ore_in_glaciemite"
+  },
+  "result": "unseen_world:red_titanium_ingot"
+}

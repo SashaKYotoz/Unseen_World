@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raw_unseenium": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:raw_unseenium"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:unseenium_ingot_from_blasting_raw_unseenium"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_unseenium",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:unseenium_ingot_from_blasting_raw_unseenium"
+    ]
+  },
+  "sends_telemetry_event": false
+}

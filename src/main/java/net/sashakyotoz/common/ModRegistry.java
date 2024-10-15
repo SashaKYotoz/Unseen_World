@@ -49,6 +49,7 @@ public class ModRegistry {
         }
 
         public BlockBuilder drop_silk(ItemConvertible loot) {
+            BLOCK_DROPS.putIfAbsent(this.block, loot);
             BLOCK_SILK_DROPS.putIfAbsent(this.block, loot);
             return this;
         }
@@ -136,6 +137,10 @@ public class ModRegistry {
             BLOCK_CUTOUT.add(this.block);
             return this;
         }
+        public BlockBuilder translucent() {
+            BLOCK_TRANSLUCENT.add(this.block);
+            return this;
+        }
 
         public BlockBuilder fuel(int duration) {
             ITEM_BURNABLE.put(this.block, duration);
@@ -214,15 +219,28 @@ public class ModRegistry {
         WALL_SIGN,
         HANGING_SIGN,
         WALL_HANGING_SIGN,
+        BULB,
         PANE
     }
 
     public static class Foods {
-        public static final FoodComponent CRYSTIE_APPLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(2).hunger(4).statusEffect(
-                        new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 1, true, false),
+        public static final FoodComponent CRYSTIE_APPLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(2).hunger(3).statusEffect(
+                        new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 0, true, false),
                         1)
                 .statusEffect(
                         new StatusEffectInstance(StatusEffects.GLOWING, 240, 1, true, false),
+                        1).build();
+        public static final FoodComponent BEARFRUIT_BRAMBLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(1).hunger(3).statusEffect(
+                        new StatusEffectInstance(StatusEffects.REGENERATION, 100, 1, true, true),
+                        1)
+                .statusEffect(
+                        new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 0, true, true),
+                        1).build();
+        public static final FoodComponent NIGHTBERRY = new FoodComponent.Builder().alwaysEdible().saturationModifier(2).hunger(2).statusEffect(
+                        new StatusEffectInstance(StatusEffects.NIGHT_VISION, 300, 0, true, true),
+                        1)
+                .statusEffect(
+                        new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 100, 0, true, true),
                         1).build();
     }
 
@@ -270,6 +288,7 @@ public class ModRegistry {
 
     public static Map<Models, List<Block>> BLOCK_MODELS = new HashMap<>();
     public static List<Block> BLOCK_CUTOUT = new ArrayList<>();
+    public static List<Block> BLOCK_TRANSLUCENT = new ArrayList<>();
 
     public static Map<Block, Pair<Integer, Integer>> BLOCK_FLAMMABLE = new HashMap<>();
 

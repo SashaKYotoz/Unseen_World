@@ -1,14 +1,10 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_door"
-=======
     "unseen_world:amethyst_door",
     "unseen_world:grizzly_door",
     "unseen_world:tealive_door",
     "unseen_world:burlywood_door",
     "unseen_world:crimsonveil_door"
->>>>>>> Stashed changes
   ]
 }

@@ -1,79 +1,168 @@
 package net.sashakyotoz.common.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-<<<<<<< Updated upstream
-=======
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
->>>>>>> Stashed changes
 import net.minecraft.data.client.Models;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.HangingSignItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.SignItem;
-<<<<<<< Updated upstream
-=======
+import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
->>>>>>> Stashed changes
+import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Rarity;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
-<<<<<<< Updated upstream
-=======
+import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
+import net.sashakyotoz.common.items.custom.ModArmorItem;
+import net.sashakyotoz.common.items.custom.ShieldOfChimericWarriorItem;
 import net.sashakyotoz.common.tags.ModTags;
->>>>>>> Stashed changes
 
 public class ModItems {
     public static void register() {
         UnseenWorld.log("Registering Items for modid : " + UnseenWorld.MOD_ID);
     }
+
     public static final Item ECLIPSE_KEYSTONE = ModRegistry.ofItem("eclipse_keystone",
             new Item(new FabricItemSettings().rarity(Rarity.EPIC))).model(Models.GENERATED).build();
     //ore
+    public static final Item RAW_UNSEENIUM_ORE = ModRegistry.ofItem("raw_unseenium",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
     public static final Item RAW_ABYSSAL_ORE = ModRegistry.ofItem("raw_abyssal",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
     public static final Item RAW_RED_TITANIUM_ORE = ModRegistry.ofItem("raw_red_titanium",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
-    public static final Item RAW_UNSEENIUM_ORE = ModRegistry.ofItem("raw_unseenium",
-            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+    public static final Item UNSEENIUM_INGOT = ModRegistry.ofItem("unseenium_ingot",
+            new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
     public static final Item ABYSSAL_INGOT = ModRegistry.ofItem("abyssal_ingot",
             new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
     public static final Item RED_TITANIUM_INGOT = ModRegistry.ofItem("red_titanium_ingot",
             new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
-    public static final Item UNSEENIUM_INGOT = ModRegistry.ofItem("unseenium_ingot",
-            new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
+
+    public static final Item UNSEENIUM_SHOVEL = ModRegistry.ofItem("unseenium_shovel",
+                    new ShovelItem(ModTiers.UNSEENIUM, 2, -3f, new FabricItemSettings()))
+            .model(Models.HANDHELD).tag(ItemTags.SHOVELS).build();
+    public static final Item UNSEENIUM_PICKAXE = ModRegistry.ofItem("unseenium_pickaxe",
+                    new PickaxeItem(ModTiers.UNSEENIUM, 2, -2.8f, new FabricItemSettings()))
+            .model(Models.HANDHELD).tag(ItemTags.PICKAXES).build();
+    public static final Item UNSEENIUM_AXE = ModRegistry.ofItem("unseenium_axe",
+                    new AxeItem(ModTiers.UNSEENIUM, 7, -3f, new FabricItemSettings()))
+            .model(Models.HANDHELD).tag(ItemTags.AXES).build();
+    public static final Item UNSEENIUM_HOE = ModRegistry.ofItem("unseenium_hoe",
+                    new HoeItem(ModTiers.UNSEENIUM, 0, -3f, new FabricItemSettings()))
+            .model(Models.HANDHELD).tag(ItemTags.HOES).build();
+    public static final Item UNSEENIUM_SWORD = ModRegistry.ofItem("unseenium_sword",
+                    new SwordItem(ModTiers.UNSEENIUM, 4, -2.4f, new FabricItemSettings()))
+            .model(Models.HANDHELD).tag(ItemTags.SWORDS).build();
+    public static final Item UNSEENIUM_HELMET = ModRegistry.ofItem("unseenium_helmet",
+            new ModArmorItem(ModArmorMaterials.UNSEENIUM, ArmorItem.Type.HELMET,
+                    new FabricItemSettings().rarity(Rarity.RARE))).build();
+    public static final Item UNSEENIUM_CHESTPLATE = ModRegistry.ofItem("unseenium_chestplate",
+            new ModArmorItem(ModArmorMaterials.UNSEENIUM, ArmorItem.Type.CHESTPLATE,
+                    new FabricItemSettings().rarity(Rarity.RARE))).build();
+    public static final Item UNSEENIUM_LEGGINGS = ModRegistry.ofItem("unseenium_leggings",
+            new ModArmorItem(ModArmorMaterials.UNSEENIUM, ArmorItem.Type.LEGGINGS,
+                    new FabricItemSettings().rarity(Rarity.RARE))).build();
+    public static final Item UNSEENIUM_BOOTS = ModRegistry.ofItem("unseenium_boots",
+            new ModArmorItem(ModArmorMaterials.UNSEENIUM, ArmorItem.Type.BOOTS,
+                    new FabricItemSettings().rarity(Rarity.RARE))).build();
+
+    public static final Item ABYSSAL_SHOVEL = ModRegistry.ofItem("abyssal_shovel",
+                    new ShovelItem(ModTiers.ABYSSAL, 2, -3f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.SHOVELS).build();
+    public static final Item ABYSSAL_PICKAXE = ModRegistry.ofItem("abyssal_pickaxe",
+                    new PickaxeItem(ModTiers.ABYSSAL, 2, -2.8f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.PICKAXES).build();
+    public static final Item ABYSSAL_AXE = ModRegistry.ofItem("abyssal_axe",
+                    new AxeItem(ModTiers.ABYSSAL, 7, -3f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.AXES).build();
+    public static final Item ABYSSAL_HOE = ModRegistry.ofItem("abyssal_hoe",
+                    new HoeItem(ModTiers.ABYSSAL, 0, -3f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.HOES).build();
+    public static final Item ABYSSAL_SWORD = ModRegistry.ofItem("abyssal_sword",
+                    new SwordItem(ModTiers.ABYSSAL, 4, -2.4f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.SWORDS).build();
+    public static final Item ABYSSAL_HELMET = ModRegistry.ofItem("abyssal_helmet",
+            new ModArmorItem(ModArmorMaterials.ABYSSAL, ArmorItem.Type.HELMET,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    public static final Item ABYSSAL_CHESTPLATE = ModRegistry.ofItem("abyssal_chestplate",
+            new ModArmorItem(ModArmorMaterials.ABYSSAL, ArmorItem.Type.CHESTPLATE,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    public static final Item ABYSSAL_LEGGINGS = ModRegistry.ofItem("abyssal_leggings",
+            new ModArmorItem(ModArmorMaterials.ABYSSAL, ArmorItem.Type.LEGGINGS,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    public static final Item ABYSSAL_BOOTS = ModRegistry.ofItem("abyssal_boots",
+            new ModArmorItem(ModArmorMaterials.ABYSSAL, ArmorItem.Type.BOOTS,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+
+    public static final Item RED_TITANIUM_SHOVEL = ModRegistry.ofItem("red_titanium_shovel",
+                    new ShovelItem(ModTiers.TITANIUM, 2, -3f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.SHOVELS).build();
+    public static final Item RED_TITANIUM_PICKAXE = ModRegistry.ofItem("red_titanium_pickaxe",
+                    new PickaxeItem(ModTiers.TITANIUM, 2, -2.8f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.PICKAXES).build();
+    public static final Item RED_TITANIUM_AXE = ModRegistry.ofItem("red_titanium_axe",
+                    new AxeItem(ModTiers.TITANIUM, 7, -3f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.AXES).build();
+    public static final Item RED_TITANIUM_HOE = ModRegistry.ofItem("red_titanium_hoe",
+                    new HoeItem(ModTiers.TITANIUM, 0, -3f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.HOES).build();
+    public static final Item RED_TITANIUM_SWORD = ModRegistry.ofItem("red_titanium_sword",
+                    new SwordItem(ModTiers.TITANIUM, 4, -2.4f, new FabricItemSettings().fireproof()))
+            .model(Models.HANDHELD).tag(ItemTags.SWORDS).build();
+    public static final Item RED_TITANIUM_HELMET = ModRegistry.ofItem("red_titanium_helmet",
+            new ModArmorItem(ModArmorMaterials.TITANIUM, ArmorItem.Type.HELMET,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    public static final Item RED_TITANIUM_CHESTPLATE = ModRegistry.ofItem("red_titanium_chestplate",
+            new ModArmorItem(ModArmorMaterials.TITANIUM, ArmorItem.Type.CHESTPLATE,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    public static final Item RED_TITANIUM_LEGGINGS = ModRegistry.ofItem("red_titanium_leggings",
+            new ModArmorItem(ModArmorMaterials.TITANIUM, ArmorItem.Type.LEGGINGS,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    public static final Item RED_TITANIUM_BOOTS = ModRegistry.ofItem("red_titanium_boots",
+            new ModArmorItem(ModArmorMaterials.TITANIUM, ArmorItem.Type.BOOTS,
+                    new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
+    //bosses' stuff
+    public static final Item CHIMERIC_ROCKBREAKER_HAMMER = ModRegistry.ofItem("chimeric_rockbreaker_hammer",
+            new ChimericRockbreakerHammerItem(4,-3.1f,new FabricItemSettings().rarity(Rarity.EPIC))).build();
+    public static final Item SHIELD_OF_CHIMERIC_WARRIOR = ModRegistry.ofItem("shield_of_chimeric_warrior",
+            new ShieldOfChimericWarriorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1).maxDamage(893))).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(Models.GENERATED).build();
-<<<<<<< Updated upstream
-    //wood items
-    public static final Item AMETHYST_SIGN = ModRegistry.ofItem("amethyst_sign",
-                    new SignItem(new FabricItemSettings(), ModBlocks.AMETHYST_SIGN, ModBlocks.AMETHYST_WALL_SIGN))
-            .fuel(200).build();
-    public static final Item AMETHYST_HANGING_SIGN = ModRegistry.ofItem("amethyst_hanging_sign",
-                    new HangingSignItem(ModBlocks.AMETHYST_HANGING_SIGN, ModBlocks.AMETHYST_WALL_HANGING_SIGN, new FabricItemSettings()))
-=======
+    public static final Item BEARFRUIT_BRAMBLE = ModRegistry.ofItem("bearfruit_bramble",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.BEARFRUIT_BRAMBLE))).model(Models.GENERATED).build();
+    public static final Item NIGHTBERRY = ModRegistry.ofItem("nightberry",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.NIGHTBERRY))).model(Models.GENERATED).build();
+    //crystals
+    public static final Item GRIPCRYSTAL = ModRegistry.ofItem("gripcrystal",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+    //keys
+    public static final Item GRIPCRYSTAL_KEY = ModRegistry.ofItem("gripcrystal_key",
+            new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
+    public static final Item ABYSSAL_KEY = ModRegistry.ofItem("abyssal_key",
+            new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
     //signs
     private static FabricBlockSettings copy(FabricBlockSettings original) {
         return FabricBlockSettings.copyOf(original);
     }
+
     //amethyst
     private static final FabricBlockSettings PassableTreeMaterial = FabricBlockSettings.copyOf(Blocks.OAK_SIGN);
     public static final Block AMETHYST_SIGN = ModRegistry.ofBlock("amethyst_sign",
-                    new SignBlock(PassableTreeMaterial, ModBlocks.AMETHYST),false)
+                    new SignBlock(PassableTreeMaterial, ModBlocks.AMETHYST), false)
             .tag(BlockTags.SIGNS, BlockTags.STANDING_SIGNS, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.AMETHYST_BLOCKS)
             .tool("_axe").build();
     public static final Block AMETHYST_WALL_SIGN = ModRegistry.ofBlock("amethyst_wall_sign",
-                    new WallSignBlock(PassableTreeMaterial, ModBlocks.AMETHYST),false)
+                    new WallSignBlock(PassableTreeMaterial, ModBlocks.AMETHYST), false)
             .tag(BlockTags.SIGNS, BlockTags.WALL_SIGNS, BlockTags.WALL_POST_OVERRIDE)
             .tool("_axe").build();
     public static final Block AMETHYST_HANGING_SIGN = ModRegistry.ofBlock("amethyst_hanging_sign",
-                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.AMETHYST),false)
+                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.AMETHYST), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.CEILING_HANGING_SIGNS, ModTags.Blocks.AMETHYST_BLOCKS)
             .tool("_axe").build();
     public static final Block AMETHYST_WALL_HANGING_SIGN = ModRegistry.ofBlock("amethyst_wall_hanging_sign",
-                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.AMETHYST),false)
+                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.AMETHYST), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, ModTags.Blocks.AMETHYST_BLOCKS)
             .tool("_axe").build();
     public static final Item AMETHYST_SIGN_ITEM = ModRegistry.ofItem("amethyst_sign",
@@ -84,19 +173,19 @@ public class ModItems {
             .fuel(200).build();
     //grizzly
     public static final Block GRIZZLY_SIGN = ModRegistry.ofBlock("grizzly_sign",
-                    new SignBlock(PassableTreeMaterial, ModBlocks.GRIZZLY),false)
+                    new SignBlock(PassableTreeMaterial, ModBlocks.GRIZZLY), false)
             .tag(BlockTags.SIGNS, BlockTags.STANDING_SIGNS, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.GRIZZLY_BLOCKS)
             .tool("_axe").build();
     public static final Block GRIZZLY_WALL_SIGN = ModRegistry.ofBlock("grizzly_wall_sign",
-                    new WallSignBlock(PassableTreeMaterial, ModBlocks.GRIZZLY),false)
+                    new WallSignBlock(PassableTreeMaterial, ModBlocks.GRIZZLY), false)
             .tag(BlockTags.SIGNS, BlockTags.WALL_SIGNS, BlockTags.WALL_POST_OVERRIDE)
             .tool("_axe").build();
     public static final Block GRIZZLY_HANGING_SIGN = ModRegistry.ofBlock("grizzly_hanging_sign",
-                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.GRIZZLY),false)
+                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.GRIZZLY), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.CEILING_HANGING_SIGNS, ModTags.Blocks.GRIZZLY_BLOCKS)
             .tool("_axe").build();
     public static final Block GRIZZLY_WALL_HANGING_SIGN = ModRegistry.ofBlock("grizzly_wall_hanging_sign",
-                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.GRIZZLY),false)
+                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.GRIZZLY), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, ModTags.Blocks.GRIZZLY_BLOCKS)
             .tool("_axe").build();
     public static final Item GRIZZLY_SIGN_ITEM = ModRegistry.ofItem("grizzly_sign",
@@ -107,19 +196,19 @@ public class ModItems {
             .fuel(200).build();
     //tealive
     public static final Block TEALIVE_SIGN = ModRegistry.ofBlock("tealive_sign",
-                    new SignBlock(PassableTreeMaterial, ModBlocks.TEALIVE),false)
+                    new SignBlock(PassableTreeMaterial, ModBlocks.TEALIVE), false)
             .tag(BlockTags.SIGNS, BlockTags.STANDING_SIGNS, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.TEALIVE_BLOCKS)
             .tool("_axe").build();
     public static final Block TEALIVE_WALL_SIGN = ModRegistry.ofBlock("tealive_wall_sign",
-                    new WallSignBlock(PassableTreeMaterial, ModBlocks.TEALIVE),false)
+                    new WallSignBlock(PassableTreeMaterial, ModBlocks.TEALIVE), false)
             .tag(BlockTags.SIGNS, BlockTags.WALL_SIGNS, BlockTags.WALL_POST_OVERRIDE)
             .tool("_axe").build();
     public static final Block TEALIVE_HANGING_SIGN = ModRegistry.ofBlock("tealive_hanging_sign",
-                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.TEALIVE),false)
+                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.TEALIVE), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.CEILING_HANGING_SIGNS, ModTags.Blocks.TEALIVE_BLOCKS)
             .tool("_axe").build();
     public static final Block TEALIVE_WALL_HANGING_SIGN = ModRegistry.ofBlock("tealive_wall_hanging_sign",
-                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.TEALIVE),false)
+                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.TEALIVE), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, ModTags.Blocks.TEALIVE_BLOCKS)
             .tool("_axe").build();
     public static final Item TEALIVE_SIGN_ITEM = ModRegistry.ofItem("tealive_sign",
@@ -130,19 +219,19 @@ public class ModItems {
             .fuel(200).build();
     //burlywood
     public static final Block BURLYWOOD_SIGN = ModRegistry.ofBlock("burlywood_sign",
-                    new SignBlock(PassableTreeMaterial, ModBlocks.BURLYWOOD),false)
+                    new SignBlock(PassableTreeMaterial, ModBlocks.BURLYWOOD), false)
             .tag(BlockTags.SIGNS, BlockTags.STANDING_SIGNS, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.BURLYWOOD_BLOCKS)
             .tool("_axe").build();
     public static final Block BURLYWOOD_WALL_SIGN = ModRegistry.ofBlock("burlywood_wall_sign",
-                    new WallSignBlock(PassableTreeMaterial, ModBlocks.BURLYWOOD),false)
+                    new WallSignBlock(PassableTreeMaterial, ModBlocks.BURLYWOOD), false)
             .tag(BlockTags.SIGNS, BlockTags.WALL_SIGNS, BlockTags.WALL_POST_OVERRIDE)
             .tool("_axe").build();
     public static final Block BURLYWOOD_HANGING_SIGN = ModRegistry.ofBlock("burlywood_hanging_sign",
-                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.BURLYWOOD),false)
+                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.BURLYWOOD), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.CEILING_HANGING_SIGNS, ModTags.Blocks.BURLYWOOD_BLOCKS)
             .tool("_axe").build();
     public static final Block BURLYWOOD_WALL_HANGING_SIGN = ModRegistry.ofBlock("burlywood_wall_hanging_sign",
-                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.BURLYWOOD),false)
+                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.BURLYWOOD), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, ModTags.Blocks.BURLYWOOD_BLOCKS)
             .tool("_axe").build();
     public static final Item BURLYWOOD_SIGN_ITEM = ModRegistry.ofItem("burlywood_sign",
@@ -153,19 +242,19 @@ public class ModItems {
             .fuel(200).build();
     //crimsonveil
     public static final Block CRIMSONVEIL_SIGN = ModRegistry.ofBlock("crimsonveil_sign",
-                    new SignBlock(PassableTreeMaterial, ModBlocks.CRIMSONVEIL),false)
+                    new SignBlock(PassableTreeMaterial, ModBlocks.CRIMSONVEIL), false)
             .tag(BlockTags.SIGNS, BlockTags.STANDING_SIGNS, BlockTags.WALL_POST_OVERRIDE, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
             .tool("_axe").build();
     public static final Block CRIMSONVEIL_WALL_SIGN = ModRegistry.ofBlock("crimsonveil_wall_sign",
-                    new WallSignBlock(PassableTreeMaterial, ModBlocks.CRIMSONVEIL),false)
+                    new WallSignBlock(PassableTreeMaterial, ModBlocks.CRIMSONVEIL), false)
             .tag(BlockTags.SIGNS, BlockTags.WALL_SIGNS, BlockTags.WALL_POST_OVERRIDE)
             .tool("_axe").build();
     public static final Block CRIMSONVEIL_HANGING_SIGN = ModRegistry.ofBlock("crimsonveil_hanging_sign",
-                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.CRIMSONVEIL),false)
+                    new HangingSignBlock(PassableTreeMaterial, ModBlocks.CRIMSONVEIL), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.CEILING_HANGING_SIGNS, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
             .tool("_axe").build();
     public static final Block CRIMSONVEIL_WALL_HANGING_SIGN = ModRegistry.ofBlock("crimsonveil_wall_hanging_sign",
-                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.CRIMSONVEIL),false)
+                    new WallHangingSignBlock(copy(PassableTreeMaterial), ModBlocks.CRIMSONVEIL), false)
             .tag(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, ModTags.Blocks.CRIMSONVEIL_BLOCKS)
             .tool("_axe").build();
     public static final Item CRIMSONVEIL_SIGN_ITEM = ModRegistry.ofItem("crimsonveil_sign",
@@ -173,9 +262,18 @@ public class ModItems {
             .fuel(200).build();
     public static final Item CRIMSONVEIL_HANGING_SIGN_ITEM = ModRegistry.ofItem("crimsonveil_hanging_sign",
                     new HangingSignItem(CRIMSONVEIL_HANGING_SIGN, CRIMSONVEIL_WALL_HANGING_SIGN, new FabricItemSettings()))
->>>>>>> Stashed changes
             .fuel(200).build();
     //buckets
     public static final Item DARK_WATER_BUCKET = ModRegistry.ofItem("dark_water_bucket",
-            new BucketItem(ModBlocks.DARK_WATER,new FabricItemSettings())).model(Models.GENERATED).build();
+            new BucketItem(ModBlocks.DARK_WATER, new FabricItemSettings().recipeRemainder(Items.BUCKET).maxCount(1))).model(Models.GENERATED).build();
+    //spawn eggs
+    public static final Item GLEAMCARVER_SPAWN_EGG = ModRegistry.ofItem("gleamcarver_spawn_egg",
+                    new SpawnEggItem(ModEntities.GLEAMCARVER, 9787244, 3746083, new FabricItemSettings()))
+            .build();
+    public static final Item HARMONY_WATCHER_SPAWN_EGG = ModRegistry.ofItem("harmony_watcher_spawn_egg",
+                    new SpawnEggItem(ModEntities.HARMONY_WATCHER, 5013401, 10066329, new FabricItemSettings()))
+            .build();
+    public static final Item DARK_GUARDIAN_SPAWN_EGG = ModRegistry.ofItem("dark_guardian_spawn_egg",
+                    new SpawnEggItem(ModEntities.DARK_GUARDIAN, 12801229, 6035741, new FabricItemSettings()))
+            .build();
 }

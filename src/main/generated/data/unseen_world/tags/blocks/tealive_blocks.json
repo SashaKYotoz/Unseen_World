@@ -1,9 +1,6 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:tealive_sign",
-    "unseen_world:tealive_hanging_sign",
-    "unseen_world:tealive_wall_hanging_sign",
     "unseen_world:tealive_log",
     "unseen_world:stripped_tealive_wood",
     "unseen_world:tealive_wood",
@@ -17,6 +14,9 @@
     "unseen_world:tealive_fence_gate",
     "unseen_world:tealive_door",
     "unseen_world:tealive_trapdoor",
-    "unseen_world:tealive_sapling"
+    "unseen_world:tealive_sapling",
+    "unseen_world:tealive_sign",
+    "unseen_world:tealive_hanging_sign",
+    "unseen_world:tealive_wall_hanging_sign"
   ]
 }

@@ -3,22 +3,23 @@ package net.sashakyotoz.common.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.client.*;
 import net.minecraft.data.family.BlockFamily;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
-<<<<<<< Updated upstream
-=======
+import net.sashakyotoz.common.blocks.custom.BulbLikeBlock;
 import net.sashakyotoz.common.items.ModItems;
->>>>>>> Stashed changes
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ModModelProvider extends FabricModelProvider {
     public ModModelProvider(FabricDataOutput output) {
@@ -44,6 +45,8 @@ public class ModModelProvider extends FabricModelProvider {
             generator.registerTrapdoor(block);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.FLUID))
             generator.registerSimpleState(block);
+        for (Block block : ModRegistry.getModelList(ModRegistry.Models.BULB))
+            registerBulbBlock(generator,(BulbLikeBlock) block);
         for (Block block : ModRegistry.BLOCK_SETS.keySet()) {
             if (ModRegistry.BLOCK_SETS.get(block).containsKey(ModRegistry.Models.WOOD)) {
                 poollog = generator.registerLog(block);
@@ -81,10 +84,8 @@ public class ModModelProvider extends FabricModelProvider {
                 }
             }
         }
-<<<<<<< Updated upstream
-//        generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
-//                ModBlocks.AMETHYST_HANGING_SIGN, ModBlocks.AMETHYST_WALL_HANGING_SIGN);
-=======
+        generator.registerParentedItemModel(ModBlocks.KEY_HANDLER_STONE.asItem(), UnseenWorld.makeID("block/key_handler_stone"));
+        generator.registerParentedItemModel(ModBlocks.GLACIEMITE_TRANSLOCATONE.asItem(), UnseenWorld.makeID("block/glaciemite_translocatone"));
         generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
                 ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN);
         generator.registerHangingSign(ModBlocks.STRIPPED_GRIZZLY_LOG,
@@ -95,7 +96,6 @@ public class ModModelProvider extends FabricModelProvider {
                 ModItems.BURLYWOOD_HANGING_SIGN, ModItems.BURLYWOOD_WALL_HANGING_SIGN);
         generator.registerHangingSign(ModBlocks.STRIPPED_CRIMSONVEIL_LOG,
                 ModItems.CRIMSONVEIL_HANGING_SIGN, ModItems.CRIMSONVEIL_WALL_HANGING_SIGN);
->>>>>>> Stashed changes
     }
 
     @Override
@@ -103,8 +103,22 @@ public class ModModelProvider extends FabricModelProvider {
         for (Map.Entry<Item, Model> entry : ModRegistry.ITEM_MODELS.entrySet())
             generator.register(entry.getKey(), entry.getValue());
         generator.register(ModBlocks.HANGING_AMETHYST_LEAVES.asItem(), Models.GENERATED);
+        generator.register(ModBlocks.BEARFRUIT_BRAMBLE.asItem(), Models.GENERATED);
+        generator.register(ModBlocks.MIDNIGHT_LILY_PAD.asItem(), Models.GENERATED);
+        for (Item item : ModRegistry.ITEMS) {
+            if (item instanceof ArmorItem armorItem)
+                generator.registerArmor(armorItem);
+            if (item.getTranslationKey().contains("spawn_egg"))
+                generator.register(item, new Model(Optional.of(Identifier.of("minecraft", "item/template_spawn_egg")),
+                        Optional.empty()));
+        }
     }
-
+    private void registerBulbBlock(BlockStateModelGenerator generator, BulbLikeBlock block) {
+        Identifier identifier = TexturedModel.CUBE_ALL.upload(block, generator.modelCollector);
+        Identifier identifier2 = generator.createSubModel(block, "_litted", Models.CUBE_ALL, TextureMap::all);
+        generator.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(Properties.LIT, identifier2, identifier)));
+    }
     private void registerDynamicTopSoils(Identifier bottomTexture, BlockStateModelGenerator generator, Block... topSoilBlocks) {
         for (Block topSoil : topSoilBlocks) {
             TextureMap textureMap = new TextureMap()

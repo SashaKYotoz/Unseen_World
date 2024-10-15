@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:the_darkness",
+    "unseen_world:dark_wasteland",
+    "unseen_world:dark_ocean",
+    "unseen_world:dark_lifeless_ocean",
+    "unseen_world:crimsonveil_plateau",
+    "unseen_world:crimsonveil_woods",
+    "unseen_world:old_growth_crimsonveil_woods",
+    "unseen_world:tanzanite_caves",
+    "unseen_world:tealivy_highlands",
+    "unseen_world:harmony_grove"
+  ]
+}

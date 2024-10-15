@@ -11,11 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-<<<<<<<< Updated upstream:src/main/generated/data/unseen_world/loot_tables/blocks/amethyst_sign.json
           "name": "unseen_world:amethyst_sign"
-========
-          "name": "unseen_world:amethyst_sapling"
->>>>>>>> Stashed changes:src/main/generated/data/unseen_world/loot_tables/blocks/amethyst_sapling.json
         }
       ],
       "rolls": 1.0

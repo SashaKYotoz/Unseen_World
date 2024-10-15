@@ -14,7 +14,7 @@ import net.sashakyotoz.common.datagen.*;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
 import net.sashakyotoz.common.world.ModDimensions;
-import net.sashakyotoz.common.world.features.ModPlacements;
+import net.sashakyotoz.common.world.features.placements.ModPlacements;
 
 import java.util.Map;
 
@@ -24,13 +24,10 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
 		pack.addProvider(ModBlockTagProvider::new);
-<<<<<<< Updated upstream
-=======
 		pack.addProvider(ModFluidTagProvider::new);
->>>>>>> Stashed changes
 		pack.addProvider(ModBiomeTagProvider::new);
 		pack.addProvider(ModItemTagProvider::new);
-		pack.addProvider(ModLootTableProvider::new);
+		pack.addProvider(ModBlockLootTableProvider::new);
 		pack.addProvider(ModModelProvider::new);
 		pack.addProvider(ModWorldGenerator::new);
 		pack.addProvider(ModLanguageProvider::new);

@@ -1,11 +1,11 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
     "unseen_world:amethyst_pressure_plate",
-    "unseen_world:amethyst_sign",
-    "unseen_world:amethyst_wall_sign"
-=======
+    "unseen_world:grizzly_pressure_plate",
+    "unseen_world:tealive_pressure_plate",
+    "unseen_world:burlywood_pressure_plate",
+    "unseen_world:crimsonveil_pressure_plate",
     "unseen_world:amethyst_sign",
     "unseen_world:amethyst_wall_sign",
     "unseen_world:grizzly_sign",
@@ -15,12 +15,6 @@
     "unseen_world:burlywood_sign",
     "unseen_world:burlywood_wall_sign",
     "unseen_world:crimsonveil_sign",
-    "unseen_world:crimsonveil_wall_sign",
-    "unseen_world:amethyst_pressure_plate",
-    "unseen_world:grizzly_pressure_plate",
-    "unseen_world:tealive_pressure_plate",
-    "unseen_world:burlywood_pressure_plate",
-    "unseen_world:crimsonveil_pressure_plate"
->>>>>>> Stashed changes
+    "unseen_world:crimsonveil_wall_sign"
   ]
 }

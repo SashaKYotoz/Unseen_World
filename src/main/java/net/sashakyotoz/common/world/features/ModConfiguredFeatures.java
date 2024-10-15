@@ -2,27 +2,18 @@ package net.sashakyotoz.common.world.features;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-<<<<<<< Updated upstream
-=======
 import net.minecraft.block.PropaguleBlock;
->>>>>>> Stashed changes
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.structure.rule.BlockMatchRuleTest;
+import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.util.collection.DataPool;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
-<<<<<<< Updated upstream
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize;
-=======
 import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.math.intprovider.WeightedListIntProvider;
@@ -31,25 +22,11 @@ import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.size.ThreeLayersFeatureSize;
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize;
 import net.minecraft.world.gen.foliage.AcaciaFoliagePlacer;
->>>>>>> Stashed changes
 import net.minecraft.world.gen.foliage.RandomSpreadFoliagePlacer;
 import net.minecraft.world.gen.root.AboveRootPlacement;
 import net.minecraft.world.gen.root.MangroveRootPlacement;
 import net.minecraft.world.gen.root.MangroveRootPlacer;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
-<<<<<<< Updated upstream
-import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
-import net.minecraft.world.gen.treedecorator.AttachedToLeavesTreeDecorator;
-import net.minecraft.world.gen.trunk.BendingTrunkPlacer;
-import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.blocks.ModBlocks;
-
-import java.util.List;
-import java.util.Optional;
-
-public class ModConfiguredFeatures {
-    public static final RegistryKey<ConfiguredFeature<?, ?>> AMETHYST_TREE = create("amethyst_tree");
-=======
 import net.minecraft.world.gen.stateprovider.RandomizedIntBlockStateProvider;
 import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.treedecorator.AttachedToLeavesTreeDecorator;
@@ -58,6 +35,11 @@ import net.minecraft.world.gen.trunk.UpwardsBranchingTrunkPlacer;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.HangingFruitBlock;
+import net.sashakyotoz.common.world.features.custom.BoulderFeature;
+import net.sashakyotoz.common.world.features.custom.MidnightLilyPadFeature;
+import net.sashakyotoz.common.world.features.custom.StandingFlowerBunchFeature;
+import net.sashakyotoz.common.world.features.custom.configs.BoulderFeatureConfig;
+import net.sashakyotoz.common.world.features.custom.configs.StandingFlowerBunchFeatureConfig;
 import net.sashakyotoz.common.world.features.trees.placers.BurlywoodFoliagePlacer;
 import net.sashakyotoz.common.world.features.trees.placers.BurlywoodTrunkPlacer;
 import net.sashakyotoz.common.world.features.trees.placers.GrizzlyFoliagePlacer;
@@ -74,51 +56,35 @@ public class ModConfiguredFeatures {
     public static final RegistryKey<ConfiguredFeature<?, ?>> TALL_CRIMSONVEIL_TREE = create("tall_crimsonveil_tree");
     public static final RegistryKey<ConfiguredFeature<?, ?>> TEALIVE_TREE = create("tealive_tree");
     public static final RegistryKey<ConfiguredFeature<?, ?>> GRIZZLY_TREE = create("grizzly_tree");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> TALL_GRIZZLY_TREE = create("tall_grizzly_tree");
     public static final RegistryKey<ConfiguredFeature<?, ?>> BURLYWOOD_TREE = create("burlywood_tree");
->>>>>>> Stashed changes
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> UNSEENIUM_ORE = create("unseenium_ore");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> RED_TITANIUM_ORE = create("red_titanium_ore");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> ABYSSAL_ORE = create("abyssal_ore");
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> GLACIEMITE_BOULDER = create("glaciemite_boulder");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> DARK_CURRANTSLATE_BOULDER = create("dark_currantslate_boulder");
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> WATER_LAKE = create("water_lake");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> DARK_WATER_LAKE = create("dark_water_lake");
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> BEARFRUIT_BRAMBLE_PATCH = create("bearfruit_bramble_patch");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> MIDNIGHT_LILY_PATCH = create("midnight_lily_patch");
 
     public static void boostrap(Registerable<ConfiguredFeature<?, ?>> context) {
         RegistryEntryLookup<Block> registryEntryLookup = context.getRegistryLookup(RegistryKeys.BLOCK);
         register(context, AMETHYST_TREE, Feature.TREE, new TreeFeatureConfig.Builder(
                 BlockStateProvider.of(ModBlocks.AMETHYST_LOG),
-<<<<<<< Updated upstream
-                new BendingTrunkPlacer(5, 2, 1, 4, UniformIntProvider.create(1, 2)),
-                BlockStateProvider.of(ModBlocks.AMETHYST_LEAVES),
-                new RandomSpreadFoliagePlacer(UniformIntProvider.create(2, 4), UniformIntProvider.create(0, 1), ConstantIntProvider.create(2), 52),
-                Optional.of(
-                        new MangroveRootPlacer(
-                                UniformIntProvider.create(3, 7),
-                                BlockStateProvider.of(ModBlocks.AMETHYST_WOOD),
-                                Optional.of(new AboveRootPlacement(BlockStateProvider.of(ModBlocks.AMETHYST_LOG), 0.25F)),
-                                new MangroveRootPlacement(
-                                        registryEntryLookup.getOrThrow(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH),
-                                        RegistryEntryList.of(Block::getRegistryEntry, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS),
-                                        BlockStateProvider.of(Blocks.MUDDY_MANGROVE_ROOTS),
-                                        2,
-                                        3,
-                                        0.2F
-                                )
-                        )
-                ),
-=======
                 new GrizzlyTrunkPlacer(5, 2, 2),
                 BlockStateProvider.of(ModBlocks.AMETHYST_LEAVES),
-                new AcaciaFoliagePlacer(UniformIntProvider.create(2,3), UniformIntProvider.create(0,1)),
->>>>>>> Stashed changes
-                new TwoLayersFeatureSize(1, 1, 1))
+                new AcaciaFoliagePlacer(UniformIntProvider.create(1, 2), UniformIntProvider.create(0, 1)),
+                new TwoLayersFeatureSize(1, 2, 1))
                 .decorators(List.of(
                         new AttachedToLeavesTreeDecorator(
                                 0.2f,
                                 1,
                                 0,
-<<<<<<< Updated upstream
-                                new WeightedBlockStateProvider(
-                                        DataPool.of(ModBlocks.HANGING_AMETHYST_LEAVES.getDefaultState())
-                                ),
-                                1,
-                                List.of(Direction.DOWN))))
-                .dirtProvider(BlockStateProvider.of(ModBlocks.AMETHYST_GRASS_BLOCK)).forceDirt().build());
-=======
                                 new WeightedBlockStateProvider(DataPool.of(ModBlocks.HANGING_AMETHYST_LEAVES.getDefaultState().with(HangingFruitBlock.HAS_FRUIT, Random.create().nextBoolean()))),
                                 1,
                                 List.of(Direction.DOWN))))
@@ -127,7 +93,7 @@ public class ModConfiguredFeatures {
                 BlockStateProvider.of(ModBlocks.AMETHYST_LOG),
                 new GrizzlyTrunkPlacer(2, 1, 2),
                 BlockStateProvider.of(ModBlocks.AMETHYST_LEAVES),
-                new AcaciaFoliagePlacer(UniformIntProvider.create(1,2), UniformIntProvider.create(0,1)),
+                new AcaciaFoliagePlacer(UniformIntProvider.create(0, 1), UniformIntProvider.create(0, 1)),
                 new TwoLayersFeatureSize(1, 1, 1))
                 .dirtProvider(BlockStateProvider.of(ModBlocks.AMETHYST_GRASS_BLOCK)).forceDirt().build());
         register(context, CRIMSONVEIL_TREE, Feature.TREE, new TreeFeatureConfig.Builder(
@@ -211,6 +177,13 @@ public class ModConfiguredFeatures {
                 new GrizzlyFoliagePlacer(UniformIntProvider.create(3, 5), ConstantIntProvider.create(0)),
                 new TwoLayersFeatureSize(1, 0, 2)
         ).dirtProvider(BlockStateProvider.of(ModBlocks.GRIMWOOD_GRASS_BLOCK)).build());
+        register(context, TALL_GRIZZLY_TREE, Feature.TREE, new TreeFeatureConfig.Builder(
+                BlockStateProvider.of(ModBlocks.GRIZZLY_LOG),
+                new GrizzlyTrunkPlacer(9, 4, 6),
+                BlockStateProvider.of(ModBlocks.GRIZZLY_LEAVES),
+                new GrizzlyFoliagePlacer(UniformIntProvider.create(2, 3), UniformIntProvider.create(0, 1)),
+                new TwoLayersFeatureSize(1, 1, 2)
+        ).dirtProvider(BlockStateProvider.of(ModBlocks.GRIMWOOD_GRASS_BLOCK)).build());
         register(context, BURLYWOOD_TREE, Feature.TREE, new TreeFeatureConfig.Builder(
                 BlockStateProvider.of(ModBlocks.BURLYWOOD_LOG),
                 new BurlywoodTrunkPlacer(9, 2, 3),
@@ -218,7 +191,30 @@ public class ModConfiguredFeatures {
                 new BurlywoodFoliagePlacer(UniformIntProvider.create(1, 2), UniformIntProvider.create(0, 1)),
                 new ThreeLayersFeatureSize(1, 1, 1, 1, 2, OptionalInt.empty())
         ).ignoreVines().dirtProvider(BlockStateProvider.of(Blocks.DIRT)).build());
->>>>>>> Stashed changes
+
+        RuleTest glaciemiteReplacables = new BlockMatchRuleTest(ModBlocks.GLACIEMITE);
+        RuleTest darkCurrantslateReplacables = new BlockMatchRuleTest(ModBlocks.DARK_CURRANTSLATE);
+        List<OreFeatureConfig.Target> unseeniumOres =
+                List.of(OreFeatureConfig.createTarget(glaciemiteReplacables, ModBlocks.UNSEENIUM_ORE_IN_GLACIEMITE.getDefaultState()),
+                        OreFeatureConfig.createTarget(darkCurrantslateReplacables, ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE.getDefaultState()));
+        List<OreFeatureConfig.Target> titaniumOres =
+                List.of(OreFeatureConfig.createTarget(glaciemiteReplacables, ModBlocks.RED_TITANIUM_IN_GLACIEMITE.getDefaultState()),
+                        OreFeatureConfig.createTarget(darkCurrantslateReplacables, ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE.getDefaultState()));
+        List<OreFeatureConfig.Target> abyssalOres =
+                List.of(OreFeatureConfig.createTarget(glaciemiteReplacables, ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE.getDefaultState()),
+                        OreFeatureConfig.createTarget(darkCurrantslateReplacables, ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE.getDefaultState()));
+        register(context, UNSEENIUM_ORE, Feature.ORE, new OreFeatureConfig(unseeniumOres, 4));
+        register(context, RED_TITANIUM_ORE, Feature.ORE, new OreFeatureConfig(titaniumOres, 2));
+        register(context, ABYSSAL_ORE, Feature.ORE, new OreFeatureConfig(abyssalOres, 3));
+
+        register(context, GLACIEMITE_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformIntProvider.create(4, 9), BlockStateProvider.of(ModBlocks.GLACIEMITE)));
+        register(context, DARK_CURRANTSLATE_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformIntProvider.create(3, 8), BlockStateProvider.of(ModBlocks.DARK_CURRANTSLATE)));
+
+        register(context, WATER_LAKE, Feature.LAKE, new LakeFeature.Config(BlockStateProvider.of(Blocks.WATER.getDefaultState()), BlockStateProvider.of(Blocks.STONE.getDefaultState())));
+        register(context, DARK_WATER_LAKE, Feature.LAKE, new LakeFeature.Config(BlockStateProvider.of(ModBlocks.DARK_WATER_BLOCK.getDefaultState()), BlockStateProvider.of(ModBlocks.DARK_CURRANTSLATE.getDefaultState())));
+
+        register(context, BEARFRUIT_BRAMBLE_PATCH, StandingFlowerBunchFeature.INSTANCE, new StandingFlowerBunchFeatureConfig(UniformIntProvider.create(3, 7), BlockStateProvider.of(ModBlocks.BEARFRUIT_BRAMBLE)));
+        register(context, MIDNIGHT_LILY_PATCH, MidnightLilyPadFeature.INSTANCE,DefaultFeatureConfig.INSTANCE);
     }
 
     public static RegistryKey<ConfiguredFeature<?, ?>> create(String name) {

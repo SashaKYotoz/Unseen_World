@@ -1,14 +1,10 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_slab"
-=======
     "unseen_world:amethyst_slab",
     "unseen_world:grizzly_slab",
     "unseen_world:tealive_slab",
     "unseen_world:burlywood_slab",
     "unseen_world:crimsonveil_slab"
->>>>>>> Stashed changes
   ]
 }

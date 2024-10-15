@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:unseenium_ingot_from_blasting_unseenium_ore_in_dark_currantslate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_unseenium_ore_in_dark_currantslate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:unseenium_ore_in_dark_currantslate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_unseenium_ore_in_dark_currantslate",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:unseenium_ingot_from_blasting_unseenium_ore_in_dark_currantslate"
+    ]
+  },
+  "sends_telemetry_event": false
+}

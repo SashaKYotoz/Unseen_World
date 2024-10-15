@@ -1,9 +1,6 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:crimsonveil_sign",
-    "unseen_world:crimsonveil_hanging_sign",
-    "unseen_world:crimsonveil_wall_hanging_sign",
     "unseen_world:crimsonveil_log",
     "unseen_world:stripped_crimsonveil_wood",
     "unseen_world:crimsonveil_wood",
@@ -17,6 +14,9 @@
     "unseen_world:crimsonveil_fence_gate",
     "unseen_world:crimsonveil_door",
     "unseen_world:crimsonveil_trapdoor",
-    "unseen_world:crimsonveil_sapling"
+    "unseen_world:crimsonveil_sapling",
+    "unseen_world:crimsonveil_sign",
+    "unseen_world:crimsonveil_hanging_sign",
+    "unseen_world:crimsonveil_wall_hanging_sign"
   ]
 }

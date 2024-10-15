@@ -11,11 +11,7 @@
               "add": false,
               "conditions": [
                 {
-<<<<<<<< Updated upstream:src/main/generated/data/unseen_world/loot_tables/blocks/glaciemite_bricks_slab.json
-                  "block": "unseen_world:glaciemite_bricks_slab",
-========
                   "block": "unseen_world:burlywood_slab",
->>>>>>>> Stashed changes:src/main/generated/data/unseen_world/loot_tables/blocks/burlywood_slab.json
                   "condition": "minecraft:block_state_property",
                   "properties": {
                     "type": "double"
@@ -29,11 +25,7 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-<<<<<<<< Updated upstream:src/main/generated/data/unseen_world/loot_tables/blocks/glaciemite_bricks_slab.json
-          "name": "unseen_world:glaciemite_bricks_slab"
-========
           "name": "unseen_world:burlywood_slab"
->>>>>>>> Stashed changes:src/main/generated/data/unseen_world/loot_tables/blocks/burlywood_slab.json
         }
       ],
       "rolls": 1.0

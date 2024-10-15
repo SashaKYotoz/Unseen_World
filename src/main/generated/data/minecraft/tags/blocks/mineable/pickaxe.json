@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "unseen_world:dark_frost_bricks",
+    "unseen_world:key_handler_stone",
+    "unseen_world:glaciemite_translocatone",
     "unseen_world:dark_currantslate",
     "unseen_world:dark_currantslate_slab",
     "unseen_world:dark_currantslate_stairs",
@@ -18,6 +20,7 @@
     "unseen_world:glaciemite_bricks_slab",
     "unseen_world:glaciemite_bricks_stairs",
     "unseen_world:glaciemite_bricks_wall",
+    "unseen_world:glaciemite_bulb",
     "unseen_world:tanzanite_block",
     "unseen_world:polished_tanzanite",
     "unseen_world:polished_tanzanite_slab",

@@ -28,17 +28,34 @@ public class ModTags {
         public static final TagKey<Block> HANGING_AMETHYST_LEAVES_GROWABLE_ON = create("hanging_amethyst_leaves_growable_on");
         public static final TagKey<Block> HANGING_CRIMSONVEIL_LEAVES_GROWABLE_ON = create("hanging_crimsonveil_leaves_growable_on");
         public static final TagKey<Block> HANGING_BURLYWOOD_LEAVES_GROWABLE_ON = create("hanging_burlywood_leaves_growable_on");
+        public static final TagKey<Block> BEARFRUIT_BRAMBLE_GROWABLE_ON = create("bearfruit_bramble_growable_on");
         private static TagKey<Block> create(String name) {
             return TagKey.of(RegistryKeys.BLOCK, UnseenWorld.makeID(name));
         }
     }
     public static class Biomes {
-        public static final TagKey<Biome> GREENISH_LIKE_BIOMES = create("greenish_like_biomes");
-        public static final TagKey<Biome> AMETHYST_LIKE_BIOMES = create("amethyst_like_biomes");
-        public static final TagKey<Biome> TEALIVE_LIKE_BIOMES = create("tealive_like_biomes");
-        public static final TagKey<Biome> DARK_WATERFUL_BIOMES = create("dark_waterful_biomes");
-        public static final TagKey<Biome> GLACIEMITE_MAIN_STONE_BIOMES = create("glaciemite_main_stone_biomes");
-        public static final TagKey<Biome> NIGHTDARK_GRASS_COVERED_BIOMES = create("nightdark_grass_covered_biomes");
+        public static final TagKey<Biome> ABYSSAL_SPAWNS_IN = create("abyssal_spawns_in");
+        public static final TagKey<Biome> UNSEENIUM_SPAWNS_IN = create("unseenium_spawns_in");
+        public static final TagKey<Biome> TITANIUM_SPAWNS_IN = create("titanium_spawns_in");
+
+        public static final TagKey<Biome> GRASS_COVERED = create("grass_covered");
+        public static final TagKey<Biome> FLOWERS_COVERED = create("flowers_covered");
+
+        public static final TagKey<Biome> GLACIEMITE_BOULDER_SPAWNS_ON = create("glaciemite_boulder_spawns_on");
+        public static final TagKey<Biome> CURRANTSLATE_BOULDER_SPAWNS_ON = create("currantslate_boulder_spawns_on");
+
+        public static final TagKey<Biome> WATER_LAKE_SPAWNS_ON = create("water_lake_spawns_on");
+        public static final TagKey<Biome> DARK_WATER_LAKE_SPAWNS_ON = create("dark_water_lake_spawns_on");
+
+        public static final TagKey<Biome> HAS_BURLYWOOD_TREE = create("has_burlywood_tree");
+        public static final TagKey<Biome> HAS_AMETHYST_TREE = create("has_amethyst_tree");
+        public static final TagKey<Biome> HAS_CRIMSONVEIL_TREE = create("has_crimsonveil_tree");
+
+        public static final TagKey<Biome> HAS_FROST_PORTAL = create("has_frost_portal");
+
+        public static final TagKey<Biome> HAS_GLEAMCARVER = create("has_gleamcarver");
+        public static final TagKey<Biome> HAS_HARMONY_WATCHER = create("has_harmony_watcher");
+
         private static TagKey<Biome> create(String name) {
             return TagKey.of(RegistryKeys.BIOME, UnseenWorld.makeID(name));
         }

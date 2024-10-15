@@ -1,0 +1,5 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/handled",
+	"texture_size": [64, 32]
+}

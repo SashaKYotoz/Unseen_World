@@ -2,9 +2,6 @@
   "replace": false,
   "values": [
     "unseen_world:amethyst_fence",
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_fence_gate"
-=======
     "unseen_world:amethyst_fence_gate",
     "unseen_world:grizzly_fence",
     "unseen_world:grizzly_fence_gate",
@@ -14,6 +11,5 @@
     "unseen_world:burlywood_fence_gate",
     "unseen_world:crimsonveil_fence",
     "unseen_world:crimsonveil_fence_gate"
->>>>>>> Stashed changes
   ]
 }

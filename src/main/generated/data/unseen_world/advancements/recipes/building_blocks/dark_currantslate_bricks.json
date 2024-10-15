@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dark_currantslate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:dark_currantslate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "unseen_world:dark_currantslate_bricks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_dark_currantslate",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "unseen_world:dark_currantslate_bricks"
+    ]
+  },
+  "sends_telemetry_event": false
+}

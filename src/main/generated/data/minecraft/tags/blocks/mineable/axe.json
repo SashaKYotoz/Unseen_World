@@ -1,29 +1,6 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
-=======
-    "unseen_world:amethyst_sign",
-    "unseen_world:amethyst_wall_sign",
-    "unseen_world:amethyst_hanging_sign",
-    "unseen_world:amethyst_wall_hanging_sign",
-    "unseen_world:grizzly_sign",
-    "unseen_world:grizzly_wall_sign",
-    "unseen_world:grizzly_hanging_sign",
-    "unseen_world:grizzly_wall_hanging_sign",
-    "unseen_world:tealive_sign",
-    "unseen_world:tealive_wall_sign",
-    "unseen_world:tealive_hanging_sign",
-    "unseen_world:tealive_wall_hanging_sign",
-    "unseen_world:burlywood_sign",
-    "unseen_world:burlywood_wall_sign",
-    "unseen_world:burlywood_hanging_sign",
-    "unseen_world:burlywood_wall_hanging_sign",
-    "unseen_world:crimsonveil_sign",
-    "unseen_world:crimsonveil_wall_sign",
-    "unseen_world:crimsonveil_hanging_sign",
-    "unseen_world:crimsonveil_wall_hanging_sign",
->>>>>>> Stashed changes
     "unseen_world:stripped_amethyst_log",
     "unseen_world:amethyst_log",
     "unseen_world:stripped_amethyst_wood",
@@ -37,12 +14,6 @@
     "unseen_world:amethyst_fence_gate",
     "unseen_world:amethyst_door",
     "unseen_world:amethyst_trapdoor",
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_sign",
-    "unseen_world:amethyst_wall_sign",
-    "unseen_world:amethyst_hanging_sign",
-    "unseen_world:amethyst_wall_hanging_sign"
-=======
     "unseen_world:stripped_grizzly_log",
     "unseen_world:grizzly_log",
     "unseen_world:stripped_grizzly_wood",
@@ -94,7 +65,26 @@
     "unseen_world:crimsonveil_fence",
     "unseen_world:crimsonveil_fence_gate",
     "unseen_world:crimsonveil_door",
-    "unseen_world:crimsonveil_trapdoor"
->>>>>>> Stashed changes
+    "unseen_world:crimsonveil_trapdoor",
+    "unseen_world:amethyst_sign",
+    "unseen_world:amethyst_wall_sign",
+    "unseen_world:amethyst_hanging_sign",
+    "unseen_world:amethyst_wall_hanging_sign",
+    "unseen_world:grizzly_sign",
+    "unseen_world:grizzly_wall_sign",
+    "unseen_world:grizzly_hanging_sign",
+    "unseen_world:grizzly_wall_hanging_sign",
+    "unseen_world:tealive_sign",
+    "unseen_world:tealive_wall_sign",
+    "unseen_world:tealive_hanging_sign",
+    "unseen_world:tealive_wall_hanging_sign",
+    "unseen_world:burlywood_sign",
+    "unseen_world:burlywood_wall_sign",
+    "unseen_world:burlywood_hanging_sign",
+    "unseen_world:burlywood_wall_hanging_sign",
+    "unseen_world:crimsonveil_sign",
+    "unseen_world:crimsonveil_wall_sign",
+    "unseen_world:crimsonveil_hanging_sign",
+    "unseen_world:crimsonveil_wall_hanging_sign"
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:warrior_of_darkness_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 592301239,
+    "spacing": 32,
+    "separation": 24
+  }
+}

@@ -4,9 +4,6 @@
     "unseen_world:stripped_amethyst_log",
     "unseen_world:amethyst_log",
     "unseen_world:stripped_amethyst_wood",
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_wood"
-=======
     "unseen_world:amethyst_wood",
     "unseen_world:stripped_grizzly_log",
     "unseen_world:grizzly_log",
@@ -24,6 +21,5 @@
     "unseen_world:crimsonveil_log",
     "unseen_world:stripped_crimsonveil_wood",
     "unseen_world:crimsonveil_wood"
->>>>>>> Stashed changes
   ]
 }

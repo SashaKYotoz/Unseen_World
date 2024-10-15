@@ -1,9 +1,5 @@
 {
-<<<<<<<< Updated upstream:src/main/generated/data/unseen_world/worldgen/placed_feature/amethyst_tree.json
-  "feature": "unseen_world:amethyst_tree",
-========
   "feature": "unseen_world:grizzly_tree",
->>>>>>>> Stashed changes:src/main/generated/data/unseen_world/worldgen/placed_feature/grizzly_tree.json
   "placement": [
     {
       "type": "minecraft:count",
@@ -40,11 +36,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-<<<<<<<< Updated upstream:src/main/generated/data/unseen_world/worldgen/placed_feature/amethyst_tree.json
-          "Name": "unseen_world:amethyst_sapling",
-========
           "Name": "unseen_world:grizzly_sapling",
->>>>>>>> Stashed changes:src/main/generated/data/unseen_world/worldgen/placed_feature/grizzly_tree.json
           "Properties": {
             "stage": "0"
           }

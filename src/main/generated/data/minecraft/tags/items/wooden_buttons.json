@@ -1,14 +1,10 @@
 {
   "replace": false,
   "values": [
-<<<<<<< Updated upstream
-    "unseen_world:amethyst_button"
-=======
     "unseen_world:amethyst_button",
     "unseen_world:grizzly_button",
     "unseen_world:tealive_button",
     "unseen_world:burlywood_button",
     "unseen_world:crimsonveil_button"
->>>>>>> Stashed changes
   ]
 }

@@ -3,16 +3,19 @@ package net.sashakyotoz;
 import net.fabricmc.api.ModInitializer;
 
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.util.Identifier;
+import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.UnseenWorldDataGenerator;
+import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
 import net.sashakyotoz.common.items.ModItemGroups;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.ModWorldGeneration;
-<<<<<<< Updated upstream
-=======
+import net.sashakyotoz.common.world.features.ModFeatures;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
->>>>>>> Stashed changes
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,20 +32,21 @@ public class UnseenWorld implements ModInitializer {
 				.tintColor(0x000)
 				.registerPortal();
 		ModItems.register();
-<<<<<<< Updated upstream
-		ModBlocks.register();
 		ModItemGroups.register();
+		ModBlocks.register();
+		ModBlockEntities.register();
+
+		TrackedDataHandlerRegistry.register(WarriorOfChimericDarkness.WARRIOR_POSE);
+
+		ModEntities.register();
+		ModFeatures.register();
+		ModParticleTypes.register();
+
 		UnseenWorldDataGenerator.registerBurnable();
 		UnseenWorldDataGenerator.registerFuels();
 		UnseenWorldDataGenerator.registerStripped();
-=======
-		ModItemGroups.register();
-		ModBlocks.register();
-		UnseenWorldDataGenerator.registerBurnable();
-		UnseenWorldDataGenerator.registerFuels();
-		UnseenWorldDataGenerator.registerStripped();
+
 		ModTreePlacerTypes.register();
->>>>>>> Stashed changes
 		ModWorldGeneration.register();
 	}
 	public static Identifier makeID(String id) {

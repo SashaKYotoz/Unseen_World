@@ -1,13 +1,24 @@
-// 1.20.1	2024-09-02T22:22:27.3237176	Unseen World/Tags for minecraft:item
-0375e10af4bd9da3b44c83b5082bd0cf590fa57a data\minecraft\tags\items\wooden_fences.json
-1430e757d137ff61a9c52ecc888209932258d02b data\minecraft\tags\items\planks.json
-c08a6955febd978e40f658591d1d10c837c4b2b0 data\minecraft\tags\items\wooden_buttons.json
-c8e854a0584c0025a70a3cd6cdd95e662cec1928 data\minecraft\tags\items\saplings.json
-3c2ee2a3bef328bafa2067061c78bd9e4e3d6a18 data\minecraft\tags\items\wooden_slabs.json
-e3e593052b8ac2ce83107c6a81030199d88bc816 data\minecraft\tags\items\wooden_pressure_plates.json
+// 1.20.1	2024-10-12T22:22:43.9589846	Unseen World/Tags for minecraft:item
+bf73df56ef41c02898f21ebfca017f81e46398ff data\minecraft\tags\items\wooden_fences.json
+da293f97ee7cdf20e5cfd363d5d8bec75c975ef4 data\minecraft\tags\items\trimmable_armor.json
+e09f6354376c160ce21c230dbf1410c9f2ff9934 data\minecraft\tags\items\planks.json
+f7156737ece6c0e4acd3b47b93c115fb4be01d3f data\minecraft\tags\items\hoes.json
+81bf6ba1a48f1cb3d20701abb76802584d5c1622 data\minecraft\tags\items\wooden_buttons.json
+25503164e82540b3d2eba629bda663959b57bfa6 data\minecraft\tags\items\flowers.json
+b74b41d353f180a1eb91a369d13ee9dfb695d5af data\minecraft\tags\items\shovels.json
+c85b51c4ce64462494a15e71f25a385fbb172961 data\minecraft\tags\items\saplings.json
+b06cb129279df088a441d62ce5e91356093cdc66 data\unseen_world\tags\items\grizzly_logs.json
+ff117ad317469d22762c118e302453e23ac097f0 data\minecraft\tags\items\wooden_slabs.json
+9368ec3a7645209615756661cc3e258421bb357e data\minecraft\tags\items\wooden_pressure_plates.json
 0cee53e4e2b76489da55d54e265c8ced7f79d30d data\unseen_world\tags\items\amethyst_logs.json
-4e72cb308f8e69e559389f20278276c2ed698a64 data\minecraft\tags\items\wooden_doors.json
-9e0f08aa72bad84d9aebe9eccb4590c79be4702b data\minecraft\tags\items\fence_gates.json
-53e043081d2e4cdf01ca51d9c24ae247da19d76e data\minecraft\tags\items\wooden_trapdoors.json
-dd044d69fa49453cec360ac34474d1c75e4e9487 data\minecraft\tags\items\wooden_stairs.json
-0cee53e4e2b76489da55d54e265c8ced7f79d30d data\minecraft\tags\items\logs_that_burn.json
+7f8c91b1cd9d8405f17ed2c2f3cf67a3aa401341 data\minecraft\tags\items\axes.json
+6438ec5d2df1f3b5178c37620122d6621cb84bbf data\minecraft\tags\items\wooden_trapdoors.json
+40fb6f8fc4bdb96d7f37efe83c88e713bbaab67f data\minecraft\tags\items\fence_gates.json
+b98784223c2454dfb4f3c3795319830d542420c8 data\minecraft\tags\items\wooden_doors.json
+9d1c076b097348d0bac455b33de5ee5e1c624a17 data\minecraft\tags\items\swords.json
+1a5cc591cbb783d297a97666f98f26705b65a64b data\unseen_world\tags\items\tealive_logs.json
+0deacf2aa60aee7217570ee9ab39e779efaf7648 data\minecraft\tags\items\wooden_stairs.json
+0d5c31ad46a7fa47d5e2e4a068b654740b4e2d44 data\unseen_world\tags\items\burlywood_logs.json
+60e709fba0a53fe5b62bd58f8c4f0f705792908d data\unseen_world\tags\items\crimsonveil_logs.json
+5c1c722e1822f917d664ad2ad554ed88cadde358 data\minecraft\tags\items\logs_that_burn.json
+6e4eace623e9e20fbf7eb24e669f1223861a4c8f data\minecraft\tags\items\pickaxes.json

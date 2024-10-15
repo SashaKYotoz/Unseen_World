@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "unseen_world:block/glaciemite_bulb"
+    },
+    "lit=true": {
+      "model": "unseen_world:block/glaciemite_bulb_litted"
+    }
+  }
+}

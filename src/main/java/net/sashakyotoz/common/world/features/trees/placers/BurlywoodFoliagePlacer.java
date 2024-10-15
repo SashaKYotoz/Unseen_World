@@ -39,16 +39,16 @@ public class BurlywoodFoliagePlacer extends FoliagePlacer {
         BlockPos blockPos = treeNode.getCenter().up(offset);
         boolean bl = treeNode.isGiantTrunk();
         if (bl) {
-            this.generateSquare(world, placer, random, config, blockPos, radius + 1, -1, bl);
-            this.generateSquare(world, placer, random, config, blockPos, radius + 2, 0, bl);
-            this.generateSquare(world, placer, random, config, blockPos, radius + 1, 1, bl);
-            if (random.nextBoolean()) {
-                this.generateSquare(world, placer, random, config, blockPos.down(-3), radius, 2, bl);
-                this.generateSquare(world, placer, random, config, blockPos.down(-2), radius+1, 2, bl);
-            }
-        } else {
-            this.generateSquare(world, placer, random, config, blockPos, radius + 2, -1, bl);
+            this.generateSquare(world, placer, random, config, blockPos, radius, -1, bl);
             this.generateSquare(world, placer, random, config, blockPos, radius + 1, 0, bl);
+            this.generateSquare(world, placer, random, config, blockPos, radius, 1, bl);
+//            if (random.nextBoolean()) {
+//                this.generateSquare(world, placer, random, config, blockPos.down(-3), radius, 2, bl);
+//                this.generateSquare(world, placer, random, config, blockPos.down(-2), radius+1, 2, bl);
+//            }
+        } else {
+            this.generateSquare(world, placer, random, config, blockPos, radius + 1, -1, bl);
+            this.generateSquare(world, placer, random, config, blockPos, radius, 0, bl);
         }
     }
 

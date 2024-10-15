@@ -3,7 +3,6 @@ package net.sashakyotoz.common.world.features.trees.placers;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.util.math.BlockPos;
@@ -13,12 +12,10 @@ import net.minecraft.world.TestableWorld;
 import net.minecraft.world.gen.feature.TreeFeature;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacerType;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -59,7 +56,7 @@ public class BurlywoodTrunkPlacer extends TrunkPlacer {
         Function<BlockState, BlockState> function = state -> state.withIfExists(PillarBlock.AXIS, direction.getAxis());
         for (int q = 0; q < height; q++) {
             if (q + 3 > height && q % 2 == 0)
-                list.add(this.generateBranch(world, replacer, random, height, startPos.up(), config, function, direction.getOpposite(), j, j < l - 1, mutable));
+                list.add(this.generateBranch(world, replacer, random, height, random.nextBoolean() ? startPos.up() : startPos.up(3), config, function, direction.getOpposite(), j, j < l - 1, mutable));
             if (q >= i && j > 0) {
                 n += direction.getOffsetX();
                 o += direction.getOffsetZ();
@@ -73,11 +70,10 @@ public class BurlywoodTrunkPlacer extends TrunkPlacer {
                 this.getAndSetState(world, replacer, random, blockPos2.east(), config);
                 this.getAndSetState(world, replacer, random, blockPos2.south(), config);
                 this.getAndSetState(world, replacer, random, blockPos2.east().south(), config);
-                this.getAndSetState(world, replacer, random, blockPos2.up(4).east().south(), config);
             }
         }
 
-        list.add(new FoliagePlacer.TreeNode(new BlockPos(n, p, o), 0, true));
+        list.add(new FoliagePlacer.TreeNode(new BlockPos(n, p-1, o), 0, true));
 
         for (int q = -1; q <= 2; q++) {
             for (int r = -1; r <= 2; r++) {
@@ -88,7 +84,7 @@ public class BurlywoodTrunkPlacer extends TrunkPlacer {
                         this.getAndSetState(world, replacer, random, new BlockPos(k + q, p - t - 1, m + r), config);
                     }
 
-                    list.add(new FoliagePlacer.TreeNode(new BlockPos(n + q, p-1, o + r), 0, false));
+                    list.add(new FoliagePlacer.TreeNode(new BlockPos(n + q, p, o + r), 0, false));
                 }
             }
         }

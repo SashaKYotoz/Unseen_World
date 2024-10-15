@@ -12,17 +12,16 @@ public class ModLanguageProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(TranslationBuilder translationBuilder) {
-<<<<<<< Updated upstream
-        translationBuilder.add("itemgroup.unseen_world.equipment", "Unseen World: Equipment");
-        translationBuilder.add("itemgroup.unseen_world.blocks", "Unseen World: Blocks");
-
-        ModRegistry.BLOCKS.forEach(block ->
-                translationBuilder.add(block, convertToName(block.getTranslationKey(), true))
-        );
-=======
         translationBuilder.add("itemgroup.unseen_world.items", "Unseen World: Items");
         translationBuilder.add("itemgroup.unseen_world.blocks", "Unseen World: Blocks");
 
+        translationBuilder.add("entity.unseen_world.warrior_of_chimeric_darkness", "Warrior of Chimeric Darkness");
+
+        translationBuilder.add("item.unseen_world.armor_tips", "When the full set worn:");
+        translationBuilder.add("item.unseen_world.abyssal_armor_tooltip", "Immunise you to Darkness, Falling into void");
+        translationBuilder.add("item.unseen_world.titanium_armor_tooltip", "Immunise you to Fire");
+        translationBuilder.add("item.unseen_world.unseenium_armor_tooltip", "Immunise you to Glowing");
+        translationBuilder.add("item.unseen_world.unseenium_armor_tooltip1", "Slowly recover itself, if noone near");
 
         translationBuilder.add("block.unseen_world.amethyst_sign", "Amethyst Sign");
         translationBuilder.add("block.unseen_world.amethyst_hanging_sign", "Amethyst Hanging Sign");
@@ -39,7 +38,6 @@ public class ModLanguageProvider extends FabricLanguageProvider {
             if (!block.getTranslationKey().contains("sign"))
                 translationBuilder.add(block, convertToName(block.getTranslationKey(), true));
         });
->>>>>>> Stashed changes
         ModRegistry.ITEMS.forEach(item -> {
             if (!(item instanceof BlockItem))
                 translationBuilder.add(item, convertToName(item.getTranslationKey(), false));

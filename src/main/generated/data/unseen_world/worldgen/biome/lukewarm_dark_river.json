@@ -17,7 +17,13 @@
     "water_color": 0,
     "water_fog_color": 0
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [
+      "unseen_world:midnight_lily_patch"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {

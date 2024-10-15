@@ -23,19 +23,11 @@ public class ModDimensions {
 
     public static void bootstrapType(Registerable<DimensionType> context) {
         context.register(CHIMERIC_DARKNESS_TYPE, new DimensionType(
-<<<<<<< Updated upstream
-                OptionalLong.of(23000), // fixedTime
-                false, // hasSkylight
-                false, // hasCeiling
-                false, // ultraWarm
-                true, // natural
-=======
-                OptionalLong.of(0), // fixedTime
+                OptionalLong.of(1000), // fixedTime
                 false, // hasSkylight
                 false, // hasCeiling
                 false, // ultraWarm
                 false, // natural
->>>>>>> Stashed changes
                 16.0, // coordinateScale
                 false, // bedWorks
                 true, // respawnAnchorWorks
@@ -43,8 +35,8 @@ public class ModDimensions {
                 384, // height
                 320, // logicalHeight
                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn
-                DimensionTypes.THE_NETHER_ID, // effectsLocation
-                1.0f, // ambientLight
+                UnseenWorld.makeID("the_chimeric_darkness"), // effectsLocation
+                0.005F, // ambientLight
                 new DimensionType.MonsterSettings(false, false, UniformIntProvider.create(0, 4), 0)));
     }
 }
