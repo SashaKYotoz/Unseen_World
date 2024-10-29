@@ -11,11 +11,8 @@
     "unseen_world:gloworchid",
     "unseen_world:deep_water_anfeltsia",
     "unseen_world:tanzashroom",
-    "unseen_world:tanzashroom_light",
     "unseen_world:tanzashroom_block",
     "unseen_world:tanzashroom_stem",
-    "unseen_world:nightdew_of_chimeric_darkness",
     "unseen_world:amethyst_grass"
-  ],
-  "replace": false
+  ]
 }

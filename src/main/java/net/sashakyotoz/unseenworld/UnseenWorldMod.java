@@ -5,6 +5,7 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +17,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.sashakyotoz.anitexlib.utils.TextureAnimator;
 import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIScreen;
+import net.sashakyotoz.unseenworld.network.BlazerHelmetAbilityMessage;
+import net.sashakyotoz.unseenworld.network.MiningBootsAbilityMessage;
+import net.sashakyotoz.unseenworld.network.ModNetwork;
+import net.sashakyotoz.unseenworld.recipes.brewing.DarkImmunitePotionRecipeBrewingRecipe;
+import net.sashakyotoz.unseenworld.recipes.brewing.RedTitaniumPoisonSwordRecipeBrewingRecipe;
 import net.sashakyotoz.unseenworld.registries.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,6 +87,12 @@ public class UnseenWorldMod {
         ComposterBlock.COMPOSTABLES.put(UnseenWorldItems.BERRIES_OF_BLOOMING_VINE.get(), 0.2f);
         PotionBrewing.addMix(Potions.AWKWARD, UnseenWorldItems.TEALIVE_STONY_SHARD.get(),Potions.LONG_NIGHT_VISION);
         PotionBrewing.addMix(Potions.AWKWARD, UnseenWorldItems.DARK_FREE_SOUL.get(), UnseenWorldPotions.DARK_IMMUNITE_POTION.get());
+
+        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new RedTitaniumPoisonSwordRecipeBrewingRecipe()));
+        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new DarkImmunitePotionRecipeBrewingRecipe()));
+
+        ModNetwork.addNetworkMessage(BlazerHelmetAbilityMessage.class, BlazerHelmetAbilityMessage::buffer, BlazerHelmetAbilityMessage::new, BlazerHelmetAbilityMessage::handler);
+        ModNetwork.addNetworkMessage(MiningBootsAbilityMessage.class, MiningBootsAbilityMessage::buffer, MiningBootsAbilityMessage::new, MiningBootsAbilityMessage::handler);
     }
     private void clientSetup(final FMLClientSetupEvent event){
         ModItemProperties.addCustomItemProperties();

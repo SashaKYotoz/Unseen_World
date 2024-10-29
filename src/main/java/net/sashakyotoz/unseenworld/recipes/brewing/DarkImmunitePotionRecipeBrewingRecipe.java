@@ -1,11 +1,7 @@
 
 package net.sashakyotoz.unseenworld.recipes.brewing;
 
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.brewing.IBrewingRecipe;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -15,12 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldPotions;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+
 public class DarkImmunitePotionRecipeBrewingRecipe implements IBrewingRecipe {
-	@SubscribeEvent
-	public static void init(FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new DarkImmunitePotionRecipeBrewingRecipe()));
-	}
 
 	@Override
 	public boolean isInput(ItemStack input) {

@@ -20,6 +20,7 @@ Wiki for mod is coming in soon future on sashakyotoz_dev website
 
 Currently plans for versions:
 
+- Make complete version for Fabric(upcoming v0.3 of UW) and port it to 1.21+
 - Port mod to NeoForge and support 1.21+ versions of game
 
 The mod is translated into 2 languages:

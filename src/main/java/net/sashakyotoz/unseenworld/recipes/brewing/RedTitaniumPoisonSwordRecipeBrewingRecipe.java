@@ -1,11 +1,7 @@
 
 package net.sashakyotoz.unseenworld.recipes.brewing;
 
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.brewing.IBrewingRecipe;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.alchemy.Potions;
@@ -16,12 +12,8 @@ import net.minecraft.world.item.Item;
 
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+
 public class RedTitaniumPoisonSwordRecipeBrewingRecipe implements IBrewingRecipe {
-	@SubscribeEvent
-	public static void init(FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new RedTitaniumPoisonSwordRecipeBrewingRecipe()));
-	}
 
 	@Override
 	public boolean isInput(ItemStack input) {

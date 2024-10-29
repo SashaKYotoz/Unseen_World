@@ -48,13 +48,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
         );
         this.tag(ItemTags.SHOVELS).replace(false).add(
                 UnseenWorldItems.ITEMS.getEntries().stream()
-                        .filter(itemRegistryObject -> !itemRegistryObject.get().getDescriptionId().contains("shovel"))
+                        .filter(itemRegistryObject -> itemRegistryObject.get().getDescriptionId().contains("shovel"))
                         .map(RegistryObject::get)
                         .toArray(Item[]::new)
         );
         this.tag(ItemTags.HOES).replace(false).add(
                 UnseenWorldItems.ITEMS.getEntries().stream()
-                        .filter(itemRegistryObject -> !itemRegistryObject.get().getDescriptionId().contains("hoe"))
+                        .filter(itemRegistryObject -> itemRegistryObject.get().getDescriptionId().contains("hoe"))
                         .map(RegistryObject::get)
                         .toArray(Item[]::new)
         );

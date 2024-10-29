@@ -1,10 +1,6 @@
 package net.sashakyotoz.unseenworld.network;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
 
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -12,7 +8,6 @@ import net.sashakyotoz.unseenworld.managers.BlazerHelmetShiftEventProcedure;
 
 import java.util.Objects;
 import java.util.function.Supplier;
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BlazerHelmetAbilityMessage {
     int type, pressedms;
 
@@ -40,9 +35,5 @@ public class BlazerHelmetAbilityMessage {
     public static void pressAction(Player player, int type,int pressedms) {
         if (type == 0)
             BlazerHelmetShiftEventProcedure.execute(player);
-    }
-    @SubscribeEvent
-    public static void registerMessage(FMLCommonSetupEvent event) {
-        ModNetwork.addNetworkMessage(BlazerHelmetAbilityMessage.class, BlazerHelmetAbilityMessage::buffer, BlazerHelmetAbilityMessage::new, BlazerHelmetAbilityMessage::handler);
     }
 }

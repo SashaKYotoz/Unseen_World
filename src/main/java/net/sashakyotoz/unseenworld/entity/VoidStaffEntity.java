@@ -45,15 +45,15 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
     public void onHitBlock(@NotNull BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
         if (this.getOwner() != null && this.getOwner() instanceof Player player) {
-            this.level().addParticle(UnseenWorldParticleTypes.VOID_PORTAL.get(), player.getX(), player.getY() + 2.5, player.getZ(), 1, 1, 1);
+            if (this.level().isClientSide())
+                this.level().addParticle(UnseenWorldParticleTypes.VOID_PORTAL.get(), player.getX(), player.getY() + 2.5, player.getZ(), 1, 1, 1);
             BlockPos hitPos = blockHitResult.getBlockPos().above();
             UnseenWorldMod.queueServerWork(20, () -> {
                 float x = hitPos.getX();
                 float y = hitPos.getY();
                 float z = hitPos.getZ();
                 player.teleportTo(x, y, z);
-                if (level().loadedAndEntityCanStandOn(blockHitResult.getBlockPos(), player))
-                    this.level().addParticle(UnseenWorldParticleTypes.VOID_PORTAL.get(), x, y + 1.5, z, 1, 1, 1);
+                this.level().addParticle(UnseenWorldParticleTypes.VOID_PORTAL.get(), x, y + 1.5, z, 1, 1, 1);
                 if (player instanceof ServerPlayer serverPlayer)
                     serverPlayer.connection.teleport(x, y, z, player.getYRot(), player.getXRot());
             });

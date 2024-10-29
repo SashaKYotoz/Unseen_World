@@ -49,6 +49,5 @@
     "unseen_world:naturerium_block",
     "unseen_world:void_ingot_block",
     "unseen_world:red_titanium_block"
-  ],
-  "replace": false
+  ]
 }
