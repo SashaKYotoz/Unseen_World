@@ -5,25 +5,12 @@
       {
         "type": "minecraft:attached_to_leaves",
         "block_provider": {
-          "type": "minecraft:randomized_int_state_provider",
-          "property": "age",
-          "source": {
-            "type": "minecraft:simple_state_provider",
-            "state": {
-              "Name": "minecraft:mangrove_propagule",
-              "Properties": {
-                "age": "0",
-                "hanging": "true",
-                "stage": "0",
-                "waterlogged": "false"
-              }
-            }
-          },
-          "values": {
-            "type": "minecraft:uniform",
-            "value": {
-              "max_inclusive": 4,
-              "min_inclusive": 0
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "unseen_world:crimsonveil_vine",
+            "Properties": {
+              "age": "0",
+              "berries": "false"
             }
           }
         },
@@ -44,9 +31,15 @@
     },
     "foliage_placer": {
       "type": "minecraft:random_spread_foliage_placer",
-      "foliage_height": 2,
+      "foliage_height": 1,
       "leaf_placement_attempts": 70,
-      "offset": 0,
+      "offset": {
+        "type": "minecraft:uniform",
+        "value": {
+          "max_inclusive": 1,
+          "min_inclusive": 0
+        }
+      },
       "radius": 3
     },
     "foliage_provider": {
@@ -120,7 +113,7 @@
     },
     "trunk_placer": {
       "type": "minecraft:upwards_branching_trunk_placer",
-      "base_height": 6,
+      "base_height": 7,
       "can_grow_through": "#minecraft:mangrove_logs_can_grow_through",
       "extra_branch_length": {
         "type": "minecraft:uniform",

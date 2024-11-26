@@ -2,7 +2,7 @@ package net.sashakyotoz.common.entities.ai;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.sashakyotoz.common.entities.HarmonyWatcherEntity;
+import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
 public class WatcherAttackGoal extends Goal {
     private final HarmonyWatcherEntity watcher;

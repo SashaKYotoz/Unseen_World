@@ -1,13 +1,11 @@
 package net.sashakyotoz.client.renderers;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
-import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.models.HarmonyWatcherModel;
-import net.sashakyotoz.common.entities.HarmonyWatcherEntity;
+import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
 public class HarmonyWatcherRenderer extends DeathFixedMobRenderer<HarmonyWatcherEntity, HarmonyWatcherModel> {
 

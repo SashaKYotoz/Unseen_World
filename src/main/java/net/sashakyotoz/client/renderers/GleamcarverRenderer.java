@@ -1,11 +1,10 @@
 package net.sashakyotoz.client.renderers;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.models.GleamcarverModel;
-import net.sashakyotoz.common.entities.GleamcarverEntity;
+import net.sashakyotoz.common.entities.custom.GleamcarverEntity;
 
 public class GleamcarverRenderer extends DeathFixedMobRenderer<GleamcarverEntity, GleamcarverModel> {
 

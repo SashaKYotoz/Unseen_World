@@ -3,7 +3,7 @@
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
-    "foliage_color": 0,
+    "foliage_color": 5013401,
     "grass_color": 0,
     "music": {
       "max_delay": 24000,
@@ -30,5 +30,5 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.0
+  "temperature": 0.5
 }

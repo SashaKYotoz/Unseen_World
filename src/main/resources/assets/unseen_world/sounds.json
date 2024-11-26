@@ -1,0 +1,9 @@
+{
+  "gleamcarver_ambient_sound": {
+    "subtitle": "sounds.unseen_world.gleamcarver_ambient_sound",
+    "sounds": [
+      "unseen_world:gleamcarver_ambient_sound",
+      "unseen_world:gleamcarver_ambient_sound1"
+    ]
+  }
+}

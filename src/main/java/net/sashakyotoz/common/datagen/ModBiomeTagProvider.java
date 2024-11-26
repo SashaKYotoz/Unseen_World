@@ -87,6 +87,11 @@ public class ModBiomeTagProvider extends VanillaBiomeTagProvider {
                 ModBiomes.GREENISH_VALLEY,
                 ModBiomes.HARMONY_GROVE
         );
+        this.getOrCreateTagBuilder(ModTags.Biomes.HAS_BURLYWOOD_BUSH_TREE).add(
+                ModBiomes.BURLYWOOD_JUNGLE,
+                ModBiomes.GREENISH_VALLEY,
+                ModBiomes.GREENISH_MEADOW
+        );
         this.getOrCreateTagBuilder(ModTags.Biomes.HAS_AMETHYST_TREE).add(
                 ModBiomes.AMETHYST_FOREST,
                 ModBiomes.HARMONY_GROVE
@@ -112,6 +117,19 @@ public class ModBiomeTagProvider extends VanillaBiomeTagProvider {
                 ModBiomes.AMETHYST_CHIMERIES,
                 ModBiomes.TEALIVY_VALLEY,
                 ModBiomes.HARMONY_GROVE
+        );
+        this.getOrCreateTagBuilder(ModTags.Biomes.HAS_SABERPARD).add(
+                ModBiomes.DARK_WASTELAND,
+                ModBiomes.GRIZZLY_HIGHLANDS,
+                ModBiomes.CRIMSONVEIL_PLATEAU,
+                ModBiomes.HARMONY_GROVE,
+                ModBiomes.GREENISH_VALLEY,
+                ModBiomes.BURLYWOOD_JUNGLE
+        );
+        this.getOrCreateTagBuilder(ModTags.Biomes.SPAWNS_STEPPE_SABERPARD).add(
+                ModBiomes.DARK_WASTELAND,
+                ModBiomes.GRIZZLY_HIGHLANDS,
+                ModBiomes.CRIMSONVEIL_PLATEAU
         );
     }
 }

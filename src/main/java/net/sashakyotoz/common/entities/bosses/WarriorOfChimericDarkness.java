@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.EntityPositionSource;
 import net.sashakyotoz.client.particles.custom.effects.WindVibrationParticleEffect;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.entities.ai.warrior_goals.WarriorMovementGoal;
+import net.sashakyotoz.common.entities.ai.bosses_goals.WarriorMovementGoal;
 import net.sashakyotoz.utils.ChimericDarknessData;
 import net.sashakyotoz.utils.JsonWorldController;
 
@@ -64,10 +64,6 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
         mobNavigation.setCanWalkOverFences(true);
     }
 
-    @Override
-    public boolean canFreeze() {
-        return false;
-    }
 
     @Override
     public ServerBossBar bossInfo() {

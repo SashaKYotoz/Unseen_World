@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.sashakyotoz.common.entities.HarmonyWatcherEntity;
+import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
 public class FertilizeGoal extends Goal {
     private final HarmonyWatcherEntity watcher;

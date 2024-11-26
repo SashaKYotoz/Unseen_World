@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:dark_wasteland",
+    "unseen_world:grizzly_highlands",
+    "unseen_world:crimsonveil_plateau",
+    "unseen_world:harmony_grove",
+    "unseen_world:greenish_valley",
+    "unseen_world:burlywood_jungle"
+  ]
+}

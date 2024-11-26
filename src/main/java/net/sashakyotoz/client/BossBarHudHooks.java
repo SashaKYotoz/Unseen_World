@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public class BossBarHudHooks {
     private static final Identifier BOSSBAR_WARRIOR_OF_DARKNESS = UnseenWorld.makeID("textures/gui/bossbars/warrior_of_darkness_bossbar.png");
+    private static final Identifier BOSSBAR_ECLIPSE_SENTINEL = UnseenWorld.makeID("textures/gui/bossbars/eclipse_sentinel_bossbar.png");
     public static void render(MinecraftClient client, Map<UUID, ClientBossBar> events, DrawContext context){
         if (!events.isEmpty()) {
             int i = client.getWindow().getScaledWidth();
@@ -29,11 +30,13 @@ public class BossBarHudHooks {
         }
     }
     private static boolean shouldDisplayFrame(ClientBossBar info) {
-        return info.getName().contains(Text.translatable("entity.unseen_world.warrior_of_chimeric_darkness"));
+        return info.getName().contains(Text.translatable("entity.unseen_world.warrior_of_chimeric_darkness")) || info.getName().contains(Text.translatable("entity.unseen_world.eclipse_sentinel"));
     }
     private static Identifier getBossbarLocation(ClientBossBar info){
         if (info.getName().contains(Text.translatable("entity.unseen_world.warrior_of_chimeric_darkness")))
             return BOSSBAR_WARRIOR_OF_DARKNESS;
+        if (info.getName().contains(Text.translatable("entity.unseen_world.eclipse_sentinel")))
+            return BOSSBAR_ECLIPSE_SENTINEL;
         return new Identifier("");
     }
 }

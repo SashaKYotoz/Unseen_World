@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stripped_burlywood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:stripped_burlywood_log"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "unseen_world:stripped_burlywood_wood"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_stripped_burlywood_log",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "unseen_world:stripped_burlywood_wood"
+    ]
+  },
+  "sends_telemetry_event": false
+}

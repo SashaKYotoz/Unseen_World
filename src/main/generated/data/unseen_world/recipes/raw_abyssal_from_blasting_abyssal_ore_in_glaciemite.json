@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 400,
+  "experience": 10.0,
+  "group": "abyssal_ore",
+  "ingredient": {
+    "item": "unseen_world:abyssal_ore_in_glaciemite"
+  },
+  "result": "unseen_world:raw_abyssal"
+}

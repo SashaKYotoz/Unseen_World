@@ -8,7 +8,8 @@ import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.blocks.custom.MidnightLilyPadBlock;
+import net.sashakyotoz.common.blocks.ModFluids;
+import net.sashakyotoz.common.blocks.custom.plants.MidnightLilyPadBlock;
 
 public class MidnightLilyPadFeature extends Feature<DefaultFeatureConfig> {
     public static final Feature<DefaultFeatureConfig> INSTANCE = new MidnightLilyPadFeature();
@@ -28,7 +29,7 @@ public class MidnightLilyPadFeature extends Feature<DefaultFeatureConfig> {
                 for (int z = -radius; z < radius; z++) {
                     if (random.nextBoolean()){
                         BlockPos pos = origin.add(x, y, z);
-                        if ((world.getFluidState(pos).getFluid() == ModBlocks.DARK_WATER
+                        if ((world.getFluidState(pos).getFluid() == ModFluids.DARK_WATER
                                 || world.getFluidState(pos).getFluid() == Fluids.WATER)
                                 && world.getBlockState(pos.up()).isAir() && random.nextBoolean())
                             this.setBlockState(world,pos.up(),ModBlocks.MIDNIGHT_LILY_PAD.getDefaultState().with(MidnightLilyPadBlock.HAS_BERRY,random.nextBoolean()));

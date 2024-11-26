@@ -2,6 +2,8 @@ package net.sashakyotoz.common.items;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.block.AbstractPlantBlock;
+import net.minecraft.block.AbstractPlantStemBlock;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
@@ -15,17 +17,15 @@ public class ModItemGroups {
     public static final ItemGroup UNSEEN_WORLD_EQUIPMENT = register("equipment",
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.unseen_world.items"))
                     .icon(() -> new ItemStack(ModItems.ECLIPSE_KEYSTONE))
-                    .entries((displayContext, entries) -> {
-                        ModRegistry.ITEMS.forEach(item -> {
-                            if (!(item instanceof BlockItem))
-                                entries.add(item);
-                        });
-                    }).build());
+                    .entries((displayContext, entries) -> ModRegistry.ITEMS.forEach(item -> {
+                        if (!(item instanceof BlockItem))
+                            entries.add(item);
+                    })).build());
     public static final ItemGroup UNSEEN_WORLD_BLOCKS = register("blocks",
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.unseen_world.blocks"))
                     .icon(() -> new ItemStack(ModBlocks.DARK_FROST_BRICKS))
                     .entries((displayContext, entries) -> ModRegistry.BLOCKS.forEach(block -> {
-                        if (!block.getTranslationKey().contains("sign") && !(block instanceof FluidBlock))
+                        if (!block.getTranslationKey().contains("sign") && !(block instanceof FluidBlock) && (!(block instanceof AbstractPlantBlock) && (!(block instanceof AbstractPlantStemBlock))))
                             entries.add(block);
                     })).build());
 

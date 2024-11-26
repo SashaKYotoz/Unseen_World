@@ -9,6 +9,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.tag.BlockTags;
@@ -205,6 +206,7 @@ public class ModRegistry {
         FLUID,
         WALL,
         CROSS,
+        CROSS_ITEMLESS,
         PILLAR,
         WOOD,
         STAIRS,
@@ -228,7 +230,11 @@ public class ModRegistry {
                         new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 0, true, false),
                         1)
                 .statusEffect(
-                        new StatusEffectInstance(StatusEffects.GLOWING, 240, 1, true, false),
+                        new StatusEffectInstance(StatusEffects.HASTE, 240, 1, true, false),
+                        1).build();
+        public static final FoodComponent GLOW_APPLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(3).hunger(3)
+                .statusEffect(
+                        new StatusEffectInstance(StatusEffects.GLOWING, 300, 1, true, false),
                         1).build();
         public static final FoodComponent BEARFRUIT_BRAMBLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(1).hunger(3).statusEffect(
                         new StatusEffectInstance(StatusEffects.REGENERATION, 100, 1, true, true),
@@ -241,6 +247,12 @@ public class ModRegistry {
                         1)
                 .statusEffect(
                         new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 100, 0, true, true),
+                        1).build();
+        public static final FoodComponent WARPEDVEIL_VINE_FRUIT = new FoodComponent.Builder().alwaysEdible().saturationModifier(1).hunger(3).statusEffect(
+                        new StatusEffectInstance(StatusEffects.GLOWING, 300, 0, true, true),
+                        1)
+                .statusEffect(
+                        new StatusEffectInstance(StatusEffects.SATURATION, 60, 0, true, true),
                         1).build();
     }
 
@@ -297,4 +309,10 @@ public class ModRegistry {
     public static Map<TagKey<Item>, List<Item>> ITEM_TAGS = new HashMap<>();
     public static Map<Item, Model> ITEM_MODELS = new HashMap<>();
     public static Map<ItemConvertible, Integer> ITEM_BURNABLE = new HashMap<>();
+
+    public static final Potion GLOWING = register("glowing", new Potion(new StatusEffectInstance(StatusEffects.GLOWING, 3600)));
+
+    private static Potion register(String name, Potion potion) {
+        return Registry.register(Registries.POTION, name, potion);
+    }
 }

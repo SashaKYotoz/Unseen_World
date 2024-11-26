@@ -10,6 +10,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -18,6 +19,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.networking.data.GrippingData;
+import net.sashakyotoz.utils.IEntityDataSaver;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -42,13 +45,16 @@ public class ModArmorItem extends ArmorItem {
                                 livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
                                 9, 0, 1, 0, 0.5);
                     world.playSound(livingEntity, livingEntity.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.NEUTRAL, 3f, 2.5f);
-                    livingEntity.teleport(livingEntity.getX(), livingEntity.getY() + 128, livingEntity.getZ());
+                    livingEntity.teleport(livingEntity.getX(), livingEntity.getY() + 384, livingEntity.getZ());
+                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING,300,1));
+                    if (livingEntity instanceof ServerPlayerEntity player)
+                        GrippingData.addGrippingSeconds((IEntityDataSaver) player, 10);
                     headStack.damage(2, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.HEAD));
                     chestStack.damage(2, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
                     leggingsStack.damage(2, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.LEGS));
                     bootsStack.damage(2, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.FEET));
                 }
-                if (livingEntity.age % 10 == 0 && livingEntity.hasStatusEffect(StatusEffects.DARKNESS)){
+                if (livingEntity.age % 10 == 0 && livingEntity.hasStatusEffect(StatusEffects.DARKNESS)) {
                     livingEntity.clearStatusEffects();
                     if (livingEntity.getWorld() instanceof ServerWorld serverWorld)
                         serverWorld.spawnParticles(ParticleTypes.FIREWORK,
@@ -60,27 +66,27 @@ public class ModArmorItem extends ArmorItem {
                     bootsStack.damage(1, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.FEET));
                 }
             }
-            if (isRedTitaniumArmorSet(headStack,chestStack,leggingsStack,bootsStack)){
-                if ((livingEntity.isOnFire() || livingEntity.isInLava()) && !livingEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)){
-                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,160,0));
+            if (isRedTitaniumArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
+                if ((livingEntity.isOnFire() || livingEntity.isInLava()) && !livingEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 160, 0));
                     headStack.damage(1, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.HEAD));
                     chestStack.damage(1, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
                     leggingsStack.damage(1, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.LEGS));
                     bootsStack.damage(1, livingEntity, livingEntity1 -> livingEntity1.sendEquipmentBreakStatus(EquipmentSlot.FEET));
                 }
             }
-            if (isUnseeniumArmorSet(headStack,chestStack,leggingsStack,bootsStack)){
-                if (livingEntity.age % 200 == 0){
-                    List<LivingEntity> entities = livingEntity.getWorld().getEntitiesByClass(LivingEntity.class,livingEntity.getBoundingBox().expand(16),livingEntity1 -> livingEntity1 != livingEntity);
-                    if (entities.isEmpty()){
+            if (isUnseeniumArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
+                if (livingEntity.age % 200 == 0) {
+                    List<LivingEntity> entities = livingEntity.getWorld().getEntitiesByClass(LivingEntity.class, livingEntity.getBoundingBox().expand(16), livingEntity1 -> livingEntity1 != livingEntity);
+                    if (entities.isEmpty()) {
                         if (headStack.getDamage() < headStack.getMaxDamage())
-                            headStack.setDamage(headStack.getDamage()-2);
+                            headStack.setDamage(headStack.getDamage() - 2);
                         if (chestStack.getDamage() < chestStack.getMaxDamage())
-                            chestStack.setDamage(chestStack.getDamage()-2);
+                            chestStack.setDamage(chestStack.getDamage() - 2);
                         if (leggingsStack.getDamage() < leggingsStack.getMaxDamage())
-                            leggingsStack.setDamage(leggingsStack.getDamage()-2);
+                            leggingsStack.setDamage(leggingsStack.getDamage() - 2);
                         if (bootsStack.getDamage() < bootsStack.getMaxDamage())
-                            bootsStack.setDamage(bootsStack.getDamage()-2);
+                            bootsStack.setDamage(bootsStack.getDamage() - 2);
                     }
                 }
                 if (livingEntity.age % 20 == 0 && livingEntity.hasStatusEffect(StatusEffects.GLOWING))
@@ -94,9 +100,9 @@ public class ModArmorItem extends ArmorItem {
         super.appendTooltip(stack, world, tooltip, context);
         tooltip.add(Text.translatable("item.unseen_world.armor_tips").formatted(Formatting.BLUE));
         if (stack.isOf(ModItems.ABYSSAL_HELMET)
-        || stack.isOf(ModItems.ABYSSAL_CHESTPLATE)
-        || stack.isOf(ModItems.ABYSSAL_LEGGINGS)
-        || stack.isOf(ModItems.ABYSSAL_BOOTS)
+                || stack.isOf(ModItems.ABYSSAL_CHESTPLATE)
+                || stack.isOf(ModItems.ABYSSAL_LEGGINGS)
+                || stack.isOf(ModItems.ABYSSAL_BOOTS)
         )
             tooltip.add(Text.translatable("item.unseen_world.abyssal_armor_tooltip"));
         if (stack.isOf(ModItems.RED_TITANIUM_HELMET)
@@ -109,7 +115,7 @@ public class ModArmorItem extends ArmorItem {
                 || stack.isOf(ModItems.UNSEENIUM_CHESTPLATE)
                 || stack.isOf(ModItems.UNSEENIUM_LEGGINGS)
                 || stack.isOf(ModItems.UNSEENIUM_INGOT)
-        ){
+        ) {
             tooltip.add(Text.translatable("item.unseen_world.unseenium_armor_tooltip"));
             tooltip.add(Text.translatable("item.unseen_world.unseenium_armor_tooltip1"));
         }

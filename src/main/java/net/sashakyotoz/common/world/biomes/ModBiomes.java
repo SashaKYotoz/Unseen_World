@@ -82,14 +82,14 @@ public class ModBiomes {
         context.register(DARK_RIVER, ocean(context));
         context.register(LUKEWARM_DARK_RIVER, ocean(context));
         context.register(GREYNISH_SHORE, ocean(context));
-        context.register(GRIZZLY_THICKET, theDarkness(context));
+        context.register(GRIZZLY_THICKET, grizzlyLikeBiome(context));
         context.register(CURRANTSLATE_PEAKS, theDarkness(context));
-        context.register(GRIZZLY_HIGHLANDS, theDarkness(context));
-        context.register(CRIMSONVEIL_WOODS, theDarkness(context));
-        context.register(OLD_GROWTH_CRIMSONVEIL_WOODS, theDarkness(context));
+        context.register(GRIZZLY_HIGHLANDS, grizzlyLikeBiome(context));
+        context.register(CRIMSONVEIL_WOODS, semiHotBiome(context));
+        context.register(OLD_GROWTH_CRIMSONVEIL_WOODS, semiHotBiome(context));
         context.register(THE_DARKNESS, theDarkness(context));
         context.register(DARK_BADLANDS, theDarkness(context));
-        context.register(CRIMSONVEIL_PLATEAU, theDarkness(context));
+        context.register(CRIMSONVEIL_PLATEAU, semiHotBiome(context));
         context.register(DARK_WASTELAND, theDarkness(context));
         context.register(TEALIVY_VALLEY, tealivyBiome(context));
         context.register(TEALIVY_HIGHLANDS, tealivyBiome(context));
@@ -104,10 +104,6 @@ public class ModBiomes {
 
     public static Biome amethystBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
-//        spawnBuilder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(ModEntities.PORCUPINE, 2, 3, 5));
-//
-//        spawnBuilder.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(EntityType.WOLF, 5, 4, 4));
-
         GenerationSettings.LookupBackedBuilder biomeBuilder =
                 new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE),
                         context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
@@ -123,6 +119,28 @@ public class ModBiomes {
                         .skyColor(4605011)
                         .grassColor(13061821)
                         .foliageColor(13061821)
+                        .moodSound(BiomeMoodSound.CAVE)
+                        .fogColor(4605011)
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
+                .build();
+    }
+    public static Biome grizzlyLikeBiome(Registerable<Biome> context) {
+        SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
+        GenerationSettings.LookupBackedBuilder biomeBuilder =
+                new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE),
+                        context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        return new Biome.Builder()
+                .precipitation(false)
+                .downfall(0f)
+                .temperature(0.75f)
+                .generationSettings(biomeBuilder.build())
+                .spawnSettings(spawnBuilder.build())
+                .effects((new BiomeEffects.Builder())
+                        .waterColor(7340544)
+                        .waterFogColor(7340544)
+                        .skyColor(4605011)
+                        .grassColor(7340544)
+                        .foliageColor(7340544)
                         .moodSound(BiomeMoodSound.CAVE)
                         .fogColor(4605011)
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
@@ -169,6 +187,28 @@ public class ModBiomes {
                         .skyColor(4605011)
                         .grassColor(0x000)
                         .foliageColor(0x000)
+                        .fogColor(4605011)
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_END.value()))).build())
+                .build();
+    }
+    public static Biome semiHotBiome(Registerable<Biome> context) {
+        SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
+
+        GenerationSettings.LookupBackedBuilder biomeBuilder =
+                new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE),
+                        context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        return new Biome.Builder()
+                .precipitation(false)
+                .downfall(0f)
+                .temperature(0.5f)
+                .generationSettings(biomeBuilder.build())
+                .spawnSettings(spawnBuilder.build())
+                .effects((new BiomeEffects.Builder())
+                        .waterColor(0x000)
+                        .waterFogColor(0x000)
+                        .skyColor(4605011)
+                        .grassColor(0x000)
+                        .foliageColor(5013401)
                         .fogColor(4605011)
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_END.value()))).build())
                 .build();

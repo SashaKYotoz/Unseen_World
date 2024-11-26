@@ -1,15 +1,20 @@
 package net.sashakyotoz.client.models;
 
 import net.minecraft.client.model.*;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.scoreboard.ScoreboardCriterion;
+import net.minecraft.util.math.MathHelper;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.DarkGuardianEntity;
+import net.sashakyotoz.common.entities.custom.DarkGuardianEntity;
 
 public class DarkGuardianModel extends BipedEntityModel<DarkGuardianEntity> {
     public static final EntityModelLayer DARK_GUARDIAN = new EntityModelLayer(UnseenWorld.makeID("dark_guardian"), "main");
+    private final ModelPart root;
     private final ModelPart head;
     private final ModelPart body;
     private final ModelPart right_arm;
@@ -18,7 +23,8 @@ public class DarkGuardianModel extends BipedEntityModel<DarkGuardianEntity> {
     private final ModelPart left_leg;
 
     public DarkGuardianModel(ModelPart root) {
-        super(root);
+        super(root, RenderLayer::getEntityTranslucent);
+        this.root = root;
         this.head = root.getChild("head");
         this.body = root.getChild("body");
         this.right_arm = root.getChild("right_arm");
@@ -53,6 +59,12 @@ public class DarkGuardianModel extends BipedEntityModel<DarkGuardianEntity> {
         ModelPartData left_leg = modelPartData.addChild("left_leg", ModelPartBuilder.create().uv(16, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.0F))
                 .uv(0, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.25F)), ModelTransform.pivot(1.9F, 12.0F, 0.0F));
         return TexturedModelData.of(modelData, 128, 64);
+    }
+
+    @Override
+    public void setAngles(DarkGuardianEntity livingEntity, float f, float g, float h, float i, float j) {
+        super.setAngles(livingEntity, f, g, h, i, j);
+        this.root.pitch -= Math.abs(MathHelper.cos(f * 0.5F) * 0.9F);
     }
 
     @Override

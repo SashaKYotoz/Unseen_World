@@ -19,10 +19,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
-import net.sashakyotoz.common.blocks.custom.entities.GlaciemiteTranslocatoneBlockEntity;
-import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
-import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneData;
-import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.blocks.custom.entities.TranslocatoneBlockEntity;
 
 public class GlaciemiteTranslocatoneBlock extends BlockWithEntity {
     public static final BooleanProperty TRIGGERED = Properties.TRIGGERED;
@@ -45,7 +42,7 @@ public class GlaciemiteTranslocatoneBlock extends BlockWithEntity {
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new GlaciemiteTranslocatoneBlockEntity(pos, state);
+        return new TranslocatoneBlockEntity(pos, state);
     }
 
     @Override
@@ -60,10 +57,9 @@ public class GlaciemiteTranslocatoneBlock extends BlockWithEntity {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.getBlockEntity(pos) instanceof GlaciemiteTranslocatoneBlockEntity entity) {
+        if (world.getBlockEntity(pos) instanceof TranslocatoneBlockEntity entity) {
             world.playSound(player, pos, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 2.5f, 2);
             world.setBlockState(pos, state.with(TRIGGERED, false));
-            world.setBlockState(entity.pos,world.getBlockState(entity.pos).with(Properties.LOCKED,true));
             player.teleport(entity.pos.getX(),entity.pos.getY(),entity.pos.getZ());
         }
         return super.onUse(state, world, pos, player, hand, hit);
@@ -76,6 +72,6 @@ public class GlaciemiteTranslocatoneBlock extends BlockWithEntity {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, ModBlockEntities.GLACIEMITE_TRANSLOCATONE, GlaciemiteTranslocatoneBlockEntity::tick);
+        return checkType(type, ModBlockEntities.TRANSLOCATONE, TranslocatoneBlockEntity::tick);
     }
 }

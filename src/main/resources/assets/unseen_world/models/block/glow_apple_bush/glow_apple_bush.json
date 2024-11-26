@@ -1,0 +1,36 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"0": "unseen_world:block/glow_apple_bush"
+	},
+	"elements": [
+		{
+			"from": [6, 0, 6],
+			"to": [10, 8, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 8, 15]},
+			"faces": {
+				"north": {"uv": [2, 16, 0, 12], "texture": "#0"},
+				"east": {"uv": [0, 12, 2, 16], "texture": "#0"},
+				"south": {"uv": [2, 12, 0, 16], "texture": "#0"},
+				"west": {"uv": [2, 12, 0, 16], "texture": "#0"},
+				"up": {"uv": [0, 9.5, 2, 11.5], "texture": "#0"},
+				"down": {"uv": [0, 9.5, 2, 11.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [2, 3.5, 2],
+			"to": [14, 15.5, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 8.5, 12]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#0"},
+				"east": {"uv": [16, 0, 8, 8], "texture": "#0"},
+				"south": {"uv": [0, 0, 8, 8], "texture": "#0"},
+				"west": {"uv": [16, 0, 8, 8], "texture": "#0"},
+				"up": {"uv": [8, 0, 0, 8], "texture": "#0"},
+				"down": {"uv": [8, 0, 0, 8], "texture": "#0"}
+			}
+		}
+	],
+	"display": {}
+}

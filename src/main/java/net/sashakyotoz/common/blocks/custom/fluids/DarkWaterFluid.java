@@ -18,6 +18,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.blocks.ModFluids;
 import net.sashakyotoz.common.items.ModItems;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,12 +27,12 @@ import java.util.Optional;
 public abstract class DarkWaterFluid extends FlowableFluid {
     @Override
     public Fluid getFlowing() {
-        return ModBlocks.DARK_FLOWING_WATER;
+        return ModFluids.DARK_FLOWING_WATER;
     }
 
     @Override
     public Fluid getStill() {
-        return ModBlocks.DARK_WATER;
+        return ModFluids.DARK_WATER;
     }
 
     @Override
@@ -91,12 +92,12 @@ public abstract class DarkWaterFluid extends FlowableFluid {
 
     @Override
     public BlockState toBlockState(FluidState state) {
-        return ModBlocks.DARK_WATER_BLOCK.getDefaultState().with(FluidBlock.LEVEL, getBlockStateLevel(state));
+        return ModBlocks.DARK_WATER.getDefaultState().with(FluidBlock.LEVEL, getBlockStateLevel(state));
     }
 
     @Override
     public boolean matchesType(Fluid fluid) {
-        return fluid == ModBlocks.DARK_WATER || fluid == ModBlocks.DARK_FLOWING_WATER;
+        return fluid == ModFluids.DARK_WATER || fluid == ModFluids.DARK_FLOWING_WATER;
     }
 
     @Override

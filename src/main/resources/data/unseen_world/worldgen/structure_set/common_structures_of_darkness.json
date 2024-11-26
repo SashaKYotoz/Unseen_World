@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:guardian_camp_remains",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1947040103,
+    "spacing": 24,
+    "separation": 20
+  }
+}

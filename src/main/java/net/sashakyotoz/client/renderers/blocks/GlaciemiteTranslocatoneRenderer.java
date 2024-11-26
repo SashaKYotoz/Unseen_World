@@ -8,9 +8,9 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.RotationAxis;
-import net.sashakyotoz.common.blocks.custom.entities.GlaciemiteTranslocatoneBlockEntity;
+import net.sashakyotoz.common.blocks.custom.entities.TranslocatoneBlockEntity;
 
-public class GlaciemiteTranslocatoneRenderer<T extends GlaciemiteTranslocatoneBlockEntity> implements BlockEntityRenderer<T> {
+public class GlaciemiteTranslocatoneRenderer<T extends TranslocatoneBlockEntity> implements BlockEntityRenderer<T> {
     private final BlockEntityRendererFactory.Context context;
 
     public GlaciemiteTranslocatoneRenderer(BlockEntityRendererFactory.Context context) {

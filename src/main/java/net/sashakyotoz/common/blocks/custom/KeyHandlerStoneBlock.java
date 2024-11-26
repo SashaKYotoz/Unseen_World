@@ -23,25 +23,30 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneData;
 import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.entities.bosses.EclipseSentinelEntity;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
 import net.sashakyotoz.common.items.ModItems;
 
 public class KeyHandlerStoneBlock extends BlockWithEntity {
     public static final BooleanProperty LOCKED = Properties.LOCKED;
+    public static final BooleanProperty IS_OUT_CURRANTSLATE = BooleanProperty.of("is_out_currantslate");
     private final VoxelShape KEY_HANDLER_STONE = VoxelShapes.union(
-            KeyHandlerStoneBlock.createCuboidShape(0,0,0,16,4,16),
-            KeyHandlerStoneBlock.createCuboidShape(1,4,1,15,6,15),
-            KeyHandlerStoneBlock.createCuboidShape(3,6,3,13,14,13),
-            KeyHandlerStoneBlock.createCuboidShape(1,14,1,15,16,15),
-            KeyHandlerStoneBlock.createCuboidShape(2,16,2,14,18,14));
+            KeyHandlerStoneBlock.createCuboidShape(0, 0, 0, 16, 4, 16),
+            KeyHandlerStoneBlock.createCuboidShape(1, 4, 1, 15, 6, 15),
+            KeyHandlerStoneBlock.createCuboidShape(3, 6, 3, 13, 14, 13),
+            KeyHandlerStoneBlock.createCuboidShape(1, 14, 1, 15, 16, 15),
+            KeyHandlerStoneBlock.createCuboidShape(2, 16, 2, 14, 18, 14));
+
     public KeyHandlerStoneBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(LOCKED, true));
+        this.setDefaultState(this.getDefaultState().with(IS_OUT_CURRANTSLATE, false).with(LOCKED, true));
     }
+
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(LOCKED);
+        builder.add(LOCKED).add(IS_OUT_CURRANTSLATE);
     }
+
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new KeyHandlerStoneBlockEntity(pos, state);
@@ -55,41 +60,69 @@ public class KeyHandlerStoneBlock extends BlockWithEntity {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof KeyHandlerStoneBlockEntity entity) {
-            if (player.getMainHandStack().isOf(ModItems.GRIPCRYSTAL_KEY)) {
-                player.getItemCooldownManager().set(player.getMainHandStack().getItem(), 20);
-                if (entity.data.firstKeyIn()) {
-                    entity.data = new KeyHandlerStoneData(true, entity.data.firstKeyOffset(), true, -1f);
-                    player.getMainHandStack().decrement(1);
-                    world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
-                } else {
-                    entity.data = new KeyHandlerStoneData(true, 1, entity.data.secondKeyIn(), entity.data.secondKeyOffset());
-                    player.getMainHandStack().decrement(1);
-                    world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
+            if (!state.get(IS_OUT_CURRANTSLATE)) {
+                if (player.getMainHandStack().isOf(ModItems.GRIPCRYSTAL_KEY)) {
+                    player.getItemCooldownManager().set(player.getMainHandStack().getItem(), 20);
+                    if (entity.data.firstKeyIn()) {
+                        entity.data = new KeyHandlerStoneData(true, entity.data.firstKeyOffset(), true, -1f);
+                        player.getMainHandStack().decrement(1);
+                        world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
+                    } else {
+                        entity.data = new KeyHandlerStoneData(true, 1, entity.data.secondKeyIn(), entity.data.secondKeyOffset());
+                        player.getMainHandStack().decrement(1);
+                        world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
+                    }
+                }
+                if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && !world.isClient()) {
+                    world.playSound(player, pos, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 2, 2);
+                    world.setBlockState(pos, state.with(LOCKED, false));
+                    BlockPos pos1 = getPosOfTranslocatone(world, pos);
+                    player.teleport(player.getX(), pos1.getY() + 1, player.getZ());
+                    if (!pos.equals(pos1)) {
+                        WarriorOfChimericDarkness warrior = new WarriorOfChimericDarkness(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS, world);
+                        warrior.teleport(pos1.getX(), pos1.getY() + 0.5f, pos1.getZ());
+                        world.spawnEntity(warrior);
+                    }
+                }
+            } else {
+                if (player.getMainHandStack().isOf(ModItems.ABYSSAL_KEY)) {
+                    player.getItemCooldownManager().set(player.getMainHandStack().getItem(), 20);
+                    if (entity.data.firstKeyIn()) {
+                        entity.data = new KeyHandlerStoneData(true, entity.data.firstKeyOffset(), true, -1f);
+                        player.getMainHandStack().decrement(1);
+                        world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
+                    } else {
+                        entity.data = new KeyHandlerStoneData(true, 1, entity.data.secondKeyIn(), entity.data.secondKeyOffset());
+                        player.getMainHandStack().decrement(1);
+                        world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
+                    }
+                }
+                if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && !world.isClient()) {
+                    world.playSound(player, pos, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 2, 2);
+                    world.setBlockState(pos, state.with(LOCKED, false));
+                    BlockPos pos1 = getPosOfTranslocatone(world, pos);
+                    player.teleport(player.getX(), pos1.getY() + 1, player.getZ());
+                    if (!pos.equals(pos1)) {
+                        EclipseSentinelEntity sentinelEntity = new EclipseSentinelEntity(ModEntities.ECLIPSE_SENTINEL, world);
+                        sentinelEntity.teleport(pos1.getX(), pos1.getY() + 0.5f, pos1.getZ());
+                        world.spawnEntity(sentinelEntity);
+                    }
                 }
             }
-            if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && !world.isClient()){
-                world.playSound(player, pos, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 2, 2);
-                world.setBlockState(pos,state.with(LOCKED,false));
-                BlockPos pos1 = getPosOfTranslocatone(world,pos);
-                player.teleport(player.getX(),pos1.getY()+1 ,player.getZ());
-                if (!pos.equals(pos1)){
-                    WarriorOfChimericDarkness warrior = new WarriorOfChimericDarkness(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS,world);
-                    warrior.teleport(pos1.getX(),pos1.getY()+0.5f,pos1.getZ());
-                    world.spawnEntity(warrior);
-                }
-            }
+
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }
-    private BlockPos getPosOfTranslocatone(World world,BlockPos pos){
+
+    private BlockPos getPosOfTranslocatone(World world, BlockPos pos) {
         int radius = 3;
         int height = 31;
         for (int y = -height; y < height; y++) {
             for (int x = -radius; x < radius; x++) {
                 for (int z = -radius; z < radius; z++) {
-                    BlockPos pos1 = pos.add(x,y,z);
-                    if (world.getBlockState(pos1).isOf(ModBlocks.GLACIEMITE_TRANSLOCATONE)){
-                        world.setBlockState(pos1,world.getBlockState(pos1).with(Properties.TRIGGERED,true));
+                    BlockPos pos1 = pos.add(x, y, z);
+                    if (world.getBlockState(pos1).isOf(ModBlocks.GLACIEMITE_TRANSLOCATONE)) {
+                        world.setBlockState(pos1, world.getBlockState(pos1).with(Properties.TRIGGERED, true));
                         return pos1;
                     }
                 }

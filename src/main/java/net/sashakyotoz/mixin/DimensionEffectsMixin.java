@@ -31,19 +31,5 @@ public class DimensionEffectsMixin {
                 return true;
             }
         });
-//        Object2ObjectMap<Identifier, DimensionEffects> map = ReflectionHelper.getMap();
-//        if (map != null) {
-//            map.put(UnseenWorld.makeID("the_chimeric_darkness"), new DimensionEffects(Float.NaN,false, DimensionEffects.SkyType.NONE,false,true) {
-//                @Override
-//                public Vec3d adjustFogColor(Vec3d color, float sunHeight) {
-//                    return color.multiply(0.1);
-//                }
-//
-//                @Override
-//                public boolean useThickFog(int camX, int camY) {
-//                    return true;
-//                }
-//            });
-//        }
     }
 }

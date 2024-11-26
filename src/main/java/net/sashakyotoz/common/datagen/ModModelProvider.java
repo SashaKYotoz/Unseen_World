@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.client.*;
 import net.minecraft.data.family.BlockFamily;
+import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.state.property.Properties;
@@ -39,6 +40,8 @@ public class ModModelProvider extends FabricModelProvider {
             generator.registerLog(block).log(block);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.CROSS))
             generator.registerTintableCross(block, BlockStateModelGenerator.TintType.NOT_TINTED);
+        for (Block block : ModRegistry.getModelList(ModRegistry.Models.CROSS_ITEMLESS))
+            registerItemlessCross(generator, block, BlockStateModelGenerator.TintType.NOT_TINTED);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.DOOR))
             generator.registerDoor(block);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.TRAPDOOR))
@@ -46,7 +49,7 @@ public class ModModelProvider extends FabricModelProvider {
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.FLUID))
             generator.registerSimpleState(block);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.BULB))
-            registerBulbBlock(generator,(BulbLikeBlock) block);
+            registerBulbBlock(generator, (BulbLikeBlock) block);
         for (Block block : ModRegistry.BLOCK_SETS.keySet()) {
             if (ModRegistry.BLOCK_SETS.get(block).containsKey(ModRegistry.Models.WOOD)) {
                 poollog = generator.registerLog(block);
@@ -86,6 +89,7 @@ public class ModModelProvider extends FabricModelProvider {
         }
         generator.registerParentedItemModel(ModBlocks.KEY_HANDLER_STONE.asItem(), UnseenWorld.makeID("block/key_handler_stone"));
         generator.registerParentedItemModel(ModBlocks.GLACIEMITE_TRANSLOCATONE.asItem(), UnseenWorld.makeID("block/glaciemite_translocatone"));
+        generator.registerParentedItemModel(ModBlocks.GLOW_APPLE_BUSH.asItem(), UnseenWorld.makeID("block/glow_apple_bush/glow_apple_bush_without_fruit"));
         generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
                 ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN);
         generator.registerHangingSign(ModBlocks.STRIPPED_GRIZZLY_LOG,
@@ -96,6 +100,10 @@ public class ModModelProvider extends FabricModelProvider {
                 ModItems.BURLYWOOD_HANGING_SIGN, ModItems.BURLYWOOD_WALL_HANGING_SIGN);
         generator.registerHangingSign(ModBlocks.STRIPPED_CRIMSONVEIL_LOG,
                 ModItems.CRIMSONVEIL_HANGING_SIGN, ModItems.CRIMSONVEIL_WALL_HANGING_SIGN);
+        generator.registerFlowerbed(ModBlocks.AMETHYST_PETALS);
+        generator.registerPlantPart(ModBlocks.UMBRAL_KELP, ModBlocks.UMBRAL_KELP_PLANT, BlockStateModelGenerator.TintType.NOT_TINTED);
+        generator.registerTintableCross(ModBlocks.GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
+        generator.registerDoubleBlock(ModBlocks.TALL_GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
     }
 
     @Override
@@ -105,6 +113,7 @@ public class ModModelProvider extends FabricModelProvider {
         generator.register(ModBlocks.HANGING_AMETHYST_LEAVES.asItem(), Models.GENERATED);
         generator.register(ModBlocks.BEARFRUIT_BRAMBLE.asItem(), Models.GENERATED);
         generator.register(ModBlocks.MIDNIGHT_LILY_PAD.asItem(), Models.GENERATED);
+        generator.register(ModBlocks.UMBRAL_KELP.asItem(), Models.GENERATED);
         for (Item item : ModRegistry.ITEMS) {
             if (item instanceof ArmorItem armorItem)
                 generator.registerArmor(armorItem);
@@ -113,12 +122,18 @@ public class ModModelProvider extends FabricModelProvider {
                         Optional.empty()));
         }
     }
+
     private void registerBulbBlock(BlockStateModelGenerator generator, BulbLikeBlock block) {
         Identifier identifier = TexturedModel.CUBE_ALL.upload(block, generator.modelCollector);
         Identifier identifier2 = generator.createSubModel(block, "_litted", Models.CUBE_ALL, TextureMap::all);
         generator.blockStateCollector
                 .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(Properties.LIT, identifier2, identifier)));
     }
+
+    private void registerItemlessCross(BlockStateModelGenerator generator, Block block, BlockStateModelGenerator.TintType tintType) {
+        generator.registerTintableCrossBlockState(block, tintType);
+    }
+
     private void registerDynamicTopSoils(Identifier bottomTexture, BlockStateModelGenerator generator, Block... topSoilBlocks) {
         for (Block topSoil : topSoilBlocks) {
             TextureMap textureMap = new TextureMap()

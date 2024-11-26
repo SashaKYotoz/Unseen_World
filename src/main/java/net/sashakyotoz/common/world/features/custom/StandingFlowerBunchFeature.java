@@ -3,17 +3,12 @@ package net.sashakyotoz.common.world.features.custom;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
-import net.sashakyotoz.common.blocks.custom.StandingFruitBlock;
-import net.sashakyotoz.common.world.features.custom.configs.BoulderFeatureConfig;
+import net.sashakyotoz.common.blocks.custom.plants.StandingFruitBlock;
 import net.sashakyotoz.common.world.features.custom.configs.StandingFlowerBunchFeatureConfig;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StandingFlowerBunchFeature extends Feature<StandingFlowerBunchFeatureConfig> {
     public static final Feature<StandingFlowerBunchFeatureConfig> INSTANCE = new StandingFlowerBunchFeature(StandingFlowerBunchFeatureConfig.CODEC);

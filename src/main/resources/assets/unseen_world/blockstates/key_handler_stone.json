@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "is_out_currantslate=false": {
       "model": "unseen_world:block/key_handler_stone"
+    },
+    "is_out_currantslate=true": {
+      "model": "unseen_world:block/currantslate_key_handler_stone"
     }
   }
 }

@@ -6,7 +6,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.GleamcarverEntity;
+import net.sashakyotoz.common.entities.custom.GleamcarverEntity;
 import net.sashakyotoz.common.entities.animations.GleamcarverAnimations;
 
 public class GleamcarverModel extends SinglePartEntityModel<GleamcarverEntity> {

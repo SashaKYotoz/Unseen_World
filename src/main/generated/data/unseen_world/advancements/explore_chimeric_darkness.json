@@ -1,0 +1,502 @@
+{
+  "parent": "unseen_world:into_the_heart_of_darkness",
+  "criteria": {
+    "unseen_world:amethyst_chimeries": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:amethyst_chimeries"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:amethyst_forest": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:amethyst_forest"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:burlywood_jungle": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:burlywood_jungle"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:crimsonveil_plateau": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:crimsonveil_plateau"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:crimsonveil_woods": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:crimsonveil_woods"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:currantslate_peaks": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:currantslate_peaks"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:dark_badlands": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:dark_badlands"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:dark_lifeless_ocean": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:dark_lifeless_ocean"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:dark_ocean": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:dark_ocean"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:dark_river": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:dark_river"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:dark_wasteland": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:dark_wasteland"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:deep_glaciemite_caves": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:deep_glaciemite_caves"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:greenish_meadow": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:greenish_meadow"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:greenish_valley": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:greenish_valley"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:greynish_shore": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:greynish_shore"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:grizzly_highlands": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:grizzly_highlands"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:grizzly_thicket": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:grizzly_thicket"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:harmony_grove": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:harmony_grove"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:lukewarm_dark_river": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:lukewarm_dark_river"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:old_growth_crimsonveil_woods": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:old_growth_crimsonveil_woods"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:shiny_caverns": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:shiny_caverns"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:tanzanite_caves": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:tanzanite_caves"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:tealivy_highlands": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:tealivy_highlands"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:tealivy_valley": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:tealivy_valley"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:the_darkness": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:the_darkness"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.explore_chimeric_darkness.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:red_titanium_boots",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.explore_chimeric_darkness"
+    }
+  },
+  "requirements": [
+    [
+      "unseen_world:the_darkness"
+    ],
+    [
+      "unseen_world:amethyst_forest"
+    ],
+    [
+      "unseen_world:crimsonveil_woods"
+    ],
+    [
+      "unseen_world:grizzly_thicket"
+    ],
+    [
+      "unseen_world:burlywood_jungle"
+    ],
+    [
+      "unseen_world:old_growth_crimsonveil_woods"
+    ],
+    [
+      "unseen_world:amethyst_chimeries"
+    ],
+    [
+      "unseen_world:greenish_valley"
+    ],
+    [
+      "unseen_world:greenish_meadow"
+    ],
+    [
+      "unseen_world:tealivy_valley"
+    ],
+    [
+      "unseen_world:dark_wasteland"
+    ],
+    [
+      "unseen_world:crimsonveil_plateau"
+    ],
+    [
+      "unseen_world:harmony_grove"
+    ],
+    [
+      "unseen_world:grizzly_highlands"
+    ],
+    [
+      "unseen_world:tealivy_highlands"
+    ],
+    [
+      "unseen_world:currantslate_peaks"
+    ],
+    [
+      "unseen_world:shiny_caverns"
+    ],
+    [
+      "unseen_world:tanzanite_caves"
+    ],
+    [
+      "unseen_world:deep_glaciemite_caves"
+    ],
+    [
+      "unseen_world:dark_river"
+    ],
+    [
+      "unseen_world:lukewarm_dark_river"
+    ],
+    [
+      "unseen_world:dark_ocean"
+    ],
+    [
+      "unseen_world:dark_lifeless_ocean"
+    ],
+    [
+      "unseen_world:greynish_shore"
+    ],
+    [
+      "unseen_world:dark_badlands"
+    ]
+  ],
+  "rewards": {
+    "experience": 500
+  },
+  "sends_telemetry_event": true
+}

@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.HarmonyWatcherEntity;
+import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 import net.sashakyotoz.common.entities.animations.HarmonyWatcherAnimations;
 
 public class HarmonyWatcherModel extends SinglePartEntityModel<HarmonyWatcherEntity> implements ModelWithArms {

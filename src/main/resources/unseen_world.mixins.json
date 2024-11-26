@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockEntityTypeMixin",
+    "ModEntityDataSaverMixin",
     "PlayerMixin",
     "ServerWorldMixin",
     "access.FoliagePlacerTypeInvoker",
@@ -13,11 +14,14 @@
     "defaultRequire": 1
   },
   "client": [
+    "AbstractClientPlayerMixin",
     "ArmorFeatureRendererMixin",
     "BossBarHudMixin",
     "BuiltinModelItemRendererMixin",
     "DimensionEffectsMixin",
     "HeldItemRendererMixin",
-    "LightmapTextureManagerMixin"
+    "LightmapTextureManagerMixin",
+    "MinecraftClientMixin",
+    "PlayerRendererMixin"
   ]
 }

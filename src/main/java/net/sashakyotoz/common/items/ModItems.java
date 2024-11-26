@@ -6,21 +6,27 @@ import net.minecraft.block.*;
 import net.minecraft.data.client.Models;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Rarity;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.blocks.ModFluids;
 import net.sashakyotoz.common.entities.ModEntities;
-import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
-import net.sashakyotoz.common.items.custom.ModArmorItem;
-import net.sashakyotoz.common.items.custom.ShieldOfChimericWarriorItem;
+import net.sashakyotoz.common.items.custom.*;
 import net.sashakyotoz.common.tags.ModTags;
 
 public class ModItems {
     public static void register() {
         UnseenWorld.log("Registering Items for modid : " + UnseenWorld.MOD_ID);
+
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(ModBlocks.UMBRAL_KELP.asItem(), 0.15f);
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(ModBlocks.GLOOMWEED.asItem(), 0.1f);
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(ModBlocks.TALL_GLOOMWEED.asItem(), 0.15f);
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(CRYSTIE_APPLE, 0.05f);
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(GLOW_APPLE, 0.05f);
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(BEARFRUIT_BRAMBLE, 0.05f);
+        ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.put(NIGHTBERRY, 0.05f);
     }
 
     public static final Item ECLIPSE_KEYSTONE = ModRegistry.ofItem("eclipse_keystone",
@@ -124,24 +130,36 @@ public class ModItems {
                     new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
     //bosses' stuff
     public static final Item CHIMERIC_ROCKBREAKER_HAMMER = ModRegistry.ofItem("chimeric_rockbreaker_hammer",
-            new ChimericRockbreakerHammerItem(4,-3.1f,new FabricItemSettings().rarity(Rarity.EPIC))).build();
+            new ChimericRockbreakerHammerItem(4, -3.1f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     public static final Item SHIELD_OF_CHIMERIC_WARRIOR = ModRegistry.ofItem("shield_of_chimeric_warrior",
             new ShieldOfChimericWarriorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1).maxDamage(893))).build();
+    public static final Item ECLIPSEBANE = ModRegistry.ofItem("eclipsebane",
+            new EclipsebaneItem(ModTiers.ECLIPSEBANE, 4, -2.5f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+    public static final Item GRIPPING_ABYSSAL_BOW = ModRegistry.ofItem("gripping_abyssal_bow",
+            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(Models.GENERATED).build();
+    public static final Item GLOW_APPLE = ModRegistry.ofItem("glow_apple",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.GLOW_APPLE))).model(Models.GENERATED).build();
     public static final Item BEARFRUIT_BRAMBLE = ModRegistry.ofItem("bearfruit_bramble",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.BEARFRUIT_BRAMBLE))).model(Models.GENERATED).build();
     public static final Item NIGHTBERRY = ModRegistry.ofItem("nightberry",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.NIGHTBERRY))).model(Models.GENERATED).build();
+    public static final Item WARPEDVEIL_VINE_FRUIT = ModRegistry.ofItem("warpedveil_vine_fruit",
+            new AliasedBlockItem(ModBlocks.CRIMSONVEIL_VINE,new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.WARPEDVEIL_VINE_FRUIT))).model(Models.GENERATED).build();
     //crystals
     public static final Item GRIPCRYSTAL = ModRegistry.ofItem("gripcrystal",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+    //materials
+    public static final Item THICK_STRING = ModRegistry.ofItem("thick_string",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
     //keys
     public static final Item GRIPCRYSTAL_KEY = ModRegistry.ofItem("gripcrystal_key",
             new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
     public static final Item ABYSSAL_KEY = ModRegistry.ofItem("abyssal_key",
             new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
+
     //signs
     private static FabricBlockSettings copy(FabricBlockSettings original) {
         return FabricBlockSettings.copyOf(original);
@@ -265,7 +283,7 @@ public class ModItems {
             .fuel(200).build();
     //buckets
     public static final Item DARK_WATER_BUCKET = ModRegistry.ofItem("dark_water_bucket",
-            new BucketItem(ModBlocks.DARK_WATER, new FabricItemSettings().recipeRemainder(Items.BUCKET).maxCount(1))).model(Models.GENERATED).build();
+            new BucketItem(ModFluids.DARK_WATER, new FabricItemSettings().recipeRemainder(Items.BUCKET).maxCount(1))).model(Models.GENERATED).build();
     //spawn eggs
     public static final Item GLEAMCARVER_SPAWN_EGG = ModRegistry.ofItem("gleamcarver_spawn_egg",
                     new SpawnEggItem(ModEntities.GLEAMCARVER, 9787244, 3746083, new FabricItemSettings()))
@@ -275,5 +293,14 @@ public class ModItems {
             .build();
     public static final Item DARK_GUARDIAN_SPAWN_EGG = ModRegistry.ofItem("dark_guardian_spawn_egg",
                     new SpawnEggItem(ModEntities.DARK_GUARDIAN, 12801229, 6035741, new FabricItemSettings()))
+            .build();
+    public static final Item GLOOMWHALE_SPAWN_EGG = ModRegistry.ofItem("gloomwhale_spawn_egg",
+                    new SpawnEggItem(ModEntities.GLOOMWHALE, 4210943, 1644825, new FabricItemSettings()))
+            .build();
+    public static final Item SABERPARD_SPAWN_EGG = ModRegistry.ofItem("saberpard_spawn_egg",
+                    new SpawnEggItem(ModEntities.SABERPARD, 16445005, 1644825, new FabricItemSettings()))
+            .build();
+    public static final Item ESPYER_SPAWN_EGG = ModRegistry.ofItem("espyer_spawn_egg",
+                    new SpawnEggItem(ModEntities.ESPYER, 10066329, 1474182, new FabricItemSettings()))
             .build();
 }

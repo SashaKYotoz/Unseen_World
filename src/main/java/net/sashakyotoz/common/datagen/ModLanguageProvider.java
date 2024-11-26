@@ -2,7 +2,10 @@ package net.sashakyotoz.common.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
+import net.minecraft.registry.Registries;
+import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 
 public class ModLanguageProvider extends FabricLanguageProvider {
@@ -15,7 +18,10 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("itemgroup.unseen_world.items", "Unseen World: Items");
         translationBuilder.add("itemgroup.unseen_world.blocks", "Unseen World: Blocks");
 
-        translationBuilder.add("entity.unseen_world.warrior_of_chimeric_darkness", "Warrior of Chimeric Darkness");
+//        translationBuilder.add("entity.unseen_world.warrior_of_chimeric_darkness", "Warrior of Chimeric Darkness");
+//        translationBuilder.add("entity.unseen_world.eclipse_sentinel", "Eclipse Sentinel");
+
+        translationBuilder.add("item.unseen_world.warpedveil_vine_fruit", "Warpedveil vine fruit");
 
         translationBuilder.add("item.unseen_world.armor_tips", "When the full set worn:");
         translationBuilder.add("item.unseen_world.abyssal_armor_tooltip", "Immunise you to Darkness, Falling into void");
@@ -34,6 +40,22 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("block.unseen_world.crimsonveil_sign", "Crimsonveil Sign");
         translationBuilder.add("block.unseen_world.crimsonveil_hanging_sign", "Crimsonveil Hanging Sign");
 
+        translationBuilder.add("sounds.unseen_world.gleamcarver_ambient_sound", "Gleamcarver squeak");
+
+        translationBuilder.add("item.minecraft.potion.effect.glowing", "Potion of Glowing");
+        translationBuilder.add("item.minecraft.splash_potion.effect.glowing", "Splash Potion of Glowing");
+        translationBuilder.add("item.minecraft.lingering_potion.effect.glowing", "Lingering Potion of Glowing");
+
+        translationBuilder.add("key.category.unseen_world.unseen_world", "Unseen World's Key binds");
+        translationBuilder.add("key.unseen_world.gripcrystal_weapons_abilities", "Key to change ability");
+
+        translationBuilder.add("advancement.unseen_world.into_the_chimeric_darkness", "Into the Chimeric Darkness");
+        translationBuilder.add("advancement.unseen_world.into_the_chimeric_darkness.desc", "Place, where echoes of the Overworld whisper in void");
+        translationBuilder.add("advancement.unseen_world.into_the_heart_of_darkness", "Heart of the Darkness");
+        translationBuilder.add("advancement.unseen_world.into_the_heart_of_darkness.desc", "Brave the shadows, but beware what looks back. (We hope it's friendly...)");
+        translationBuilder.add("advancement.unseen_world.explore_chimeric_darkness", "Darkness Tourist Destinations");
+        translationBuilder.add("advancement.unseen_world.explore_chimeric_darkness.desc", "Explore all Chimeric Darkness biomes");
+
         ModRegistry.BLOCKS.forEach(block -> {
             if (!block.getTranslationKey().contains("sign"))
                 translationBuilder.add(block, convertToName(block.getTranslationKey(), true));
@@ -42,9 +64,13 @@ public class ModLanguageProvider extends FabricLanguageProvider {
             if (!(item instanceof BlockItem))
                 translationBuilder.add(item, convertToName(item.getTranslationKey(), false));
         });
+        Registries.ENTITY_TYPE.forEach(entityType -> {
+            if (entityType.getTranslationKey().contains(UnseenWorld.MOD_ID))
+                translationBuilder.add(entityType, convertToName(entityType.getTranslationKey(), true));
+        });
     }
 
-    private String convertToName(String key, boolean isBlock) {
+    private String convertToName(String key, boolean toLeaveUppercase) {
         String[] parts = key.split("\\.");
         String[] words = parts[parts.length - 1].split("_");
 
@@ -56,7 +82,7 @@ public class ModLanguageProvider extends FabricLanguageProvider {
                     .append(" ");
         }
         String name = nameBuilder.toString().trim();
-        if (isBlock) {
+        if (toLeaveUppercase) {
             return name;
         } else {
             return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "unseen_world:abyssal_ingot"
+    },
+    "G": {
+      "item": "unseen_world:gripcrystal"
+    },
+    "X": {
+      "item": "unseen_world:thick_string"
+    }
+  },
+  "pattern": [
+    " GX",
+    "A X",
+    " GX"
+  ],
+  "result": {
+    "item": "unseen_world:gripping_abyssal_bow"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:raw_unseenium_from_blasting_unseenium_ore_in_glaciemite"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_unseenium_ore_in_glaciemite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:unseenium_ore_in_glaciemite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_unseenium_ore_in_glaciemite",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:raw_unseenium_from_blasting_unseenium_ore_in_glaciemite"
+    ]
+  },
+  "sends_telemetry_event": false
+}

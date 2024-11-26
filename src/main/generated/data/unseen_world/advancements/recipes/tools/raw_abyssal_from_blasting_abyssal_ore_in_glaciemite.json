@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_abyssal_ore_in_glaciemite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:abyssal_ore_in_glaciemite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:raw_abyssal_from_blasting_abyssal_ore_in_glaciemite"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_abyssal_ore_in_glaciemite",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:raw_abyssal_from_blasting_abyssal_ore_in_glaciemite"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
@@ -34,6 +35,9 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.NIGHTDARK_GRASS_BLOCK,
                 ModBlocks.TEALIVY_GRASS_BLOCK,
                 ModBlocks.BEARFRUIT_BRAMBLE
+        );
+        this.getOrCreateTagBuilder(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH).add(
+                ModBlocks.DARK_WATER
         );
     }
 }

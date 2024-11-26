@@ -3,6 +3,10 @@
     {
       "structure": "unseen_world:warrior_of_darkness_tower",
       "weight": 1
+    },
+    {
+      "structure": "unseen_world:eclipse_core",
+      "weight": 1
     }
   ],
   "placement": {
