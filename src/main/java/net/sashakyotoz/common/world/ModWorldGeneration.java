@@ -7,11 +7,8 @@ import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
-import net.sashakyotoz.common.entities.custom.EspyerEntity;
-import net.sashakyotoz.common.entities.custom.GloomwhaleEntity;
-import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
+import net.sashakyotoz.common.entities.custom.*;
 import net.sashakyotoz.common.entities.ModEntities;
-import net.sashakyotoz.common.entities.custom.SaberpardEntity;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
@@ -98,6 +95,8 @@ public class ModWorldGeneration {
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.GLOOMWEED_PATCH);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.CRIMSONVEIL_PLATEAU),
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.TALL_GLOOMWEED_PATCH);
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.THE_DARKNESS),
+                GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.DARKNESS_SPIRAL_SPIKE);
 
         BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.HAS_GLEAMCARVER),
                 SpawnGroup.AMBIENT,
@@ -123,10 +122,15 @@ public class ModWorldGeneration {
                 SpawnGroup.MONSTER,
                 ModEntities.ESPYER,
                 5, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DEEP_GLACIEMITE_CAVES,ModBiomes.SHINY_CAVERNS,ModBiomes.THE_DARKNESS),
+                SpawnGroup.AMBIENT,
+                ModEntities.ELDRITCH_WATCHER,
+                5, 1, 1);
 //        SpawnRestriction.register(ModEntities.GLEAMCARVER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, GleamcarverEntity::canGleamcarverSpawn);
         SpawnRestriction.register(ModEntities.HARMONY_WATCHER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HarmonyWatcherEntity::canWatcherSpawn);
         SpawnRestriction.register(ModEntities.GLOOMWHALE, SpawnRestriction.Location.IN_WATER, Heightmap.Type.OCEAN_FLOOR, GloomwhaleEntity::canWhaleSpawn);
-        SpawnRestriction.register(ModEntities.SABERPARD, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, SaberpardEntity::isValidNaturalSpawn);
+        SpawnRestriction.register(ModEntities.SABERPARD, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, SaberpardEntity::isValidNaturalSpawn);
         SpawnRestriction.register(ModEntities.ESPYER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, EspyerEntity::canEspyerSpawn);
+        SpawnRestriction.register(ModEntities.ELDRITCH_WATCHER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, EldritchWatcherEntity::canWatcherSpawn);
     }
 }

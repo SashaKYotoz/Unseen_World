@@ -7,21 +7,22 @@ import net.minecraft.advancement.AdvancementFrame;
 import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.advancement.criterion.ChangedDimensionCriterion;
+import net.minecraft.advancement.criterion.OnKilledCriterion;
 import net.minecraft.advancement.criterion.TickCriterion;
-import net.minecraft.data.server.advancement.vanilla.VanillaAdventureTabAdvancementGenerator;
 import net.minecraft.loot.condition.LocationCheckLootCondition;
 import net.minecraft.predicate.NumberRange;
+import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LocationPredicate;
 import net.minecraft.predicate.entity.LootContextPredicate;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList;
 import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.datagen.advancements.CuredGripcrystalEntityCriterion;
+import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
@@ -77,7 +78,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 .criterion("entered_the_darkness", BiomeCriterion.of(ModBiomes.THE_DARKNESS))
                 .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:into_the_heart_of_darkness");
         Advancement EXPLORE_CHIMERIC_DARKNESS = requireListedBiomesVisited(
-                Advancement.Builder.create(),List.of(
+                Advancement.Builder.create(), List.of(
                         ModBiomes.THE_DARKNESS,
                         ModBiomes.AMETHYST_FOREST,
                         ModBiomes.CRIMSONVEIL_WOODS,
@@ -113,6 +114,56 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         true, true, false)
                 .parent(INTO_THE_HEART_OF_DARKNESS)
                 .rewards(AdvancementRewards.Builder.experience(500)).build(consumer, "unseen_world:explore_chimeric_darkness");
+        Advancement CURE_GRIPCRYSTAL_ENTITY = Advancement.Builder.create()
+                .display(ModItems.GRIPTONITE,
+                        Text.translatable(BASE + "cure_gripcrystal_entity"),
+                        Text.translatable(BASE + "cure_gripcrystal_entity" + DESC),
+                        null,
+                        AdvancementFrame.GOAL,
+                        true, true, false)
+                .parent(INTO_THE_CHIMERIC_DARKNESS)
+                .criterion("cure_gripcrystal_entity", CuredGripcrystalEntityCriterion.Conditions.any())
+                .rewards(AdvancementRewards.Builder.experience(250)).build(consumer, "unseen_world:cure_gripcrystal_entity");
+        Advancement FORTRESS_IN_THE_DARKNESS = Advancement.Builder.create()
+                .display(ModItems.GRIPCRYSTAL_KEY,
+                        Text.translatable(BASE + "fortress_in_the_darkness"),
+                        Text.translatable(BASE + "fortress_in_the_darkness" + DESC),
+                        null,
+                        AdvancementFrame.TASK,
+                        true, true, false)
+                .parent(INTO_THE_CHIMERIC_DARKNESS)
+                .criterion("fortress_in_the_darkness", TickCriterion.Conditions.createLocation(LocationPredicate.feature(ModRegistry.WARRIOR_OF_DARKNESS_TOWER)))
+                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:fortress_in_the_darkness");
+        Advancement VAULT_OF_ECLIPSE = Advancement.Builder.create()
+                .display(ModItems.ABYSSAL_KEY,
+                        Text.translatable(BASE + "vault_of_eclipse"),
+                        Text.translatable(BASE + "vault_of_eclipse" + DESC),
+                        null,
+                        AdvancementFrame.TASK,
+                        true, true, false)
+                .parent(INTO_THE_CHIMERIC_DARKNESS)
+                .criterion("vault_of_eclipse", TickCriterion.Conditions.createLocation(LocationPredicate.feature(ModRegistry.ECLIPSE_CORE)))
+                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:vault_of_eclipse");
+        Advancement WHISPERS_OF_THE_LIGHT = Advancement.Builder.create()
+                .display(ModItems.CHIMERIC_ROCKBREAKER_HAMMER,
+                        Text.translatable(BASE + "whispers_of_the_light"),
+                        Text.translatable(BASE + "whispers_of_the_light" + DESC),
+                        null,
+                        AdvancementFrame.CHALLENGE,
+                        true, true, false)
+                .parent(FORTRESS_IN_THE_DARKNESS)
+                .criterion("whispers_of_the_light", OnKilledCriterion.Conditions.createPlayerKilledEntity(EntityPredicate.Builder.create().type(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS)))
+                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:whispers_of_the_light");
+        Advancement QUENCHED_SUN = Advancement.Builder.create()
+                .display(ModItems.ECLIPSEBANE,
+                        Text.translatable(BASE + "quenched_sun"),
+                        Text.translatable(BASE + "quenched_sun" + DESC),
+                        null,
+                        AdvancementFrame.CHALLENGE,
+                        true, true, false)
+                .parent(VAULT_OF_ECLIPSE)
+                .criterion("quenched_sun", OnKilledCriterion.Conditions.createPlayerKilledEntity(EntityPredicate.Builder.create().type(ModEntities.ECLIPSE_SENTINEL)))
+                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:quenched_sun");
     }
 
     private static Advancement.Builder requireListedBiomesVisited(Advancement.Builder builder, List<RegistryKey<Biome>> biomes) {

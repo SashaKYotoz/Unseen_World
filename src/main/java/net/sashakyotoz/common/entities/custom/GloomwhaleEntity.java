@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -28,11 +29,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.entities.ai.GloomwhaleJumpGoal;
 import net.sashakyotoz.common.items.ModItems;
 import org.jetbrains.annotations.Nullable;
@@ -78,8 +79,14 @@ public class GloomwhaleEntity extends WaterCreatureEntity {
                 return ActionResult.SUCCESS;
             } else
                 return ActionResult.CONSUME;
-        } else
-            return super.interactMob(player, hand);
+        } else if (itemStack.isOf(ModItems.GRIPTONITE)) {
+            if (!player.getAbilities().creativeMode && player instanceof ServerPlayerEntity player1)
+                itemStack.damage(1, player1.getRandom(), player1);
+            if (!this.getWorld().isClient)
+                this.setConverting(player.getUuid(), this.random.nextInt(1201) + 1200);
+            return ActionResult.SUCCESS;
+        }
+        return super.interactMob(player, hand);
     }
 
     public static boolean canWhaleSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
@@ -154,6 +161,8 @@ public class GloomwhaleEntity extends WaterCreatureEntity {
             PlayerEntity player = world.getPlayerByUuid(this.converter);
             if (player != null)
                 player.dropItem(ModItems.GRIPCRYSTAL);
+            if (player instanceof ServerPlayerEntity player1)
+                ModRegistry.CURED_GRIPCRYSTAL_ENTITY_CRITERION.trigger(player1, this, dolphin);
         }
         dolphin.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0));
         if (!this.isSilent())

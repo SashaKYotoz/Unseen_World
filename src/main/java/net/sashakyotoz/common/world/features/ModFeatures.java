@@ -14,5 +14,6 @@ public class ModFeatures {
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("bush_like_tree_patch"), TreeBushLikeFeature.INSTANCE);
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("adaptive_lake"), AdaptiveLakeFeature.INSTANCE);
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("umbral_kelp"), UmbralKelpFeature.INSTANCE);
+        Registry.register(Registries.FEATURE, UnseenWorld.makeID("spiral_spikes_feature"), SpiralSpikesFeature.INSTANCE);
     }
 }

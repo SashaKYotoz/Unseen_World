@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:archaeology",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:griptonite"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:raw_abyssal"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:crystie_apple",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_scrap",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:raw_red_titanium",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:granulated_griptonite",
+          "weight": 2
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "unseen_world:archaeology/dark_ocean_ruins_ooze"
+}

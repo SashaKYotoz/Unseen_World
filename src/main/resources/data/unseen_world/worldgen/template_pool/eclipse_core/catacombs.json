@@ -18,7 +18,7 @@
                 "input_predicate": {
                   "predicate_type": "minecraft:random_block_match",
                   "block": "unseen_world:dark_currantslate_bricks",
-                  "probability": 0.25
+                  "probability": 0.125
                 },
                 "output_state": {
                   "Name": "unseen_world:dark_currantslate"
@@ -31,7 +31,7 @@
                 "input_predicate": {
                   "predicate_type": "minecraft:random_block_match",
                   "block": "unseen_world:glaciemite_bricks",
-                  "probability": 0.15
+                  "probability": 0.125
                 },
                 "output_state": {
                   "Name": "unseen_world:glaciemite"
@@ -59,7 +59,7 @@
                 "input_predicate": {
                   "predicate_type": "minecraft:random_block_match",
                   "block": "unseen_world:dark_currantslate_bricks",
-                  "probability": 0.25
+                  "probability": 0.125
                 },
                 "output_state": {
                   "Name": "minecraft:air"

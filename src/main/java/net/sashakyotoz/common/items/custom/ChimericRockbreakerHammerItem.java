@@ -1,11 +1,9 @@
 package net.sashakyotoz.common.items.custom;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
-import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -16,6 +14,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.items.ModTiers;
 import net.sashakyotoz.common.networking.data.GripcrystalManaData;
@@ -47,9 +46,9 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
                     }
                 }
                 entity.getServerWorld().spawnParticles(
-                        new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIAMOND_BLOCK.getDefaultState()),
+                        ModParticleTypes.GRIPPING_CRYSTAL,
                         entity.getX(), entity.getY() + 1, entity.getZ(),
-                        3, 0, 0, 0, 1);
+                        5, 0, 0, 0, 1);
             }
         }
         return super.use(world, player, hand);

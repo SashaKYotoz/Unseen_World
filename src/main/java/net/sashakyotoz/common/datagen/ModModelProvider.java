@@ -104,6 +104,9 @@ public class ModModelProvider extends FabricModelProvider {
         generator.registerPlantPart(ModBlocks.UMBRAL_KELP, ModBlocks.UMBRAL_KELP_PLANT, BlockStateModelGenerator.TintType.NOT_TINTED);
         generator.registerTintableCross(ModBlocks.GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
         generator.registerDoubleBlock(ModBlocks.TALL_GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
+        registerCrystalLike(generator,ModBlocks.GRIPCRYSTAL_WART);
+        generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_ASHEN_OOZE);
+        generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_GLIMMERGRAIN_SAND);
     }
 
     @Override
@@ -159,5 +162,15 @@ public class ModModelProvider extends FabricModelProvider {
                                     .register(false, list))
             );
         }
+    }
+    public final void registerCrystalLike(BlockStateModelGenerator generator,Block block) {
+        generator.registerItemModel(block.asItem());
+        generator.blockStateCollector
+                .accept(
+                        VariantsBlockStateSupplier.create(
+                                        block, BlockStateVariant.create().put(VariantSettings.MODEL, Models.CROSS.upload(block, TextureMap.cross(block), generator.modelCollector))
+                                )
+                                .coordinate(generator.createUpDefaultFacingVariantMap())
+                );
     }
 }

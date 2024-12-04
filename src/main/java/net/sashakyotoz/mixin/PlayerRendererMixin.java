@@ -26,7 +26,7 @@ public abstract class PlayerRendererMixin {
 
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     private void render(AbstractClientPlayerEntity player, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        if (player.fallDistance > 0.1f && GrippingData.getGrippingTime((IEntityDataSaver) player) > 0){
+        if (player.fallDistance > 0.175f && GrippingData.getGrippingTime((IEntityDataSaver) player) > 0){
             matrixStack.multiply(RotationAxis.POSITIVE_X.rotation(player.age % 45));
             matrixStack.multiply(RotationAxis.POSITIVE_Z.rotation(player.age % 45));
         }

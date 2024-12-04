@@ -1,0 +1,17 @@
+{
+  "type": "alloy_forgery:forging",
+  "inputs": [
+    {
+      "item": "minecraft:ancient_debris"
+    },
+    {
+      "item": "unseen_world:red_titanium_ore_in_glaciemite"
+    }
+  ],
+  "output": {
+    "id": "unseen_world:red_titanium_ingot",
+    "count": 1
+  },
+  "min_forge_tier": 2,
+  "fuel_per_tick": 15
+}

@@ -6,6 +6,18 @@
     "grown=true,type=bush": {
       "model": "unseen_world:block/glow_apple_bush/glow_apple_bush"
     },
+    "facing=up,grown=false,type=stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_stem"
+    },
+    "facing=up,grown=true,type=stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_stem"
+    },
+    "facing=down,grown=false,type=stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_stem"
+    },
+    "facing=down,grown=true,type=stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_stem"
+    },
     "facing=north,grown=false,type=stem": {
       "model": "unseen_world:block/glow_apple_bush/glow_apple_stem"
     },
@@ -29,6 +41,24 @@
     },
     "facing=west,grown=true,type=stem": {
       "model": "unseen_world:block/glow_apple_bush/glow_apple_stem"
+    },
+    "facing=up,grown=false,type=turn_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_turn_stem",
+      "y": 90,
+      "x": 180
+    },
+    "facing=up,grown=true,type=turn_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_turn_stem",
+      "y": 90,
+      "x": 180
+    },
+    "facing=down,grown=false,type=turn_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_turn_stem",
+      "y": 90
+    },
+    "facing=down,grown=true,type=turn_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_turn_stem",
+      "y": 90
     },
     "facing=north,grown=false,type=turn_stem": {
       "model": "unseen_world:block/glow_apple_bush/glow_apple_turn_stem",
@@ -57,6 +87,24 @@
     },
     "facing=west,grown=true,type=turn_stem": {
       "model": "unseen_world:block/glow_apple_bush/glow_apple_turn_stem"
+    },
+    "facing=up,grown=false,type=crooked_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_crooked_stem",
+      "y": 270,
+      "x": 180
+    },
+    "facing=up,grown=true,type=crooked_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_crooked_stem",
+      "y": 270,
+      "x": 180
+    },
+    "facing=down,grown=false,type=crooked_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_crooked_stem",
+      "y": 270
+    },
+    "facing=down,grown=true,type=crooked_stem": {
+      "model": "unseen_world:block/glow_apple_bush/glow_apple_crooked_stem",
+      "y": 270
     },
     "facing=north,grown=false,type=crooked_stem": {
       "model": "unseen_world:block/glow_apple_bush/glow_apple_crooked_stem",

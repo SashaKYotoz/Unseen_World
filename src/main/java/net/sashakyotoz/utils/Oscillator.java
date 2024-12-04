@@ -9,4 +9,12 @@ public class Oscillator {
         double phase = (2 * Math.PI * (tickCount % PERIOD_IN_TICKS)) / PERIOD_IN_TICKS;
         return 0.5 * (1 + Math.sin(phase));
     }
+    public static double getOscillatingOppositeValue(int tickCount) {
+        double phase = (2 * Math.PI * (tickCount % PERIOD_IN_TICKS)) / PERIOD_IN_TICKS;
+        return 0.5 * (1 + Math.cos(phase));
+    }
+    public static double getOscillatingWithNegativeValue(int tickCount) {
+        double phase = (2 * Math.PI * (tickCount % PERIOD_IN_TICKS)) / PERIOD_IN_TICKS;
+        return 0.5 * Math.sin(phase);
+    }
 }

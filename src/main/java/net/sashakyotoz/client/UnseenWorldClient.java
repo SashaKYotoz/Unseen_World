@@ -71,6 +71,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(GloomwhaleModel.GLOOMWHALE, GloomwhaleModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(SaberpardModel.SABERPARD, SaberpardModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(EspyerModel.ESPYER, EspyerModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(EldritchWatcherModel.ELDRITCH_WATCHER, EldritchWatcherModel::getTexturedModelData);
 
         EntityRendererRegistry.register(ModEntities.GLEAMCARVER, GleamcarverRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONY_WATCHER, HarmonyWatcherRenderer::new);
@@ -78,6 +79,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.GLOOMWHALE, GloomwhaleRenderer::new);
         EntityRendererRegistry.register(ModEntities.SABERPARD, SaberpardRenderer::new);
         EntityRendererRegistry.register(ModEntities.ESPYER, EspyerRenderer::new);
+        EntityRendererRegistry.register(ModEntities.ELDRITCH_WATCHER, EldritchWatcherRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, GrippingCrystalProjectileRenderer::new);
 

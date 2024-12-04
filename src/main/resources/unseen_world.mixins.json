@@ -19,6 +19,7 @@
     "BossBarHudMixin",
     "BuiltinModelItemRendererMixin",
     "DimensionEffectsMixin",
+    "EntityRenderDispatcherMixin",
     "HeldItemRendererMixin",
     "LightmapTextureManagerMixin",
     "MinecraftClientMixin",

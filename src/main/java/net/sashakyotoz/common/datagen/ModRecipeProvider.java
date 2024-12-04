@@ -153,6 +153,13 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .group("red_titanium_ingot")
                 .criterion("has_netherite_scrap", conditionsFromItem(Items.NETHERITE_SCRAP))
                 .offerTo(exporter);
+        //crystals recipes
+        offerReversibleCompactingRecipesWithCompactingRecipeGroup(
+                exporter, RecipeCategory.MISC, ModItems.GRANULATED_GRIPCRYSTAL, RecipeCategory.MISC, ModItems.GRIPCRYSTAL, "gripcrystal_from_granulate", "gripcrystal"
+        );
+        offerReversibleCompactingRecipesWithCompactingRecipeGroup(
+                exporter, RecipeCategory.MISC, ModItems.GRANULATED_GRIPTONITE, RecipeCategory.MISC, ModItems.GRIPTONITE, "griptonite_from_granulate", "griptonite"
+        );
 
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.POLISHED_TANZANITE, ModBlocks.TANZANITE_BLOCK);
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_CURRANTSLATE_BRICKS, ModBlocks.DARK_CURRANTSLATE);
@@ -180,6 +187,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .pattern("A X")
                 .pattern(" GX")
                 .criterion("has_string", conditionsFromItem(ModItems.THICK_STRING))
+                .offerTo(exporter);
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.COMBAT, Items.BOW)
+                .input(ModItems.GRIPPING_ABYSSAL_BOW)
+                .input(ModItems.GRIPTONITE)
+                .criterion("has_griptonite", conditionsFromItem(ModItems.GRIPTONITE))
                 .offerTo(exporter);
         //hanging sign
         offerHangingSignRecipe(exporter, ModItems.AMETHYST_HANGING_SIGN, ModBlocks.STRIPPED_AMETHYST_LOG);

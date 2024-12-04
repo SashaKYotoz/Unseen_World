@@ -1,7 +1,6 @@
 package net.sashakyotoz.client.renderers;
 
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.EyesFeatureRenderer;
@@ -14,7 +13,11 @@ import net.sashakyotoz.client.models.EspyerModel;
 import net.sashakyotoz.client.renderers.layers.EspyerChargeFeatureRenderer;
 import net.sashakyotoz.common.entities.custom.EspyerEntity;
 
+import java.util.Calendar;
+
 public class EspyerRenderer extends MobEntityRenderer<EspyerEntity, EspyerModel> {
+    private final Identifier XMAS_TEXTURE = UnseenWorld.makeID("textures/entity/espyer/espyer_xmas.png");
+    private boolean xmasTexture = false;
 
     public EspyerRenderer(EntityRendererFactory.Context context) {
         super(context, new EspyerModel(context.getPart(EspyerModel.ESPYER)), 0.5F);
@@ -25,6 +28,10 @@ public class EspyerRenderer extends MobEntityRenderer<EspyerEntity, EspyerModel>
                 return RenderLayer.getEyes(UnseenWorld.makeID("textures/entity/espyer/espyer_glowing_parts.png"));
             }
         });
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 20 && calendar.get(Calendar.DATE) <= 26) {
+            this.xmasTexture = true;
+        }
     }
 
     protected void scale(EspyerEntity espyer, MatrixStack matrixStack, float f) {
@@ -47,6 +54,6 @@ public class EspyerRenderer extends MobEntityRenderer<EspyerEntity, EspyerModel>
     }
 
     public Identifier getTexture(EspyerEntity espyer) {
-        return UnseenWorld.makeID("textures/entity/espyer/espyer.png");
+        return xmasTexture ? XMAS_TEXTURE : UnseenWorld.makeID("textures/entity/espyer/espyer.png");
     }
 }

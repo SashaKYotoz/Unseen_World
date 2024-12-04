@@ -5,13 +5,28 @@
     "fog_color": 4605011,
     "foliage_color": 5013401,
     "grass_color": 5013401,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 4.0,
+      "sound": "minecraft:ambient.warped_forest.mood",
+      "tick_delay": 6000
+    },
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.menu"
+        "sound_id": "minecraft:music.credits"
       }
+    },
+    "particle": {
+      "options": {
+        "type": "unseen_world:leaf",
+        "blue": 0.65,
+        "green": 0.75,
+        "red": 0.1
+      },
+      "probability": 0.00125
     },
     "sky_color": 4605011,
     "water_color": 5013401,

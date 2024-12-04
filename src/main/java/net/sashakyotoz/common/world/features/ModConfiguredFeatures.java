@@ -35,10 +35,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.plants.HangingFruitBlock;
 import net.sashakyotoz.common.world.features.custom.*;
-import net.sashakyotoz.common.world.features.custom.configs.AdaptiveLakeFeatureConfig;
-import net.sashakyotoz.common.world.features.custom.configs.BoulderFeatureConfig;
-import net.sashakyotoz.common.world.features.custom.configs.StandingFlowerBunchFeatureConfig;
-import net.sashakyotoz.common.world.features.custom.configs.TreeBushLikeConfig;
+import net.sashakyotoz.common.world.features.custom.configs.*;
 import net.sashakyotoz.common.world.features.trees.placers.BurlywoodFoliagePlacer;
 import net.sashakyotoz.common.world.features.trees.placers.BurlywoodTrunkPlacer;
 import net.sashakyotoz.common.world.features.trees.placers.GrizzlyFoliagePlacer;
@@ -71,6 +68,8 @@ public class ModConfiguredFeatures {
     public static final RegistryKey<ConfiguredFeature<?, ?>> GLACIEMITE_BOULDER = create("glaciemite_boulder");
     public static final RegistryKey<ConfiguredFeature<?, ?>> DARK_CURRANTSLATE_BOULDER = create("dark_currantslate_boulder");
     public static final RegistryKey<ConfiguredFeature<?, ?>> AMETHYST_BOULDER = create("amethyst_boulder");
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> DARKNESS_SPIRAL_SPIKE = create("darkness_spiral_spike");
 
     public static final RegistryKey<ConfiguredFeature<?, ?>> WATER_LAKE = create("water_lake");
     public static final RegistryKey<ConfiguredFeature<?, ?>> DARK_WATER_LAKE = create("dark_water_lake");
@@ -234,6 +233,8 @@ public class ModConfiguredFeatures {
         register(context, GLACIEMITE_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformIntProvider.create(4, 9), BlockStateProvider.of(ModBlocks.GLACIEMITE)));
         register(context, DARK_CURRANTSLATE_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformIntProvider.create(3, 8), BlockStateProvider.of(ModBlocks.DARK_CURRANTSLATE)));
         register(context, AMETHYST_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformIntProvider.create(4, 7), BlockStateProvider.of(Blocks.AMETHYST_BLOCK)));
+
+        register(context, DARKNESS_SPIRAL_SPIKE, SpiralSpikesFeature.INSTANCE, new SpiralSpikesFeatureConfig(BlockStateProvider.of(ModBlocks.GLACIEMITE), BlockStateProvider.of(Blocks.DEEPSLATE), UniformIntProvider.create(3, 9)));
 
         register(context, WATER_LAKE, Feature.LAKE, new LakeFeature.Config(BlockStateProvider.of(Blocks.WATER.getDefaultState()), BlockStateProvider.of(Blocks.STONE.getDefaultState())));
         register(context, DARK_WATER_LAKE, Feature.LAKE, new LakeFeature.Config(BlockStateProvider.of(ModBlocks.DARK_WATER.getDefaultState()), BlockStateProvider.of(ModBlocks.DARK_CURRANTSLATE.getDefaultState())));

@@ -19,16 +19,6 @@ public class GrippingData {
         return seconds;
     }
 
-    public static int addGrippingSecondsToEntity(IEntityDataSaver entity, int amount) {
-        NbtCompound nbt = entity.getPersistentData();
-        int seconds = nbt.getInt("gripping");
-        seconds += amount;
-        nbt.putInt("gripping", seconds);
-        if (entity instanceof Entity entity1)
-            entity1.velocityModified = true;
-        return seconds;
-    }
-
     public static int getGrippingTime(IEntityDataSaver entityDataSaver) {
         return entityDataSaver.getPersistentData().getInt("gripping");
     }
@@ -39,15 +29,6 @@ public class GrippingData {
         gripping = gripping - 1;
         nbt.putInt("gripping", gripping);
         syncGripping(gripping, (ServerPlayerEntity) player);
-        return gripping;
-    }
-    public static int removeGrippingPerTickToEntity(IEntityDataSaver entity) {
-        NbtCompound nbt = entity.getPersistentData();
-        int gripping = nbt.getInt("gripping");
-        gripping = gripping - 1;
-        nbt.putInt("gripping", gripping);
-        if (entity instanceof Entity entity1)
-            entity1.velocityModified = true;
         return gripping;
     }
 

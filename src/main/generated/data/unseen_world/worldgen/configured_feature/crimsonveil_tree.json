@@ -19,7 +19,7 @@
         ],
         "exclusion_radius_xz": 1,
         "exclusion_radius_y": 0,
-        "probability": 0.14,
+        "probability": 0.3,
         "required_empty_blocks": 2
       }
     ],

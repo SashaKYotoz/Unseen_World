@@ -22,7 +22,10 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
@@ -34,6 +37,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
+import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
@@ -71,7 +75,7 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
         this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.8, 0.9f));
         this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
         this.goalSelector.add(3, new AttackGoal(this));
-        this.goalSelector.add(3, new PounceAtTargetGoal(this,0.6F));
+        this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.6F));
         this.goalSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
         this.temptGoal = new TemptGoal(this, 0.6, TAMING_INGREDIENT, true);
         this.goalSelector.add(3, this.temptGoal);
@@ -101,9 +105,14 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
                 return ActionResult.SUCCESS;
             } else
                 return ActionResult.CONSUME;
-        } else {
+        } else if (itemStack.isOf(ModItems.GRIPTONITE)) {
+            if (!player.getAbilities().creativeMode && player instanceof ServerPlayerEntity player1)
+                itemStack.damage(1, player1.getRandom(), player1);
+            if (!this.getWorld().isClient)
+                this.setConverting(player.getUuid(), this.random.nextInt(1201) + 1200);
+            return ActionResult.SUCCESS;
+        } else
             return super.interactMob(player, hand);
-        }
     }
 
     private void setConverting(@Nullable UUID uuid, int delay) {
@@ -142,9 +151,13 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
         this.dataTracker.startTracking(TYPE, 0);
         this.dataTracker.startTracking(CONVERTING, false);
     }
+
     public static boolean isValidNaturalSpawn(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isIn(BlockTags.DIRT);
+        return spawnReason == SpawnReason.SPAWNER
+                || (world.getBlockState(pos.down()).isIn(BlockTags.DIRT)
+                || world.getBlockState(pos).isIn(BlockTags.DIRT));
     }
+
     @Override
     public void setVariant(Type variant) {
         this.dataTracker.set(TYPE, variant.getId());
@@ -178,6 +191,31 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0);
+    }
+
+    @Override
+    public void tick() {
+        if (!this.getWorld().isClient && this.isAlive() && this.isConverting()) {
+            this.conversionTimer--;
+            if (this.conversionTimer <= 0)
+                this.finishConversion((ServerWorld) this.getWorld());
+        }
+        super.tick();
+    }
+
+    private void finishConversion(ServerWorld world) {
+        OcelotEntity ocelot = this.convertTo(EntityType.OCELOT, false);
+        ocelot.initialize(world, world.getLocalDifficulty(ocelot.getBlockPos()), SpawnReason.CONVERSION, null, null);
+        if (this.converter != null) {
+            PlayerEntity player = world.getPlayerByUuid(this.converter);
+            if (player != null)
+                player.dropItem(ModItems.GRIPCRYSTAL);
+            if (player instanceof ServerPlayerEntity player1)
+                ModRegistry.CURED_GRIPCRYSTAL_ENTITY_CRITERION.trigger(player1, this, ocelot);
+        }
+        ocelot.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0));
+        if (!this.isSilent())
+            world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_OCELOT_HURT, SoundCategory.NEUTRAL, 3, 2);
     }
 
     @Nullable

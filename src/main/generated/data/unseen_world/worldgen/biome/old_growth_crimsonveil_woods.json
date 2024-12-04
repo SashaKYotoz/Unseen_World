@@ -10,7 +10,7 @@
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.end"
+        "sound_id": "minecraft:music.nether.crimson_forest"
       }
     },
     "sky_color": 4605011,

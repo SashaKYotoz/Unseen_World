@@ -4,7 +4,6 @@ import net.fabricmc.api.ModInitializer;
 
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.util.Identifier;
@@ -60,7 +59,8 @@ public class UnseenWorld implements ModInitializer {
         ModTreePlacerTypes.register();
         ModWorldGeneration.register();
 
-        BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, Items.NETHER_WART, ModRegistry.GLOWING);
+        BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, ModItems.GLOW_APPLE, ModRegistry.GLOWING);
+        BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, ModItems.WARPEDVEIL_VINE_FRUIT, ModRegistry.GLOWING);
     }
 
     public static Identifier makeID(String id) {

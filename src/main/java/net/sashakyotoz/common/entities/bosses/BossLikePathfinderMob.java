@@ -1,18 +1,23 @@
 package net.sashakyotoz.common.entities.bosses;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.ServerBossBar;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -50,6 +55,26 @@ public abstract class BossLikePathfinderMob extends PathAwareEntity implements M
     @Override
     public boolean canFreeze() {
         return false;
+    }
+
+    public abstract boolean haveToDropLoot(DamageSource source);
+
+    @Override
+    protected void drop(DamageSource source) {
+        Entity entity = source.getAttacker();
+        int i;
+        if (entity instanceof PlayerEntity)
+            i = EnchantmentHelper.getLooting((LivingEntity) entity);
+        else
+            i = 0;
+        boolean bl = this.playerHitTimer > 0;
+        if (this.shouldDropLoot() && this.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+            if (haveToDropLoot(source))
+                this.dropLoot(source, bl);
+            this.dropEquipment(source, i, bl);
+        }
+        this.dropInventory();
+        this.dropXp();
     }
 
     @Override

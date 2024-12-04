@@ -5,15 +5,15 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinelEntity;
 
 public class SentinelMovementGoal extends Goal {
-    private final EclipseSentinelEntity warrior;
+    private final EclipseSentinelEntity sentinel;
 
-    public SentinelMovementGoal(EclipseSentinelEntity warrior) {
-        this.warrior = warrior;
+    public SentinelMovementGoal(EclipseSentinelEntity sentinel) {
+        this.sentinel = sentinel;
     }
 
     @Override
     public boolean canStart() {
-        return this.warrior.getTarget() != null;
+        return this.sentinel.getTarget() != null;
     }
 
     @Override
@@ -24,31 +24,31 @@ public class SentinelMovementGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        LivingEntity target = this.warrior.getTarget();
+        LivingEntity target = this.sentinel.getTarget();
         if (target != null) {
-            if (this.warrior.canSee(target)) {
-                if (!this.warrior.isInSentinelPose(EclipseSentinelEntity.SentinelPose.DYING))
-                    this.warrior.lookAtEntity(target, 15, 15);
-                switch (this.warrior.getSentinelPose()) {
-                    case SWORD_SWING -> this.warrior.getNavigation().startMovingTo(target, 0.75f);
+            if (this.sentinel.canSee(target)) {
+                if (!this.sentinel.isInSentinelPose(EclipseSentinelEntity.SentinelPose.DYING))
+                    this.sentinel.lookAtEntity(target, this.sentinel.isInSentinelPose(EclipseSentinelEntity.SentinelPose.BEAMING) ? 5 : 15, 15);
+                switch (this.sentinel.getSentinelPose()) {
+                    case SWORD_SWING -> this.sentinel.getNavigation().startMovingTo(target, 0.75f);
                     case BACKFLIP -> {
-                        if (this.warrior.squaredDistanceTo(target) < 5)
-                            this.warrior.getMoveControl().strafeTo(-0.5f, 0f);
+                        if (this.sentinel.squaredDistanceTo(target) < 5 && this.sentinel.isOnGround())
+                            this.sentinel.getMoveControl().strafeTo(-0.5f, 0f);
                     }
-                    case HARD_RUSH, RUSH_AND_SWING -> {
-                        if (this.warrior.squaredDistanceTo(target) > 3)
-                            this.warrior.getNavigation().startMovingTo(target, 1f);
+                    case HARD_RUSH -> {
+                        if (this.sentinel.squaredDistanceTo(target) > 3)
+                            this.sentinel.getNavigation().startMovingTo(target, 1f);
                     }
                     case BLASTING_EROFLAME -> {
-                        if (target.squaredDistanceTo(this.warrior) > 4)
-                            this.warrior.getNavigation().startMovingTo(target, 1.25f);
+                        if (target.squaredDistanceTo(this.sentinel) > 4)
+                            this.sentinel.getNavigation().startMovingTo(target, 1.25f);
                         else
-                            this.warrior.getMoveControl().strafeTo(-0.5f, 1f);
+                            this.sentinel.getMoveControl().strafeTo(-0.5f, 1f);
                     }
-                    case DARKNESS, BEAMING, IDLING, DYING -> this.warrior.getNavigation().stop();
+                    case DARKNESS, BEAMING, IDLING, DYING, RUSH_AND_SWING -> this.sentinel.getNavigation().stop();
                 }
             } else
-                this.warrior.getNavigation().startMovingTo(target, 1);
+                this.sentinel.getNavigation().startMovingTo(target, 0.5f);
         }
     }
 

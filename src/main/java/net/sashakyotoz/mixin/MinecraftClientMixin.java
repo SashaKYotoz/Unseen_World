@@ -29,7 +29,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "doAttack", at = @At("TAIL"))
     private void attackHandler(CallbackInfoReturnable<Boolean> cir) {
-        if (crosshairTarget != null && crosshairTarget.getType() == HitResult.Type.MISS && player != null) {
+        if (crosshairTarget != null && crosshairTarget.getType() == HitResult.Type.MISS && player != null && !ActionsManager.isModLoaded("bettercombat")) {
             ItemStack stack = player.getMainHandStack();
             if (stack.getItem() instanceof EclipsebaneItem item && item.getItemPhase(stack).equals("light_ray"))
                 ClientPlayNetworking.send(ModMessages.LEFT_CLICK_HANDLER, PacketByteBufs.create());

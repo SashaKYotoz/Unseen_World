@@ -1,0 +1,34 @@
+{
+  "parent": "unseen_world:into_the_chimeric_darkness",
+  "criteria": {
+    "cure_gripcrystal_entity": {
+      "conditions": {},
+      "trigger": "minecraft:cured_gripcrystal_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.cure_gripcrystal_entity.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:griptonite",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.cure_gripcrystal_entity"
+    }
+  },
+  "requirements": [
+    [
+      "cure_gripcrystal_entity"
+    ]
+  ],
+  "rewards": {
+    "experience": 250
+  },
+  "sends_telemetry_event": true
+}

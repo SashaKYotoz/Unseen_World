@@ -136,7 +136,7 @@ public class ModItems {
     public static final Item ECLIPSEBANE = ModRegistry.ofItem("eclipsebane",
             new EclipsebaneItem(ModTiers.ECLIPSEBANE, 4, -2.5f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     public static final Item GRIPPING_ABYSSAL_BOW = ModRegistry.ofItem("gripping_abyssal_bow",
-            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE).maxDamage(984))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(Models.GENERATED).build();
@@ -147,9 +147,15 @@ public class ModItems {
     public static final Item NIGHTBERRY = ModRegistry.ofItem("nightberry",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.NIGHTBERRY))).model(Models.GENERATED).build();
     public static final Item WARPEDVEIL_VINE_FRUIT = ModRegistry.ofItem("warpedveil_vine_fruit",
-            new AliasedBlockItem(ModBlocks.CRIMSONVEIL_VINE,new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.WARPEDVEIL_VINE_FRUIT))).model(Models.GENERATED).build();
+            new AliasedBlockItem(ModBlocks.CRIMSONVEIL_VINE, new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.WARPEDVEIL_VINE_FRUIT))).model(Models.GENERATED).build();
     //crystals
     public static final Item GRIPCRYSTAL = ModRegistry.ofItem("gripcrystal",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+    public static final Item GRANULATED_GRIPCRYSTAL = ModRegistry.ofItem("granulated_gripcrystal",
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+    public static final Item GRIPTONITE = ModRegistry.ofItem("griptonite",
+            new GriptoniteItem(new FabricItemSettings().maxCount(1).maxDamage(4).rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+    public static final Item GRANULATED_GRIPTONITE = ModRegistry.ofItem("granulated_griptonite",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
     //materials
     public static final Item THICK_STRING = ModRegistry.ofItem("thick_string",
@@ -302,5 +308,8 @@ public class ModItems {
             .build();
     public static final Item ESPYER_SPAWN_EGG = ModRegistry.ofItem("espyer_spawn_egg",
                     new SpawnEggItem(ModEntities.ESPYER, 10066329, 1474182, new FabricItemSettings()))
+            .build();
+    public static final Item ELDRITCH_WATCHER_SPAWN_EGG = ModRegistry.ofItem("eldritch_watcher_spawn_egg",
+                    new SpawnEggItem(ModEntities.ELDRITCH_WATCHER, 5013401, 0, new FabricItemSettings()))
             .build();
 }

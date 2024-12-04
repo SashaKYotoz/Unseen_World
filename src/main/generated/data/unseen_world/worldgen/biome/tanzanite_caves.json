@@ -5,6 +5,12 @@
     "fog_color": 4605011,
     "foliage_color": 6579300,
     "grass_color": 6579300,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 2.0,
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000
+    },
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
@@ -12,6 +18,12 @@
       "sound": {
         "sound_id": "minecraft:music.overworld.lush_caves"
       }
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:ash"
+      },
+      "probability": 0.0125
     },
     "sky_color": 4605011,
     "water_color": 6579300,

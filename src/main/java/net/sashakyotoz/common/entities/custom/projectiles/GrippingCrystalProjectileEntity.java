@@ -24,7 +24,6 @@ public class GrippingCrystalProjectileEntity extends PersistentProjectileEntity 
 
     public GrippingCrystalProjectileEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(entityType, world);
-        UnseenWorld.log("Gripping crystal created");
     }
 
     @Override

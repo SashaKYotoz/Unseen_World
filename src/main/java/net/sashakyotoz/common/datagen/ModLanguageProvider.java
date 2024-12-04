@@ -48,6 +48,7 @@ public class ModLanguageProvider extends FabricLanguageProvider {
 
         translationBuilder.add("key.category.unseen_world.unseen_world", "Unseen World's Key binds");
         translationBuilder.add("key.unseen_world.gripcrystal_weapons_abilities", "Key to change ability");
+        translationBuilder.add("key.unseen_world.extra_gripcrystal_weapons_abilities", "Key to use ability with BetterCombat");
 
         translationBuilder.add("advancement.unseen_world.into_the_chimeric_darkness", "Into the Chimeric Darkness");
         translationBuilder.add("advancement.unseen_world.into_the_chimeric_darkness.desc", "Place, where echoes of the Overworld whisper in void");
@@ -55,6 +56,16 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("advancement.unseen_world.into_the_heart_of_darkness.desc", "Brave the shadows, but beware what looks back. (We hope it's friendly...)");
         translationBuilder.add("advancement.unseen_world.explore_chimeric_darkness", "Darkness Tourist Destinations");
         translationBuilder.add("advancement.unseen_world.explore_chimeric_darkness.desc", "Explore all Chimeric Darkness biomes");
+        translationBuilder.add("advancement.unseen_world.cure_gripcrystal_entity", "Captive of Gripping on Freedom now");
+        translationBuilder.add("advancement.unseen_world.cure_gripcrystal_entity.desc", "Grip no more! The illness fades as griptonite works its magic");
+        translationBuilder.add("advancement.unseen_world.fortress_in_the_darkness", "Fortress in the Darkness");
+        translationBuilder.add("advancement.unseen_world.fortress_in_the_darkness.desc", "A shadowy stronghold looms... Did its master build it, or was it built for them?");
+        translationBuilder.add("advancement.unseen_world.vault_of_eclipse", "Vault of Eclipse");
+        translationBuilder.add("advancement.unseen_world.vault_of_eclipse.desc", "Deep below, where the light dare not tread... but what eclipsed the Sentinel's glory?");
+        translationBuilder.add("advancement.unseen_world.whispers_of_the_light", "Whispers of the Light");
+        translationBuilder.add("advancement.unseen_world.whispers_of_the_light.desc", "The one who bounded stars to darkness - defeated");
+        translationBuilder.add("advancement.unseen_world.quenched_sun", "Quenched Sun");
+        translationBuilder.add("advancement.unseen_world.quenched_sun.desc", "The one who hided eternal eclipse - defeated");
 
         ModRegistry.BLOCKS.forEach(block -> {
             if (!block.getTranslationKey().contains("sign"))

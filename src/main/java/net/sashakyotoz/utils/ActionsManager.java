@@ -46,6 +46,13 @@ public class ActionsManager {
         }
     }
 
+    public static void spawnParticle(ParticleEffect type, World world, double x, double y, double z, float modifier) {
+        for (int i = 0; i < 360; i++) {
+            if (i % 20 == 0)
+                world.addParticle(type, x + 0.25f, y, z + 0.25, Math.cos(i) * 0.25d * modifier, 0.2d, Math.sin(i) * 0.25d * modifier);
+        }
+    }
+
     public static void hitNearbyMobs(LivingEntity livingEntity, float damage, int radius) {
         List<LivingEntity> entityList = livingEntity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(livingEntity.getPos(), livingEntity.getPos()).expand(radius), e -> true)
                 .stream().sorted(Comparator.comparingDouble(entity -> entity.squaredDistanceTo(livingEntity.getPos()))).toList();

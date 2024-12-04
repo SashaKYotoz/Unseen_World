@@ -5,13 +5,25 @@
     "fog_color": 4605011,
     "foliage_color": 0,
     "grass_color": 0,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 4.0,
+      "sound": "minecraft:ambient.basalt_deltas.mood",
+      "tick_delay": 6000
+    },
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.end"
+        "sound_id": "minecraft:music.nether.basalt_deltas"
       }
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:ash"
+      },
+      "probability": 0.1025
     },
     "sky_color": 4605011,
     "water_color": 0,
@@ -30,5 +42,5 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.0
+  "temperature": 0.05
 }

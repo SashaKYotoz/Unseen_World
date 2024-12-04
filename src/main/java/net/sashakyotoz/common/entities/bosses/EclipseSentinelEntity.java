@@ -27,24 +27,29 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIntArray;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.BlockPositionSource;
-import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.client.particles.custom.effects.LightVibrationParticleEffect;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.ai.bosses_goals.SentinelMovementGoal;
+import net.sashakyotoz.common.entities.bosses.parts.EclipseSentinelPartEntity;
 import net.sashakyotoz.common.networking.data.GrippingData;
 import net.sashakyotoz.utils.ChimericDarknessData;
 import net.sashakyotoz.utils.IEntityDataSaver;
@@ -69,6 +74,10 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
     public final AnimationState exalting = new AnimationState();
     public final AnimationState heavy_swing = new AnimationState();
 
+    private final EclipseSentinelPartEntity[] parts;
+    public final EclipseSentinelPartEntity body;
+    public final EclipseSentinelPartEntity cape;
+
     private final ServerBossBar bossBar = new ServerBossBar(Text.translatable("entity.unseen_world.eclipse_sentinel"), BossBar.Color.BLUE, BossBar.Style.NOTCHED_6);
     public static final TrackedDataHandler<EclipseSentinelEntity.SentinelPose> SENTINEL_POSE = TrackedDataHandler.ofEnum(EclipseSentinelEntity.SentinelPose.class);
     public static final TrackedData<EclipseSentinelEntity.SentinelPose> PHASE = DataTracker.registerData(EclipseSentinelEntity.class, SENTINEL_POSE);
@@ -81,10 +90,18 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
         this.experiencePoints = WITHER_XP;
         this.pos = this.getBlockPos().add(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4);
         this.setStepHeight(1.5f);
-        this.setPhase();
+//        this.setPhase();
         MobNavigation mobNavigation = (MobNavigation) this.getNavigation();
         mobNavigation.setCanSwim(true);
         mobNavigation.setCanWalkOverFences(true);
+        this.body = new EclipseSentinelPartEntity(this, "body", 0.45F, 0.35F);
+        this.cape = new EclipseSentinelPartEntity(this, "cape", 0.45F, 0.35F);
+        this.parts = new EclipseSentinelPartEntity[]{this.body};
+    }
+
+    @Override
+    public int getMaxHeadRotation() {
+        return this.isInSentinelPose(SentinelPose.BEAMING) ? 10 : super.getMaxHeadRotation();
     }
 
     @Override
@@ -114,16 +131,28 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                 case DYING -> this.death.start(this.age);
                 case RUSH_AND_SWING -> {
                     this.exalting.stop();
+                    this.navigation.stop();
                     this.rush_and_swing.start(this.age);
-                    this.queueServerWork(15, () -> this.setVelocity(
+                    this.queueServerWork(35, () -> this.setVelocity(
                             this.getXVector(1, this.getYaw()),
                             0.65,
                             this.getZVector(1, this.getYaw())));
-                    this.queueServerWork(18, () -> {
-                        this.playSound(SoundEvents.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 1.5f, 1);
-                        if (this.getTarget() != null && this.squaredDistanceTo(this.getTarget()) < 7f) {
-                            this.tryAttack(this.getTarget());
-                            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2, World.ExplosionSourceType.NONE);
+                    this.queueServerWork(60, () -> {
+                        this.playSound(SoundEvents.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.5f, 1);
+                        if (this.getWorld() instanceof ServerWorld world)
+                            world.spawnParticles(ModParticleTypes.GRIPPING_CRYSTAL,
+                                    this.getX() + getXVector(1, this.getYaw()),
+                                    this.getY() + 1.5f,
+                                    this.getZ() + getZVector(1, this.getYaw()),
+                                    7, 0, 0, 0, 1
+                            );
+                        if (this.getTarget() != null) {
+                            if (this.getTarget() instanceof ServerPlayerEntity player)
+                                GrippingData.addGrippingSeconds((IEntityDataSaver) player, 8);
+                            if (this.squaredDistanceTo(this.getTarget()) < 7f) {
+                                this.tryAttack(this.getTarget());
+                                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2, World.ExplosionSourceType.NONE);
+                            }
                         }
                     });
                 }
@@ -136,46 +165,7 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                     this.queueServerWork(25, () -> {
                         if (this.getTarget() != null && this.getTarget().squaredDistanceTo(this) < 5)
                             this.tryAttack(this.getTarget());
-                        float scaling = 0;
-                        World world = this.getWorld();
-                        BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(10)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                        if (world instanceof ServerWorld serverWorld)
-                            serverWorld.spawnParticles(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
-                        for (int i1 = 0; i1 < 10; i1++) {
-                            BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            if (!this.getWorld().getBlockState(pos).isOpaque())
-                                scaling = scaling + 1;
-                            BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
-                            for (LivingEntity entity : entities) {
-                                if (entity != this)
-                                    entity.damage(this.getDamageSources().magic(), 10);
-                            }
-                        }
-                    });
-                    this.queueServerWork(35, () -> {
-                        if (this.getTarget() != null && this.getTarget().squaredDistanceTo(this) < 5)
-                            this.tryAttack(this.getTarget());
-                        float scaling = 0;
-                        World world = this.getWorld();
-                        BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(11)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                        if (world instanceof ServerWorld serverWorld)
-                            serverWorld.spawnParticles(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
-                        for (int i1 = 0; i1 < 11; i1++) {
-                            BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            if (!this.getWorld().getBlockState(pos).isOpaque())
-                                scaling = scaling + 1;
-                            BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
-                            for (LivingEntity entity : entities) {
-                                if (entity != this)
-                                    entity.damage(this.getDamageSources().magic(), 10);
-                            }
-                        }
-                    });
-                    this.queueServerWork(45, () -> {
-                        if (this.getTarget() != null && this.getTarget().squaredDistanceTo(this) < 5)
-                            this.tryAttack(this.getTarget());
+                        this.playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1, 1.5f);
                         float scaling = 0;
                         World world = this.getWorld();
                         BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(12)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
@@ -189,7 +179,28 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                             List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
                             for (LivingEntity entity : entities) {
                                 if (entity != this)
-                                    entity.damage(this.getDamageSources().magic(), 10);
+                                    entity.damage(this.getDamageSources().magic(), 12);
+                            }
+                        }
+                    });
+                    this.queueServerWork(45, () -> {
+                        if (this.getTarget() != null && this.getTarget().squaredDistanceTo(this) < 5)
+                            this.tryAttack(this.getTarget());
+                        float scaling = 0;
+                        this.playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1, 1.5f);
+                        World world = this.getWorld();
+                        BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(13)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
+                        if (world instanceof ServerWorld serverWorld)
+                            serverWorld.spawnParticles(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
+                        for (int i1 = 0; i1 < 13; i1++) {
+                            BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
+                            if (!this.getWorld().getBlockState(pos).isOpaque())
+                                scaling = scaling + 1;
+                            BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
+                            List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
+                            for (LivingEntity entity : entities) {
+                                if (entity != this)
+                                    entity.damage(this.getDamageSources().magic(), 12);
                             }
                         }
                     });
@@ -284,7 +295,6 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                     this.navigation.stop();
                     this.spawnParticle(ParticleTypes.SQUID_INK, this.getWorld(), this.getX(), this.getY() + 1, this.getZ(), 1.5f);
                     this.setVelocity(0, 1, 0);
-
                     this.queueServerWork(15, () -> {
                         if (this.getTarget() != null) {
                             Vec3d vec3d = new Vec3d(
@@ -296,10 +306,11 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                             this.setVelocity(vec3d);
                         }
                     });
-                    this.queueServerWork(25, () -> {
+                    this.queueServerWork(30, () -> {
                         if (this.getTarget() != null) {
                             this.teleport(this.getTarget().getX(), this.getTarget().getY() + 2, this.getTarget().getZ());
                             this.getTarget().damage(this.getDamageSources().magic(), 6);
+                            this.playSound(SoundEvents.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 2);
                             this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2, World.ExplosionSourceType.NONE);
                             setPhase();
                         }
@@ -381,7 +392,11 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
             }
         }
     }
-
+    @Override
+    public boolean haveToDropLoot(DamageSource source) {
+        return source.getAttacker() instanceof ServerPlayerEntity player &&
+                !(player.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(ModEntities.ECLIPSE_SENTINEL)) > 1);
+    }
     @Override
     public void tick() {
         super.tick();
@@ -392,6 +407,8 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
         if (this.timeOfAbility > 0)
             this.timeOfAbility--;
         if (this.getTarget() != null) {
+            if (this.getTarget().squaredDistanceTo(this) > 784 && this.isInSentinelPose(SentinelPose.BEAMING))
+                this.setSentinelPose(SentinelPose.HARD_RUSH);
             if (this.age % ((this.getHealth() < this.getMaxHealth() / 2f) ? 20 : 40) == 0)
                 this.pos = this.random.nextBoolean() ? this.getBlockPos().add(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4)
                         : this.getTarget().getBlockPos().up();
@@ -444,7 +461,7 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
             }
             if (this.isInSentinelPose(SentinelPose.EXALTING)) {
                 if (this.age % 4 == 0 && isSolidBlockBelow()) {
-                    this.addVelocity(0, 0.55f, 0);
+                    this.addVelocity(0, 0.5f, 0);
                     scheduleVelocityUpdate();
                 }
                 if (this.age % 30 == 0) {
@@ -463,12 +480,52 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
         }
     }
 
+    @Override
+    public void tickMovement() {
+        super.tickMovement();
+        float f14 = this.getYaw() * ((float) Math.PI / 180F);
+        float f1 = MathHelper.sin(f14);
+        float f15 = MathHelper.cos(f14);
+        Vec3d[] vec3ds = new Vec3d[this.parts.length];
+        for (int s = 0; s < this.parts.length; s++) {
+            vec3ds[s] = new Vec3d(this.parts[s].getX(), this.parts[s].getY(), this.parts[s].getZ());
+        }
+
+        this.movePart(this.body, f1 * -0.75F, 1.75D, -f15 * -0.75F);
+        this.movePart(this.cape, f1 * 0.75F, 1.5D, -f15 * 0.75F);
+        for (int ac = 0; ac < this.parts.length; ac++) {
+            this.parts[ac].prevX = vec3ds[ac].x;
+            this.parts[ac].prevY = vec3ds[ac].y;
+            this.parts[ac].prevZ = vec3ds[ac].z;
+            this.parts[ac].lastRenderX = vec3ds[ac].x;
+            this.parts[ac].lastRenderY = vec3ds[ac].y;
+            this.parts[ac].lastRenderZ = vec3ds[ac].z;
+        }
+    }
+
+    public EclipseSentinelPartEntity[] getBodyParts() {
+        return this.parts;
+    }
+
+    private void movePart(EclipseSentinelPartEntity partEntity, double dx, double dy, double dz) {
+        partEntity.setPosition(this.getX() + dx, this.getY() + dy, this.getZ() + dz);
+    }
+
     private boolean isSolidBlockBelow() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             if (this.getWorld().getBlockState(this.getBlockPos().down(i)).isOpaque())
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+        EclipseSentinelPartEntity[] bodyParts = this.getBodyParts();
+        for (int i = 0; i < bodyParts.length; i++) {
+            bodyParts[i].setId(i + packet.getId());
+        }
     }
 
     @Override
@@ -612,11 +669,11 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
         IDLING(100),
         DARKNESS(120),
         BACKFLIP(60),
-        SWORD_SWING(60),
-        HEAVY_SWING(80),
+        SWORD_SWING(80),
+        HEAVY_SWING(70),
         HARD_RUSH(80),
         BLASTING_EROFLAME(50),
-        RUSH_AND_SWING(50),
+        RUSH_AND_SWING(60),
         SKY_JUMPING(80),
         BEAMING(160),
         EXALTATION(80),

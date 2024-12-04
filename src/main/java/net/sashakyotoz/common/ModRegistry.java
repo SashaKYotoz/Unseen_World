@@ -1,6 +1,8 @@
 package net.sashakyotoz.common;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.advancement.criterion.CuredZombieVillagerCriterion;
 import net.minecraft.block.Block;
 import net.minecraft.data.client.Model;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -12,11 +14,15 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.world.gen.structure.Structure;
 import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.common.datagen.advancements.CuredGripcrystalEntityCriterion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +30,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ModRegistry {
+    //constants
+    public static final CuredGripcrystalEntityCriterion CURED_GRIPCRYSTAL_ENTITY_CRITERION = Criteria.register(new CuredGripcrystalEntityCriterion());
+
+    public static final RegistryKey<Structure> WARRIOR_OF_DARKNESS_TOWER = RegistryKey.of(RegistryKeys.STRUCTURE,UnseenWorld.makeID("warrior_of_darkness_tower"));
+    public static final RegistryKey<Structure> ECLIPSE_CORE = RegistryKey.of(RegistryKeys.STRUCTURE,UnseenWorld.makeID("eclipse_core"));
+
     public static class BlockBuilder {
         protected BlockBuilder(Identifier id, Block block, boolean item) {
             this.id = id;

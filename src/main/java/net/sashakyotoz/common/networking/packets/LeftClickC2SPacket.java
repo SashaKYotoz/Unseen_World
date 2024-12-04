@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.RaycastContext;
@@ -29,6 +30,8 @@ public class LeftClickC2SPacket {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
                                PacketByteBuf buf, PacketSender responseSender) {
         ItemStack stack = player.getMainHandStack();
+        if (ActionsManager.isModLoaded("bettercombat"))
+            player.swingHand(Hand.MAIN_HAND);
         if (stack.isIn(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS) && GripcrystalManaData.getMana((IEntityDataSaver) player) > 0) {
             if (stack.getItem() instanceof EclipsebaneItem item
                     && item.getItemPhase(player.getMainHandStack()).equals("light_ray")
@@ -84,7 +87,7 @@ public class LeftClickC2SPacket {
         if (ActionsManager.canUseGripcrystalCharges(stack)) {
             if (GripcrystalManaData.getMana((IEntityDataSaver) player) > 2) {
                 ActionsManager.hitNearbyMobs(player, stack.getItem().getTranslationKey().contains("netherite") ? 8 : 6, 5);
-                ActionsManager.spawnParticle(ParticleTypes.END_ROD,player.getServerWorld(),player.getX(),player.getY(),player.getZ(),1);
+                ActionsManager.spawnParticle(ParticleTypes.END_ROD, player.getServerWorld(), player.getX(), player.getY(), player.getZ(), 1);
                 GripcrystalManaData.removeMana((IEntityDataSaver) player, 2);
             }
         }

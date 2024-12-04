@@ -10,10 +10,12 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.DolphinEntity;
 import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -21,7 +23,9 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -37,10 +41,14 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.event.GameEvent;
+import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.entities.ai.EspyerIgniteGoal;
+import net.sashakyotoz.common.items.ModItems;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
 
@@ -48,6 +56,10 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
     private static final TrackedData<Integer> FUSE_SPEED = DataTracker.registerData(EspyerEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Boolean> CHARGED = DataTracker.registerData(EspyerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> IGNITED = DataTracker.registerData(EspyerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> CONVERTING = DataTracker.registerData(EspyerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private int conversionTimer;
+    @Nullable
+    private UUID converter;
     private int lastFuseTime;
     private int currentFuseTime;
     private int fuseTime = 30;
@@ -93,15 +105,22 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
         this.dataTracker.startTracking(FUSE_SPEED, -1);
         this.dataTracker.startTracking(CHARGED, false);
         this.dataTracker.startTracking(IGNITED, false);
+        this.dataTracker.startTracking(CONVERTING, false);
+    }
+
+    public boolean isConverting() {
+        return this.getDataTracker().get(CONVERTING);
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        if (this.dataTracker.get(CHARGED)) {
+        if (this.dataTracker.get(CHARGED))
             nbt.putBoolean("powered", true);
+        nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
+        if (this.converter != null) {
+            nbt.putUuid("ConversionPlayer", this.converter);
         }
-
         nbt.putShort("Fuse", (short) this.fuseTime);
         nbt.putByte("ExplosionRadius", (byte) this.explosionRadius);
         nbt.putBoolean("ignited", this.isIgnited());
@@ -110,6 +129,8 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
+        if (nbt.contains("ConversionTime", NbtElement.NUMBER_TYPE) && nbt.getInt("ConversionTime") > -1)
+            this.setConverting(nbt.containsUuid("ConversionPlayer") ? nbt.getUuid("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
         this.dataTracker.set(CHARGED, nbt.getBoolean("powered"));
         if (nbt.contains("Fuse", NbtElement.NUMBER_TYPE))
             this.fuseTime = nbt.getShort("Fuse");
@@ -117,6 +138,15 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
             this.explosionRadius = nbt.getByte("ExplosionRadius");
         if (nbt.getBoolean("ignited"))
             this.ignite();
+    }
+
+    private void setConverting(@Nullable UUID uuid, int delay) {
+        this.converter = uuid;
+        this.conversionTimer = delay;
+        this.getDataTracker().set(CONVERTING, true);
+        this.removeStatusEffect(StatusEffects.GLOWING);
+        this.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, delay, Math.min(this.getWorld().getDifficulty().getId() - 1, 0)));
+        this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_SPLASH_PARTICLES);
     }
 
     @Override
@@ -143,10 +173,28 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
                 this.getNavigation().startMovingTo(this.getTarget(), 1);
             else
                 this.getNavigation().stop();
+            if (!this.getWorld().isClient && this.isAlive() && this.isConverting()) {
+                this.conversionTimer--;
+                if (this.conversionTimer <= 0)
+                    this.finishConversion((ServerWorld) this.getWorld());
+            }
         }
         super.tick();
     }
-
+    private void finishConversion(ServerWorld world) {
+        CreeperEntity creeper = this.convertTo(EntityType.CREEPER, false);
+        creeper.initialize(world, world.getLocalDifficulty(creeper.getBlockPos()), SpawnReason.CONVERSION, null, null);
+        if (this.converter != null) {
+            PlayerEntity player = world.getPlayerByUuid(this.converter);
+            if (player != null)
+                player.dropItem(ModItems.GRIPCRYSTAL);
+            if (player instanceof ServerPlayerEntity player1)
+                ModRegistry.CURED_GRIPCRYSTAL_ENTITY_CRITERION.trigger(player1, this, creeper);
+        }
+        creeper.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0));
+        if (!this.isSilent())
+            world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_CREEPER_HURT, SoundCategory.NEUTRAL, 2, 2);
+    }
     public boolean isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape, Predicate<LivingEntity> predicate, DoubleSupplier... entityYChecks) {
         if (predicate.test(entity)) {
             Vec3d vec3d = entity.getRotationVec(1.0F).normalize();
@@ -235,6 +283,12 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
             }
 
             return ActionResult.success(this.getWorld().isClient);
+        } else if (itemStack.isOf(ModItems.GRIPTONITE)) {
+            if (!player.getAbilities().creativeMode && player instanceof ServerPlayerEntity player1)
+                itemStack.damage(1, player1.getRandom(), player1);
+            if (!this.getWorld().isClient)
+                this.setConverting(player.getUuid(), this.random.nextInt(1201) + 600);
+            return ActionResult.SUCCESS;
         } else {
             return super.interactMob(player, hand);
         }

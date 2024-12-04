@@ -41,6 +41,8 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> DARK_CURRANTSLATE_BOULDER = create("dark_currantslate_boulder");
     public static final RegistryKey<PlacedFeature> AMETHYST_BOULDER = create("amethyst_boulder");
 
+    public static final RegistryKey<PlacedFeature> DARKNESS_SPIRAL_SPIKE = create("darkness_spiral_spike");
+
     public static final RegistryKey<PlacedFeature> WATER_LAKE = create("water_lake");
     public static final RegistryKey<PlacedFeature> DARK_WATER_LAKE = create("dark_water_lake");
     public static final RegistryKey<PlacedFeature> CRIMSONVEIL_DARK_WATER_LAKE = create("crimsonveil_dark_water_lake");
@@ -127,6 +129,16 @@ public class ModPlacements {
                 BiomePlacementModifier.of(),
                 RarityFilterPlacementModifier.of(4));
 
+        register(
+                context,
+                DARKNESS_SPIRAL_SPIKE,
+                configLookup.getOrThrow(ModConfiguredFeatures.DARKNESS_SPIRAL_SPIKE),
+                NoiseThresholdCountPlacementModifier.of(-0.75, 0, 1),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP,
+                BiomePlacementModifier.of()
+        );
+
         register(context, WATER_LAKE, configLookup.getOrThrow(ModConfiguredFeatures.WATER_LAKE),
                 RarityFilterPlacementModifier.of(6),
                 SquarePlacementModifier.of(),
@@ -176,7 +188,7 @@ public class ModPlacements {
                 context,
                 AMETHYST_FLOWERS,
                 configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_FLOWERS),
-                NoiseThresholdCountPlacementModifier.of(-0.85, 6, 9),
+                NoiseThresholdCountPlacementModifier.of(-0.85, 3, 6),
                 SquarePlacementModifier.of(),
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of()

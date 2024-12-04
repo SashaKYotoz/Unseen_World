@@ -24,6 +24,7 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(GLOOMWHALE, GloomwhaleEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SABERPARD, SaberpardEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(ESPYER, EspyerEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ELDRITCH_WATCHER, EldritchWatcherEntity.createAttributes());
     }
 
     public static final EntityType<GleamcarverEntity> GLEAMCARVER = Registry.register(Registries.ENTITY_TYPE,
@@ -44,13 +45,16 @@ public class ModEntities {
     public static final EntityType<EspyerEntity> ESPYER = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("espyer"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, EspyerEntity::new)
                     .dimensions(EntityDimensions.fixed(0.6F, 1.6F)).build());
+    public static final EntityType<EldritchWatcherEntity> ELDRITCH_WATCHER = Registry.register(Registries.ENTITY_TYPE,
+            UnseenWorld.makeID("eldritch_watcher"), FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, EldritchWatcherEntity::new)
+                    .dimensions(EntityDimensions.fixed(1.3F, 3.8F)).build());
 
     public static final EntityType<WarriorOfChimericDarkness> WARRIOR_OF_CHIMERIC_DARKNESS = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("warrior_of_chimeric_darkness"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, WarriorOfChimericDarkness::new)
                     .dimensions(EntityDimensions.fixed(1.75f, 2.85f)).build());
     public static final EntityType<EclipseSentinelEntity> ECLIPSE_SENTINEL = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("eclipse_sentinel"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, EclipseSentinelEntity::new)
-                    .dimensions(EntityDimensions.fixed(1.65f, 3f)).build());
+                    .dimensions(EntityDimensions.fixed(1.55f, 3f)).build());
 
     public static final EntityType<GrippingCrystalProjectileEntity> GRIPPING_CRYSTAL_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("gripping_crystal_projectile"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, GrippingCrystalProjectileEntity::new)

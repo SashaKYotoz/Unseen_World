@@ -20,8 +20,10 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -32,8 +34,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.EntityPositionSource;
 import net.sashakyotoz.client.particles.custom.effects.WindVibrationParticleEffect;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.ai.bosses_goals.WarriorMovementGoal;
+import net.sashakyotoz.common.networking.data.GrippingData;
+import net.sashakyotoz.utils.ActionsManager;
 import net.sashakyotoz.utils.ChimericDarknessData;
+import net.sashakyotoz.utils.IEntityDataSaver;
 import net.sashakyotoz.utils.JsonWorldController;
 
 import java.util.List;
@@ -51,11 +57,11 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
 
     private final ServerBossBar bossBar = new ServerBossBar(Text.translatable("entity.unseen_world.warrior_of_chimeric_darkness"), BossBar.Color.PURPLE, BossBar.Style.NOTCHED_6);
     private BlockPos pos;
+    private int timeOfAbility = 0;
 
     public WarriorOfChimericDarkness(EntityType<? extends BossLikePathfinderMob> entityType, World world) {
         super(entityType, world);
         this.experiencePoints = WITHER_XP;
-        this.dataTracker.startTracking(PHASE, WarriorPose.SPAWNING);
         this.pos = this.getBlockPos().add(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
         this.setStepHeight(1.5f);
         this.setRandomPhase();
@@ -64,6 +70,11 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
         mobNavigation.setCanWalkOverFences(true);
     }
 
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(PHASE, WarriorPose.SPAWNING);
+    }
 
     @Override
     public ServerBossBar bossInfo() {
@@ -142,7 +153,8 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
                     this.getJumpControl().setActive();
                     this.queueServerWork(18, () -> {
                         this.hitNearbyMobs(10, 7);
-                        this.provokeEarthquake(3);
+                        if (!ActionsManager.isModLoaded("sodium"))
+                            this.provokeEarthquake(3);
                         this.playSound(SoundEvents.BLOCK_ANVIL_HIT, 2.5f, 2.5f);
                     });
                 }
@@ -198,67 +210,67 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
         switch (this.getWarriorPose()) {
             case DASHING -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                     case 1 -> this.setWarriorPose(WarriorPose.EROFLAMING);
                     case 2 -> this.setWarriorPose(WarriorPose.SPINNING);
                     case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
+                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                 }
             }
             case HAMMER_ATTACKING -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.DASHING);
                     case 1 -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
                     case 2 -> this.setWarriorPose(WarriorPose.SPINNING);
                     case 3 -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
+                    default -> this.setWarriorPose(WarriorPose.DASHING);
                 }
             }
             case HEAVY_HAMMER_ATTACKING -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
                     case 1 -> this.setWarriorPose(WarriorPose.DASHING);
                     case 2 -> this.setWarriorPose(WarriorPose.EROFLAMING);
                     case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
+                    default -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
                 }
             }
             case SPINNING -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                     case 1 -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
                     case 2 -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
                     case 3 -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
+                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                 }
             }
             case SHIELDED_WALK -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                     case 1 -> this.setWarriorPose(WarriorPose.EROFLAMING);
                     case 2 -> this.setWarriorPose(WarriorPose.DASHING);
                     case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
+                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                 }
             }
             case IDLING -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                     case 1 -> this.setWarriorPose(WarriorPose.SPINNING);
                     case 2 -> this.setWarriorPose(WarriorPose.DASHING);
                     case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
+                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                 }
             }
             case BLASTING -> {
                 pos = this.getBlockPos().add(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
                     case 1 -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
                     case 2 -> this.setWarriorPose(WarriorPose.DASHING);
                     case 3 -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
+                    default -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
                 }
             }
             default -> {
                 switch (random) {
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                     case 1 -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
                     case 2 -> this.setWarriorPose(WarriorPose.EROFLAMING);
                     case 3 -> this.setWarriorPose(WarriorPose.SPINNING);
+                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
                 }
             }
         }
@@ -294,21 +306,14 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
     @Override
     public void tick() {
         super.tick();
+        if (this.timeOfAbility > 0)
+            this.timeOfAbility--;
         if (this.getTarget() != null) {
-            int changeTick;
-            switch (this.getWarriorPose()) {
-                default -> changeTick = 240;
-                case EROFLAMING -> changeTick = 120;
-                case DASHING, SHIELDED_STRIKING -> changeTick = 60;
-                case SHIELDED_WALK -> changeTick = 200;
-                case BLASTING -> changeTick = 300;
-            }
-            if (this.squaredDistanceTo(this.getTarget()) < 3) {
-                changeTick = 40;
+            if (this.squaredDistanceTo(this.getTarget()) < 4) {
                 if (!this.isInWarriorPose(WarriorPose.HAMMER_ATTACKING))
                     this.getMoveControl().strafeTo(-1, 0);
             }
-            if (this.age % changeTick == 0 && !this.isInWarriorPose(WarriorPose.DYING))
+            if (this.timeOfAbility <= 0 && !this.isInWarriorPose(WarriorPose.DYING))
                 this.setRandomPhase();
             if (this.isInWarriorPose(WarriorPose.BLASTING)) {
                 this.navigation.stop();
@@ -343,7 +348,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
                         0.45f,
                         this.getZVector(-0.75f, this.getTarget().getYaw())
                 );
-            if (this.age % 2 == 0 && this.isInWarriorPose(WarriorPose.EROFLAMING)) {
+            if (this.age % 4 == 0 && this.isInWarriorPose(WarriorPose.EROFLAMING)) {
                 World world = this.getWorld();
                 if (world instanceof ServerWorld serverWorld) {
                     Vec3d eyePos = this.getEyePos();
@@ -373,12 +378,19 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
                 List<LivingEntity> entities = world.getEntitiesByClass(LivingEntity.class, new Box(center.toCenterPos(), center.toCenterPos()).expand(3), LivingEntity::canHit);
                 for (LivingEntity entity : entities) {
                     if (entity != this && !entity.isFireImmune()) {
-                        entity.setFireTicks(40);
+                        if (entity instanceof ServerPlayerEntity player)
+                            GrippingData.addGrippingSeconds((IEntityDataSaver) player, 2);
                         entity.damage(this.getDamageSources().dryOut(), 4);
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public boolean haveToDropLoot(DamageSource source) {
+        return source.getAttacker() instanceof ServerPlayerEntity player &&
+                !(player.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS)) > 1);
     }
 
     @Override
@@ -402,6 +414,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
 
     public void setWarriorPose(WarriorPose pose) {
         this.dataTracker.set(PHASE, pose);
+        this.timeOfAbility = pose.getAbilityTime;
     }
 
     public WarriorPose getWarriorPose() {
@@ -413,16 +426,21 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
     }
 
     public enum WarriorPose {
-        IDLING,
-        SPINNING,
-        HAMMER_ATTACKING,
-        HEAVY_HAMMER_ATTACKING,
-        DASHING,
-        EROFLAMING,
-        BLASTING,
-        SHIELDED_WALK,
-        SHIELDED_STRIKING,
-        DYING,
-        SPAWNING;
+        IDLING(300),
+        SPINNING(200),
+        HAMMER_ATTACKING(50),
+        HEAVY_HAMMER_ATTACKING(60),
+        DASHING(40),
+        EROFLAMING(120),
+        BLASTING(280),
+        SHIELDED_WALK(160),
+        SHIELDED_STRIKING(60),
+        DYING(500),
+        SPAWNING(20);
+        public final int getAbilityTime;
+
+        WarriorPose(int getAbilityTime) {
+            this.getAbilityTime = getAbilityTime;
+        }
     }
 }

@@ -1,18 +1,17 @@
 package net.sashakyotoz.common.world.biomes;
 
 import net.minecraft.client.sound.MusicType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.BiomeMoodSound;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeEffects;
-import net.minecraft.world.biome.GenerationSettings;
-import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.GenerationStep;
 import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.client.particles.custom.effects.LeafParticleEffect;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
 
 public class ModBiomes {
@@ -21,13 +20,13 @@ public class ModBiomes {
 
     public static final RegistryKey<Biome> AMETHYST_FOREST = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("amethyst_forest"));
-    public static final RegistryKey<Biome> GRIZZLY_THICKET  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> GRIZZLY_THICKET = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("grizzly_thicket"));
     public static final RegistryKey<Biome> BURLYWOOD_JUNGLE = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("burlywood_jungle"));
-    public static final RegistryKey<Biome> CRIMSONVEIL_WOODS  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> CRIMSONVEIL_WOODS = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("crimsonveil_woods"));
-    public static final RegistryKey<Biome> OLD_GROWTH_CRIMSONVEIL_WOODS  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> OLD_GROWTH_CRIMSONVEIL_WOODS = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("old_growth_crimsonveil_woods"));
 
     public static final RegistryKey<Biome> AMETHYST_CHIMERIES = RegistryKey.of(RegistryKeys.BIOME,
@@ -38,30 +37,30 @@ public class ModBiomes {
             UnseenWorld.makeID("greenish_meadow"));
     public static final RegistryKey<Biome> TEALIVY_VALLEY = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("tealivy_valley"));
-    public static final RegistryKey<Biome> DARK_WASTELAND  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> DARK_WASTELAND = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("dark_wasteland"));
-    public static final RegistryKey<Biome> CRIMSONVEIL_PLATEAU  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> CRIMSONVEIL_PLATEAU = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("crimsonveil_plateau"));
-    public static final RegistryKey<Biome> HARMONY_GROVE  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> HARMONY_GROVE = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("harmony_grove"));
 
-    public static final RegistryKey<Biome> GRIZZLY_HIGHLANDS  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> GRIZZLY_HIGHLANDS = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("grizzly_highlands"));
-    public static final RegistryKey<Biome> TEALIVY_HIGHLANDS  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> TEALIVY_HIGHLANDS = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("tealivy_highlands"));
-    public static final RegistryKey<Biome> CURRANTSLATE_PEAKS  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> CURRANTSLATE_PEAKS = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("currantslate_peaks"));
 
-    public static final RegistryKey<Biome> SHINY_CAVERNS  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> SHINY_CAVERNS = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("shiny_caverns"));
-    public static final RegistryKey<Biome> TANZANITE_CAVES  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> TANZANITE_CAVES = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("tanzanite_caves"));
-    public static final RegistryKey<Biome> DEEP_GLACIEMITE_CAVES  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> DEEP_GLACIEMITE_CAVES = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("deep_glaciemite_caves"));
 
-    public static final RegistryKey<Biome> DARK_RIVER  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> DARK_RIVER = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("dark_river"));
-    public static final RegistryKey<Biome> LUKEWARM_DARK_RIVER  = RegistryKey.of(RegistryKeys.BIOME,
+    public static final RegistryKey<Biome> LUKEWARM_DARK_RIVER = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("lukewarm_dark_river"));
     public static final RegistryKey<Biome> DARK_OCEAN = RegistryKey.of(RegistryKeys.BIOME,
             UnseenWorld.makeID("dark_ocean"));
@@ -93,13 +92,13 @@ public class ModBiomes {
         context.register(DARK_WASTELAND, theDarkness(context));
         context.register(TEALIVY_VALLEY, tealivyBiome(context));
         context.register(TEALIVY_HIGHLANDS, tealivyBiome(context));
-        context.register(GREENISH_VALLEY,greenishBiome(context));
-        context.register(GREENISH_MEADOW,greenishBiome(context));
-        context.register(BURLYWOOD_JUNGLE,greenishBiome(context));
-        context.register(HARMONY_GROVE,greenishBiome(context));
-        context.register(SHINY_CAVERNS,cavernBiome(context));
-        context.register(TANZANITE_CAVES,cavernBiome(context));
-        context.register(DEEP_GLACIEMITE_CAVES,cavernBiome(context));
+        context.register(GREENISH_VALLEY, greenishBiome(context));
+        context.register(GREENISH_MEADOW, greenishBiome(context));
+        context.register(BURLYWOOD_JUNGLE, greenishBiome(context));
+        context.register(HARMONY_GROVE, mixedForestBiome(context));
+        context.register(SHINY_CAVERNS, cavernBiome(context));
+        context.register(TANZANITE_CAVES, cavernBiome(context));
+        context.register(DEEP_GLACIEMITE_CAVES, cavernBiome(context));
     }
 
     public static Biome amethystBiome(Registerable<Biome> context) {
@@ -124,6 +123,7 @@ public class ModBiomes {
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
                 .build();
     }
+
     public static Biome grizzlyLikeBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
         GenerationSettings.LookupBackedBuilder biomeBuilder =
@@ -146,13 +146,14 @@ public class ModBiomes {
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
                 .build();
     }
+
     public static Biome ocean(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
         GenerationSettings.LookupBackedBuilder biomeBuilder =
                 new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE),
                         context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
-        biomeBuilder.feature(GenerationStep.Feature.LOCAL_MODIFICATIONS,ModPlacements.MIDNIGHT_LILY_PATCH);
+        biomeBuilder.feature(GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.MIDNIGHT_LILY_PATCH);
         return new Biome.Builder()
                 .precipitation(false)
                 .downfall(0f)
@@ -160,6 +161,7 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder.build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
+                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.025f))
                         .waterColor(0x000)
                         .waterFogColor(0x000)
                         .skyColor(4605011)
@@ -169,6 +171,7 @@ public class ModBiomes {
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_UNDER_WATER.value()))).build())
                 .build();
     }
+
     public static Biome theDarkness(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
@@ -178,19 +181,22 @@ public class ModBiomes {
         return new Biome.Builder()
                 .precipitation(false)
                 .downfall(0f)
-                .temperature(0)
+                .temperature(0.05f)
                 .generationSettings(biomeBuilder.build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
+                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.1025f))
                         .waterColor(0x000)
                         .waterFogColor(0x000)
                         .skyColor(4605011)
                         .grassColor(0x000)
                         .foliageColor(0x000)
                         .fogColor(4605011)
-                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_END.value()))).build())
+                        .moodSound(new BiomeMoodSound(SoundEvents.AMBIENT_BASALT_DELTAS_MOOD, 6000, 8, 4.0))
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_BASALT_DELTAS.value()))).build())
                 .build();
     }
+
     public static Biome semiHotBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
@@ -210,9 +216,10 @@ public class ModBiomes {
                         .grassColor(0x000)
                         .foliageColor(5013401)
                         .fogColor(4605011)
-                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_END.value()))).build())
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
                 .build();
     }
+
     public static Biome tealivyBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
@@ -226,15 +233,18 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder.build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
+                        .particleConfig(new BiomeParticleConfig(new LeafParticleEffect(0.1f, 0.75f, 0.65f), 0.00125f))
                         .waterColor(5013401)
                         .waterFogColor(5013401)
                         .skyColor(4605011)
                         .grassColor(5013401)
                         .foliageColor(5013401)
                         .fogColor(4605011)
-                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_MENU.value()))).build())
+                        .moodSound(new BiomeMoodSound(SoundEvents.AMBIENT_WARPED_FOREST_MOOD, 6000, 8, 4.0))
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_CREDITS.value()))).build())
                 .build();
     }
+
     public static Biome greenishBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
@@ -254,9 +264,10 @@ public class ModBiomes {
                         .grassColor(6717235)
                         .foliageColor(6717235)
                         .fogColor(4605011)
-                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_MENU.value()))).build())
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_GAME.value()))).build())
                 .build();
     }
+
     public static Biome cavernBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
@@ -270,15 +281,18 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder.build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
+                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.0125f))
                         .waterColor(6579300)
                         .waterFogColor(6579300)
                         .skyColor(4605011)
                         .grassColor(6579300)
                         .foliageColor(6579300)
                         .fogColor(4605011)
+                        .moodSound(BiomeMoodSound.CAVE)
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_OVERWORLD_LUSH_CAVES.value()))).build())
                 .build();
     }
+
     public static Biome mixedForestBiome(Registerable<Biome> context) {
         SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
 
