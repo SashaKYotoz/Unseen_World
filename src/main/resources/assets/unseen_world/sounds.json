@@ -1,4 +1,10 @@
 {
+  "the_darkness.ambient": {
+    "subtitle": "sounds.unseen_world.ambient_sound",
+    "sounds": [
+      "unseen_world:biome/the_darkness"
+    ]
+  },
   "gleamcarver_ambient_sound": {
     "subtitle": "sounds.unseen_world.gleamcarver_ambient_sound",
     "sounds": [

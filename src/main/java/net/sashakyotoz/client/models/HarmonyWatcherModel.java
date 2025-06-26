@@ -9,8 +9,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
+import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.animations.HarmonyWatcherAnimations;
+import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
 public class HarmonyWatcherModel extends SinglePartEntityModel<HarmonyWatcherEntity> implements ModelWithArms {
     public static final EntityModelLayer HARMONY_WATCHER = new EntityModelLayer(UnseenWorld.makeID("harmony_watcher"), "main");
@@ -66,9 +67,10 @@ public class HarmonyWatcherModel extends SinglePartEntityModel<HarmonyWatcherEnt
     public void setAngles(HarmonyWatcherEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         this.eye.yaw = netHeadYaw * (float) (Math.PI / 180.0);
-        this.animateMovement(entity.isAngry ? HarmonyWatcherAnimations.WALKWHENANGRY : HarmonyWatcherAnimations.WALK,limbSwing,limbSwingAmount,3.0f,3.0f);
-        this.updateAnimation(entity.death,HarmonyWatcherAnimations.DEATH,ageInTicks);
-        this.updateAnimation(entity.fertilize,HarmonyWatcherAnimations.FERTILIZE,ageInTicks);
+        this.animateMovement(entity.isAngry ? HarmonyWatcherAnimations.WALK_WHEN_ANGRY : HarmonyWatcherAnimations.WALK, limbSwing, limbSwingAmount, 3.0f, 3.0f);
+        this.updateAnimation(entity.fertilize, HarmonyWatcherAnimations.FERTILIZE, ageInTicks);
+        if (ConfigEntries.doAdvancedDeathForMobs)
+            this.updateAnimation(entity.death, HarmonyWatcherAnimations.DEATH, ageInTicks);
     }
 
     @Override

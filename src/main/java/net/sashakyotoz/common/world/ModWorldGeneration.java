@@ -4,16 +4,29 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
-import net.sashakyotoz.common.entities.custom.*;
+import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.entities.custom.*;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
 
 public class ModWorldGeneration {
+    //NaturesSpirit copyright
+    //source code: https://github.com/Team-Hibiscus/NaturesSpirit/blob/dev/src/main/java/net/hibiscus/naturespirit/registration/NSWorldGen.java
+    public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> CLIFF_PILLAR = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, UnseenWorld.makeID("cliff_pillar"));
+    public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> CLIFF_PILLAR_ROOF = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS,
+            UnseenWorld.makeID("cliff_pillar_roof"));
+    public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> CLIFF_SURFACE = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, UnseenWorld.makeID("cliff_surface"));
+    //
+    public static final RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> DARKNESS_CLIFF_PILLAR = RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, UnseenWorld.makeID("darkness_cliff_pillar"));
+
     public static void register() {
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.ABYSSAL_SPAWNS_IN),
                 GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.ABYSSAL_ORE);
@@ -48,12 +61,8 @@ public class ModWorldGeneration {
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BURLYWOOD_TREE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.BURLYWOOD_JUNGLE),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.SMALL_BURLYWOOD_TREE);
-        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.HAS_BURLYWOOD_BUSH_TREE),
-                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.SMALL_BUSH_LIKE_TREE_PATCH);
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.HAS_AMETHYST_TREE),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.SMALL_AMETHYST_TREE);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.AMETHYST_CHIMERIES),
-                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_BUSH);
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.HAS_CRIMSONVEIL_TREE),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.CRIMSONVEIL_TREE);
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.HAS_AMETHYST_TREE),
@@ -62,17 +71,11 @@ public class ModWorldGeneration {
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_FLOWERS);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.AMETHYST_CHIMERIES),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_FLOWERS);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.BURLYWOOD_JUNGLE),
-                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BUSH_LIKE_TREE_PATCH);
 
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.CRIMSONVEIL_WOODS),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.TALL_CRIMSONVEIL_TREE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.AMETHYST_FOREST),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_TREE);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.GRIZZLY_THICKET),
-                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.GRIZZLY_TREE);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.GRIZZLY_THICKET),
-                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.TALL_GRIZZLY_TREE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.GRIZZLY_THICKET, ModBiomes.GRIZZLY_HIGHLANDS),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BEARFRUIT_BRAMBLE_PATCH);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TEALIVY_VALLEY),
@@ -97,6 +100,11 @@ public class ModWorldGeneration {
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.TALL_GLOOMWEED_PATCH);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.THE_DARKNESS),
                 GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.DARKNESS_SPIRAL_SPIKE);
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES),
+                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_CEILING_BOULDER);
+
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.CURRANTSLATE_BOULDER_SPAWNS_ON),
+                GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.GRIPPING_DARK_CURRANTSLATE_PATCH_FLOOR);
 
         BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.HAS_GLEAMCARVER),
                 SpawnGroup.AMBIENT,
@@ -107,9 +115,13 @@ public class ModWorldGeneration {
                 ModEntities.HARMONY_WATCHER,
                 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.HAS_SABERPARD),
-                SpawnGroup.CREATURE,
+                SpawnGroup.AMBIENT,
                 ModEntities.SABERPARD,
-                5, 1, 2);
+                4, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.HAS_TUSKHOG),
+                SpawnGroup.AMBIENT,
+                ModEntities.TUSKHOG,
+                6, 1, 2);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DARK_LIFELESS_OCEAN),
                 SpawnGroup.WATER_CREATURE,
                 ModEntities.GLOOMWHALE,
@@ -122,14 +134,14 @@ public class ModWorldGeneration {
                 SpawnGroup.MONSTER,
                 ModEntities.ESPYER,
                 5, 1, 1);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DEEP_GLACIEMITE_CAVES,ModBiomes.SHINY_CAVERNS,ModBiomes.THE_DARKNESS),
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DEEP_GLACIEMITE_CAVES, ModBiomes.SHINY_CAVERNS, ModBiomes.THE_DARKNESS),
                 SpawnGroup.AMBIENT,
                 ModEntities.ELDRITCH_WATCHER,
                 5, 1, 1);
-//        SpawnRestriction.register(ModEntities.GLEAMCARVER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, GleamcarverEntity::canGleamcarverSpawn);
-        SpawnRestriction.register(ModEntities.HARMONY_WATCHER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HarmonyWatcherEntity::canWatcherSpawn);
+        SpawnRestriction.register(ModEntities.HARMONY_WATCHER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HarmonyWatcherEntity::canWatcherSpawn);
         SpawnRestriction.register(ModEntities.GLOOMWHALE, SpawnRestriction.Location.IN_WATER, Heightmap.Type.OCEAN_FLOOR, GloomwhaleEntity::canWhaleSpawn);
         SpawnRestriction.register(ModEntities.SABERPARD, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, SaberpardEntity::isValidNaturalSpawn);
+        SpawnRestriction.register(ModEntities.TUSKHOG, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, TuskhogEntity::isValidNaturalSpawn);
         SpawnRestriction.register(ModEntities.ESPYER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, EspyerEntity::canEspyerSpawn);
         SpawnRestriction.register(ModEntities.ELDRITCH_WATCHER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, EldritchWatcherEntity::canWatcherSpawn);
     }

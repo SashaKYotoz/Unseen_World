@@ -23,7 +23,24 @@
     "water_color": 13061821,
     "water_fog_color": 13061821
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:iron_ore"
+    ],
+    [
+      "unseen_world:amethyst_ceiling_boulder"
+    ],
+    [],
+    [
+      "unseen_world:amethyst_bush"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {

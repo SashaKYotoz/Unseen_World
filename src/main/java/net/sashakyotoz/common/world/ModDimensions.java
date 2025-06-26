@@ -8,7 +8,6 @@ import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.dimension.DimensionTypes;
 import net.sashakyotoz.UnseenWorld;
 
 import java.util.OptionalLong;
@@ -23,13 +22,13 @@ public class ModDimensions {
 
     public static void bootstrapType(Registerable<DimensionType> context) {
         context.register(CHIMERIC_DARKNESS_TYPE, new DimensionType(
-                OptionalLong.of(1000), // fixedTime
+                OptionalLong.of(16000), // fixedTime
                 false, // hasSkylight
                 false, // hasCeiling
                 false, // ultraWarm
                 false, // natural
                 16.0, // coordinateScale
-                false, // bedWorks
+                true, // bedWorks
                 true, // respawnAnchorWorks
                 -64, // minY
                 384, // height

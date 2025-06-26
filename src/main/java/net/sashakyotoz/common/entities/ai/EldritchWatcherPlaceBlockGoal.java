@@ -26,7 +26,6 @@ public class EldritchWatcherPlaceBlockGoal extends Goal {
             return false;
         else
             return this.watcher.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) && this.watcher.getRandom().nextInt(toGoalTicks(2000)) == 0;
-
     }
 
     @Override

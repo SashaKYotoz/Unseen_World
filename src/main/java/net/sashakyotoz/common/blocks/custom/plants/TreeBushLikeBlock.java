@@ -1,11 +1,9 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.PlantBlock;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -23,13 +21,15 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
 
-public class TreeBushLikeBlock extends PlantBlock {
+public class TreeBushLikeBlock extends PlantBlock implements Fertilizable {
     public static final BooleanProperty GROWN = BooleanProperty.of("grown");
-    public static final EnumProperty<TreeBushLikeTypes> TYPE = EnumProperty.of("type", TreeBushLikeTypes.class);
+    public static final EnumProperty<BushTypes> TYPE = EnumProperty.of("type", BushTypes.class);
     public static final DirectionProperty FACING = Properties.FACING;
 
     private static final VoxelShape STEM_SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
@@ -42,7 +42,7 @@ public class TreeBushLikeBlock extends PlantBlock {
 
     public TreeBushLikeBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(GROWN, Boolean.FALSE).with(TYPE, TreeBushLikeTypes.BUSH));
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(GROWN, Boolean.FALSE).with(TYPE, BushTypes.BUSH));
     }
 
     @Override
@@ -59,47 +59,48 @@ public class TreeBushLikeBlock extends PlantBlock {
         BlockState south = world.getBlockState(pos.south());
         BlockState east = world.getBlockState(pos.east());
         BlockState west = world.getBlockState(pos.west());
-        if (north.isOf(ModBlocks.GLOW_APPLE_BUSH) && north.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-            return this.getDefaultState().with(FACING, Direction.NORTH).with(TYPE, TreeBushLikeTypes.CROOKED_STEM);
-        if (south.isOf(ModBlocks.GLOW_APPLE_BUSH) && south.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-            return this.getDefaultState().with(FACING, Direction.SOUTH).with(TYPE, TreeBushLikeTypes.CROOKED_STEM);
-        if (east.isOf(ModBlocks.GLOW_APPLE_BUSH) && east.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-            return this.getDefaultState().with(FACING, Direction.EAST).with(TYPE, TreeBushLikeTypes.CROOKED_STEM);
-        if (west.isOf(ModBlocks.GLOW_APPLE_BUSH) && west.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-            return this.getDefaultState().with(FACING, Direction.WEST).with(TYPE, TreeBushLikeTypes.CROOKED_STEM);
-        if (floor.isOf(ModBlocks.GLOW_APPLE_BUSH) && (floor.get(TYPE) == TreeBushLikeTypes.CROOKED_STEM
-                || floor.get(TYPE) == TreeBushLikeTypes.STEM))
-            return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite()).with(TYPE, ctx.getPlayer().getRandom().nextBoolean() ? TreeBushLikeTypes.BUSH : TreeBushLikeTypes.STEM);
-        if (floor.isOf(ModBlocks.GLOW_APPLE_BUSH) && floor.get(TYPE) == TreeBushLikeTypes.BUSH) {
-            world.setBlockState(pos.down(), floor.with(TYPE, TreeBushLikeTypes.STEM));
-            return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite()).with(TYPE, TreeBushLikeTypes.STEM);
+        if (north.isOf(ModBlocks.GLOW_APPLE_BUSH) && north.get(TYPE) == BushTypes.TURN_STEM)
+            return this.getDefaultState().with(FACING, Direction.NORTH).with(TYPE, BushTypes.CROOKED_STEM);
+        if (south.isOf(ModBlocks.GLOW_APPLE_BUSH) && south.get(TYPE) == BushTypes.TURN_STEM)
+            return this.getDefaultState().with(FACING, Direction.SOUTH).with(TYPE, BushTypes.CROOKED_STEM);
+        if (east.isOf(ModBlocks.GLOW_APPLE_BUSH) && east.get(TYPE) == BushTypes.TURN_STEM)
+            return this.getDefaultState().with(FACING, Direction.EAST).with(TYPE, BushTypes.CROOKED_STEM);
+        if (west.isOf(ModBlocks.GLOW_APPLE_BUSH) && west.get(TYPE) == BushTypes.TURN_STEM)
+            return this.getDefaultState().with(FACING, Direction.WEST).with(TYPE, BushTypes.CROOKED_STEM);
+        if (floor.isOf(ModBlocks.GLOW_APPLE_BUSH) && (floor.get(TYPE) == BushTypes.CROOKED_STEM
+                || floor.get(TYPE) == BushTypes.STEM))
+            return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite()).with(TYPE, ctx.getPlayer().getRandom().nextBoolean() ? BushTypes.BUSH : BushTypes.STEM);
+        if (floor.isOf(ModBlocks.GLOW_APPLE_BUSH) && floor.get(TYPE) == BushTypes.BUSH) {
+            world.setBlockState(pos.down(), floor.with(TYPE, BushTypes.STEM));
+            return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite()).with(TYPE, BushTypes.STEM);
         }
-        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite()).with(TYPE, TreeBushLikeTypes.BUSH);
+        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite()).with(TYPE, BushTypes.BUSH);
     }
+
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-        super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         BlockState north = world.getBlockState(pos.north());
         BlockState south = world.getBlockState(pos.south());
         BlockState east = world.getBlockState(pos.east());
         BlockState west = world.getBlockState(pos.west());
-        if ((north.isOf(ModBlocks.GLOW_APPLE_BUSH) && north.get(TYPE) == TreeBushLikeTypes.CROOKED_STEM)
-                && (south.isOf(ModBlocks.GLOW_APPLE_BUSH) && south.get(TYPE) == TreeBushLikeTypes.CROOKED_STEM)
-                && (east.isOf(ModBlocks.GLOW_APPLE_BUSH) && east.get(TYPE) == TreeBushLikeTypes.CROOKED_STEM)
-                && (west.isOf(ModBlocks.GLOW_APPLE_BUSH) && west.get(TYPE) == TreeBushLikeTypes.CROOKED_STEM))
-            world.setBlockState(pos, state.with(TYPE, TreeBushLikeTypes.CROSSING_STEM));
+        if ((north.isOf(ModBlocks.GLOW_APPLE_BUSH) && north.get(TYPE) == BushTypes.CROOKED_STEM)
+                && (south.isOf(ModBlocks.GLOW_APPLE_BUSH) && south.get(TYPE) == BushTypes.CROOKED_STEM)
+                && (east.isOf(ModBlocks.GLOW_APPLE_BUSH) && east.get(TYPE) == BushTypes.CROOKED_STEM)
+                && (west.isOf(ModBlocks.GLOW_APPLE_BUSH) && west.get(TYPE) == BushTypes.CROOKED_STEM))
+            return state.with(TYPE, BushTypes.CROSSING_STEM);
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.randomTick(state, world, pos, random);
-        if (random.nextInt(9) == 3 && state.get(TYPE) == TreeBushLikeTypes.BUSH)
+        if (random.nextInt(9) == 3 && state.get(TYPE) == BushTypes.BUSH)
             world.setBlockState(pos, state.with(GROWN, true));
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (state.get(GROWN) && state.get(TYPE) == TreeBushLikeTypes.BUSH) {
+        if (state.get(GROWN) && state.get(TYPE) == BushTypes.BUSH) {
             player.dropItem(ModItems.GLOW_APPLE);
             world.setBlockState(pos, state.with(GROWN, false));
         }
@@ -131,34 +132,52 @@ public class TreeBushLikeBlock extends PlantBlock {
         BlockState south = world.getBlockState(pos.south());
         BlockState east = world.getBlockState(pos.east());
         BlockState west = world.getBlockState(pos.west());
-        if ((north.getBlock() instanceof TreeBushLikeBlock && north.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-                || (south.getBlock() instanceof TreeBushLikeBlock && south.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-                || (east.getBlock() instanceof TreeBushLikeBlock && east.get(TYPE) == TreeBushLikeTypes.TURN_STEM)
-                || (west.getBlock() instanceof TreeBushLikeBlock && west.get(TYPE) == TreeBushLikeTypes.TURN_STEM))
+        if ((north.getBlock() instanceof TreeBushLikeBlock && north.get(TYPE) == BushTypes.TURN_STEM)
+                || (south.getBlock() instanceof TreeBushLikeBlock && south.get(TYPE) == BushTypes.TURN_STEM)
+                || (east.getBlock() instanceof TreeBushLikeBlock && east.get(TYPE) == BushTypes.TURN_STEM)
+                || (west.getBlock() instanceof TreeBushLikeBlock && west.get(TYPE) == BushTypes.TURN_STEM))
             return true;
-        if ((north.getBlock() instanceof TreeBushLikeBlock && north.get(TYPE) == TreeBushLikeTypes.CROSSING_STEM)
-                || (south.getBlock() instanceof TreeBushLikeBlock && south.get(TYPE) == TreeBushLikeTypes.CROSSING_STEM)
-                || (east.getBlock() instanceof TreeBushLikeBlock && east.get(TYPE) == TreeBushLikeTypes.CROSSING_STEM)
-                || (west.getBlock() instanceof TreeBushLikeBlock && west.get(TYPE) == TreeBushLikeTypes.CROSSING_STEM))
+        if ((north.getBlock() instanceof TreeBushLikeBlock && north.get(TYPE) == BushTypes.CROSSING_STEM)
+                || (south.getBlock() instanceof TreeBushLikeBlock && south.get(TYPE) == BushTypes.CROSSING_STEM)
+                || (east.getBlock() instanceof TreeBushLikeBlock && east.get(TYPE) == BushTypes.CROSSING_STEM)
+                || (west.getBlock() instanceof TreeBushLikeBlock && west.get(TYPE) == BushTypes.CROSSING_STEM))
             return true;
         if (floor.isOf(ModBlocks.GLOW_APPLE_BUSH)) {
-            if ((floor.get(TYPE) == TreeBushLikeTypes.BUSH && !floor.get(GROWN))
-                    || (floor.get(TYPE) == TreeBushLikeTypes.STEM))
+            if ((floor.get(TYPE) == BushTypes.BUSH && !floor.get(GROWN))
+                    || (floor.get(TYPE) == BushTypes.STEM))
                 return true;
-            if (floor.get(TYPE) == TreeBushLikeTypes.CROOKED_STEM)
+            if (floor.get(TYPE) == BushTypes.CROOKED_STEM)
                 return true;
         }
         return super.canPlaceAt(state, world, pos);
     }
 
-    public enum TreeBushLikeTypes implements StringIdentifiable {
+    @Override
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
+        return state.get(TYPE) == BushTypes.BUSH && world.getBlockState(pos.up()).isAir();
+    }
+
+    @Override
+    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+        world.getRegistryManager().getOptional(RegistryKeys.CONFIGURED_FEATURE).flatMap(registry ->
+                registry.getEntry(ModConfiguredFeatures.BUSH_LIKE_TREE_PATCH)).ifPresent(reference ->
+                reference.value().generate(world, world.getChunkManager().getChunkGenerator(),
+                        Random.create(pos.asLong()), pos));
+    }
+
+    public enum BushTypes implements StringIdentifiable {
         STEM("stem"),
         CROOKED_STEM("crooked_stem"),
         TURN_STEM("turn_stem"),
         CROSSING_STEM("crossing_stem"),
         BUSH("bush");
 
-        TreeBushLikeTypes(String name) {
+        BushTypes(String name) {
             this.name = name;
         }
 

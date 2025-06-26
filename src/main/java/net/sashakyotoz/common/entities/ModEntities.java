@@ -18,13 +18,14 @@ public class ModEntities {
         UnseenWorld.log("Registering Entities for modid : " + UnseenWorld.MOD_ID);
         FabricDefaultAttributeRegistry.register(GLEAMCARVER, GleamcarverEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(HARMONY_WATCHER, HarmonyWatcherEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(DARK_GUARDIAN, DarkGuardianEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(VIOLEGER, ViolegerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarkness.createAttributes());
         FabricDefaultAttributeRegistry.register(ECLIPSE_SENTINEL, EclipseSentinelEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GLOOMWHALE, GloomwhaleEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SABERPARD, SaberpardEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(ESPYER, EspyerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(ELDRITCH_WATCHER, EldritchWatcherEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(TUSKHOG, TuskhogEntity.createAttributes());
     }
 
     public static final EntityType<GleamcarverEntity> GLEAMCARVER = Registry.register(Registries.ENTITY_TYPE,
@@ -33,8 +34,8 @@ public class ModEntities {
     public static final EntityType<HarmonyWatcherEntity> HARMONY_WATCHER = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("harmony_watcher"), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HarmonyWatcherEntity::new)
                     .dimensions(EntityDimensions.fixed(1.4f, 1.8f)).build());
-    public static final EntityType<DarkGuardianEntity> DARK_GUARDIAN = Registry.register(Registries.ENTITY_TYPE,
-            UnseenWorld.makeID("dark_guardian"), FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, DarkGuardianEntity::new)
+    public static final EntityType<ViolegerEntity> VIOLEGER = Registry.register(Registries.ENTITY_TYPE,
+            UnseenWorld.makeID("violeger"), FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, ViolegerEntity::new)
                     .dimensions(EntityDimensions.fixed(0.8f, 1.9f)).build());
     public static final EntityType<GloomwhaleEntity> GLOOMWHALE = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("gloomwhale"), FabricEntityTypeBuilder.create(SpawnGroup.WATER_CREATURE, GloomwhaleEntity::new)
@@ -48,10 +49,13 @@ public class ModEntities {
     public static final EntityType<EldritchWatcherEntity> ELDRITCH_WATCHER = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("eldritch_watcher"), FabricEntityTypeBuilder.create(SpawnGroup.AMBIENT, EldritchWatcherEntity::new)
                     .dimensions(EntityDimensions.fixed(1.3F, 3.8F)).build());
+    public static final EntityType<TuskhogEntity> TUSKHOG = Registry.register(Registries.ENTITY_TYPE,
+            UnseenWorld.makeID("tuskhog"), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TuskhogEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.9F, 0.9F)).build());
 
     public static final EntityType<WarriorOfChimericDarkness> WARRIOR_OF_CHIMERIC_DARKNESS = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("warrior_of_chimeric_darkness"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, WarriorOfChimericDarkness::new)
-                    .dimensions(EntityDimensions.fixed(1.75f, 2.85f)).build());
+                    .dimensions(EntityDimensions.fixed(1.9f, 2.95f)).build());
     public static final EntityType<EclipseSentinelEntity> ECLIPSE_SENTINEL = Registry.register(Registries.ENTITY_TYPE,
             UnseenWorld.makeID("eclipse_sentinel"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, EclipseSentinelEntity::new)
                     .dimensions(EntityDimensions.fixed(1.55f, 3f)).build());

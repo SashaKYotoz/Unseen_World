@@ -4,12 +4,17 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
 import net.minecraft.loot.entry.GroupEntry;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.function.ApplyBonusLootFunction;
+import net.minecraft.loot.function.SetCountLootFunction;
+import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.predicate.StatePredicate;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
@@ -52,6 +57,24 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE, block -> oreDrops(block, ModItems.RAW_UNSEENIUM_ORE));
         addDrop(ModBlocks.RED_TITANIUM_IN_GLACIEMITE, block -> oreDrops(block, ModItems.RAW_RED_TITANIUM_ORE));
         addDrop(ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE, block -> oreDrops(block, ModItems.RAW_RED_TITANIUM_ORE));
+        addDrop(ModBlocks.IRON_ORE_IN_GLACIEMITE, block -> dropsWithSilkTouch(
+                block,
+                this.applyExplosionDecay(
+                        block,
+                        ItemEntry.builder(Items.IRON_NUGGET)
+                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0F, 5.0F)))
+                                .apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
+                )));
+            addDrop(ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE, block -> dropsWithSilkTouch(
+                block,
+                this.applyExplosionDecay(
+                        block,
+                        ItemEntry.builder(Items.IRON_NUGGET)
+                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0F, 5.0F)))
+                                .apply(ApplyBonusLootFunction.oreDrops(Enchantments.FORTUNE))
+                )));
+        addDrop(ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE, block -> drops(block, Items.NETHERITE_SCRAP));
+        addDrop(ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE, block -> drops(block, Items.NETHERITE_SCRAP));
 
         addDrop(ModBlocks.AMETHYST_GRASS_BLOCK, block -> this.drops(block, ModBlocks.DARK_CURRANTSLATE));
         addDrop(ModBlocks.TEALIVY_GRASS_BLOCK, block -> this.drops(block, ModBlocks.GLACIEMITE));

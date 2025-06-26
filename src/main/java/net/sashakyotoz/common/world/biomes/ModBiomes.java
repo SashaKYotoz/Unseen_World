@@ -11,7 +11,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.GenerationStep;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.client.particles.custom.effects.LeafParticleEffect;
+import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
 
 public class ModBiomes {
@@ -81,15 +81,15 @@ public class ModBiomes {
         context.register(DARK_RIVER, ocean(context));
         context.register(LUKEWARM_DARK_RIVER, ocean(context));
         context.register(GREYNISH_SHORE, ocean(context));
-        context.register(GRIZZLY_THICKET, grizzlyLikeBiome(context));
-        context.register(CURRANTSLATE_PEAKS, theDarkness(context));
+        context.register(GRIZZLY_THICKET, grizzlyForestBiome(context));
+        context.register(CURRANTSLATE_PEAKS, darkBiomes(context));
         context.register(GRIZZLY_HIGHLANDS, grizzlyLikeBiome(context));
         context.register(CRIMSONVEIL_WOODS, semiHotBiome(context));
         context.register(OLD_GROWTH_CRIMSONVEIL_WOODS, semiHotBiome(context));
         context.register(THE_DARKNESS, theDarkness(context));
-        context.register(DARK_BADLANDS, theDarkness(context));
+        context.register(DARK_BADLANDS, darkBiomes(context));
         context.register(CRIMSONVEIL_PLATEAU, semiHotBiome(context));
-        context.register(DARK_WASTELAND, theDarkness(context));
+        context.register(DARK_WASTELAND, darkBiomes(context));
         context.register(TEALIVY_VALLEY, tealivyBiome(context));
         context.register(TEALIVY_HIGHLANDS, tealivyBiome(context));
         context.register(GREENISH_VALLEY, greenishBiome(context));
@@ -110,7 +110,11 @@ public class ModBiomes {
                 .precipitation(false)
                 .downfall(0f)
                 .temperature(0.5f)
-                .generationSettings(biomeBuilder.build())
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.AMETHYST_CEILING_BOULDER)
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_BUSH)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .waterColor(13061821)
@@ -134,6 +138,32 @@ public class ModBiomes {
                 .downfall(0f)
                 .temperature(0.75f)
                 .generationSettings(biomeBuilder.build())
+                .spawnSettings(spawnBuilder.build())
+                .effects((new BiomeEffects.Builder())
+                        .waterColor(7340544)
+                        .waterFogColor(7340544)
+                        .skyColor(4605011)
+                        .grassColor(7340544)
+                        .foliageColor(7340544)
+                        .moodSound(BiomeMoodSound.CAVE)
+                        .fogColor(4605011)
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
+                .build();
+    }
+    public static Biome grizzlyForestBiome(Registerable<Biome> context) {
+        SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
+        GenerationSettings.LookupBackedBuilder biomeBuilder =
+                new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE),
+                        context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        return new Biome.Builder()
+                .precipitation(false)
+                .downfall(0f)
+                .temperature(0.75f)
+                .generationSettings(
+                        biomeBuilder
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.GRIZZLY_TREE)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.TALL_GRIZZLY_TREE)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .waterColor(7340544)
@@ -181,11 +211,14 @@ public class ModBiomes {
         return new Biome.Builder()
                 .precipitation(false)
                 .downfall(0f)
-                .temperature(0.05f)
-                .generationSettings(biomeBuilder.build())
+                .temperature(0.16f)
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.ANCIENT_DEBRIS)
+                        .feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.DARK_CURRANTSLATE_CEILING_BOULDER)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
-                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.1025f))
+                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.0125f))
                         .waterColor(0x000)
                         .waterFogColor(0x000)
                         .skyColor(4605011)
@@ -193,6 +226,34 @@ public class ModBiomes {
                         .foliageColor(0x000)
                         .fogColor(4605011)
                         .moodSound(new BiomeMoodSound(SoundEvents.AMBIENT_BASALT_DELTAS_MOOD, 6000, 8, 4.0))
+                        .music(MusicType.createIngameMusic(RegistryEntry.of(ModSoundEvents.THE_DARKNESS_AMBIENT))).build())
+                .build();
+    }
+
+    public static Biome darkBiomes(Registerable<Biome> context) {
+        SpawnSettings.Builder spawnBuilder = new SpawnSettings.Builder();
+
+        GenerationSettings.LookupBackedBuilder biomeBuilder =
+                new GenerationSettings.LookupBackedBuilder(context.getRegistryLookup(RegistryKeys.PLACED_FEATURE),
+                        context.getRegistryLookup(RegistryKeys.CONFIGURED_CARVER));
+        return new Biome.Builder()
+                .precipitation(false)
+                .downfall(0f)
+                .temperature(0.2f)
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.ANCIENT_DEBRIS)
+                        .feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.DARK_CURRANTSLATE_CEILING_BOULDER)
+                        .build())
+                .spawnSettings(spawnBuilder.build())
+                .effects((new BiomeEffects.Builder())
+                        .particleConfig(new BiomeParticleConfig(ParticleTypes.CRIT, 0.0025f))
+                        .waterColor(0x000)
+                        .waterFogColor(0x000)
+                        .skyColor(4605011)
+                        .grassColor(0x000)
+                        .foliageColor(0x000)
+                        .fogColor(4605011)
+                        .moodSound(new BiomeMoodSound(SoundEvents.AMBIENT_WARPED_FOREST_MOOD, 6000, 8, 4.0))
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_BASALT_DELTAS.value()))).build())
                 .build();
     }
@@ -207,7 +268,9 @@ public class ModBiomes {
                 .precipitation(false)
                 .downfall(0f)
                 .temperature(0.5f)
-                .generationSettings(biomeBuilder.build())
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .waterColor(0x000)
@@ -230,10 +293,11 @@ public class ModBiomes {
                 .precipitation(false)
                 .downfall(0f)
                 .temperature(0.5f)
-                .generationSettings(biomeBuilder.build())
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
-                        .particleConfig(new BiomeParticleConfig(new LeafParticleEffect(0.1f, 0.75f, 0.65f), 0.00125f))
                         .waterColor(5013401)
                         .waterFogColor(5013401)
                         .skyColor(4605011)
@@ -255,7 +319,10 @@ public class ModBiomes {
                 .precipitation(false)
                 .downfall(0f)
                 .temperature(0.75f)
-                .generationSettings(biomeBuilder.build())
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.TOP_LAYER_MODIFICATION, ModPlacements.BUSH_LIKE_TREE_PATCH)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BURLYWOOD_VIOLET_PATCH)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .waterColor(6717235)
@@ -278,7 +345,11 @@ public class ModBiomes {
                 .precipitation(false)
                 .downfall(0f)
                 .temperature(0f)
-                .generationSettings(biomeBuilder.build())
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.ANCIENT_DEBRIS)
+                        .feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.GRIPPING_GLACIEMITE_PATCH_CEILING)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.0125f))
@@ -303,7 +374,9 @@ public class ModBiomes {
                 .precipitation(false)
                 .downfall(0f)
                 .temperature(0f)
-                .generationSettings(biomeBuilder.build())
+                .generationSettings(biomeBuilder
+                        .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .waterColor(6717235)

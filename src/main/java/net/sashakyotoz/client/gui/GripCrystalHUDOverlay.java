@@ -4,14 +4,15 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.api.entity_data.IEntityDataSaver;
+import net.sashakyotoz.common.config.ConfigController;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
 import net.sashakyotoz.common.items.custom.EclipsebaneItem;
 import net.sashakyotoz.common.items.custom.GrippingAbyssalBowItem;
 import net.sashakyotoz.common.tags.ModTags;
-import net.sashakyotoz.utils.ActionsManager;
-import net.sashakyotoz.utils.IEntityDataSaver;
 
 public class GripCrystalHUDOverlay implements HudRenderCallback {
     private static final Identifier MANA_FRAME = UnseenWorld.makeID(
@@ -31,10 +32,6 @@ public class GripCrystalHUDOverlay implements HudRenderCallback {
             "textures/gui/gripcrystal_abilities/heavy_winding.png");
     private static final Identifier HAMMER_EROFLAMING = UnseenWorld.makeID(
             "textures/gui/gripcrystal_abilities/hammer_eroflaming.png");
-    private static final Identifier GRIPCRYSTAL_SHIELD = UnseenWorld.makeID(
-            "textures/gui/gripcrystal_abilities/gripcrystal_shield.png");
-    private static final Identifier STAFF_AURA = UnseenWorld.makeID(
-            "textures/gui/gripcrystal_abilities/staff_aura.png");
     private static final Identifier CRYSTAL_CRUSHING = UnseenWorld.makeID(
             "textures/gui/gripcrystal_abilities/crystal_crushing.png");
     private static final Identifier CRYSTAL_RAIN = UnseenWorld.makeID(
@@ -48,7 +45,7 @@ public class GripCrystalHUDOverlay implements HudRenderCallback {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client != null && client.player != null &&
                 (client.player.getMainHandStack().isIn(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS)
-                        || ActionsManager.canUseGripcrystalCharges(client.player.getMainHandStack()))) {
+                        || ConfigController.getDataToStack(client.player.getMainHandStack()) != null)) {
             int width = client.getWindow().getScaledWidth();
             int height = client.getWindow().getScaledHeight();
             x = width / 2;
@@ -56,8 +53,8 @@ public class GripCrystalHUDOverlay implements HudRenderCallback {
             ItemStack stack = client.player.getMainHandStack();
             drawContext.drawTexture(MANA_FRAME, x - 128, y - 142, 0, 0, 256, 256);
             int[][] orbPositions = {
-                    {-99, -160}, {-106, -154}, {-114, -149}, {-124, -147}, {-133, -147},
-                    {-143, -149}, {-151, -154}, {-158, -160}
+                    {-156, -121}, {-156, -131}, {-133, -155}, {-123, -155}, {-100, -131},
+                    {-100, -121}, {-123, -97}, {-133, -97}
             };
 
             if (stack.getItem() instanceof EclipsebaneItem item) {
@@ -85,10 +82,11 @@ public class GripCrystalHUDOverlay implements HudRenderCallback {
                             drawContext.drawTexture(CRYSTAL_SUCTIONING, x - 128, y - 142, 0, 0, 256, 256);
                 }
             }
-            if (ActionsManager.isModLoaded("minecells") && stack.getItem().getTranslationKey().contains("cursed_sword"))
-                drawContext.drawTexture(GRIPCRYSTAL_SHIELD, x - 128, y - 142, 0, 0, 256, 256);
-            if (ActionsManager.isModLoaded("sortilege") && stack.getItem().getTranslationKey().contains("staff"))
-                drawContext.drawTexture(STAFF_AURA, x - 128, y - 142, 0, 0, 256, 256);
+            ConfigController.DataItem dataItem = ConfigController.getDataToStack(stack);
+            if (dataItem != null) {
+                if (dataItem.item() != Items.AIR)
+                    drawContext.drawTexture(dataItem.spellIcon(), x - 128, y - 142, 0, 0, 256, 256);
+            }
             for (int i = 0; i < 8; i++) {
                 if (((IEntityDataSaver) client.player).getPersistentData().getInt("gripcrystal_mana") >= (i * 6 == 0 ? 6 : (i + 1) * 6))
                     drawContext.drawTexture(MANA_ORB, x + orbPositions[i][0], y + orbPositions[i][1], 0, 0, 256, 256);

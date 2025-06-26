@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "age=0,vertical_direction=down": {
+      "model": "unseen_world:block/gripping_spigelia_stage0",
+      "x": 180
+    },
+    "age=0,vertical_direction=up": {
+      "model": "unseen_world:block/gripping_spigelia_stage0"
+    },
+    "age=1,vertical_direction=down": {
+      "model": "unseen_world:block/gripping_spigelia_stage1",
+      "x": 180
+    },
+    "age=1,vertical_direction=up": {
+      "model": "unseen_world:block/gripping_spigelia_stage1"
+    },
+    "age=2,vertical_direction=down": {
+      "model": "unseen_world:block/gripping_spigelia_stage2",
+      "x": 180
+    },
+    "age=2,vertical_direction=up": {
+      "model": "unseen_world:block/gripping_spigelia_stage2"
+    }
+  }
+}

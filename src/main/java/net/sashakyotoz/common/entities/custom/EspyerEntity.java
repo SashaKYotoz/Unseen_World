@@ -14,9 +14,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.DolphinEntity;
-import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -118,9 +115,8 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
         if (this.dataTracker.get(CHARGED))
             nbt.putBoolean("powered", true);
         nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
-        if (this.converter != null) {
+        if (this.converter != null)
             nbt.putUuid("ConversionPlayer", this.converter);
-        }
         nbt.putShort("Fuse", (short) this.fuseTime);
         nbt.putByte("ExplosionRadius", (byte) this.explosionRadius);
         nbt.putBoolean("ignited", this.isIgnited());

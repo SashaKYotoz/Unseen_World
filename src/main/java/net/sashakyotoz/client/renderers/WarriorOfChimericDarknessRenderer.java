@@ -5,7 +5,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.models.WarriorOfChimericDarknessModel;
-import net.sashakyotoz.client.renderers.layers.WarriorOfDarknessEroflameLayer;
+import net.sashakyotoz.client.renderers.layers.bosses.WarriorOfDarknessEroflameLayer;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
 
 public class WarriorOfChimericDarknessRenderer extends DeathFixedMobRenderer<WarriorOfChimericDarkness, WarriorOfChimericDarknessModel>{

@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
@@ -80,6 +81,40 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                             .offerTo(exporter);
             }
         }
+        //trapdoors
+        createTrapdoorRecipe(ModBlocks.AMETHYST_TRAPDOOR, Ingredient.ofItems(ModBlocks.AMETHYST_PLANKS))
+                .criterion(hasItem(ModBlocks.AMETHYST_PLANKS), conditionsFromItem(ModBlocks.AMETHYST_PLANKS))
+                .offerTo(exporter);
+        createTrapdoorRecipe(ModBlocks.TEALIVE_TRAPDOOR, Ingredient.ofItems(ModBlocks.TEALIVE_PLANKS))
+                .criterion(hasItem(ModBlocks.TEALIVE_PLANKS), conditionsFromItem(ModBlocks.TEALIVE_PLANKS))
+                .offerTo(exporter);
+        createTrapdoorRecipe(ModBlocks.BURLYWOOD_TRAPDOOR, Ingredient.ofItems(ModBlocks.BURLYWOOD_PLANKS))
+                .criterion(hasItem(ModBlocks.BURLYWOOD_PLANKS), conditionsFromItem(ModBlocks.BURLYWOOD_PLANKS))
+                .offerTo(exporter);
+        createTrapdoorRecipe(ModBlocks.CRIMSONVEIL_TRAPDOOR, Ingredient.ofItems(ModBlocks.CRIMSONVEIL_PLANKS))
+                .criterion(hasItem(ModBlocks.CRIMSONVEIL_PLANKS), conditionsFromItem(ModBlocks.CRIMSONVEIL_PLANKS))
+                .offerTo(exporter);
+        createTrapdoorRecipe(ModBlocks.GRIZZLY_TRAPDOOR, Ingredient.ofItems(ModBlocks.GRIZZLY_PLANKS))
+                .criterion(hasItem(ModBlocks.GRIZZLY_PLANKS), conditionsFromItem(ModBlocks.GRIZZLY_PLANKS))
+                .offerTo(exporter);
+        //doors
+        createDoorRecipe(ModBlocks.AMETHYST_DOOR, Ingredient.ofItems(ModBlocks.AMETHYST_PLANKS))
+                .criterion(hasItem(ModBlocks.AMETHYST_PLANKS), conditionsFromItem(ModBlocks.AMETHYST_PLANKS))
+                .offerTo(exporter);
+        createDoorRecipe(ModBlocks.TEALIVE_DOOR, Ingredient.ofItems(ModBlocks.TEALIVE_PLANKS))
+                .criterion(hasItem(ModBlocks.TEALIVE_PLANKS), conditionsFromItem(ModBlocks.TEALIVE_PLANKS))
+                .offerTo(exporter);
+        createDoorRecipe(ModBlocks.BURLYWOOD_DOOR, Ingredient.ofItems(ModBlocks.BURLYWOOD_PLANKS))
+                .criterion(hasItem(ModBlocks.BURLYWOOD_PLANKS), conditionsFromItem(ModBlocks.BURLYWOOD_PLANKS))
+                .offerTo(exporter);
+        createDoorRecipe(ModBlocks.CRIMSONVEIL_DOOR, Ingredient.ofItems(ModBlocks.CRIMSONVEIL_PLANKS))
+                .criterion(hasItem(ModBlocks.CRIMSONVEIL_PLANKS), conditionsFromItem(ModBlocks.CRIMSONVEIL_PLANKS))
+                .offerTo(exporter);
+        createDoorRecipe(ModBlocks.GRIZZLY_DOOR, Ingredient.ofItems(ModBlocks.GRIZZLY_PLANKS))
+                .criterion(hasItem(ModBlocks.GRIZZLY_PLANKS), conditionsFromItem(ModBlocks.GRIZZLY_PLANKS))
+                .offerTo(exporter);
+        //shields
+        ComplexRecipeJsonBuilder.create(ModRegistry.WARRIOR_SHIELD_DECORATION).offerTo(exporter, "unseen_world:crafting_warrior_shield_decoration");
         //planks
         offerPlanksRecipe(exporter, ModBlocks.AMETHYST_PLANKS, ModTags.Items.AMETHYST_LOGS, 4);
         offerPlanksRecipe(exporter, ModBlocks.TEALIVE_PLANKS, ModTags.Items.TEALIVE_LOGS, 4);
@@ -135,6 +170,11 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 RecipeCategory.TOOLS, ModItems.RAW_UNSEENIUM_ORE, 5, 300, "unseenium_ore");
         offerBlasting(exporter, List.of(ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE, ModBlocks.RED_TITANIUM_IN_GLACIEMITE),
                 RecipeCategory.TOOLS, ModItems.RAW_RED_TITANIUM_ORE, 10, 500, "titanium_ore");
+        offerBlasting(exporter, List.of(ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE, ModBlocks.IRON_ORE_IN_GLACIEMITE),
+                RecipeCategory.TOOLS, Items.IRON_NUGGET, 5, 300, "iron_ore");
+        offerBlasting(exporter, List.of(ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE, ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE),
+                RecipeCategory.TOOLS, Items.NETHERITE_SCRAP, 10, 500, "ancient_debris");
+
         ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.UNSEENIUM_INGOT)
                 .input(ModItems.RAW_UNSEENIUM_ORE, 4)
                 .input(Items.NETHERITE_SCRAP, 4)
@@ -165,6 +205,8 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_CURRANTSLATE_BRICKS, ModBlocks.DARK_CURRANTSLATE);
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.GLACIEMITE_BRICKS, ModBlocks.GLACIEMITE);
 
+        offerSingleOutputShapelessRecipe(exporter, Items.PURPLE_DYE, ModBlocks.BURLYWOOD_VIOLET, "purple_dye");
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.FOOD, Items.BONE_MEAL, 4)
                 .input('D', ModBlocks.GLOOMWEED)
                 .input('G', ModBlocks.UMBRAL_KELP)
@@ -194,6 +236,14 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .input(ModItems.GRIPTONITE)
                 .criterion("has_griptonite", conditionsFromItem(ModItems.GRIPTONITE))
                 .offerTo(exporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, ModBlocks.GRIPTONITE_LANTERN)
+                .input('#', ModItems.GRIPTONITE).input('X', Items.IRON_NUGGET)
+                .pattern("XXX").pattern("X#X").pattern("XXX")
+                .criterion("has_iron_nugget", conditionsFromItem(Items.IRON_NUGGET))
+                .criterion("has_griptonite", conditionsFromItem(ModItems.GRIPTONITE)).offerTo(exporter);
+
+        offerCompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, Blocks.PURPLE_WOOL, ModItems.THICK_STRING,"has_string");
         //hanging sign
         offerHangingSignRecipe(exporter, ModItems.AMETHYST_HANGING_SIGN, ModBlocks.STRIPPED_AMETHYST_LOG);
         offerHangingSignRecipe(exporter, ModItems.GRIZZLY_HANGING_SIGN, ModBlocks.STRIPPED_GRIZZLY_LOG);

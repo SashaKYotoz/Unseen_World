@@ -2,7 +2,6 @@ package net.sashakyotoz.common.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
 import net.sashakyotoz.UnseenWorld;
@@ -18,8 +17,7 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("itemgroup.unseen_world.items", "Unseen World: Items");
         translationBuilder.add("itemgroup.unseen_world.blocks", "Unseen World: Blocks");
 
-//        translationBuilder.add("entity.unseen_world.warrior_of_chimeric_darkness", "Warrior of Chimeric Darkness");
-//        translationBuilder.add("entity.unseen_world.eclipse_sentinel", "Eclipse Sentinel");
+        translationBuilder.add("gameplay.unseen_world.key_handler_cooldown", "Key Handler will recharge in: %s");
 
         translationBuilder.add("item.unseen_world.warpedveil_vine_fruit", "Warpedveil vine fruit");
 
@@ -28,6 +26,8 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("item.unseen_world.titanium_armor_tooltip", "Immunise you to Fire");
         translationBuilder.add("item.unseen_world.unseenium_armor_tooltip", "Immunise you to Glowing");
         translationBuilder.add("item.unseen_world.unseenium_armor_tooltip1", "Slowly recover itself, if noone near");
+
+        translationBuilder.add("item.unseen_world.griptonite_lantern_tooltip", "Removes gripping sickness of near players");
 
         translationBuilder.add("block.unseen_world.amethyst_sign", "Amethyst Sign");
         translationBuilder.add("block.unseen_world.amethyst_hanging_sign", "Amethyst Hanging Sign");
@@ -41,6 +41,8 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("block.unseen_world.crimsonveil_hanging_sign", "Crimsonveil Hanging Sign");
 
         translationBuilder.add("sounds.unseen_world.gleamcarver_ambient_sound", "Gleamcarver squeak");
+
+        translationBuilder.add("filled_map.unseen_world.eclipse_core", "Eclipse Core map");
 
         translationBuilder.add("item.minecraft.potion.effect.glowing", "Potion of Glowing");
         translationBuilder.add("item.minecraft.splash_potion.effect.glowing", "Splash Potion of Glowing");

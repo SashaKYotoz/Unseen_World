@@ -21,6 +21,7 @@
     "unseen_world:glaciemite_bricks_stairs",
     "unseen_world:glaciemite_bricks_wall",
     "unseen_world:glaciemite_bulb",
+    "unseen_world:griptonite_lantern",
     "unseen_world:tanzanite_block",
     "unseen_world:polished_tanzanite",
     "unseen_world:polished_tanzanite_slab",
@@ -34,6 +35,13 @@
     "unseen_world:unseenium_ore_in_dark_currantslate",
     "unseen_world:unseenium_ore_in_glaciemite",
     "unseen_world:unseenium_ingot_block",
+    "unseen_world:iron_ore_in_dark_currantslate",
+    "unseen_world:iron_ore_in_glaciemite",
+    "unseen_world:ancient_debris_in_dark_currantslate",
+    "unseen_world:ancient_debris_in_glaciemite",
+    "unseen_world:gripping_dark_currantslate",
+    "unseen_world:gripping_glaciemite",
+    "unseen_world:gripping_spigelia",
     "unseen_world:gripcrystal_wart"
   ]
 }

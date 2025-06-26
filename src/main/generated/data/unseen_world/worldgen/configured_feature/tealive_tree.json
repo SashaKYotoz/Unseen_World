@@ -9,8 +9,14 @@
       }
     },
     "foliage_placer": {
-      "type": "minecraft:acacia_foliage_placer",
-      "offset": 0,
+      "type": "minecraft:hanging_blob_foliage_placer",
+      "offset": {
+        "type": "minecraft:uniform",
+        "value": {
+          "max_inclusive": 1,
+          "min_inclusive": 0
+        }
+      },
       "radius": 2
     },
     "foliage_provider": {

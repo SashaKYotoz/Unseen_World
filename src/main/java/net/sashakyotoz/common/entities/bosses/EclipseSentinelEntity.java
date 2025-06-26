@@ -30,10 +30,8 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -44,23 +42,24 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.BlockPositionSource;
+import net.sashakyotoz.api.entity_data.IGrippingEntity;
+import net.sashakyotoz.api.entity_data.data.GrippingData;
+import net.sashakyotoz.api.multipart_entity.EntityPart;
+import net.sashakyotoz.api.multipart_entity.MultipartEntity;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.client.particles.custom.effects.LightVibrationParticleEffect;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.config.ChimericDarknessData;
+import net.sashakyotoz.common.config.WorldConfigController;
 import net.sashakyotoz.common.entities.ai.bosses_goals.SentinelMovementGoal;
 import net.sashakyotoz.common.entities.bosses.parts.EclipseSentinelPartEntity;
-import net.sashakyotoz.common.networking.data.GrippingData;
-import net.sashakyotoz.utils.ChimericDarknessData;
-import net.sashakyotoz.utils.IEntityDataSaver;
-import net.sashakyotoz.utils.JsonWorldController;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.util.List;
 
-public class EclipseSentinelEntity extends BossLikePathfinderMob {
+public class EclipseSentinelEntity extends BossLikePathfinderMob implements MultipartEntity {
     public final AnimationState death = new AnimationState();
     public final AnimationState backflip = new AnimationState();
     public final AnimationState sword_swing = new AnimationState();
@@ -90,13 +89,12 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
         this.experiencePoints = WITHER_XP;
         this.pos = this.getBlockPos().add(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4);
         this.setStepHeight(1.5f);
-//        this.setPhase();
         MobNavigation mobNavigation = (MobNavigation) this.getNavigation();
         mobNavigation.setCanSwim(true);
         mobNavigation.setCanWalkOverFences(true);
         this.body = new EclipseSentinelPartEntity(this, "body", 0.45F, 0.35F);
         this.cape = new EclipseSentinelPartEntity(this, "cape", 0.45F, 0.35F);
-        this.parts = new EclipseSentinelPartEntity[]{this.body};
+        this.parts = new EclipseSentinelPartEntity[]{this.body, this.cape};
     }
 
     @Override
@@ -147,8 +145,8 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                                     7, 0, 0, 0, 1
                             );
                         if (this.getTarget() != null) {
-                            if (this.getTarget() instanceof ServerPlayerEntity player)
-                                GrippingData.addGrippingSeconds((IEntityDataSaver) player, 8);
+                            if (this.getTarget() instanceof IGrippingEntity entity1)
+                                GrippingData.addGrippingSeconds(entity1, 8);
                             if (this.squaredDistanceTo(this.getTarget()) < 7f) {
                                 this.tryAttack(this.getTarget());
                                 this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2, World.ExplosionSourceType.NONE);
@@ -207,8 +205,8 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
                 }
                 case HEAVY_SWING -> {
                     this.heavy_swing.start(this.age);
-                    if (this.getTarget() instanceof ServerPlayerEntity player)
-                        GrippingData.addGrippingSeconds((IEntityDataSaver) player, 5);
+                    if (this.getTarget() instanceof IGrippingEntity entity1)
+                        GrippingData.addGrippingSeconds(entity1, 5);
                     this.navigation.stop();
                     this.queueServerWork(50, () -> {
                         float scaling = 0;
@@ -392,11 +390,12 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
             }
         }
     }
+
     @Override
     public boolean haveToDropLoot(DamageSource source) {
-        return source.getAttacker() instanceof ServerPlayerEntity player &&
-                !(player.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(ModEntities.ECLIPSE_SENTINEL)) > 1);
+        return source.getAttacker() instanceof PlayerEntity;
     }
+
     @Override
     public void tick() {
         super.tick();
@@ -483,7 +482,7 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
     @Override
     public void tickMovement() {
         super.tickMovement();
-        float f14 = this.getYaw() * ((float) Math.PI / 180F);
+        float f14 = this.getHeadYaw() * ((float) Math.PI / 180F);
         float f1 = MathHelper.sin(f14);
         float f15 = MathHelper.cos(f14);
         Vec3d[] vec3ds = new Vec3d[this.parts.length];
@@ -613,9 +612,9 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
     public void onDeath(DamageSource damageSource) {
         this.deathTime = -30;
         if (this.getWorld() instanceof ServerWorld world) {
-            ChimericDarknessData data = JsonWorldController.data.get(0);
-            JsonWorldController.saveController(world, data.starsUnlock(), true, data.galacticUnlock());
-            JsonWorldController.updateSave(world);
+            ChimericDarknessData data = WorldConfigController.data.get(0);
+            WorldConfigController.saveController(world, data.starsUnlock(), true, data.galacticUnlock());
+            WorldConfigController.updateSave(world);
         }
         updateTranslocatone(this.getWorld(), this.getBlockPos());
         super.onDeath(damageSource);
@@ -663,6 +662,11 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob {
 
     public boolean isInSentinelPose(EclipseSentinelEntity.SentinelPose pose) {
         return this.getSentinelPose() == pose;
+    }
+
+    @Override
+    public EntityPart[] getParts() {
+        return this.parts;
     }
 
     public enum SentinelPose {

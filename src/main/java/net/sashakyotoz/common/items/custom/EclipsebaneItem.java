@@ -12,8 +12,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
-import net.sashakyotoz.common.networking.data.GripcrystalManaData;
-import net.sashakyotoz.utils.IEntityDataSaver;
+import net.sashakyotoz.api.entity_data.IEntityDataSaver;
+import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class EclipsebaneItem extends SwordItem {
                     player.getEquippedStack(EquipmentSlot.LEGS),
                     player.getEquippedStack(EquipmentSlot.FEET)
             )) {
-                ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 1));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 1));
             }
             if (entity.getWorld() instanceof ServerWorld world1)
                 world1.spawnParticles(ParticleTypes.SQUID_INK, entity.getX(), entity.getY() + 1, entity.getZ(), 9, 0, 1, 0, 0.5);

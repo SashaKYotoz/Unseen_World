@@ -1,10 +1,13 @@
 package net.sashakyotoz.common.tags;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.gen.structure.Structure;
 import net.sashakyotoz.UnseenWorld;
 
 public class ModTags {
@@ -16,11 +19,13 @@ public class ModTags {
         public static final TagKey<Item> CRIMSONVEIL_LOGS = create("crimsonveil_logs");
 
         public static final TagKey<Item> CAN_BE_CHARGED_BY_GRIPCRYSTALS = create("can_be_charged_by_gripcrystals");
+        public static final TagKey<Item> GRIPPING_BUNDLE_CAN_HANDLE = create("gripping_bundle_can_handle");
 
         private static TagKey<Item> create(String name) {
             return TagKey.of(RegistryKeys.ITEM, UnseenWorld.makeID(name));
         }
     }
+
     public static class Blocks {
         public static final TagKey<Block> AMETHYST_BLOCKS = create("amethyst_blocks");
         public static final TagKey<Block> BURLYWOOD_BLOCKS = create("burlywood_blocks");
@@ -31,10 +36,13 @@ public class ModTags {
         public static final TagKey<Block> CRIMSONVEIL_VINES_GROWABLE_ON = create("hanging_crimsonveil_leaves_growable_on");
         public static final TagKey<Block> HANGING_BURLYWOOD_LEAVES_GROWABLE_ON = create("hanging_burlywood_leaves_growable_on");
         public static final TagKey<Block> BEARFRUIT_BRAMBLE_GROWABLE_ON = create("bearfruit_bramble_growable_on");
+        public static final TagKey<Block> GRIPPING_STONE_CAN_REPLACE = create("gripping_stone_can_replace");
+
         private static TagKey<Block> create(String name) {
             return TagKey.of(RegistryKeys.BLOCK, UnseenWorld.makeID(name));
         }
     }
+
     public static class Biomes {
         public static final TagKey<Biome> ABYSSAL_SPAWNS_IN = create("abyssal_spawns_in");
         public static final TagKey<Biome> UNSEENIUM_SPAWNS_IN = create("unseenium_spawns_in");
@@ -50,7 +58,6 @@ public class ModTags {
         public static final TagKey<Biome> DARK_WATER_LAKE_SPAWNS_ON = create("dark_water_lake_spawns_on");
 
         public static final TagKey<Biome> HAS_BURLYWOOD_TREE = create("has_burlywood_tree");
-        public static final TagKey<Biome> HAS_BURLYWOOD_BUSH_TREE = create("has_burlywood_bush_tree");
         public static final TagKey<Biome> HAS_AMETHYST_TREE = create("has_amethyst_tree");
         public static final TagKey<Biome> HAS_CRIMSONVEIL_TREE = create("has_crimsonveil_tree");
 
@@ -59,11 +66,37 @@ public class ModTags {
         public static final TagKey<Biome> HAS_GLEAMCARVER = create("has_gleamcarver");
         public static final TagKey<Biome> HAS_HARMONY_WATCHER = create("has_harmony_watcher");
         public static final TagKey<Biome> HAS_SABERPARD = create("has_saberpard");
+        public static final TagKey<Biome> HAS_TUSKHOG = create("has_tuskhog");
 
         public static final TagKey<Biome> SPAWNS_STEPPE_SABERPARD = create("spawns_steppe_saberpard");
+        public static final TagKey<Biome> SPAWNS_WARM_TUSKHOG = create("spawns_warm_tuskhog");
 
         private static TagKey<Biome> create(String name) {
             return TagKey.of(RegistryKeys.BIOME, UnseenWorld.makeID(name));
+        }
+    }
+
+    public static class Entities {
+        public static final TagKey<EntityType<?>> GRIPPING_IMMUNE_ENTITY_TYPES = create("gripping_immune_entity_types");
+
+        private static TagKey<EntityType<?>> create(String name) {
+            return TagKey.of(RegistryKeys.ENTITY_TYPE, UnseenWorld.makeID(name));
+        }
+    }
+
+    public static class GameEvents {
+        public static final TagKey<GameEvent> ELDRITCH_CAN_LISTEN = create("eldritch_can_listen");
+
+        private static TagKey<GameEvent> create(String name) {
+            return TagKey.of(RegistryKeys.GAME_EVENT, UnseenWorld.makeID(name));
+        }
+    }
+
+    public static class Structures {
+        public static final TagKey<Structure> MAP_CAN_LOCATE_UNDERGROUND = create("map_can_locate_underground");
+
+        private static TagKey<Structure> create(String name) {
+            return TagKey.of(RegistryKeys.STRUCTURE, UnseenWorld.makeID(name));
         }
     }
 }

@@ -31,28 +31,28 @@ public class TreeBushLikeFeature extends Feature<TreeBushLikeConfig> {
             pos.add(k * 2, 0, 0);
             for (int i = 0; i < semiHeight; i++) {
                 this.setBlockState(world, pos.up(i),
-                        ModBlocks.GLOW_APPLE_BUSH.getDefaultState().with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.STEM));
+                        ModBlocks.GLOW_APPLE_BUSH.getDefaultState().with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.STEM));
             }
             BlockPos pos1;
             BlockPos pos2;
             this.setBlockState(world, pos.up(semiHeight), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                    .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.TURN_STEM)
+                    .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.TURN_STEM)
                     .with(TreeBushLikeBlock.FACING, random.nextBoolean() ? Direction.NORTH : Direction.EAST));
             if (world.getBlockState(pos.up(semiHeight)).get(TreeBushLikeBlock.FACING).getOpposite() == Direction.SOUTH) {
                 this.setBlockState(world, pos.up(semiHeight).north(), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.CROOKED_STEM)
+                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.CROOKED_STEM)
                         .with(TreeBushLikeBlock.FACING, Direction.SOUTH));
                 this.setBlockState(world, pos.up(semiHeight).south(), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.CROOKED_STEM)
+                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.CROOKED_STEM)
                         .with(TreeBushLikeBlock.FACING, Direction.NORTH));
                 pos1 = pos.up(semiHeight + 1).north();
                 pos2 = pos.up(semiHeight + 1).south();
             } else {
                 this.setBlockState(world, pos.up(semiHeight).east(), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.CROOKED_STEM)
+                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.CROOKED_STEM)
                         .with(TreeBushLikeBlock.FACING, Direction.WEST));
                 this.setBlockState(world, pos.up(semiHeight).west(), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.CROOKED_STEM)
+                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.CROOKED_STEM)
                         .with(TreeBushLikeBlock.FACING, Direction.EAST));
                 pos1 = pos.up(semiHeight + 1).east();
                 pos2 = pos.up(semiHeight + 1).west();
@@ -60,14 +60,18 @@ public class TreeBushLikeFeature extends Feature<TreeBushLikeConfig> {
             int height = config.height().get(random);
             for (int i = 0; i < height; i++) {
                 this.setBlockState(world, pos1.up(i), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.STEM));
+                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.STEM));
                 this.setBlockState(world, pos2.up(i), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.STEM));
+                        .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.STEM));
                 if (i + 1 == height) {
+                    world.updateNeighbors(pos.up(semiHeight), world.getBlockState(pos.up(semiHeight - 1)).getBlock());
                     this.setBlockState(world, pos1.up(i), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                            .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.BUSH));
+                            .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.BUSH));
                     this.setBlockState(world, pos2.up(i), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
-                            .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.TreeBushLikeTypes.BUSH));
+                            .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.BUSH).with(TreeBushLikeBlock.GROWN, random.nextBoolean()));
+                    if (random.nextInt(4) == 1)
+                        this.generate(new FeatureContext<>(context.getFeature(), world,
+                                context.getGenerator(), random, pos1, config));
                 }
             }
         }

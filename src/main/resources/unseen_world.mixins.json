@@ -4,25 +4,31 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockEntityTypeMixin",
-    "ModEntityDataSaverMixin",
-    "PlayerMixin",
-    "ServerWorldMixin",
     "access.FoliagePlacerTypeInvoker",
-    "access.TrunkPlacerTypeInvoker"
+    "access.TreeDecoratorTypeInvoker",
+    "access.TrunkPlacerTypeInvoker",
+    "entity.EntityMixin",
+    "entity.EntityTypeMixin",
+    "entity.LivingEntityMixin",
+    "entity.PlayerMixin",
+    "entity.ThreadedAnvilChunkStorageMixin",
+    "world.ServerWorldMixin",
+    "world.SurfaceBuilderMixin",
+    "world.WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "AbstractClientPlayerMixin",
-    "ArmorFeatureRendererMixin",
-    "BossBarHudMixin",
-    "BuiltinModelItemRendererMixin",
-    "DimensionEffectsMixin",
-    "EntityRenderDispatcherMixin",
-    "HeldItemRendererMixin",
-    "LightmapTextureManagerMixin",
-    "MinecraftClientMixin",
-    "PlayerRendererMixin"
+    "client.AbstractClientPlayerMixin",
+    "client.ArmorFeatureRendererMixin",
+    "client.BossBarHudMixin",
+    "client.BuiltinModelItemRendererMixin",
+    "client.EntityModelMixin",
+    "client.EntityRenderDispatcherMixin",
+    "client.HeldItemRendererMixin",
+    "client.LightmapTextureManagerMixin",
+    "client.LivingEntityRendererMixin",
+    "client.MinecraftClientMixin"
   ]
 }

@@ -7,8 +7,10 @@ import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.custom.GloomwhaleEntity;
+import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.animations.GloomwhaleAnimations;
+import net.sashakyotoz.common.entities.animations.HarmonyWatcherAnimations;
+import net.sashakyotoz.common.entities.custom.GloomwhaleEntity;
 
 public class GloomwhaleModel extends SinglePartEntityModel<GloomwhaleEntity> {
     public static final EntityModelLayer GLOOMWHALE = new EntityModelLayer(UnseenWorld.makeID("gloomwhale"), "main");
@@ -116,6 +118,8 @@ public class GloomwhaleModel extends SinglePartEntityModel<GloomwhaleEntity> {
         if (entity.getTarget() != null && entity.squaredAttackRange(entity.getTarget()) < 9)
             this.jaw.pitch = 0.1f + MathHelper.sin(entity.age) / 10f;
         this.animateMovement(GloomwhaleAnimations.SWIM, limbSwing, limbSwingAmount, 1, 1);
+        if (ConfigEntries.doAdvancedDeathForMobs)
+            this.updateAnimation(entity.death, HarmonyWatcherAnimations.DEATH, ageInTicks);
         this.updateAnimation(entity.death, GloomwhaleAnimations.DEATH, ageInTicks, 0.5f);
     }
 

@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
@@ -42,7 +41,7 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
                         BlockState waterState = context.getConfig().state().get(context.getRandom(), context.getOrigin());
                         level.setBlockState(pos1, waterState, 3);
                     }
-                    sz = sz + MathHelper.nextInt(context.getRandom(), 1, 2);
+                    sz = sz + 1;
                 }
                 sy = sy + 1;
             }

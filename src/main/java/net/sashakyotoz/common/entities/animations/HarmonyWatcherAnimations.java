@@ -117,7 +117,7 @@ public class HarmonyWatcherAnimations {
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(1f, AnimationHelper.createRotationalVector(0f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR))).build();
-    public static final Animation WALKWHENANGRY = Animation.Builder.create(1f).looping()
+    public static final Animation WALK_WHEN_ANGRY = Animation.Builder.create(1f).looping()
             .addBoneAnimation("head",
                     new Transformation(Transformation.Targets.TRANSLATE,
                             new Keyframe(0f, AnimationHelper.createTranslationalVector(0f, 0f, 0f),

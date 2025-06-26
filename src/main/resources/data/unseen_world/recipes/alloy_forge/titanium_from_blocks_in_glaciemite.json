@@ -1,5 +1,13 @@
 {
   "type": "alloy_forgery:forging",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloy_forgery"
+      ]
+    }
+  ],
   "inputs": [
     {
       "item": "minecraft:ancient_debris"

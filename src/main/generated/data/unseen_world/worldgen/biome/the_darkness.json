@@ -16,20 +16,33 @@
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.nether.basalt_deltas"
+        "sound_id": "unseen_world:the_darkness.ambient"
       }
     },
     "particle": {
       "options": {
         "type": "minecraft:ash"
       },
-      "probability": 0.1025
+      "probability": 0.0125
     },
     "sky_color": 4605011,
     "water_color": 0,
     "water_fog_color": 0
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:ancient_debris"
+    ],
+    [
+      "unseen_world:dark_currantslate_ceiling_boulder"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {
@@ -42,5 +55,5 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.05
+  "temperature": 0.16
 }

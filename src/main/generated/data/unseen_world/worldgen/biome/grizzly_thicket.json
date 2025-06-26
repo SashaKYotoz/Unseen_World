@@ -23,7 +23,21 @@
     "water_color": 7340544,
     "water_fog_color": 7340544
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:grizzly_tree",
+      "unseen_world:tall_grizzly_tree"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {

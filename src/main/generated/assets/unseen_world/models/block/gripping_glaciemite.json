@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "unseen_world:block/glaciemite",
+    "particle": "unseen_world:block/glaciemite",
+    "side": "unseen_world:block/gripping_glaciemite",
+    "top": "unseen_world:block/gripping_lump"
+  }
+}

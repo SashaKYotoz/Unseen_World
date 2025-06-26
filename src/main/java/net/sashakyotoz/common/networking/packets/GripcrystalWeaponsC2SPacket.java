@@ -6,12 +6,12 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.sashakyotoz.api.entity_data.IEntityDataSaver;
+import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
 import net.sashakyotoz.common.items.custom.EclipsebaneItem;
 import net.sashakyotoz.common.items.custom.GrippingAbyssalBowItem;
-import net.sashakyotoz.common.networking.data.GripcrystalManaData;
 import net.sashakyotoz.common.tags.ModTags;
-import net.sashakyotoz.utils.IEntityDataSaver;
 
 public class GripcrystalWeaponsC2SPacket {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,

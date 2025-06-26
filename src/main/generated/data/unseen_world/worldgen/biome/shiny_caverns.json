@@ -29,7 +29,21 @@
     "water_color": 6579300,
     "water_fog_color": 6579300
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:iron_ore",
+      "unseen_world:ancient_debris"
+    ],
+    [
+      "unseen_world:gripping_glaciemite_patch_ceiling"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {

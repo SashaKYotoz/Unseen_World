@@ -1,16 +1,18 @@
 package net.sashakyotoz.common.datagen;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.client.*;
 import net.minecraft.data.family.BlockFamily;
-import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
@@ -40,8 +42,6 @@ public class ModModelProvider extends FabricModelProvider {
             generator.registerLog(block).log(block);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.CROSS))
             generator.registerTintableCross(block, BlockStateModelGenerator.TintType.NOT_TINTED);
-        for (Block block : ModRegistry.getModelList(ModRegistry.Models.CROSS_ITEMLESS))
-            registerItemlessCross(generator, block, BlockStateModelGenerator.TintType.NOT_TINTED);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.DOOR))
             generator.registerDoor(block);
         for (Block block : ModRegistry.getModelList(ModRegistry.Models.TRAPDOOR))
@@ -90,6 +90,7 @@ public class ModModelProvider extends FabricModelProvider {
         generator.registerParentedItemModel(ModBlocks.KEY_HANDLER_STONE.asItem(), UnseenWorld.makeID("block/key_handler_stone"));
         generator.registerParentedItemModel(ModBlocks.GLACIEMITE_TRANSLOCATONE.asItem(), UnseenWorld.makeID("block/glaciemite_translocatone"));
         generator.registerParentedItemModel(ModBlocks.GLOW_APPLE_BUSH.asItem(), UnseenWorld.makeID("block/glow_apple_bush/glow_apple_bush_without_fruit"));
+
         generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
                 ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN);
         generator.registerHangingSign(ModBlocks.STRIPPED_GRIZZLY_LOG,
@@ -100,13 +101,21 @@ public class ModModelProvider extends FabricModelProvider {
                 ModItems.BURLYWOOD_HANGING_SIGN, ModItems.BURLYWOOD_WALL_HANGING_SIGN);
         generator.registerHangingSign(ModBlocks.STRIPPED_CRIMSONVEIL_LOG,
                 ModItems.CRIMSONVEIL_HANGING_SIGN, ModItems.CRIMSONVEIL_WALL_HANGING_SIGN);
+
+        registerGrippingOrientable(generator, ModBlocks.GRIPPING_DARK_CURRANTSLATE);
+        registerGrippingOrientable(generator, ModBlocks.GRIPPING_GLACIEMITE);
+        generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_ASHEN_OOZE);
+        generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_GLIMMERGRAIN_SAND);
+
+        registerCrimsonveilVines(generator);
+
         generator.registerFlowerbed(ModBlocks.AMETHYST_PETALS);
         generator.registerPlantPart(ModBlocks.UMBRAL_KELP, ModBlocks.UMBRAL_KELP_PLANT, BlockStateModelGenerator.TintType.NOT_TINTED);
         generator.registerTintableCross(ModBlocks.GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
         generator.registerDoubleBlock(ModBlocks.TALL_GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
-        registerCrystalLike(generator,ModBlocks.GRIPCRYSTAL_WART);
-        generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_ASHEN_OOZE);
-        generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_GLIMMERGRAIN_SAND);
+        registerVerticalPlant(generator, ModBlocks.GRIPPING_SPIGELIA);
+        registerCrystalLike(generator, ModBlocks.GRIPCRYSTAL_WART);
+        generator.registerLantern(ModBlocks.GRIPTONITE_LANTERN);
     }
 
     @Override
@@ -117,6 +126,7 @@ public class ModModelProvider extends FabricModelProvider {
         generator.register(ModBlocks.BEARFRUIT_BRAMBLE.asItem(), Models.GENERATED);
         generator.register(ModBlocks.MIDNIGHT_LILY_PAD.asItem(), Models.GENERATED);
         generator.register(ModBlocks.UMBRAL_KELP.asItem(), Models.GENERATED);
+        registerBundle(generator, ModItems.GRIPPING_BUNDLE);
         for (Item item : ModRegistry.ITEMS) {
             if (item instanceof ArmorItem armorItem)
                 generator.registerArmor(armorItem);
@@ -126,6 +136,35 @@ public class ModModelProvider extends FabricModelProvider {
         }
     }
 
+    private JsonObject createBundleJson(Identifier id, Map<TextureKey, Identifier> textures) {
+        JsonObject jsonObject = Models.GENERATED.createJson(id, textures);
+        JsonArray overrides = new JsonArray();
+        JsonObject override = new JsonObject();
+        JsonObject predicate = new JsonObject();
+        predicate.addProperty("filled", 0.0000001);
+        override.add("predicate", predicate);
+        override.addProperty("model", id.withSuffixedPath("_filled").toString());
+        overrides.add(override);
+        jsonObject.add("overrides", overrides);
+        return jsonObject;
+    }
+
+    private void registerBundle(ItemModelGenerator generator, Item item) {
+        Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(TextureMap.getId(item)), generator.writer, this::createBundleJson);
+        generator.register(item, "_filled", Models.GENERATED);
+    }
+
+    private void registerCrimsonveilVines(BlockStateModelGenerator generator) {
+        Identifier identifier = generator.createSubModel(ModBlocks.CRIMSONVEIL_VINE, "", Models.CROSS, TextureMap::cross);
+        Identifier identifier2 = generator.createSubModel(ModBlocks.CRIMSONVEIL_VINE, "_has_berry", Models.CROSS, TextureMap::cross);
+        generator.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(ModBlocks.CRIMSONVEIL_VINE).coordinate(BlockStateModelGenerator.createBooleanModelMap(Properties.BERRIES, identifier2, identifier)));
+        Identifier identifier3 = generator.createSubModel(ModBlocks.CRIMSONVEIL_VINE_PLANT, "", Models.CROSS, TextureMap::cross);
+        Identifier identifier4 = generator.createSubModel(ModBlocks.CRIMSONVEIL_VINE_PLANT, "_has_berry", Models.CROSS, TextureMap::cross);
+        generator.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(ModBlocks.CRIMSONVEIL_VINE_PLANT).coordinate(BlockStateModelGenerator.createBooleanModelMap(Properties.BERRIES, identifier4, identifier3)));
+    }
+
     private void registerBulbBlock(BlockStateModelGenerator generator, BulbLikeBlock block) {
         Identifier identifier = TexturedModel.CUBE_ALL.upload(block, generator.modelCollector);
         Identifier identifier2 = generator.createSubModel(block, "_litted", Models.CUBE_ALL, TextureMap::all);
@@ -133,8 +172,27 @@ public class ModModelProvider extends FabricModelProvider {
                 .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(Properties.LIT, identifier2, identifier)));
     }
 
-    private void registerItemlessCross(BlockStateModelGenerator generator, Block block, BlockStateModelGenerator.TintType tintType) {
-        generator.registerTintableCrossBlockState(block, tintType);
+    public final void registerGrippingOrientable(BlockStateModelGenerator generator, Block block) {
+        String s = block.equals(ModBlocks.GRIPPING_GLACIEMITE) ? "glaciemite" : "dark_currantslate";
+        TextureMap textureMap = new TextureMap()
+                .put(TextureKey.TOP, Registries.BLOCK.getId(block).withPath(path -> "block/" + "gripping_lump"))
+                .put(TextureKey.SIDE, TextureMap.getSubId(block, ""))
+                .put(TextureKey.BOTTOM, Registries.BLOCK.getId(block).withPath(path -> "block/" + s))
+                .inherit(TextureKey.BOTTOM, TextureKey.PARTICLE);
+        Identifier identifier = Models.CUBE_BOTTOM_TOP.upload(block, textureMap, generator.modelCollector);
+        generator.blockStateCollector
+                .accept(
+                        VariantsBlockStateSupplier.create(block)
+                                .coordinate(
+                                        BlockStateVariantMap.create(Properties.FACING)
+                                                .register(Direction.DOWN, BlockStateVariant.create().put(VariantSettings.MODEL, identifier).put(VariantSettings.X, VariantSettings.Rotation.R180))
+                                                .register(Direction.UP, BlockStateVariant.create().put(VariantSettings.MODEL, identifier))
+                                                .register(Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, identifier).put(VariantSettings.Y, VariantSettings.Rotation.R0).put(VariantSettings.X, VariantSettings.Rotation.R90))
+                                                .register(Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, identifier).put(VariantSettings.Y, VariantSettings.Rotation.R90).put(VariantSettings.X, VariantSettings.Rotation.R90))
+                                                .register(Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, identifier).put(VariantSettings.Y, VariantSettings.Rotation.R180).put(VariantSettings.X, VariantSettings.Rotation.R90))
+                                                .register(Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, identifier).put(VariantSettings.Y, VariantSettings.Rotation.R270).put(VariantSettings.X, VariantSettings.Rotation.R90))
+                                )
+                );
     }
 
     private void registerDynamicTopSoils(Identifier bottomTexture, BlockStateModelGenerator generator, Block... topSoilBlocks) {
@@ -163,7 +221,25 @@ public class ModModelProvider extends FabricModelProvider {
             );
         }
     }
-    public final void registerCrystalLike(BlockStateModelGenerator generator,Block block) {
+
+    private void registerVerticalPlant(BlockStateModelGenerator generator, Block block) {
+        generator.registerItemModel(block.asItem());
+        generator.blockStateCollector.accept(
+                VariantsBlockStateSupplier.create(block)
+                        .coordinate(
+                                BlockStateVariantMap.create(Properties.VERTICAL_DIRECTION, Properties.AGE_2)
+                                        .register(Direction.UP, 0, BlockStateVariant.create().put(VariantSettings.MODEL, Models.CROSS.upload(block, "_stage0", TextureMap.cross(TextureMap.getSubId(block, "_stage0")), generator.modelCollector)))
+                                        .register(Direction.UP, 1, BlockStateVariant.create().put(VariantSettings.MODEL, Models.CROSS.upload(block, "_stage1", TextureMap.cross(TextureMap.getSubId(block, "_stage1")), generator.modelCollector)))
+                                        .register(Direction.UP, 2, BlockStateVariant.create().put(VariantSettings.MODEL, Models.CROSS.upload(block, "_stage2", TextureMap.cross(TextureMap.getSubId(block, "_stage2")), generator.modelCollector)))
+                                        .register(Direction.DOWN, 0, BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getBlockSubModelId(block, "_stage0")).put(VariantSettings.X, VariantSettings.Rotation.R180))
+                                        .register(Direction.DOWN, 1, BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getBlockSubModelId(block, "_stage1")).put(VariantSettings.X, VariantSettings.Rotation.R180))
+                                        .register(Direction.DOWN, 2, BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getBlockSubModelId(block, "_stage2")).put(VariantSettings.X, VariantSettings.Rotation.R180))
+                        )
+        );
+    }
+
+
+    private void registerCrystalLike(BlockStateModelGenerator generator, Block block) {
         generator.registerItemModel(block.asItem());
         generator.blockStateCollector
                 .accept(

@@ -4,8 +4,11 @@ import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.YOffset;
+import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.PlacedFeatures;
@@ -32,6 +35,8 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> UNSEENIUM_ORE = create("unseenium_ore");
     public static final RegistryKey<PlacedFeature> RED_TITANIUM_ORE = create("red_titanium_ore");
     public static final RegistryKey<PlacedFeature> ABYSSAL_ORE = create("abyssal_ore");
+    public static final RegistryKey<PlacedFeature> IRON_ORE = create("iron_ore");
+    public static final RegistryKey<PlacedFeature> ANCIENT_DEBRIS = create("ancient_debris");
 
     public static final RegistryKey<PlacedFeature> TANZANITE_SPHERE = create("tanzanite_sphere");
 
@@ -40,6 +45,9 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> GLACIEMITE_BOULDER = create("glaciemite_boulder");
     public static final RegistryKey<PlacedFeature> DARK_CURRANTSLATE_BOULDER = create("dark_currantslate_boulder");
     public static final RegistryKey<PlacedFeature> AMETHYST_BOULDER = create("amethyst_boulder");
+
+    public static final RegistryKey<PlacedFeature> AMETHYST_CEILING_BOULDER = create("amethyst_ceiling_boulder");
+    public static final RegistryKey<PlacedFeature> DARK_CURRANTSLATE_CEILING_BOULDER = create("dark_currantslate_ceiling_boulder");
 
     public static final RegistryKey<PlacedFeature> DARKNESS_SPIRAL_SPIKE = create("darkness_spiral_spike");
 
@@ -51,10 +59,14 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> MIDNIGHT_LILY_PATCH = create("midnight_lily_patch");
     public static final RegistryKey<PlacedFeature> BUSH_LIKE_TREE_PATCH = create("bush_like_tree_patch");
     public static final RegistryKey<PlacedFeature> SMALL_BUSH_LIKE_TREE_PATCH = create("small_bush_like_tree_patch");
+    public static final RegistryKey<PlacedFeature> BURLYWOOD_VIOLET_PATCH = create("burlywood_violet_patch");
 
     public static final RegistryKey<PlacedFeature> UMBRAL_KELP = create("umbral_kelp");
     public static final RegistryKey<PlacedFeature> GLOOMWEED_PATCH = create("gloomweed_patch");
     public static final RegistryKey<PlacedFeature> TALL_GLOOMWEED_PATCH = create("tall_gloomweed_patch");
+
+    public static final RegistryKey<PlacedFeature> GRIPPING_GLACIEMITE_PATCH_CEILING = create("gripping_glaciemite_patch_ceiling");
+    public static final RegistryKey<PlacedFeature> GRIPPING_DARK_CURRANTSLATE_PATCH_FLOOR = create("gripping_dark_currantslate_patch_floor");
 
     public static void boostrap(Registerable<PlacedFeature> context) {
         var configLookup = context.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
@@ -62,7 +74,7 @@ public class ModPlacements {
                 VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
                         PlacedFeatures.createCountExtraModifier(1, 0.5f, 2),
                         ModBlocks.AMETHYST_SAPLING));
-        register(context, SMALL_AMETHYST_TREE, configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_TREE),
+        register(context, SMALL_AMETHYST_TREE, configLookup.getOrThrow(ModConfiguredFeatures.SMALL_AMETHYST_TREE),
                 VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
                         PlacedFeatures.createCountExtraModifier(2, 0.5f, 4),
                         ModBlocks.AMETHYST_SAPLING));
@@ -108,6 +120,12 @@ public class ModPlacements {
         register(context, ABYSSAL_ORE, configLookup.getOrThrow(ModConfiguredFeatures.ABYSSAL_ORE),
                 ModOrePlacement.modifiersWithCount(3,
                         HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(32))));
+        register(context, IRON_ORE, configLookup.getOrThrow(ModConfiguredFeatures.IRON_ORE),
+                ModOrePlacement.modifiersWithCount(4,
+                        HeightRangePlacementModifier.uniform(YOffset.fixed(-32), YOffset.fixed(48))));
+        register(context, ANCIENT_DEBRIS, configLookup.getOrThrow(ModConfiguredFeatures.ANCIENT_DEBRIS),
+                ModOrePlacement.modifiersWithCount(1,
+                        HeightRangePlacementModifier.uniform(YOffset.fixed(-64), YOffset.fixed(0))));
 
         register(context, TANZANITE_SPHERE, configLookup.getOrThrow(ModConfiguredFeatures.TANZANITE_SPHERE),
                 ModOrePlacement.modifiersWithCount(3,
@@ -128,6 +146,22 @@ public class ModPlacements {
                 PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP,
                 BiomePlacementModifier.of(),
                 RarityFilterPlacementModifier.of(4));
+        register(context, AMETHYST_CEILING_BOULDER, configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_CEILING_BOULDER),
+                CountPlacementModifier.of(32),
+                SquarePlacementModifier.of(),
+                BiomePlacementModifier.of(),
+                PlacedFeatures.BOTTOM_TO_120_RANGE,
+                EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 5),
+                RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1))
+        );
+        register(context, DARK_CURRANTSLATE_CEILING_BOULDER, configLookup.getOrThrow(ModConfiguredFeatures.DARK_CURRANTSLATE_CEILING_BOULDER),
+                CountPlacementModifier.of(32),
+                SquarePlacementModifier.of(),
+                BiomePlacementModifier.of(),
+                PlacedFeatures.BOTTOM_TO_120_RANGE,
+                EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 5),
+                RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1))
+        );
 
         register(
                 context,
@@ -173,6 +207,11 @@ public class ModPlacements {
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of(),
                 RarityFilterPlacementModifier.of(2));
+        register(context, BURLYWOOD_VIOLET_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.BURLYWOOD_VIOLET_PATCH),
+                RarityFilterPlacementModifier.of(3),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                BiomePlacementModifier.of());
 
         register(
                 context,
@@ -190,6 +229,7 @@ public class ModPlacements {
                 configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_FLOWERS),
                 NoiseThresholdCountPlacementModifier.of(-0.85, 3, 6),
                 SquarePlacementModifier.of(),
+                RarityFilterPlacementModifier.of(4),
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of()
         );
@@ -197,13 +237,35 @@ public class ModPlacements {
                 context,
                 GLOOMWEED_PATCH,
                 configLookup.getOrThrow(ModConfiguredFeatures.GLOOMWEED_PATCH),
-                CountPlacementModifier.of(4),RarityFilterPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of()
+                CountPlacementModifier.of(4), RarityFilterPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of()
         );
         register(
                 context,
                 TALL_GLOOMWEED_PATCH,
                 configLookup.getOrThrow(ModConfiguredFeatures.TALL_GLOOMWEED_PATCH),
-                CountPlacementModifier.of(2),RarityFilterPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of()
+                CountPlacementModifier.of(2), RarityFilterPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of()
+        );
+        register(
+                context,
+                GRIPPING_GLACIEMITE_PATCH_CEILING,
+                configLookup.getOrThrow(ModConfiguredFeatures.GRIPPING_GLACIEMITE_PATCH_CEILING),
+                CountPlacementModifier.of(64),
+                SquarePlacementModifier.of(),
+                HeightRangePlacementModifier.uniform(YOffset.getBottom(), YOffset.fixed(56)),
+                EnvironmentScanPlacementModifier.of(Direction.UP, BlockPredicate.solid(), BlockPredicate.IS_AIR, 4),
+                RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(-1)),
+                BiomePlacementModifier.of()
+        );
+        register(
+                context,
+                GRIPPING_DARK_CURRANTSLATE_PATCH_FLOOR,
+                configLookup.getOrThrow(ModConfiguredFeatures.GRIPPING_DARK_CURRANTSLATE_PATCH_FLOOR),
+                CountPlacementModifier.of(64),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.BOTTOM_TO_120_RANGE,
+                EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.IS_AIR, 4),
+                RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(1)),
+                BiomePlacementModifier.of()
         );
     }
 

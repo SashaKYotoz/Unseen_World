@@ -2,6 +2,7 @@ package net.sashakyotoz.common.items;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.*;
 import net.minecraft.data.client.Models;
 import net.minecraft.item.*;
@@ -39,23 +40,23 @@ public class ModItems {
     public static final Item RAW_RED_TITANIUM_ORE = ModRegistry.ofItem("raw_red_titanium",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
     public static final Item UNSEENIUM_INGOT = ModRegistry.ofItem("unseenium_ingot",
-            new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
+            new Item(new FabricItemSettings().rarity(Rarity.RARE))).tag(ConventionalItemTags.INGOTS).model(Models.GENERATED).build();
     public static final Item ABYSSAL_INGOT = ModRegistry.ofItem("abyssal_ingot",
-            new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
+            new Item(new FabricItemSettings().rarity(Rarity.RARE))).tag(ConventionalItemTags.INGOTS).model(Models.GENERATED).build();
     public static final Item RED_TITANIUM_INGOT = ModRegistry.ofItem("red_titanium_ingot",
-            new Item(new FabricItemSettings().rarity(Rarity.RARE))).model(Models.GENERATED).build();
+            new Item(new FabricItemSettings().rarity(Rarity.RARE))).tag(ConventionalItemTags.INGOTS).model(Models.GENERATED).build();
 
     public static final Item UNSEENIUM_SHOVEL = ModRegistry.ofItem("unseenium_shovel",
-                    new ShovelItem(ModTiers.UNSEENIUM, 2, -3f, new FabricItemSettings()))
+                    new ShovelItem(ModTiers.UNSEENIUM, 2.5f, -3f, new FabricItemSettings()))
             .model(Models.HANDHELD).tag(ItemTags.SHOVELS).build();
     public static final Item UNSEENIUM_PICKAXE = ModRegistry.ofItem("unseenium_pickaxe",
                     new PickaxeItem(ModTiers.UNSEENIUM, 2, -2.8f, new FabricItemSettings()))
             .model(Models.HANDHELD).tag(ItemTags.PICKAXES).build();
     public static final Item UNSEENIUM_AXE = ModRegistry.ofItem("unseenium_axe",
-                    new AxeItem(ModTiers.UNSEENIUM, 7, -3f, new FabricItemSettings()))
+                    new AxeItem(ModTiers.UNSEENIUM, 6, -3f, new FabricItemSettings()))
             .model(Models.HANDHELD).tag(ItemTags.AXES).build();
     public static final Item UNSEENIUM_HOE = ModRegistry.ofItem("unseenium_hoe",
-                    new HoeItem(ModTiers.UNSEENIUM, 0, -3f, new FabricItemSettings()))
+                    new HoeItem(ModTiers.UNSEENIUM, -5, 0, new FabricItemSettings()))
             .model(Models.HANDHELD).tag(ItemTags.HOES).build();
     public static final Item UNSEENIUM_SWORD = ModRegistry.ofItem("unseenium_sword",
                     new SwordItem(ModTiers.UNSEENIUM, 4, -2.4f, new FabricItemSettings()))
@@ -74,16 +75,16 @@ public class ModItems {
                     new FabricItemSettings().rarity(Rarity.RARE))).build();
 
     public static final Item ABYSSAL_SHOVEL = ModRegistry.ofItem("abyssal_shovel",
-                    new ShovelItem(ModTiers.ABYSSAL, 2, -3f, new FabricItemSettings().fireproof()))
+                    new ShovelItem(ModTiers.ABYSSAL, 2.5f, -3f, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.SHOVELS).build();
     public static final Item ABYSSAL_PICKAXE = ModRegistry.ofItem("abyssal_pickaxe",
                     new PickaxeItem(ModTiers.ABYSSAL, 2, -2.8f, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.PICKAXES).build();
     public static final Item ABYSSAL_AXE = ModRegistry.ofItem("abyssal_axe",
-                    new AxeItem(ModTiers.ABYSSAL, 7, -3f, new FabricItemSettings().fireproof()))
+                    new AxeItem(ModTiers.ABYSSAL, 6, -3f, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.AXES).build();
     public static final Item ABYSSAL_HOE = ModRegistry.ofItem("abyssal_hoe",
-                    new HoeItem(ModTiers.ABYSSAL, 0, -3f, new FabricItemSettings().fireproof()))
+                    new HoeItem(ModTiers.ABYSSAL, -6, 0, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.HOES).build();
     public static final Item ABYSSAL_SWORD = ModRegistry.ofItem("abyssal_sword",
                     new SwordItem(ModTiers.ABYSSAL, 4, -2.4f, new FabricItemSettings().fireproof()))
@@ -102,16 +103,16 @@ public class ModItems {
                     new FabricItemSettings().rarity(Rarity.RARE).fireproof())).build();
 
     public static final Item RED_TITANIUM_SHOVEL = ModRegistry.ofItem("red_titanium_shovel",
-                    new ShovelItem(ModTiers.TITANIUM, 2, -3f, new FabricItemSettings().fireproof()))
+                    new ShovelItem(ModTiers.TITANIUM, 2.5f, -3f, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.SHOVELS).build();
     public static final Item RED_TITANIUM_PICKAXE = ModRegistry.ofItem("red_titanium_pickaxe",
                     new PickaxeItem(ModTiers.TITANIUM, 2, -2.8f, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.PICKAXES).build();
     public static final Item RED_TITANIUM_AXE = ModRegistry.ofItem("red_titanium_axe",
-                    new AxeItem(ModTiers.TITANIUM, 7, -3f, new FabricItemSettings().fireproof()))
+                    new AxeItem(ModTiers.TITANIUM, 6, -3f, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.AXES).build();
     public static final Item RED_TITANIUM_HOE = ModRegistry.ofItem("red_titanium_hoe",
-                    new HoeItem(ModTiers.TITANIUM, 0, -3f, new FabricItemSettings().fireproof()))
+                    new HoeItem(ModTiers.TITANIUM, -6, 0, new FabricItemSettings().fireproof()))
             .model(Models.HANDHELD).tag(ItemTags.HOES).build();
     public static final Item RED_TITANIUM_SWORD = ModRegistry.ofItem("red_titanium_sword",
                     new SwordItem(ModTiers.TITANIUM, 4, -2.4f, new FabricItemSettings().fireproof()))
@@ -132,11 +133,13 @@ public class ModItems {
     public static final Item CHIMERIC_ROCKBREAKER_HAMMER = ModRegistry.ofItem("chimeric_rockbreaker_hammer",
             new ChimericRockbreakerHammerItem(4, -3.1f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     public static final Item SHIELD_OF_CHIMERIC_WARRIOR = ModRegistry.ofItem("shield_of_chimeric_warrior",
-            new ShieldOfChimericWarriorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1).maxDamage(893))).build();
+            new ShieldOfChimericWarriorItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1).maxDamage(893))).tag(ConventionalItemTags.SHIELDS).build();
     public static final Item ECLIPSEBANE = ModRegistry.ofItem("eclipsebane",
             new EclipsebaneItem(ModTiers.ECLIPSEBANE, 4, -2.5f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     public static final Item GRIPPING_ABYSSAL_BOW = ModRegistry.ofItem("gripping_abyssal_bow",
-            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE).maxDamage(984))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE).maxDamage(984))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS, ConventionalItemTags.BOWS).build();
+    //artifacts
+    public static final Item GRIPPING_BUNDLE = ModRegistry.ofItem("gripping_bundle", new GrippingBundleItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(Models.GENERATED).build();
@@ -150,13 +153,13 @@ public class ModItems {
             new AliasedBlockItem(ModBlocks.CRIMSONVEIL_VINE, new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.WARPEDVEIL_VINE_FRUIT))).model(Models.GENERATED).build();
     //crystals
     public static final Item GRIPCRYSTAL = ModRegistry.ofItem("gripcrystal",
-            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).tag(ModTags.Items.GRIPPING_BUNDLE_CAN_HANDLE).model(Models.GENERATED).build();
     public static final Item GRANULATED_GRIPCRYSTAL = ModRegistry.ofItem("granulated_gripcrystal",
-            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).tag(ModTags.Items.GRIPPING_BUNDLE_CAN_HANDLE).model(Models.GENERATED).build();
     public static final Item GRIPTONITE = ModRegistry.ofItem("griptonite",
-            new GriptoniteItem(new FabricItemSettings().maxCount(1).maxDamage(4).rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+            new GriptoniteItem(new FabricItemSettings().maxCount(1).maxDamage(4).rarity(Rarity.UNCOMMON))).tag(ModTags.Items.GRIPPING_BUNDLE_CAN_HANDLE).model(Models.GENERATED).build();
     public static final Item GRANULATED_GRIPTONITE = ModRegistry.ofItem("granulated_griptonite",
-            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
+            new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).tag(ModTags.Items.GRIPPING_BUNDLE_CAN_HANDLE).model(Models.GENERATED).build();
     //materials
     public static final Item THICK_STRING = ModRegistry.ofItem("thick_string",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON))).model(Models.GENERATED).build();
@@ -297,8 +300,8 @@ public class ModItems {
     public static final Item HARMONY_WATCHER_SPAWN_EGG = ModRegistry.ofItem("harmony_watcher_spawn_egg",
                     new SpawnEggItem(ModEntities.HARMONY_WATCHER, 5013401, 10066329, new FabricItemSettings()))
             .build();
-    public static final Item DARK_GUARDIAN_SPAWN_EGG = ModRegistry.ofItem("dark_guardian_spawn_egg",
-                    new SpawnEggItem(ModEntities.DARK_GUARDIAN, 12801229, 6035741, new FabricItemSettings()))
+    public static final Item VIOLEGER_SPAWN_EGG = ModRegistry.ofItem("violeger_spawn_egg",
+                    new SpawnEggItem(ModEntities.VIOLEGER, 12801229, 6035741, new FabricItemSettings()))
             .build();
     public static final Item GLOOMWHALE_SPAWN_EGG = ModRegistry.ofItem("gloomwhale_spawn_egg",
                     new SpawnEggItem(ModEntities.GLOOMWHALE, 4210943, 1644825, new FabricItemSettings()))
@@ -311,5 +314,8 @@ public class ModItems {
             .build();
     public static final Item ELDRITCH_WATCHER_SPAWN_EGG = ModRegistry.ofItem("eldritch_watcher_spawn_egg",
                     new SpawnEggItem(ModEntities.ELDRITCH_WATCHER, 5013401, 0, new FabricItemSettings()))
+            .build();
+    public static final Item TUSKHOG_SPAWN_EGG = ModRegistry.ofItem("tuskhog_spawn_egg",
+                    new SpawnEggItem(ModEntities.TUSKHOG, 15771042, 5000268, new FabricItemSettings()))
             .build();
 }

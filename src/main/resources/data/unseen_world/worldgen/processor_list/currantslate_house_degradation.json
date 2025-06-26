@@ -1,0 +1,48 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "block": "unseen_world:dark_currantslate_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_currantslate"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "unseen_world:dark_currantslate_bricks_slab",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.05
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "unseen_world:dark_currantslate_slab"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "unseen_world:dark_currantslate_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.00005
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -7,19 +7,7 @@
     "unseen_world:crimsonveil_plateau"
   ],
   "step": "surface_structures",
-  "spawn_overrides": {
-    "monster": {
-      "bounding_box": "piece",
-      "spawns": [
-        {
-          "type": "unseen_world:dark_guardian",
-          "weight": 1,
-          "minCount": 1,
-          "maxCount": 1
-        }
-      ]
-    }
-  },
+  "spawn_overrides": {},
   "terrain_adaptation": "beard_box",
   "start_pool": "unseen_world:guardian_camp_ruins/temples",
   "size": 6,

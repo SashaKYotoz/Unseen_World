@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "unseen_world:block/glow_apple_bush"
+		"0": "unseen_world:block/glow_apple_bush",
+		"particle": "unseen_world:block/glow_apple_bush"
 	},
 	"elements": [
 		{

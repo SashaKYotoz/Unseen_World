@@ -17,7 +17,17 @@
     "water_color": 6717235,
     "water_fog_color": 6579300
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:iron_ore"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {

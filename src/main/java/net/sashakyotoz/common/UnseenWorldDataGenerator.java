@@ -11,9 +11,10 @@ import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Pair;
 import net.sashakyotoz.common.datagen.*;
+import net.sashakyotoz.common.datagen.tags.*;
+import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
-import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
 
 import java.util.Map;
@@ -28,6 +29,8 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ModFluidTagProvider::new);
 		pack.addProvider(ModBiomeTagProvider::new);
 		pack.addProvider(ModItemTagProvider::new);
+		pack.addProvider(ModGameEventTagProvider::new);
+		pack.addProvider(ModEntityTagProvider::new);
 		pack.addProvider(ModBlockLootTableProvider::new);
 		pack.addProvider(ModModelProvider::new);
 		pack.addProvider(ModWorldGenerator::new);

@@ -11,7 +11,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
-import net.sashakyotoz.common.blocks.custom.KeyHandlerStoneBlock;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
 import net.sashakyotoz.common.items.ModItems;
 
@@ -23,10 +22,10 @@ public class KeyHandlerStoneRenderer<T extends KeyHandlerStoneBlockEntity> imple
     }
 
     @Override
-    public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(KeyHandlerStoneBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
         ItemStack stackToRender = ModItems.GRIPCRYSTAL_KEY.getDefaultStack();
-        if (entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).get(KeyHandlerStoneBlock.IS_OUT_CURRANTSLATE))
+        if (entity.getWorld() != null && entity.isOutCurrantSlate(entity.getWorld(), entity.getPos()))
             stackToRender = ModItems.ABYSSAL_KEY.getDefaultStack();
         if (entity.data.firstKeyIn()) {
             matrices.translate(0.5, 0.75, entity.data.firstKeyOffset() + 0.8);
@@ -61,7 +60,7 @@ public class KeyHandlerStoneRenderer<T extends KeyHandlerStoneBlockEntity> imple
             );
         }
         matrices.pop();
-        if (entity.data.firstKeyIn() && entity.data.secondKeyIn()) {
+        if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && entity.data.cooldown() > 0) {
             matrices.push();
             matrices.scale(0.25f, 0.25f, 0.25f);
             matrices.translate(2, 5 + Math.sin(entity.ticks) * 0.25f, 2);

@@ -5,7 +5,6 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.EyesFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.sashakyotoz.UnseenWorld;
@@ -42,9 +41,6 @@ public class EspyerRenderer extends MobEntityRenderer<EspyerEntity, EspyerModel>
         g *= g;
         float i = (1.0F + g * 0.4F) * h;
         float j = (1.0F + g * 0.1F) / h;
-        if (espyer.getWorld().getClosestPlayer(espyer, 32) != null
-                && espyer.isEntityLookingAtMe(espyer.getWorld().getClosestPlayer(espyer, 32), 0.5, false, true, LivingEntity::canHit, espyer::getEyeY, espyer::getY, () -> (espyer.getEyeY() + espyer.getY()) / 2.0))
-            matrixStack.translate(0, 0.75f, 0);
         matrixStack.scale(i, j, i);
     }
 

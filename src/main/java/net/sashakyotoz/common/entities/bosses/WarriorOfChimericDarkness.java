@@ -19,32 +19,34 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.event.EntityPositionSource;
+import net.sashakyotoz.api.entity_data.IGrippingEntity;
+import net.sashakyotoz.api.entity_data.data.GrippingData;
+import net.sashakyotoz.api.multipart_entity.EntityPart;
+import net.sashakyotoz.api.multipart_entity.MultipartEntity;
 import net.sashakyotoz.client.particles.custom.effects.WindVibrationParticleEffect;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.config.ChimericDarknessData;
+import net.sashakyotoz.common.config.WorldConfigController;
 import net.sashakyotoz.common.entities.ai.bosses_goals.WarriorMovementGoal;
-import net.sashakyotoz.common.networking.data.GrippingData;
-import net.sashakyotoz.utils.ActionsManager;
-import net.sashakyotoz.utils.ChimericDarknessData;
-import net.sashakyotoz.utils.IEntityDataSaver;
-import net.sashakyotoz.utils.JsonWorldController;
+import net.sashakyotoz.common.entities.bosses.parts.WarriorPartEntity;
+import net.sashakyotoz.utils.ActionsUtils;
 
 import java.util.List;
 
-public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
+public class WarriorOfChimericDarkness extends BossLikePathfinderMob implements MultipartEntity {
     public final AnimationState spawn = new AnimationState();
     public final AnimationState death = new AnimationState();
     public final AnimationState dash = new AnimationState();
@@ -56,6 +58,11 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
     protected static final TrackedData<WarriorPose> PHASE = DataTracker.registerData(WarriorOfChimericDarkness.class, WARRIOR_POSE);
 
     private final ServerBossBar bossBar = new ServerBossBar(Text.translatable("entity.unseen_world.warrior_of_chimeric_darkness"), BossBar.Color.PURPLE, BossBar.Style.NOTCHED_6);
+
+    private final WarriorPartEntity[] parts;
+    public final WarriorPartEntity body;
+    public final WarriorPartEntity backCrack;
+
     private BlockPos pos;
     private int timeOfAbility = 0;
 
@@ -64,10 +71,13 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
         this.experiencePoints = WITHER_XP;
         this.pos = this.getBlockPos().add(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
         this.setStepHeight(1.5f);
-        this.setRandomPhase();
+        this.setPhase();
         MobNavigation mobNavigation = (MobNavigation) this.getNavigation();
         mobNavigation.setCanSwim(true);
         mobNavigation.setCanWalkOverFences(true);
+        this.body = new WarriorPartEntity(this, "body", 0.6F, 0.8F);
+        this.backCrack = new WarriorPartEntity(this, "backCrack", 0.6F, 0.8F);
+        this.parts = new WarriorPartEntity[]{this.body, this.backCrack};
     }
 
     @Override
@@ -85,9 +95,9 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
     public void onDeath(DamageSource damageSource) {
         this.deathTime = -20;
         if (this.getWorld() instanceof ServerWorld world) {
-            ChimericDarknessData data = JsonWorldController.data.get(0);
-            JsonWorldController.saveController(world, true, data.sunUnlock(), data.galacticUnlock());
-            JsonWorldController.updateSave(world);
+            ChimericDarknessData data = WorldConfigController.data.get(0);
+            WorldConfigController.saveController(world, true, data.sunUnlock(), data.galacticUnlock());
+            WorldConfigController.updateSave(world);
         }
         updateTranslocatone(this.getWorld(), this.getBlockPos());
         super.onDeath(damageSource);
@@ -153,7 +163,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
                     this.getJumpControl().setActive();
                     this.queueServerWork(18, () -> {
                         this.hitNearbyMobs(10, 7);
-                        if (!ActionsManager.isModLoaded("sodium"))
+                        if (!ActionsUtils.isModLoaded("sodium"))
                             this.provokeEarthquake(3);
                         this.playSound(SoundEvents.BLOCK_ANVIL_HIT, 2.5f, 2.5f);
                     });
@@ -193,6 +203,49 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
     }
 
     @Override
+    public void tickMovement() {
+        super.tickMovement();
+        float f14 = this.getHeadYaw() * ((float) Math.PI / 180F);
+        float f1 = MathHelper.sin(f14);
+        float f15 = MathHelper.cos(f14);
+        Vec3d[] vec3ds = new Vec3d[this.parts.length];
+        for (int s = 0; s < this.parts.length; s++)
+            vec3ds[s] = new Vec3d(this.parts[s].getX(), this.parts[s].getY(), this.parts[s].getZ());
+        this.movePart(this.body, f1 * -1.25F, 1.75D, -f15 * -1.25F);
+        this.movePart(this.backCrack, f1 * 1.1F, 1.5D, -f15 * 1.1F);
+        for (int ac = 0; ac < this.parts.length; ac++) {
+            this.parts[ac].prevX = vec3ds[ac].x;
+            this.parts[ac].prevY = vec3ds[ac].y;
+            this.parts[ac].prevZ = vec3ds[ac].z;
+            this.parts[ac].lastRenderX = vec3ds[ac].x;
+            this.parts[ac].lastRenderY = vec3ds[ac].y;
+            this.parts[ac].lastRenderZ = vec3ds[ac].z;
+        }
+    }
+
+    public WarriorPartEntity[] getBodyParts() {
+        return this.parts;
+    }
+
+    private void movePart(WarriorPartEntity partEntity, double dx, double dy, double dz) {
+        partEntity.setPosition(this.getX() + dx, this.getY() + dy, this.getZ() + dz);
+    }
+
+    @Override
+    public EntityPart[] getParts() {
+        return this.parts;
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+        WarriorPartEntity[] bodyParts = this.getBodyParts();
+        for (int i = 0; i < bodyParts.length; i++) {
+            bodyParts[i].setId(i + packet.getId());
+        }
+    }
+
+    @Override
     protected void initGoals() {
         super.initGoals();
         this.goalSelector.add(4, new WarriorMovementGoal(this));
@@ -205,75 +258,19 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
         return super.canBeHitByProjectile() && !this.isInWarriorPose(WarriorPose.SPINNING);
     }
 
-    public void setRandomPhase() {
-        int random = this.getRandom().nextInt(4);
+    public void setPhase() {
         switch (this.getWarriorPose()) {
-            case DASHING -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.EROFLAMING);
-                    case 2 -> this.setWarriorPose(WarriorPose.SPINNING);
-                    case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
-                }
-            }
-            case HAMMER_ATTACKING -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
-                    case 2 -> this.setWarriorPose(WarriorPose.SPINNING);
-                    case 3 -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
-                    default -> this.setWarriorPose(WarriorPose.DASHING);
-                }
-            }
-            case HEAVY_HAMMER_ATTACKING -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.DASHING);
-                    case 2 -> this.setWarriorPose(WarriorPose.EROFLAMING);
-                    case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
-                    default -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
-                }
-            }
-            case SPINNING -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
-                    case 2 -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
-                    case 3 -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
-                }
-            }
-            case SHIELDED_WALK -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.EROFLAMING);
-                    case 2 -> this.setWarriorPose(WarriorPose.DASHING);
-                    case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
-                }
-            }
-            case IDLING -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.SPINNING);
-                    case 2 -> this.setWarriorPose(WarriorPose.DASHING);
-                    case 3 -> this.setWarriorPose(WarriorPose.BLASTING);
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
-                }
-            }
-            case BLASTING -> {
-                pos = this.getBlockPos().add(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
-                    case 2 -> this.setWarriorPose(WarriorPose.DASHING);
-                    case 3 -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
-                    default -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
-                }
-            }
-            default -> {
-                switch (random) {
-                    case 1 -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
-                    case 2 -> this.setWarriorPose(WarriorPose.EROFLAMING);
-                    case 3 -> this.setWarriorPose(WarriorPose.SPINNING);
-                    default -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
-                }
-            }
+            case IDLING -> this.setWarriorPose(WarriorPose.HAMMER_ATTACKING);
+            case HAMMER_ATTACKING -> this.setWarriorPose(WarriorPose.SHIELDED_WALK);
+            case SHIELDED_WALK -> this.setWarriorPose(WarriorPose.DASHING);
+            case DASHING -> this.setWarriorPose(WarriorPose.BLASTING);
+            case BLASTING -> this.setWarriorPose(WarriorPose.HEAVY_HAMMER_ATTACKING);
+            case HEAVY_HAMMER_ATTACKING -> this.setWarriorPose(WarriorPose.SPINNING);
+            case SPINNING -> this.setWarriorPose(WarriorPose.EROFLAMING);
+            case EROFLAMING -> this.setWarriorPose(WarriorPose.SHIELDED_STRIKING);
+            case SHIELDED_STRIKING, SPAWNING -> this.setWarriorPose(WarriorPose.IDLING);
         }
+        pos = this.getBlockPos().add(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
     }
 
     private void updateTranslocatone(World world, BlockPos pos) {
@@ -314,7 +311,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
                     this.getMoveControl().strafeTo(-1, 0);
             }
             if (this.timeOfAbility <= 0 && !this.isInWarriorPose(WarriorPose.DYING))
-                this.setRandomPhase();
+                this.setPhase();
             if (this.isInWarriorPose(WarriorPose.BLASTING)) {
                 this.navigation.stop();
                 if (this.getWorld() instanceof ServerWorld world)
@@ -378,8 +375,8 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
                 List<LivingEntity> entities = world.getEntitiesByClass(LivingEntity.class, new Box(center.toCenterPos(), center.toCenterPos()).expand(3), LivingEntity::canHit);
                 for (LivingEntity entity : entities) {
                     if (entity != this && !entity.isFireImmune()) {
-                        if (entity instanceof ServerPlayerEntity player)
-                            GrippingData.addGrippingSeconds((IEntityDataSaver) player, 2);
+                        if (entity instanceof IGrippingEntity entity1)
+                            GrippingData.addGrippingSeconds(entity1, 2);
                         entity.damage(this.getDamageSources().dryOut(), 4);
                     }
                 }
@@ -389,8 +386,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
 
     @Override
     public boolean haveToDropLoot(DamageSource source) {
-        return source.getAttacker() instanceof ServerPlayerEntity player &&
-                !(player.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS)) > 1);
+        return source.getAttacker() instanceof PlayerEntity;
     }
 
     @Override
@@ -400,8 +396,10 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob {
             this.setWarriorPose(WarriorPose.SHIELDED_WALK);
         if (this.isInWarriorPose(WarriorPose.SHIELDED_WALK)
                 || this.isInWarriorPose(WarriorPose.EROFLAMING)
-                || this.isInWarriorPose(WarriorPose.BLASTING))
+                || this.isInWarriorPose(WarriorPose.BLASTING)) {
+            this.playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1.1f, 0.9f);
             return false;
+        }
         if (this.getTarget() != null && this.isInWarriorPose(WarriorPose.SHIELDED_WALK))
             this.getTarget().damage(source, amount / 2f);
         return super.damage(source, amount);

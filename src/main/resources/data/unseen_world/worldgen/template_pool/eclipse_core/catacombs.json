@@ -7,39 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
         "location": "unseen_world:eclipse_core/eclipse_catacombs_main_room",
-        "processors": [
-          {
-            "processor_type": "minecraft:rule",
-            "rules": [
-              {
-                "location_predicate": {
-                  "predicate_type": "minecraft:always_true"
-                },
-                "input_predicate": {
-                  "predicate_type": "minecraft:random_block_match",
-                  "block": "unseen_world:dark_currantslate_bricks",
-                  "probability": 0.125
-                },
-                "output_state": {
-                  "Name": "unseen_world:dark_currantslate"
-                }
-              },
-              {
-                "location_predicate": {
-                  "predicate_type": "minecraft:always_true"
-                },
-                "input_predicate": {
-                  "predicate_type": "minecraft:random_block_match",
-                  "block": "unseen_world:glaciemite_bricks",
-                  "probability": 0.125
-                },
-                "output_state": {
-                  "Name": "unseen_world:glaciemite"
-                }
-              }
-            ]
-          }
-        ]
+        "processors": "minecraft:empty"
       }
     },
     {
@@ -48,26 +16,7 @@
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
         "location": "unseen_world:eclipse_core/eclipse_catacombs_crooked_tunnels",
-        "processors": [
-          {
-            "processor_type": "minecraft:rule",
-            "rules": [
-              {
-                "location_predicate": {
-                  "predicate_type": "minecraft:always_true"
-                },
-                "input_predicate": {
-                  "predicate_type": "minecraft:random_block_match",
-                  "block": "unseen_world:dark_currantslate_bricks",
-                  "probability": 0.125
-                },
-                "output_state": {
-                  "Name": "minecraft:air"
-                }
-              }
-            ]
-          }
-        ]
+        "processors": "minecraft:empty"
       }
     },
     {
@@ -76,6 +25,103 @@
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
         "location": "unseen_world:eclipse_core/eclipse_catacombs_vertical_tunnels",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_broken_tunnel",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:rule",
+              "rules": [
+                {
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "input_predicate": {
+                    "predicate_type": "minecraft:random_block_match",
+                    "block": "unseen_world:glimmergrain_sand",
+                    "probability": 0.25
+                  },
+                  "output_state": {
+                    "Name": "unseen_world:suspicious_glimmergrain_sand"
+                  },
+                  "block_entity_modifier": {
+                    "type": "minecraft:append_loot",
+                    "loot_table": "unseen_world:archaeology/dark_ocean_ruins_sand"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_broken_tunnel1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_tunnel",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_tunnel1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_tunnel2",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_entrance_tunnel",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_entrance_tunnel1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:eclipse_core/eclipse_catacombs_entrance_tunnel2",
         "processors": "minecraft:empty"
       }
     }

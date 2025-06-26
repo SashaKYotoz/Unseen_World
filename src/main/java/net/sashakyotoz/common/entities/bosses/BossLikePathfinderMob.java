@@ -42,14 +42,15 @@ public abstract class BossLikePathfinderMob extends PathAwareEntity implements M
     @Override
     public void tick() {
         super.tick();
-        List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
-        workQueue.forEach(work -> {
-            work.setValue(work.getValue() - 1);
-            if (work.getValue() == 0)
-                actions.add(work);
+        List<AbstractMap.SimpleEntry<Runnable, Integer>> toExecute = new ArrayList<>();
+        workQueue.forEach(entry -> {
+            entry.setValue(entry.getValue() - 1);
+            if (entry.getValue() <= 0)
+                toExecute.add(entry);
         });
-        actions.forEach(e -> e.getKey().run());
-        workQueue.removeAll(actions);
+        if (!toExecute.isEmpty())
+            workQueue.removeAll(toExecute);
+        toExecute.forEach(entry -> entry.getKey().run());
     }
 
     @Override
@@ -84,17 +85,18 @@ public abstract class BossLikePathfinderMob extends PathAwareEntity implements M
 
     public void provokeEarthquake(int radius) {
         World world = this.getWorld();
-        for (int y = -2; y < 2; y++) {
-            for (int x = -radius; x < radius; x++) {
-                for (int z = -radius; z < radius; z++) {
-                    BlockPos pos = this.getBlockPos().add(x, y, z);
-                    if (world.getBlockState(pos) != null && world.getBlockState(pos).isOpaque() && world.getBlockState(pos).getHardness(this.getWorld(), pos) < 10 && world.getBlockState(pos.up()).isAir()) {
-                        FallingBlockEntity.spawnFromBlock(world, pos.up(3), world.getBlockState(pos));
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (!world.isClient())
+            for (int y = -2; y < 2; y++) {
+                for (int x = -radius; x < radius; x++) {
+                    for (int z = -radius; z < radius; z++) {
+                        BlockPos pos = this.getBlockPos().add(x, y, z);
+                        if (world.getBlockState(pos) != null && world.getBlockState(pos).isOpaque() && world.getBlockState(pos).getHardness(this.getWorld(), pos) < 10 && world.getBlockState(pos.up()).isAir()) {
+                            FallingBlockEntity.spawnFromBlock(world, pos.up(3), world.getBlockState(pos));
+                            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        }
                     }
                 }
             }
-        }
     }
 
     public void spawnParticle(ParticleEffect type, World world, double x, double y, double z, float modifier) {

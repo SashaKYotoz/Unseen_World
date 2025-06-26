@@ -17,7 +17,23 @@
     "water_color": 6717235,
     "water_fog_color": 6717235
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:burlywood_violet_patch"
+    ],
+    [
+      "unseen_world:bush_like_tree_patch"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {

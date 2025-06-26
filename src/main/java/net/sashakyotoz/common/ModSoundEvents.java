@@ -7,6 +7,8 @@ import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 
 public class ModSoundEvents {
+    public static final SoundEvent THE_DARKNESS_AMBIENT = registerSoundEvent("the_darkness.ambient");
+
     public static final SoundEvent GLEAMCARVER_AMBIENT_SOUND = registerSoundEvent("gleamcarver_ambient_sound");
 
 //    public static final BlockSoundGroup SOUND_BLOCK_SOUNDS = new BlockSoundGroup(1f, 1f,

@@ -27,12 +27,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.sashakyotoz.api.entity_data.IEntityDataSaver;
+import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.custom.projectiles.GrippingCrystalProjectileEntity;
-import net.sashakyotoz.common.networking.data.GripcrystalManaData;
-import net.sashakyotoz.utils.ActionsManager;
-import net.sashakyotoz.utils.IEntityDataSaver;
+import net.sashakyotoz.utils.ActionsUtils;
 
 import java.util.List;
 
@@ -75,9 +75,9 @@ public class GrippingAbyssalBowItem extends BowItem {
                         player.playSound(SoundEvents.BLOCK_GLASS_HIT, SoundCategory.PLAYERS, 2, 2);
                         player.getServerWorld().spawnParticles(ModParticleTypes.GRIPPING_CRYSTAL,
                                 player.getX(), player.getY(), player.getZ(), 9,
-                                ActionsManager.getXVector(2, player.getYaw()),
-                                ActionsManager.getYVector(1, player.getPitch()),
-                                ActionsManager.getZVector(2, player.getYaw()), 1);
+                                ActionsUtils.getXVector(2, player.getYaw()),
+                                ActionsUtils.getYVector(1, player.getPitch()),
+                                ActionsUtils.getZVector(2, player.getYaw()), 1);
                     }
                 }
                 case "crystal_rain" -> {
@@ -179,7 +179,7 @@ public class GrippingAbyssalBowItem extends BowItem {
 
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
-        if (ActionsManager.isModLoaded("bettercombat")) {
+        if (ActionsUtils.isModLoaded("bettercombat")) {
             ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
             builder.put(
                     EntityAttributes.GENERIC_ATTACK_DAMAGE,

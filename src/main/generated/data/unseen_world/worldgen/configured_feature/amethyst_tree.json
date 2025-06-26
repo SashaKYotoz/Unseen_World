@@ -37,19 +37,13 @@
       }
     },
     "foliage_placer": {
-      "type": "minecraft:acacia_foliage_placer",
-      "offset": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 1,
-          "min_inclusive": 0
-        }
-      },
+      "type": "minecraft:hanging_blob_foliage_placer",
+      "offset": 1,
       "radius": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 2,
-          "min_inclusive": 1
+          "max_inclusive": 3,
+          "min_inclusive": 2
         }
       }
     },
@@ -76,7 +70,8 @@
       "type": "minecraft:grizzly_trunk_placer",
       "base_height": 6,
       "height_rand_a": 2,
-      "height_rand_b": 2
+      "height_rand_b": 2,
+      "platform_height": 2
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

@@ -106,32 +106,32 @@
       "trunk_offset_y": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 4,
+          "max_inclusive": 3,
           "min_inclusive": 1
         }
       }
     },
     "trunk_placer": {
       "type": "minecraft:upwards_branching_trunk_placer",
-      "base_height": 7,
+      "base_height": 6,
       "can_grow_through": "#minecraft:mangrove_logs_can_grow_through",
       "extra_branch_length": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 2,
-          "min_inclusive": 0
+          "max_inclusive": 3,
+          "min_inclusive": 1
         }
       },
       "extra_branch_steps": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 5,
-          "min_inclusive": 1
+          "max_inclusive": 4,
+          "min_inclusive": 2
         }
       },
-      "height_rand_a": 3,
+      "height_rand_a": 4,
       "height_rand_b": 4,
-      "place_branch_per_log_probability": 0.75
+      "place_branch_per_log_probability": 0.5
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

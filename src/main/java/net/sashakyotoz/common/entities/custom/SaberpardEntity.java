@@ -10,7 +10,9 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.OcelotEntity;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -153,9 +155,7 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
     }
 
     public static boolean isValidNaturalSpawn(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return spawnReason == SpawnReason.SPAWNER
-                || (world.getBlockState(pos.down()).isIn(BlockTags.DIRT)
-                || world.getBlockState(pos).isIn(BlockTags.DIRT));
+        return world.getBlockState(pos.down()).isIn(BlockTags.DIRT);
     }
 
     @Override

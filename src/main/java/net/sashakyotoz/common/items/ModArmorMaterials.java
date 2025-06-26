@@ -10,11 +10,11 @@ import net.sashakyotoz.UnseenWorld;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    UNSEENIUM("unseenium", 25, new int[]{5, 8, 10, 5}, 24,
+    UNSEENIUM("unseenium", 25, new int[]{5, 10, 8, 5}, 24,
             SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2f, 0.1f, () -> Ingredient.ofItems(ModItems.UNSEENIUM_INGOT)),
-    ABYSSAL("abyssal", 36, new int[]{6, 9, 11, 6}, 28,
+    ABYSSAL("abyssal", 36, new int[]{6, 11, 9, 6}, 28,
             SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 2f, 0.1f, () -> Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
-    TITANIUM("titanium", 42, new int[]{6, 9, 11, 6}, 20,
+    TITANIUM("titanium", 42, new int[]{6, 11, 9, 6}, 20,
             SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 2f, 0.1f, () -> Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT));
 
     private final String name;

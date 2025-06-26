@@ -2,9 +2,11 @@ package net.sashakyotoz.common.blocks;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.BlockSoundGroup;
@@ -17,10 +19,11 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.particles.custom.effects.LeafParticleEffect;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.custom.*;
+import net.sashakyotoz.common.blocks.custom.chests.ModChestBlock;
 import net.sashakyotoz.common.blocks.custom.plants.*;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
-import net.sashakyotoz.common.world.features.trees.*;
+import net.sashakyotoz.common.world.features.trees.generators.*;
 
 import java.util.Map;
 import java.util.function.ToIntFunction;
@@ -152,11 +155,11 @@ public class ModBlocks {
             .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).tool("stone_pickaxe")
             .drop().model().build();
     public static final Block KEY_HANDLER_STONE = ModRegistry.ofBlock("key_handler_stone",
-                    new KeyHandlerStoneBlock(copy(Blocks.POLISHED_BLACKSTONE_BRICKS).luminance(createLightLevelFromBlockState(12, Properties.LOCKED)).hardness(25)))
+                    new KeyHandlerStoneBlock(copy(Blocks.POLISHED_BLACKSTONE_BRICKS).luminance(lightLevelFromBlockState(12, Properties.LOCKED)).hardness(25)))
             .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).tool("iron_pickaxe")
-            .drop().build();
+            .drop().cutout().build();
     public static final Block GLACIEMITE_TRANSLOCATONE = ModRegistry.ofBlock("glaciemite_translocatone",
-                    new GlaciemiteTranslocatoneBlock(copy(Blocks.POLISHED_BLACKSTONE_BRICKS).hardness(25)))
+                    new TranslocatoneBlock(copy(Blocks.POLISHED_BLACKSTONE_BRICKS).hardness(25)))
             .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).tool("iron_pickaxe")
             .drop().translucent().build();
     public static final Block DARK_CURRANTSLATE = ModRegistry.ofBlock("dark_currantslate",
@@ -173,7 +176,7 @@ public class ModBlocks {
             .drop().build();
     public static final Block DARK_CURRANTSLATE_WALL = ModRegistry.ofBlock("dark_currantslate_wall",
                     new WallBlock(DarkCurrantslateMaterial))
-            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE,BlockTags.WALLS).tool("stone_pickaxe")
+            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.WALLS).tool("stone_pickaxe")
             .drop().build();
     public static final Block DARK_CURRANTSLATE_BRICKS = ModRegistry.ofBlock("dark_currantslate_bricks",
                     new Block(DarkCurrantslateMaterial))
@@ -189,8 +192,10 @@ public class ModBlocks {
             .drop().build();
     public static final Block DARK_CURRANTSLATE_BRICKS_WALL = ModRegistry.ofBlock("dark_currantslate_bricks_wall",
                     new WallBlock(DarkCurrantslateMaterial))
-            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE,BlockTags.WALLS).tool("stone_pickaxe")
+            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.WALLS).tool("stone_pickaxe")
             .drop().build();
+    public static final Block DARK_CURRANTSLATE_CHEST = ModRegistry.ofBlock("dark_currantslate_chest",
+            new ModChestBlock(AbstractBlock.Settings.copy(Blocks.CHEST).strength(5, 5), ModChestBlock.ChestTypes.DARK_CURRANTSLATE)).tag(ConventionalBlockTags.CHESTS).drop().build();
     public static final Block GLACIEMITE = ModRegistry.ofBlock("glaciemite",
                     new Block(GlaciemiteMaterial))
             .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).tool("stone_pickaxe")
@@ -205,7 +210,7 @@ public class ModBlocks {
             .drop().build();
     public static final Block GLACIEMITE_WALL = ModRegistry.ofBlock("glaciemite_wall",
                     new WallBlock(GlaciemiteMaterial))
-            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE,BlockTags.WALLS).tool("stone_pickaxe")
+            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.WALLS).tool("stone_pickaxe")
             .drop().build();
     public static final Block GLACIEMITE_BRICKS = ModRegistry.ofBlock("glaciemite_bricks",
                     new Block(GlaciemiteMaterial))
@@ -221,12 +226,17 @@ public class ModBlocks {
             .drop().build();
     public static final Block GLACIEMITE_BRICKS_WALL = ModRegistry.ofBlock("glaciemite_bricks_wall",
                     new WallBlock(GlaciemiteMaterial))
-            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE,BlockTags.WALLS).tool("stone_pickaxe")
+            .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE, BlockTags.WALLS).tool("stone_pickaxe")
             .drop().build();
+    public static final Block GLACIEMITE_CHEST = ModRegistry.ofBlock("glaciemite_chest",
+            new ModChestBlock(AbstractBlock.Settings.copy(Blocks.CHEST).strength(4, 5), ModChestBlock.ChestTypes.GLACIEMITE)).tag(ConventionalBlockTags.CHESTS).drop().build();
     public static final Block GLACIEMITE_BULB = ModRegistry.ofBlock("glaciemite_bulb",
                     new BulbLikeBlock(GlaciemiteMaterial.luminance(Blocks.createLightLevelFromLitBlockState(14))))
             .tag(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).tool("stone_pickaxe")
             .drop().model(ModRegistry.Models.BULB).build();
+    public static final Block GRIPTONITE_LANTERN = ModRegistry.ofBlock("griptonite_lantern",
+                    new ModLanternBlock(FabricBlockSettings.create().solid().sounds(BlockSoundGroup.LANTERN).ticksRandomly().requiresTool().strength(3.5F).luminance(14)))
+            .tool("stone_pickaxe").cutout().drop().build();
     public static final Block TANZANITE_BLOCK = ModRegistry.ofBlock("tanzanite_block",
                     new Block(TanzaniteMaterial)).tool("stone_pickaxe")
             .drop().model().build();
@@ -245,34 +255,42 @@ public class ModBlocks {
     public static final Block ABYSSAL_ORE_IN_GLACIEMITE = ModRegistry.ofBlock("abyssal_ore_in_glaciemite",
             new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(5).requiresTool().luminance(4), UniformIntProvider.create(1, 5))).model().tool("diamond_pickaxe").build();
     public static final Block ABYSSAL_INGOT_BLOCK = ModRegistry.ofBlock("abyssal_ingot_block",
-            new Block(FabricBlockSettings.create().hardness(5).requiresTool())).model().drop().tool("diamond_pickaxe").build();
+            new Block(FabricBlockSettings.create().hardness(5).requiresTool())).tag(BlockTags.BEACON_BASE_BLOCKS).model().drop().tool("diamond_pickaxe").build();
     public static final Block RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE = ModRegistry.ofBlock("red_titanium_ore_in_dark_currantslate",
-            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(6).requiresTool().luminance(3), UniformIntProvider.create(1, 6))).model().tool("diamond_pickaxe").build();
+            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(10).requiresTool().luminance(3), UniformIntProvider.create(1, 6))).model().tool("diamond_pickaxe").build();
     public static final Block RED_TITANIUM_IN_GLACIEMITE = ModRegistry.ofBlock("red_titanium_ore_in_glaciemite",
-            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(6).requiresTool().luminance(3), UniformIntProvider.create(1, 6))).model().tool("diamond_pickaxe").build();
+            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(10).requiresTool().luminance(3), UniformIntProvider.create(1, 6))).model().tool("diamond_pickaxe").build();
     public static final Block RED_TITANIUM_INGOT_BLOCK = ModRegistry.ofBlock("red_titanium_ingot_block",
-            new Block(FabricBlockSettings.create().hardness(6).requiresTool())).model().drop().tool("diamond_pickaxe").build();
+            new Block(FabricBlockSettings.create().hardness(6).requiresTool())).tag(BlockTags.BEACON_BASE_BLOCKS).model().drop().tool("diamond_pickaxe").build();
     public static final Block UNSEENIUM_ORE_IN_DARK_CURRANTSLATE = ModRegistry.ofBlock("unseenium_ore_in_dark_currantslate",
             new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(4).requiresTool().luminance(5), UniformIntProvider.create(1, 4))).model().tool("diamond_pickaxe").build();
     public static final Block UNSEENIUM_ORE_IN_GLACIEMITE = ModRegistry.ofBlock("unseenium_ore_in_glaciemite",
             new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(4).requiresTool().luminance(5), UniformIntProvider.create(1, 4))).model().tool("diamond_pickaxe").build();
     public static final Block UNSEENIUM_INGOT_BLOCK = ModRegistry.ofBlock("unseenium_ingot_block",
-            new Block(FabricBlockSettings.create().hardness(4).requiresTool())).model().drop().tool("diamond_pickaxe").build();
+            new Block(FabricBlockSettings.create().hardness(4).requiresTool())).tag(BlockTags.BEACON_BASE_BLOCKS).model().drop().tool("diamond_pickaxe").build();
+    public static final Block IRON_ORE_IN_DARK_CURRANTSLATE = ModRegistry.ofBlock("iron_ore_in_dark_currantslate",
+            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(3).requiresTool(), UniformIntProvider.create(1, 3))).model().tool("iron_pickaxe").build();
+    public static final Block IRON_ORE_IN_GLACIEMITE = ModRegistry.ofBlock("iron_ore_in_glaciemite",
+            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(3).requiresTool(), UniformIntProvider.create(1, 3))).model().tool("iron_pickaxe").build();
+    public static final Block ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE = ModRegistry.ofBlock("ancient_debris_in_dark_currantslate",
+            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(15).requiresTool(), UniformIntProvider.create(1, 2))).model().tool("diamond_pickaxe").build();
+    public static final Block ANCIENT_DEBRIS_IN_GLACIEMITE = ModRegistry.ofBlock("ancient_debris_in_glaciemite",
+            new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(15).requiresTool(), UniformIntProvider.create(1, 2))).model().tool("diamond_pickaxe").build();
     //grass
     public static final Block NIGHTDARK_GRASS_BLOCK = ModRegistry.ofBlock("nightdark_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.BLACK))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
     public static final Block TEALIVY_GRASS_BLOCK = ModRegistry.ofBlock("tealivy_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.CYAN))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
     public static final Block AMETHYST_GRASS_BLOCK = ModRegistry.ofBlock("amethyst_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PURPLE))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
     public static final Block GRIMWOOD_GRASS_BLOCK = ModRegistry.ofBlock("grimwood_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.RED))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
     //sand-like
-    public static final Block ASHEN_OOZE = ModRegistry.ofBlock("ashen_ooze", new Block(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PALE_YELLOW))).tool("_shovel").drop().model().build();
-    public static final Block SUSPICIOUS_ASHEN_OOZE = ModRegistry.ofBlock("suspicious_ashen_ooze", new BrushableBlock(
+    public static final Block ASHEN_OOZE = ModRegistry.ofBlock("ashen_ooze", new Block(FabricBlockSettings.create().hardness(1).mapColor(MapColor.TERRACOTTA_ORANGE))).tool("_shovel").drop().model().build();
+    public static final Block SUSPICIOUS_ASHEN_OOZE = ModRegistry.ofBlock("suspicious_ashen_ooze", new SusBlock(
             ASHEN_OOZE,
-            FabricBlockSettings.create().hardness(0.25f).mapColor(MapColor.PALE_YELLOW),
+            FabricBlockSettings.create().hardness(0.25f).mapColor(MapColor.TERRACOTTA_ORANGE),
             SoundEvents.ITEM_BRUSH_BRUSHING_GRAVEL,
             SoundEvents.ITEM_BRUSH_BRUSHING_SAND_COMPLETE
     )).tool("_shovel").build();
     public static final Block GLIMMERGRAIN_SAND = ModRegistry.ofBlock("glimmergrain_sand", new FallingBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.GRAY))).tool("_shovel").drop().model().build();
-    public static final Block SUSPICIOUS_GLIMMERGRAIN_SAND = ModRegistry.ofBlock("suspicious_glimmergrain_sand", new BrushableBlock(
+    public static final Block SUSPICIOUS_GLIMMERGRAIN_SAND = ModRegistry.ofBlock("suspicious_glimmergrain_sand", new SusBlock(
             GLIMMERGRAIN_SAND,
             FabricBlockSettings.create().hardness(0.25f).mapColor(MapColor.PALE_YELLOW),
             SoundEvents.ITEM_BRUSH_BRUSHING_SAND,
@@ -302,12 +320,12 @@ public class ModBlocks {
             .flammable(5, 5).fuel(300).drop().model().build();
 
     public static final Block AMETHYST_LEAVES = ModRegistry.ofBlock("amethyst_leaves",
-                    new LeafDroppingLeaveBlock(AmethystLeafMaterial, new LeafParticleEffect(0.5f, 0.15f, 0.75f)))
+                    new LeafDroppingLeaveBlock(AmethystLeafMaterial, new LeafParticleEffect(0.6f, 0.2f, 0.7f)))
             .tag(BlockTags.LEAVES, ModTags.Blocks.AMETHYST_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
             .tool("_hoe").flammable(5, 30)
             .model().cutout().build();
     public static final Block HANGING_AMETHYST_LEAVES = ModRegistry.ofBlock("hanging_amethyst_leaves",
-                    new HangingFruitBlock(copy(AmethystLeafMaterial).collidable(false).breakInstantly(),
+                    new HangingFruitBlock(copy(AmethystLeafMaterial).luminance(lightLevelFromBlockStateR(4, HangingFruitBlock.HAS_FRUIT)).collidable(false).breakInstantly(),
                             () -> ModItems.CRYSTIE_APPLE,
                             ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON,
                             Block.createCuboidShape(0, 0, 0, 16, 16, 16)))
@@ -677,7 +695,7 @@ public class ModBlocks {
                     ), false)
             .tag(BlockTags.LEAVES, ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON)
             .tool("_hoe").flammable(5, 30)
-            .model(ModRegistry.Models.CROSS_ITEMLESS).cutout().build();
+            .cutout().build();
     public static final Block CRIMSONVEIL_VINE_PLANT = ModRegistry.ofBlock("crimsonveil_vine_plant",
                     new CrimsonveilVinesBodyBlock(FabricBlockSettings.create().mapColor(MapColor.DARK_CRIMSON)
                             .ticksRandomly()
@@ -688,7 +706,7 @@ public class ModBlocks {
                             .pistonBehavior(PistonBehavior.DESTROY)), false)
             .tag(BlockTags.LEAVES, ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON)
             .tool("_hoe").flammable(5, 30)
-            .model(ModRegistry.Models.CROSS_ITEMLESS).cutout().build();
+            .cutout().build();
 
     public static final Block CRIMSONVEIL_PLANKS = ModRegistry.ofBlock("crimsonveil_planks",
                     new Block(CrimsonveilTreeMaterial))
@@ -755,15 +773,18 @@ public class ModBlocks {
                             ModItems.BEARFRUIT_BRAMBLE, ModTags.Blocks.BEARFRUIT_BRAMBLE_GROWABLE_ON, Block.createCuboidShape(
                             6, 0, 6, 10, 16, 10
                     )))
-            .cutout().tag(ModTags.Blocks.BEARFRUIT_BRAMBLE_GROWABLE_ON).tagitem(ItemTags.FLOWERS).drop_shears(ModItems.BEARFRUIT_BRAMBLE).build();
+            .cutout().tag(ModTags.Blocks.BEARFRUIT_BRAMBLE_GROWABLE_ON, BlockTags.CLIMBABLE).tagitem(ItemTags.FLOWERS).drop_shears(ModItems.BEARFRUIT_BRAMBLE).build();
     public static final Block MIDNIGHT_LILY_PAD = ModRegistry.ofBlock("midnight_lily",
             new MidnightLilyPadBlock(FabricBlockSettings.create().mapColor(MapColor.DIAMOND_BLUE).breakInstantly().sounds(BlockSoundGroup.LILY_PAD).nonOpaque().pistonBehavior(PistonBehavior.DESTROY).luminance(8))).cutout().build();
     public static final Block AMETHYST_PETALS = ModRegistry.ofBlock("amethyst_petals",
             new FlowerbedBlock(FabricBlockSettings.create().mapColor(MapColor.PALE_PURPLE).breakInstantly().noCollision().sounds(BlockSoundGroup.SMALL_AMETHYST_BUD)
-                    .pistonBehavior(PistonBehavior.DESTROY).luminance(createLightLevelFromBlockState(8, Properties.FLOWER_AMOUNT, 2)))).cutout().build();
+                    .pistonBehavior(PistonBehavior.DESTROY).luminance(lightLevelFromBlockState(8, Properties.FLOWER_AMOUNT, 2)))).cutout().build();
     public static final Block GLOW_APPLE_BUSH = ModRegistry.ofBlock("glow_apple_bush",
             new TreeBushLikeBlock(FabricBlockSettings.create().mapColor(MapColor.PALE_GREEN).hardness(0.25f).sounds(BlockSoundGroup.SMALL_DRIPLEAF)
-                    .pistonBehavior(PistonBehavior.DESTROY).luminance(createLightLevelFromBlockState(4, TreeBushLikeBlock.GROWN)).ticksRandomly())).cutout().build();
+                    .pistonBehavior(PistonBehavior.DESTROY).luminance(lightLevelFromBlockStateR(10, TreeBushLikeBlock.GROWN)).ticksRandomly())).cutout().build();
+    public static final Block BURLYWOOD_VIOLET = ModRegistry.ofBlock("burlywood_violet",
+            new FlowerBlock(StatusEffects.GLOWING, 100, FabricBlockSettings.create().mapColor(MapColor.PALE_PURPLE).breakInstantly().sounds(BlockSoundGroup.FLOWERING_AZALEA)
+                    .luminance(12).ticksRandomly().noCollision())).drop().cutout().model(ModRegistry.Models.CROSS).build();
     public static final Block UMBRAL_KELP = ModRegistry.ofBlock("umbral_kelp",
             new UmbralKelpBlock(FabricBlockSettings.create().mapColor(MapColor.PURPLE).breakInstantly().sounds(BlockSoundGroup.WET_GRASS)
                     .pistonBehavior(PistonBehavior.DESTROY).noCollision().luminance(8))).drop().cutout().build();
@@ -776,6 +797,17 @@ public class ModBlocks {
     public static final Block TALL_GLOOMWEED = ModRegistry.ofBlock("tall_gloomweed",
             new TallPlantBlock(FabricBlockSettings.create().replaceable().breakInstantly().sounds(BlockSoundGroup.GRASS)
                     .pistonBehavior(PistonBehavior.DESTROY).noCollision())).tool("_hoe").cutout().build();
+    public static final Block GRIPPING_DARK_CURRANTSLATE = ModRegistry.ofBlock("gripping_dark_currantslate",
+                    new GrippingStoneBlock(FabricBlockSettings.create().hardness(3).dropsLike(DARK_CURRANTSLATE)))
+            .tag(BlockTags.DAMPENS_VIBRATIONS).tool("stone_pickaxe").build();
+    public static final Block GRIPPING_GLACIEMITE = ModRegistry.ofBlock("gripping_glaciemite",
+                    new GrippingStoneBlock(FabricBlockSettings.create().hardness(2.5f).dropsLike(GLACIEMITE)))
+            .tag(BlockTags.DAMPENS_VIBRATIONS).tool("stone_pickaxe").build();
+    public static final Block GRIPPING_SPIGELIA = ModRegistry.ofBlock("gripping_spigelia",
+                    new GrippingSpigeliaBlock(copy(Blocks.WARPED_FUNGUS).ticksRandomly()
+                            .luminance(lightLevelFromBlockState(2, Properties.AGE_2, 2)).emissiveLighting((state, world, pos) ->
+                                    world.getBlockState(pos.down()).isAir() || world.getBlockState(pos.up()).isAir()).jumpVelocityMultiplier(0.85f)))
+            .tag(BlockTags.DAMPENS_VIBRATIONS).tool("stone_pickaxe").cutout().drop().build();
     public static final Block GRIPCRYSTAL_WART = ModRegistry.ofBlock("gripcrystal_wart",
             new GripcrystalWartBlock(FabricBlockSettings.create().replaceable().breakInstantly().luminance(10).sounds(BlockSoundGroup.LARGE_AMETHYST_BUD)
                     .pistonBehavior(PistonBehavior.DESTROY).noCollision())).tool("stone_pickaxe").cutout().build();
@@ -783,7 +815,7 @@ public class ModBlocks {
     public static final Block DARK_WATER = ModRegistry.ofBlock("dark_water",
                     new DarkWaterBlock(ModFluids.DARK_WATER,
                             FabricBlockSettings.create()
-                                    .mapColor(MapColor.WATER_BLUE)
+                                    .mapColor(MapColor.BLACK)
                                     .replaceable()
                                     .noCollision()
                                     .strength(150.0F)
@@ -793,11 +825,15 @@ public class ModBlocks {
                                     .sounds(BlockSoundGroup.INTENTIONALLY_EMPTY)))
             .model(ModRegistry.Models.FLUID).build();
 
-    public static ToIntFunction<BlockState> createLightLevelFromBlockState(int litLevel, IntProperty property, int modifierToLight) {
+    public static ToIntFunction<BlockState> lightLevelFromBlockState(int litLevel, IntProperty property, int modifierToLight) {
         return state -> Math.min(state.get(property) * modifierToLight, litLevel);
     }
 
-    public static ToIntFunction<BlockState> createLightLevelFromBlockState(int litLevel, BooleanProperty property) {
+    public static ToIntFunction<BlockState> lightLevelFromBlockState(int litLevel, BooleanProperty property) {
         return state -> state.get(property) ? 0 : litLevel;
+    }
+
+    public static ToIntFunction<BlockState> lightLevelFromBlockStateR(int litLevel, BooleanProperty property) {
+        return state -> state.get(property) ? litLevel : 0;
     }
 }

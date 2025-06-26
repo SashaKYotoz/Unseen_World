@@ -1,6 +1,8 @@
 package net.sashakyotoz.common.entities.custom;
 
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.control.AquaticMoveControl;
+import net.minecraft.entity.ai.control.YawAdjustingLookControl;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.SwimNavigation;
@@ -50,6 +52,8 @@ public class GloomwhaleEntity extends WaterCreatureEntity {
 
     public GloomwhaleEntity(EntityType<? extends WaterCreatureEntity> entityType, World world) {
         super(entityType, world);
+        this.moveControl = new AquaticMoveControl(this, 85, 10, 0.02F, 0.1F, true);
+        this.lookControl = new YawAdjustingLookControl(this, 10);
     }
 
     @Override
@@ -144,10 +148,8 @@ public class GloomwhaleEntity extends WaterCreatureEntity {
         this.goalSelector.add(0, new MoveIntoWaterGoal(this));
         this.goalSelector.add(4, new SwimAroundGoal(this, 1.0, 10));
         this.goalSelector.add(4, new LookAroundGoal(this));
-        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 16.0F));
+        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(5, new GloomwhaleJumpGoal(this, 10));
-        this.targetSelector.add(6, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
-        this.goalSelector.add(5, new GoToWalkTargetGoal(this, 1.0));
         this.goalSelector.add(6, new MeleeAttackGoal(this, 1.2F, true));
         this.goalSelector.add(8, new ChaseBoatGoal(this));
         this.goalSelector.add(9, new FleeEntityGoal(this, GuardianEntity.class, 8.0F, 1.0, 1.0));
@@ -181,11 +183,10 @@ public class GloomwhaleEntity extends WaterCreatureEntity {
             this.move(MovementType.SELF, this.getVelocity());
             this.setVelocity(this.getVelocity().multiply(0.9));
             if (this.getTarget() == null) {
-                this.setVelocity(this.getVelocity().add(0.0, -0.005, 0.0));
+                this.setVelocity(this.getVelocity().add(0.0, -0.0025, 0.0));
             }
-        } else {
+        } else
             super.travel(movementInput);
-        }
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {

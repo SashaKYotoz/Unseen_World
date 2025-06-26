@@ -2,7 +2,6 @@ package net.sashakyotoz.common;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.advancement.criterion.CuredZombieVillagerCriterion;
 import net.minecraft.block.Block;
 import net.minecraft.data.client.Model;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -12,6 +11,9 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.potion.Potion;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -23,6 +25,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.world.gen.structure.Structure;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.datagen.advancements.CuredGripcrystalEntityCriterion;
+import net.sashakyotoz.common.datagen.recipes.WarriorShieldDecorationRecipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +36,16 @@ public class ModRegistry {
     //constants
     public static final CuredGripcrystalEntityCriterion CURED_GRIPCRYSTAL_ENTITY_CRITERION = Criteria.register(new CuredGripcrystalEntityCriterion());
 
-    public static final RegistryKey<Structure> WARRIOR_OF_DARKNESS_TOWER = RegistryKey.of(RegistryKeys.STRUCTURE,UnseenWorld.makeID("warrior_of_darkness_tower"));
-    public static final RegistryKey<Structure> ECLIPSE_CORE = RegistryKey.of(RegistryKeys.STRUCTURE,UnseenWorld.makeID("eclipse_core"));
+    public static final RegistryKey<Structure> WARRIOR_OF_DARKNESS_TOWER = RegistryKey.of(RegistryKeys.STRUCTURE, UnseenWorld.makeID("warrior_of_darkness_tower"));
+    public static final RegistryKey<Structure> ECLIPSE_CORE = RegistryKey.of(RegistryKeys.STRUCTURE, UnseenWorld.makeID("eclipse_core"));
+
+    public static RecipeSerializer<WarriorShieldDecorationRecipe> WARRIOR_SHIELD_DECORATION = register(
+            "crafting_warrior_shield_decoration", new SpecialRecipeSerializer<>(WarriorShieldDecorationRecipe::new)
+    );
+
+    private static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(String id, S serializer) {
+        return Registry.register(Registries.RECIPE_SERIALIZER, String.format("%s:%s", UnseenWorld.MOD_ID, id), serializer);
+    }
 
     public static class BlockBuilder {
         protected BlockBuilder(Identifier id, Block block, boolean item) {
@@ -150,6 +161,7 @@ public class ModRegistry {
             BLOCK_CUTOUT.add(this.block);
             return this;
         }
+
         public BlockBuilder translucent() {
             BLOCK_TRANSLUCENT.add(this.block);
             return this;
@@ -218,7 +230,6 @@ public class ModRegistry {
         FLUID,
         WALL,
         CROSS,
-        CROSS_ITEMLESS,
         PILLAR,
         WOOD,
         STAIRS,

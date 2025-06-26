@@ -1,0 +1,62 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5,
+                "min": 1
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "unseen_world:raw_abyssal",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4,
+                "min": 1
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "unseen_world:crystie_apple",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:abyssal_helmet",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:abyssal_boots",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:gripcrystal"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5,
+        "min": 1
+      }
+    }
+  ],
+  "random_sequence": "unseen_world:chests/violeger_village_equipment"
+}

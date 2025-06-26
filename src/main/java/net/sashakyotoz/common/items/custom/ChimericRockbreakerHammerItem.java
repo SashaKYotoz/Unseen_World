@@ -14,11 +14,11 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.sashakyotoz.api.entity_data.IEntityDataSaver;
+import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.items.ModTiers;
-import net.sashakyotoz.common.networking.data.GripcrystalManaData;
-import net.sashakyotoz.utils.IEntityDataSaver;
 
 import java.util.List;
 

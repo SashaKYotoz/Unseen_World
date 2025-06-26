@@ -13,7 +13,6 @@ public class SaberpardModel extends SinglePartEntityModel<SaberpardEntity> {
     public static final EntityModelLayer SABERPARD = new EntityModelLayer(UnseenWorld.makeID("saberpard"), "main");
     private final ModelPart root;
     private final ModelPart body;
-    private final ModelPart belly;
     private final ModelPart head;
     private final ModelPart upperTail;
     private final ModelPart lowerTail;
@@ -27,7 +26,6 @@ public class SaberpardModel extends SinglePartEntityModel<SaberpardEntity> {
     public SaberpardModel(ModelPart root) {
         this.root = root;
         this.body = root.getChild("body");
-        this.belly = this.body.getChild("belly");
         this.head = this.body.getChild("head");
         this.upperTail = this.body.getChild("tail1");
         this.lowerTail = this.upperTail.getChild("tail2");

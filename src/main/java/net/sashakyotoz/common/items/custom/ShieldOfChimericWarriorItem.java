@@ -6,10 +6,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.text.Text;
-import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -17,7 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
-import net.sashakyotoz.utils.ActionsManager;
+import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,11 +25,6 @@ public class ShieldOfChimericWarriorItem extends Item implements Equipment {
     public ShieldOfChimericWarriorItem(Item.Settings settings) {
         super(settings);
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
-    }
-
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-        return BlockItem.getBlockEntityNbt(stack) != null ? this.getTranslationKey() + "." + getColor(stack).getName() : super.getTranslationKey(stack);
     }
 
     @Override
@@ -53,9 +46,9 @@ public class ShieldOfChimericWarriorItem extends Item implements Equipment {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         if (user.isSneaking()) {
-            user.setVelocity(ActionsManager.getXVector(2, user.getYaw()),
-                    ActionsManager.getYVector(0.25, user.getPitch()),
-                    ActionsManager.getZVector(2, user.getYaw()));
+            user.setVelocity(ActionsUtils.getXVector(2, user.getYaw()),
+                    ActionsUtils.getYVector(0.25, user.getPitch()),
+                    ActionsUtils.getZVector(2, user.getYaw()));
             BlockPos center = world.raycast(new RaycastContext(user.getEyePos(), user.getEyePos().add(user.getRotationVec(1f).multiply(3)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, user)).getBlockPos();
             List<LivingEntity> entities = world.getEntitiesByClass(LivingEntity.class, new Box(center.toCenterPos(), center.toCenterPos()).expand(3), LivingEntity::canHit);
             for (LivingEntity entity : entities) {
@@ -71,12 +64,7 @@ public class ShieldOfChimericWarriorItem extends Item implements Equipment {
 
     @Override
     public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return ingredient.isIn(ItemTags.STONE_BRICKS) || super.canRepair(stack, ingredient);
-    }
-
-    public static DyeColor getColor(ItemStack stack) {
-        NbtCompound nbtCompound = BlockItem.getBlockEntityNbt(stack);
-        return nbtCompound != null ? DyeColor.byId(nbtCompound.getInt("Base")) : DyeColor.WHITE;
+        return ingredient.isOf(ModItems.GRIPTONITE) || super.canRepair(stack, ingredient);
     }
 
     @Override

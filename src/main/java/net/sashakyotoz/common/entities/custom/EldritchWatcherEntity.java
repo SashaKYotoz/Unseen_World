@@ -11,7 +11,9 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.*;
+import net.minecraft.entity.mob.Hoglin;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -32,15 +34,18 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.sashakyotoz.UnseenWorld;
+import net.minecraft.world.event.listener.EntityGameEventHandler;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.entities.ai.EldritchWatcherPlaceBlockGoal;
+import net.sashakyotoz.common.entities.ai.listeners.EldritchEventListener;
 import net.sashakyotoz.common.items.ModItems;
-import net.sashakyotoz.utils.ActionsManager;
+import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
+import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class EldritchWatcherEntity extends PathAwareEntity {
     private static final TrackedData<Boolean> CONVERTING = DataTracker.registerData(EldritchWatcherEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -51,11 +56,18 @@ public class EldritchWatcherEntity extends PathAwareEntity {
     private UUID converter;
     public final AnimationState attack = new AnimationState();
     public final AnimationState death = new AnimationState();
+    public final EntityGameEventHandler<EldritchEventListener> listener = new EntityGameEventHandler<>(new EldritchEventListener(this));
 
     public EldritchWatcherEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
         this.setStepHeight(1.5f);
         this.experiencePoints = 15;
+    }
+
+    @Override
+    public void updateEventHandler(BiConsumer<EntityGameEventHandler<?>, ServerWorld> callback) {
+        if (this.getWorld() instanceof ServerWorld serverWorld)
+            callback.accept(this.listener, serverWorld);
     }
 
     @Override
@@ -67,29 +79,36 @@ public class EldritchWatcherEntity extends PathAwareEntity {
     }
 
     public void setCarriedBlock(boolean flag) {
-        UnseenWorld.log(flag);
         this.dataTracker.set(CARRING_BLOCK, flag);
     }
 
     public boolean isCarringBlock() {
         return this.dataTracker.get(CARRING_BLOCK);
     }
+
     public static boolean canWatcherSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         BlockPos blockPos = pos.down();
         return spawnReason == SpawnReason.SPAWNER
                 || (world.getBlockState(blockPos).allowsSpawning(world, blockPos, type)
-                && world.getEntitiesByType(TypeFilter.instanceOf(EspyerEntity.class), new Box(pos).expand(64), LivingEntity::isAlive).size() < 2
+                && world.getEntitiesByType(TypeFilter.instanceOf(EldritchWatcherEntity.class), new Box(pos).expand(64), LivingEntity::isAlive).size() < 3
                 && blockPos.getY() > -32
+                && blockPos.getY() < 96
                 && world.isPlayerInRange(pos.getX(), pos.getY(), pos.getZ(), 32));
     }
+
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new EldritchWatcherPlaceBlockGoal(this));
         this.goalSelector.add(1, new WanderAroundFarGoal(this, 0.75, 0.1f));
         this.goalSelector.add(1, new LookAroundGoal(this));
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 24.0F));
-        this.targetSelector.add(2, new MeleeAttackGoal(this, 1, true));
+        this.targetSelector.add(1, new ActiveTargetGoal<>(this, LivingEntity.class, true));
+        this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
+        this.targetSelector.add(2, new MeleeAttackGoal(this, 1, true) {
+            @Override
+            public boolean canStart() {
+                return super.canStart() && (mob.getTarget() != null && mob.squaredDistanceTo(mob.getTarget()) < 20);
+            }
+        });
     }
 
     @Override
@@ -111,15 +130,25 @@ public class EldritchWatcherEntity extends PathAwareEntity {
     @Override
     public void handleStatus(byte status) {
         super.handleStatus(status);
-        if (status >= 4 && status <= 20){
+        if (status >= 4 && status <= 20) {
             this.attack.start(this.age);
+        }
+    }
+
+    @Override
+    protected void onKilledBy(@Nullable LivingEntity adversary) {
+        if (adversary instanceof EldritchWatcherEntity && this.getWorld() instanceof ServerWorld world) {
+            world.getRegistryManager().getOptional(RegistryKeys.CONFIGURED_FEATURE).flatMap(registry ->
+                    registry.getEntry(ModConfiguredFeatures.GRIPPING_DARK_CURRANTSLATE_PATCH_FLOOR)).ifPresent(reference ->
+                    reference.value().generate(world, world.getChunkManager().getChunkGenerator(),
+                            Random.create(this.getSteppingPos().asLong()), this.getSteppingPos().up()));
         }
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 70)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 80)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 24.0)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 8)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 2)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2);
@@ -199,16 +228,14 @@ public class EldritchWatcherEntity extends PathAwareEntity {
             if (this.getChargingTicks() < 2000 && !this.isCarringBlock()) {
                 setChargingTicks(this.getChargingTicks() + 100);
                 this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT, 1.5f, 2);
-                if (this.getWorld() instanceof ServerWorld world)
-                    ActionsManager.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, world, this.getX(), this.getY() + 1.5f, this.getZ(), 2);
+                ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, this.getWorld(), this.getX(), this.getY() + 1.5f, this.getZ(), 2);
             }
         }
         if (this.getChargingTicks() > 2000) {
             this.setCarriedBlock(true);
             this.playSound(SoundEvents.BLOCK_BEACON_AMBIENT, 2f, 2.5f);
             setChargingTicks(0);
-            if (this.getWorld() instanceof ServerWorld world)
-                ActionsManager.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, world, this.getX(), this.getY() + 1.5f, this.getZ(), 2.5f);
+            ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, this.getWorld(), this.getX(), this.getY() + 1.5f, this.getZ(), 2.5f);
         }
         super.tick();
     }

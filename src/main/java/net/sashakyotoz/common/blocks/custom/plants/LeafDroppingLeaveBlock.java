@@ -20,7 +20,7 @@ public class LeafDroppingLeaveBlock extends LeavesBlock {
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);
-        if (random.nextInt(10) == 0) {
+        if (random.nextInt(12) == 3) {
             BlockPos blockPos = pos.down();
             BlockState blockState = world.getBlockState(blockPos);
             if (!isFaceFullSquare(blockState.getCollisionShape(world, blockPos), Direction.UP)) {

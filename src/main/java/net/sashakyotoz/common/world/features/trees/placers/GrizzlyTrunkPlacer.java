@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.TestableWorld;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.foliage.FoliagePlacer;
@@ -20,11 +21,14 @@ import java.util.OptionalInt;
 import java.util.function.BiConsumer;
 
 public class GrizzlyTrunkPlacer extends TrunkPlacer {
-    public static final Codec<GrizzlyTrunkPlacer> CODEC = RecordCodecBuilder.create(instance ->
-            fillTrunkPlacerFields(instance).apply(instance, GrizzlyTrunkPlacer::new));
+    public static final Codec<GrizzlyTrunkPlacer> CODEC = RecordCodecBuilder.create(instance -> fillTrunkPlacerFields(instance)
+            .and(Codec.intRange(0, 4).fieldOf("platform_height").forGetter(trunk -> trunk.platformHeight))
+            .apply(instance, GrizzlyTrunkPlacer::new));
+    private final int platformHeight;
 
-    public GrizzlyTrunkPlacer(int baseHeight, int firstRandomHeight, int secondRandomHeight) {
+    public GrizzlyTrunkPlacer(int baseHeight, int firstRandomHeight, int secondRandomHeight, int platformHeight) {
         super(baseHeight, firstRandomHeight, secondRandomHeight);
+        this.platformHeight = platformHeight;
     }
 
     @Override
@@ -49,6 +53,12 @@ public class GrizzlyTrunkPlacer extends TrunkPlacer {
         Direction ultDirection = Direction.Type.HORIZONTAL.random(random);
         OptionalInt optionalInt = OptionalInt.empty();
         int k = 0;
+        for (int i = 0; i < platformHeight; i++) {
+            this.getAndSetState(world, replacer, random, world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, startPos.north().offset(ultDirection, i)), config);
+            this.getAndSetState(world, replacer, random, world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, startPos.east()), config);
+            this.getAndSetState(world, replacer, random, world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, startPos.south().offset(ultDirection, i)), config);
+            this.getAndSetState(world, replacer, random, world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, startPos.west()), config);
+        }
         for (int dy = 0; dy < height; dy++) {
             int y1 = y + dy;
 

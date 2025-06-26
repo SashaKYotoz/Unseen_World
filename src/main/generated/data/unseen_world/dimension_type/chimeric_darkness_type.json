@@ -1,9 +1,9 @@
 {
   "ambient_light": 0.005,
-  "bed_works": false,
+  "bed_works": true,
   "coordinate_scale": 16.0,
   "effects": "unseen_world:the_chimeric_darkness",
-  "fixed_time": 1000,
+  "fixed_time": 16000,
   "has_ceiling": false,
   "has_raids": false,
   "has_skylight": false,
