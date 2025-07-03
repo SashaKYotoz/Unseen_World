@@ -1,15 +1,13 @@
 package net.sashakyotoz.unseenworld.registries;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
 import net.sashakyotoz.unseenworld.block.entity.GoldenChestBlockEntity;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.DeferredRegister;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.Block;
-
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
 
 public class UnseenWorldBlockEntities {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, UnseenWorldMod.MODID);

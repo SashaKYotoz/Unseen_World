@@ -16,9 +16,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.sashakyotoz.unseenworld.managers.GoldenChestGUIUpdate;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldMenus;
-import net.sashakyotoz.unseenworld.managers.GoldenChestGUIUpdate;
 
 import java.util.HashMap;
 import java.util.Map;

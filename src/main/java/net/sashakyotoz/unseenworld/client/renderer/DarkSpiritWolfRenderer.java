@@ -1,11 +1,10 @@
 
 package net.sashakyotoz.unseenworld.client.renderer;
 
-import net.sashakyotoz.unseenworld.client.model.ModelSpiritOfWolf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.sashakyotoz.unseenworld.client.model.ModelSpiritOfWolf;
 import net.sashakyotoz.unseenworld.entity.DarkSpiritWolfEntity;
 
 public class DarkSpiritWolfRenderer extends MobRenderer<DarkSpiritWolfEntity, ModelSpiritOfWolf<DarkSpiritWolfEntity>> {

@@ -1,23 +1,18 @@
 
 package net.sashakyotoz.unseenworld.item;
 
-import net.minecraft.sounds.SoundEvents;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
-import net.sashakyotoz.unseenworld.managers.UnseenArmorTickEventProcedure;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.sashakyotoz.unseenworld.managers.UnseenArmorTickEventProcedure;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import java.util.List;
 

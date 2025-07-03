@@ -1,12 +1,11 @@
 package net.sashakyotoz.unseenworld.registries;
 
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.DeferredRegister;
-
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 
 public class UnseenWorldPotions {
 	public static final DeferredRegister<Potion> REGISTRY = DeferredRegister.create(ForgeRegistries.POTIONS, UnseenWorldMod.MODID);

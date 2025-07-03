@@ -12,7 +12,7 @@ overworld, where sun never rises.
 Chimeric Darkness - mod's dimension, where water is dark, and hazards is everywhere, but even here you can find friends
 and a _bunch of adventures on your head_
 
-![](https://media.forgecdn.net/attachments/description/550263/description_c2a4360d-9cd0-415e-bb78-8a617f402f44.png)
+![](https://media.forgecdn.net/attachments/description/550263/description_19f8be2b-93bb-4109-9c68-b35e9152eac8.png)
 
 <hr>
 
@@ -20,8 +20,7 @@ Wiki for mod is coming in soon future on sashakyotoz_dev website
 
 Currently plans for versions:
 
-- Make complete version for Fabric(upcoming v0.3 of UW) and port it to 1.21+
-- Port mod to NeoForge and support 1.21+ versions of game
+- Release v0.4 and port it to 1.21+
 
 The mod is translated into 2 languages:
 

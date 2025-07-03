@@ -1,7 +1,6 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -16,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 public class TanzaniteBlockBuddingBlock extends Block {
 	private static final Direction[] DIRECTIONS = Direction.values();

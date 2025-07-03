@@ -1,18 +1,11 @@
 package net.sashakyotoz.unseenworld.registries;
 
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.DeferredRegister;
-
 import net.minecraft.world.effect.MobEffect;
-
-import net.sashakyotoz.unseenworld.effects.UnseeniumMobEffect;
-import net.sashakyotoz.unseenworld.effects.SoulOvergrowthMobEffect;
-import net.sashakyotoz.unseenworld.effects.ReducedOfGravityMobEffect;
-import net.sashakyotoz.unseenworld.effects.MeteoritestrophyMobEffect;
-import net.sashakyotoz.unseenworld.effects.DarkVoidMobEffect;
-import net.sashakyotoz.unseenworld.effects.DarkImmuniteMobEffect;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.effects.*;
 
 public class UnseenWorldMobEffects {
 	public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, UnseenWorldMod.MODID);

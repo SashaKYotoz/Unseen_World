@@ -1,7 +1,6 @@
 
 package net.sashakyotoz.unseenworld.block;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -10,6 +9,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 public class GrizzlyLeavesBlock extends LeavesBlock {
 	public GrizzlyLeavesBlock() {

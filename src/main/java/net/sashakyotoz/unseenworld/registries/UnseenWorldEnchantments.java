@@ -1,15 +1,14 @@
 package net.sashakyotoz.unseenworld.registries;
 
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.enchantment.GravitySpikeEnchantment;
 import net.sashakyotoz.unseenworld.enchantment.LifeSteelEnchantment;
 import net.sashakyotoz.unseenworld.enchantment.MiningbootsEnchantment;
 import net.sashakyotoz.unseenworld.enchantment.ShiningBladeEnchantment;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.DeferredRegister;
-
-import net.minecraft.world.item.enchantment.Enchantment;
 
 public class UnseenWorldEnchantments {
 	public static final DeferredRegister<Enchantment> REGISTRY = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, UnseenWorldMod.MODID);

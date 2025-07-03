@@ -2,9 +2,9 @@ package net.sashakyotoz.unseenworld.item;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
-import net.minecraft.world.item.Tier;
 
 public class ModTiers {
     //hammers

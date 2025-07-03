@@ -20,10 +20,11 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
-import org.apache.commons.lang3.mutable.MutableObject;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import org.apache.commons.lang3.mutable.MutableObject;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,17 +1,15 @@
 package net.sashakyotoz.unseenworld.registries;
 
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidType;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.DeferredRegister;
-
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FlowingFluid;
-
-import net.sashakyotoz.unseenworld.fluid.LiquidOfChimeryFluid;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.fluid.DarkWaterFluid;
+import net.sashakyotoz.unseenworld.fluid.LiquidOfChimeryFluid;
 import net.sashakyotoz.unseenworld.fluid.types.DarkWaterFluidType;
 import net.sashakyotoz.unseenworld.fluid.types.LiquidOfChimeryFluidType;
 

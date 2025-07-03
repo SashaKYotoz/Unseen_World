@@ -1,8 +1,6 @@
 package net.sashakyotoz.unseenworld.block.entity;
 
 import io.netty.buffer.Unpooled;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldBlockEntities;
-import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -22,6 +20,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.sashakyotoz.unseenworld.client.gui.GoldenChestGUIMenu;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlockEntities;
 
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;

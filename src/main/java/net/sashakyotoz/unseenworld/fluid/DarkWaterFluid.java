@@ -7,7 +7,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.sashakyotoz.unseenworld.registries.*;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldFluids;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 
 public abstract class DarkWaterFluid extends ForgeFlowingFluid {
 	public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(UnseenWorldFluids.DARK_WATER_TYPE, UnseenWorldFluids.DARK_WATER, UnseenWorldFluids.FLOWING_DARK_WATER)

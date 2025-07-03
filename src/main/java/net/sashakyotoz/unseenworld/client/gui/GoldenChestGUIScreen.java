@@ -7,8 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.util.HashMap;
-
 public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUIMenu> {
 	public GoldenChestGUIScreen(GoldenChestGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);

@@ -1,15 +1,12 @@
 
 package net.sashakyotoz.unseenworld.client.renderer;
 
-import net.sashakyotoz.unseenworld.client.model.ModelRed_Sylph;
-import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.resources.ResourceLocation;
+import net.sashakyotoz.unseenworld.client.model.ModelRed_Sylph;
 import net.sashakyotoz.unseenworld.entity.RedSlylfEntity;
-import net.minecraft.world.entity.animal.allay.Allay;
 
 import java.util.Calendar;
 

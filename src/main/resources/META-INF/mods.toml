@@ -1,10 +1,10 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-license = "All Rights Reserved"
+license = "AGNYA License"
 
 [[mods]]
 modId = "unseen_world"
-version = "3.5.1"
+version = "3.5.2"
 displayName = "Unseen World"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/unseen-world"
 logoFile = "logo.png"

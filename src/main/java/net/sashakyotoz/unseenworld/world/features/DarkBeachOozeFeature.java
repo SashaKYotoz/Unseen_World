@@ -1,14 +1,14 @@
 
 package net.sashakyotoz.unseenworld.world.features;
 
-import net.minecraft.world.level.levelgen.feature.configurations.ReplaceSphereConfiguration;
-import net.minecraft.world.level.levelgen.feature.ReplaceBlobsFeature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.Level;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.ReplaceBlobsFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.ReplaceSphereConfiguration;
 
 import java.util.Set;
 

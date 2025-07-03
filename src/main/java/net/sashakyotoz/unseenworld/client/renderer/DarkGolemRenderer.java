@@ -3,13 +3,12 @@ package net.sashakyotoz.unseenworld.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.world.entity.Pose;
-import net.sashakyotoz.unseenworld.client.model.ModelWarriorOfTheChimericDarkness;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-
+import net.minecraft.world.entity.Pose;
+import net.sashakyotoz.unseenworld.client.model.ModelWarriorOfTheChimericDarkness;
 import net.sashakyotoz.unseenworld.entity.DarkGolemEntity;
 import org.jetbrains.annotations.NotNull;
 

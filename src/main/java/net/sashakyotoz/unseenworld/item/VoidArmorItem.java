@@ -11,8 +11,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.managers.ArmorAbilitiesProcedure;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import java.util.List;
 

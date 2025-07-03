@@ -1,10 +1,9 @@
 
 package net.sashakyotoz.unseenworld;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.item.ItemProperties;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class ModItemProperties {

@@ -10,7 +10,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.world.features.*;
-import net.sashakyotoz.unseenworld.world.features.underground.*;
+import net.sashakyotoz.unseenworld.world.features.underground.GrassBlockOfShinyRedlightFeature;
+import net.sashakyotoz.unseenworld.world.features.underground.GrizzlyLightBlockFeature;
+import net.sashakyotoz.unseenworld.world.features.underground.GrizzlyLightInCavernsFeature;
+import net.sashakyotoz.unseenworld.world.features.underground.ShinyCavernsLightFeature;
 
 public class UnseenWorldFeatures {
 	public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, UnseenWorldMod.MODID);
