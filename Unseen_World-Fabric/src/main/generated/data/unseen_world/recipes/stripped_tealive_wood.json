@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stripped_tealive_wood",
+  "key": {
+    "S": {
+      "item": "unseen_world:stripped_tealive_log"
+    }
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "count": 4,
+    "item": "unseen_world:stripped_tealive_wood"
+  },
+  "show_notification": true
+}

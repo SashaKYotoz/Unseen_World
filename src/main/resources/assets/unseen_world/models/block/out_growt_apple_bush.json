@@ -1,9 +1,0 @@
-{
-  "parent": "unseen_world:custom/out_growt_apple_bush",
-  "textures": {
-    "all": "unseen_world:block/out_growt_apple_with_fruit",
-    "particle": "unseen_world:block/out_growt_apple_with_fruit",
-    "0": "unseen_world:block/out_growt_apple_with_fruit"
-  },
-  "render_type": "cutout"
-}

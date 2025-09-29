@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stripped_burlywood_wood",
+  "key": {
+    "S": {
+      "item": "unseen_world:stripped_burlywood_log"
+    }
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "count": 4,
+    "item": "unseen_world:stripped_burlywood_wood"
+  },
+  "show_notification": true
+}

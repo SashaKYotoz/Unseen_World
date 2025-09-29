@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": [
+    "unseen_world:the_darkness",
+    "unseen_world:dark_wasteland",
+    "unseen_world:dark_lifeless_ocean",
+    "unseen_world:amethyst_chimeries",
+    "unseen_world:tanzanite_caves"
+  ],
+  "step": "underground_structures",
+  "spawn_overrides": {
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "axolotls": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "misc": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "underground_water_creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "water_ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "water_creature": { 
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "bury",
+  "start_pool": "unseen_world:eclipse_core/core",
+  "size": 7,
+  "start_height": {
+    "absolute": 4
+  },
+  "max_distance_from_center": 108,
+  "use_expansion_hack": true
+}

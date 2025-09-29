@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:burlywood_log",
+    "unseen_world:stripped_burlywood_wood",
+    "unseen_world:burlywood_wood",
+    "unseen_world:burlywood_leaves",
+    "unseen_world:burlywood_planks",
+    "unseen_world:burlywood_stairs",
+    "unseen_world:burlywood_slab",
+    "unseen_world:burlywood_pressure_plate",
+    "unseen_world:burlywood_button",
+    "unseen_world:burlywood_fence",
+    "unseen_world:burlywood_fence_gate",
+    "unseen_world:burlywood_door",
+    "unseen_world:burlywood_trapdoor",
+    "unseen_world:burlywood_sapling",
+    "unseen_world:burlywood_sign",
+    "unseen_world:burlywood_hanging_sign",
+    "unseen_world:burlywood_wall_hanging_sign"
+  ]
+}

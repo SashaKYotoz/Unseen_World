@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:tealive_log",
+    "unseen_world:stripped_tealive_wood",
+    "unseen_world:tealive_wood",
+    "unseen_world:tealive_leaves",
+    "unseen_world:tealive_planks",
+    "unseen_world:tealive_stairs",
+    "unseen_world:tealive_slab",
+    "unseen_world:tealive_pressure_plate",
+    "unseen_world:tealive_button",
+    "unseen_world:tealive_fence",
+    "unseen_world:tealive_fence_gate",
+    "unseen_world:tealive_door",
+    "unseen_world:tealive_trapdoor",
+    "unseen_world:tealive_sapling",
+    "unseen_world:tealive_sign",
+    "unseen_world:tealive_hanging_sign",
+    "unseen_world:tealive_wall_hanging_sign"
+  ]
+}

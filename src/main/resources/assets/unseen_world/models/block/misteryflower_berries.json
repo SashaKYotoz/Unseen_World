@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:block/misteryflower_berries",
-    "particle": "unseen_world:block/misteryflower_berries"
-  },
-  "render_type": "cutout"
-}

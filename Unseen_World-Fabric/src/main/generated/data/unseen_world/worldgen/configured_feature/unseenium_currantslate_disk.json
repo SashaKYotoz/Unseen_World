@@ -1,0 +1,38 @@
+{
+  "type": "unseen_world:disk_ore",
+  "config": {
+    "half_height": 2,
+    "ore_state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "unseen_world:unseenium_ore_in_dark_currantslate"
+        }
+      },
+      "rules": []
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 5,
+        "min_inclusive": 2
+      }
+    },
+    "state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "unseen_world:dark_currantslate"
+        }
+      },
+      "rules": []
+    },
+    "target": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+        "unseen_world:tanzanite_block",
+        "minecraft:calcite"
+      ]
+    }
+  }
+}

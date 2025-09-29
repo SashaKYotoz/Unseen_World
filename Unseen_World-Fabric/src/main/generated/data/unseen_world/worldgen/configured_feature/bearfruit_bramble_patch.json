@@ -1,0 +1,23 @@
+{
+  "type": "unseen_world:standing_flower_bunch",
+  "config": {
+    "block": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:bearfruit_bramble_stem",
+        "Properties": {
+          "has_flower": "true",
+          "has_fruit": "false",
+          "luminance": "0"
+        }
+      }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 7,
+        "min_inclusive": 3
+      }
+    }
+  }
+}

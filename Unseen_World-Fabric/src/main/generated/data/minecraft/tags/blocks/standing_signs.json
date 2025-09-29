@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:amethyst_sign",
+    "unseen_world:grizzly_sign",
+    "unseen_world:tealive_sign",
+    "unseen_world:burlywood_sign",
+    "unseen_world:crimsonveil_sign"
+  ]
+}

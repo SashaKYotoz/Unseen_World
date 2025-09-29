@@ -1,0 +1,42 @@
+{
+  "parent": "unseen_world:into_the_chimeric_darkness",
+  "criteria": {
+    "fortress_in_the_darkness": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "unseen_world:warrior_of_darkness_tower"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.fortress_in_the_darkness.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:gripcrystal_key"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.fortress_in_the_darkness"
+    }
+  },
+  "requirements": [
+    [
+      "fortress_in_the_darkness"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

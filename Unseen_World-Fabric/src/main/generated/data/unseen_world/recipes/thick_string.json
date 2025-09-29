@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "unseen_world:gloomweed"
+    },
+    "G": {
+      "item": "unseen_world:umbral_kelp"
+    }
+  },
+  "pattern": [
+    "GDG"
+  ],
+  "result": {
+    "item": "unseen_world:thick_string"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:unseenium_helmet",
+    "unseen_world:unseenium_chestplate",
+    "unseen_world:unseenium_leggings",
+    "unseen_world:unseenium_boots",
+    "unseen_world:abyssal_helmet",
+    "unseen_world:abyssal_chestplate",
+    "unseen_world:abyssal_leggings",
+    "unseen_world:abyssal_boots",
+    "unseen_world:red_titanium_helmet",
+    "unseen_world:red_titanium_chestplate",
+    "unseen_world:red_titanium_leggings",
+    "unseen_world:red_titanium_boots"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "type": "unseen_world:disk_ore",
+  "config": {
+    "half_height": 2,
+    "ore_state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "unseen_world:red_titanium_ore_in_glaciemite"
+        }
+      },
+      "rules": []
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 4,
+        "min_inclusive": 2
+      }
+    },
+    "state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "unseen_world:glaciemite"
+        }
+      },
+      "rules": []
+    },
+    "target": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+        "unseen_world:tanzanite_block",
+        "minecraft:calcite"
+      ]
+    }
+  }
+}

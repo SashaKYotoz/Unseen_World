@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:key_handler_stone",
+    "unseen_world:glaciemite_translocatone",
+    "unseen_world:iron_ore_in_dark_currantslate",
+    "unseen_world:iron_ore_in_glaciemite"
+  ]
+}

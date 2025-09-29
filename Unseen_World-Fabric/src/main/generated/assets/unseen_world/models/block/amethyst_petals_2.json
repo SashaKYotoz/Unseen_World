@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/flowerbed_2",
+  "textures": {
+    "flowerbed": "unseen_world:block/amethyst_petals",
+    "stem": "unseen_world:block/amethyst_petals_stem"
+  }
+}

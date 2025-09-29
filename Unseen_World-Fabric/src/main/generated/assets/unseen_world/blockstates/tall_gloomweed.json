@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "unseen_world:block/tall_gloomweed_bottom"
+    },
+    "half=upper": {
+      "model": "unseen_world:block/tall_gloomweed_top"
+    }
+  }
+}

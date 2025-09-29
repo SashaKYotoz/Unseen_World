@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "has_fruit=false,has_flower=false": {
+      "model": "unseen_world:block/bearfruit_bramble_stem"
+    },
+    "has_fruit=false,has_flower=true": {
+      "model": "unseen_world:block/bearfruit_bramble_flower"
+    },
+    "has_fruit=true": {
+      "model": "unseen_world:block/bearfruit_bramble_fruit"
+    }
+  }
+}

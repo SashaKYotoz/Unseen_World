@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_polished_tanzanite": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:polished_tanzanite"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "unseen_world:polished_tanzanite_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_polished_tanzanite",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "unseen_world:polished_tanzanite_slab"
+    ]
+  },
+  "sends_telemetry_event": false
+}

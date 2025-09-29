@@ -1,0 +1,29 @@
+{
+  "type": "unseen_world:adaptive_lake",
+  "config": {
+    "block": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:dark_water",
+        "Properties": {
+          "level": "0"
+        }
+      }
+    },
+    "deepness": 1,
+    "xRadius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 7,
+        "min_inclusive": 2
+      }
+    },
+    "zRadius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 7,
+        "min_inclusive": 2
+      }
+    }
+  }
+}

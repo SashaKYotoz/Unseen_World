@@ -1,8 +1,0 @@
-{
-  "parent": "block/template_wall_post",
-  "textures": {
-    "wall": "unseen_world:block/red_brick",
-    "particle": "unseen_world:block/red_brick"
-  },
-  "render_type": "cutout_mipped"
-}

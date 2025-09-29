@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": "unseen_world:the_darkness",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_box",
+  "start_pool": "unseen_world:warrior_tower/warrior_tower_bottom",
+  "size": 7,
+  "start_height": {
+    "absolute": 60
+  },
+  "max_distance_from_center": 112,
+  "use_expansion_hack": true
+}

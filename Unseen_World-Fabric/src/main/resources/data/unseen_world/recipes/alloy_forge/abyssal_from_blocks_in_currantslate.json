@@ -1,0 +1,25 @@
+{
+  "type": "alloy_forgery:forging",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloy_forgery"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "item": "minecraft:ancient_debris"
+    },
+    {
+      "item": "unseen_world:abyssal_ore_in_dark_currantslate"
+    }
+  ],
+  "output": {
+    "id": "unseen_world:abyssal_ingot",
+    "count": 1
+  },
+  "min_forge_tier": 2,
+  "fuel_per_tick": 15
+}

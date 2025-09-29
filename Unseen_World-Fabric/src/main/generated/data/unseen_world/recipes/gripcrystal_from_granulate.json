@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "gripcrystal",
+  "key": {
+    "#": {
+      "item": "unseen_world:granulated_gripcrystal"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "item": "unseen_world:gripcrystal"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/crimsonveil_slab"
+    },
+    "type=double": {
+      "model": "unseen_world:block/crimsonveil_planks"
+    },
+    "type=top": {
+      "model": "unseen_world:block/crimsonveil_slab_top"
+    }
+  }
+}

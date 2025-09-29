@@ -1,0 +1,48 @@
+{
+  "fallback": "unseen_world:glaciemite_ruins/roads",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/main_glaciemite_trail",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/main_glaciemite_trail1",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:rule",
+              "rules": [
+                {
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "input_predicate": {
+                    "predicate_type": "minecraft:random_block_match",
+                    "block": "unseen_world:glaciemite_bricks",
+                    "probability": 0.25
+                  },
+                  "output_state": {
+                    "Name": "unseen_world:suspicious_glimmergrain_sand"
+                  },
+                  "block_entity_modifier": {
+                    "type": "minecraft:append_loot",
+                    "loot_table": "unseen_world:archaeology/dark_ocean_ruins_sand"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

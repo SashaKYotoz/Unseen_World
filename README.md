@@ -6,8 +6,8 @@ Status: **Stable**
 
 # About:
 
-"Unseen World" - dimension-adding Minecraft mod for Forge(and NeoForge in future),that shows dark version of Minecraft's
-overworld, where sun never rises.
+"Unseen World" - dimension-adding Minecraft mod,that shows dark version of Minecraft's
+overworld, where sun was hidden for ages.
 
 Chimeric Darkness - mod's dimension, where water is dark, and hazards is everywhere, but even here you can find friends
 and a _bunch of adventures on your head_
@@ -16,12 +16,23 @@ and a _bunch of adventures on your head_
 
 <hr>
 
-Wiki for mod is coming in soon future on sashakyotoz_dev website
+Wiki for mod can be found on [sashakyotoz_dev](https://sashakyotoz.github.io/sashakyotoz_dev/)
 
 Currently plans for versions:
 
-- Release v0.4 and port it to 1.21+
+- Complete v1.0 of UW and port it to 1.21+
 
 The mod is translated into 2 languages:
 
 - English(original) and Ukrainian - by SashaKYotoz
+
+
+# Unseen World v0.4.1 changelog:
+
+### Worldgen
+- Multinoise biome source was replaced to custom one
+- Surface biomes don't spawn below 32 y anymore
+- Added new variations of caves for cave biomes
+- Added slate clusters that may contain ore as well
+- Fixed replacement of bedrock by other mod's blocks
+- Changed feature generating biome tags

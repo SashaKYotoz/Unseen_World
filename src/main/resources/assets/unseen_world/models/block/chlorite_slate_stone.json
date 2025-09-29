@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/chlorite_slate_stone_with_animation",
-    "particle": "unseen_world:block/chlorite_slate_stone_with_animation"
-  },
-  "render_type": "solid"
-}

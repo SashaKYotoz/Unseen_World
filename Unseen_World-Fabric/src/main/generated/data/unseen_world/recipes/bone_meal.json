@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "unseen_world:gloomweed"
+    },
+    "G": {
+      "item": "unseen_world:umbral_kelp"
+    }
+  },
+  "pattern": [
+    "DG",
+    "GD"
+  ],
+  "result": {
+    "count": 4,
+    "item": "minecraft:bone_meal"
+  },
+  "show_notification": true
+}

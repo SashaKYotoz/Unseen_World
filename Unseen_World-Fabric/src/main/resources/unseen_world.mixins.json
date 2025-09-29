@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "package": "net.sashakyotoz.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BlockEntityTypeMixin",
+    "access.FoliagePlacerTypeInvoker",
+    "access.TreeDecoratorTypeInvoker",
+    "access.TrunkPlacerTypeInvoker",
+    "entity.EntityMixin",
+    "entity.LivingEntityMixin",
+    "entity.PlayerMixin",
+    "entity.ThreadedAnvilChunkStorageMixin",
+    "world.ServerWorldMixin",
+    "world.SurfaceBuilderMixin",
+    "world.WorldMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.AbstractClientPlayerMixin",
+    "client.ArmorFeatureRendererMixin",
+    "client.BossBarHudMixin",
+    "client.BuiltinModelItemRendererMixin",
+    "client.EntityModelMixin",
+    "client.EntityRenderDispatcherMixin",
+    "client.HeldItemRendererMixin",
+    "client.LightmapTextureManagerMixin",
+    "client.LivingEntityRendererMixin",
+    "client.MinecraftClientMixin"
+  ]
+}

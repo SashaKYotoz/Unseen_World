@@ -1,9 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": [
-    "unseen_world:amethyst_forest",
-    "unseen_world:tanzanite_above_ground_cavern"
-  ],
-  "features": "unseen_world:dripstone_of_amethyst_overgrowth_cluster",
-  "step": "underground_structures"
-}

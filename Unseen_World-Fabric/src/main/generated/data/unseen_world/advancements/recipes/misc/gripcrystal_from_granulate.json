@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_granulated_gripcrystal": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:granulated_gripcrystal"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:gripcrystal_from_granulate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_granulated_gripcrystal",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:gripcrystal_from_granulate"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 300,
+  "experience": 5.0,
+  "group": "iron_ore",
+  "ingredient": {
+    "item": "unseen_world:iron_ore_in_dark_currantslate"
+  },
+  "result": "minecraft:iron_nugget"
+}

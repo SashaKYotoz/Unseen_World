@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_abyssal_ore_in_dark_currantslate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:abyssal_ore_in_dark_currantslate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:raw_abyssal_from_blasting_abyssal_ore_in_dark_currantslate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_abyssal_ore_in_dark_currantslate",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:raw_abyssal_from_blasting_abyssal_ore_in_dark_currantslate"
+    ]
+  },
+  "sends_telemetry_event": false
+}

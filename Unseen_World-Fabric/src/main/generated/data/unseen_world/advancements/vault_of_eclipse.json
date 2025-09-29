@@ -1,0 +1,42 @@
+{
+  "parent": "unseen_world:into_the_chimeric_darkness",
+  "criteria": {
+    "vault_of_eclipse": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "unseen_world:eclipse_core"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.vault_of_eclipse.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:abyssal_key"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.vault_of_eclipse"
+    }
+  },
+  "requirements": [
+    [
+      "vault_of_eclipse"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:stripped_amethyst_log",
+    "unseen_world:amethyst_log",
+    "unseen_world:stripped_amethyst_wood",
+    "unseen_world:amethyst_wood",
+    "unseen_world:stripped_grizzly_log",
+    "unseen_world:grizzly_log",
+    "unseen_world:stripped_grizzly_wood",
+    "unseen_world:grizzly_wood",
+    "unseen_world:stripped_tealive_log",
+    "unseen_world:tealive_log",
+    "unseen_world:stripped_tealive_wood",
+    "unseen_world:tealive_wood",
+    "unseen_world:stripped_burlywood_log",
+    "unseen_world:burlywood_log",
+    "unseen_world:stripped_burlywood_wood",
+    "unseen_world:burlywood_wood",
+    "unseen_world:stripped_crimsonveil_log",
+    "unseen_world:crimsonveil_log",
+    "unseen_world:stripped_crimsonveil_wood",
+    "unseen_world:crimsonveil_wood"
+  ]
+}

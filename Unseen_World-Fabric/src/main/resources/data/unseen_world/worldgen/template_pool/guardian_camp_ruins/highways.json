@@ -1,0 +1,41 @@
+{
+  "fallback": "unseen_world:guardian_camp_ruins/highways",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:guardian_camp_remains/guardian_camp_highway_platform",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:guardian_camp_remains/guardian_camp_highway_platform1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:guardian_camp_remains/guardian_camp_highway_platform2",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:guardian_camp_remains/guardian_camp_highway_platform3",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

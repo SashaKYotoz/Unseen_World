@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:blocks/dark_crimson_planks",
-    "particle": "unseen_world:blocks/dark_crimson_planks"
-  }
-}

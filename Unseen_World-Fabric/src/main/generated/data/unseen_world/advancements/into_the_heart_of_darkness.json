@@ -1,0 +1,45 @@
+{
+  "parent": "unseen_world:into_the_chimeric_darkness",
+  "criteria": {
+    "entered_the_darkness": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "biome": "unseen_world:the_darkness",
+              "position": {
+                "y": {
+                  "max": 256.0,
+                  "min": 0.0
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.into_the_heart_of_darkness.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:key_handler_stone"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.into_the_heart_of_darkness"
+    }
+  },
+  "requirements": [
+    [
+      "entered_the_darkness"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

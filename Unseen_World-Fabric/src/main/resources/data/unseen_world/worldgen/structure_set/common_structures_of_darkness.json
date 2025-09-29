@@ -1,0 +1,26 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:guardian_camp_remains",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:glaciemite_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:grizzly_mineshaft",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:violeger_village",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1947040103,
+    "spacing": 24,
+    "separation": 16
+  }
+}

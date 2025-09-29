@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "unseen_world:tealive_logs"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "unseen_world:tealive_planks"
+  }
+}

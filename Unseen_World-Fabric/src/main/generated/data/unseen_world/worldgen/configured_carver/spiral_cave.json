@@ -1,0 +1,25 @@
+{
+  "type": "unseen_world:spiral_cave",
+  "config": {
+    "lava_level": {
+      "absolute": 10
+    },
+    "length": 384,
+    "probability": 0.75,
+    "radius": 6.5,
+    "radius_variance": 1.5,
+    "replaceable": "#unseen_world:chimeric_darkness_stones",
+    "turn_rate": 0.12566371,
+    "vertical_spread": 2,
+    "y": {
+      "type": "minecraft:uniform",
+      "max_inclusive": {
+        "absolute": 32
+      },
+      "min_inclusive": {
+        "absolute": -48
+      }
+    },
+    "yScale": 1.0
+  }
+}

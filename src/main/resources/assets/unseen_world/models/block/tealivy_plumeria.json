@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:block/tealivy_plumeria",
-    "particle": "unseen_world:block/tealivy_plumeria"
-  },
-  "render_type": "cutout"
-}

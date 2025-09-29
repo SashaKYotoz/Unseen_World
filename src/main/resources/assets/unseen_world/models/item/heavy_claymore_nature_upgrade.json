@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "unseen_world:item/heavy_claymore_nature_upgrade"
-  }
-}

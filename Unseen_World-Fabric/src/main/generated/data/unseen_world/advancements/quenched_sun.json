@@ -1,0 +1,41 @@
+{
+  "parent": "unseen_world:vault_of_eclipse",
+  "criteria": {
+    "quenched_sun": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "unseen_world:eclipse_sentinel"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.quenched_sun.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:eclipsebane",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.quenched_sun"
+    }
+  },
+  "requirements": [
+    [
+      "quenched_sun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

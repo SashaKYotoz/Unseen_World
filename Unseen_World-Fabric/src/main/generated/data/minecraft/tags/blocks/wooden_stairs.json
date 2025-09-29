@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:amethyst_stairs",
+    "unseen_world:grizzly_stairs",
+    "unseen_world:tealive_stairs",
+    "unseen_world:burlywood_stairs",
+    "unseen_world:crimsonveil_stairs"
+  ]
+}

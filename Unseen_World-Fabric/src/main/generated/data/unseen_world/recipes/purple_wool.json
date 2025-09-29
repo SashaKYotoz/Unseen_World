@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    },
+    {
+      "item": "unseen_world:thick_string"
+    }
+  ],
+  "result": {
+    "item": "minecraft:purple_wool"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "unseenium_ingot",
+  "ingredients": [
+    {
+      "item": "unseen_world:raw_unseenium"
+    },
+    {
+      "item": "unseen_world:raw_unseenium"
+    },
+    {
+      "item": "unseen_world:raw_unseenium"
+    },
+    {
+      "item": "unseen_world:raw_unseenium"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:unseenium_ingot"
+  }
+}

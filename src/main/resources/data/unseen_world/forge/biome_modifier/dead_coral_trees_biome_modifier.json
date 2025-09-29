@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "unseen_world:dark_ocean",
-  "features": "unseen_world:dead_coral_trees",
-  "step": "local_modifications"
-}

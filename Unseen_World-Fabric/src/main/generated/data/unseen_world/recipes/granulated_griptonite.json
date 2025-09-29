@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:griptonite"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "unseen_world:granulated_griptonite"
+  }
+}

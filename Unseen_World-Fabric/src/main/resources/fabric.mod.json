@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "unseen_world",
+  "version": "${version}",
+  "name": "Unseen World",
+  "description": "Unseen World, world of darkness, are waiting for you",
+  "authors": [
+    "SashaKYotoz"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/unseen-world",
+    "sources": "https://github.com/SashaKYotoz/Unseen_World"
+  },
+  "license": "AGNYA License",
+  "icon": "assets/unseen_world/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.sashakyotoz.UnseenWorld"
+    ],
+    "client": [
+      "net.sashakyotoz.client.UnseenWorldClient"
+    ],
+    "fabric-datagen": [
+      "net.sashakyotoz.common.UnseenWorldDataGenerator"
+    ]
+  },
+  "mixins": [
+    "unseen_world.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "accessWidener": "unseen_world.accesswidener"
+}

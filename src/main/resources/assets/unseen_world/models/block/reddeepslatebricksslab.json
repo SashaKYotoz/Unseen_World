@@ -1,9 +1,0 @@
-{
-  "parent": "block/slab",
-  "textures": {
-    "bottom": "unseen_world:block/red_brick",
-    "top": "unseen_world:block/red_brick",
-    "side": "unseen_world:block/red_brick"
-  },
-  "render_type": "solid"
-}
