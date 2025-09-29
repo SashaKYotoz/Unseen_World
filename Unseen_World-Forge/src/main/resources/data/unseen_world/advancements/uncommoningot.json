@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:naturerium_ingot"
+    },
+    "title": {
+      "translate": "advancements.uncommoningot.title"
+    },
+    "description": {
+      "translate": "advancements.uncommoningot.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "uncommoningot": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 1,
+    "recipes": [
+      "unseen_world:naturerium_ore_block_recipe",
+      "unseen_world:naturerium_block_ore_recipe",
+      "unseen_world:naturerium_pickaxe_recipe",
+      "unseen_world:naturerium_axe_recipe",
+      "unseen_world:naturerium_sword_recipe",
+      "unseen_world:naturerium_shovel_recipe",
+      "unseen_world:naturerium_hoe_recipe",
+      "unseen_world:naturerium_armor_helmet_recipe",
+      "unseen_world:naturerium_armor_body_recipe",
+      "unseen_world:naturerium_armor_leggings_recipe",
+      "unseen_world:naturerium_armor_boots_recipe"
+    ]
+  },
+  "parent": "unseen_world:welcometo_unseen_world"
+}

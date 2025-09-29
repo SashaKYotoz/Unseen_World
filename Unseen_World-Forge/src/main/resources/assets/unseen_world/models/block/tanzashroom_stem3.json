@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "unseen_world:block/tanzashroom_stem_inside",
+    "up": "unseen_world:block/tanzashroom_stem_inside",
+    "north": "unseen_world:block/tanzashroom_stem",
+    "east": "unseen_world:block/tanzashroom_stem",
+    "south": "unseen_world:block/tanzashroom_stem",
+    "west": "unseen_world:block/tanzashroom_stem",
+    "particle": "unseen_world:block/tanzashroom_stem"
+  }
+}

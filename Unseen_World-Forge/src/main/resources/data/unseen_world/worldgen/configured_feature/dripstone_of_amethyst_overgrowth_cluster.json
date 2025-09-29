@@ -1,0 +1,29 @@
+{
+  "type": "unseen_world:dripstone_of_amethyst_overgrowth_cluster",
+  "config": {
+    "tries": 64,
+    "xz_spread": 5,
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "unseen_world:dripstone_of_amethyst_overgrowth"
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
+    }
+  }
+}

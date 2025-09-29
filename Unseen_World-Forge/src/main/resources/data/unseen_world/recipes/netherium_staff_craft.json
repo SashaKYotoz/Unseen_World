@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " 12",
+    " 45",
+    "6  "
+  ],
+  "key": {
+    "1": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "2": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "4": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "5": {
+      "item": "unseen_world:fire_pearl"
+    },
+    "6": {
+      "item": "unseen_world:red_blaze_rod"
+    }
+  },
+  "result": {
+    "item": "unseen_world:netherium_staff",
+    "count": 1
+  }
+}

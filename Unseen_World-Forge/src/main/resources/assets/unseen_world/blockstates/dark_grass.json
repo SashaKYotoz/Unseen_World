@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "facing=north,snowy=false": {
+      "model": "unseen_world:block/dark_grass",
+      "y": 0
+    },
+    "facing=east,snowy=false": {
+      "model": "unseen_world:block/dark_grass",
+      "y": 90
+    },
+    "facing=south,snowy=false": {
+      "model": "unseen_world:block/dark_grass",
+      "y": 180
+    },
+    "facing=west,snowy=false": {
+      "model": "unseen_world:block/dark_grass",
+      "y": 270
+    },
+    "facing=north,snowy=true": {
+      "model": "unseen_world:block/dark_grass1",
+      "y": 0
+    },
+    "facing=east,snowy=true": {
+      "model": "unseen_world:block/dark_grass1",
+      "y": 90
+    },
+    "facing=south,snowy=true": {
+      "model": "unseen_world:block/dark_grass1",
+      "y": 180
+    },
+    "facing=west,snowy=true": {
+      "model": "unseen_world:block/dark_grass1",
+      "y": 270
+    }
+  }
+}

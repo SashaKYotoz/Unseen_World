@@ -1,0 +1,84 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.2,
+  "downfall": 0.5,
+  "effects": {
+    "mood_sound": {
+      "sound": "ambient.crimson_forest.mood",
+      "tick_delay": 6000,
+      "offset": 8,
+      "block_search_extent": 2
+    },
+    "additions_sound": {
+      "sound": "ambient.crimson_forest.loop",
+      "tick_chance": 0.0015
+    },
+    "music": {
+      "sound": "unseen_world:dark_chimeric_sound",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": true
+    },
+    "particle": {
+      "options": {
+        "type": "unseen_world:bluevoidparticle"
+      },
+      "probability": 0.0005
+    },
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
+  },
+  "spawners": {
+    "monster": [],
+    "creature": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
+      "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:underwater_magma"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:darkcrimsonforest_tree",
+      "unseen_world:darkcrimsonsapling"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

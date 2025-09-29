@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:tealivy_planks"
+    },
+    {
+      "item": "unseen_world:tealivy_planks"
+    },
+    {
+      "item": "unseen_world:tealivy_planks"
+    },
+    {
+      "item": "unseen_world:tealivy_planks"
+    },
+    {
+      "item": "unseen_world:tealivy_planks"
+    },
+    {
+      "item": "unseen_world:tealivy_planks"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:tealivy_door",
+    "count": 3
+  }
+}

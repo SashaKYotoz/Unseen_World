@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "unseen_world:tealive_luminous_valley",
+    "unseen_world:tanzanite_above_ground_cavern",
+    "unseen_world:greenish_valley"
+  ],
+  "spawners": {
+    "type": "unseen_world:tealive_skeleton",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

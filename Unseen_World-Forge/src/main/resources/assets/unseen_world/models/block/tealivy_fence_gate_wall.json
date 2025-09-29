@@ -1,0 +1,7 @@
+{
+  "parent": "block/template_fence_gate_wall",
+  "textures": {
+    "texture": "unseen_world:block/tealivy_planks"
+  },
+  "render_type": "solid"
+}

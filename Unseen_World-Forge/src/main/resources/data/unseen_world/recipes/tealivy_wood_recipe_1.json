@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:tealivy_wood"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:tealivy_planks",
+    "count": 6
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "size": 6,
+    "discard_chance_on_air_exposure": 0.5,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:blockstate_match",
+          "block_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:deep_gem_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:deepslate"
+        },
+        "state": {
+          "Name": "unseen_world:deep_gem_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:red_ooze"
+          }
+        },
+        "state": {
+          "Name": "unseen_world:deep_gem_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "unseen_world:dark_currantslate"
+        },
+        "state": {
+          "Name": "unseen_world:deep_gem_ore"
+        }
+      }
+    ]
+  }
+}

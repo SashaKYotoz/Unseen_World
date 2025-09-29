@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:greenish_burly_wood_planks"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:greenish_burly_wood_button",
+    "count": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "unseen_world:tealive_luminous_valley",
+  "spawners": {
+    "type": "unseen_world:ghast_of_tealive_valley",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

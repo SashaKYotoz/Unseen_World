@@ -1,0 +1,20 @@
+{
+  "type": "unseen_world:liquid_of_chimery_feature",
+  "config": {
+    "fluid": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:liquid_of_chimery",
+        "Properties": {
+          "level": "0"
+        }
+      }
+    },
+    "barrier": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:air"
+      }
+    }
+  }
+}

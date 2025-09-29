@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "frozen_river",
+    "warm_ocean",
+    "river",
+    "cold_ocean"
+  ],
+  "spawners": {
+    "type": "unseen_world:moonfish",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

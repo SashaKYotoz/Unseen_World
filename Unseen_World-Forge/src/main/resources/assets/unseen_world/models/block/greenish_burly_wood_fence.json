@@ -1,0 +1,8 @@
+{
+  "parent": "block/fence_side",
+  "textures": {
+    "texture": "unseen_world:block/greenish_burlywood_planks",
+    "particle": "unseen_world:block/greenish_burlywood_planks"
+  },
+  "render_type": "solid"
+}

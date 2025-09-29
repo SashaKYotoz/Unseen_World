@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "unseen_world:block/tanzanite_bricks",
+    "particle": "unseen_world:block/tanzanite_bricks"
+  },
+  "render_type": "solid"
+}

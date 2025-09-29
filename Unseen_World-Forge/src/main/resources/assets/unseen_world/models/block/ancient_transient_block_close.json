@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "unseen_world:block/ancient_transient_block_close",
+    "particle": "unseen_world:block/ancient_transient_block_close"
+  },
+  "render_type": "solid"
+}

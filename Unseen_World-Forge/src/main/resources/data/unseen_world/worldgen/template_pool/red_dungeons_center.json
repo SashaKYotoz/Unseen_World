@@ -1,0 +1,14 @@
+{
+  "fallback": "unseen_world:dungeons_corridors",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:red_dungeons/red_dungeon_center",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

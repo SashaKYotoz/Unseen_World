@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:amethyst_forest",
+    "unseen_world:grizzly_forest",
+    "unseen_world:greenish_valley",
+    "unseen_world:dark_wasteland",
+    "unseen_world:darkcrimsonforest"
+  ],
+  "features": "unseen_world:liquid_of_chimery_feature",
+  "step": "lakes"
+}

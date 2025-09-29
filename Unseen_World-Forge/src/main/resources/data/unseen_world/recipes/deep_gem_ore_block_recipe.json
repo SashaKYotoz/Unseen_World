@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:deep_gem"
+    },
+    "1": {
+      "item": "unseen_world:deep_gem"
+    },
+    "2": {
+      "item": "unseen_world:deep_gem"
+    },
+    "3": {
+      "item": "unseen_world:deep_gem"
+    },
+    "4": {
+      "item": "unseen_world:deep_gem"
+    },
+    "5": {
+      "item": "unseen_world:deep_gem"
+    },
+    "6": {
+      "item": "unseen_world:deep_gem"
+    },
+    "7": {
+      "item": "unseen_world:deep_gem"
+    },
+    "8": {
+      "item": "unseen_world:deep_gem"
+    }
+  },
+  "result": {
+    "item": "unseen_world:deep_gem_block",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "AGNYA License"
+
+[[mods]]
+modId = "unseen_world"
+version = "3.5.2"
+displayName = "Unseen World"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/unseen-world"
+logoFile = "logo.png"
+authors = "SashaKYotoz"
+description = "Unseen World, world of darkness, are waiting for you"
+
+[[dependencies.unseen_world]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.20.1]"
+    ordering = "NONE"
+    side = "BOTH"
+[[dependencies.unseen_world]]
+    modId = "anitexlib"
+    mandatory = true
+    versionRange = "[0.4,)"
+    ordering = "BEFORE"
+    side = "BOTH"
+
+
+
+

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:tanzanite_spheres",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1290545105,
+    "spacing": 4,
+    "separation": 1
+  }
+}

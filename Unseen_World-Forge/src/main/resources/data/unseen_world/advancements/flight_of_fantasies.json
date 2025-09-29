@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:unseen_armor_boots"
+    },
+    "title": {
+      "translate": "advancements.flight_of_fantasies.title"
+    },
+    "description": {
+      "translate": "advancements.flight_of_fantasies.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "flight_of_fantasies": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 3
+  },
+  "parent": "unseen_world:goto_darkness"
+}

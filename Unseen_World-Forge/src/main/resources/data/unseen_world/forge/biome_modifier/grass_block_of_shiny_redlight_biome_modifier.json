@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:grizzly_forest",
+    "unseen_world:grizzly_steppe",
+    "unseen_world:dark_crimson_valley",
+    "unseen_world:greenish_valley"
+  ],
+  "features": "unseen_world:grass_block_of_shiny_redlight",
+  "step": "underground_ores"
+}

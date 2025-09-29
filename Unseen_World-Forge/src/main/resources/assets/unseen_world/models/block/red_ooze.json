@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "unseen_world:block/red_ooze",
+    "particle": "unseen_world:block/red_ooze"
+  },
+  "render_type": "solid"
+}

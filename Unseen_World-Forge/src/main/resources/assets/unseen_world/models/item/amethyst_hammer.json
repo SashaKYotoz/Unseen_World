@@ -1,0 +1,8 @@
+{
+  "parent": "unseen_world:custom/amethyst_hammer",
+  "textures": {
+    "0": "unseen_world:block/amethyst_hammer",
+    "1": "unseen_world:block/amethyst_on_hammer",
+    "particle": "unseen_world:item/amethyst_hammer"
+  }
+}

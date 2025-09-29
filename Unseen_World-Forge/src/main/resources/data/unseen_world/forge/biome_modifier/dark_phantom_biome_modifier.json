@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "unseen_world:amethyst_forest",
+    "unseen_world:dark_wasteland",
+    "unseen_world:dark_crimson_valley"
+  ],
+  "spawners": {
+    "type": "unseen_world:dark_phantom",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

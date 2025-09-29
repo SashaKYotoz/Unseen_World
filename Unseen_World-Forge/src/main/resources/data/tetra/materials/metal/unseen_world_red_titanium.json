@@ -1,0 +1,35 @@
+{
+  "key": "unseen_world_red_titanium",
+  "category": "metal",
+  "primary": 18,
+  "secondary": 4,
+  "tertiary": 3,
+  "durability": 2485,
+  "integrityCost": 3,
+  "integrityGain": 7,
+  "magicCapacity": 50,
+  "toolLevel": "tetra:maxed_forge_hammer",
+  "toolEfficiency": 15,
+  "tints": {
+    "glyph": "c09396",
+    "texture": "c09396"
+  },
+  "textures": [
+    "metal",
+    "default"
+  ],
+  "material": {
+    "items": [
+      "unseen_world:red_titanium_ingot"
+    ]
+  },
+  "requiredTools": {
+    "hammer_dig": "tetra:maxed_forge_hammer"
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "unseen_world"
+    }
+  ]
+}

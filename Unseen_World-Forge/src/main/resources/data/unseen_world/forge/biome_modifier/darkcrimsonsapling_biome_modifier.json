@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "unseen_world:dark_wasteland",
+  "features": "unseen_world:darkcrimsonsapling",
+  "step": "vegetal_decoration"
+}

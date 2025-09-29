@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "unseen_world:block/dark_currantslate",
+    "particle": "unseen_world:block/dark_currantslate"
+  },
+  "render_type": "solid"
+}

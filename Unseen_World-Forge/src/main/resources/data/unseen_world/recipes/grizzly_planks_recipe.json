@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:grizzly_log"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:grizzly_planks",
+    "count": 4
+  }
+}

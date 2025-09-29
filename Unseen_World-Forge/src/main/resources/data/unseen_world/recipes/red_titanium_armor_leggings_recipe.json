@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "012",
+    "3 5",
+    "6 8"
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:blaze_shield_shard"
+    },
+    "1": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "2": {
+      "item": "unseen_world:blaze_shield_shard"
+    },
+    "3": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "5": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "6": {
+      "item": "unseen_world:red_titanium_ingot"
+    },
+    "8": {
+      "item": "unseen_world:red_titanium_ingot"
+    }
+  },
+  "result": {
+    "item": "unseen_world:red_titanium_armor_leggings",
+    "count": 1
+  }
+}

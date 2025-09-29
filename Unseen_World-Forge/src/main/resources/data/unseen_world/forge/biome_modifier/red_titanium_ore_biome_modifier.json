@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:grizzly_forest",
+    "unseen_world:grizzly_steppe",
+    "unseen_world:greenish_valley",
+    "unseen_world:shiny_caverns"
+  ],
+  "features": "unseen_world:red_titanium_ore",
+  "step": "underground_ores"
+}

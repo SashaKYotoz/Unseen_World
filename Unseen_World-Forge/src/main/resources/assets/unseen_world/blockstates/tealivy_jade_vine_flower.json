@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=upper": {
+      "model": "unseen_world:block/tealivy_jade_vine_flower"
+    },
+    "half=lower": {
+      "model": "unseen_world:block/tealivy_jade_vine_flower_bottom"
+    }
+  }
+}

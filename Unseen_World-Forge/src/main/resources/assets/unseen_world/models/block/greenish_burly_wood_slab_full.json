@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "unseen_world:block/greenish_burlywood_planks",
+    "top": "unseen_world:block/greenish_burlywood_planks",
+    "side": "unseen_world:block/greenish_burlywood_planks"
+  },
+  "render_type": "solid"
+}

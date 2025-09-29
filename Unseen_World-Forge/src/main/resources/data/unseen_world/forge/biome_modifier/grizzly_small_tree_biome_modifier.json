@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "unseen_world:grizzly_forest",
+  "features": "unseen_world:grizzly_small_tree",
+  "step": "surface_structures"
+}

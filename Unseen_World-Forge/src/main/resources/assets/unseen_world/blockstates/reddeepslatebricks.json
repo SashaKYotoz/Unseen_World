@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "unseen_world:block/reddeepslatebricks"
+    },
+    "facing=east": {
+      "model": "unseen_world:block/reddeepslatebricks",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "unseen_world:block/reddeepslatebricks",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "unseen_world:block/reddeepslatebricks",
+      "y": 270
+    }
+  }
+}

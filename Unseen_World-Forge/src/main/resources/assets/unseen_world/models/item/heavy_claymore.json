@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "unseen_world:item/heavy_claymore_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "unseen_world:item/heavy_claymore_2d"
+    },
+    "ground": {
+      "parent": "unseen_world:item/heavy_claymore_3d"
+    },
+    "fixed": {
+      "parent": "unseen_world:item/heavy_claymore_2d"
+    }
+  },
+  "overrides": [
+    {"predicate": {"custom_model_data":1}, "model": "unseen_world:item/void_heavy_claymore"},
+    {"predicate": {"custom_model_data":2}, "model": "unseen_world:item/nature_heavy_claymore"},
+    {"predicate": {"custom_model_data":3}, "model": "unseen_world:item/red_titanium_heavy_claymore"}
+  ]
+}

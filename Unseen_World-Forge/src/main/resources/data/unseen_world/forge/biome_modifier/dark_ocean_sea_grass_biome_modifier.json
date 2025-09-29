@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "unseen_world:dark_ocean",
+  "features": "unseen_world:dark_ocean_sea_grass",
+  "step": "local_modifications"
+}

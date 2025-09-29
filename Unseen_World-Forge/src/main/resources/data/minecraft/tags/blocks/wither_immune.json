@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:red_titanium_block",
+    "unseen_world:void_ingot_block",
+    "unseen_world:naturerium_block",
+    "unseen_world:unseen_block",
+    "unseen_world:deep_gem_block"
+  ]
+}

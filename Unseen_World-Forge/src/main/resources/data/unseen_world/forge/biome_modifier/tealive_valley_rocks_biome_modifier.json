@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "unseen_world:tealive_luminous_valley",
+  "features": "unseen_world:tealive_valley_rocks",
+  "step": "top_layer_modification"
+}

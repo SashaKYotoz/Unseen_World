@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:fiery_saber"
+    },
+    "title": {
+      "translate": "advancements.found_treasure.title"
+    },
+    "description": {
+      "translate": "advancements.found_treasure.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found_treasure": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 5
+  },
+  "parent": "unseen_world:welcometo_unseen_world"
+}

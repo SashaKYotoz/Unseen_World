@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "unseen_world:blocks/greenish_burlywood_planks",
+    "particle": "unseen_world:blocks/greenish_burlywood_planks"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "unseen_world:block/crimserry_propagule",
+    "particle": "unseen_world:block/crimserry_propagule"
+  },
+  "render_type": "cutout"
+}

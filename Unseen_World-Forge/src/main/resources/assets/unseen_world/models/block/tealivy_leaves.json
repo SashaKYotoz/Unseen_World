@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "unseen_world:block/tealivy_leaves",
+    "particle": "unseen_world:block/tealivy_leaves"
+  },
+  "render_type": "translucent"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "unseen_world:custom/knight_chest",
+  "textures": {
+    "all": "unseen_world:block/knight_chest",
+    "particle": "unseen_world:block/knight_chest",
+    "0": "unseen_world:block/knight_chest"
+  },
+  "render_type": "solid"
+}

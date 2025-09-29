@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab_top",
+  "textures": {
+    "bottom": "unseen_world:block/grizzly_planks",
+    "top": "unseen_world:block/grizzly_planks",
+    "side": "unseen_world:block/grizzly_planks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " 12",
+    " 45",
+    "6  "
+  ],
+  "key": {
+    "1": {
+      "item": "unseen_world:tanzanite_shard"
+    },
+    "2": {
+      "item": "unseen_world:tanzanite_shard"
+    },
+    "4": {
+      "item": "unseen_world:netherium_staff"
+    },
+    "5": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "6": {
+      "item": "unseen_world:red_blaze_rod"
+    }
+  },
+  "result": {
+    "item": "unseen_world:tanzanite_staff",
+    "count": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "unseen_world:item/heavy_claymore_temple"
+  },
+  "overrides": [
+    {"predicate": {"custom_model_data":1}, "model": "unseen_world:item/heavy_claymore_void_upgrade"},
+    {"predicate": {"custom_model_data":2}, "model": "unseen_world:item/heavy_claymore_nature_upgrade"},
+    {"predicate": {"custom_model_data":3}, "model": "unseen_world:item/heavy_claymore_titanium_upgrade"}
+  ]
+}

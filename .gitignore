@@ -112,15 +112,15 @@ gradle-app.setting
 **/build/
 
 # Common working directory
-Unseen_World-Forge/run/
-Unseen_World-Forge/run-data/
-Unseen_World-Forge/src/generated/resources/.cache/
-Unseen_World-Forge/build/
+/Unseen_World-Forge/run/
+/Unseen_World-Forge/run-data/
+/Unseen_World-Forge/src/generated/resources/.cache/
+/Unseen_World-Forge/build/
 
-Unseen_World-Fabric/run/
-Unseen_World-Fabric/run-data/
-Unseen_World-Fabric/src/generated/resources/.cache/
-Unseen_World-Fabric/build/
+/Unseen_World-Fabric/run/
+/Unseen_World-Fabric/run-data/
+/Unseen_World-Fabric/src/generated/resources/.cache/
+/Unseen_World-Fabric/build/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar

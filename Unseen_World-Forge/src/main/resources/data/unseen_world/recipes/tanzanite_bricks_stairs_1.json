@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "unseen_world:tanzanite_bricks"
+  },
+  "result": "unseen_world:tanzanite_bricks_stairs"
+}

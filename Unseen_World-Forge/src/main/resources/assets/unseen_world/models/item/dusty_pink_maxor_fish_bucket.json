@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "unseen_world:item/dusty_pink_maxor_fish_bucket"
+  }
+}

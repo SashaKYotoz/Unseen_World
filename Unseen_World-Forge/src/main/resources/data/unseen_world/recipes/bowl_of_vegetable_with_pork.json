@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "012",
+    "345",
+    " 7 "
+  ],
+  "key": {
+    "0": {
+      "item": "minecraft:carrot"
+    },
+    "1": {
+      "item": "unseen_world:chimeric_blue_pepper"
+    },
+    "2": {
+      "item": "unseen_world:luminouscookedporkchop"
+    },
+    "3": {
+      "item": "minecraft:carrot"
+    },
+    "4": {
+      "item": "unseen_world:chimeric_blue_pepper"
+    },
+    "5": {
+      "item": "unseen_world:luminouscookedporkchop"
+    },
+    "7": {
+      "item": "minecraft:bowl"
+    }
+  },
+  "result": {
+    "item": "unseen_world:dish_vegetable_with_pork",
+    "count": 1
+  }
+}

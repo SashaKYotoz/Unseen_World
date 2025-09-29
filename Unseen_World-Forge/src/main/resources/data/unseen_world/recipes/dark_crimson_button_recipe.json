@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:dark_crimson_planks"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:dark_crimson_button",
+    "count": 1
+  }
+}

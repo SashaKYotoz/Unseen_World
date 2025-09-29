@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "unseen_world:void_upgrade_smithing_template"
+  },
+  "base": {
+    "item": "unseen_world:void_ingot_sword"
+  },
+  "addition": {
+    "item": "unseen_world:dark_pearl"
+  },
+  "result": {
+    "item": "unseen_world:void_endermen_sword"
+  }
+}

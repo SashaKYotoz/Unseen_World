@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "012",
+    " 4 "
+  ],
+  "key": {
+    "0": {
+      "item": "unseen_world:crimserry_soul_berry_food"
+    },
+    "1": {
+      "item": "unseen_world:berriesfrom_blooming_vine"
+    },
+    "2": {
+      "item": "unseen_world:purple_berries"
+    },
+    "4": {
+      "item": "minecraft:bowl"
+    }
+  },
+  "result": {
+    "item": "unseen_world:dishwith_berries",
+    "count": 1
+  }
+}

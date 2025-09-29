@@ -1,0 +1,10 @@
+{
+  "parent": "unseen_world:custom/nightdew_of_chimeric_darkness",
+  "textures": {
+    "all": "unseen_world:block/red_ooze",
+    "particle": "unseen_world:block/red_ooze",
+    "0": "unseen_world:block/red_ooze",
+    "1": "unseen_world:block/nightdew_of_chimeric_darkness_1"
+  },
+  "render_type": "solid"
+}

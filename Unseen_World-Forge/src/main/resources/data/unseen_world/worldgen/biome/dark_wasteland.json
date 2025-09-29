@@ -1,0 +1,100 @@
+{
+  "has_precipitation": false,
+  "temperature": 0,
+  "downfall": 0.5,
+  "effects": {
+    "mood_sound": {
+      "sound": "ambient.cave",
+      "tick_delay": 6000,
+      "offset": 8,
+      "block_search_extent": 2
+    },
+    "music": {
+      "sound": "biome.dark_chimeric",
+      "min_delay": 4000,
+      "max_delay": 8000,
+      "replace_current_music": true
+    },
+    "particle": {
+      "options": {
+        "type": "glow"
+      },
+      "probability": 0.001
+    },
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "unseen_world:dark_spirit_wolf",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      {
+        "type": "unseen_world:dark_hoglin",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "creature": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [
+      {
+        "type": "unseen_world:dark_phantom",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "unseen_world:snowdrifter",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [
+      "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
+      "minecraft:ore_lapis",
+      "minecraft:underwater_magma",
+      "minecraft:ore_emerald",
+      "unseen_world:darkness_ooze_vegetation"
+    ],
+    [],
+    [
+      "unseen_world:dark_wasteland_tree",
+      "unseen_world:ice_spikes"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

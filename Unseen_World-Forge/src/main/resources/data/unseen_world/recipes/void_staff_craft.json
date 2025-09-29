@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " 12",
+    " 45",
+    "6  "
+  ],
+  "key": {
+    "1": {
+      "item": "unseen_world:void_ingot_ingot"
+    },
+    "2": {
+      "item": "unseen_world:dark_pearl"
+    },
+    "4": {
+      "item": "minecraft:stick"
+    },
+    "5": {
+      "item": "unseen_world:void_ingot_ingot"
+    },
+    "6": {
+      "item": "unseen_world:blue_void"
+    }
+  },
+  "result": {
+    "item": "unseen_world:void_staff",
+    "count": 1
+  }
+}

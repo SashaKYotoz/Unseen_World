@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "item": "unseen_world:the_darkness"
+    },
+    "title": {
+      "translate": "advancements.goto_darkness.title"
+    },
+    "description": {
+      "translate": "advancements.goto_darkness.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "goto_darkness": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 5,
+    "recipes": [
+      "unseen_world:void_ingot_ore_block_recipe",
+      "unseen_world:void_ingot_block_ore_recipe",
+      "unseen_world:void_ingot_ore_smelting",
+      "unseen_world:voidingotcraft",
+      "unseen_world:voidhelmetcraft",
+      "unseen_world:void_chestplatecraft",
+      "unseen_world:void_legginscraft",
+      "unseen_world:voidbootscraft",
+      "unseen_world:void_ingot_pickaxe_recipe",
+      "unseen_world:void_ingot_axe_recipe",
+      "unseen_world:void_ingot_sword_recipe",
+      "unseen_world:void_ingot_shovel_recipe",
+      "unseen_world:void_ingot_hoe_recipe",
+      "unseen_world:voidendermensword_craft"
+    ]
+  },
+  "parent": "unseen_world:welcometo_unseen_world"
+}

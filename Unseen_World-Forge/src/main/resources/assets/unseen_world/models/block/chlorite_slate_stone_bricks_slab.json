@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "unseen_world:block/chlorite_slate_stone_bricks_with_animation",
+    "top": "unseen_world:block/chlorite_slate_stone_bricks_with_animation",
+    "side": "unseen_world:block/chlorite_slate_stone_bricks_with_animation"
+  },
+  "render_type": "solid"
+}

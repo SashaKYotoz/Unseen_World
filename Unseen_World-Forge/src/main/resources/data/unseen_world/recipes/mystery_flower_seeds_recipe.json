@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "unseen_world:purple_berries"
+    }
+  ],
+  "result": {
+    "item": "unseen_world:misteryflower_sapling"
+  }
+}

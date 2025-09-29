@@ -1,0 +1,83 @@
+{
+  "has_precipitation": false,
+  "temperature": -1,
+  "downfall": 0.2,
+  "effects": {
+    "mood_sound": {
+      "sound": "ambient.basalt_deltas.mood",
+      "tick_delay": 6000,
+      "offset": 8,
+      "block_search_extent": 2
+    },
+    "additions_sound": {
+      "sound": "ambient.basalt_deltas.additions",
+      "tick_chance": 0.015
+    },
+    "particle": {
+      "options": {
+        "type": "unseen_world:bluevoidparticle"
+      },
+      "probability": 0.001
+    },
+    "foliage_color": 4605011,
+    "grass_color": 4605011,
+    "sky_color": 4605011,
+    "fog_color": 4605011,
+    "water_color": 4605011,
+    "water_fog_color": 4605011
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "unseen_world:dark_skeleton",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "creature": [
+      {
+        "type": "unseen_world:chimeric_purplemarer",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [
+      "minecraft:iceberg_packed",
+      "minecraft:iceberg_blue",
+      "minecraft:large_dripstone",
+      "minecraft:large_basalt_columns"
+    ],
+    [],
+    [
+      "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried"
+    ],
+    [],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ]
+}

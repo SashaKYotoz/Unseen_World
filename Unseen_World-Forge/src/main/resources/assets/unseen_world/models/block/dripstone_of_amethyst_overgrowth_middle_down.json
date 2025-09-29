@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "unseen_world:block/amethyst_dripstone_bottom_middle",
+    "particle": "unseen_world:block/amethyst_dripstone_bottom_middle"
+  },
+  "render_type": "cutout"
+}

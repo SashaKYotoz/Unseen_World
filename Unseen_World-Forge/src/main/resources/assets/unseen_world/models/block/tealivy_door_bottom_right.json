@@ -1,0 +1,8 @@
+{
+  "parent": "block/door_bottom_right",
+  "textures": {
+    "bottom": "unseen_world:block/tealivy_door_down",
+    "top": "unseen_world:block/tealivy_door_up"
+  },
+  "render_type": "translucent"
+}

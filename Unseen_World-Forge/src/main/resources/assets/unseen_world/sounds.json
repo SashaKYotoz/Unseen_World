@@ -1,0 +1,61 @@
+{
+  "biome.amethyst_forest": {
+    "subtitle": "subtitles.amethyst_ambient",
+    "sounds": [
+      "unseen_world:biomes/amethyst_forest/amethyst",
+      "unseen_world:biomes/amethyst_forest/amethyst1",
+      "unseen_world:biomes/amethyst_forest/amethyst2"
+    ]
+  },
+  "biome.tealivy_valley": {
+    "subtitle": "subtitles.dark_chimeric_sounds",
+    "sounds": [
+      "unseen_world:biomes/tealivy_valley/tealive",
+      "unseen_world:biomes/tealivy_valley/tealive1"
+    ]
+  },
+  "biome.grizzly_forest": {
+    "subtitle": "subtitles.dark_chimeric_sounds",
+    "sounds": [
+      "unseen_world:biomes/grizzly_forest/grizzly_forest_ambient",
+      "unseen_world:biomes/grizzly_forest/grizzly_forest_ambient1"
+    ]
+  },
+  "biome.dark_chimeric": {
+    "subtitle": "subtitles.dark_chimeric_sounds",
+    "sounds": [
+      "unseen_world:biomes/dark_chimeric/dark_crimson"
+    ]
+  },
+  "chimeric_sound": {
+    "sounds": [
+      {
+        "name": "unseen_world:chimeric_sound",
+        "stream": false
+      }
+    ]
+  },
+  "happy_place": {
+    "sounds": [
+      {
+        "name": "unseen_world:happy_place",
+        "stream": true
+      }
+    ]
+  },
+  "chaotic": {
+    "sounds": [
+      {
+        "name": "unseen_world:chaotic",
+        "stream": true
+      }
+    ]
+  },
+  "item.staff_shot": {
+    "sounds": [
+      "unseen_world:items/staff_shoot/staff_shoot",
+      "unseen_world:items/staff_shoot/staff_shoot1",
+      "unseen_world:items/staff_shoot/staff_shoot2"
+    ]
+  }
+}

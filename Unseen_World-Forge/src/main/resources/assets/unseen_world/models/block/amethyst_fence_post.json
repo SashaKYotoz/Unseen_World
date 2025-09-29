@@ -1,0 +1,8 @@
+{
+  "parent": "block/fence_post",
+  "textures": {
+    "texture": "unseen_world:block/amethyst_planks",
+    "particle": "unseen_world:block/amethyst_planks"
+  },
+  "render_type": "solid"
+}

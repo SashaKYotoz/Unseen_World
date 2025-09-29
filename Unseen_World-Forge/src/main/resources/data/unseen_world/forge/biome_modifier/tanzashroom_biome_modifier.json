@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:tanzanite_above_ground_cavern",
+    "unseen_world:amethyst_fields",
+    "unseen_world:amethyst_forest"
+  ],
+  "features": "unseen_world:tanzashroom",
+  "step": "vegetal_decoration"
+}

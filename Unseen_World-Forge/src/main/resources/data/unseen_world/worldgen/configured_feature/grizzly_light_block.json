@@ -1,0 +1,25 @@
+{
+  "type": "unseen_world:grizzly_light_block",
+  "config": {
+    "size": 4,
+    "discard_chance_on_air_exposure": 0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "blockstate_match",
+          "block_state": {
+            "Name": "unseen_world:grizzly_leaves",
+            "Properties": {
+              "distance": "7",
+              "persistent": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        "state": {
+          "Name": "unseen_world:grizzly_light_block"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:blackstone_fortress",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:darkness_temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 663689357,
+    "spacing": 32,
+    "separation": 16
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "":[ 
+    {
+      "model": "unseen_world:block/reinforced_polished_blackstone_bricks"
+    },
+    {
+      "model": "unseen_world:block/reinforced_polished_blackstone_bricks_1"
+    }  
+	]
+  }
+}

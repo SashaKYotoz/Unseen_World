@@ -1,0 +1,6 @@
+{
+  "parent": "unseen_world:item/void_bow",
+  "textures": {
+    "layer0": "unseen_world:item/void_bow_pulling_2"
+  }
+}

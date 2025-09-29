@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "unseen_world:tanzanite_above_ground_cavern",
+    "unseen_world:amethyst_forest",
+    "unseen_world:amethyst_fields",
+    "unseen_world:dark_crimson_valley",
+    "unseen_world:shiny_caverns"
+  ],
+  "features": "unseen_world:tanzanite_block",
+  "step": "underground_ores"
+}
