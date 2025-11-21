@@ -33,6 +33,7 @@ dependencies {
 
     modRuntimeOnly ("curse.maven:worldedit-225608:4586218")
     modCompileOnly ("curse.maven:worldedit-225608:4586218")
+    modRuntimeOnly ("curse.maven:neruina-851046:6489040")
 
     modImplementation include ("io.github.cottonmc:LibGui:${project.libgui_version}")
 }

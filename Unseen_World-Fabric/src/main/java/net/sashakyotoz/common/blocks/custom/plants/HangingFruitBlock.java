@@ -3,7 +3,6 @@ package net.sashakyotoz.common.blocks.custom.plants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Fertilizable;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemConvertible;
@@ -18,7 +17,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.sashakyotoz.common.blocks.ModBlocks;
@@ -49,11 +47,6 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
     @Override
     public boolean hasRandomTicks(BlockState state) {
         return !state.get(HAS_FRUIT);
-    }
-
-    @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return state.get(HAS_FRUIT) ? Block.createCuboidShape(0, 8, 0, 16, 16, 16) : super.getOutlineShape(state, world, pos, context);
     }
 
     @Override
@@ -93,9 +86,19 @@ public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable
         if (state.isIn(ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.down()).isAir())
             world.setBlockState(pos.down(), random.nextBoolean() ? ModBlocks.HANGING_AMETHYST_LEAVES.getDefaultState().with(HAS_FRUIT, true) :
                     this.getDefaultState());
-        if (state.isIn(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.down()).isAir()){
+        if (state.isIn(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.down()).isAir()) {
             world.setBlockState(pos, ModBlocks.CRIMSONVEIL_VINE_PLANT.getDefaultState());
             world.setBlockState(pos.down(), ModBlocks.CRIMSONVEIL_VINE.getDefaultState());
+        }
+        if (state.isIn(ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON)
+                && state.contains(HAS_FRUIT)
+                && !state.get(HAS_FRUIT)
+                && random.nextInt(4) == 0
+                && world.getBlockState(pos.down()).isAir()) {
+            if (random.nextBoolean())
+                world.setBlockState(pos, state.with(HAS_FRUIT, true));
+            else
+                world.setBlockState(pos.down(), ModBlocks.HANGING_BURLYWOOD_LEAVES.getDefaultState());
         }
     }
 }

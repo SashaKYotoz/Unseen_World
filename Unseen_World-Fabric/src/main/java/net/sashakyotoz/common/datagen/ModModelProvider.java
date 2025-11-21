@@ -17,6 +17,9 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.BulbLikeBlock;
+import net.sashakyotoz.common.blocks.custom.plants.DarknessFernBlock;
+import net.sashakyotoz.common.blocks.custom.plants.HangingFruitBlock;
+import net.sashakyotoz.common.blocks.custom.plants.LeafDroppingLeaveBlock;
 import net.sashakyotoz.common.items.ModItems;
 
 import java.util.Arrays;
@@ -90,6 +93,7 @@ public class ModModelProvider extends FabricModelProvider {
         generator.registerParentedItemModel(ModBlocks.KEY_HANDLER_STONE.asItem(), UnseenWorld.makeID("block/key_handler_stone"));
         generator.registerParentedItemModel(ModBlocks.GLACIEMITE_TRANSLOCATONE.asItem(), UnseenWorld.makeID("block/glaciemite_translocatone"));
         generator.registerParentedItemModel(ModBlocks.GLOW_APPLE_BUSH.asItem(), UnseenWorld.makeID("block/glow_apple_bush/glow_apple_bush_without_fruit"));
+        generator.registerItemModel(ModBlocks.HANGING_BURLYWOOD_LEAVES);
 
         generator.registerHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG,
                 ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN);
@@ -107,11 +111,15 @@ public class ModModelProvider extends FabricModelProvider {
         generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_ASHEN_OOZE);
         generator.registerBrushableBlock(ModBlocks.SUSPICIOUS_GLIMMERGRAIN_SAND);
 
+        registerOvergrownLeaves(generator, (LeafDroppingLeaveBlock) ModBlocks.BURLYWOOD_LEAVES);
+        registerOvergrownLeaves(generator, (LeafDroppingLeaveBlock) ModBlocks.AMETHYST_LEAVES);
+
         registerCrimsonveilVines(generator);
+        registerBurlywoodFruit(generator, (HangingFruitBlock) ModBlocks.HANGING_BURLYWOOD_LEAVES);
 
         generator.registerFlowerbed(ModBlocks.AMETHYST_PETALS);
         generator.registerPlantPart(ModBlocks.UMBRAL_KELP, ModBlocks.UMBRAL_KELP_PLANT, BlockStateModelGenerator.TintType.NOT_TINTED);
-        generator.registerTintableCross(ModBlocks.GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
+        registerTintableLitCross(generator, (DarknessFernBlock) ModBlocks.GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
         generator.registerDoubleBlock(ModBlocks.TALL_GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
         registerVerticalPlant(generator, ModBlocks.GRIPPING_SPIGELIA);
         registerCrystalLike(generator, ModBlocks.GRIPCRYSTAL_WART);
@@ -126,6 +134,7 @@ public class ModModelProvider extends FabricModelProvider {
         generator.register(ModBlocks.BEARFRUIT_BRAMBLE.asItem(), Models.GENERATED);
         generator.register(ModBlocks.MIDNIGHT_LILY_PAD.asItem(), Models.GENERATED);
         generator.register(ModBlocks.UMBRAL_KELP.asItem(), Models.GENERATED);
+
         registerBundle(generator, ModItems.GRIPPING_BUNDLE);
         for (Item item : ModRegistry.ITEMS) {
             if (item instanceof ArmorItem armorItem)
@@ -152,6 +161,29 @@ public class ModModelProvider extends FabricModelProvider {
     private void registerBundle(ItemModelGenerator generator, Item item) {
         Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(TextureMap.getId(item)), generator.writer, this::createBundleJson);
         generator.register(item, "_filled", Models.GENERATED);
+    }
+
+    private void registerTintableLitCross(BlockStateModelGenerator generator, DarknessFernBlock block, BlockStateModelGenerator.TintType tintType) {
+        generator.registerItemModel(block);
+        TextureMap crossTexture = TextureMap.cross(block);
+        Identifier identifier = tintType.getCrossModel().upload(block, crossTexture, generator.modelCollector);
+        Identifier identifier2 = generator.createSubModel(block, "_lit", Models.TINTED_CROSS, TextureMap::cross);
+        generator.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(DarknessFernBlock.LIT, identifier2, identifier)));
+    }
+
+    private void registerOvergrownLeaves(BlockStateModelGenerator generator, LeafDroppingLeaveBlock block) {
+        Identifier identifier = TexturedModel.CUBE_ALL.upload(block, generator.modelCollector);
+        Identifier identifier2 = generator.createSubModel(block, "_overgrown", Models.CUBE_ALL, TextureMap::all);
+        generator.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(LeafDroppingLeaveBlock.OVERGROWN, identifier2, identifier)));
+    }
+
+    private void registerBurlywoodFruit(BlockStateModelGenerator generator, HangingFruitBlock block) {
+        Identifier identifier = Models.CROSS.upload(block, TextureMap.cross(block), generator.modelCollector);
+        Identifier identifier2 = UnseenWorld.makeID("block/glow_apple_fruit");
+        generator.blockStateCollector
+                .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(HangingFruitBlock.HAS_FRUIT, identifier2, identifier)));
     }
 
     private void registerCrimsonveilVines(BlockStateModelGenerator generator) {

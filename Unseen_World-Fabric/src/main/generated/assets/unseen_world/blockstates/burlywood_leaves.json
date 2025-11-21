@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "overgrown=false": {
       "model": "unseen_world:block/burlywood_leaves"
+    },
+    "overgrown=true": {
+      "model": "unseen_world:block/burlywood_leaves_overgrown"
     }
   }
 }

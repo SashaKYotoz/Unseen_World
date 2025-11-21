@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "lit=false": {
       "model": "unseen_world:block/gloomweed"
+    },
+    "lit=true": {
+      "model": "unseen_world:block/gloomweed_lit"
     }
   }
 }

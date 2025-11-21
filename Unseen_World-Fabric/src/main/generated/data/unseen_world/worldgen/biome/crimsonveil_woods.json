@@ -3,8 +3,8 @@
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
-    "foliage_color": 5013401,
-    "grass_color": 0,
+    "foliage_color": 336860160,
+    "grass_color": 336860160,
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
@@ -26,6 +26,11 @@
     [],
     [
       "unseen_world:iron_ore"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:gloomweed_patch"
     ]
   ],
   "has_precipitation": false,

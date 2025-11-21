@@ -13,12 +13,6 @@
         "sound_id": "minecraft:music.under_water"
       }
     },
-    "particle": {
-      "options": {
-        "type": "minecraft:ash"
-      },
-      "probability": 0.025
-    },
     "sky_color": 4605011,
     "water_color": 0,
     "water_fog_color": 0

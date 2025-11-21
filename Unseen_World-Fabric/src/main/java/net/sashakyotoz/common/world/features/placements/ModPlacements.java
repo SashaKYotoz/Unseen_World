@@ -5,6 +5,7 @@ import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.world.Heightmap;
@@ -32,6 +33,7 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> TALL_CRIMSONVEIL_TREE = create("tall_crimsonveil_tree");
     public static final RegistryKey<PlacedFeature> BURLYWOOD_TREE = create("burlywood_tree");
     public static final RegistryKey<PlacedFeature> SMALL_BURLYWOOD_TREE = create("small_burlywood_tree");
+    public static final RegistryKey<PlacedFeature> BUSH_BURLYWOOD_TREE = create("bush_burlywood_tree");
 
     public static final RegistryKey<PlacedFeature> UNSEENIUM_ORE = create("unseenium_ore");
     public static final RegistryKey<PlacedFeature> RED_TITANIUM_ORE = create("red_titanium_ore");
@@ -63,6 +65,7 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> BURLYWOOD_VIOLET_PATCH = create("burlywood_violet_patch");
 
     public static final RegistryKey<PlacedFeature> UMBRAL_KELP = create("umbral_kelp");
+    public static final RegistryKey<PlacedFeature> RARE_GLOOMWEED_PATCH = create("rare_gloomweed_patch");
     public static final RegistryKey<PlacedFeature> GLOOMWEED_PATCH = create("gloomweed_patch");
     public static final RegistryKey<PlacedFeature> TALL_GLOOMWEED_PATCH = create("tall_gloomweed_patch");
 
@@ -80,7 +83,7 @@ public class ModPlacements {
                         ModBlocks.AMETHYST_SAPLING));
         register(context, SMALL_AMETHYST_TREE, configLookup.getOrThrow(ModConfiguredFeatures.SMALL_AMETHYST_TREE),
                 VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
-                        PlacedFeatures.createCountExtraModifier(2, 0.5f, 4),
+                        PlacedFeatures.createCountExtraModifier(1, 0.5f, 4),
                         ModBlocks.AMETHYST_SAPLING));
         register(context, AMETHYST_BUSH, configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_BUSH),
                 VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
@@ -108,11 +111,15 @@ public class ModPlacements {
                         ModBlocks.CRIMSONVEIL_SAPLING));
         register(context, BURLYWOOD_TREE, configLookup.getOrThrow(ModConfiguredFeatures.BURLYWOOD_TREE),
                 VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
-                        PlacedFeatures.createCountExtraModifier(1, 0.25f, 2),
+                        PlacedFeatures.createCountExtraModifier(1, 0.5f, 3),
                         ModBlocks.BURLYWOOD_SAPLING));
         register(context, SMALL_BURLYWOOD_TREE, configLookup.getOrThrow(ModConfiguredFeatures.SMALL_BURLYWOOD_TREE),
                 VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
-                        PlacedFeatures.createCountExtraModifier(1, 0.5f, 2),
+                        PlacedFeatures.createCountExtraModifier(2, 0.5f, 3),
+                        ModBlocks.BURLYWOOD_SAPLING));
+        register(context, BUSH_BURLYWOOD_TREE, configLookup.getOrThrow(ModConfiguredFeatures.BUSH_BURLYWOOD_TREE),
+                VegetationPlacedFeatures.treeModifiersWithWouldSurvive(
+                        PlacedFeatures.createCountExtraModifier(2, 0.5f, 4),
                         ModBlocks.BURLYWOOD_SAPLING));
 
         register(context, UNSEENIUM_ORE, configLookup.getOrThrow(ModConfiguredFeatures.UNSEENIUM_ORE),
@@ -204,12 +211,14 @@ public class ModPlacements {
                 SquarePlacementModifier.of(),
                 BiomePlacementModifier.of());
         register(context, BUSH_LIKE_TREE_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.BUSH_LIKE_TREE_PATCH),
-                PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
+                PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP,
                 BiomePlacementModifier.of(),
+                BlockFilterPlacementModifier.of(BlockPredicate.wouldSurvive(ModBlocks.GLOW_APPLE_BUSH.getDefaultState(), BlockPos.ORIGIN)),
                 RarityFilterPlacementModifier.of(2));
         register(context, SMALL_BUSH_LIKE_TREE_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.SMALL_BUSH_LIKE_TREE_PATCH),
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of(),
+                BlockFilterPlacementModifier.of(BlockPredicate.wouldSurvive(ModBlocks.GLOW_APPLE_BUSH.getDefaultState(), BlockPos.ORIGIN)),
                 RarityFilterPlacementModifier.of(2));
         register(context, BURLYWOOD_VIOLET_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.BURLYWOOD_VIOLET_PATCH),
                 RarityFilterPlacementModifier.of(3),
@@ -236,6 +245,12 @@ public class ModPlacements {
                 RarityFilterPlacementModifier.of(4),
                 PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP,
                 BiomePlacementModifier.of()
+        );
+        register(
+                context,
+                RARE_GLOOMWEED_PATCH,
+                configLookup.getOrThrow(ModConfiguredFeatures.RARE_GLOOMWEED_PATCH),
+                CountPlacementModifier.of(1), RarityFilterPlacementModifier.of(8), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of()
         );
         register(
                 context,

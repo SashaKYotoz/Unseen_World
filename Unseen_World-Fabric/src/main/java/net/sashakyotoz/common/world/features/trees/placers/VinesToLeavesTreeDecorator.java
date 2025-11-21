@@ -9,6 +9,7 @@ import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
+import net.sashakyotoz.common.blocks.custom.plants.HangingFruitBlock;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 
 public class VinesToLeavesTreeDecorator extends TreeDecorator {
@@ -50,13 +51,17 @@ public class VinesToLeavesTreeDecorator extends TreeDecorator {
     private void placeVines(BlockState state, BlockPos pos, TreeDecorator.Generator generator) {
         generator.replace(pos, state);
         int i = height.get(generator.getRandom());
-
-        for (BlockPos var4 = pos.down(); generator.isAir(var4) && i > 0; i--) {
+        int tmpI = i;
+        for (BlockPos pos1 = pos.down(); generator.isAir(pos1) && tmpI > 0; tmpI--) {
             if (state.contains(Properties.BERRIES))
-                generator.replace(var4, state.with(Properties.BERRIES, generator.getRandom().nextBoolean()));
+                generator.replace(pos1, state.with(Properties.BERRIES, generator.getRandom().nextBoolean()));
+            if (state.contains(HangingFruitBlock.HAS_FRUIT) && !state.contains(Properties.BERRIES))
+                generator.replace(pos1, state.with(HangingFruitBlock.HAS_FRUIT, false));
             else
-                generator.replace(var4, state);
-            var4 = var4.down();
+                generator.replace(pos1, state);
+            pos1 = pos1.down();
         }
+        if (state.contains(HangingFruitBlock.HAS_FRUIT) && !state.contains(Properties.BERRIES))
+            generator.replace(pos.down(i), state.with(HangingFruitBlock.HAS_FRUIT, true));
     }
 }

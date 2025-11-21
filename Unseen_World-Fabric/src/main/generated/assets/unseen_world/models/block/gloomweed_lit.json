@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/tinted_cross",
+  "textures": {
+    "cross": "unseen_world:block/gloomweed_lit"
+  }
+}

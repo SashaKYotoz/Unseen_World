@@ -33,7 +33,7 @@
                   "condition": "minecraft:survives_explosion"
                 }
               ],
-              "name": "minecraft:dirt"
+              "name": "unseen_world:nightdark_dirt"
             }
           ]
         }

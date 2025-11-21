@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "overgrown=false": {
       "model": "unseen_world:block/amethyst_leaves"
+    },
+    "overgrown=true": {
+      "model": "unseen_world:block/amethyst_leaves_overgrown"
     }
   }
 }

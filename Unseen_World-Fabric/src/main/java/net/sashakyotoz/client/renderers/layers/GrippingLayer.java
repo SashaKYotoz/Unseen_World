@@ -1,6 +1,8 @@
 package net.sashakyotoz.client.renderers.layers;
 
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -11,14 +13,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
+import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.config.ConfigEntries;
 
 public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> extends StuckObjectsRenderer<T, M> {
     private final EntityRendererFactory.Context context;
+    private final Identifier TEXTURE = UnseenWorld.makeID("textures/entity/gripping_layer.png");
 
     public GrippingLayer(LivingEntityRenderer<T, M> livingEntityRenderer, EntityRendererFactory.Context context) {
         super(livingEntityRenderer);
@@ -34,6 +39,13 @@ public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> ext
         if (entity instanceof IGrippingEntity entity1 && entity1.getGrippingData() > 0)
             return Math.round(entity1.getGrippingData() / 2f);
         return 0;
+    }
+
+    @Override
+    protected boolean renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
+        if (entity instanceof IGrippingEntity iGrippingEntity)
+            part.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(TEXTURE)), light, OverlayTexture.DEFAULT_UV, 1, 1, 1, iGrippingEntity.getGrippingData() / 10f);
+        return true;
     }
 
     @Override

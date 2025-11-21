@@ -10,6 +10,7 @@ import net.minecraft.sound.BiomeMoodSound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.world.carvers.ModCarvers;
@@ -192,7 +193,6 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder.build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
-                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.025f))
                         .waterColor(0x000)
                         .waterFogColor(0x000)
                         .skyColor(4605011)
@@ -247,7 +247,6 @@ public class ModBiomes {
                         .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
-                        .particleConfig(new BiomeParticleConfig(ParticleTypes.CRIT, 0.0025f))
                         .waterColor(0x000)
                         .waterFogColor(0x000)
                         .skyColor(4605011)
@@ -271,14 +270,15 @@ public class ModBiomes {
                 .temperature(0.5f)
                 .generationSettings(biomeBuilder
                         .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.GLOOMWEED_PATCH)
                         .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
                         .waterColor(0x000)
                         .waterFogColor(0x000)
                         .skyColor(4605011)
-                        .grassColor(0x000)
-                        .foliageColor(5013401)
+                        .grassColor(336860160)
+                        .foliageColor(336860160)
                         .fogColor(4605011)
                         .music(MusicType.createIngameMusic(RegistryEntry.of(SoundEvents.MUSIC_NETHER_CRIMSON_FOREST.value()))).build())
                 .build();
@@ -323,6 +323,8 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder
                         .feature(GenerationStep.Feature.TOP_LAYER_MODIFICATION, ModPlacements.BUSH_LIKE_TREE_PATCH)
                         .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BURLYWOOD_VIOLET_PATCH)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.RARE_GLOOMWEED_PATCH)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_GRASS_JUNGLE)
                         .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
@@ -354,7 +356,6 @@ public class ModBiomes {
                         .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())
-                        .particleConfig(new BiomeParticleConfig(ParticleTypes.ASH, 0.0125f))
                         .waterColor(6579300)
                         .waterFogColor(6579300)
                         .skyColor(4605011)

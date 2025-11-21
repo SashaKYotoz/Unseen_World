@@ -3,6 +3,7 @@ package net.sashakyotoz.common.world;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.common.world.biomes.DarknessMultiNoiseBiomeSource;
 import net.sashakyotoz.common.world.carvers.custom.SpiralCaveCarver;
 import net.sashakyotoz.common.world.features.custom.*;
 

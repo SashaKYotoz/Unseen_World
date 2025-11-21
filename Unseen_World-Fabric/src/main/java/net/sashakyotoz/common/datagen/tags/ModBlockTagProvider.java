@@ -33,7 +33,9 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.AMETHYST_GRASS_BLOCK,
                 ModBlocks.GRIMWOOD_GRASS_BLOCK,
                 ModBlocks.NIGHTDARK_GRASS_BLOCK,
+                ModBlocks.NIGHTDARK_DIRT,
                 ModBlocks.TEALIVY_GRASS_BLOCK,
+                ModBlocks.TEALIVY_DIRT,
                 ModBlocks.BEARFRUIT_BRAMBLE
         );
         this.getOrCreateTagBuilder(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH).add(

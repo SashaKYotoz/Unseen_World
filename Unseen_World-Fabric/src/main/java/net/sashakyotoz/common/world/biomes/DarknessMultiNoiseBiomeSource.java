@@ -1,4 +1,4 @@
-package net.sashakyotoz.common.world;
+package net.sashakyotoz.common.world.biomes;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
@@ -16,7 +16,6 @@ import net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.biome.source.util.VanillaBiomeParameters;
 import net.minecraft.world.gen.densityfunction.DensityFunctions;
-import net.sashakyotoz.common.world.biomes.ModBiomes;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,8 +58,10 @@ public class DarknessMultiNoiseBiomeSource extends BiomeSource {
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         RegistryEntry<Biome> candidate = this.getBiomeAtPoint(noise.sample(x, y, z));
         int y1 = BiomeCoords.toBlock(y);
+        if (y1 > 220)
+            return this.getBiomeAtPoint(noise.sample(x, BiomeCoords.fromBlock(96), z));
         if (y1 < 32) {
-            if (y1 < -48)
+            if (y1 < -40)
                 return registryEntryFromKey(ModBiomes.DEEP_GLACIEMITE_CAVES, candidate);
             MultiNoiseUtil.NoiseValuePoint sampled = noise.sample(x, y1, z);
             float temperature = MultiNoiseUtil.toFloat(sampled.temperatureNoise());
@@ -71,6 +72,7 @@ public class DarknessMultiNoiseBiomeSource extends BiomeSource {
         }
         return candidate;
     }
+
     private RegistryEntry<Biome> registryEntryFromKey(RegistryKey<Biome> key, RegistryEntry<Biome> fallback) {
         return Optional.of(this.getBiomeEntries().getEntries().stream().filter(noiseHypercubeRegistryEntryPair -> noiseHypercubeRegistryEntryPair.getSecond().matchesKey(key)).findFirst().get().getSecond()).orElse(fallback);
     }
@@ -93,6 +95,6 @@ public class DarknessMultiNoiseBiomeSource extends BiomeSource {
         float m = MultiNoiseUtil.toFloat(noiseValuePoint.weirdnessNoise());
         double d = DensityFunctions.getPeaksValleysNoise(m);
         VanillaBiomeParameters vanillaBiomeParameters = new VanillaBiomeParameters();
-        info.add("Biome builder PV: " + VanillaBiomeParameters.getPeaksValleysDescription(d) + " C: " + vanillaBiomeParameters.getContinentalnessDescription(f) + " E: " + vanillaBiomeParameters.getErosionDescription(g) + " T: " + vanillaBiomeParameters.getTemperatureDescription(h) + " H: " + vanillaBiomeParameters.getHumidityDescription(l));
+        info.add("Biome builder PV: %s C: %s E: %s T: %s H: %s".formatted(VanillaBiomeParameters.getPeaksValleysDescription(d), vanillaBiomeParameters.getContinentalnessDescription(f), vanillaBiomeParameters.getErosionDescription(g), vanillaBiomeParameters.getTemperatureDescription(h), vanillaBiomeParameters.getHumidityDescription(l)));
     }
 }

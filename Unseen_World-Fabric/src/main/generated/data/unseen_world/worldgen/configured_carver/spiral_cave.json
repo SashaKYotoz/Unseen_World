@@ -5,7 +5,7 @@
       "absolute": 10
     },
     "length": 384,
-    "probability": 0.75,
+    "probability": 0.35,
     "radius": 6.5,
     "radius_variance": 1.5,
     "replaceable": "#unseen_world:chimeric_darkness_stones",

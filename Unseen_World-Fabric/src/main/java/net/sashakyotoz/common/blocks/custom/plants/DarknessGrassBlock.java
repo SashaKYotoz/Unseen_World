@@ -33,7 +33,7 @@ public class DarknessGrassBlock extends GrassBlock {
     @Override
     public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
         BlockPos blockPos = pos.up();
-        BlockState blockState = ModBlocks.GLOOMWEED.getDefaultState();
+        BlockState blockState = random.nextBoolean() ? ModBlocks.GLOOMWEED.getDefaultState() : ModBlocks.MURKTUFT.getDefaultState();
         Optional<RegistryEntry.Reference<PlacedFeature>> optional = world.getRegistryManager()
                 .get(RegistryKeys.PLACED_FEATURE)
                 .getEntry(ModPlacements.GLOOMWEED_PATCH);
@@ -51,7 +51,7 @@ public class DarknessGrassBlock extends GrassBlock {
 
             BlockState blockState2 = world.getBlockState(blockPos2);
             if (blockState2.isOf(blockState.getBlock()) && random.nextInt(10) == 0) {
-                ((Fertilizable)blockState.getBlock()).grow(world, random, blockPos2, blockState2);
+                ((Fertilizable) blockState.getBlock()).grow(world, random, blockPos2, blockState2);
             }
 
             if (blockState2.isAir()) {
@@ -62,7 +62,7 @@ public class DarknessGrassBlock extends GrassBlock {
                         continue;
                     }
 
-                    registryEntry = ((RandomPatchFeatureConfig)((ConfiguredFeature)list.get(0)).config()).feature();
+                    registryEntry = ((RandomPatchFeatureConfig) list.get(0).config()).feature();
                 } else {
                     if (optional.isEmpty())
                         continue;

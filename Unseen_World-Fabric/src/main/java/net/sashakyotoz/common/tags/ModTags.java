@@ -49,7 +49,6 @@ public class ModTags {
         public static final TagKey<Biome> UNSEENIUM_SPAWNS_IN = create("unseenium_spawns_in");
         public static final TagKey<Biome> TITANIUM_SPAWNS_IN = create("titanium_spawns_in");
 
-        public static final TagKey<Biome> GRASS_COVERED = create("grass_covered");
         public static final TagKey<Biome> FLOWERS_COVERED = create("flowers_covered");
 
         public static final TagKey<Biome> GLACIEMITE_BOULDER_SPAWNS_ON = create("glaciemite_boulder_spawns_on");

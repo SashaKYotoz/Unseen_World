@@ -9,6 +9,20 @@
       "type": "minecraft:biome"
     },
     {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "unseen_world:glow_apple_bush",
+          "Properties": {
+            "type": "bush",
+            "facing": "north",
+            "grown": "false"
+          }
+        }
+      }
+    },
+    {
       "type": "minecraft:rarity_filter",
       "chance": 2
     }

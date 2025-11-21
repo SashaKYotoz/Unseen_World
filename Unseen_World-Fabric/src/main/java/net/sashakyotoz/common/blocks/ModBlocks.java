@@ -133,7 +133,7 @@ public class ModBlocks {
     private static final FabricBlockSettings AmethystLeafMaterial = FabricBlockSettings.create().sounds(BlockSoundGroup.AZALEA_LEAVES).nonOpaque().breakInstantly().ticksRandomly();
     private static final FabricBlockSettings BurlywoodTreeMaterial =
             FabricBlockSettings.create().hardness(3f).luminance(3).mapColor(MapColor.DARK_GREEN).sounds(BlockSoundGroup.BAMBOO_WOOD);
-    private static final FabricBlockSettings BurlywoodLeafMaterial = FabricBlockSettings.create().luminance(3).mapColor(MapColor.DARK_GREEN).sounds(BlockSoundGroup.BAMBOO_WOOD).nonOpaque().breakInstantly().ticksRandomly();
+    private static final FabricBlockSettings BurlywoodLeafMaterial = FabricBlockSettings.create().luminance(3).mapColor(MapColor.DARK_GREEN).sounds(BlockSoundGroup.BIG_DRIPLEAF).nonOpaque().breakInstantly().ticksRandomly();
     private static final FabricBlockSettings TealiveTreeMaterial =
             FabricBlockSettings.create().hardness(1.5f).luminance(5).mapColor(MapColor.CYAN).sounds(BlockSoundGroup.NETHER_WOOD);
     private static final FabricBlockSettings TealiveLeafMaterial = FabricBlockSettings.create().mapColor(MapColor.CYAN).sounds(BlockSoundGroup.AZALEA_LEAVES).nonOpaque().breakInstantly().ticksRandomly();
@@ -277,10 +277,12 @@ public class ModBlocks {
     public static final Block ANCIENT_DEBRIS_IN_GLACIEMITE = ModRegistry.ofBlock("ancient_debris_in_glaciemite",
             new ExperienceDroppingBlock(FabricBlockSettings.create().hardness(15).requiresTool(), UniformIntProvider.create(1, 2))).model().tool("diamond_pickaxe").build();
     //grass
-    public static final Block NIGHTDARK_GRASS_BLOCK = ModRegistry.ofBlock("nightdark_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.BLACK))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
-    public static final Block TEALIVY_GRASS_BLOCK = ModRegistry.ofBlock("tealivy_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.CYAN))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
-    public static final Block AMETHYST_GRASS_BLOCK = ModRegistry.ofBlock("amethyst_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PURPLE))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
-    public static final Block GRIMWOOD_GRASS_BLOCK = ModRegistry.ofBlock("grimwood_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.RED))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block NIGHTDARK_GRASS_BLOCK = ModRegistry.ofBlock("nightdark_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.BLACK).sounds(BlockSoundGroup.ROOTED_DIRT))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block TEALIVY_GRASS_BLOCK = ModRegistry.ofBlock("tealivy_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.CYAN).sounds(BlockSoundGroup.ROOTED_DIRT))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block AMETHYST_GRASS_BLOCK = ModRegistry.ofBlock("amethyst_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.PURPLE).sounds(BlockSoundGroup.AMETHYST_BLOCK))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block GRIMWOOD_GRASS_BLOCK = ModRegistry.ofBlock("grimwood_grass_block", new DarknessGrassBlock(FabricBlockSettings.create().hardness(1).mapColor(MapColor.RED).sounds(BlockSoundGroup.GILDED_BLACKSTONE))).tool("_shovel").model(ModRegistry.Models.GRASS).tag(BlockTags.DIRT).build();
+    public static final Block NIGHTDARK_DIRT = ModRegistry.ofBlock("nightdark_dirt", new Block(FabricBlockSettings.create().hardness(1).mapColor(MapColor.GRAY).sounds(BlockSoundGroup.ROOTED_DIRT))).tool("_shovel").model().drop().tag(BlockTags.DIRT).build();
+    public static final Block TEALIVY_DIRT = ModRegistry.ofBlock("tealivy_dirt", new Block(FabricBlockSettings.create().hardness(1).mapColor(MapColor.CYAN).sounds(BlockSoundGroup.ROOTED_DIRT))).tool("_shovel").model().drop().tag(BlockTags.DIRT).build();
     //sand-like
     public static final Block ASHEN_OOZE = ModRegistry.ofBlock("ashen_ooze", new Block(FabricBlockSettings.create().hardness(1).mapColor(MapColor.TERRACOTTA_ORANGE))).tool("_shovel").drop().model().build();
     public static final Block SUSPICIOUS_ASHEN_OOZE = ModRegistry.ofBlock("suspicious_ashen_ooze", new SusBlock(
@@ -323,13 +325,13 @@ public class ModBlocks {
                     new LeafDroppingLeaveBlock(AmethystLeafMaterial, new LeafParticleEffect(0.6f, 0.2f, 0.7f)))
             .tag(BlockTags.LEAVES, ModTags.Blocks.AMETHYST_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
             .tool("_hoe").flammable(5, 30)
-            .model().cutout().build();
+            .cutout().build();
     public static final Block HANGING_AMETHYST_LEAVES = ModRegistry.ofBlock("hanging_amethyst_leaves",
-                    new HangingFruitBlock(copy(AmethystLeafMaterial).luminance(lightLevelFromBlockStateR(4, HangingFruitBlock.HAS_FRUIT)).collidable(false).breakInstantly(),
+                    new HangingFruitBlock(copy(AmethystLeafMaterial).luminance(lightLevelFromBlockStateR(4, HangingFruitBlock.HAS_FRUIT)).noCollision().breakInstantly(),
                             () -> ModItems.CRYSTIE_APPLE,
                             ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON,
                             Block.createCuboidShape(0, 0, 0, 16, 16, 16)))
-            .tag(BlockTags.LEAVES, ModTags.Blocks.AMETHYST_BLOCKS)
+            .tag(BlockTags.LEAVES, ModTags.Blocks.AMETHYST_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
             .tool("_hoe").flammable(5, 30)
             .cutout().build();
 
@@ -590,12 +592,31 @@ public class ModBlocks {
             .tool("_axe").strip(STRIPPED_BURLYWOOD_WOOD)
             .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.BURLYWOOD_LOGS)
             .flammable(5, 5).fuel(300).drop().model().build();
+    public static final Block BURLYWOOD_HEART = ModRegistry.ofBlock("burlywood_heart",
+                    new BurlywoodHeartBlock(FabricBlockSettings.copyOf(BurlywoodTreeMaterial).ticksRandomly().luminance(12).emissiveLighting((state, blockView, pos) ->
+                            !state.get(BurlywoodHeartBlock.PERSISTENT)
+                                    && (blockView.getBlockState(pos.north()).isAir()
+                                    || blockView.getBlockState(pos.south()).isAir()
+                                    || blockView.getBlockState(pos.west()).isAir()
+                                    || blockView.getBlockState(pos.east()).isAir()))))
+            .tool("_axe")
+            .tag(BlockTags.LOGS_THAT_BURN, ModTags.Blocks.BURLYWOOD_BLOCKS).tagitem(ItemTags.LOGS_THAT_BURN, ModTags.Items.BURLYWOOD_LOGS)
+            .flammable(20, 1).fuel(600).model().build();
 
     public static final Block BURLYWOOD_LEAVES = ModRegistry.ofBlock("burlywood_leaves",
-                    new LeafDroppingLeaveBlock(BurlywoodLeafMaterial, new LeafParticleEffect(0.5f, 0.5f, 0)))
-            .tag(BlockTags.LEAVES, ModTags.Blocks.BURLYWOOD_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
+                    new LeafDroppingLeaveBlock(BurlywoodLeafMaterial, new LeafParticleEffect(0.5f, 0.5f, 0.1f)))
+            .tag(BlockTags.LEAVES, ModTags.Blocks.BURLYWOOD_BLOCKS, ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON)
             .tool("_hoe").flammable(5, 30)
-            .model().cutout().build();
+            .cutout().build();
+    public static final Block HANGING_BURLYWOOD_LEAVES = ModRegistry.ofBlock("hanging_burlywood_leaves",
+                    new HangingFruitBlock(FabricBlockSettings.copyOf(BurlywoodLeafMaterial.noCollision()
+                            .lightLevel(lightLevelFromBlockStateR(8, HangingFruitBlock.HAS_FRUIT)).breakInstantly()),
+                            () -> ModItems.GLOW_APPLE,
+                            ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON,
+                            Block.createCuboidShape(4, 0, 4, 12, 16, 12)))
+            .tag(BlockTags.LEAVES, ModTags.Blocks.BURLYWOOD_BLOCKS, ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON)
+            .tool("_hoe").flammable(5, 30)
+            .cutout().build();
 
     public static final Block BURLYWOOD_PLANKS = ModRegistry.ofBlock("burlywood_planks",
                     new Block(BurlywoodTreeMaterial))
@@ -775,7 +796,7 @@ public class ModBlocks {
                     )))
             .cutout().tag(ModTags.Blocks.BEARFRUIT_BRAMBLE_GROWABLE_ON, BlockTags.CLIMBABLE).tagitem(ItemTags.FLOWERS).drop_shears(ModItems.BEARFRUIT_BRAMBLE).build();
     public static final Block MIDNIGHT_LILY_PAD = ModRegistry.ofBlock("midnight_lily",
-            new MidnightLilyPadBlock(FabricBlockSettings.create().mapColor(MapColor.DIAMOND_BLUE).breakInstantly().sounds(BlockSoundGroup.LILY_PAD).nonOpaque().pistonBehavior(PistonBehavior.DESTROY).luminance(8))).cutout().build();
+            new MidnightLilyPadBlock(FabricBlockSettings.create().mapColor(MapColor.DIAMOND_BLUE).breakInstantly().sounds(BlockSoundGroup.LILY_PAD).nonOpaque().pistonBehavior(PistonBehavior.DESTROY).luminance(8))).drop_shears().cutout().build();
     public static final Block AMETHYST_PETALS = ModRegistry.ofBlock("amethyst_petals",
             new FlowerbedBlock(FabricBlockSettings.create().mapColor(MapColor.PALE_PURPLE).breakInstantly().noCollision().sounds(BlockSoundGroup.SMALL_AMETHYST_BUD)
                     .pistonBehavior(PistonBehavior.DESTROY).luminance(lightLevelFromBlockState(8, Properties.FLOWER_AMOUNT, 2)))).cutout().build();
@@ -793,10 +814,14 @@ public class ModBlocks {
                     .pistonBehavior(PistonBehavior.DESTROY).noCollision()), false).drop(UMBRAL_KELP).cutout().build();
     public static final Block GLOOMWEED = ModRegistry.ofBlock("gloomweed",
             new DarknessFernBlock(FabricBlockSettings.create().replaceable().breakInstantly().sounds(BlockSoundGroup.GRASS)
-                    .pistonBehavior(PistonBehavior.DESTROY).noCollision())).tool("_hoe").cutout().build();
+                    .pistonBehavior(PistonBehavior.DESTROY).noCollision().lightLevel(lightLevelFromBlockStateR(6, DarknessFernBlock.LIT)), false)).drop_shears().tool("_hoe").cutout().build();
     public static final Block TALL_GLOOMWEED = ModRegistry.ofBlock("tall_gloomweed",
             new TallPlantBlock(FabricBlockSettings.create().replaceable().breakInstantly().sounds(BlockSoundGroup.GRASS)
-                    .pistonBehavior(PistonBehavior.DESTROY).noCollision())).tool("_hoe").cutout().build();
+                    .pistonBehavior(PistonBehavior.DESTROY).noCollision())).tool("_hoe").drop_tall_shears(GLOOMWEED).cutout().build();
+    public static final Block MURKTUFT = ModRegistry.ofBlock("murktuft",
+            new DarknessFernBlock(FabricBlockSettings.create().replaceable().breakInstantly().ticksRandomly().sounds(BlockSoundGroup.GRASS)
+                    .pistonBehavior(PistonBehavior.DESTROY).noCollision().lightLevel(lightLevelFromBlockStateR(8, DarknessFernBlock.LIT))
+                    .emissiveLighting((state, world, pos) -> state.get(DarknessFernBlock.LIT)), true)).drop_shears().tool("_hoe").model(ModRegistry.Models.CROSS).cutout().build();
     public static final Block GRIPPING_DARK_CURRANTSLATE = ModRegistry.ofBlock("gripping_dark_currantslate",
                     new GrippingStoneBlock(FabricBlockSettings.create().hardness(3).dropsLike(DARK_CURRANTSLATE)))
             .tag(BlockTags.DAMPENS_VIBRATIONS).tool("stone_pickaxe").build();

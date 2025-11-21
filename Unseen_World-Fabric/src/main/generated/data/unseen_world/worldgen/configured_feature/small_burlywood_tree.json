@@ -1,7 +1,28 @@
 {
   "type": "minecraft:tree",
   "config": {
-    "decorators": [],
+    "decorators": [
+      {
+        "type": "minecraft:vines_to_leaves_decorator",
+        "block": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "unseen_world:hanging_burlywood_leaves",
+            "Properties": {
+              "has_fruit": "false"
+            }
+          }
+        },
+        "height": {
+          "type": "minecraft:uniform",
+          "value": {
+            "max_inclusive": 3,
+            "min_inclusive": 1
+          }
+        },
+        "probability": 0.1
+      }
+    ],
     "dirt_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
@@ -31,6 +52,7 @@
         "Name": "unseen_world:burlywood_leaves",
         "Properties": {
           "distance": "7",
+          "overgrown": "false",
           "persistent": "false",
           "waterlogged": "false"
         }
@@ -48,9 +70,10 @@
     },
     "trunk_placer": {
       "type": "minecraft:burlywood_trunk_placer",
-      "base_height": 5,
+      "base_height": 8,
       "height_rand_a": 1,
-      "height_rand_b": 2
+      "height_rand_b": 2,
+      "should_search_wood": false
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

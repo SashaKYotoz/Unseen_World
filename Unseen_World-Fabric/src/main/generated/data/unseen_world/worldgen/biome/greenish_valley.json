@@ -28,7 +28,9 @@
     [],
     [],
     [
-      "unseen_world:burlywood_violet_patch"
+      "unseen_world:burlywood_violet_patch",
+      "unseen_world:rare_gloomweed_patch",
+      "minecraft:patch_grass_jungle"
     ],
     [
       "unseen_world:bush_like_tree_patch"

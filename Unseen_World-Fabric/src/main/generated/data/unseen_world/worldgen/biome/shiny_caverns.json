@@ -21,12 +21,6 @@
         "sound_id": "minecraft:music.overworld.lush_caves"
       }
     },
-    "particle": {
-      "options": {
-        "type": "minecraft:ash"
-      },
-      "probability": 0.0125
-    },
     "sky_color": 4605011,
     "water_color": 6579300,
     "water_fog_color": 6579300

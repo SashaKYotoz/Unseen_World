@@ -264,21 +264,21 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         generateLeggingsRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_LEGGINGS);
         generateBootsRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_BOOTS);
 
-        generateSwordRecipe(exporter,ModItems.UNSEENIUM_INGOT,ModItems.UNSEENIUM_SWORD);
-        generatePickaxeRecipe(exporter,ModItems.UNSEENIUM_INGOT,ModItems.UNSEENIUM_PICKAXE);
-        generateAxeRecipe(exporter,ModItems.UNSEENIUM_INGOT,ModItems.UNSEENIUM_AXE);
-        generateHoeRecipe(exporter,ModItems.UNSEENIUM_INGOT,ModItems.UNSEENIUM_HOE);
-        generateShovelRecipe(exporter,ModItems.UNSEENIUM_INGOT,ModItems.UNSEENIUM_SHOVEL);
-        generateSwordRecipe(exporter,ModItems.ABYSSAL_INGOT,ModItems.ABYSSAL_SWORD);
-        generatePickaxeRecipe(exporter,ModItems.ABYSSAL_INGOT,ModItems.ABYSSAL_PICKAXE);
-        generateAxeRecipe(exporter,ModItems.ABYSSAL_INGOT,ModItems.ABYSSAL_AXE);
-        generateHoeRecipe(exporter,ModItems.ABYSSAL_INGOT,ModItems.ABYSSAL_HOE);
-        generateShovelRecipe(exporter,ModItems.ABYSSAL_INGOT,ModItems.ABYSSAL_SHOVEL);
-        generateSwordRecipe(exporter,ModItems.RED_TITANIUM_INGOT,ModItems.RED_TITANIUM_SWORD);
-        generatePickaxeRecipe(exporter,ModItems.RED_TITANIUM_INGOT,ModItems.RED_TITANIUM_PICKAXE);
-        generateAxeRecipe(exporter,ModItems.RED_TITANIUM_INGOT,ModItems.RED_TITANIUM_AXE);
-        generateHoeRecipe(exporter,ModItems.RED_TITANIUM_INGOT,ModItems.RED_TITANIUM_HOE);
-        generateShovelRecipe(exporter,ModItems.RED_TITANIUM_INGOT,ModItems.RED_TITANIUM_SHOVEL);
+        generateSwordRecipe(exporter, ModItems.UNSEENIUM_INGOT, ModItems.UNSEENIUM_SWORD);
+        generatePickaxeRecipe(exporter, ModItems.UNSEENIUM_INGOT, ModItems.UNSEENIUM_PICKAXE);
+        generateAxeRecipe(exporter, ModItems.UNSEENIUM_INGOT, ModItems.UNSEENIUM_AXE);
+        generateHoeRecipe(exporter, ModItems.UNSEENIUM_INGOT, ModItems.UNSEENIUM_HOE);
+        generateShovelRecipe(exporter, ModItems.UNSEENIUM_INGOT, ModItems.UNSEENIUM_SHOVEL);
+        generateSwordRecipe(exporter, ModItems.ABYSSAL_INGOT, ModItems.ABYSSAL_SWORD);
+        generatePickaxeRecipe(exporter, ModItems.ABYSSAL_INGOT, ModItems.ABYSSAL_PICKAXE);
+        generateAxeRecipe(exporter, ModItems.ABYSSAL_INGOT, ModItems.ABYSSAL_AXE);
+        generateHoeRecipe(exporter, ModItems.ABYSSAL_INGOT, ModItems.ABYSSAL_HOE);
+        generateShovelRecipe(exporter, ModItems.ABYSSAL_INGOT, ModItems.ABYSSAL_SHOVEL);
+        generateSwordRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_SWORD);
+        generatePickaxeRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_PICKAXE);
+        generateAxeRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_AXE);
+        generateHoeRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_HOE);
+        generateShovelRecipe(exporter, ModItems.RED_TITANIUM_INGOT, ModItems.RED_TITANIUM_SHOVEL);
     }
 
     private void generateHelmetRecipe(Consumer<RecipeJsonProvider> exporter, Item ingredient, Item result) {

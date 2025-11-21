@@ -19,12 +19,6 @@
         "sound_id": "minecraft:music.nether.basalt_deltas"
       }
     },
-    "particle": {
-      "options": {
-        "type": "minecraft:crit"
-      },
-      "probability": 0.0025
-    },
     "sky_color": 4605011,
     "water_color": 0,
     "water_fog_color": 0

@@ -20,6 +20,7 @@
         "Name": "unseen_world:amethyst_leaves",
         "Properties": {
           "distance": "7",
+          "overgrown": "false",
           "persistent": "false",
           "waterlogged": "false"
         }

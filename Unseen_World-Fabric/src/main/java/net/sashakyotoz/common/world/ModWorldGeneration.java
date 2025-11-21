@@ -35,8 +35,6 @@ public class ModWorldGeneration {
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.UNSEENIUM_SPAWNS_IN),
                 GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.UNSEENIUM_ORE);
 
-        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.GRASS_COVERED),
-                GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.PATCH_GRASS_JUNGLE);
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.FLOWERS_COVERED),
                 GenerationStep.Feature.VEGETAL_DECORATION, VegetationPlacedFeatures.FLOWER_MEADOW);
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.FLOWERS_COVERED),
@@ -78,33 +76,23 @@ public class ModWorldGeneration {
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_TREE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.GRIZZLY_THICKET, ModBiomes.GRIZZLY_HIGHLANDS),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BEARFRUIT_BRAMBLE_PATCH);
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.BURLYWOOD_JUNGLE),
+                GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.BUSH_BURLYWOOD_TREE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TEALIVY_VALLEY),
                 GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.TEALIVE_TREE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.DARK_OCEAN),
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.UMBRAL_KELP);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.OLD_GROWTH_CRIMSONVEIL_WOODS),
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TEALIVY_VALLEY, ModBiomes.GRIZZLY_THICKET, ModBiomes.DARK_WASTELAND),
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TEALIVY_VALLEY),
-                GenerationStep.Feature.RAW_GENERATION, ModPlacements.GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TEALIVY_VALLEY),
-                GenerationStep.Feature.RAW_GENERATION, ModPlacements.TALL_GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.DARK_WASTELAND),
-                GenerationStep.Feature.RAW_GENERATION, ModPlacements.GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.DARK_WASTELAND),
-                GenerationStep.Feature.RAW_GENERATION, ModPlacements.TALL_GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.GRIZZLY_THICKET),
-                GenerationStep.Feature.RAW_GENERATION, ModPlacements.GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.CRIMSONVEIL_PLATEAU),
-                GenerationStep.Feature.RAW_GENERATION, ModPlacements.GLOOMWEED_PATCH);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.CRIMSONVEIL_PLATEAU),
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TEALIVY_VALLEY, ModBiomes.DARK_WASTELAND, ModBiomes.CRIMSONVEIL_PLATEAU),
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.TALL_GLOOMWEED_PATCH);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.THE_DARKNESS),
                 GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.DARKNESS_SPIRAL_SPIKE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES),
                 GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.AMETHYST_CEILING_BOULDER);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES,ModBiomes.SHINY_CAVERNS),
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES, ModBiomes.SHINY_CAVERNS),
                 GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.UNSEENIUM_CURRANTSLATE_DISK);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES,ModBiomes.SHINY_CAVERNS),
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES, ModBiomes.SHINY_CAVERNS),
                 GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.TITANIUM_CURRANTSLATE_DISK);
 
         BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.CURRANTSLATE_BOULDER_SPAWNS_ON),

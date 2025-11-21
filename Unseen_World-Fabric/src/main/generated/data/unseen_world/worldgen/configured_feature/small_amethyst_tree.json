@@ -16,8 +16,8 @@
       "offset": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 2,
-          "min_inclusive": 1
+          "max_inclusive": 1,
+          "min_inclusive": 0
         }
       },
       "radius": {
@@ -34,6 +34,7 @@
         "Name": "unseen_world:amethyst_leaves",
         "Properties": {
           "distance": "7",
+          "overgrown": "false",
           "persistent": "false",
           "waterlogged": "false"
         }

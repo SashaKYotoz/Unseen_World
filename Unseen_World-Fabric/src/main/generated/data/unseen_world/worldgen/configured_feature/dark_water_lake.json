@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:lake",
+  "type": "unseen_world:adaptive_lake",
   "config": {
     "barrier": {
       "type": "minecraft:simple_state_provider",
@@ -7,7 +7,7 @@
         "Name": "unseen_world:dark_currantslate"
       }
     },
-    "fluid": {
+    "block": {
       "type": "minecraft:simple_state_provider",
       "state": {
         "Name": "unseen_world:dark_water",

@@ -33,11 +33,6 @@ public class ModBiomeTagProvider extends VanillaBiomeTagProvider {
                 ModBiomes.SHINY_CAVERNS,
                 ModBiomes.HARMONY_GROVE
         );
-        this.getOrCreateTagBuilder(ModTags.Biomes.GRASS_COVERED).add(
-                ModBiomes.GREENISH_VALLEY,
-                ModBiomes.GREENISH_MEADOW,
-                ModBiomes.BURLYWOOD_JUNGLE
-        );
         this.getOrCreateTagBuilder(ModTags.Biomes.FLOWERS_COVERED).add(
                 ModBiomes.GREENISH_MEADOW,
                 ModBiomes.GREENISH_VALLEY,

@@ -3,10 +3,8 @@ package net.sashakyotoz.client.environment;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.DimensionRenderingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import net.sashakyotoz.UnseenWorld;
@@ -17,8 +15,10 @@ import net.sashakyotoz.utils.Oscillator;
 import org.joml.Matrix4f;
 
 public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.SkyRenderer {
+    private final DarknessFlashState darknessFlashState = new DarknessFlashState();
     public static final Identifier STAR = UnseenWorld.makeID("textures/environment/remains_of_star.png");
     public static final Identifier GALAXY = UnseenWorld.makeID("textures/environment/dark_galactic_animated.png");
+    public static final Identifier FLASH = UnseenWorld.makeID("textures/environment/darkness_flash.png");
 
     @Override
     public void render(WorldRenderContext context) {

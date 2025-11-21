@@ -73,13 +73,26 @@ public class ModRegistry {
         }
 
         public BlockBuilder drop_silk(ItemConvertible loot) {
-            BLOCK_DROPS.putIfAbsent(this.block, loot);
+            drop(loot);
             BLOCK_SILK_DROPS.putIfAbsent(this.block, loot);
             return this;
         }
 
         public BlockBuilder drop_shears(ItemConvertible loot) {
+            drop(loot);
             BLOCK_SHEARS_DROPS.putIfAbsent(this.block, loot);
+            return this;
+        }
+
+        public BlockBuilder drop_shears() {
+            drop();
+            BLOCK_SHEARS_DROPS.putIfAbsent(this.block, this.block.asItem());
+            return this;
+        }
+
+        public BlockBuilder drop_tall_shears(Block grass) {
+            drop();
+            TALL_BLOCK_SHEARS_DROPS.putIfAbsent(this.block, new Pair<>(grass, this.block));
             return this;
         }
 
@@ -317,6 +330,7 @@ public class ModRegistry {
     public static Map<Block, ItemConvertible> BLOCK_DROPS = new HashMap<>();
     public static Map<Block, ItemConvertible> BLOCK_SILK_DROPS = new HashMap<>();
     public static Map<Block, ItemConvertible> BLOCK_SHEARS_DROPS = new HashMap<>();
+    public static Map<Block, Pair<Block, Block>> TALL_BLOCK_SHEARS_DROPS = new HashMap<>();
 
     public static Map<Block, Block> BLOCK_STRIPPED = new HashMap<>();
     public static Map<Block, Map<Models, Block>> BLOCK_SETS = new HashMap<>();

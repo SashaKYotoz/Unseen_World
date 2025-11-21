@@ -81,6 +81,7 @@
         "max_root_width": 5,
         "muddy_roots_in": [
           "unseen_world:nightdark_grass_block",
+          "unseen_world:nightdark_dirt",
           "unseen_world:crimsonveil_log"
         ],
         "muddy_roots_provider": {

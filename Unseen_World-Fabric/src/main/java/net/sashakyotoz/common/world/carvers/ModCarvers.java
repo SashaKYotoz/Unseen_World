@@ -23,7 +23,7 @@ public class ModCarvers {
     public static void boostrap(Registerable<ConfiguredCarver<?>> context) {
         RegistryEntryLookup<Block> registryEntryLookup = context.getRegistryLookup(RegistryKeys.BLOCK);
         register(context, SPIRAL_CAVE, SpiralCaveCarver.INSTANCE, new SpiralCaveCarverConfig(
-                0.25F,
+                0.35F,
                 UniformHeightProvider.create(YOffset.fixed(-48),YOffset.fixed(32)),
                 ConstantFloatProvider.create(1.0F),
                 YOffset.fixed(10),

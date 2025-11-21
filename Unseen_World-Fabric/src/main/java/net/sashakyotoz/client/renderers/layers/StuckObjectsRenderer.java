@@ -23,6 +23,10 @@ public abstract class StuckObjectsRenderer<T extends LivingEntity, M extends Ent
 
     protected abstract void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float directionX, float directionY, float directionZ, float tickDelta);
 
+    protected boolean renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
+        return false;
+    }
+
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
         int m = this.getObjectCount(livingEntity);
         Random random = Random.create(livingEntity.getId());
@@ -31,7 +35,7 @@ public abstract class StuckObjectsRenderer<T extends LivingEntity, M extends Ent
                 matrixStack.push();
                 if (this.getContextModel() instanceof IModelPartsAccessor accessor && !accessor.getAllModelParts().isEmpty()) {
                     ModelPart modelPart = getRandomPart(accessor.getAllModelParts(), random);
-                    if (modelPart != null && !modelPart.isEmpty()) {
+                    if (modelPart != null && !modelPart.isEmpty() && renderModelPartOverlay(modelPart, matrixStack, vertexConsumerProvider, i, livingEntity)) {
                         ModelPart.Cuboid cuboid = modelPart.getRandomCuboid(random);
                         modelPart.rotate(matrixStack);
                         float o = random.nextFloat();

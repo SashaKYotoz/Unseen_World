@@ -40,8 +40,20 @@
               "name": "unseen_world:hanging_amethyst_leaves"
             },
             {
-              "type": "minecraft:group",
-              "children": []
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "chances": [
+                    0.25,
+                    0.5,
+                    0.75,
+                    1.0
+                  ],
+                  "condition": "minecraft:table_bonus",
+                  "enchantment": "minecraft:fortune"
+                }
+              ],
+              "name": "unseen_world:hanging_amethyst_leaves"
             }
           ]
         }

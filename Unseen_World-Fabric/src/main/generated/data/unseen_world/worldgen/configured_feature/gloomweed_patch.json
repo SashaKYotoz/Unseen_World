@@ -17,7 +17,22 @@
             "seed": 2345,
             "states": [
               {
-                "Name": "unseen_world:gloomweed"
+                "Name": "unseen_world:gloomweed",
+                "Properties": {
+                  "lit": "false"
+                }
+              },
+              {
+                "Name": "unseen_world:gloomweed",
+                "Properties": {
+                  "lit": "true"
+                }
+              },
+              {
+                "Name": "unseen_world:murktuft",
+                "Properties": {
+                  "lit": "true"
+                }
               }
             ]
           }
@@ -34,7 +49,7 @@
       ]
     },
     "tries": 96,
-    "xz_spread": 6,
+    "xz_spread": 5,
     "y_spread": 2
   }
 }
