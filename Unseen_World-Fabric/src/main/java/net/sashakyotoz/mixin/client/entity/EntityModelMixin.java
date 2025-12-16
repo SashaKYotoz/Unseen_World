@@ -1,4 +1,4 @@
-package net.sashakyotoz.mixin.client;
+package net.sashakyotoz.mixin.client.entity;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.TexturedModelData;

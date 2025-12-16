@@ -14,7 +14,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LightmapTextureManagerMixin {
     @Inject(method = "getBrightness", at = @At("HEAD"), cancellable = true)
     private static void getBrightness(DimensionType type, int lightLevel, CallbackInfoReturnable<Float> cir) {
-        if (type.effects().equals(UnseenWorld.makeID("the_chimeric_darkness")) && WorldConfigController.data.get(0) != null && WorldConfigController.data.get(0).galacticUnlock())
-            cir.setReturnValue(1.0F);
+        if (type.effects().equals(UnseenWorld.makeID("the_chimeric_darkness"))
+                && WorldConfigController.data.get(0) != null
+                && WorldConfigController.data.get(0).starsUnlock()
+                && WorldConfigController.data.get(0).sunUnlock()
+                && WorldConfigController.data.get(0).galacticUnlock())
+            cir.setReturnValue(0.75F);
     }
 }

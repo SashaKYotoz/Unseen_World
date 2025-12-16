@@ -1,4 +1,4 @@
-package net.sashakyotoz.mixin.client;
+package net.sashakyotoz.mixin.client.entity;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

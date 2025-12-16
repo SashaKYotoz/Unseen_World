@@ -27,6 +27,7 @@ import net.sashakyotoz.client.particles.custom.effects.WindVibrationParticleEffe
 import net.sashakyotoz.common.config.ConfigController;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
 import net.sashakyotoz.common.items.custom.EclipsebaneItem;
+import net.sashakyotoz.common.items.custom.IGrippingWeapons;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.utils.ActionsUtils;
 
@@ -38,11 +39,11 @@ public class AbilityClickC2SPacket {
         ItemStack stack = player.getMainHandStack();
         player.swingHand(Hand.MAIN_HAND);
         if (stack.isIn(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS) && GripcrystalManaData.getMana((IEntityDataSaver) player) > 0) {
-            if (stack.getItem() instanceof EclipsebaneItem item
-                    && item.getItemPhase(player.getMainHandStack()).equals("light_ray")
-                    && GripcrystalManaData.getMana((IEntityDataSaver) player) > 6) {
-                GripcrystalManaData.removeMana((IEntityDataSaver) player, 6);
-                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 3, 2.5f);
+            if (stack.getItem() instanceof EclipsebaneItem
+                    && IGrippingWeapons.getPhase(player.getMainHandStack()).equals("light_ray")
+                    && GripcrystalManaData.getMana((IEntityDataSaver) player) >= 3) {
+                GripcrystalManaData.removeMana((IEntityDataSaver) player, 3);
+                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 2, 2.5f);
                 float scaling = 0;
                 World world = player.getWorld();
                 BlockPos particlePos = player.getWorld().raycast(new RaycastContext(player.getEyePos(), player.getEyePos().add(player.getRotationVec(1f).multiply(9)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, player)).getBlockPos();
@@ -59,8 +60,8 @@ public class AbilityClickC2SPacket {
                     }
                 }
             }
-            if (stack.getItem() instanceof ChimericRockbreakerHammerItem item
-                    && item.getItemPhase(player.getMainHandStack()).equals("heavy_winding")
+            if (stack.getItem() instanceof ChimericRockbreakerHammerItem
+                    && IGrippingWeapons.getPhase(player.getMainHandStack()).equals("heavy_winding")
                     && GripcrystalManaData.getMana((IEntityDataSaver) player) > 12) {
                 GripcrystalManaData.removeMana((IEntityDataSaver) player, 12);
                 player.getServerWorld().playSound(player, player.getBlockPos().up(), SoundEvents.ENTITY_LLAMA_SWAG, SoundCategory.PLAYERS, 2, 1.75f);

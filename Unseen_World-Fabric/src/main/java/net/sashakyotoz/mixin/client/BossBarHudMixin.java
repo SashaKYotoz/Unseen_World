@@ -24,8 +24,9 @@ public class BossBarHudMixin {
     @Final
     @Shadow
     final Map<UUID, ClientBossBar> bossBars = Maps.newLinkedHashMap();
-    @Inject(method = "render",at = @At("HEAD"))
-    private void renderBossBar(DrawContext context, CallbackInfo ci){
-        BossBarHudHooks.render(client,bossBars,context);
+
+    @Inject(method = "render", at = @At("HEAD"))
+    private void renderBossBar(DrawContext context, CallbackInfo ci) {
+        BossBarHudHooks.render(client, bossBars, context);
     }
 }

@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
@@ -115,6 +116,10 @@ public class UnseenWorld implements ModInitializer {
                 for (EntityPart part : multipartEntity.getParts()) partMap.remove(part.getId());
             }
         });
+        ServerTickEvents.END_WORLD_TICK.register(world -> world.getPlayers().stream()
+                .filter(player -> !player.isSpectator()
+                && GripcrystalManaData.getOpacity(((IEntityDataSaver) player)) > 0)
+                .forEach(player -> GripcrystalManaData.removeOpacity((IEntityDataSaver) player, 0.02f)));
     }
 
     public static Identifier makeID(String id) {

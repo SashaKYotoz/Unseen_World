@@ -25,11 +25,12 @@ import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.models.EclipsebaneModel;
 import net.sashakyotoz.client.models.ShieldOfWarriorModel;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.items.custom.EclipsebaneItem;
+import net.sashakyotoz.common.items.custom.IGrippingWeapons;
 import net.sashakyotoz.utils.Oscillator;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -83,7 +84,7 @@ public class BuiltinModelItemRendererMixin {
             }
             matrices.pop();
         }
-        if (stack.getItem() instanceof EclipsebaneItem item) {
+        if (stack.getItem() instanceof EclipsebaneItem) {
             matrices.push();
             matrices.scale(-1.0F, -1.0F, 1.0F);
             switch (mode) {
@@ -95,17 +96,17 @@ public class BuiltinModelItemRendererMixin {
             MinecraftClient client = MinecraftClient.getInstance();
             PlayerEntity player = client.player;
             int color = 0xFFFFFF;
-            switch (item.getItemPhase(stack)) {
+            switch (IGrippingWeapons.getPhase(stack)) {
                 case "light_ray" -> {
                     if (player != null && GripcrystalManaData.getMana((IEntityDataSaver) player) > 0)
-                        color = Color.HSBtoRGB(WorldClientEventsHandler.halfTicks.get(0) == null ? 0 : WorldClientEventsHandler.halfTicks.get(0) / 10 % 360, 1F, 1.0F);
+                        color = Color.HSBtoRGB(ClientTicks.getHalfTicks() / 10 % 360, 1F, 1.0F);
                 }
                 case "absorption" -> {
                     if (player != null && GripcrystalManaData.getMana((IEntityDataSaver) player) < 48)
-                        color = Color.HSBtoRGB(240, 1F, (float) Oscillator.getOscillatingValue(Math.round(WorldClientEventsHandler.halfTicks.get(0) * 2)));
+                        color = Color.HSBtoRGB(240, 1F, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()));
                 }
                 case "blade_shield" ->
-                        color = Color.HSBtoRGB(300, (float) Oscillator.getOscillatingValue(Math.round(WorldClientEventsHandler.halfTicks.get(0) * 2)), 1F);
+                        color = Color.HSBtoRGB(300, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()), 1F);
             }
             float r = (float) (color >> 16 & 255) / 255.0F;
             float g = (float) (color >> 8 & 255) / 255.0F;

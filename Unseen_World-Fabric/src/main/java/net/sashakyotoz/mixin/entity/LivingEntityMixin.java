@@ -7,16 +7,18 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.IllagerEntity;
 import net.minecraft.entity.mob.SilverfishEntity;
 import net.minecraft.entity.passive.OcelotEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.MultipartEntity;
+import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
 import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.utils.ActionsUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -60,19 +62,33 @@ public abstract class LivingEntityMixin implements IGrippingEntity {
     @Inject(method = "baseTick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) ((Object) this);
-        if (!(livingEntity instanceof PlayerEntity) && livingEntity instanceof IGrippingEntity entity && entity.getGrippingData() > 0 && livingEntity.age % 5 == 0) {
-            GrippingData.removeGrippingPerTick(entity);
-            if (livingEntity instanceof OcelotEntity entity1)
-                entity1.convertTo(ModEntities.SABERPARD, false);
-            if (livingEntity instanceof SilverfishEntity entity1)
-                entity1.convertTo(ModEntities.GLEAMCARVER, false);
-            if (livingEntity instanceof IllagerEntity entity1)
-                entity1.convertTo(ModEntities.VIOLEGER, false);
-            if (livingEntity.getWorld().isClient() && ConfigEntries.spawnParticlesOfGripping) {
-                float sin = (float) Math.sin(livingEntity.age % 360);
-                float cos = (float) Math.cos(livingEntity.age % 360);
-                float tan = (float) Math.tan(livingEntity.age % 360);
-                livingEntity.getWorld().addParticle(ParticleTypes.DRIPPING_WATER, livingEntity.getX() + sin, livingEntity.getY() + tan, livingEntity.getZ() + cos, 0, 0, 0);
+        if (livingEntity.age % 10 == 0) {
+            if (livingEntity instanceof IGrippingEntity entity) {
+                if (entity.getGrippingData() > 0) {
+                    if (livingEntity.getWorld().isClient() && ConfigEntries.spawnParticlesOfGripping) {
+                        float sin = (float) Math.sin(livingEntity.age % 360);
+                        float cos = (float) Math.cos(livingEntity.age % 360);
+                        float tan = (float) Math.tan(livingEntity.age % 360);
+                        livingEntity.getWorld().addParticle(ParticleTypes.DRIPPING_WATER, livingEntity.getX() + sin, livingEntity.getY() + tan, livingEntity.getZ() + cos, 0, 0, 0);
+                    }
+                    if (livingEntity.age % 20 == 0 && livingEntity.isAlive())
+                        livingEntity.damage(livingEntity.getDamageSources().starve(), 1);
+                    if (livingEntity.getWorld() instanceof ServerWorld world) {
+                        if (ActionsUtils.isEntityInCover(livingEntity, world))
+                            GrippingData.removeGrippingPerTick(entity);
+                        else {
+                            if (livingEntity instanceof OcelotEntity entity1)
+                                entity1.convertTo(ModEntities.SABERPARD, false);
+                            if (livingEntity instanceof SilverfishEntity entity1)
+                                entity1.convertTo(ModEntities.GLEAMCARVER, false);
+                            if (livingEntity instanceof IllagerEntity entity1)
+                                entity1.convertTo(ModEntities.VIOLEGER, true);
+                        }
+                    }
+                } else if (livingEntity.getWorld() instanceof ServerWorld world
+                        && ChimericWeatherState.get(world).isGrippfallActive()
+                        && !ActionsUtils.isEntityInCover(livingEntity, world))
+                    GrippingData.addGrippingSeconds(entity, 2);
             }
         }
     }

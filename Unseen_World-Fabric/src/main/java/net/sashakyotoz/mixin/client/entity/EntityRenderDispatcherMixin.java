@@ -1,4 +1,4 @@
-package net.sashakyotoz.mixin.client;
+package net.sashakyotoz.mixin.client.entity;
 
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.WorldRenderer;

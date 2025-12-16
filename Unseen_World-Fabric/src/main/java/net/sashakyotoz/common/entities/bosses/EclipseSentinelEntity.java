@@ -54,6 +54,7 @@ import net.sashakyotoz.common.config.ChimericDarknessData;
 import net.sashakyotoz.common.config.WorldConfigController;
 import net.sashakyotoz.common.entities.ai.bosses_goals.SentinelMovementGoal;
 import net.sashakyotoz.common.entities.bosses.parts.EclipseSentinelPartEntity;
+import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -139,11 +140,11 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob implements Mult
                     this.queueServerWork(60, () -> {
                         this.playSound(SoundEvents.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.5f, 1);
                         spawnWorldParticle(ModParticleTypes.GRIPPING_CRYSTAL,
-                                    this.getX() + getXVector(1, this.getYaw()),
-                                    this.getY() + 1.5f,
-                                    this.getZ() + getZVector(1, this.getYaw()),
-                                    7, 0, 0, 0, 1
-                            );
+                                this.getX() + getXVector(1, this.getYaw()),
+                                this.getY() + 1.5f,
+                                this.getZ() + getZVector(1, this.getYaw()),
+                                7, 0, 0, 0, 1
+                        );
                         if (this.getTarget() != null) {
                             if (this.getTarget() instanceof IGrippingEntity entity1)
                                 GrippingData.addGrippingSeconds(entity1, 8);
@@ -424,25 +425,18 @@ public class EclipseSentinelEntity extends BossLikePathfinderMob implements Mult
             }
             if (this.isInSentinelPose(SentinelPose.HARD_RUSH) && this.age % 10 == 0) {
                 spawnWorldParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OBSIDIAN.getDefaultState()),
-                            this.getX() + this.getXVector(1, this.getYaw()), this.getY() + 1, this.getZ() + this.getZVector(1, this.getYaw()),
-                            9, 0, 1, 0, 1);
+                        this.getX() + this.getXVector(1, this.getYaw()), this.getY() + 1, this.getZ() + this.getZVector(1, this.getYaw()),
+                        9, 0, 1, 0, 1);
                 this.hitNearbyMobs(4, 2);
                 this.playSound(SoundEvents.BLOCK_DEEPSLATE_FALL, 3, 2.5f);
             }
             if (this.isInSentinelPose(SentinelPose.BEAMING) && this.age % 5 == 0) {
-                float scaling = 0;
-                World world = this.getWorld();
-                for (int i1 = 0; i1 < 16; i1++) {
-                    BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                    if (!this.getWorld().getBlockState(pos).isOpaque() || this.getWorld().getBlockState(pos).getBlock().getTranslationKey().contains("glass"))
-                        scaling = scaling + 1;
-                    BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                    List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(0.675), LivingEntity::canHit);
-                    for (LivingEntity entity : entities) {
-                        if (entity != this)
-                            entity.damage(this.getDamageSources().magic(), 6);
-                    }
-                }
+                ActionsUtils.raycastAlong(this.getWorld(), this, 16, (world, pos1) ->
+                        world.getEntitiesByClass(LivingEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()).expand(0.75),
+                                LivingEntity::canHit).forEach(entity -> {
+                            if (entity != this)
+                                entity.damage(this.getDamageSources().magic(), 6);
+                        }));
             }
             if (this.isInSentinelPose(SentinelPose.EXALTING)) {
                 if (this.age % 4 == 0 && isSolidBlockBelow()) {

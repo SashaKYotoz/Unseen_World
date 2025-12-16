@@ -15,7 +15,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.models.EclipseSentinelModel;
 import net.sashakyotoz.client.renderers.layers.bosses.EclipseSentinelEroflameLayer;
 import net.sashakyotoz.client.renderers.layers.bosses.EclipseSentinelGlowingLayer;
@@ -70,7 +70,7 @@ public class EclipseSentinelRenderer extends DeathFixedMobRenderer<EclipseSentin
             matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((1.5707964F - o) * 57.295776F));
             matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(n * 57.295776F));
             float q = j * 0.05F * -1.5F;
-            int color = Color.HSBtoRGB(WorldClientEventsHandler.halfTicks.get(0) == null ? 0 : WorldClientEventsHandler.halfTicks.get(0) / 10 % 360, 1F, 1.0f);
+            int color = Color.HSBtoRGB(ClientTicks.getHalfTicks() / 10 % 360, 1F, 1.0f);
             float r0 = (float) (color >> 16 & 255) / 255.0F;
             float g0 = (float) (color >> 8 & 255) / 255.0F;
             float b0 = (float) (color & 255) / 255.0F;

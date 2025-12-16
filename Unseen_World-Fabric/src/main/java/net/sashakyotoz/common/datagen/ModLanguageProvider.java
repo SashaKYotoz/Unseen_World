@@ -19,6 +19,8 @@ public class ModLanguageProvider extends FabricLanguageProvider {
 
         translationBuilder.add("gameplay.unseen_world.key_handler_cooldown", "Key Handler will recharge in: %s");
 
+        translationBuilder.add("commands.unseen_world.weather.set.grippfall", "Set the weather to grippfall");
+
         translationBuilder.add("item.unseen_world.warpedveil_vine_fruit", "Warpedveil vine fruit");
 
         translationBuilder.add("item.unseen_world.armor_tips", "When the full set worn:");

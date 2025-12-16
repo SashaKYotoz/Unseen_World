@@ -12,7 +12,6 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.sashakyotoz.common.items.custom.ModArmorItem;
@@ -24,21 +23,14 @@ public class DarkWaterBlock extends FluidBlock {
 
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (entity instanceof LivingEntity livingEntity) {
+        if (entity instanceof LivingEntity livingEntity && livingEntity.age % 20 == 0) {
             ItemStack headStack = livingEntity.getEquippedStack(EquipmentSlot.HEAD);
-            ItemStack chestStack = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
-            ItemStack leggingsStack = livingEntity.getEquippedStack(EquipmentSlot.LEGS);
-            ItemStack bootsStack = livingEntity.getEquippedStack(EquipmentSlot.FEET);
-            if (!(headStack.isOf(Items.TURTLE_HELMET) && livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)
-                    && ModArmorItem.isAbyssalArmorSet(headStack, chestStack, leggingsStack, bootsStack)
-                    && ModArmorItem.isUnseeniumArmorSet(headStack, chestStack, leggingsStack, bootsStack))
-                    && ModArmorItem.isRedTitaniumArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
-                if (livingEntity.age % 20 == 0 && !livingEntity.hasStatusEffect(StatusEffects.DARKNESS)) {
-                    livingEntity.setVelocity(livingEntity.getRandom().nextBoolean()
-                            ? new Vec3d(1, 1, 0)
-                            : new Vec3d(0, -1, -1));
+            if (!(headStack.isOf(Items.TURTLE_HELMET) || livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)
+                    || ModArmorItem.isAbyssalArmorSet(livingEntity)
+                    || ModArmorItem.isUnseeniumArmorSet(livingEntity)
+                    || ModArmorItem.isRedTitaniumArmorSet(livingEntity))) {
+                if (!livingEntity.hasStatusEffect(StatusEffects.DARKNESS))
                     livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 0));
-                }
             }
         }
         if (entity instanceof BoatEntity boatEntity)

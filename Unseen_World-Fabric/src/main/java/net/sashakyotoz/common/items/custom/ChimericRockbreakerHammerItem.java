@@ -31,10 +31,10 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        if (getItemPhase(player.getMainHandStack()).equals("hammer_eroflaming"))
+        if (IGrippingWeapons.getPhase(player.getMainHandStack()).equals("hammer_eroflaming"))
             player.setCurrentHand(hand);
         if (player instanceof ServerPlayerEntity entity && GripcrystalManaData.getMana((IEntityDataSaver) entity) < 48) {
-            if (getItemPhase(player.getMainHandStack()).equals("hammer_smashing") && player.getInventory().containsAny(itemStack -> itemStack.isOf(ModItems.GRIPCRYSTAL))) {
+            if (IGrippingWeapons.getPhase(player.getMainHandStack()).equals("hammer_smashing") && player.getInventory().containsAny(itemStack -> itemStack.isOf(ModItems.GRIPCRYSTAL))) {
                 GripcrystalManaData.addMana((IEntityDataSaver) player, 6);
                 for (int i = 0; i < player.getInventory().size(); i++) {
                     ItemStack itemStack = player.getInventory().getStack(i);
@@ -61,7 +61,7 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
 
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        if (getItemPhase(stack).equals("hammer_eroflaming") && user instanceof ServerPlayerEntity serverPlayer && GripcrystalManaData.getMana((IEntityDataSaver) serverPlayer) > 0) {
+        if (IGrippingWeapons.getPhase(stack).equals("hammer_eroflaming") && user instanceof ServerPlayerEntity serverPlayer && GripcrystalManaData.getMana((IEntityDataSaver) serverPlayer) > 0) {
             BlockPos center = world.raycast(new RaycastContext(user.getEyePos(), user.getEyePos().add(user.getRotationVec(1f).multiply(remainingUseTicks % 2 == 0 ? 2 : 4)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, user)).getBlockPos();
             List<LivingEntity> entities = world.getEntitiesByClass(LivingEntity.class, new Box(center.toCenterPos(), center.toCenterPos()).expand(3), LivingEntity::canHit);
             Vec3d eyePos = serverPlayer.getEyePos();
@@ -103,9 +103,5 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
                 }
             }
         }
-    }
-
-    public String getItemPhase(ItemStack stack) {
-        return stack.getOrCreateNbt().getString("rockbreaker_hammer_phase");
     }
 }

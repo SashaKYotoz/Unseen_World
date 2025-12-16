@@ -15,10 +15,8 @@ import net.sashakyotoz.utils.Oscillator;
 import org.joml.Matrix4f;
 
 public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.SkyRenderer {
-    private final DarknessFlashState darknessFlashState = new DarknessFlashState();
     public static final Identifier STAR = UnseenWorld.makeID("textures/environment/remains_of_star.png");
     public static final Identifier GALAXY = UnseenWorld.makeID("textures/environment/dark_galactic_animated.png");
-    public static final Identifier FLASH = UnseenWorld.makeID("textures/environment/darkness_flash.png");
 
     @Override
     public void render(WorldRenderContext context) {
@@ -26,8 +24,7 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
             ChimericDarknessData data = WorldConfigController.data.get(0);
             if (data != null) {
                 context.matrixStack().push();
-                if (data.starsUnlock())
-                    renderStars(context);
+                renderStars(context);
                 if (data.sunUnlock())
                     renderSkyObject(data, context);
                 context.matrixStack().pop();
@@ -40,7 +37,7 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
         float k = 30.0F;
         context.matrixStack().scale(0.5f, 0.5f, 0.5f);
         if (!data.galacticUnlock())
-            context.matrixStack().multiply(RotationAxis.POSITIVE_Z.rotationDegrees((WorldClientEventsHandler.halfTicks.get(0) / 4) % 36000));
+            context.matrixStack().multiply(RotationAxis.POSITIVE_Z.rotationDegrees((ClientTicks.getHalfTicks() / 4) % 36000));
         else
             context.matrixStack().scale(0.25f, 0.25f, 0.25f);
         Matrix4f matrix4f2 = context.matrixStack().peek().getPositionMatrix();
@@ -55,7 +52,7 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
         } else {
             RenderSystem.setShaderTexture(0, GALAXY);
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            int currentFrame = Math.round(WorldClientEventsHandler.halfTicks.get(0) * 2) % 16;
+            int currentFrame = ClientTicks.getTicks() % 16;
             float frameHeight = 1.0f / 16;
             float minV = currentFrame * frameHeight;
             float maxV = minV + frameHeight;
@@ -71,8 +68,8 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
     }
 
     private void renderStars(WorldRenderContext context) {
-        RenderSystem.setShaderColor(1f, 0.25f, Oscillator.getOscillatingValue(), 0.5f);
-        context.matrixStack().multiply(RotationAxis.POSITIVE_Y.rotationDegrees((WorldClientEventsHandler.halfTicks.get(0) / 16) % 360));
+        RenderSystem.setShaderColor(1f, 0.25f, Oscillator.getOscillatingValue(), 1f);
+        context.matrixStack().multiply(RotationAxis.POSITIVE_Y.rotationDegrees((ClientTicks.getHalfTicks() / 16) % 360));
         BackgroundRenderer.clearFog();
         VertexBuffer starsBuffer = context.worldRenderer().starsBuffer;
         if (starsBuffer != null) {

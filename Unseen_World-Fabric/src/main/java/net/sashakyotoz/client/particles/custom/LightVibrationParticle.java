@@ -9,7 +9,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.PositionSource;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.particles.custom.effects.LightVibrationParticleEffect;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -132,7 +132,7 @@ public class LightVibrationParticle extends SpriteBillboardParticle {
                 this.field_28250 = (float) MathHelper.atan2(e, g);
                 this.field_40508 = this.field_40507;
                 this.field_40507 = (float) MathHelper.atan2(f, Math.sqrt(e * e + g * g));
-                int color = Color.HSBtoRGB(WorldClientEventsHandler.halfTicks.get(0) == null ? 0 : WorldClientEventsHandler.halfTicks.get(0) / 10 % 360, 1F, 1.0F);
+                int color = Color.HSBtoRGB(ClientTicks.getHalfTicks() / 10 % 360, 1F, 1.0F);
                 red = (float) (color >> 16 & 255) / 255.0F;
                 green = (float) (color >> 8 & 255) / 255.0F;
                 blue = (float) (color & 255) / 255.0F;

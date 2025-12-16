@@ -7,7 +7,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.animations.EldritchWatcherAnimations;
 import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
@@ -87,7 +87,7 @@ public class EldritchWatcherModel extends SinglePartEntityModel<EldritchWatcherE
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         this.animateMovement(EldritchWatcherAnimations.WALK, limbSwing, limbSwingAmount, 2, 2);
         if (!entity.isDead())
-            this.body.roll = (float) Oscillator.getOscillatingWithNegativeValue(Math.round(WorldClientEventsHandler.halfTicks.get(0) * 2)) * 0.35f;
+            this.body.roll = (float) Oscillator.getOscillatingWithNegativeValue(ClientTicks.getTicks()) * 0.35f;
         this.updateAnimation(entity.attack, EldritchWatcherAnimations.ATTACK, ageInTicks);
         if (ConfigEntries.doAdvancedDeathForMobs)
             this.updateAnimation(entity.death, EldritchWatcherAnimations.DEATH, ageInTicks);

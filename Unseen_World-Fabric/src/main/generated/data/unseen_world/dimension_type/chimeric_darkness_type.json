@@ -1,5 +1,5 @@
 {
-  "ambient_light": 0.005,
+  "ambient_light": 0.0075,
   "bed_works": true,
   "coordinate_scale": 16.0,
   "effects": "unseen_world:the_chimeric_darkness",

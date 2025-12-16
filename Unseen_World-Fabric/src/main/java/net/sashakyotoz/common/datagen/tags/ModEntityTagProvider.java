@@ -24,6 +24,7 @@ public class ModEntityTagProvider extends FabricTagProvider.EntityTypeTagProvide
                 ModEntities.HARMONY_WATCHER,
                 ModEntities.GLOOMWHALE,
                 ModEntities.TUSKHOG,
+                ModEntities.ESPYER,
                 ModEntities.GLEAMCARVER
         );
     }

@@ -45,10 +45,10 @@ public class GrippingAbyssalBowItem extends BowItem {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
-        if (getItemPhase(stack).isEmpty())
+        if (IGrippingWeapons.getPhase(stack).isEmpty())
             return super.use(world, user, hand);
         else if (user instanceof ServerPlayerEntity player &&
-                (GripcrystalManaData.getMana((IEntityDataSaver) player) > 0 || getItemPhase(stack).equals("crystal_suctioning"))) {
+                (GripcrystalManaData.getMana((IEntityDataSaver) player) > 0 || IGrippingWeapons.getPhase(stack).equals("crystal_suctioning"))) {
             user.setCurrentHand(hand);
             return TypedActionResult.consume(stack);
         } else
@@ -65,7 +65,7 @@ public class GrippingAbyssalBowItem extends BowItem {
         if (user instanceof PlayerEntity playerEntity) {
             int i = this.getMaxUseTime(stack) - remainingUseTicks;
             float f = getPullProgress(i);
-            switch (getItemPhase(stack)) {
+            switch (IGrippingWeapons.getPhase(stack)) {
                 case "crystal_crushing" -> {
                     if (playerEntity instanceof ServerPlayerEntity player && GripcrystalManaData.getMana((IEntityDataSaver) player) > 2) {
                         GripcrystalManaData.removeMana((IEntityDataSaver) player, 2);
@@ -198,9 +198,5 @@ public class GrippingAbyssalBowItem extends BowItem {
             return slot == EquipmentSlot.MAINHAND ? builder.build() : super.getAttributeModifiers(slot);
         } else
             return super.getAttributeModifiers(stack, slot);
-    }
-
-    public String getItemPhase(ItemStack stack) {
-        return stack.getOrCreateNbt().getString("bow_phase");
     }
 }

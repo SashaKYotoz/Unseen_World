@@ -9,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 import net.sashakyotoz.api.entity_data.IModelPartsAccessor;
 
@@ -21,40 +22,52 @@ public abstract class StuckObjectsRenderer<T extends LivingEntity, M extends Ent
 
     protected abstract int getObjectCount(T entity);
 
-    protected abstract void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float directionX, float directionY, float directionZ, float tickDelta);
+    protected abstract void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity);
 
-    protected boolean renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
-        return false;
+    protected void renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
     }
 
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
         int m = this.getObjectCount(livingEntity);
         Random random = Random.create(livingEntity.getId());
         if (m > 0) {
-            for (int n = 0; n < m; ++n) {
-                matrixStack.push();
-                if (this.getContextModel() instanceof IModelPartsAccessor accessor && !accessor.getAllModelParts().isEmpty()) {
+            if (this.getContextModel() instanceof IModelPartsAccessor accessor && !accessor.getAllModelParts().isEmpty()) {
+                for (int n = 0; n < m; ++n) {
+                    matrixStack.push();
                     ModelPart modelPart = getRandomPart(accessor.getAllModelParts(), random);
-                    if (modelPart != null && !modelPart.isEmpty() && renderModelPartOverlay(modelPart, matrixStack, vertexConsumerProvider, i, livingEntity)) {
-                        ModelPart.Cuboid cuboid = modelPart.getRandomCuboid(random);
-                        modelPart.rotate(matrixStack);
-                        float o = random.nextFloat();
-                        float p = random.nextFloat();
-                        float q = random.nextFloat();
-                        float r = MathHelper.lerp(o, cuboid.minX, cuboid.maxX) / 16.0F;
-                        float s = MathHelper.lerp(p, cuboid.minY, cuboid.maxY) / 16.0F;
-                        float t = MathHelper.lerp(q, cuboid.minZ, cuboid.maxZ) / 16.0F;
-                        matrixStack.translate(r, s, t);
-                        o = -1.0F * (o * 2.0F - 1.0F);
-                        p = -1.0F * (p * 2.0F - 1.0F);
-                        q = -1.0F * (q * 2.0F - 1.0F);
-                        this.renderObject(matrixStack, vertexConsumerProvider, i, livingEntity, o, p, q, h);
+                    if (modelPart != null && !modelPart.isEmpty()) {
+                        calculateRotations(matrixStack,modelPart,random,modelPart.getRandomCuboid(random));
+                        this.renderObject(matrixStack, vertexConsumerProvider, i, livingEntity);
                     }
+                    matrixStack.pop();
                 }
+                matrixStack.push();
+                ModelPart modelPart = getRandomPart(accessor.getAllModelParts(), random);
+                if (modelPart != null && !modelPart.isEmpty())
+                    renderModelPartOverlay(modelPart, matrixStack, vertexConsumerProvider, i, livingEntity);
                 matrixStack.pop();
             }
 
         }
+    }
+
+    public void calculateRotations(MatrixStack matrixStack, ModelPart modelPart, Random random, ModelPart.Cuboid cuboid) {
+        modelPart.rotate(matrixStack);
+        float directionX = random.nextFloat();
+        float directionY = random.nextFloat();
+        float directionZ = random.nextFloat();
+        float r = MathHelper.lerp(directionX, cuboid.minX, cuboid.maxX) / 16.0F;
+        float s = MathHelper.lerp(directionY, cuboid.minY, cuboid.maxY) / 16.0F;
+        float t = MathHelper.lerp(directionZ, cuboid.minZ, cuboid.maxZ) / 16.0F;
+        matrixStack.translate(r, s, t);
+        directionX = -1.0F * (directionX * 2.0F - 1.0F);
+        directionY = -1.0F * (directionY * 2.0F - 1.0F);
+        directionZ = -1.0F * (directionZ * 2.0F - 1.0F);
+        float f = MathHelper.sqrt(directionX * directionX + directionZ * directionZ);
+        float g = (float) (Math.atan2(directionX, directionZ) * 57.2957763671875);
+        float h = (float) (Math.atan2(directionY, f) * 57.2957763671875);
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(g - 90.0F));
+        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(h));
     }
 
     public ModelPart getRandomPart(List<ModelPart> parts, Random random) {

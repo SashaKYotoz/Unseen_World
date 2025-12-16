@@ -136,6 +136,7 @@ public class ModModelProvider extends FabricModelProvider {
         generator.register(ModBlocks.UMBRAL_KELP.asItem(), Models.GENERATED);
 
         registerBundle(generator, ModItems.GRIPPING_BUNDLE);
+        registerGauntlet(generator, ModItems.GRIPPING_GAUNTLET);
         for (Item item : ModRegistry.ITEMS) {
             if (item instanceof ArmorItem armorItem)
                 generator.registerArmor(armorItem);
@@ -145,22 +146,29 @@ public class ModModelProvider extends FabricModelProvider {
         }
     }
 
-    private JsonObject createBundleJson(Identifier id, Map<TextureKey, Identifier> textures) {
+    private JsonObject createPredicatedJson(Identifier id, Map<TextureKey, Identifier> textures, String s, double d) {
         JsonObject jsonObject = Models.GENERATED.createJson(id, textures);
         JsonArray overrides = new JsonArray();
         JsonObject override = new JsonObject();
         JsonObject predicate = new JsonObject();
-        predicate.addProperty("filled", 0.0000001);
+        predicate.addProperty(s, d);
         override.add("predicate", predicate);
-        override.addProperty("model", id.withSuffixedPath("_filled").toString());
+        override.addProperty("model", id.withSuffixedPath("_%s".formatted(s)).toString());
         overrides.add(override);
         jsonObject.add("overrides", overrides);
         return jsonObject;
     }
 
     private void registerBundle(ItemModelGenerator generator, Item item) {
-        Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(TextureMap.getId(item)), generator.writer, this::createBundleJson);
+        Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(TextureMap.getId(item)), generator.writer,
+                (id, textures) -> createPredicatedJson(id, textures, "filled", 0.000001));
         generator.register(item, "_filled", Models.GENERATED);
+    }
+
+    private void registerGauntlet(ItemModelGenerator generator, Item item) {
+        Models.GENERATED.upload(ModelIds.getItemModelId(item), TextureMap.layer0(TextureMap.getId(item)), generator.writer,
+                (id, textures) -> createPredicatedJson(id, textures, "grip", 1.0));
+        generator.register(item, "_grip", Models.GENERATED);
     }
 
     private void registerTintableLitCross(BlockStateModelGenerator generator, DarknessFernBlock block, BlockStateModelGenerator.TintType tintType) {

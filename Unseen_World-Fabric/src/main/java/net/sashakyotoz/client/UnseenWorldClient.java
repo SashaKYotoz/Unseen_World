@@ -30,7 +30,8 @@ import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.MultipartEntity;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
 import net.sashakyotoz.client.environment.ChimericDarknessSkyRenderer;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
+import net.sashakyotoz.client.environment.weather.Grippfall;
 import net.sashakyotoz.client.gui.FullScreenOverlay;
 import net.sashakyotoz.client.gui.GripCrystalHUDOverlay;
 import net.sashakyotoz.client.gui.blocks.ChestScreenHandler;
@@ -120,7 +121,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         ModMessages.registerS2CPackets();
         HudRenderCallback.EVENT.register(new GripCrystalHUDOverlay());
         HudRenderCallback.EVENT.register(new FullScreenOverlay());
-        ClientTickEvents.END_CLIENT_TICK.register(new WorldClientEventsHandler());
+        ClientTickEvents.END_CLIENT_TICK.register(new ClientTicks());
 
         DimensionRenderingRegistry.registerDimensionEffects(UnseenWorld.makeID("the_chimeric_darkness"),
                 new DimensionEffects(Float.NaN, false, DimensionEffects.SkyType.NONE, false, true) {
@@ -135,6 +136,7 @@ public class UnseenWorldClient implements ClientModInitializer {
                     }
                 });
         DimensionRenderingRegistry.registerSkyRenderer(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY, new ChimericDarknessSkyRenderer());
+        DimensionRenderingRegistry.registerWeatherRenderer(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY, new Grippfall());
 
         ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, new Identifier("pull"), (stack, world, entity, seed) -> {
             if (entity == null)
@@ -144,21 +146,14 @@ public class UnseenWorldClient implements ClientModInitializer {
         });
         ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, new Identifier("pulling"), (stack, world, entity, seed) -> entity != null
                 && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> {
-            switch (stack.getOrCreateNbt().getString("bow_phase")) {
-                case "crystal_crushing", "crystal_suctioning" -> {
-                    return 2;
-                }
-                case "crystal_rain" -> {
-                    return 1;
-                }
-                default -> {
-                    return 0;
-                }
-            }
+        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> switch (stack.getOrCreateNbt().getString("bow_phase")) {
+            case "crystal_crushing", "crystal_suctioning" -> 2;
+            case "crystal_rain" -> 1;
+            default -> 0;
         });
         ModelPredicateProviderRegistry.register(ModItems.SHIELD_OF_CHIMERIC_WARRIOR, new Identifier("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
         ModelPredicateProviderRegistry.register(ModItems.GRIPPING_BUNDLE, new Identifier("filled"), (stack, world, entity, seed) -> BundleItem.getAmountFilled(stack));
+        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_GAUNTLET, new Identifier("grip"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
 
         ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity instanceof MultipartEntity multipartEntity) {

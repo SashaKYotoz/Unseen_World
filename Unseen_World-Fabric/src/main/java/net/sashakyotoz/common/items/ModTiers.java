@@ -4,11 +4,11 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public enum ModTiers implements ToolMaterial {
-    UNSEENIUM(4,1263,12f,5f,36,Ingredient.ofItems(ModItems.UNSEENIUM_INGOT)),
-    ABYSSAL(5,2350,13f,6f,24,Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
-    TITANIUM(5,2485,14f,6f,20,Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT)),
+    UNSEENIUM(4,1263,12f,4f,36,Ingredient.ofItems(ModItems.UNSEENIUM_INGOT)),
+    ABYSSAL(5,2350,13f,5f,24,Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
+    TITANIUM(5,2485,14f,5f,20,Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT)),
     ROCKBREAKER_HAMMER(4,2374,10f,7f,30,Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
-    ECLIPSEBANE(3,2169,8f,9f,32,Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT));
+    ECLIPSEBANE(3,2169,8f,8f,32,Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT));
 
     private final int durability;
     private final float speed;

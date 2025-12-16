@@ -1,7 +1,7 @@
 package net.sashakyotoz.utils;
 
 import net.minecraft.util.math.MathHelper;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
 
 public class Oscillator {
     private static final int TICKS_PER_SECOND = 20;
@@ -25,8 +25,8 @@ public class Oscillator {
 
     public static float getOscillatingValue() {
         int tickCount = 0;
-        if (WorldClientEventsHandler.halfTicks != null)
-            tickCount = Math.round(WorldClientEventsHandler.halfTicks.get(0) * 2);
+        if (ClientTicks.halfTicks != null)
+            tickCount = ClientTicks.getTicks();
         float phase = (float) ((2 * Math.PI * (tickCount % PERIOD_IN_TICKS)) / PERIOD_IN_TICKS);
         return 0.5F * (1 + MathHelper.sin(phase));
     }

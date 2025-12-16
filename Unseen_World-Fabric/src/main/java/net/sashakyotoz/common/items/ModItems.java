@@ -140,6 +140,8 @@ public class ModItems {
             new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE).maxDamage(984))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS, ConventionalItemTags.BOWS).build();
     //artifacts
     public static final Item GRIPPING_BUNDLE = ModRegistry.ofItem("gripping_bundle", new GrippingBundleItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+    public static final Item GRIPPING_GAUNTLET = ModRegistry.ofItem("gripping_gauntlet", new GrippingGauntletItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+    public static final Item GRIPCRYSTAL_ORB = ModRegistry.ofItem("gripcrystal_orb", new GripcrystalOrbItem(new FabricItemSettings().rarity(Rarity.RARE).maxCount(16))).model(Models.GENERATED).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(Models.GENERATED).build();

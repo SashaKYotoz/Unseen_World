@@ -14,8 +14,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.common.blocks.ModBlocks;
@@ -42,19 +40,13 @@ public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> ext
     }
 
     @Override
-    protected boolean renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
+    protected void renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
         if (entity instanceof IGrippingEntity iGrippingEntity)
             part.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(TEXTURE)), light, OverlayTexture.DEFAULT_UV, 1, 1, 1, iGrippingEntity.getGrippingData() / 10f);
-        return true;
     }
 
     @Override
-    protected void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float directionX, float directionY, float directionZ, float tickDelta) {
-        float f = MathHelper.sqrt(directionX * directionX + directionZ * directionZ);
-        float g = (float) (Math.atan2(directionX, directionZ) * 57.2957763671875);
-        float h = (float) (Math.atan2(directionY, f) * 57.2957763671875);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(g - 90.0F));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(h));
+    protected void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
         matrices.scale(0.35f, 0.35f, 0.35f);
         ItemStack stack = ModBlocks.GRIPCRYSTAL_WART.asItem().getDefaultStack();
         if (entity instanceof LivingEntity entity1)

@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
 import net.sashakyotoz.common.items.custom.EclipsebaneItem;
+import net.sashakyotoz.common.items.custom.IGrippingWeapons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +51,8 @@ public class ConfigController implements ServerWorldEvents.Load {
     public record ModEntry(String modId, List<ItemEntry> items) {
     }
 
-    public record ModConfig(List<ModEntry> entries) {
+
+    public record ModConfig(String config_version, List<ModEntry> entries) {
     }
 
     public static List<DataItem> loadGrippingManaConfig() {
@@ -61,8 +63,12 @@ public class ConfigController implements ServerWorldEvents.Load {
                 Files.writeString(configPath, getCompatibilityConfig());
             }
             String json = Files.readString(configPath);
+            ModConfig tmpConfig = gson.fromJson(getCompatibilityConfig(), ModConfig.class);
             ModConfig config = gson.fromJson(json, ModConfig.class);
-
+            if (!config.config_version.equals(tmpConfig.config_version)) {
+                Files.writeString(configPath, getCompatibilityConfig());
+                config = tmpConfig;
+            }
             List<DataItem> spellItems = new ArrayList<>();
             for (ModEntry modEntry : config.entries()) {
                 for (ItemEntry itemEntry : modEntry.items()) {
@@ -84,7 +90,7 @@ public class ConfigController implements ServerWorldEvents.Load {
             Path configPath = FabricLoader.getInstance().getConfigDir().resolve("unseen_world/uw-config.json");
             if (!Files.exists(configPath)) {
                 Files.createDirectories(configPath.getParent());
-                Files.writeString(configPath, getEntriesConfig()); 
+                Files.writeString(configPath, getEntriesConfig());
             }
             String json = Files.readString(configPath);
             CONFIG = gson.fromJson(json, Map.class);
@@ -116,6 +122,7 @@ public class ConfigController implements ServerWorldEvents.Load {
     private static String getCompatibilityConfig() {
         return """
                 {
+                   "config_version": "1.0",
                    "entries": [
                      {
                        "modId": "sortilege",
@@ -209,8 +216,8 @@ public class ConfigController implements ServerWorldEvents.Load {
     }
 
     public static boolean canHandleGripcrystalAbility(ItemStack stack) {
-        return (stack.getItem() instanceof EclipsebaneItem eclipsebaneItem && eclipsebaneItem.getItemPhase(stack).equals("light_ray"))
-                || (stack.getItem() instanceof ChimericRockbreakerHammerItem hammerItem && hammerItem.getItemPhase(stack).equals("heavy_winding"))
+        return (stack.getItem() instanceof EclipsebaneItem && IGrippingWeapons.getPhase(stack).equals("light_ray"))
+                || (stack.getItem() instanceof ChimericRockbreakerHammerItem && IGrippingWeapons.getPhase(stack).equals("heavy_winding"))
                 || ConfigController.getDataToStack(stack) != null;
     }
 

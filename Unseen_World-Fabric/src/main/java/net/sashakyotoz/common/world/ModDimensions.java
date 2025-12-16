@@ -35,7 +35,7 @@ public class ModDimensions {
                 320, // logicalHeight
                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn
                 UnseenWorld.makeID("the_chimeric_darkness"), // effectsLocation
-                0.005F, // ambientLight
+                0.0075F, // ambientLight
                 new DimensionType.MonsterSettings(false, false, UniformIntProvider.create(0, 4), 0)));
     }
 }

@@ -118,23 +118,45 @@ public class ModArmorItem extends ArmorItem {
     }
 
     public static boolean isAbyssalArmorSet(ItemStack head, ItemStack chest, ItemStack legs, ItemStack feet) {
-        return head.getItem() == ModItems.ABYSSAL_HELMET
-                && chest.getItem() == ModItems.ABYSSAL_CHESTPLATE
-                && legs.getItem() == ModItems.ABYSSAL_LEGGINGS
-                && feet.getItem() == ModItems.ABYSSAL_BOOTS;
+        return head.isOf(ModItems.ABYSSAL_HELMET)
+                && chest.isOf(ModItems.ABYSSAL_CHESTPLATE)
+                && legs.isOf(ModItems.ABYSSAL_LEGGINGS)
+                && feet.isOf(ModItems.ABYSSAL_BOOTS);
+    }
+
+    public static boolean isAbyssalArmorSet(LivingEntity entity) {
+        ItemStack headStack = entity.getEquippedStack(EquipmentSlot.HEAD);
+        ItemStack chestStack = entity.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack leggingsStack = entity.getEquippedStack(EquipmentSlot.LEGS);
+        ItemStack bootsStack = entity.getEquippedStack(EquipmentSlot.FEET);
+        return isAbyssalArmorSet(headStack, chestStack, leggingsStack, bootsStack);
     }
 
     public static boolean isRedTitaniumArmorSet(ItemStack headSlot, ItemStack chestSlot, ItemStack legsSlot, ItemStack feetSlot) {
-        return feetSlot.getItem() == ModItems.RED_TITANIUM_HELMET
-                && legsSlot.getItem() == ModItems.RED_TITANIUM_LEGGINGS
-                && chestSlot.getItem() == ModItems.RED_TITANIUM_CHESTPLATE
-                && headSlot.getItem() == ModItems.RED_TITANIUM_HELMET;
+        return feetSlot.isOf(ModItems.RED_TITANIUM_HELMET)
+                && legsSlot.isOf(ModItems.RED_TITANIUM_LEGGINGS)
+                && chestSlot.isOf(ModItems.RED_TITANIUM_CHESTPLATE)
+                && headSlot.isOf(ModItems.RED_TITANIUM_HELMET);
+    }
+    public static boolean isRedTitaniumArmorSet(LivingEntity entity) {
+        ItemStack headStack = entity.getEquippedStack(EquipmentSlot.HEAD);
+        ItemStack chestStack = entity.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack leggingsStack = entity.getEquippedStack(EquipmentSlot.LEGS);
+        ItemStack bootsStack = entity.getEquippedStack(EquipmentSlot.FEET);
+        return isRedTitaniumArmorSet(headStack, chestStack, leggingsStack, bootsStack);
     }
 
     public static boolean isUnseeniumArmorSet(ItemStack headSlot, ItemStack chestSlot, ItemStack legsSlot, ItemStack feetSlot) {
-        return feetSlot.getItem() == ModItems.UNSEENIUM_BOOTS
-                && legsSlot.getItem() == ModItems.UNSEENIUM_LEGGINGS
-                && chestSlot.getItem() == ModItems.UNSEENIUM_CHESTPLATE
-                && headSlot.getItem() == ModItems.UNSEENIUM_HELMET;
+        return feetSlot.isOf(ModItems.UNSEENIUM_BOOTS)
+                && legsSlot.isOf(ModItems.UNSEENIUM_LEGGINGS)
+                && chestSlot.isOf(ModItems.UNSEENIUM_CHESTPLATE)
+                && headSlot.isOf(ModItems.UNSEENIUM_HELMET);
+    }
+    public static boolean isUnseeniumArmorSet(LivingEntity entity) {
+        ItemStack headStack = entity.getEquippedStack(EquipmentSlot.HEAD);
+        ItemStack chestStack = entity.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack leggingsStack = entity.getEquippedStack(EquipmentSlot.LEGS);
+        ItemStack bootsStack = entity.getEquippedStack(EquipmentSlot.FEET);
+        return isUnseeniumArmorSet(headStack, chestStack, leggingsStack, bootsStack);
     }
 }

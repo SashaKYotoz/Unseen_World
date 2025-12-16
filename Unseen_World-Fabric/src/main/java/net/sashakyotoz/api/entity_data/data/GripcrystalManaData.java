@@ -17,12 +17,28 @@ public class GripcrystalManaData {
         else
             mana += amount;
         nbt.putInt("gripcrystal_mana", mana);
-        syncMana(mana, (ServerPlayerEntity) player);
+        syncData(mana, nbt.getFloat("ability_opacity"), (ServerPlayerEntity) player);
         return mana;
+    }
+
+    public static float addOpacityDelta(IEntityDataSaver player, float amount) {
+        NbtCompound nbt = player.getPersistentData();
+        float opacity = nbt.getFloat("ability_opacity");
+        if (opacity + amount >= 1)
+            opacity = 1;
+        else
+            opacity += amount;
+        nbt.putFloat("ability_opacity", opacity);
+        syncData(nbt.getInt("gripcrystal_mana"), opacity, (ServerPlayerEntity) player);
+        return opacity;
     }
 
     public static int getMana(IEntityDataSaver player) {
         return player.getPersistentData().getInt("gripcrystal_mana");
+    }
+
+    public static float getOpacity(IEntityDataSaver player) {
+        return player.getPersistentData().getFloat("ability_opacity");
     }
 
     public static int removeMana(IEntityDataSaver player, int amount) {
@@ -33,13 +49,26 @@ public class GripcrystalManaData {
         else
             mana -= amount;
         nbt.putInt("gripcrystal_mana", mana);
-        syncMana(mana, (ServerPlayerEntity) player);
+        syncData(mana, nbt.getFloat("ability_opacity"), (ServerPlayerEntity) player);
         return mana;
     }
 
-    public static void syncMana(int mana, ServerPlayerEntity player) {
+    public static float removeOpacity(IEntityDataSaver player, float amount) {
+        NbtCompound nbt = player.getPersistentData();
+        float opacity = nbt.getFloat("ability_opacity");
+        if (opacity - amount < 0)
+            opacity = 0;
+        else
+            opacity -= amount;
+        nbt.putFloat("ability_opacity", opacity);
+        syncData(nbt.getInt("gripcrystal_mana"), opacity, (ServerPlayerEntity) player);
+        return opacity;
+    }
+
+    public static void syncData(int mana, float opacity, ServerPlayerEntity player) {
         PacketByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(mana);
+        buffer.writeFloat(opacity);
         ServerPlayNetworking.send(player, ModMessages.GRIPCRYSTAL_MANA_HANDLER, buffer);
     }
 }

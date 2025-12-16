@@ -9,7 +9,7 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.client.environment.WorldClientEventsHandler;
+import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
 import net.sashakyotoz.utils.Oscillator;
 
@@ -23,6 +23,6 @@ public class EldritchWatcherPulsatingLayer<T extends EldritchWatcherEntity, M ex
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(
                 UnseenWorld.makeID("textures/entity/eldritch_watcher/eldritch_watcher_pulsating_spots.png")
         ));
-        this.getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, (float) Oscillator.getOscillatingValue(Math.round(WorldClientEventsHandler.halfTicks.get(0) * 2)));
+        this.getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()));
     }
 }
