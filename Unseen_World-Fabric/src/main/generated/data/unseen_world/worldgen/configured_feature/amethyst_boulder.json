@@ -7,7 +7,7 @@
         "Name": "minecraft:amethyst_block"
       }
     },
-    "size": {
+    "height": {
       "type": "minecraft:uniform",
       "value": {
         "max_inclusive": 7,

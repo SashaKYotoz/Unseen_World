@@ -40,7 +40,7 @@ public class GrippingGauntletItem extends Item {
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (user instanceof PlayerEntity player && !world.isClient()) {
-            ActionsUtils.raycastAlong(world, player, 24, (world1, pos) ->
+            ActionsUtils.rayCastAlong(world, player, 24, (world1, pos) ->
                     world1.getEntitiesByClass(LivingEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()).expand(0.75),
                             LivingEntity::canHit).stream().filter(this::getNotEmptyEntity).forEach(entity -> {
                         if (entity != player && world1 instanceof ServerWorld serverWorld) {

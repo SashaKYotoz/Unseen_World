@@ -8,6 +8,7 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -40,18 +41,28 @@ public class EclipsebaneItem extends SwordItem {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        return UseAction.TOOT_HORN;
+        return UseAction.BLOCK;
     }
 
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (IGrippingWeapons.getPhase(stack).equals("absorption") && GripcrystalManaData.getMana((IEntityDataSaver) user) < 48) {
-            ActionsUtils.raycastAlong(world, user, 16, (world1, pos) ->
+            ActionsUtils.rayCastAlong(world, user, 16, (world1, pos) ->
                     world1.getEntitiesByClass(LivingEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()).expand(0.675),
-                            LivingEntity::canHit).forEach(entity ->  {
+                            LivingEntity::canHit).stream().findFirst().ifPresent(entity -> {
                         if (entity != user) {
-                            entity.playSound(SoundEvents.BLOCK_CONDUIT_DEACTIVATE, 1.5f, 2.0f);
+                            world1.playSound(null, pos, SoundEvents.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.5f, 2.0f);
                             world1.addParticle(ParticleTypes.END_ROD, pos.getX() + (Math.cos(remainingUseTicks * Math.PI / 10)), pos.getY() + (Math.tan(remainingUseTicks * Math.PI / 10)), pos.getZ() + (Math.sin(remainingUseTicks * Math.PI / 10)), 0.0D, 0.0D, 0.0D);
+                            entity.setVelocity(
+                                    user.getVelocity().x - entity.getVelocity().x,
+                                    user.getVelocity().y - entity.getVelocity().y,
+                                    user.getVelocity().z - entity.getVelocity().z);
+                            entity.velocityModified = true;
+                            if (user instanceof ServerPlayerEntity player) {
+                                GripcrystalManaData.addMana((IEntityDataSaver) player, 2);
+                                player.getHungerManager().addExhaustion(1);
+                                player.getItemCooldownManager().set(stack.getItem(), 10);
+                            }
                         }
                     }));
         }

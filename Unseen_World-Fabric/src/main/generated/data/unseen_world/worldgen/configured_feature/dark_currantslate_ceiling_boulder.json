@@ -7,7 +7,7 @@
         "Name": "unseen_world:dark_currantslate"
       }
     },
-    "size": {
+    "height": {
       "type": "minecraft:uniform",
       "value": {
         "max_inclusive": 8,

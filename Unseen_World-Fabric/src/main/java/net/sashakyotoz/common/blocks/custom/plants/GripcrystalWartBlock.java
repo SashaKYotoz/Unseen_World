@@ -3,15 +3,17 @@ package net.sashakyotoz.common.blocks.custom.plants;
 import net.minecraft.block.AmethystClusterBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
-import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.utils.ActionsUtils;
 
 public class GripcrystalWartBlock extends AmethystClusterBlock {
@@ -20,21 +22,28 @@ public class GripcrystalWartBlock extends AmethystClusterBlock {
     }
 
     @Override
-    public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
-        if (!world.isClient()) {
-            BlockPos blockPos = hit.getBlockPos();
-            world.playSound(null, blockPos, SoundEvents.BLOCK_AZALEA_HIT, SoundCategory.BLOCKS, 1.0F, 0.5F + world.random.nextFloat() * 1.2F);
-            world.playSound(null, blockPos, SoundEvents.BLOCK_SCULK_CHARGE, SoundCategory.BLOCKS, 1.0F, 0.5F + world.random.nextFloat() * 1.2F);
-        }
+    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        super.onLandedUpon(world, state, pos, entity, fallDistance);
+        gripNearby(entity.getWorld(), entity.getBlockPos());
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (entity instanceof IGrippingEntity entity1 && entity.age % 10 == 0) {
-            if (entity1.getGrippingData() < 5) {
-                ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, entity.getWorld(), entity.getX(), entity.getY(), entity.getZ(), 2);
-                GrippingData.addGrippingSeconds(entity1, 5);
-            }
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        if (random.nextInt(9) == 1) {
+            if (world.getBlockState(pos.up()).isAir())
+                gripNearby(world, pos.up());
+            if (world.getBlockState(pos.down()).isAir())
+                gripNearby(world, pos.down(2));
         }
+    }
+
+    private void gripNearby(World world, BlockPos pos) {
+        world.getEntitiesByClass(LivingEntity.class,
+                new Box(pos.toCenterPos(), pos.toCenterPos()).expand(6), entity ->
+                        entity instanceof IGrippingEntity).forEach(entity -> {
+            GrippingData.addGrippingSeconds((IGrippingEntity) entity, 4);
+            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.BLOCKS, 1.2F, 1.8F);
+            ActionsUtils.spawnParticle(ParticleTypes.BUBBLE_POP, world, pos.getX(), pos.getY(), pos.getZ(), 4f);
+        });
     }
 }

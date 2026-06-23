@@ -53,6 +53,10 @@ public class ModPlacements {
     public static final RegistryKey<PlacedFeature> DARK_CURRANTSLATE_CEILING_BOULDER = create("dark_currantslate_ceiling_boulder");
 
     public static final RegistryKey<PlacedFeature> DARKNESS_SPIRAL_SPIKE = create("darkness_spiral_spike");
+    public static final RegistryKey<PlacedFeature> GRIPTONITE_CLUSTER_SPIKE = create("griptonite_cluster_spike");
+    public static final RegistryKey<PlacedFeature> AMETHYST_CLUSTER_SPIKE = create("amethyst_cluster_spike");
+
+    public static final RegistryKey<PlacedFeature> GRIPCRYSTAL_WART_PATCH = create("gripcrystal_wart_patch");
 
     public static final RegistryKey<PlacedFeature> WATER_LAKE = create("water_lake");
     public static final RegistryKey<PlacedFeature> DARK_WATER_LAKE = create("dark_water_lake");
@@ -178,10 +182,37 @@ public class ModPlacements {
                 context,
                 DARKNESS_SPIRAL_SPIKE,
                 configLookup.getOrThrow(ModConfiguredFeatures.DARKNESS_SPIRAL_SPIKE),
-                NoiseThresholdCountPlacementModifier.of(-0.75, 0, 1),
+                RarityFilterPlacementModifier.of(6),
+                CountPlacementModifier.of(2),
                 SquarePlacementModifier.of(),
                 PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP,
                 BiomePlacementModifier.of()
+        );
+        register(
+                context,
+                GRIPTONITE_CLUSTER_SPIKE,
+                configLookup.getOrThrow(ModConfiguredFeatures.GRIPTONITE_CLUSTER_SPIKE),
+                RarityFilterPlacementModifier.of(8),
+                CountPlacementModifier.of(2),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP,
+                BiomePlacementModifier.of()
+        );
+        register(
+                context,
+                AMETHYST_CLUSTER_SPIKE,
+                configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_CLUSTER_SPIKE),
+                RarityFilterPlacementModifier.of(8),
+                CountPlacementModifier.of(2),
+                SquarePlacementModifier.of(),
+                PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP,
+                BiomePlacementModifier.of()
+        );
+        register(
+                context,
+                GRIPCRYSTAL_WART_PATCH,
+                configLookup.getOrThrow(ModConfiguredFeatures.GRIPCRYSTAL_WART_PATCH),
+                CountPlacementModifier.of(1), RarityFilterPlacementModifier.of(4), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of()
         );
 
         register(context, WATER_LAKE, configLookup.getOrThrow(ModConfiguredFeatures.WATER_LAKE),

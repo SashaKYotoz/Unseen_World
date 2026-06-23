@@ -1,6 +1,5 @@
 package net.sashakyotoz.common.entities.bosses;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -19,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.sashakyotoz.utils.ActionsUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -84,19 +84,21 @@ public abstract class BossLikePathfinderMob extends PathAwareEntity implements M
     }
 
     public void provokeEarthquake(int radius) {
-        World world = this.getWorld();
-        if (!world.isClient())
-            for (int y = -2; y < 2; y++) {
-                for (int x = -radius; x < radius; x++) {
-                    for (int z = -radius; z < radius; z++) {
-                        BlockPos pos = this.getBlockPos().add(x, y, z);
-                        if (world.getBlockState(pos) != null && world.getBlockState(pos).isOpaque() && world.getBlockState(pos).getHardness(this.getWorld(), pos) < 10 && world.getBlockState(pos.up()).isAir()) {
-                            FallingBlockEntity.spawnFromBlock(world, pos.up(3), world.getBlockState(pos));
-                            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (!ActionsUtils.isModLoaded("sodium")) {
+            World world = this.getWorld();
+            if (!world.isClient())
+                for (int y = -2; y < 2; y++) {
+                    for (int x = -radius; x < radius; x++) {
+                        for (int z = -radius; z < radius; z++) {
+                            BlockPos pos = this.getBlockPos().add(x, y, z);
+                            if (world.getBlockState(pos) != null && world.getBlockState(pos).isOpaque() && world.getBlockState(pos).getHardness(this.getWorld(), pos) < 10 && world.getBlockState(pos.up()).isAir()) {
+                                FallingBlockEntity.spawnFromBlock(world, pos.up(3), world.getBlockState(pos));
+                                world.breakBlock(pos, false);
+                            }
                         }
                     }
                 }
-            }
+        }
     }
 
     public void spawnParticle(ParticleEffect type, World world, double x, double y, double z, float modifier) {

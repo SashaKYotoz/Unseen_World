@@ -204,8 +204,11 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.POLISHED_TANZANITE, ModBlocks.TANZANITE_BLOCK);
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.DARK_CURRANTSLATE_BRICKS, ModBlocks.DARK_CURRANTSLATE);
         offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.GLACIEMITE_BRICKS, ModBlocks.GLACIEMITE);
+        offer2x2CompactingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.GLIMMERGRAIN_SANDSTONE, ModBlocks.GLIMMERGRAIN_SAND);
 
         offerSingleOutputShapelessRecipe(exporter, Items.PURPLE_DYE, ModBlocks.BURLYWOOD_VIOLET, "purple_dye");
+
+        offerBlasting(exporter, List.of(ModBlocks.GLIMMERGRAIN_SAND), RecipeCategory.BUILDING_BLOCKS, Blocks.BLACK_STAINED_GLASS, 5, 200, "black_stained_glass");
 
         ShapedRecipeJsonBuilder.create(RecipeCategory.FOOD, Items.BONE_MEAL, 4)
                 .input('D', ModBlocks.GLOOMWEED)

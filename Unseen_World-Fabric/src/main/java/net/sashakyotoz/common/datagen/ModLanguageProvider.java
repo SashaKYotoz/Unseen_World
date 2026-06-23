@@ -43,6 +43,7 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("block.unseen_world.crimsonveil_hanging_sign", "Crimsonveil Hanging Sign");
 
         translationBuilder.add("sounds.unseen_world.gleamcarver_ambient_sound", "Gleamcarver squeak");
+        translationBuilder.add("sounds.unseen_world.ambient_sound", "Darkness vibrates");
 
         translationBuilder.add("filled_map.unseen_world.eclipse_core", "Eclipse Core map");
 

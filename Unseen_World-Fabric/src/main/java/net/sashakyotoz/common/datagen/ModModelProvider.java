@@ -10,6 +10,7 @@ import net.minecraft.data.family.BlockFamily;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -17,10 +18,14 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.BulbLikeBlock;
+import net.sashakyotoz.common.blocks.custom.EngravedGlaciemiteBricksBlock;
+import net.sashakyotoz.common.blocks.custom.KeyHandlerStoneBlock;
+import net.sashakyotoz.common.blocks.custom.OrdealSpawnerBlock;
 import net.sashakyotoz.common.blocks.custom.plants.DarknessFernBlock;
 import net.sashakyotoz.common.blocks.custom.plants.HangingFruitBlock;
 import net.sashakyotoz.common.blocks.custom.plants.LeafDroppingLeaveBlock;
 import net.sashakyotoz.common.items.ModItems;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,7 +95,7 @@ public class ModModelProvider extends FabricModelProvider {
                 }
             }
         }
-        generator.registerParentedItemModel(ModBlocks.KEY_HANDLER_STONE.asItem(), UnseenWorld.makeID("block/key_handler_stone"));
+        generator.registerParentedItemModel(ModBlocks.KEY_HANDLER_STONE.asItem(), UnseenWorld.makeID("block/key_handler_stone_glaciemite"));
         generator.registerParentedItemModel(ModBlocks.GLACIEMITE_TRANSLOCATONE.asItem(), UnseenWorld.makeID("block/glaciemite_translocatone"));
         generator.registerParentedItemModel(ModBlocks.GLOW_APPLE_BUSH.asItem(), UnseenWorld.makeID("block/glow_apple_bush/glow_apple_bush_without_fruit"));
         generator.registerItemModel(ModBlocks.HANGING_BURLYWOOD_LEAVES);
@@ -123,6 +128,14 @@ public class ModModelProvider extends FabricModelProvider {
         generator.registerDoubleBlock(ModBlocks.TALL_GLOOMWEED, BlockStateModelGenerator.TintType.TINTED);
         registerVerticalPlant(generator, ModBlocks.GRIPPING_SPIGELIA);
         registerCrystalLike(generator, ModBlocks.GRIPCRYSTAL_WART);
+        registerCrystalLike(generator, ModBlocks.GRIPTONITE_CLUSTER);
+
+        registerCubeBottomTop(generator, ModBlocks.ENGRAVED_GLACIEMITE_BRICKS, EngravedGlaciemiteBricksBlock.GRIPPED, "_charged", false, false);
+        registerCubeBottomTop(generator, ModBlocks.GLIMMERGRAIN_SANDSTONE, null, "", true, false);
+        registerCubeBottomTop(generator, ModBlocks.ORDEAL_SPAWNER, OrdealSpawnerBlock.GRIPPING, "_gripped", true, false);
+
+        registerKeyHandler(generator, ModBlocks.KEY_HANDLER_STONE);
+
         generator.registerLantern(ModBlocks.GRIPTONITE_LANTERN);
     }
 
@@ -178,6 +191,83 @@ public class ModModelProvider extends FabricModelProvider {
         Identifier identifier2 = generator.createSubModel(block, "_lit", Models.TINTED_CROSS, TextureMap::cross);
         generator.blockStateCollector
                 .accept(VariantsBlockStateSupplier.create(block).coordinate(BlockStateModelGenerator.createBooleanModelMap(DarknessFernBlock.LIT, identifier2, identifier)));
+    }
+
+    private void registerCubeBottomTop(BlockStateModelGenerator generator, Block block, @Nullable BooleanProperty property, String suffix, boolean bottomDiffer, boolean hasSingleTexture) {
+        Identifier sideId = TextureMap.getSubId(block, "_side");
+        Identifier sideSuffixedId = TextureMap.getSubId(block, "_side" + suffix);
+        Identifier topId = TextureMap.getSubId(block, "_top");
+        Identifier topSuffixedId = TextureMap.getSubId(block, "_top" + suffix);
+        Identifier bottomId = bottomDiffer ? TextureMap.getSubId(block, "_bottom") : topId;
+        TextureMap textureMap = new TextureMap()
+                .put(TextureKey.SIDE, sideId)
+                .put(TextureKey.TOP, topId)
+                .put(TextureKey.BOTTOM, bottomId);
+        TextureMap textureSuffixedMap = new TextureMap()
+                .put(TextureKey.SIDE, sideSuffixedId)
+                .put(TextureKey.TOP, topSuffixedId)
+                .put(TextureKey.BOTTOM, bottomId);
+        Identifier activeModelId = hasSingleTexture ? TextureMap.getId(block) : Models.CUBE_BOTTOM_TOP.upload(block, textureMap, generator.modelCollector);
+        Identifier suffixedModelId = hasSingleTexture || suffix.isEmpty() ? TextureMap.getSubId(block, suffix) : Models.CUBE_BOTTOM_TOP.upload(block, suffix, textureSuffixedMap, generator.modelCollector);
+        if (property != null) {
+            if (block.getDefaultState().contains(Properties.HORIZONTAL_FACING)) {
+                generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
+                        .coordinate(BlockStateVariantMap.create(property, Properties.HORIZONTAL_FACING)
+                                .register(false, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R0))
+                                .register(true, Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, suffixedModelId).put(VariantSettings.Y, VariantSettings.Rotation.R0))
+                                .register(false, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                                .register(true, Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, suffixedModelId).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                                .register(false, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                                .register(true, Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, suffixedModelId).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                                .register(false, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                                .register(true, Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, suffixedModelId).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        )
+                );
+            } else {
+                generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
+                        .coordinate(BlockStateVariantMap.create(property)
+                                .register(false, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId))
+                                .register(true, BlockStateVariant.create().put(VariantSettings.MODEL, suffixedModelId))
+                        )
+                );
+            }
+        } else {
+            if (block.getDefaultState().contains(Properties.HORIZONTAL_FACING)) {
+                generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
+                        .coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING)
+                                .register(Direction.NORTH, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R0))
+                                .register(Direction.SOUTH, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                                .register(Direction.EAST, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R90))
+                                .register(Direction.WEST, BlockStateVariant.create().put(VariantSettings.MODEL, activeModelId).put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        )
+                );
+            } else
+                generator.blockStateCollector.accept(BlockStateModelGenerator.createSingletonBlockState(block, activeModelId));
+        }
+    }
+
+    private void registerKeyHandler(BlockStateModelGenerator generator, Block block) {
+        TextureKey layer0 = TextureKey.of("0");
+        Model customModel = new Model(
+                Optional.of(new Identifier("unseen_world", "block/key_handler_stone")),
+                Optional.empty(),
+                layer0,
+                TextureKey.PARTICLE
+        );
+
+        generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
+                .coordinate(BlockStateVariantMap.create(KeyHandlerStoneBlock.HANDLER_TYPE)
+                        .register(type -> {
+                            String name = type.asString();
+                            Identifier textureId = new Identifier("unseen_world", "block/" + name + "_key_handler");
+
+                            TextureMap textures = new TextureMap()
+                                    .put(layer0, textureId)
+                                    .put(TextureKey.PARTICLE, textureId);
+
+                            Identifier modelId = customModel.upload(block, "_" + name, textures, generator.modelCollector);
+                            return BlockStateVariant.create().put(VariantSettings.MODEL, modelId);
+                        })));
     }
 
     private void registerOvergrownLeaves(BlockStateModelGenerator generator, LeafDroppingLeaveBlock block) {

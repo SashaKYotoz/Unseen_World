@@ -43,9 +43,12 @@ import net.sashakyotoz.client.particles.custom.LeafParticle;
 import net.sashakyotoz.client.particles.custom.LightVibrationParticle;
 import net.sashakyotoz.client.particles.custom.WindVibrationParticle;
 import net.sashakyotoz.client.renderers.*;
-import net.sashakyotoz.client.renderers.blocks.GlaciemiteTranslocatoneRenderer;
 import net.sashakyotoz.client.renderers.blocks.KeyHandlerStoneRenderer;
 import net.sashakyotoz.client.renderers.blocks.ModChestRenderer;
+import net.sashakyotoz.client.renderers.blocks.TranslocatoneRenderer;
+import net.sashakyotoz.client.renderers.bosses.EclipseSentinelRenderer;
+import net.sashakyotoz.client.renderers.bosses.WarriorOfChimericDarknessRenderer;
+import net.sashakyotoz.client.renderers.layers.DarkeningLayer;
 import net.sashakyotoz.client.renderers.layers.GrippingLayer;
 import net.sashakyotoz.client.renderers.layers.player.BladeShieldLayer;
 import net.sashakyotoz.client.renderers.projectiles.GrippingCrystalProjectileRenderer;
@@ -55,6 +58,7 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModFluids;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.items.custom.IGrippingWeapons;
 import net.sashakyotoz.common.networking.KeyInputHandler;
 import net.sashakyotoz.common.networking.ModMessages;
 import net.sashakyotoz.common.world.ModDimensions;
@@ -77,24 +81,34 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(GleamcarverModel.GLEAMCARVER, GleamcarverModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(HarmonyWatcherModel.HARMONY_WATCHER, HarmonyWatcherModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ViolegerModel.VIOLEGER, ViolegerModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(AuricPatriarchModel.AURIC_PATRIARCH, AuricPatriarchModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(WarriorOfChimericDarknessModel.WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarknessModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ShieldOfWarriorModel.SHIELD_OF_WARRIOR, ShieldOfWarriorModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(EclipsebaneModel.ECLIPSEBANE, EclipsebaneModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(EclipseSentinelModel.ECLIPSE_SENTINEL, EclipseSentinelModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(GloomwhaleModel.GLOOMWHALE, GloomwhaleModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ShimmerModel.SHIMMER, ShimmerModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(SaberpardModel.SABERPARD, SaberpardModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(EspyerModel.ESPYER, EspyerModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(EldritchWatcherModel.ELDRITCH_WATCHER, EldritchWatcherModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(TuskhogModel.TUSKHOG, TuskhogModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(DreadflapModel.DREADFLAP, DreadflapModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ReaverModel.REAVER, ReaverModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(VexalBeetleModel.VEXAL_BEETLE, VexalBeetleModel::getTexturedModelData);
 
         EntityRendererRegistry.register(ModEntities.GLEAMCARVER, GleamcarverRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONY_WATCHER, HarmonyWatcherRenderer::new);
         EntityRendererRegistry.register(ModEntities.VIOLEGER, ViolegerRenderer::new);
+        EntityRendererRegistry.register(ModEntities.VENOMER, VenomerRenderer::new);
         EntityRendererRegistry.register(ModEntities.GLOOMWHALE, GloomwhaleRenderer::new);
+        EntityRendererRegistry.register(ModEntities.GRIPPING_GLOOMWHALE, GrippingGloomwhaleRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SHIMMER, ShimmerRenderer::new);
         EntityRendererRegistry.register(ModEntities.SABERPARD, SaberpardRenderer::new);
         EntityRendererRegistry.register(ModEntities.ESPYER, EspyerRenderer::new);
         EntityRendererRegistry.register(ModEntities.ELDRITCH_WATCHER, EldritchWatcherRenderer::new);
         EntityRendererRegistry.register(ModEntities.TUSKHOG, TuskhogRenderer::new);
+        EntityRendererRegistry.register(ModEntities.DREADFLAP, DreadflapRenderer::new);
+        EntityRendererRegistry.register(ModEntities.REAVER, ReaverRenderer::new);
+        EntityRendererRegistry.register(ModEntities.VEXAL_BEETLE, VexalBeetleRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, GrippingCrystalProjectileRenderer::new);
 
@@ -107,7 +121,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.ECLIPSE_SENTINEL, EclipseSentinelRenderer::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.KEY_HANDLER, KeyHandlerStoneRenderer::new);
-        BlockEntityRendererFactories.register(ModBlockEntities.TRANSLOCATONE, GlaciemiteTranslocatoneRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.TRANSLOCATONE, TranslocatoneRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.SUSBLOCK, BrushableBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.DARK_CURRANTSLATE_CHEST, ModChestRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.GLACIEMITE_CHEST, ModChestRenderer::new);
@@ -146,7 +160,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         });
         ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, new Identifier("pulling"), (stack, world, entity, seed) -> entity != null
                 && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> switch (stack.getOrCreateNbt().getString("bow_phase")) {
+        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> switch (IGrippingWeapons.getPhase(stack)) {
             case "crystal_crushing", "crystal_suctioning" -> 2;
             case "crystal_rain" -> 1;
             default -> 0;
@@ -171,6 +185,7 @@ public class UnseenWorldClient implements ClientModInitializer {
             if (entityRenderer instanceof PlayerEntityRenderer)
                 registrationHelper.register(new BladeShieldLayer<>(entityRenderer, context));
             registrationHelper.register(new GrippingLayer<>(entityRenderer, context));
+            registrationHelper.register(new DarkeningLayer<>(entityRenderer));
         });
         HandledScreens.register(
                 ModScreenHandlers.DARK_CURRANTSLATE_CHEST,

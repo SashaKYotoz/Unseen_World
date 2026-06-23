@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "facing=east,gripped=false": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks",
+      "y": 90
+    },
+    "facing=east,gripped=true": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks_charged",
+      "y": 90
+    },
+    "facing=north,gripped=false": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks",
+      "y": 0
+    },
+    "facing=north,gripped=true": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks_charged",
+      "y": 0
+    },
+    "facing=south,gripped=false": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks",
+      "y": 180
+    },
+    "facing=south,gripped=true": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks_charged",
+      "y": 180
+    },
+    "facing=west,gripped=false": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks",
+      "y": 270
+    },
+    "facing=west,gripped=true": {
+      "model": "unseen_world:block/engraved_glaciemite_bricks_charged",
+      "y": 270
+    }
+  }
+}

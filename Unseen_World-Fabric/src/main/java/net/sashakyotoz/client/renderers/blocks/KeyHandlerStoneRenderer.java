@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
-import net.sashakyotoz.common.items.ModItems;
 
 public class KeyHandlerStoneRenderer<T extends KeyHandlerStoneBlockEntity> implements BlockEntityRenderer<T> {
     private final BlockEntityRendererFactory.Context context;
@@ -24,13 +23,11 @@ public class KeyHandlerStoneRenderer<T extends KeyHandlerStoneBlockEntity> imple
     @Override
     public void render(KeyHandlerStoneBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
-        ItemStack stackToRender = ModItems.GRIPCRYSTAL_KEY.getDefaultStack();
-        if (entity.getWorld() != null && entity.isOutCurrantSlate(entity.getWorld(), entity.getPos()))
-            stackToRender = ModItems.ABYSSAL_KEY.getDefaultStack();
+        ItemStack stackToRender = entity.keyToRenderer(entity.getWorld(), entity.getPos());
         if (entity.data.firstKeyIn()) {
-            matrices.translate(0.5, 0.75, entity.data.firstKeyOffset() + 0.8);
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(135));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+            matrices.translate(0.5, 0.65, entity.data.firstKeyOffset() + 0.8);
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270));
             this.context.getItemRenderer().renderItem(
                     stackToRender,
                     ModelTransformationMode.GROUND,
@@ -44,8 +41,8 @@ public class KeyHandlerStoneRenderer<T extends KeyHandlerStoneBlockEntity> imple
         }
         matrices.pop();
         matrices.push();
-        matrices.translate(0.5, 0.575, entity.data.secondKeyOffset() + 0.2);
-        matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(45));
+        matrices.translate(0.5, 0.65, entity.data.secondKeyOffset() + 0.2);
+        matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
         if (entity.data.secondKeyIn()) {
             this.context.getItemRenderer().renderItem(

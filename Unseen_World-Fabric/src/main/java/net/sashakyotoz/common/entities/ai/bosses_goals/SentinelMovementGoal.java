@@ -2,12 +2,12 @@ package net.sashakyotoz.common.entities.ai.bosses_goals;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.sashakyotoz.common.entities.bosses.EclipseSentinelEntity;
+import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 
 public class SentinelMovementGoal extends Goal {
-    private final EclipseSentinelEntity sentinel;
+    private final EclipseSentinel sentinel;
 
-    public SentinelMovementGoal(EclipseSentinelEntity sentinel) {
+    public SentinelMovementGoal(EclipseSentinel sentinel) {
         this.sentinel = sentinel;
     }
 
@@ -27,8 +27,8 @@ public class SentinelMovementGoal extends Goal {
         LivingEntity target = this.sentinel.getTarget();
         if (target != null) {
             if (this.sentinel.canSee(target)) {
-                if (!this.sentinel.isInSentinelPose(EclipseSentinelEntity.SentinelPose.DYING))
-                    this.sentinel.lookAtEntity(target, this.sentinel.isInSentinelPose(EclipseSentinelEntity.SentinelPose.BEAMING) ? 5 : 15, 15);
+                if (!this.sentinel.isInSentinelPose(EclipseSentinel.SentinelPose.DYING))
+                    this.sentinel.lookAtEntity(target, this.sentinel.isInSentinelPose(EclipseSentinel.SentinelPose.BEAMING) ? 5 : 15, 15);
                 switch (this.sentinel.getSentinelPose()) {
                     case SWORD_SWING -> this.sentinel.getNavigation().startMovingTo(target, 0.75f);
                     case BACKFLIP -> {

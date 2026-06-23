@@ -9,16 +9,16 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.bosses.EclipseSentinelEntity;
+import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 
-public class EclipseSentinelGlowingLayer<T extends EclipseSentinelEntity, M extends SinglePartEntityModel<T>> extends FeatureRenderer<T, M> {
+public class EclipseSentinelGlowingLayer<T extends EclipseSentinel, M extends SinglePartEntityModel<T>> extends FeatureRenderer<T, M> {
 
     public EclipseSentinelGlowingLayer(FeatureRendererContext<T, M> context) {
         super(context);
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, EclipseSentinelEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, EclipseSentinel entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(
                 entity.isExalted()
                         ? UnseenWorld.makeID("textures/entity/eclipse_sentinel/eclipse_sentinel_glowing_parts_exalted.png")

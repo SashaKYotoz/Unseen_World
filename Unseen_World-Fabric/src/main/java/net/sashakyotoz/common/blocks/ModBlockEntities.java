@@ -8,6 +8,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.blocks.custom.chests.entities.DarkCurranslateChestEntity;
 import net.sashakyotoz.common.blocks.custom.chests.entities.GlaciemiteChestEntity;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
+import net.sashakyotoz.common.blocks.custom.entities.OrdealSpawnerBlockEntity;
 import net.sashakyotoz.common.blocks.custom.entities.SusBlockEntity;
 import net.sashakyotoz.common.blocks.custom.entities.TranslocatoneBlockEntity;
 
@@ -31,4 +32,7 @@ public class ModBlockEntities {
     public static final BlockEntityType<GlaciemiteChestEntity> GLACIEMITE_CHEST = Registry.register(Registries.BLOCK_ENTITY_TYPE,
             UnseenWorld.makeID("glaciemite_chest"),
             FabricBlockEntityTypeBuilder.create(GlaciemiteChestEntity::new, ModBlocks.GLACIEMITE_CHEST).build());
+    public static final BlockEntityType<OrdealSpawnerBlockEntity> ORDEAL_SPAWNER = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+            UnseenWorld.makeID("ordeal_spawner"),
+            FabricBlockEntityTypeBuilder.create(OrdealSpawnerBlockEntity::new, ModBlocks.ORDEAL_SPAWNER).build());
 }

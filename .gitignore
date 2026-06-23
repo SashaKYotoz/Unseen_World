@@ -118,7 +118,7 @@ gradle-app.setting
 
 /Unseen_World-Fabric/run
 /Unseen_World-Fabric/run-data
-/Unseen_World-Fabric/src/main/generated/
+/Unseen_World-Fabric/src/main/generated/.cache/
 
 /Unseen_World-Fabric/build/
 

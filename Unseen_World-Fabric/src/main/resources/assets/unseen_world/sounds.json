@@ -5,6 +5,12 @@
       "unseen_world:biome/the_darkness"
     ]
   },
+  "ordeal_spawner.rewarding": {
+    "subtitle": "sounds.unseen_world.ordeal_spawner_rewarding",
+    "sounds": [
+      "unseen_world:block/ordeal_spawner_rewarding"
+    ]
+  },
   "gleamcarver_ambient_sound": {
     "subtitle": "sounds.unseen_world.gleamcarver_ambient_sound",
     "sounds": [

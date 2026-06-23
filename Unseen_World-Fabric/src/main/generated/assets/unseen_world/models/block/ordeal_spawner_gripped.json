@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "unseen_world:block/ordeal_spawner_bottom",
+    "side": "unseen_world:block/ordeal_spawner_side_gripped",
+    "top": "unseen_world:block/ordeal_spawner_top_gripped"
+  }
+}

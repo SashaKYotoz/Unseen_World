@@ -7,11 +7,9 @@ import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
-import net.sashakyotoz.common.entities.spawners.ViolegersSpawner;
 import net.sashakyotoz.common.world.ModDimensions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,14 +25,6 @@ public abstract class ServerWorldMixin implements WorldMultipartHelper {
 
     @Shadow
     public abstract ServerWorld toServerWorld();
-
-    @Unique
-    private final ViolegersSpawner guardiansSpawner = new ViolegersSpawner();
-
-    @Inject(method = "tickSpawners", at = @At("HEAD"))
-    public void tick(boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci) {
-        guardiansSpawner.spawn(this.toServerWorld(), spawnMonsters, spawnAnimals);
-    }
 
     //weather
     @Inject(method = "tickWeather", at = @At(value = "TAIL"))

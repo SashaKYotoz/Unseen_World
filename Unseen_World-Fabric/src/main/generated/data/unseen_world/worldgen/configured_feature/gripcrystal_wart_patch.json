@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:noise_provider",
+            "noise": {
+              "amplitudes": [
+                1.0
+              ],
+              "firstOctave": 0
+            },
+            "scale": 0.020833334,
+            "seed": 12345,
+            "states": [
+              {
+                "Name": "unseen_world:gripcrystal_wart",
+                "Properties": {
+                  "facing": "up",
+                  "waterlogged": "false"
+                }
+              },
+              {
+                "Name": "unseen_world:gripping_spigelia",
+                "Properties": {
+                  "age": "1",
+                  "vertical_direction": "up"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
+    },
+    "tries": 32,
+    "xz_spread": 5,
+    "y_spread": 2
+  }
+}

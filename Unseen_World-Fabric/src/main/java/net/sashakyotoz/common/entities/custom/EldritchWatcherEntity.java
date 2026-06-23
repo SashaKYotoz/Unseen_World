@@ -37,7 +37,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.event.listener.EntityGameEventHandler;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.entities.ai.EldritchWatcherPlaceBlockGoal;
+import net.sashakyotoz.common.entities.ai.goals.EldritchWatcherPlaceBlockGoal;
 import net.sashakyotoz.common.entities.ai.listeners.EldritchEventListener;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
@@ -50,7 +50,7 @@ import java.util.function.BiConsumer;
 public class EldritchWatcherEntity extends PathAwareEntity {
     private static final TrackedData<Boolean> CONVERTING = DataTracker.registerData(EldritchWatcherEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> CHARGE_TICKS = DataTracker.registerData(EldritchWatcherEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> CARRING_BLOCK = DataTracker.registerData(EldritchWatcherEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> CARRYING_BLOCK = DataTracker.registerData(EldritchWatcherEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private int conversionTimer;
     @Nullable
     private UUID converter;
@@ -75,15 +75,15 @@ public class EldritchWatcherEntity extends PathAwareEntity {
         super.initDataTracker();
         this.dataTracker.startTracking(CONVERTING, false);
         this.dataTracker.startTracking(CHARGE_TICKS, 0);
-        this.dataTracker.startTracking(CARRING_BLOCK, false);
+        this.dataTracker.startTracking(CARRYING_BLOCK, false);
     }
 
     public void setCarriedBlock(boolean flag) {
-        this.dataTracker.set(CARRING_BLOCK, flag);
+        this.dataTracker.set(CARRYING_BLOCK, flag);
     }
 
     public boolean isCarringBlock() {
-        return this.dataTracker.get(CARRING_BLOCK);
+        return this.dataTracker.get(CARRYING_BLOCK);
     }
 
     public static boolean canWatcherSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {

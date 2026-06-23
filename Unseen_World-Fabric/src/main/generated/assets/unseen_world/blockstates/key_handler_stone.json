@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "handler_type=dark_currantslate": {
+      "model": "unseen_world:block/key_handler_stone_dark_currantslate"
+    },
+    "handler_type=glaciemite": {
+      "model": "unseen_world:block/key_handler_stone_glaciemite"
+    },
+    "handler_type=golden": {
+      "model": "unseen_world:block/key_handler_stone_golden"
+    }
+  }
+}

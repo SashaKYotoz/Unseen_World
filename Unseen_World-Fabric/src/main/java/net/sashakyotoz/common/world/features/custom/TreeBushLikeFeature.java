@@ -75,6 +75,14 @@ public class TreeBushLikeFeature extends Feature<TreeBushLikeConfig> {
                 }
             }
         }
+        BlockPos semiHeightPos = pos.up(semiHeight);
+        if (world.testBlockState(semiHeightPos.north(), blockState -> blockState.isOf(ModBlocks.GLOW_APPLE_BUSH))
+                && world.testBlockState(semiHeightPos.south(), blockState -> blockState.isOf(ModBlocks.GLOW_APPLE_BUSH))
+                && world.testBlockState(semiHeightPos.west(), blockState -> blockState.isOf(ModBlocks.GLOW_APPLE_BUSH))
+                && world.testBlockState(semiHeightPos.east(), blockState -> blockState.isOf(ModBlocks.GLOW_APPLE_BUSH)))
+            this.setBlockState(world, pos.up(semiHeight), ModBlocks.GLOW_APPLE_BUSH.getDefaultState()
+                    .with(TreeBushLikeBlock.TYPE, TreeBushLikeBlock.BushTypes.CROSSING_STEM)
+                    .with(TreeBushLikeBlock.FACING, Direction.NORTH));
         return world.getBlockState(pos.down()).isIn(BlockTags.DIRT);
     }
 }

@@ -1,0 +1,35 @@
+{
+  "type": "unseen_world:cluster_spike_feature",
+  "config": {
+    "cluster_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:griptonite_cluster",
+        "Properties": {
+          "facing": "up",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 27,
+        "min_inclusive": 13
+      }
+    },
+    "integration_size": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 15,
+        "min_inclusive": 11
+      }
+    },
+    "state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:dark_currantslate"
+      }
+    }
+  }
+}

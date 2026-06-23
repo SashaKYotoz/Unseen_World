@@ -12,6 +12,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 import net.sashakyotoz.api.entity_data.IModelPartsAccessor;
+import net.sashakyotoz.utils.ModelPartUtils;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public abstract class StuckObjectsRenderer<T extends LivingEntity, M extends Ent
     protected void renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
     }
 
+    protected abstract Triple<Float, Float, Float> getSizedPart();
+
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
         int m = this.getObjectCount(livingEntity);
         Random random = Random.create(livingEntity.getId());
@@ -36,13 +40,13 @@ public abstract class StuckObjectsRenderer<T extends LivingEntity, M extends Ent
                     matrixStack.push();
                     ModelPart modelPart = getRandomPart(accessor.getAllModelParts(), random);
                     if (modelPart != null && !modelPart.isEmpty()) {
-                        calculateRotations(matrixStack,modelPart,random,modelPart.getRandomCuboid(random));
+                        calculateRotations(matrixStack, modelPart, random, modelPart.getRandomCuboid(random));
                         this.renderObject(matrixStack, vertexConsumerProvider, i, livingEntity);
                     }
                     matrixStack.pop();
                 }
                 matrixStack.push();
-                ModelPart modelPart = getRandomPart(accessor.getAllModelParts(), random);
+                ModelPart modelPart = ModelPartUtils.getPart(getSizedPart(), accessor.getAllModelParts());
                 if (modelPart != null && !modelPart.isEmpty())
                     renderModelPartOverlay(modelPart, matrixStack, vertexConsumerProvider, i, livingEntity);
                 matrixStack.pop();

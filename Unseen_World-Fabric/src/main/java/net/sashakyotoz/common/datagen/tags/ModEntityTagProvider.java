@@ -19,10 +19,11 @@ public class ModEntityTagProvider extends FabricTagProvider.EntityTypeTagProvide
                 ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS,
                 ModEntities.ECLIPSE_SENTINEL,
                 ModEntities.VIOLEGER,
+                ModEntities.VENOMER,
                 ModEntities.SABERPARD,
                 ModEntities.ELDRITCH_WATCHER,
                 ModEntities.HARMONY_WATCHER,
-                ModEntities.GLOOMWHALE,
+                ModEntities.GRIPPING_GLOOMWHALE,
                 ModEntities.TUSKHOG,
                 ModEntities.ESPYER,
                 ModEntities.GLEAMCARVER

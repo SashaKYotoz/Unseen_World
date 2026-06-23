@@ -47,22 +47,22 @@ public abstract class DarkWaterFluid extends FlowableFluid {
         if (!state.isStill() && !(Boolean)state.get(FALLING)) {
             if (random.nextInt(64) == 0) {
                 world.playSound(
-                        (double)pos.getX() + 0.5,
-                        (double)pos.getY() + 0.5,
-                        (double)pos.getZ() + 0.5,
+                        pos.getX() + 0.5,
+                        pos.getY() + 0.5,
+                        pos.getZ() + 0.5,
                         SoundEvents.BLOCK_WATER_AMBIENT,
                         SoundCategory.BLOCKS,
                         random.nextFloat() * 0.25F + 0.75F,
-                        random.nextFloat() + 0.5F,
+                        random.nextFloat() + 0.7F,
                         false
                 );
             }
         } else if (random.nextInt(10) == 0) {
             world.addParticle(
-                    ParticleTypes.UNDERWATER,
-                    (double)pos.getX() + random.nextDouble(),
-                    (double)pos.getY() + random.nextDouble(),
-                    (double)pos.getZ() + random.nextDouble(),
+                    ParticleTypes.ASH,
+                    pos.getX() + random.nextDouble(),
+                    pos.getY() + random.nextDouble(),
+                    pos.getZ() + random.nextDouble(),
                     0.0,
                     0.0,
                     0.0

@@ -2,19 +2,17 @@ package net.sashakyotoz.common.blocks.custom;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.FlowableFluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.sashakyotoz.common.items.custom.ModArmorItem;
+import net.sashakyotoz.api.entity_data.IGrippingEntity;
+import net.sashakyotoz.common.blocks.ModFluids;
+import net.sashakyotoz.utils.ActionsUtils;
 
 public class DarkWaterBlock extends FluidBlock {
     public DarkWaterBlock(FlowableFluid fluid, Settings settings) {
@@ -24,21 +22,13 @@ public class DarkWaterBlock extends FluidBlock {
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity livingEntity && livingEntity.age % 20 == 0) {
-            ItemStack headStack = livingEntity.getEquippedStack(EquipmentSlot.HEAD);
-            if (!(headStack.isOf(Items.TURTLE_HELMET) || livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)
-                    || ModArmorItem.isAbyssalArmorSet(livingEntity)
-                    || ModArmorItem.isUnseeniumArmorSet(livingEntity)
-                    || ModArmorItem.isRedTitaniumArmorSet(livingEntity))) {
-                if (!livingEntity.hasStatusEffect(StatusEffects.DARKNESS))
-                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 60, 0));
+            if (!(livingEntity.hasStatusEffect(StatusEffects.GLOWING)
+                    || EnchantmentHelper.hasAquaAffinity(livingEntity))) {
+                if (entity instanceof IGrippingEntity entity1 && entity1.getDarkeningData() < 10 && world.getFluidState(pos.up()).isOf(ModFluids.DARK_WATER))
+                    entity1.setDarkeningData(entity1.getDarkeningData() + 1);
             }
         }
-        if (entity instanceof BoatEntity boatEntity)
-            boatEntity.addVelocity(0, -0.001f, 0);
-    }
-
-    @Override
-    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos) {
-        return true;
+        if (entity instanceof BoatEntity boatEntity && ActionsUtils.isMoving(boatEntity))
+            boatEntity.setVelocity(boatEntity.getVelocity().multiply(0.5f));
     }
 }

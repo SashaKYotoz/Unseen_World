@@ -39,10 +39,10 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
+import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -205,15 +205,7 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
 
     private void finishConversion(ServerWorld world) {
         OcelotEntity ocelot = this.convertTo(EntityType.OCELOT, false);
-        ocelot.initialize(world, world.getLocalDifficulty(ocelot.getBlockPos()), SpawnReason.CONVERSION, null, null);
-        if (this.converter != null) {
-            PlayerEntity player = world.getPlayerByUuid(this.converter);
-            if (player != null)
-                player.dropItem(ModItems.GRIPCRYSTAL);
-            if (player instanceof ServerPlayerEntity player1)
-                ModRegistry.CURED_GRIPCRYSTAL_ENTITY_CRITERION.trigger(player1, this, ocelot);
-        }
-        ocelot.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0));
+        ActionsUtils.initializeConverting(this, ocelot, uuid);
         if (!this.isSilent())
             world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_OCELOT_HURT, SoundCategory.NEUTRAL, 3, 2);
     }

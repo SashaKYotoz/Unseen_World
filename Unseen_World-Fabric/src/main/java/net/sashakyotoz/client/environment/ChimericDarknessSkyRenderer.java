@@ -24,6 +24,7 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
             ChimericDarknessData data = WorldConfigController.data.get(0);
             if (data != null) {
                 context.matrixStack().push();
+                context.matrixStack().multiply(RotationAxis.POSITIVE_Z.rotationDegrees((ClientTicks.getHalfTicks() / 32) % 36000));
                 renderStars(context);
                 if (data.sunUnlock())
                     renderSkyObject(data, context);
@@ -34,12 +35,7 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
 
     private void renderSkyObject(ChimericDarknessData data, WorldRenderContext context) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        float k = 30.0F;
-        context.matrixStack().scale(0.5f, 0.5f, 0.5f);
-        if (!data.galacticUnlock())
-            context.matrixStack().multiply(RotationAxis.POSITIVE_Z.rotationDegrees((ClientTicks.getHalfTicks() / 4) % 36000));
-        else
-            context.matrixStack().scale(0.25f, 0.25f, 0.25f);
+        float k = 10.0F;
         Matrix4f matrix4f2 = context.matrixStack().peek().getPositionMatrix();
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         if (!data.galacticUnlock()) {
@@ -52,24 +48,21 @@ public class ChimericDarknessSkyRenderer implements DimensionRenderingRegistry.S
         } else {
             RenderSystem.setShaderTexture(0, GALAXY);
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            int currentFrame = ClientTicks.getTicks() % 16;
+            int currentFrame = ClientTicks.getTicks() % 32;
             float frameHeight = 1.0f / 16;
             float minV = currentFrame * frameHeight;
             float maxV = minV + frameHeight;
-            float alpha = Math.max(0.25f, Oscillator.getOscillatingValue());
-            bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).texture(0.0F, minV).color(1, 1, 1, alpha).next();
-            bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).texture(1.0F, minV).color(1, 1, 1, alpha).next();
-            bufferBuilder.vertex(matrix4f2, k, 100.0F, k).texture(1.0F, maxV).color(1, 1, 1, alpha).next();
-            bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).texture(0.0F, maxV).color(1, 1, 1, alpha).next();
+            bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).texture(0.0F, minV).next();
+            bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).texture(1.0F, minV).next();
+            bufferBuilder.vertex(matrix4f2, k, 100.0F, k).texture(1.0F, maxV).next();
+            bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).texture(0.0F, maxV).next();
         }
-
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
-        context.matrixStack().scale(1, 1, 1);
     }
+
 
     private void renderStars(WorldRenderContext context) {
         RenderSystem.setShaderColor(1f, 0.25f, Oscillator.getOscillatingValue(), 1f);
-        context.matrixStack().multiply(RotationAxis.POSITIVE_Y.rotationDegrees((ClientTicks.getHalfTicks() / 16) % 360));
         BackgroundRenderer.clearFog();
         VertexBuffer starsBuffer = context.worldRenderer().starsBuffer;
         if (starsBuffer != null) {

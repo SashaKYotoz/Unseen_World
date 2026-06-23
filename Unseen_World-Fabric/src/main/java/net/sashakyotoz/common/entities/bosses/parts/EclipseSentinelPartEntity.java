@@ -2,13 +2,13 @@ package net.sashakyotoz.common.entities.bosses.parts;
 
 import net.minecraft.entity.damage.DamageSource;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
-import net.sashakyotoz.common.entities.bosses.EclipseSentinelEntity;
+import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 
 public class EclipseSentinelPartEntity extends EntityPart {
-    public final EclipseSentinelEntity owner;
+    public final EclipseSentinel owner;
     public final String name;
 
-    public EclipseSentinelPartEntity(EclipseSentinelEntity owner, String name, float width, float height) {
+    public EclipseSentinelPartEntity(EclipseSentinel owner, String name, float width, float height) {
         super(owner, width, height);
         this.calculateDimensions();
         this.owner = owner;

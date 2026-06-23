@@ -17,7 +17,8 @@ public class ModWorldFeatures {
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("bush_like_tree_patch"), TreeBushLikeFeature.INSTANCE);
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("adaptive_lake"), AdaptiveLakeFeature.INSTANCE);
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("umbral_kelp"), UmbralKelpFeature.INSTANCE);
-        Registry.register(Registries.FEATURE, UnseenWorld.makeID("spiral_spikes_feature"), SpiralSpikesFeature.INSTANCE);
+        Registry.register(Registries.FEATURE, UnseenWorld.makeID("spiral_spike_feature"), SpiralSpikeFeature.INSTANCE);
+        Registry.register(Registries.FEATURE, UnseenWorld.makeID("cluster_spike_feature"), ClusterSpikeFeature.INSTANCE);
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("gripping_vegetation"), GrippingVegetationFeature.INSTANCE);
         Registry.register(Registries.FEATURE, UnseenWorld.makeID("disk_ore"), DiskOreFeature.INSTANCE);
 

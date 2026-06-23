@@ -1,22 +1,35 @@
 package net.sashakyotoz.utils;
 
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.brain.task.LookTargetUtil;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
+import net.sashakyotoz.common.ModRegistry;
+import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.items.custom.ModArmorItem;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.DoubleSupplier;
 
 public class ActionsUtils {
     @FunctionalInterface
@@ -24,7 +37,7 @@ public class ActionsUtils {
         void apply(World world, BlockPos pos);
     }
 
-    public static void raycastAlong(
+    public static void rayCastAlong(
             World world,
             Entity entity,
             float maxDistance,
@@ -32,7 +45,7 @@ public class ActionsUtils {
         float scaling = 0;
         for (int i = 0; i < maxDistance; i++) {
             BlockPos pos = world.raycast(new RaycastContext(entity.getEyePos(), entity.getEyePos().add(entity.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, entity)).getBlockPos();
-            if (!world.getBlockState(pos).isOpaque() || world.getBlockState(pos).getBlock().getTranslationKey().contains("glass"))
+            if (!world.getBlockState(pos).isOpaque() || world.getBlockState(pos).isIn(ConventionalBlockTags.GLASS_BLOCKS) || world.getBlockState(pos).getBlock().getTranslationKey().contains("glass"))
                 ++scaling;
             action.apply(world, pos);
         }
@@ -50,7 +63,7 @@ public class ActionsUtils {
         return speed * Math.sin((yaw + 90) * (Math.PI / 180));
     }
 
-    public static boolean isMoving(LivingEntity entity) {
+    public static boolean isMoving(Entity entity) {
         return entity.getVelocity().horizontalLengthSquared() > 1.0E-6D;
     }
 
@@ -97,6 +110,30 @@ public class ActionsUtils {
     public static void dropItem(LivingEntity entity, ItemStack... stack) {
         for (ItemStack itemStack : stack) {
             LookTargetUtil.give(entity, itemStack, entity.getPos().add(0.0, 1.0, 0.0));
+        }
+    }
+
+    public static boolean canSee(Entity entity, RaycastContext.ShapeType shapeType, RaycastContext.FluidHandling fluidHandling, DoubleSupplier entityY) {
+        Vec3d vec3d = new Vec3d(entity.getX(), entity.getEyeY(), entity.getZ());
+        Vec3d vec3d2 = new Vec3d(entity.getX(), entityY.getAsDouble(), entity.getZ());
+        if (vec3d2.distanceTo(vec3d) > 128.0) {
+            return false;
+        } else {
+            return entity.getWorld().raycast(new RaycastContext(vec3d, vec3d2, shapeType, fluidHandling, entity)).getType() == HitResult.Type.MISS;
+        }
+    }
+
+    public static void initializeConverting(LivingEntity origin, MobEntity entity, UUID converter) {
+        if (origin.getWorld() instanceof ServerWorld world && entity != null) {
+            entity.initialize(world, world.getLocalDifficulty(entity.getBlockPos()), SpawnReason.CONVERSION, null, null);
+            if (converter != null) {
+                PlayerEntity player = world.getPlayerByUuid(converter);
+                if (player != null)
+                    player.dropItem(ModItems.GRIPCRYSTAL);
+                if (player instanceof ServerPlayerEntity player1)
+                    ModRegistry.CURED_GRIPCRYSTAL_ENTITY_CRITERION.trigger(player1, origin, entity);
+            }
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0));
         }
     }
 }

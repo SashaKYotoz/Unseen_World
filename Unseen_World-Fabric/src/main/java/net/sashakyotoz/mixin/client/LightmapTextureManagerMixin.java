@@ -1,5 +1,7 @@
 package net.sashakyotoz.mixin.client;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.world.dimension.DimensionType;
 import net.sashakyotoz.UnseenWorld;
@@ -14,11 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LightmapTextureManagerMixin {
     @Inject(method = "getBrightness", at = @At("HEAD"), cancellable = true)
     private static void getBrightness(DimensionType type, int lightLevel, CallbackInfoReturnable<Float> cir) {
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (type.effects().equals(UnseenWorld.makeID("the_chimeric_darkness"))
                 && WorldConfigController.data.get(0) != null
                 && WorldConfigController.data.get(0).starsUnlock()
                 && WorldConfigController.data.get(0).sunUnlock()
-                && WorldConfigController.data.get(0).galacticUnlock())
+                && WorldConfigController.data.get(0).galacticUnlock() && player != null && player.getY() < 48)
             cir.setReturnValue(0.75F);
     }
 }

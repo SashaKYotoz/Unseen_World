@@ -75,6 +75,10 @@ public class ModConfiguredFeatures {
     public static final RegistryKey<ConfiguredFeature<?, ?>> AMETHYST_BOULDER = create("amethyst_boulder");
 
     public static final RegistryKey<ConfiguredFeature<?, ?>> DARKNESS_SPIRAL_SPIKE = create("darkness_spiral_spike");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> GRIPTONITE_CLUSTER_SPIKE = create("griptonite_cluster_spike");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> AMETHYST_CLUSTER_SPIKE = create("amethyst_cluster_spike");
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> GRIPCRYSTAL_WART_PATCH = create("gripcrystal_wart_patch");
 
     public static final RegistryKey<ConfiguredFeature<?, ?>> WATER_LAKE = create("water_lake");
     public static final RegistryKey<ConfiguredFeature<?, ?>> DARK_WATER_LAKE = create("dark_water_lake");
@@ -155,7 +159,7 @@ public class ModConfiguredFeatures {
                                 Optional.of(new AboveRootPlacement(BlockStateProvider.of(ModBlocks.CRIMSONVEIL_LOG), 0.25F)),
                                 new MangroveRootPlacement(
                                         registryEntryLookup.getOrThrow(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH),
-                                        RegistryEntryList.of(Block::getRegistryEntry, ModBlocks.NIGHTDARK_GRASS_BLOCK,ModBlocks.NIGHTDARK_DIRT, ModBlocks.CRIMSONVEIL_LOG),
+                                        RegistryEntryList.of(Block::getRegistryEntry, ModBlocks.NIGHTDARK_GRASS_BLOCK, ModBlocks.NIGHTDARK_DIRT, ModBlocks.CRIMSONVEIL_LOG),
                                         BlockStateProvider.of(ModBlocks.CRIMSONVEIL_LOG), 5, 12, 0.2F))),
                 new TwoLayersFeatureSize(2, 0, 2))
                 .decorators(
@@ -290,7 +294,13 @@ public class ModConfiguredFeatures {
                 PredicatedStateProvider.of(ModBlocks.GLACIEMITE), PredicatedStateProvider.of(ModBlocks.RED_TITANIUM_IN_GLACIEMITE),
                 BlockPredicate.matchingBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE)), UniformIntProvider.create(2, 4), 2));
 
-        register(context, DARKNESS_SPIRAL_SPIKE, SpiralSpikesFeature.INSTANCE, new SpiralSpikesFeatureConfig(BlockStateProvider.of(ModBlocks.GLACIEMITE), BlockStateProvider.of(Blocks.DEEPSLATE), UniformIntProvider.create(3, 9)));
+        register(context, DARKNESS_SPIRAL_SPIKE, SpiralSpikeFeature.INSTANCE, new SpiralSpikeFeatureConfig(BlockStateProvider.of(ModBlocks.GLACIEMITE), BlockStateProvider.of(ModBlocks.GRIPPING_GLACIEMITE), BlockStateProvider.of(ModBlocks.GRIPCRYSTAL_WART), UniformIntProvider.create(4, 12)));
+        register(context, GRIPTONITE_CLUSTER_SPIKE, ClusterSpikeFeature.INSTANCE, new ClusterSpikeFeatureConfig(BlockStateProvider.of(ModBlocks.DARK_CURRANTSLATE), BlockStateProvider.of(ModBlocks.GRIPTONITE_CLUSTER), UniformIntProvider.create(11, 15), UniformIntProvider.create(13, 27)));
+
+        DataPool.Builder<BlockState> amethystSpike = DataPool.builder();
+        amethystSpike.add(Blocks.MEDIUM_AMETHYST_BUD.getDefaultState(),3);
+        amethystSpike.add(Blocks.LARGE_AMETHYST_BUD.getDefaultState(),1);
+        register(context, AMETHYST_CLUSTER_SPIKE, ClusterSpikeFeature.INSTANCE, new ClusterSpikeFeatureConfig(BlockStateProvider.of(Blocks.AMETHYST_BLOCK), new WeightedBlockStateProvider(amethystSpike), UniformIntProvider.create(7, 11), UniformIntProvider.create(9, 19)));
 
         register(context, WATER_LAKE, AdaptiveLakeFeature.INSTANCE, new AdaptiveLakeFeatureConfig(BlockStateProvider.of(Blocks.WATER), BlockStateProvider.of(Blocks.STONE)));
         register(context, DARK_WATER_LAKE, AdaptiveLakeFeature.INSTANCE, new AdaptiveLakeFeatureConfig(BlockStateProvider.of(ModBlocks.DARK_WATER), BlockStateProvider.of(ModBlocks.DARK_CURRANTSLATE)));
@@ -300,23 +310,43 @@ public class ModConfiguredFeatures {
         register(context, BUSH_LIKE_TREE_PATCH, TreeBushLikeFeature.INSTANCE, new TreeBushLikeConfig(UniformIntProvider.create(0, 2), UniformIntProvider.create(1, 5)));
         register(context, SMALL_BUSH_LIKE_TREE_PATCH, TreeBushLikeFeature.INSTANCE, new TreeBushLikeConfig(UniformIntProvider.create(0, 1), UniformIntProvider.create(1, 4)));
         register(context, BURLYWOOD_VIOLET_PATCH, Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(ModBlocks.BURLYWOOD_VIOLET))));
+        register(context, GRIPCRYSTAL_WART_PATCH, Feature.RANDOM_PATCH,
+                new RandomPatchFeatureConfig(
+                        32,
+                        5,
+                        2,
+                        PlacedFeatures.createEntry(
+                                Feature.SIMPLE_BLOCK,
+                                new SimpleBlockFeatureConfig(
+                                        new NoiseBlockStateProvider(
+                                                12345L,
+                                                new DoublePerlinNoiseSampler.NoiseParameters(0, 1.0),
+                                                0.020833334F,
+                                                List.of(
+                                                        ModBlocks.GRIPCRYSTAL_WART.getDefaultState(),
+                                                        ModBlocks.GRIPPING_SPIGELIA.getDefaultState().withIfExists(Properties.AGE_2, 1)
+                                                )
+                                        )
+                                )
+                        )
+                ));
 
         register(context, CRIMSONVEIL_DARK_WATER_LAKE, AdaptiveLakeFeature.INSTANCE, new AdaptiveLakeFeatureConfig(
                 BlockStateProvider.of(ModBlocks.DARK_WATER), BlockStateProvider.of(Blocks.AIR)));
 
         register(context, UMBRAL_KELP, UmbralKelpFeature.INSTANCE, new DefaultFeatureConfig());
-        DataPool.Builder<BlockState> builder = DataPool.builder();
+        DataPool.Builder<BlockState> petals = DataPool.builder();
 
         for (int i = 1; i <= 4; i++) {
             for (Direction direction : Direction.Type.HORIZONTAL)
-                builder.add(ModBlocks.AMETHYST_PETALS.getDefaultState().with(FlowerbedBlock.FLOWER_AMOUNT, i).with(FlowerbedBlock.FACING, direction), 1);
+                petals.add(ModBlocks.AMETHYST_PETALS.getDefaultState().with(FlowerbedBlock.FLOWER_AMOUNT, i).with(FlowerbedBlock.FACING, direction), 1);
         }
         register(
                 context,
                 AMETHYST_FLOWERS,
                 Feature.FLOWER,
                 new RandomPatchFeatureConfig(
-                        32, 3, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(builder)))
+                        32, 3, 2, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(petals)))
                 )
         );
         register(context, RARE_GLOOMWEED_PATCH, Feature.RANDOM_PATCH,

@@ -3,14 +3,18 @@ package net.sashakyotoz.common.blocks.custom.entities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.custom.KeyHandlerStoneBlock;
+import net.sashakyotoz.common.items.ModItems;
+import org.jetbrains.annotations.Nullable;
 
 public class KeyHandlerStoneBlockEntity extends BlockEntity {
     public int ticks = 0;
@@ -34,9 +38,18 @@ public class KeyHandlerStoneBlockEntity extends BlockEntity {
         super.readNbt(nbt);
     }
 
-    public boolean isOutCurrantSlate(World world, BlockPos pos) {
-        return world.getBlockState(pos).contains(KeyHandlerStoneBlock.IS_OUT_CURRANTSLATE)
-                && world.getBlockState(pos).get(KeyHandlerStoneBlock.IS_OUT_CURRANTSLATE);
+    public ItemStack keyToRenderer(@Nullable World world, BlockPos pos) {
+        if (world != null) {
+            BlockState state = world.getBlockState(pos);
+            if (state.contains(KeyHandlerStoneBlock.HANDLER_TYPE)) {
+                return switch (state.get(KeyHandlerStoneBlock.HANDLER_TYPE)) {
+                    case GOLDEN -> ModItems.AURIC_KEY.getDefaultStack();
+                    case DARK_CURRANTSLATE -> ModItems.ABYSSAL_KEY.getDefaultStack();
+                    case GLACIEMITE -> ModItems.GRIPCRYSTAL_KEY.getDefaultStack();
+                };
+            }
+        }
+        return ModItems.ABYSSAL_KEY.getDefaultStack();
     }
 
     @Override
@@ -47,6 +60,15 @@ public class KeyHandlerStoneBlockEntity extends BlockEntity {
         nbt.putFloat("secondKeyOffset", this.data.secondKeyOffset());
         nbt.putFloat("cooldown", this.data.cooldown());
         super.writeNbt(nbt);
+    }
+
+    private static ParticleEffect getTypeParticle(BlockState state) {
+        return switch (state.get(KeyHandlerStoneBlock.HANDLER_TYPE)) {
+            case GLACIEMITE ->
+                    new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIAMOND_BLOCK.getDefaultState());
+            case DARK_CURRANTSLATE -> ParticleTypes.CRIMSON_SPORE;
+            case GOLDEN -> new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.GOLD_BLOCK.getDefaultState());
+        };
     }
 
     public static void clientTick(World world, BlockPos pos, BlockState state, KeyHandlerStoneBlockEntity entity) {
@@ -61,7 +83,7 @@ public class KeyHandlerStoneBlockEntity extends BlockEntity {
             );
         if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && entity.ticks % 5 == 0)
             world.addParticle(
-                    new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIAMOND_BLOCK.getDefaultState()),
+                    getTypeParticle(state),
                     pos.getX() + 0.5,
                     pos.getY() + 1,
                     pos.getZ() + 0.5,

@@ -27,6 +27,7 @@
     "client.HeldItemRendererMixin",
     "client.LightmapTextureManagerMixin",
     "client.MinecraftClientMixin",
+    "client.ModelPartMixin",
     "client.entity.AbstractClientPlayerMixin",
     "client.entity.EntityModelMixin",
     "client.entity.EntityRenderDispatcherMixin",

@@ -86,7 +86,7 @@ public class SurfaceBuilderMixin {
                     if (!defaultState.isOf(Blocks.GRASS_BLOCK)) {
                         column.setState(j, this.defaultState);
                         for (k = j - 1; k >= chunk.getBottomY() && (column.getState(k).isAir() || column.getState(k).isOf(ModBlocks.DARK_WATER)); --k)
-                            column.setState(k, k % 2 == 0 ? Blocks.DIRT.getDefaultState() : Blocks.COARSE_DIRT.getDefaultState());
+                            column.setState(k, (k + j) % 2 == 0 ? Blocks.DIRT.getDefaultState() : Blocks.COARSE_DIRT.getDefaultState());
                     }
                 } else
                     for (k = j; k >= chunk.getBottomY() && (column.getState(k).isAir() || column.getState(k).isOf(ModBlocks.DARK_WATER)); --k)

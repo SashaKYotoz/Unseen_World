@@ -4,4 +4,8 @@ public interface IGrippingEntity {
     int getGrippingData();
 
     void setGrippingData(int value);
+
+    int getDarkeningData();
+
+    void setDarkeningData(int value);
 }

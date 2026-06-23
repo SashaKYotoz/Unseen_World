@@ -17,8 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.sashakyotoz.common.entities.ai.FertilizeGoal;
-import net.sashakyotoz.common.entities.ai.WatcherAttackGoal;
+import net.sashakyotoz.common.entities.ai.goals.FertilizeGoal;
+import net.sashakyotoz.common.entities.ai.goals.WatcherAttackGoal;
 import net.sashakyotoz.common.tags.ModTags;
 
 public class HarmonyWatcherEntity extends PathAwareEntity {

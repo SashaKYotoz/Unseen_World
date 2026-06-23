@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 5.0,
+  "group": "black_stained_glass",
+  "ingredient": {
+    "item": "unseen_world:glimmergrain_sand"
+  },
+  "result": "minecraft:black_stained_glass"
+}

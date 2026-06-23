@@ -39,7 +39,6 @@ public class ChestScreenHandler extends SyncedGuiDescription {
             }
         }
 
-        // Sets the correct GUI Size
         root.setInsets(Insets.ROOT_PANEL);
 
         int height = 15;

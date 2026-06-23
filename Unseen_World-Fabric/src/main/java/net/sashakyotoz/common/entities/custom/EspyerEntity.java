@@ -28,7 +28,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -38,9 +37,9 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.event.GameEvent;
-import net.sashakyotoz.common.ModRegistry;
-import net.sashakyotoz.common.entities.ai.EspyerIgniteGoal;
+import net.sashakyotoz.common.entities.ai.goals.EspyerIgniteGoal;
 import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -177,20 +176,14 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
         }
         super.tick();
     }
+
     private void finishConversion(ServerWorld world) {
         CreeperEntity creeper = this.convertTo(EntityType.CREEPER, false);
-        creeper.initialize(world, world.getLocalDifficulty(creeper.getBlockPos()), SpawnReason.CONVERSION, null, null);
-        if (this.converter != null) {
-            PlayerEntity player = world.getPlayerByUuid(this.converter);
-            if (player != null)
-                player.dropItem(ModItems.GRIPCRYSTAL);
-            if (player instanceof ServerPlayerEntity player1)
-                ModRegistry.CURED_GRIPCRYSTAL_ENTITY_CRITERION.trigger(player1, this, creeper);
-        }
-        creeper.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0));
+        ActionsUtils.initializeConverting(this, creeper, uuid);
         if (!this.isSilent())
             world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_CREEPER_HURT, SoundCategory.NEUTRAL, 2, 2);
     }
+
     public boolean isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape, Predicate<LivingEntity> predicate, DoubleSupplier... entityYChecks) {
         if (predicate.test(entity)) {
             Vec3d vec3d = entity.getRotationVec(1.0F).normalize();
@@ -200,24 +193,10 @@ public class EspyerEntity extends HostileEntity implements SkinOverlayOwner {
                 vec3d2 = vec3d2.normalize();
                 double f = vec3d.dotProduct(vec3d2);
                 if (f > 1.0 - d / (bl ? e : 1.0))
-                    return canSee(this, visualShape ? RaycastContext.ShapeType.VISUAL : RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, doubleSupplier);
+                    return ActionsUtils.canSee(this, visualShape ? RaycastContext.ShapeType.VISUAL : RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, doubleSupplier);
             }
         }
         return false;
-    }
-
-    public boolean canSee(Entity entity, RaycastContext.ShapeType shapeType, RaycastContext.FluidHandling fluidHandling, DoubleSupplier entityY) {
-        if (entity.getWorld() != this.getWorld()) {
-            return false;
-        } else {
-            Vec3d vec3d = new Vec3d(this.getX(), this.getEyeY(), this.getZ());
-            Vec3d vec3d2 = new Vec3d(entity.getX(), entityY.getAsDouble(), entity.getZ());
-            if (vec3d2.distanceTo(vec3d) > 128.0) {
-                return false;
-            } else {
-                return this.getWorld().raycast(new RaycastContext(vec3d, vec3d2, shapeType, fluidHandling, this)).getType() == HitResult.Type.MISS;
-            }
-        }
     }
 
     @Override

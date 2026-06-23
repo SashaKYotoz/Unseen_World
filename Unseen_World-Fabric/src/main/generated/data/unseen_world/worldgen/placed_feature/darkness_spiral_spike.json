@@ -2,10 +2,12 @@
   "feature": "unseen_world:darkness_spiral_spike",
   "placement": [
     {
-      "type": "minecraft:noise_threshold_count",
-      "above_noise": 1,
-      "below_noise": 0,
-      "noise_level": -0.75
+      "type": "minecraft:rarity_filter",
+      "chance": 6
+    },
+    {
+      "type": "minecraft:count",
+      "count": 2
     },
     {
       "type": "minecraft:in_square"

@@ -11,6 +11,8 @@ public class ModSoundEvents {
 
     public static final SoundEvent GLEAMCARVER_AMBIENT_SOUND = registerSoundEvent("gleamcarver_ambient_sound");
 
+    public static final SoundEvent ORDEAL_SPAWNER_REWARDING = registerSoundEvent("ordeal_spawner.rewarding");
+
 //    public static final BlockSoundGroup SOUND_BLOCK_SOUNDS = new BlockSoundGroup(1f, 1f,
 //            ModSounds.SOUND_BLOCK_BREAK, ModSounds.SOUND_BLOCK_STEP, ModSounds.SOUND_BLOCK_PLACE,
 //            ModSounds.SOUND_BLOCK_HIT, ModSounds.SOUND_BLOCK_FALL);

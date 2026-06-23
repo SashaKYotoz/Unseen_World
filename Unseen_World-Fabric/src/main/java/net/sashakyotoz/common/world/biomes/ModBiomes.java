@@ -115,6 +115,7 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder
                         .feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.AMETHYST_CEILING_BOULDER)
                         .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.IRON_ORE)
+                        .feature(GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.AMETHYST_CLUSTER_SPIKE)
                         .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.AMETHYST_BUSH)
                         .build())
                 .spawnSettings(spawnBuilder.build())
@@ -216,6 +217,7 @@ public class ModBiomes {
                 .generationSettings(biomeBuilder
                         .feature(GenerationStep.Feature.UNDERGROUND_ORES, ModPlacements.ANCIENT_DEBRIS)
                         .feature(GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.DARK_CURRANTSLATE_CEILING_BOULDER)
+                        .feature(GenerationStep.Feature.VEGETAL_DECORATION, ModPlacements.GRIPCRYSTAL_WART_PATCH)
                         .build())
                 .spawnSettings(spawnBuilder.build())
                 .effects((new BiomeEffects.Builder())

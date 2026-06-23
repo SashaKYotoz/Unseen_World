@@ -13,6 +13,7 @@ import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.custom.*;
+import net.sashakyotoz.common.entities.custom.basic.WhaleEntity;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
@@ -88,6 +89,8 @@ public class ModWorldGeneration {
                 GenerationStep.Feature.RAW_GENERATION, ModPlacements.TALL_GLOOMWEED_PATCH);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.THE_DARKNESS),
                 GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.DARKNESS_SPIRAL_SPIKE);
+        BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.CURRANTSLATE_PEAKS),
+                GenerationStep.Feature.LOCAL_MODIFICATIONS, ModPlacements.GRIPTONITE_CLUSTER_SPIKE);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES),
                 GenerationStep.Feature.UNDERGROUND_DECORATION, ModPlacements.AMETHYST_CEILING_BOULDER);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(ModBiomes.TANZANITE_CAVES, ModBiomes.SHINY_CAVERNS),
@@ -114,9 +117,13 @@ public class ModWorldGeneration {
                 SpawnGroup.AMBIENT,
                 ModEntities.TUSKHOG,
                 6, 1, 2);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DARK_LIFELESS_OCEAN),
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DARK_OCEAN),
                 SpawnGroup.WATER_CREATURE,
                 ModEntities.GLOOMWHALE,
+                5, 1, 3);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.DARK_LIFELESS_OCEAN),
+                SpawnGroup.WATER_CREATURE,
+                ModEntities.GRIPPING_GLOOMWHALE,
                 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.GLACIEMITE_BOULDER_SPAWNS_ON),
                 SpawnGroup.MONSTER,
@@ -131,7 +138,9 @@ public class ModWorldGeneration {
                 ModEntities.ELDRITCH_WATCHER,
                 5, 1, 1);
         SpawnRestriction.register(ModEntities.HARMONY_WATCHER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HarmonyWatcherEntity::canWatcherSpawn);
-        SpawnRestriction.register(ModEntities.GLOOMWHALE, SpawnRestriction.Location.IN_WATER, Heightmap.Type.OCEAN_FLOOR, GloomwhaleEntity::canWhaleSpawn);
+        SpawnRestriction.register(ModEntities.GLOOMWHALE, SpawnRestriction.Location.IN_WATER, Heightmap.Type.OCEAN_FLOOR, WhaleEntity::canWhaleSpawn);
+        SpawnRestriction.register(ModEntities.GRIPPING_GLOOMWHALE, SpawnRestriction.Location.IN_WATER, Heightmap.Type.OCEAN_FLOOR, WhaleEntity::canWhaleSpawn);
+        SpawnRestriction.register(ModEntities.SHIMMER, SpawnRestriction.Location.IN_WATER, Heightmap.Type.OCEAN_FLOOR, ShimmerEntity::canSpawn);
         SpawnRestriction.register(ModEntities.SABERPARD, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, SaberpardEntity::isValidNaturalSpawn);
         SpawnRestriction.register(ModEntities.TUSKHOG, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, TuskhogEntity::isValidNaturalSpawn);
         SpawnRestriction.register(ModEntities.ESPYER, SpawnRestriction.Location.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, EspyerEntity::canEspyerSpawn);

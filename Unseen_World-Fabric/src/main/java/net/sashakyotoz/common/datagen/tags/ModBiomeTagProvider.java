@@ -126,6 +126,7 @@ public class ModBiomeTagProvider extends VanillaBiomeTagProvider {
         this.getOrCreateTagBuilder(ModTags.Biomes.HAS_MODIFIED_SURFACE).add(
                 ModBiomes.TEALIVY_VALLEY,
                 ModBiomes.GREENISH_VALLEY,
+                ModBiomes.CURRANTSLATE_PEAKS,
                 ModBiomes.DARK_BADLANDS
         );
     }

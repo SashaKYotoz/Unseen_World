@@ -141,7 +141,6 @@ public class ModItems {
     //artifacts
     public static final Item GRIPPING_BUNDLE = ModRegistry.ofItem("gripping_bundle", new GrippingBundleItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
     public static final Item GRIPPING_GAUNTLET = ModRegistry.ofItem("gripping_gauntlet", new GrippingGauntletItem(new FabricItemSettings().rarity(Rarity.EPIC).maxCount(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
-    public static final Item GRIPCRYSTAL_ORB = ModRegistry.ofItem("gripcrystal_orb", new GripcrystalOrbItem(new FabricItemSettings().rarity(Rarity.RARE).maxCount(16))).model(Models.GENERATED).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(Models.GENERATED).build();
@@ -170,7 +169,8 @@ public class ModItems {
             new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
     public static final Item ABYSSAL_KEY = ModRegistry.ofItem("abyssal_key",
             new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
-
+    public static final Item AURIC_KEY = ModRegistry.ofItem("auric_key",
+            new Item(new FabricItemSettings().rarity(Rarity.RARE).maxCount(1))).model(Models.GENERATED).build();
     //signs
     private static FabricBlockSettings copy(FabricBlockSettings original) {
         return FabricBlockSettings.copyOf(original);
@@ -305,8 +305,17 @@ public class ModItems {
     public static final Item VIOLEGER_SPAWN_EGG = ModRegistry.ofItem("violeger_spawn_egg",
                     new SpawnEggItem(ModEntities.VIOLEGER, 12801229, 6035741, new FabricItemSettings()))
             .build();
+    public static final Item VENOMER_SPAWN_EGG = ModRegistry.ofItem("venomer_spawn_egg",
+                    new SpawnEggItem(ModEntities.VENOMER, 12801229, 9715553, new FabricItemSettings()))
+            .build();
     public static final Item GLOOMWHALE_SPAWN_EGG = ModRegistry.ofItem("gloomwhale_spawn_egg",
-                    new SpawnEggItem(ModEntities.GLOOMWHALE, 4210943, 1644825, new FabricItemSettings()))
+                    new SpawnEggItem(ModEntities.GLOOMWHALE, 4030943, 1644825, new FabricItemSettings()))
+            .build();
+    public static final Item GRIPPING_GLOOMWHALE_SPAWN_EGG = ModRegistry.ofItem("gripping_gloomwhale_spawn_egg",
+                    new SpawnEggItem(ModEntities.GRIPPING_GLOOMWHALE, 4030943, 1643895, new FabricItemSettings()))
+            .build();
+    public static final Item SHIMMER_SPAWN_EGG = ModRegistry.ofItem("shimmer_spawn_egg",
+                    new SpawnEggItem(ModEntities.SHIMMER, 9131142, 8278982, new FabricItemSettings()))
             .build();
     public static final Item SABERPARD_SPAWN_EGG = ModRegistry.ofItem("saberpard_spawn_egg",
                     new SpawnEggItem(ModEntities.SABERPARD, 16445005, 1644825, new FabricItemSettings()))
@@ -319,5 +328,11 @@ public class ModItems {
             .build();
     public static final Item TUSKHOG_SPAWN_EGG = ModRegistry.ofItem("tuskhog_spawn_egg",
                     new SpawnEggItem(ModEntities.TUSKHOG, 15771042, 5000268, new FabricItemSettings()))
+            .build();
+    public static final Item DREADFLAP_SPAWN_EGG = ModRegistry.ofItem("dreadflap_spawn_egg",
+                    new SpawnEggItem(ModEntities.DREADFLAP, 1644825, 8476209, new FabricItemSettings()))
+            .build();
+    public static final Item REAVER_SPAWN_EGG = ModRegistry.ofItem("reaver_spawn_egg",
+                    new SpawnEggItem(ModEntities.REAVER, 8278982, 1711153, new FabricItemSettings()))
             .build();
 }

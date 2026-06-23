@@ -58,6 +58,8 @@ public class DarknessMultiNoiseBiomeSource extends BiomeSource {
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         RegistryEntry<Biome> candidate = this.getBiomeAtPoint(noise.sample(x, y, z));
         int y1 = BiomeCoords.toBlock(y);
+        if (y1 > 72 && candidate.matchesKey(ModBiomes.GREYNISH_SHORE))
+            return registryEntryFromKey(ModBiomes.TEALIVY_VALLEY, candidate);
         if (y1 > 220)
             return this.getBiomeAtPoint(noise.sample(x, BiomeCoords.fromBlock(96), z));
         if (y1 < 32) {

@@ -32,7 +32,7 @@ import net.sashakyotoz.common.blocks.ModFluids;
 import net.sashakyotoz.common.config.ConfigController;
 import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.ModEntities;
-import net.sashakyotoz.common.entities.bosses.EclipseSentinelEntity;
+import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
 import net.sashakyotoz.common.items.ModItemGroups;
 import net.sashakyotoz.common.items.ModItems;
@@ -65,7 +65,8 @@ public class UnseenWorld implements ModInitializer {
         ModBlockEntities.register();
 
         TrackedDataHandlerRegistry.register(WarriorOfChimericDarkness.WARRIOR_POSE);
-        TrackedDataHandlerRegistry.register(EclipseSentinelEntity.SENTINEL_POSE);
+        TrackedDataHandlerRegistry.register(EclipseSentinel.SENTINEL_POSE);
+
         ModSoundEvents.registerSounds();
         ModEntities.register();
         ModWorldFeatures.register();

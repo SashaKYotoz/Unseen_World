@@ -42,7 +42,6 @@ import net.sashakyotoz.common.config.ChimericDarknessData;
 import net.sashakyotoz.common.config.WorldConfigController;
 import net.sashakyotoz.common.entities.ai.bosses_goals.WarriorMovementGoal;
 import net.sashakyotoz.common.entities.bosses.parts.WarriorPartEntity;
-import net.sashakyotoz.utils.ActionsUtils;
 
 import java.util.List;
 
@@ -163,8 +162,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob implements 
                     this.getJumpControl().setActive();
                     this.queueServerWork(18, () -> {
                         this.hitNearbyMobs(10, 7);
-                        if (!ActionsUtils.isModLoaded("sodium"))
-                            this.provokeEarthquake(3);
+                        this.provokeEarthquake(3);
                         this.playSound(SoundEvents.BLOCK_ANVIL_HIT, 2.5f, 2.5f);
                     });
                 }
@@ -211,7 +209,7 @@ public class WarriorOfChimericDarkness extends BossLikePathfinderMob implements 
         Vec3d[] vec3ds = new Vec3d[this.parts.length];
         for (int s = 0; s < this.parts.length; s++)
             vec3ds[s] = new Vec3d(this.parts[s].getX(), this.parts[s].getY(), this.parts[s].getZ());
-        this.movePart(this.body, f1 * -1.25F, 1.75D, -f15 * -1.25F);
+        this.movePart(this.body, f1 * -1.25F, 1.5D, -f15 * -1.25F);
         this.movePart(this.backCrack, f1 * 1.1F, 1.5D, -f15 * 1.1F);
         for (int ac = 0; ac < this.parts.length; ac++) {
             this.parts[ac].prevX = vec3ds[ac].x;
