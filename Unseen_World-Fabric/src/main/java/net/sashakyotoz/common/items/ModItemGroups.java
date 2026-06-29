@@ -34,7 +34,7 @@ public class ModItemGroups {
     }
 
     public static void register() {
-        UnseenWorld.log("Registering ItemGroups for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering ItemGroups for modid : " + UnseenWorld.MOD_ID);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
             entries.addAfter(Items.WARPED_HANGING_SIGN, ModItems.AMETHYST_SIGN_ITEM);
             entries.addAfter(ModItems.AMETHYST_SIGN, ModItems.AMETHYST_HANGING_SIGN_ITEM);

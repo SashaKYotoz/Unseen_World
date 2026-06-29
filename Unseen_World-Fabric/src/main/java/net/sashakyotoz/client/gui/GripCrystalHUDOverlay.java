@@ -11,7 +11,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.common.config.ConfigController;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.items.custom.*;
 import net.sashakyotoz.common.tags.ModTags;
 
@@ -102,8 +102,8 @@ public class GripCrystalHUDOverlay implements HudRenderCallback {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, opacity);
-        int xF = x + xO + ConfigEntries.xGrippingManaTextureOffset;
-        int yF = y + yO + ConfigEntries.yGrippingManaTextureOffset;
+        int xF = x + xO + ModMainConfig.xGrippingManaTextureOffset;
+        int yF = y + yO + ModMainConfig.yGrippingManaTextureOffset;
         drawContext.blit(
                 GripCrystalHUDOverlay.MANA_ORB,
                 useOffset ? x + xO : xF,
@@ -123,8 +123,8 @@ public class GripCrystalHUDOverlay implements HudRenderCallback {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, opacity);
         drawContext.blit(
                 identifier,
-                x - 128 + ConfigEntries.xGrippingManaTextureOffset,
-                y - 142 + ConfigEntries.yGrippingManaTextureOffset,
+                x - 128 + ModMainConfig.xGrippingManaTextureOffset,
+                y - 142 + ModMainConfig.yGrippingManaTextureOffset,
                 0,
                 0,
                 256,

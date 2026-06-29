@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.animations.HarmonyWatcherAnimations;
 import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
@@ -71,7 +71,7 @@ public class HarmonyWatcherModel extends HierarchicalModel<HarmonyWatcherEntity>
         this.eye.yRot = netHeadYaw * (float) (Math.PI / 180.0);
         this.animateWalk(entity.isAngry ? HarmonyWatcherAnimations.WALK_WHEN_ANGRY : HarmonyWatcherAnimations.WALK, limbSwing, limbSwingAmount, 3.0f, 3.0f);
         this.animate(entity.fertilize, HarmonyWatcherAnimations.FERTILIZE, ageInTicks);
-        if (ConfigEntries.doAdvancedDeathForMobs)
+        if (ModMainConfig.doAdvancedDeathForMobs)
             this.animate(entity.death, HarmonyWatcherAnimations.DEATH, ageInTicks);
     }
 

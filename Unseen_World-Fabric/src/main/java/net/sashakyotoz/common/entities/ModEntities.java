@@ -15,7 +15,7 @@ import net.sashakyotoz.common.entities.custom.projectiles.GrippingCrystalProject
 
 public class ModEntities {
     public static void register() {
-        UnseenWorld.log("Registering Entities for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Entities for modid : " + UnseenWorld.MOD_ID);
         FabricDefaultAttributeRegistry.register(GLEAMCARVER, GleamcarverEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(HARMONY_WATCHER, HarmonyWatcherEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(VIOLEGER, ViolegerEntity.createAttributes());

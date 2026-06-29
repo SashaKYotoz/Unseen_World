@@ -7,8 +7,10 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
+import net.lcc.sollib.api.common.SolRegistries;
+import net.lcc.sollib.api.common.logger.SolLogger;
+import net.lcc.sollib.api.common.registry.SolModContainer;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,6 +23,7 @@ import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.MultipartEntity;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
+import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
 import net.sashakyotoz.client.gui.blocks.ModScreenHandlers;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.ModRegistry;
@@ -30,7 +33,6 @@ import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModFluids;
 import net.sashakyotoz.common.config.ConfigController;
-import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
@@ -40,12 +42,10 @@ import net.sashakyotoz.common.networking.ModMessages;
 import net.sashakyotoz.common.world.ModWorldFeatures;
 import net.sashakyotoz.common.world.ModWorldGeneration;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class UnseenWorld implements ModInitializer {
-    public static final String MOD_ID = "unseen_world";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final SolModContainer MOD = new SolModContainer("Unseen World", "unseen_world");
+    public static final String MOD_ID = MOD.getNamespace();
 
     @Override
     public void onInitialize() {
@@ -80,6 +80,12 @@ public class UnseenWorld implements ModInitializer {
 
         ModTreePlacerTypes.register();
         ModWorldGeneration.register();
+
+        SolRegistries.WEATHER.register("grippfall", (source, duration) -> {
+            ChimericWeatherState.get(source.getLevel()).setGrippfallDuration(duration);
+            source.sendSuccess(() -> Component.translatable("commands.unseen_world.weather.set.grippfall"), true);
+        });
+
         ServerWorldEvents.LOAD.register(new ConfigController());
 
         PotionBrewing.addMix(Potions.AWKWARD, ModItems.GLOW_APPLE, ModRegistry.GLOWING);
@@ -119,7 +125,7 @@ public class UnseenWorld implements ModInitializer {
         });
         ServerTickEvents.END_WORLD_TICK.register(world -> world.players().stream()
                 .filter(player -> !player.isSpectator()
-                && GripcrystalManaData.getOpacity(((IEntityDataSaver) player)) > 0)
+                        && GripcrystalManaData.getOpacity(((IEntityDataSaver) player)) > 0)
                 .forEach(player -> GripcrystalManaData.removeOpacity((IEntityDataSaver) player, 0.02f)));
     }
 
@@ -127,9 +133,7 @@ public class UnseenWorld implements ModInitializer {
         return new ResourceLocation(MOD_ID, id);
     }
 
-    public static <T> T log(T message) {
-        if (FabricLoader.getInstance().isDevelopmentEnvironment() || !ConfigEntries.doLoggingOnlyInDev)
-            LOGGER.info(String.valueOf(message));
-        return message;
+    public static SolLogger log() {
+        return MOD.getLogger();
     }
 }

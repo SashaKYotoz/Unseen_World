@@ -78,7 +78,7 @@ public class ConfigController implements ServerWorldEvents.Load {
                     spellItems.add(spellItem);
                 }
             }
-            UnseenWorld.log("Loaded %s compatibility-config".formatted(UnseenWorld.MOD_ID));
+            UnseenWorld.log().error("Loaded %s compatibility-config".formatted(UnseenWorld.MOD_ID));
             return spellItems;
         } catch (Exception e) {
             return List.of();
@@ -88,15 +88,12 @@ public class ConfigController implements ServerWorldEvents.Load {
     public static void loadConfig() {
         try {
             Path configPath = FabricLoader.getInstance().getConfigDir().resolve("unseen_world/uw-config.json");
-            if (!Files.exists(configPath)) {
+            if (!Files.exists(configPath))
                 Files.createDirectories(configPath.getParent());
-                Files.writeString(configPath, getEntriesConfig());
-            }
             String json = Files.readString(configPath);
             CONFIG = gson.fromJson(json, Map.class);
-            ConfigEntries.reload();
         } catch (Exception e) {
-            UnseenWorld.log("Failed to load %s config".formatted(UnseenWorld.MOD_ID));
+            UnseenWorld.log().error("Failed to load %s config".formatted(UnseenWorld.MOD_ID));
         }
     }
 
@@ -189,29 +186,6 @@ public class ConfigController implements ServerWorldEvents.Load {
                      }
                    ]
                  }
-                """;
-    }
-
-    private static String getEntriesConfig() {
-        return """
-                {
-                    "mobs":{
-                        "animate_death_for_mobs": true,
-                        "render_gripping_on_mobs": true,
-                        "spawn_gripping_particles": true,
-                        "remove_gripping_naturally": true,
-                        "violeger_patrol_spawns_in": 9000
-                    },
-                    "gameplay":{
-                        "do_abyssal_armor_save_from_void": true,
-                        "key_handler_block_cooldown": 24000,
-                        "x_gripping_mana_texture_offset": 0,
-                        "y_gripping_mana_texture_offset": 0
-                    },
-                    "technic":{
-                        "do_logging_only_in_dev": true
-                    }
-                }
                 """;
     }
 

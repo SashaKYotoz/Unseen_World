@@ -32,7 +32,7 @@ import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneData;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
@@ -143,7 +143,7 @@ public class KeyHandlerStoneBlock extends BaseEntityBlock {
                 entity.data.firstKeyOffset(),
                 entity.data.secondKeyIn(),
                 entity.data.secondKeyOffset(),
-                ConfigEntries.keyHandlerBlockCooldown
+                ModMainConfig.keyHandlerBlockCooldown
         );
     }
 

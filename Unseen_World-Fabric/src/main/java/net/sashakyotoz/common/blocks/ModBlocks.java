@@ -29,7 +29,7 @@ import java.util.function.ToIntFunction;
 
 public class ModBlocks {
     public static void register() {
-        UnseenWorld.log("Registering Blocks for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Blocks for modid : " + UnseenWorld.MOD_ID);
         ModRegistry.BlockBuilder.registerBricksSet(DARK_CURRANTSLATE, DARK_CURRANTSLATE_STAIRS, DARK_CURRANTSLATE_SLAB, DARK_CURRANTSLATE_WALL);
         ModRegistry.BlockBuilder.registerBricksSet(DARK_CURRANTSLATE_BRICKS, DARK_CURRANTSLATE_BRICKS_STAIRS, DARK_CURRANTSLATE_BRICKS_SLAB, DARK_CURRANTSLATE_BRICKS_WALL);
         ModRegistry.BlockBuilder.registerBricksSet(GLACIEMITE, GLACIEMITE_STAIRS, GLACIEMITE_SLAB, GLACIEMITE_WALL);

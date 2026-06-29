@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> extends StuckObjectsRenderer<T, M> {
@@ -31,7 +31,7 @@ public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> ext
 
     @Override
     protected int getObjectCount(T entity) {
-        if (!ConfigEntries.renderGrippingOnMobs)
+        if (!ModMainConfig.renderCrystalsOnMobs.get())
             return 0;
         if (entity instanceof Mob entity1 && entity1.isBaby())
             return 0;

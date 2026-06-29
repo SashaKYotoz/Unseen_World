@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public class ModParticleTypes {
     public static void register() {
-        UnseenWorld.log("Registering Particles for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Particles for modid : " + UnseenWorld.MOD_ID);
     }
 
     public static final SimpleParticleType GRIPPING_CRYSTAL = Registry.register(BuiltInRegistries.PARTICLE_TYPE, UnseenWorld.makeID("gripping_crystal"),

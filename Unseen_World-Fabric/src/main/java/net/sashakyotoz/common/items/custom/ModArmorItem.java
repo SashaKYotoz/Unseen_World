@@ -19,7 +19,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 import net.sashakyotoz.client.particles.ModParticleTypes;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +40,7 @@ public class ModArmorItem extends ArmorItem {
             ItemStack leggingsStack = livingEntity.getItemBySlot(EquipmentSlot.LEGS);
             ItemStack bootsStack = livingEntity.getItemBySlot(EquipmentSlot.FEET);
             if (isAbyssalArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
-                if (livingEntity.getY() < -96 && ConfigEntries.doAbyssalArmorSaveFromVoid) {
+                if (livingEntity.getY() < -96 && ModMainConfig.doAbyssalArmorSaveFromVoid.get()) {
                     world.playSound(livingEntity, livingEntity.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.NEUTRAL, 3f, 2.5f);
                     BlockPos surfacePos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, entity.blockPosition());
                     livingEntity.teleportToWithTicket(surfacePos.getX(), surfacePos.getY() + 2, surfacePos.getZ());

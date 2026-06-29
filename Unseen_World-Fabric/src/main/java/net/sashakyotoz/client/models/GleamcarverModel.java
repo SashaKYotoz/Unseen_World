@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.animations.GleamcarverAnimations;
 import net.sashakyotoz.common.entities.custom.GleamcarverEntity;
 
@@ -87,7 +87,7 @@ public class GleamcarverModel extends HierarchicalModel<GleamcarverEntity> {
     public void setupAnim(GleamcarverEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animateWalk(GleamcarverAnimations.WALK, limbSwing, limbSwingAmount, 4.0F, 2.5F);
-        if (ConfigEntries.doAdvancedDeathForMobs)
+        if (ModMainConfig.doAdvancedDeathForMobs)
             this.animate(entity.death, GleamcarverAnimations.DEATH, ageInTicks);
     }
 

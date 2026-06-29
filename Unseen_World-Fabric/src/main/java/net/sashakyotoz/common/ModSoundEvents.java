@@ -24,6 +24,6 @@ public class ModSoundEvents {
     }
 
     public static void registerSounds() {
-        UnseenWorld.log("Registering Sounds for " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Sounds for " + UnseenWorld.MOD_ID);
     }
 }

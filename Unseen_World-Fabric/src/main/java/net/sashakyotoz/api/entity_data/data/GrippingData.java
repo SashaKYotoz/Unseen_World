@@ -2,7 +2,7 @@ package net.sashakyotoz.api.entity_data.data;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.tags.ModTags;
 
 public class GrippingData {
@@ -18,7 +18,7 @@ public class GrippingData {
     }
 
     public static void removeGrippingPerTick(IGrippingEntity entity) {
-        if (ConfigEntries.removeGrippingNaturally) {
+        if (ModMainConfig.removeParasitesNaturally.get()) {
             int gripping = entity.getGrippingData();
             gripping = gripping - 1;
             entity.setGrippingData(gripping);

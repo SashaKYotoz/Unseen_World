@@ -2,6 +2,8 @@ package net.sashakyotoz.client.renderers.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.lcc.sollib.api.client.model.entity.ModelPartUtils;
+import net.lcc.sollib.api.client.model.entity.inject.IModelPartsAccessor;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -11,8 +13,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.sashakyotoz.api.entity_data.IModelPartsAccessor;
-import net.sashakyotoz.utils.ModelPartUtils;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;

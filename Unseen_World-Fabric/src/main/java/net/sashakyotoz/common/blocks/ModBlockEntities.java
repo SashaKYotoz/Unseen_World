@@ -14,7 +14,7 @@ import net.sashakyotoz.common.blocks.custom.entities.TranslocatoneBlockEntity;
 
 public class ModBlockEntities {
     public static void register() {
-        UnseenWorld.log("Registering BlockEntities for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering BlockEntities for modid : " + UnseenWorld.MOD_ID);
     }
 
     public static final BlockEntityType<KeyHandlerStoneBlockEntity> KEY_HANDLER = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,

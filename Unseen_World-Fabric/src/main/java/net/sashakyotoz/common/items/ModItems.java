@@ -18,7 +18,7 @@ import net.sashakyotoz.common.tags.ModTags;
 
 public class ModItems {
     public static void register() {
-        UnseenWorld.log("Registering Items for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Items for modid : " + UnseenWorld.MOD_ID);
 
         ComposterBlock.COMPOSTABLES.put(ModBlocks.UMBRAL_KELP.asItem(), 0.15f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.GLOOMWEED.asItem(), 0.1f);

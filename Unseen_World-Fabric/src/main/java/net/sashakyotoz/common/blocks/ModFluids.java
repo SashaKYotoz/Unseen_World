@@ -9,7 +9,7 @@ import net.sashakyotoz.common.blocks.custom.fluids.DarkWaterFluid;
 
 public class ModFluids {
     public static void register() {
-        UnseenWorld.log("Registering Fluids for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Fluids for modid : " + UnseenWorld.MOD_ID);
     }
 
     public static final FlowingFluid DARK_FLOWING_WATER = registerFluid("dark_flowing_water", new DarkWaterFluid.Flowing());

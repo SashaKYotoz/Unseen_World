@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 
 public abstract class DeathFixedMobRenderer<T extends Mob, M extends EntityModel<T>> extends MobRenderer<T, M> {
     public DeathFixedMobRenderer(EntityRendererProvider.Context context, M entityModel, float f) {
@@ -17,7 +17,7 @@ public abstract class DeathFixedMobRenderer<T extends Mob, M extends EntityModel
     }
 
     protected void setupRotations(T entity, PoseStack matrices, float animationProgress, float bodyYaw, float tickDelta) {
-        if (entity.deathTime > 0 && !ConfigEntries.doAdvancedDeathForMobs) {
+        if (entity.deathTime > 0 && !ModMainConfig.doAdvancedDeathForMobs) {
             float f = ((float) entity.deathTime + tickDelta - 1.0F) / 20.0F * 1.6F;
             f = Math.min(1, Mth.sqrt(f));
             matrices.mulPose(Axis.ZP.rotationDegrees(f * this.getFlipDegrees(entity)));

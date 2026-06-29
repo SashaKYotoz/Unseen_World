@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class DarkeningLayer<T extends LivingEntity, M extends EntityModel<T>> extends StuckObjectsRenderer<T, M> {
@@ -24,7 +24,7 @@ public class DarkeningLayer<T extends LivingEntity, M extends EntityModel<T>> ex
 
     @Override
     protected int getObjectCount(T entity) {
-        if (!ConfigEntries.renderDarkeningOnMobs)
+        if (!ModMainConfig.renderDarkeningOnMobs.get())
             return 0;
         if (entity instanceof IGrippingEntity entity1 && entity1.getDarkeningData() > 0)
             return Math.round(entity1.getDarkeningData() / 1.5f);

@@ -9,7 +9,7 @@ import net.sashakyotoz.common.world.features.custom.*;
 
 public class ModWorldFeatures {
     public static void register() {
-        UnseenWorld.log("Registering Features for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Features for modid : " + UnseenWorld.MOD_ID);
         Registry.register(BuiltInRegistries.FEATURE, UnseenWorld.makeID("boulder"), BoulderFeature.INSTANCE);
         Registry.register(BuiltInRegistries.FEATURE, UnseenWorld.makeID("ceiling_boulder"), CeilingBoulderFeature.INSTANCE);
         Registry.register(BuiltInRegistries.FEATURE, UnseenWorld.makeID("standing_flower_bunch"), StandingFlowerBunchFeature.INSTANCE);

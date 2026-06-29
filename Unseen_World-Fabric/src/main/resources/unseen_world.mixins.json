@@ -13,7 +13,6 @@
     "entity.ThreadedAnvilChunkStorageMixin",
     "world.ServerWorldMixin",
     "world.SurfaceBuilderMixin",
-    "world.WeatherCommandMixin",
     "world.WorldMixin"
   ],
   "injectors": {
@@ -21,15 +20,12 @@
   },
   "client": [
     "client.ArmorFeatureRendererMixin",
-    "client.BossBarHudMixin",
     "client.BuiltinModelItemRendererMixin",
     "client.DrawContextMixin",
     "client.HeldItemRendererMixin",
     "client.LightmapTextureManagerMixin",
     "client.MinecraftClientMixin",
-    "client.ModelPartMixin",
     "client.entity.AbstractClientPlayerMixin",
-    "client.entity.EntityModelMixin",
     "client.entity.EntityRenderDispatcherMixin",
     "client.entity.LivingEntityRendererMixin"
   ]

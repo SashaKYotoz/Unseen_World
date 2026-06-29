@@ -69,7 +69,7 @@ public class WorldConfigController {
             mainObject.addProperty("are_galactic_liberated", false);
             Files.write(dataFile, gson.toJson(mainObject).getBytes());
         } catch (IOException e) {
-            UnseenWorld.log("Failed to create chimeric_darkness_controller.json");
+            UnseenWorld.log().debug("Failed to create chimeric_darkness_controller.json");
         }
     }
 }

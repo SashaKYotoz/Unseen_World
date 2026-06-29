@@ -18,7 +18,7 @@ import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.MultipartEntity;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
 import net.sashakyotoz.common.blocks.ModFluids;
-import net.sashakyotoz.common.config.ConfigEntries;
+import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.utils.ActionsUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -75,7 +75,7 @@ public abstract class LivingEntityMixin implements IGrippingEntity {
             Level world = livingEntity.level();
 
             if (entity.getGrippingData() > 0) {
-                if (world.isClientSide() && ConfigEntries.spawnParticlesOfGripping) {
+                if (world.isClientSide() && ModMainConfig.spawnParticlesOfGripping) {
                     float angle = livingEntity.tickCount % 360;
                     world.addParticle(ParticleTypes.DRIPPING_WATER,
                             livingEntity.getX() + (float) Math.sin(angle),

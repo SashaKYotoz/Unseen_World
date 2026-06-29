@@ -11,7 +11,7 @@ import net.sashakyotoz.mixin.access.TrunkPlacerTypeInvoker;
 
 public class ModTreePlacerTypes {
     public static void register() {
-        UnseenWorld.log("Registering Trunk and Foliage Placers for modid : " + UnseenWorld.MOD_ID);
+        UnseenWorld.log().debug("Registering Trunk and Foliage Placers for modid : " + UnseenWorld.MOD_ID);
     }
 
     public static final TrunkPlacerType<?> GRIZZLY_TRUNK_PLACER = TrunkPlacerTypeInvoker.callRegister("grizzly_trunk_placer",

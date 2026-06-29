@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
+import net.lcc.sollib.api.client.SolClientRegistries;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
@@ -64,6 +65,10 @@ import net.sashakyotoz.common.networking.ModMessages;
 import net.sashakyotoz.common.world.ModDimensions;
 
 public class UnseenWorldClient implements ClientModInitializer {
+    private static final ResourceLocation GUI_BARS_LOCATION = new ResourceLocation("textures/gui/bars.png");
+    private static final ResourceLocation BOSSBAR_WARRIOR_OF_DARKNESS = UnseenWorld.makeID("textures/gui/bossbars/warrior_of_darkness_bossbar.png");
+    private static final ResourceLocation BOSSBAR_ECLIPSE_SENTINEL = UnseenWorld.makeID("textures/gui/bossbars/eclipse_sentinel_bossbar.png");
+
     @Override
     public void onInitializeClient() {
         for (Block block : ModRegistry.BLOCK_CUTOUT)
@@ -112,10 +117,18 @@ public class UnseenWorldClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, GrippingCrystalProjectileRenderer::new);
 
-        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) ->
-                        world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
-                ModBlocks.GLOOMWEED,
-                ModBlocks.TALL_GLOOMWEED);
+        SolClientRegistries.BOSS_BAR.register(bossEvent ->
+                        bossEvent.getName().contains(Component.translatable("entity.unseen_world.warrior_of_chimeric_darkness")),
+                (guiGraphics, x, y, bossEvent) -> {
+                    guiGraphics.blit(GUI_BARS_LOCATION, x, y, 0, bossEvent.getColor().ordinal() * 5 * 2 + 5, (int) (bossEvent.getProgress() * 183.0F), 5);
+                    guiGraphics.blit(BOSSBAR_WARRIOR_OF_DARKNESS, x, y - 2, 0.0F, 0.0F, 183, 9, 183, 9);
+                });
+        SolClientRegistries.BOSS_BAR.register(bossEvent ->
+                        bossEvent.getName().contains(Component.translatable("entity.unseen_world.eclipse_sentinel")),
+                (guiGraphics, x, y, bossEvent) -> {
+                    guiGraphics.blit(GUI_BARS_LOCATION, x, y, 0, bossEvent.getColor().ordinal() * 5 * 2 + 5, (int) (bossEvent.getProgress() * 183.0F), 5);
+                    guiGraphics.blit(BOSSBAR_ECLIPSE_SENTINEL, x, y - 2, 0.0F, 0.0F, 183, 9, 183, 9);
+                });
 
         EntityRendererRegistry.register(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarknessRenderer::new);
         EntityRendererRegistry.register(ModEntities.ECLIPSE_SENTINEL, EclipseSentinelRenderer::new);
@@ -130,6 +143,11 @@ public class UnseenWorldClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(ModParticleTypes.LIGHT_VIBRATION, LightVibrationParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticleTypes.LEAF, LeafParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticleTypes.GRIPPING_CRYSTAL, GrippingCrystalParticle.Factory::new);
+
+        ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) ->
+                        world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
+                ModBlocks.GLOOMWEED,
+                ModBlocks.TALL_GLOOMWEED);
 
         KeyInputHandler.register();
         ModMessages.registerS2CPackets();
