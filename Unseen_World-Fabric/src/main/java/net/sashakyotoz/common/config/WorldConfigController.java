@@ -3,8 +3,8 @@ package net.sashakyotoz.common.config;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.LevelResource;
 import net.sashakyotoz.UnseenWorld;
 
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class WorldConfigController {
     private static final Gson gson = new Gson();
     public static final HashMap<Integer,ChimericDarknessData> data = new HashMap<>();
 
-    public static ChimericDarknessData loadData(ServerWorld world) {
-        Path pathToWorld = world.getServer().getSavePath(WorldSavePath.ROOT).resolve("chimeric_darkness_controller.json");
+    public static ChimericDarknessData loadData(ServerLevel world) {
+        Path pathToWorld = world.getServer().getWorldPath(LevelResource.ROOT).resolve("chimeric_darkness_controller.json");
         if (Files.exists(pathToWorld)) {
             try {
                 String jsonString = new String(Files.readAllBytes(pathToWorld));
@@ -37,11 +37,11 @@ public class WorldConfigController {
             createController(world);
         return null;
     }
-    public static void updateSave(ServerWorld world){
+    public static void updateSave(ServerLevel world){
         WorldConfigController.data.put(0, WorldConfigController.loadData(world));
     }
-    public static void saveController(ServerWorld world, boolean starsUnlock, boolean sunUnlock, boolean galacticUnlock) {
-        Path pathToWorld = world.getServer().getSavePath(WorldSavePath.ROOT);
+    public static void saveController(ServerLevel world, boolean starsUnlock, boolean sunUnlock, boolean galacticUnlock) {
+        Path pathToWorld = world.getServer().getWorldPath(LevelResource.ROOT);
         try {
             if (!Files.exists(pathToWorld))
                 createController(world);
@@ -56,8 +56,8 @@ public class WorldConfigController {
         }
     }
 
-    public static void createController(ServerWorld world) {
-        Path pathToWorld = world.getServer().getSavePath(WorldSavePath.ROOT);
+    public static void createController(ServerLevel world) {
+        Path pathToWorld = world.getServer().getWorldPath(LevelResource.ROOT);
         try {
             if (!Files.exists(pathToWorld)) {
                 Files.createDirectories(pathToWorld);

@@ -1,7 +1,7 @@
 package net.sashakyotoz.common.blocks.custom.chests.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.sashakyotoz.common.blocks.custom.chests.ModChestBlock;
 
 public class DarkCurranslateChestEntity extends ModChestBlockEntity {

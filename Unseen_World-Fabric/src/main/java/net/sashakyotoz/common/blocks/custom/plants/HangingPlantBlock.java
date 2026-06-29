@@ -1,43 +1,43 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class HangingPlantBlock extends Block {
     public TagKey<Block> growableOn;
     public VoxelShape shape;
 
-    public HangingPlantBlock(Settings settings, TagKey<Block> growableOn, VoxelShape shape) {
+    public HangingPlantBlock(Properties settings, TagKey<Block> growableOn, VoxelShape shape) {
         super(settings);
         this.growableOn = growableOn;
         this.shape = shape;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.shape;
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        BlockPos blockPos = pos.up();
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        BlockPos blockPos = pos.above();
         BlockState blockState = world.getBlockState(blockPos);
-        return blockState.isIn(this.growableOn);
+        return blockState.is(this.growableOn);
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (!this.canPlaceAt(state, world, pos))
-            return Blocks.AIR.getDefaultState();
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+        if (!this.canSurvive(state, world, pos))
+            return Blocks.AIR.defaultBlockState();
+        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 }

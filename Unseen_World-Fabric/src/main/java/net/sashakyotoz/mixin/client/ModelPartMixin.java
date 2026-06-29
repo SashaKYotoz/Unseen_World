@@ -1,6 +1,6 @@
 package net.sashakyotoz.mixin.client;
 
-import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.geom.ModelPart;
 import net.sashakyotoz.api.entity_data.IModelPartExtension;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ModelPartMixin implements IModelPartExtension {
 
     @Shadow @Final public Map<String, ModelPart> children;
-    @Shadow @Final private List<ModelPart.Cuboid> cuboids;
+    @Shadow @Final private List<ModelPart.Cube> cubes;
 
     @Override
     public Optional<ModelPart> findPartByName(String name) {
@@ -34,7 +34,7 @@ public class ModelPartMixin implements IModelPartExtension {
 
     @Override
     public Optional<ModelPart> findPartBySize(float x, float y, float z) {
-        for (ModelPart.Cuboid cuboid : this.cuboids) {
+        for (ModelPart.Cube cuboid : this.cubes) {
             float sizeX = cuboid.maxX - cuboid.minX;
             float sizeY = cuboid.maxY - cuboid.minY;
             float sizeZ = cuboid.maxZ - cuboid.minZ;

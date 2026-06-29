@@ -1,30 +1,30 @@
 package net.sashakyotoz.common.items.custom;
 
-import net.minecraft.client.item.BundleTooltipData;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.item.TooltipData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.tooltip.BundleTooltip;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
@@ -37,14 +37,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class GrippingBundleItem extends Item {
-    public GrippingBundleItem(Settings settings) {
+    public GrippingBundleItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (entity instanceof ServerPlayerEntity player && player.age % 20 == 0) {
+        if (entity instanceof ServerPlayer player && player.tickCount % 20 == 0) {
             int i = getGrippingModifier(stack);
             IEntityDataSaver keeper = (IEntityDataSaver) player;
             if (i < 0) {
@@ -66,27 +66,27 @@ public class GrippingBundleItem extends Item {
     private int getGrippingModifier(ItemStack stack) {
         if (getBundleOccupancy(stack) > 0) {
             Item item = getBundledStacks(stack).toList().get(0).getItem();
-            if (item.getTranslationKey().contains("gripcrystal"))
-                return item.getTranslationKey().contains("granulated") ? 1 : 4;
+            if (item.getDescriptionId().contains("gripcrystal"))
+                return item.getDescriptionId().contains("granulated") ? 1 : 4;
 
-            if (item.getTranslationKey().contains("griptonite"))
-                return item.getTranslationKey().contains("granulated") ? -3 : -6;
+            if (item.getDescriptionId().contains("griptonite"))
+                return item.getDescriptionId().contains("granulated") ? -3 : -6;
         }
         return 0;
     }
 
     @Override
-    public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
-        if (clickType != ClickType.RIGHT)
+    public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction clickType, Player player) {
+        if (clickType != ClickAction.SECONDARY)
             return false;
         else {
-            ItemStack itemStack = slot.getStack();
+            ItemStack itemStack = slot.getItem();
             if (itemStack.isEmpty()) {
                 this.playRemoveOneSound(player);
-                removeFirstStack(stack).ifPresent(removedStack -> addToBundle(stack, slot.insertStack(removedStack)));
-            } else if (itemStack.getItem().canBeNested()) {
+                removeFirstStack(stack).ifPresent(removedStack -> addToBundle(stack, slot.safeInsert(removedStack)));
+            } else if (itemStack.getItem().canFitInsideContainerItems()) {
                 int i = (64 - getBundleOccupancy(stack)) / getItemOccupancy(itemStack);
-                int j = addToBundle(stack, slot.takeStackRange(itemStack.getCount(), i, player));
+                int j = addToBundle(stack, slot.safeTake(itemStack.getCount(), i, player));
                 if (j > 0) {
                     this.playInsertSound(player);
                 }
@@ -97,8 +97,8 @@ public class GrippingBundleItem extends Item {
     }
 
     @Override
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
-        if (clickType == ClickType.RIGHT && slot.canTakePartial(player)) {
+    public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack otherStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference) {
+        if (clickType == ClickAction.SECONDARY && slot.allowModification(player)) {
             if (otherStack.isEmpty()) {
                 removeFirstStack(stack).ifPresent(itemStack -> {
                     this.playRemoveOneSound(player);
@@ -108,7 +108,7 @@ public class GrippingBundleItem extends Item {
                 int i = addToBundle(stack, otherStack);
                 if (i > 0) {
                     this.playInsertSound(player);
-                    otherStack.decrement(i);
+                    otherStack.shrink(i);
                 }
             }
             return true;
@@ -117,37 +117,37 @@ public class GrippingBundleItem extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
         if (dropAllBundledItems(itemStack, user)) {
             this.playDropContentsSound(user);
-            user.incrementStat(Stats.USED.getOrCreateStat(this));
-            return TypedActionResult.success(itemStack, world.isClient());
+            user.awardStat(Stats.ITEM_USED.get(this));
+            return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
         } else {
-            return TypedActionResult.fail(itemStack);
+            return InteractionResultHolder.fail(itemStack);
         }
     }
 
     @Override
-    public boolean isItemBarVisible(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return getBundleOccupancy(stack) > 0;
     }
 
     @Override
-    public int getItemBarStep(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         return Math.min(1 + 12 * getBundleOccupancy(stack) / 64, 13);
     }
 
     @Override
-    public int getItemBarColor(ItemStack stack) {
-        return MathHelper.packRgb(0.4F, 0.6F, 1.0F);
+    public int getBarColor(ItemStack stack) {
+        return Mth.color(0.4F, 0.6F, 1.0F);
     }
 
     private int addToBundle(ItemStack bundle, ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem().canBeNested() && stack.isIn(ModTags.Items.GRIPPING_BUNDLE_CAN_HANDLE)) {
-            NbtCompound nbtCompound = bundle.getOrCreateNbt();
+        if (!stack.isEmpty() && stack.getItem().canFitInsideContainerItems() && stack.is(ModTags.Items.GRIPPING_BUNDLE_CAN_HANDLE)) {
+            CompoundTag nbtCompound = bundle.getOrCreateTag();
             if (!nbtCompound.contains("Items"))
-                nbtCompound.put("Items", new NbtList());
+                nbtCompound.put("Items", new ListTag());
 
             int i = getBundleOccupancy(bundle);
             int j = getItemOccupancy(stack);
@@ -155,19 +155,19 @@ public class GrippingBundleItem extends Item {
             if (k == 0) {
                 return 0;
             } else {
-                NbtList nbtList = nbtCompound.getList("Items", NbtElement.COMPOUND_TYPE);
-                Optional<NbtCompound> optional = canMergeStack(stack, nbtList);
+                ListTag nbtList = nbtCompound.getList("Items", Tag.TAG_COMPOUND);
+                Optional<CompoundTag> optional = canMergeStack(stack, nbtList);
                 if (optional.isPresent()) {
-                    NbtCompound nbtCompound2 = optional.get();
-                    ItemStack itemStack = ItemStack.fromNbt(nbtCompound2);
-                    itemStack.increment(k);
-                    itemStack.writeNbt(nbtCompound2);
+                    CompoundTag nbtCompound2 = optional.get();
+                    ItemStack itemStack = ItemStack.of(nbtCompound2);
+                    itemStack.grow(k);
+                    itemStack.save(nbtCompound2);
                     nbtList.remove(nbtCompound2);
                     nbtList.add(0, nbtCompound2);
                 } else {
                     ItemStack itemStack2 = stack.copyWithCount(k);
-                    NbtCompound nbtCompound3 = new NbtCompound();
-                    itemStack2.writeNbt(nbtCompound3);
+                    CompoundTag nbtCompound3 = new CompoundTag();
+                    itemStack2.save(nbtCompound3);
                     nbtList.add(0, nbtCompound3);
                 }
 
@@ -178,18 +178,18 @@ public class GrippingBundleItem extends Item {
         }
     }
 
-    private static Optional<NbtCompound> canMergeStack(ItemStack stack, NbtList items) {
-        return stack.isOf(ModItems.GRIPPING_BUNDLE)
+    private static Optional<CompoundTag> canMergeStack(ItemStack stack, ListTag items) {
+        return stack.is(ModItems.GRIPPING_BUNDLE)
                 ? Optional.empty()
                 : items.stream()
-                .filter(NbtCompound.class::isInstance)
-                .map(NbtCompound.class::cast)
-                .filter(item -> ItemStack.canCombine(ItemStack.fromNbt(item), stack))
+                .filter(CompoundTag.class::isInstance)
+                .map(CompoundTag.class::cast)
+                .filter(item -> ItemStack.isSameItemSameTags(ItemStack.of(item), stack))
                 .findFirst();
     }
 
     private static int getItemOccupancy(ItemStack stack) {
-        return 64 / stack.getMaxCount();
+        return 64 / stack.getMaxStackSize();
     }
 
     private int getBundleOccupancy(ItemStack stack) {
@@ -197,19 +197,19 @@ public class GrippingBundleItem extends Item {
     }
 
     private Optional<ItemStack> removeFirstStack(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
+        CompoundTag nbtCompound = stack.getOrCreateTag();
         if (!nbtCompound.contains("Items"))
             return Optional.empty();
         else {
-            NbtList nbtList = nbtCompound.getList("Items", NbtElement.COMPOUND_TYPE);
+            ListTag nbtList = nbtCompound.getList("Items", Tag.TAG_COMPOUND);
             if (nbtList.isEmpty()) {
                 return Optional.empty();
             } else {
-                NbtCompound nbtCompound2 = nbtList.getCompound(0);
-                ItemStack itemStack = ItemStack.fromNbt(nbtCompound2);
+                CompoundTag nbtCompound2 = nbtList.getCompound(0);
+                ItemStack itemStack = ItemStack.of(nbtCompound2);
                 nbtList.remove(0);
                 if (nbtList.isEmpty()) {
-                    stack.removeSubNbt("Items");
+                    stack.removeTagKey("Items");
                 }
 
                 return Optional.of(itemStack);
@@ -218,85 +218,85 @@ public class GrippingBundleItem extends Item {
     }
 
     private Optional<ItemStack> decrementFirstStack(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
+        CompoundTag nbtCompound = stack.getOrCreateTag();
         if (!nbtCompound.contains("Items"))
             return Optional.empty();
         else {
-            NbtList nbtList = nbtCompound.getList("Items", NbtElement.COMPOUND_TYPE);
+            ListTag nbtList = nbtCompound.getList("Items", Tag.TAG_COMPOUND);
             if (nbtList.isEmpty()) {
                 return Optional.empty();
             } else {
-                NbtCompound nbtCompound2 = nbtList.getCompound(0);
-                ItemStack itemStack = ItemStack.fromNbt(nbtCompound2);
+                CompoundTag nbtCompound2 = nbtList.getCompound(0);
+                ItemStack itemStack = ItemStack.of(nbtCompound2);
                 if (itemStack.getCount() > 1) {
-                    itemStack.decrement(1);
-                    nbtList.set(0, itemStack.writeNbt(new NbtCompound()));
+                    itemStack.shrink(1);
+                    nbtList.set(0, itemStack.save(new CompoundTag()));
                 } else
                     nbtList.remove(0);
                 if (nbtList.isEmpty())
-                    stack.removeSubNbt("Items");
+                    stack.removeTagKey("Items");
 
                 return Optional.of(itemStack);
             }
         }
     }
 
-    private boolean dropAllBundledItems(ItemStack stack, PlayerEntity player) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
+    private boolean dropAllBundledItems(ItemStack stack, Player player) {
+        CompoundTag nbtCompound = stack.getOrCreateTag();
         if (!nbtCompound.contains("Items")) {
             return false;
         } else {
-            if (player instanceof ServerPlayerEntity) {
-                NbtList nbtList = nbtCompound.getList("Items", NbtElement.COMPOUND_TYPE);
+            if (player instanceof ServerPlayer) {
+                ListTag nbtList = nbtCompound.getList("Items", Tag.TAG_COMPOUND);
 
                 for (int i = 0; i < nbtList.size(); i++) {
-                    NbtCompound nbtCompound2 = nbtList.getCompound(i);
-                    ItemStack itemStack = ItemStack.fromNbt(nbtCompound2);
-                    player.dropItem(itemStack, true);
+                    CompoundTag nbtCompound2 = nbtList.getCompound(i);
+                    ItemStack itemStack = ItemStack.of(nbtCompound2);
+                    player.drop(itemStack, true);
                 }
             }
 
-            stack.removeSubNbt("Items");
+            stack.removeTagKey("Items");
             return true;
         }
     }
 
     private Stream<ItemStack> getBundledStacks(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getNbt();
+        CompoundTag nbtCompound = stack.getTag();
         if (nbtCompound == null) {
             return Stream.empty();
         } else {
-            NbtList nbtList = nbtCompound.getList("Items", NbtElement.COMPOUND_TYPE);
-            return nbtList.stream().map(NbtCompound.class::cast).map(ItemStack::fromNbt);
+            ListTag nbtList = nbtCompound.getList("Items", Tag.TAG_COMPOUND);
+            return nbtList.stream().map(CompoundTag.class::cast).map(ItemStack::of);
         }
     }
 
     @Override
-    public Optional<TooltipData> getTooltipData(ItemStack stack) {
-        DefaultedList<ItemStack> defaultedList = DefaultedList.of();
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+        NonNullList<ItemStack> defaultedList = NonNullList.create();
         getBundledStacks(stack).forEach(defaultedList::add);
-        return Optional.of(new BundleTooltipData(defaultedList, getBundleOccupancy(stack)));
+        return Optional.of(new BundleTooltip(defaultedList, getBundleOccupancy(stack)));
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(Text.translatable("item.minecraft.bundle.fullness", getBundleOccupancy(stack), 64).formatted(Formatting.GRAY));
+    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+        tooltip.add(Component.translatable("item.minecraft.bundle.fullness", getBundleOccupancy(stack), 64).withStyle(ChatFormatting.GRAY));
     }
 
     @Override
-    public void onItemEntityDestroyed(ItemEntity entity) {
-        ItemUsage.spawnItemContents(entity, getBundledStacks(entity.getStack()));
+    public void onDestroyed(ItemEntity entity) {
+        ItemUtils.onContainerDestroyed(entity, getBundledStacks(entity.getItem()));
     }
 
     private void playRemoveOneSound(Entity entity) {
-        entity.playSound(SoundEvents.ITEM_BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+        entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
     private void playInsertSound(Entity entity) {
-        entity.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+        entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
     private void playDropContentsSound(Entity entity) {
-        entity.playSound(SoundEvents.ITEM_BUNDLE_DROP_CONTENTS, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+        entity.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 }

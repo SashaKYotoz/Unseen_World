@@ -2,53 +2,51 @@ package net.sashakyotoz.common.entities.custom;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.ai.goal.TemptGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.network.DebugInfoSender;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.TypeFilter;
-import net.minecraft.util.function.ValueLists;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.game.DebugPackets;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.custom.brain.TuskhogBrain;
 import net.sashakyotoz.common.items.ModItems;
@@ -59,14 +57,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 import java.util.function.IntFunction;
 
-public class TuskhogEntity extends AnimalEntity implements VariantHolder<TuskhogEntity.Type> {
-    private static final TrackedData<Boolean> CONVERTING = DataTracker.registerData(TuskhogEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity.Type> {
+    private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(TuskhogEntity.class, EntityDataSerializers.BOOLEAN);
     private int conversionTimer;
     @Nullable
     private UUID converter;
-    private static final Ingredient TAMING_INGREDIENT = Ingredient.ofItems(Items.COD, Items.SALMON);
-    private static final TrackedData<Integer> TYPE = DataTracker.registerData(TuskhogEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    public static final EntityDimensions LONG_JUMPING_DIMENSIONS = EntityDimensions.changing(0.9F, 1.3F).scaled(0.7F);
+    private static final Ingredient TAMING_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
+    private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(TuskhogEntity.class, EntityDataSerializers.INT);
+    public static final EntityDimensions LONG_JUMPING_DIMENSIONS = EntityDimensions.scalable(0.9F, 1.3F).scale(0.7F);
     protected static final ImmutableList<SensorType<? extends Sensor<? super TuskhogEntity>>> SENSORS = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
             SensorType.NEAREST_PLAYERS,
@@ -77,13 +75,13 @@ public class TuskhogEntity extends AnimalEntity implements VariantHolder<Tuskhog
     );
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_MODULES = ImmutableList.of(
             MemoryModuleType.LOOK_TARGET,
-            MemoryModuleType.VISIBLE_MOBS,
+            MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
             MemoryModuleType.ATE_RECENTLY,
             MemoryModuleType.BREED_TARGET,
-            MemoryModuleType.LONG_JUMP_COOLING_DOWN,
+            MemoryModuleType.LONG_JUMP_COOLDOWN_TICKS,
             MemoryModuleType.LONG_JUMP_MID_JUMP,
             MemoryModuleType.TEMPTING_PLAYER,
             MemoryModuleType.NEAREST_VISIBLE_ADULT,
@@ -96,89 +94,89 @@ public class TuskhogEntity extends AnimalEntity implements VariantHolder<Tuskhog
     private boolean preparingRam;
     private int headPitch;
 
-    public TuskhogEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public TuskhogEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
-        this.getNavigation().setCanSwim(true);
+        this.getNavigation().setCanFloat(true);
     }
 
     @Override
-    protected void onGrowUp() {
+    protected void ageBoundaryReached() {
         if (this.isBaby())
-            this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(1.0);
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(1.0);
         else
-            this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(2.0);
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(2.0);
     }
 
     @Override
-    protected void initGoals() {
+    protected void registerGoals() {
         TemptGoal temptGoal = new TemptGoal(this, 0.6, TAMING_INGREDIENT, true);
-        this.goalSelector.add(3, temptGoal);
+        this.goalSelector.addGoal(3, temptGoal);
     }
 
     @Override
-    protected int computeFallDamage(float fallDistance, float damageMultiplier) {
-        return super.computeFallDamage(fallDistance, damageMultiplier) - 10;
+    protected int calculateFallDamage(float fallDistance, float damageMultiplier) {
+        return super.calculateFallDamage(fallDistance, damageMultiplier) - 10;
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_PIG_AMBIENT;
+        return SoundEvents.PIG_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_PIG_HURT;
+        return SoundEvents.PIG_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_GOAT_DEATH;
+        return SoundEvents.GOAT_DEATH;
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SoundEvents.ENTITY_GOAT_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.GOAT_STEP, 0.15F, 1.0F);
     }
 
     @Nullable
-    public TuskhogEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
+    public TuskhogEntity getBreedOffspring(ServerLevel serverWorld, AgeableMob passiveEntity) {
         TuskhogEntity tuskhog = ModEntities.TUSKHOG.create(serverWorld);
         if (tuskhog != null)
             TuskhogBrain.resetLongJumpCooldown(tuskhog, serverWorld.getRandom());
         return tuskhog;
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2F)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 10.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.2F)
+                .add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
     @Override
-    protected Brain.Profile<TuskhogEntity> createBrainProfile() {
-        return Brain.createProfile(MEMORY_MODULES, SENSORS);
+    protected Brain.Provider<TuskhogEntity> brainProvider() {
+        return Brain.provider(MEMORY_MODULES, SENSORS);
     }
 
     @Override
-    protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
-        return TuskhogBrain.create(this.createBrainProfile().deserialize(dynamic));
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return TuskhogBrain.create(this.brainProvider().makeBrain(dynamic));
     }
 
     @Override
-    protected void mobTick() {
-        this.getWorld().getProfiler().push("hogBrain");
-        if (this.getWorld() instanceof ServerWorld world)
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("hogBrain");
+        if (this.level() instanceof ServerLevel world)
             this.getBrain().tick(world, this);
-        this.getWorld().getProfiler().pop();
-        this.getWorld().getProfiler().push("hogActivityUpdate");
+        this.level().getProfiler().pop();
+        this.level().getProfiler().push("hogActivityUpdate");
         TuskhogBrain.updateActivities(this);
-        this.getWorld().getProfiler().pop();
-        super.mobTick();
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
-    public int getMaxHeadRotation() {
+    public int getMaxHeadYRot() {
         return 15;
     }
 
@@ -189,91 +187,91 @@ public class TuskhogEntity extends AnimalEntity implements VariantHolder<Tuskhog
     }
 
     @Override
-    public void setHeadYaw(float headYaw) {
-        int i = this.getMaxHeadRotation();
-        float f = MathHelper.subtractAngles(this.bodyYaw, headYaw);
-        float g = MathHelper.clamp(f, (float) (-i), (float) i);
-        super.setHeadYaw(this.bodyYaw + g);
+    public void setYHeadRot(float headYaw) {
+        int i = this.getMaxHeadYRot();
+        float f = Mth.degreesDifference(this.yBodyRot, headYaw);
+        float g = Mth.clamp(f, (float) (-i), (float) i);
+        super.setYHeadRot(this.yBodyRot + g);
     }
 
     @Override
-    public SoundEvent getEatSound(ItemStack stack) {
-        return SoundEvents.ENTITY_GOAT_EAT;
+    public SoundEvent getEatingSound(ItemStack stack) {
+        return SoundEvents.GOAT_EAT;
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        ActionResult actionResult = super.interactMob(player, hand);
-        if (actionResult.isAccepted() && this.isBreedingItem(itemStack)) {
-            this.getWorld()
-                    .playSoundFromEntity(null, this, this.getEatSound(itemStack), SoundCategory.NEUTRAL, 1.0F, MathHelper.nextBetween(this.getWorld().random, 0.8F, 1.2F));
-        } else if (itemStack.isOf(ModItems.CRYSTIE_APPLE)) {
-            if (this.hasStatusEffect(StatusEffects.GLOWING)) {
-                if (!player.getAbilities().creativeMode)
-                    itemStack.decrement(1);
-                if (!this.getWorld().isClient)
-                    this.setConverting(player.getUuid(), this.random.nextInt(2401) + 2400);
-                return ActionResult.SUCCESS;
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        InteractionResult actionResult = super.mobInteract(player, hand);
+        if (actionResult.consumesAction() && this.isFood(itemStack)) {
+            this.level()
+                    .playSound(null, this, this.getEatingSound(itemStack), SoundSource.NEUTRAL, 1.0F, Mth.randomBetween(this.level().random, 0.8F, 1.2F));
+        } else if (itemStack.is(ModItems.CRYSTIE_APPLE)) {
+            if (this.hasEffect(MobEffects.GLOWING)) {
+                if (!player.getAbilities().instabuild)
+                    itemStack.shrink(1);
+                if (!this.level().isClientSide)
+                    this.setConverting(player.getUUID(), this.random.nextInt(2401) + 2400);
+                return InteractionResult.SUCCESS;
             } else
-                return ActionResult.CONSUME;
-        } else if (itemStack.isOf(ModItems.GRIPTONITE)) {
-            if (!player.getAbilities().creativeMode && player instanceof ServerPlayerEntity player1)
-                itemStack.damage(1, player1.getRandom(), player1);
-            if (!this.getWorld().isClient)
-                this.setConverting(player.getUuid(), this.random.nextInt(1201) + 1200);
-            return ActionResult.SUCCESS;
+                return InteractionResult.CONSUME;
+        } else if (itemStack.is(ModItems.GRIPTONITE)) {
+            if (!player.getAbilities().instabuild && player instanceof ServerPlayer player1)
+                itemStack.hurt(1, player1.getRandom(), player1);
+            if (!this.level().isClientSide)
+                this.setConverting(player.getUUID(), this.random.nextInt(1201) + 1200);
+            return InteractionResult.SUCCESS;
         }
         return actionResult;
     }
 
     @Override
-    protected void sendAiDebugData() {
-        super.sendAiDebugData();
-        DebugInfoSender.sendBrainDebugData(this);
+    protected void sendDebugPackets() {
+        super.sendDebugPackets();
+        DebugPackets.sendEntityBrain(this);
     }
 
     @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
-        return pose == EntityPose.LONG_JUMPING ? LONG_JUMPING_DIMENSIONS.scaled(this.getScaleFactor()) : super.getDimensions(pose);
+    public EntityDimensions getDimensions(Pose pose) {
+        return pose == Pose.LONG_JUMPING ? LONG_JUMPING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
     }
 
     @Override
-    public void handleStatus(byte status) {
-        if (status == EntityStatuses.PREPARE_RAM) {
+    public void handleEntityEvent(byte status) {
+        if (status == EntityEvent.START_RAM) {
             this.preparingRam = true;
-        } else if (status == EntityStatuses.FINISH_RAM) {
+        } else if (status == EntityEvent.END_RAM) {
             this.preparingRam = false;
         } else {
-            super.handleStatus(status);
+            super.handleEntityEvent(status);
         }
     }
 
     @Override
     public void tick() {
-        if (!this.getWorld().isClient && this.isAlive() && this.isConverting()) {
+        if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
             this.conversionTimer--;
             if (this.conversionTimer <= 0)
-                this.finishConversion((ServerWorld) this.getWorld());
+                this.finishConversion((ServerLevel) this.level());
         }
         super.tick();
     }
 
-    private void finishConversion(ServerWorld world) {
-        PigEntity pig = this.convertTo(EntityType.PIG, false);
+    private void finishConversion(ServerLevel world) {
+        Pig pig = this.convertTo(EntityType.PIG, false);
         ActionsUtils.initializeConverting(this, pig, uuid);
         if (!this.isSilent())
-            world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_OCELOT_HURT, SoundCategory.NEUTRAL, 3, 2);
+            world.playSound(this, this.blockPosition(), SoundEvents.OCELOT_HURT, SoundSource.NEUTRAL, 3, 2);
     }
 
     @Override
-    public void tickMovement() {
+    public void aiStep() {
         if (this.preparingRam)
             this.headPitch++;
         else
             this.headPitch -= 2;
-        this.headPitch = MathHelper.clamp(this.headPitch, 0, 20);
-        super.tickMovement();
+        this.headPitch = Mth.clamp(this.headPitch, 0, 20);
+        super.aiStep();
     }
 
     public float getHeadPitch() {
@@ -283,82 +281,82 @@ public class TuskhogEntity extends AnimalEntity implements VariantHolder<Tuskhog
     private void setConverting(@Nullable UUID uuid, int delay) {
         this.converter = uuid;
         this.conversionTimer = delay;
-        this.getDataTracker().set(CONVERTING, true);
-        this.removeStatusEffect(StatusEffects.GLOWING);
-        this.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, delay, Math.min(this.getWorld().getDifficulty().getId() - 1, 0)));
-        this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_SPLASH_PARTICLES);
+        this.getEntityData().set(CONVERTING, true);
+        this.removeEffect(MobEffects.GLOWING);
+        this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, delay, Math.min(this.level().getDifficulty().getId() - 1, 0)));
+        this.level().broadcastEntityEvent(this, EntityEvent.VILLAGER_SWEAT);
     }
 
     public boolean isConverting() {
-        return this.getDataTracker().get(CONVERTING);
+        return this.getEntityData().get(CONVERTING);
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return TAMING_INGREDIENT.test(stack);
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(TYPE, 0);
-        this.dataTracker.startTracking(CONVERTING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TYPE, 0);
+        this.entityData.define(CONVERTING, false);
     }
 
     @Override
     public void setVariant(Type variant) {
-        this.dataTracker.set(TYPE, variant.getId());
+        this.entityData.set(TYPE, variant.getId());
     }
 
     @Override
     public Type getVariant() {
-        return Type.fromId(this.dataTracker.get(TYPE));
+        return Type.fromId(this.entityData.get(TYPE));
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        nbt.putString("Type", this.getVariant().asString());
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putString("Type", this.getVariant().getSerializedName());
         nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
         if (this.converter != null)
-            nbt.putUuid("ConversionPlayer", this.converter);
+            nbt.putUUID("ConversionPlayer", this.converter);
     }
 
     @Nullable
     @Override
-    public EntityData initialize(
-            ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt
+    public SpawnGroupData finalizeSpawn(
+            ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt
     ) {
-        RegistryEntry<Biome> registryEntry = world.getBiome(this.getBlockPos());
+        Holder<Biome> registryEntry = world.getBiome(this.blockPosition());
         Type type = Type.fromBiome(registryEntry);
         this.setVariant(type);
         if (this.random.nextBoolean())
-            this.setBreedingAge(-24000);
-        this.initEquipment(world.getRandom(), difficulty);
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+            this.setAge(-24000);
+        this.populateDefaultEquipmentSlots(world.getRandom(), difficulty);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
         this.setVariant(Type.byName(nbt.getString("Type")));
-        if (nbt.contains("ConversionTime", NbtElement.NUMBER_TYPE) && nbt.getInt("ConversionTime") > -1)
-            this.setConverting(nbt.containsUuid("ConversionPlayer") ? nbt.getUuid("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
+        if (nbt.contains("ConversionTime", Tag.TAG_ANY_NUMERIC) && nbt.getInt("ConversionTime") > -1)
+            this.setConverting(nbt.hasUUID("ConversionPlayer") ? nbt.getUUID("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
     }
 
-    public static boolean isValidNaturalSpawn(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isIn(BlockTags.DIRT)
-                && world.getEntitiesByType(TypeFilter.instanceOf(TuskhogEntity.class), new Box(pos).expand(64), LivingEntity::isAlive).size() < 4
+    public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        return world.getBlockState(pos.below()).is(BlockTags.DIRT)
+                && world.getEntities(EntityTypeTest.forClass(TuskhogEntity.class), new AABB(pos).inflate(64), LivingEntity::isAlive).size() < 4
                 && random.nextInt(4) == 1;
     }
 
-    public enum Type implements StringIdentifiable {
+    public enum Type implements StringRepresentable {
         WARM(0, "warm"),
         TEMPERATE(1, "temperate");
 
-        public static final StringIdentifiable.Codec<Type> CODEC = StringIdentifiable.createCodec(Type::values);
-        private static final IntFunction<Type> BY_ID = ValueLists.createIdToValueFunction(
-                Type::getId, values(), ValueLists.OutOfBoundsHandling.ZERO
+        public static final StringRepresentable.EnumCodec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
+        private static final IntFunction<Type> BY_ID = ByIdMap.continuous(
+                Type::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO
         );
         private final int id;
         private final String key;
@@ -369,7 +367,7 @@ public class TuskhogEntity extends AnimalEntity implements VariantHolder<Tuskhog
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.key;
         }
 
@@ -378,15 +376,15 @@ public class TuskhogEntity extends AnimalEntity implements VariantHolder<Tuskhog
         }
 
         public static Type byName(String name) {
-            return CODEC.byId(name, TEMPERATE);
+            return CODEC.byName(name, TEMPERATE);
         }
 
         public static Type fromId(int id) {
             return BY_ID.apply(id);
         }
 
-        public static Type fromBiome(RegistryEntry<Biome> biome) {
-            return biome.isIn(ModTags.Biomes.SPAWNS_WARM_TUSKHOG) ? WARM : TEMPERATE;
+        public static Type fromBiome(Holder<Biome> biome) {
+            return biome.is(ModTags.Biomes.SPAWNS_WARM_TUSKHOG) ? WARM : TEMPERATE;
         }
     }
 }

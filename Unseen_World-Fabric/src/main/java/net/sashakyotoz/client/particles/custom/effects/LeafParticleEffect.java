@@ -4,16 +4,16 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 
 import java.util.Locale;
 
-public record LeafParticleEffect(float red, float green, float blue) implements ParticleEffect {
+public record LeafParticleEffect(float red, float green, float blue) implements ParticleOptions {
     public static final Codec<LeafParticleEffect> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                             Codec.FLOAT.fieldOf("red").forGetter(effect -> effect.red),
@@ -22,8 +22,8 @@ public record LeafParticleEffect(float red, float green, float blue) implements 
                     )
                     .apply(instance, LeafParticleEffect::new)
     );
-    public static final Factory<LeafParticleEffect> PARAMETERS_FACTORY = new Factory<>() {
-        public LeafParticleEffect read(ParticleType<LeafParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException {
+    public static final Deserializer<LeafParticleEffect> PARAMETERS_FACTORY = new Deserializer<>() {
+        public LeafParticleEffect fromCommand(ParticleType<LeafParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException {
             stringReader.expect(' ');
             float r = stringReader.readFloat();
             stringReader.expect(' ');
@@ -33,8 +33,8 @@ public record LeafParticleEffect(float red, float green, float blue) implements 
             return new LeafParticleEffect(r, g, b);
         }
 
-        public LeafParticleEffect read(ParticleType<LeafParticleEffect> particleType, PacketByteBuf packetByteBuf) {
-            NbtCompound tag = packetByteBuf.readNbt();
+        public LeafParticleEffect fromNetwork(ParticleType<LeafParticleEffect> particleType, FriendlyByteBuf packetByteBuf) {
+            CompoundTag tag = packetByteBuf.readNbt();
             float r = tag.getFloat("red");
             float g = tag.getFloat("green");
             float b = tag.getFloat("blue");
@@ -43,16 +43,16 @@ public record LeafParticleEffect(float red, float green, float blue) implements 
     };
 
     @Override
-    public void write(PacketByteBuf buf) {
-        NbtCompound nbtElement = new NbtCompound();
+    public void writeToNetwork(FriendlyByteBuf buf) {
+        CompoundTag nbtElement = new CompoundTag();
         nbtElement.putFloat("red", this.red);
         nbtElement.putFloat("green", this.green);
         nbtElement.putFloat("blue", this.blue);
     }
 
     @Override
-    public String asString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %d", Registries.PARTICLE_TYPE.getId(this.getType()), red,green,blue);
+    public String writeToString() {
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %d", BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), red,green,blue);
     }
 
     @Override

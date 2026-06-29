@@ -1,7 +1,7 @@
 package net.sashakyotoz.common.entities.ai.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.sashakyotoz.common.entities.custom.EspyerEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,13 +14,13 @@ public class EspyerIgniteGoal extends Goal {
 
     public EspyerIgniteGoal(EspyerEntity espyer) {
         this.espyer = espyer;
-        this.setControls(EnumSet.of(Goal.Control.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         LivingEntity livingEntity = this.espyer.getTarget();
-        return this.espyer.getFuseSpeed() > 0 || livingEntity != null && this.espyer.squaredDistanceTo(livingEntity) < 9.0;
+        return this.espyer.getFuseSpeed() > 0 || livingEntity != null && this.espyer.distanceToSqr(livingEntity) < 9.0;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class EspyerIgniteGoal extends Goal {
     }
 
     @Override
-    public boolean shouldRunEveryTick() {
+    public boolean requiresUpdateEveryTick() {
         return true;
     }
 
@@ -43,9 +43,9 @@ public class EspyerIgniteGoal extends Goal {
     public void tick() {
         if (this.target == null)
             this.espyer.setFuseSpeed(-1);
-        else if (this.espyer.squaredDistanceTo(this.target) > 49.0)
+        else if (this.espyer.distanceToSqr(this.target) > 49.0)
             this.espyer.setFuseSpeed(-1);
-        else if (!this.espyer.getVisibilityCache().canSee(this.target))
+        else if (!this.espyer.getSensing().hasLineOfSight(this.target))
             this.espyer.setFuseSpeed(-1);
         else
             this.espyer.setFuseSpeed(1);

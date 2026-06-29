@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.registry.RegistryBuilder;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Pair;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.sashakyotoz.common.datagen.*;
 import net.sashakyotoz.common.datagen.tags.*;
 import net.sashakyotoz.common.world.ModDimensions;
@@ -39,22 +39,22 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ModRecipeProvider::new);
 	}
 	@Override
-	public void buildRegistry(RegistryBuilder registryBuilder) {
-		registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ModConfiguredFeatures::boostrap);
-		registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModPlacements::boostrap);
-		registryBuilder.addRegistry(RegistryKeys.BIOME, ModBiomes::boostrap);
-		registryBuilder.addRegistry(RegistryKeys.CONFIGURED_CARVER, ModCarvers::boostrap);
-		registryBuilder.addRegistry(RegistryKeys.DIMENSION_TYPE, ModDimensions::bootstrapType);
+	public void buildRegistry(RegistrySetBuilder registryBuilder) {
+		registryBuilder.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::boostrap);
+		registryBuilder.add(Registries.PLACED_FEATURE, ModPlacements::boostrap);
+		registryBuilder.add(Registries.BIOME, ModBiomes::boostrap);
+		registryBuilder.add(Registries.CONFIGURED_CARVER, ModCarvers::boostrap);
+		registryBuilder.add(Registries.DIMENSION_TYPE, ModDimensions::bootstrapType);
 	}
 	public static void registerFuels() {
-		for (Map.Entry<ItemConvertible, Integer> entry : ModRegistry.ITEM_BURNABLE.entrySet())
+		for (Map.Entry<ItemLike, Integer> entry : ModRegistry.ITEM_BURNABLE.entrySet())
 			FuelRegistry.INSTANCE.add(entry.getKey(), entry.getValue());
 	}
 
 	public static void registerBurnable() {
 		FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();
-		for (Map.Entry<Block, Pair<Integer, Integer>> entry : ModRegistry.BLOCK_FLAMMABLE.entrySet()) {
-			registry.add(entry.getKey(), entry.getValue().getLeft(), entry.getValue().getRight());
+		for (Map.Entry<Block, Tuple<Integer, Integer>> entry : ModRegistry.BLOCK_FLAMMABLE.entrySet()) {
+			registry.add(entry.getKey(), entry.getValue().getA(), entry.getValue().getB());
 		}
 	}
 

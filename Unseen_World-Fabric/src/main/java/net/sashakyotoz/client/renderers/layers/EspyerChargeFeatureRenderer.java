@@ -1,34 +1,34 @@
 package net.sashakyotoz.client.renderers.layers;
 
-import net.minecraft.client.render.entity.feature.EnergySwirlOverlayFeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLoader;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
+import net.minecraft.resources.ResourceLocation;
 import net.sashakyotoz.client.models.EspyerModel;
 import net.sashakyotoz.common.entities.custom.EspyerEntity;
 
-public class EspyerChargeFeatureRenderer extends EnergySwirlOverlayFeatureRenderer<EspyerEntity, EspyerModel> {
-    private static final Identifier SKIN = Identifier.of("minecraft","textures/entity/creeper/creeper_armor.png");
+public class EspyerChargeFeatureRenderer extends EnergySwirlLayer<EspyerEntity, EspyerModel> {
+    private static final ResourceLocation SKIN = ResourceLocation.tryBuild("minecraft","textures/entity/creeper/creeper_armor.png");
     private final EspyerModel model;
 
-    public EspyerChargeFeatureRenderer(FeatureRendererContext<EspyerEntity, EspyerModel> context, EntityModelLoader loader) {
+    public EspyerChargeFeatureRenderer(RenderLayerParent<EspyerEntity, EspyerModel> context, EntityModelSet loader) {
         super(context);
-        this.model = new EspyerModel(loader.getModelPart(EspyerModel.ESPYER));
+        this.model = new EspyerModel(loader.bakeLayer(EspyerModel.ESPYER));
     }
 
     @Override
-    protected float getEnergySwirlX(float partialAge) {
+    protected float xOffset(float partialAge) {
         return partialAge * 0.01F;
     }
 
     @Override
-    protected Identifier getEnergySwirlTexture() {
+    protected ResourceLocation getTextureLocation() {
         return SKIN;
     }
 
     @Override
-    protected EntityModel<EspyerEntity> getEnergySwirlModel() {
+    protected EntityModel<EspyerEntity> model() {
         return this.model;
     }
 }

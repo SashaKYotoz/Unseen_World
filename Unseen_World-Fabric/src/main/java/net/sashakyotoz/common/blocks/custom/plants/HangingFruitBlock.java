@@ -1,104 +1,104 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Fertilizable;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.tags.ModTags;
 
-public class HangingFruitBlock extends HangingPlantBlock implements Fertilizable {
-    public ItemConvertible drop;
+public class HangingFruitBlock extends HangingPlantBlock implements BonemealableBlock {
+    public ItemLike drop;
 
-    public static final BooleanProperty HAS_FRUIT = BooleanProperty.of("has_fruit");
+    public static final BooleanProperty HAS_FRUIT = BooleanProperty.create("has_fruit");
 
-    public HangingFruitBlock(Settings settings, ItemConvertible drop, TagKey<Block> growable_on, VoxelShape shape) {
-        super(settings.ticksRandomly(), growable_on, shape);
+    public HangingFruitBlock(Properties settings, ItemLike drop, TagKey<Block> growable_on, VoxelShape shape) {
+        super(settings.randomTicks(), growable_on, shape);
         this.drop = drop;
-        this.setDefaultState(this.getDefaultState().with(HAS_FRUIT, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(HAS_FRUIT, false));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HAS_FRUIT);
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (random.nextDouble() < 0.05 && this.canGrow(world, random, pos, state))
-            this.grow(world, random, pos, state);
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        if (random.nextDouble() < 0.05 && this.isBonemealSuccess(world, random, pos, state))
+            this.performBonemeal(world, random, pos, state);
     }
 
     @Override
-    public boolean hasRandomTicks(BlockState state) {
-        return !state.get(HAS_FRUIT);
+    public boolean isRandomlyTicking(BlockState state) {
+        return !state.getValue(HAS_FRUIT);
     }
 
     @Override
-    public void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack tool, boolean dropExperience) {
-        if (state.get(HAS_FRUIT))
-            world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop)));
-        super.onStacksDropped(state, world, pos, tool, dropExperience);
+    public void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack tool, boolean dropExperience) {
+        if (state.getValue(HAS_FRUIT))
+            world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop)));
+        super.spawnAfterBreak(state, world, pos, tool, dropExperience);
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (state.get(HAS_FRUIT)) {
-            world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(this.drop)));
-            world.setBlockState(pos, state.with(HAS_FRUIT, false));
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (state.getValue(HAS_FRUIT)) {
+            world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(this.drop)));
+            world.setBlockAndUpdate(pos, state.setValue(HAS_FRUIT, false));
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return super.onUse(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
-        return !state.get(HAS_FRUIT);
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+        return !state.getValue(HAS_FRUIT);
     }
 
     @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
-        return !state.get(HAS_FRUIT);
+    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
+        return !state.getValue(HAS_FRUIT);
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
-        if (random.nextInt(3) == 0 && world.getBlockState(pos.down()).isAir())
-            world.setBlockState(pos, state.with(HAS_FRUIT, true));
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+        if (random.nextInt(3) == 0 && world.getBlockState(pos.below()).isAir())
+            world.setBlockAndUpdate(pos, state.setValue(HAS_FRUIT, true));
 
-        if (state.isIn(ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.down()).isAir())
-            world.setBlockState(pos.down(), random.nextBoolean() ? ModBlocks.HANGING_AMETHYST_LEAVES.getDefaultState().with(HAS_FRUIT, true) :
-                    this.getDefaultState());
-        if (state.isIn(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.down()).isAir()) {
-            world.setBlockState(pos, ModBlocks.CRIMSONVEIL_VINE_PLANT.getDefaultState());
-            world.setBlockState(pos.down(), ModBlocks.CRIMSONVEIL_VINE.getDefaultState());
+        if (state.is(ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.below()).isAir())
+            world.setBlockAndUpdate(pos.below(), random.nextBoolean() ? ModBlocks.HANGING_AMETHYST_LEAVES.defaultBlockState().setValue(HAS_FRUIT, true) :
+                    this.defaultBlockState());
+        if (state.is(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.below()).isAir()) {
+            world.setBlockAndUpdate(pos, ModBlocks.CRIMSONVEIL_VINE_PLANT.defaultBlockState());
+            world.setBlockAndUpdate(pos.below(), ModBlocks.CRIMSONVEIL_VINE.defaultBlockState());
         }
-        if (state.isIn(ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON)
-                && state.contains(HAS_FRUIT)
-                && !state.get(HAS_FRUIT)
+        if (state.is(ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON)
+                && state.hasProperty(HAS_FRUIT)
+                && !state.getValue(HAS_FRUIT)
                 && random.nextInt(4) == 0
-                && world.getBlockState(pos.down()).isAir()) {
+                && world.getBlockState(pos.below()).isAir()) {
             if (random.nextBoolean())
-                world.setBlockState(pos, state.with(HAS_FRUIT, true));
+                world.setBlockAndUpdate(pos, state.setValue(HAS_FRUIT, true));
             else
-                world.setBlockState(pos.down(), ModBlocks.HANGING_BURLYWOOD_LEAVES.getDefaultState());
+                world.setBlockAndUpdate(pos.below(), ModBlocks.HANGING_BURLYWOOD_LEAVES.defaultBlockState());
         }
     }
 }

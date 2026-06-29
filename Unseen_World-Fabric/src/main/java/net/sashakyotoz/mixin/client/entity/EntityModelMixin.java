@@ -1,9 +1,9 @@
 package net.sashakyotoz.mixin.client.entity;
 
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.model.TexturedModelData;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.world.entity.Entity;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IModelPartsAccessor;
 import net.sashakyotoz.utils.ModelPartUtils;
@@ -48,10 +48,10 @@ public class EntityModelMixin<T extends Entity> implements IModelPartsAccessor {
         for (Method m : cls.getDeclaredMethods()) {
             if (Modifier.isStatic(m.getModifiers())
                     && m.getParameterCount() == 0
-                    && TexturedModelData.class.isAssignableFrom(m.getReturnType())) {
+                    && LayerDefinition.class.isAssignableFrom(m.getReturnType())) {
                 try {
                     m.setAccessible(true);
-                    TexturedModelData data = (TexturedModelData) m.invoke(null);
+                    LayerDefinition data = (LayerDefinition) m.invoke(null);
                     modelParts = ModelPartUtils.collectAllModelParts(data);
                     usedStatic = true;
                     staticMethodName = m.getName();

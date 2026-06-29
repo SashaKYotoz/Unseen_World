@@ -1,31 +1,31 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.entity.EntityStatuses;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.control.AquaticMoveControl;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.ChaseBoatGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
+import net.minecraft.world.entity.ai.goal.FollowBoatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.custom.basic.WhaleEntity;
 import net.sashakyotoz.common.items.ModItems;
@@ -35,106 +35,106 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class GrippingGloomwhaleEntity extends WhaleEntity {
-    private static final TrackedData<Boolean> CONVERTING = DataTracker.registerData(GrippingGloomwhaleEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(GrippingGloomwhaleEntity.class, EntityDataSerializers.BOOLEAN);
     private int conversionTimer;
     @Nullable
     private UUID converter;
 
-    public GrippingGloomwhaleEntity(EntityType<? extends WhaleEntity> entityType, World world) {
+    public GrippingGloomwhaleEntity(EntityType<? extends WhaleEntity> entityType, Level world) {
         super(entityType, world);
-        this.moveControl = new AquaticMoveControl(this, 75, 10, 0.35F, 0.1F, true);
+        this.moveControl = new SmoothSwimmingMoveControl(this, 75, 10, 0.35F, 0.1F, true);
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(CONVERTING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(CONVERTING, false);
     }
 
     private void setConverting(@Nullable UUID uuid, int delay) {
         this.converter = uuid;
         this.conversionTimer = delay;
-        this.getDataTracker().set(CONVERTING, true);
-        this.removeStatusEffect(StatusEffects.GLOWING);
-        this.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, delay, Math.min(this.getWorld().getDifficulty().getId() - 1, 0)));
-        this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_SPLASH_PARTICLES);
+        this.getEntityData().set(CONVERTING, true);
+        this.removeEffect(MobEffects.GLOWING);
+        this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, delay, Math.min(this.level().getDifficulty().getId() - 1, 0)));
+        this.level().broadcastEntityEvent(this, EntityEvent.VILLAGER_SWEAT);
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isOf(ModItems.CRYSTIE_APPLE)) {
-            if (this.hasStatusEffect(StatusEffects.GLOWING)) {
-                if (!player.getAbilities().creativeMode)
-                    itemStack.decrement(1);
-                if (!this.getWorld().isClient)
-                    this.setConverting(player.getUuid(), this.random.nextInt(2401) + 3600);
-                return ActionResult.SUCCESS;
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (itemStack.is(ModItems.CRYSTIE_APPLE)) {
+            if (this.hasEffect(MobEffects.GLOWING)) {
+                if (!player.getAbilities().instabuild)
+                    itemStack.shrink(1);
+                if (!this.level().isClientSide)
+                    this.setConverting(player.getUUID(), this.random.nextInt(2401) + 3600);
+                return InteractionResult.SUCCESS;
             } else
-                return ActionResult.CONSUME;
-        } else if (itemStack.isOf(ModItems.GRIPTONITE)) {
-            if (!player.getAbilities().creativeMode && player instanceof ServerPlayerEntity player1)
-                itemStack.damage(1, player1.getRandom(), player1);
-            if (!this.getWorld().isClient)
-                this.setConverting(player.getUuid(), this.random.nextInt(1201) + 1200);
-            return ActionResult.SUCCESS;
+                return InteractionResult.CONSUME;
+        } else if (itemStack.is(ModItems.GRIPTONITE)) {
+            if (!player.getAbilities().instabuild && player instanceof ServerPlayer player1)
+                itemStack.hurt(1, player1.getRandom(), player1);
+            if (!this.level().isClientSide)
+                this.setConverting(player.getUUID(), this.random.nextInt(1201) + 1200);
+            return InteractionResult.SUCCESS;
         }
-        return super.interactMob(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     public boolean isConverting() {
-        return this.getDataTracker().get(CONVERTING);
+        return this.getEntityData().get(CONVERTING);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
         if (this.converter != null) {
-            nbt.putUuid("ConversionPlayer", this.converter);
+            nbt.putUUID("ConversionPlayer", this.converter);
         }
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        if (nbt.contains("ConversionTime", NbtElement.NUMBER_TYPE) && nbt.getInt("ConversionTime") > -1)
-            this.setConverting(nbt.containsUuid("ConversionPlayer") ? nbt.getUuid("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
+        if (nbt.contains("ConversionTime", Tag.TAG_ANY_NUMERIC) && nbt.getInt("ConversionTime") > -1)
+            this.setConverting(nbt.hasUUID("ConversionPlayer") ? nbt.getUUID("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
     }
 
     @Override
     public void tick() {
-        if (!this.getWorld().isClient && this.isAlive() && this.isConverting()) {
+        if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
             this.conversionTimer--;
             if (this.conversionTimer <= 0)
-                this.finishConversion((ServerWorld) this.getWorld());
+                this.finishConversion((ServerLevel) this.level());
         }
         super.tick();
     }
 
     @Override
-    protected void initGoals() {
-        super.initGoals();
-        this.goalSelector.add(1, new MeleeAttackGoal(this, 1.2F, true));
-        this.goalSelector.add(2, new ChaseBoatGoal(this));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(3, new RevengeGoal(this, PlayerEntity.class).setGroupRevenge());
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2F, true));
+        this.goalSelector.addGoal(2, new FollowBoatGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this, Player.class).setAlertOthers());
     }
 
-    private void finishConversion(ServerWorld world) {
+    private void finishConversion(ServerLevel world) {
         GloomwhaleEntity gloomwhale = this.convertTo(ModEntities.GLOOMWHALE, false);
         ActionsUtils.initializeConverting(this, gloomwhale, uuid);
         if (!this.isSilent())
-            world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_DOLPHIN_HURT, SoundCategory.NEUTRAL, 2, 0.25f);
+            world.playSound(this, this.blockPosition(), SoundEvents.DOLPHIN_HURT, SoundSource.NEUTRAL, 2, 0.25f);
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 80)
-                .add(EntityAttributes.GENERIC_ARMOR, 8)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 2)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 80)
+                .add(Attributes.ARMOR, 8)
+                .add(Attributes.ARMOR_TOUGHNESS, 2)
+                .add(Attributes.ATTACK_DAMAGE, 10)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1)
+                .add(Attributes.MOVEMENT_SPEED, 0.5);
     }
 }

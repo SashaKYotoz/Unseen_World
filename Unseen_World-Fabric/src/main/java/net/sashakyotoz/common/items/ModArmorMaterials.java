@@ -1,21 +1,21 @@
 package net.sashakyotoz.common.items;
 
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.sashakyotoz.UnseenWorld;
 
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
     UNSEENIUM("unseenium", 25, new int[]{4, 9, 7, 4}, 24,
-            SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2f, 0.1f, () -> Ingredient.ofItems(ModItems.UNSEENIUM_INGOT)),
+            SoundEvents.ARMOR_EQUIP_DIAMOND, 2f, 0.1f, () -> Ingredient.of(ModItems.UNSEENIUM_INGOT)),
     ABYSSAL("abyssal", 36, new int[]{5, 10, 8, 5}, 28,
-            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 2f, 0.1f, () -> Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
+            SoundEvents.ARMOR_EQUIP_NETHERITE, 2f, 0.1f, () -> Ingredient.of(ModItems.ABYSSAL_INGOT)),
     TITANIUM("titanium", 42, new int[]{5, 10, 8, 5}, 20,
-            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 2f, 0.1f, () -> Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT));
+            SoundEvents.ARMOR_EQUIP_NETHERITE, 2f, 0.1f, () -> Ingredient.of(ModItems.RED_TITANIUM_INGOT));
 
     private final String name;
     private final int durabilityMultiplier;
@@ -41,17 +41,17 @@ public enum ModArmorMaterials implements ArmorMaterial {
     }
 
     @Override
-    public int getDurability(ArmorItem.Type type) {
+    public int getDurabilityForType(ArmorItem.Type type) {
         return BASE_DURABILITY[type.ordinal()] * this.durabilityMultiplier;
     }
 
     @Override
-    public int getProtection(ArmorItem.Type type) {
+    public int getDefenseForType(ArmorItem.Type type) {
         return protectionAmounts[type.ordinal()];
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 

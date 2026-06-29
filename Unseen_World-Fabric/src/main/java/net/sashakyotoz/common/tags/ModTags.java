@@ -1,13 +1,13 @@
 package net.sashakyotoz.common.tags;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.sashakyotoz.UnseenWorld;
 
 public class ModTags {
@@ -22,7 +22,7 @@ public class ModTags {
         public static final TagKey<Item> GRIPPING_BUNDLE_CAN_HANDLE = create("gripping_bundle_can_handle");
 
         private static TagKey<Item> create(String name) {
-            return TagKey.of(RegistryKeys.ITEM, UnseenWorld.makeID(name));
+            return TagKey.create(Registries.ITEM, UnseenWorld.makeID(name));
         }
     }
 
@@ -40,7 +40,7 @@ public class ModTags {
         public static final TagKey<Block> CHIMERIC_DARKNESS_STONES = create("chimeric_darkness_stones");
 
         private static TagKey<Block> create(String name) {
-            return TagKey.of(RegistryKeys.BLOCK, UnseenWorld.makeID(name));
+            return TagKey.create(Registries.BLOCK, UnseenWorld.makeID(name));
         }
     }
 
@@ -74,7 +74,7 @@ public class ModTags {
         public static final TagKey<Biome> HAS_MODIFIED_SURFACE = create("has_modified_surface");
 
         private static TagKey<Biome> create(String name) {
-            return TagKey.of(RegistryKeys.BIOME, UnseenWorld.makeID(name));
+            return TagKey.create(Registries.BIOME, UnseenWorld.makeID(name));
         }
     }
 
@@ -82,7 +82,7 @@ public class ModTags {
         public static final TagKey<EntityType<?>> GRIPPING_IMMUNE_ENTITY_TYPES = create("gripping_immune_entity_types");
 
         private static TagKey<EntityType<?>> create(String name) {
-            return TagKey.of(RegistryKeys.ENTITY_TYPE, UnseenWorld.makeID(name));
+            return TagKey.create(Registries.ENTITY_TYPE, UnseenWorld.makeID(name));
         }
     }
 
@@ -90,7 +90,7 @@ public class ModTags {
         public static final TagKey<GameEvent> ELDRITCH_CAN_LISTEN = create("eldritch_can_listen");
 
         private static TagKey<GameEvent> create(String name) {
-            return TagKey.of(RegistryKeys.GAME_EVENT, UnseenWorld.makeID(name));
+            return TagKey.create(Registries.GAME_EVENT, UnseenWorld.makeID(name));
         }
     }
 
@@ -98,7 +98,7 @@ public class ModTags {
         public static final TagKey<Structure> MAP_CAN_LOCATE_UNDERGROUND = create("map_can_locate_underground");
 
         private static TagKey<Structure> create(String name) {
-            return TagKey.of(RegistryKeys.STRUCTURE, UnseenWorld.makeID(name));
+            return TagKey.create(Registries.STRUCTURE, UnseenWorld.makeID(name));
         }
     }
 }

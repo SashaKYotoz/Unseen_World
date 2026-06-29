@@ -1,6 +1,6 @@
 package net.sashakyotoz.utils;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.sashakyotoz.client.environment.ClientTicks;
 
 public class Oscillator {
@@ -28,7 +28,7 @@ public class Oscillator {
         if (ClientTicks.halfTicks != null)
             tickCount = ClientTicks.getTicks();
         float phase = (float) ((2 * Math.PI * (tickCount % PERIOD_IN_TICKS)) / PERIOD_IN_TICKS);
-        return 0.5F * (1 + MathHelper.sin(phase));
+        return 0.5F * (1 + Mth.sin(phase));
     }
 
     public static float calculateDecreasingValue(float valueToDecrease) {

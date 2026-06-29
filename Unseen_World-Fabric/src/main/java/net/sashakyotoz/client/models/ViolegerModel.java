@@ -1,15 +1,22 @@
 package net.sashakyotoz.client.models;
 
-import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.*;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Arm;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.AnimationUtils;
+import net.minecraft.client.model.ArmedModel;
+import net.minecraft.client.model.HeadedModel;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.ViolegerEntity;
 
-public class ViolegerModel<T extends ViolegerEntity> extends SinglePartEntityModel<T> implements ModelWithArms, ModelWithHead {
-    public static final EntityModelLayer VIOLEGER = new EntityModelLayer(UnseenWorld.makeID("violeger"), "main");
+public class ViolegerModel<T extends ViolegerEntity> extends HierarchicalModel<T> implements ArmedModel, HeadedModel {
+    public static final ModelLayerLocation VIOLEGER = new ModelLayerLocation(UnseenWorld.makeID("violeger"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -22,133 +29,133 @@ public class ViolegerModel<T extends ViolegerEntity> extends SinglePartEntityMod
 
     public ViolegerModel(ModelPart root) {
         this.root = root;
-        this.head = root.getChild(EntityModelPartNames.HEAD);
-        this.hat = this.head.getChild(EntityModelPartNames.HAT);
+        this.head = root.getChild(PartNames.HEAD);
+        this.hat = this.head.getChild(PartNames.HAT);
         this.hat.visible = false;
-        this.arms = root.getChild(EntityModelPartNames.ARMS);
-        this.leftLeg = root.getChild(EntityModelPartNames.LEFT_LEG);
-        this.rightLeg = root.getChild(EntityModelPartNames.RIGHT_LEG);
-        this.leftArm = root.getChild(EntityModelPartNames.LEFT_ARM);
-        this.rightArm = root.getChild(EntityModelPartNames.RIGHT_ARM);
+        this.arms = root.getChild(PartNames.ARMS);
+        this.leftLeg = root.getChild(PartNames.LEFT_LEG);
+        this.rightLeg = root.getChild(PartNames.RIGHT_LEG);
+        this.leftArm = root.getChild(PartNames.LEFT_ARM);
+        this.rightArm = root.getChild(PartNames.RIGHT_ARM);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData modelPartData2 = modelPartData.addChild(
-                EntityModelPartNames.HEAD, ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F), ModelTransform.pivot(0.0F, 0.0F, 0.0F)
+    public static LayerDefinition getTextureLocationdModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        PartDefinition modelPartData2 = modelPartData.addOrReplaceChild(
+                PartNames.HEAD, CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F), PartPose.offset(0.0F, 0.0F, 0.0F)
         );
-        modelPartData2.addChild(
-                EntityModelPartNames.HAT, ModelPartBuilder.create().uv(32, 0).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 12.0F, 8.0F, new Dilation(0.45F)), ModelTransform.NONE
+        modelPartData2.addOrReplaceChild(
+                PartNames.HAT, CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 12.0F, 8.0F, new CubeDeformation(0.45F)), PartPose.ZERO
         );
-        modelPartData2.addChild(
-                EntityModelPartNames.NOSE, ModelPartBuilder.create().uv(24, 0).cuboid(-1.0F, -1.0F, -6.0F, 2.0F, 4.0F, 2.0F), ModelTransform.pivot(0.0F, -2.0F, 0.0F)
+        modelPartData2.addOrReplaceChild(
+                PartNames.NOSE, CubeListBuilder.create().texOffs(24, 0).addBox(-1.0F, -1.0F, -6.0F, 2.0F, 4.0F, 2.0F), PartPose.offset(0.0F, -2.0F, 0.0F)
         );
-        modelPartData.addChild(
-                EntityModelPartNames.BODY,
-                ModelPartBuilder.create()
-                        .uv(16, 20)
-                        .cuboid(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F)
-                        .uv(0, 38)
-                        .cuboid(-4.0F, 0.0F, -3.0F, 8.0F, 20.0F, 6.0F, new Dilation(0.5F)),
-                ModelTransform.pivot(0.0F, 0.0F, 0.0F)
+        modelPartData.addOrReplaceChild(
+                PartNames.BODY,
+                CubeListBuilder.create()
+                        .texOffs(16, 20)
+                        .addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F)
+                        .texOffs(0, 38)
+                        .addBox(-4.0F, 0.0F, -3.0F, 8.0F, 20.0F, 6.0F, new CubeDeformation(0.5F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F)
         );
-        ModelPartData modelPartData3 = modelPartData.addChild(
-                EntityModelPartNames.ARMS,
-                ModelPartBuilder.create().uv(44, 22).cuboid(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F).uv(40, 38).cuboid(-4.0F, 2.0F, -2.0F, 8.0F, 4.0F, 4.0F),
-                ModelTransform.of(0.0F, 3.0F, -1.0F, -0.75F, 0.0F, 0.0F)
+        PartDefinition modelPartData3 = modelPartData.addOrReplaceChild(
+                PartNames.ARMS,
+                CubeListBuilder.create().texOffs(44, 22).addBox(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F).texOffs(40, 38).addBox(-4.0F, 2.0F, -2.0F, 8.0F, 4.0F, 4.0F),
+                PartPose.offsetAndRotation(0.0F, 3.0F, -1.0F, -0.75F, 0.0F, 0.0F)
         );
-        modelPartData3.addChild("left_shoulder", ModelPartBuilder.create().uv(44, 22).mirrored().cuboid(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F), ModelTransform.NONE);
-        modelPartData.addChild(
-                EntityModelPartNames.RIGHT_LEG, ModelPartBuilder.create().uv(0, 22).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F), ModelTransform.pivot(-2.0F, 12.0F, 0.0F)
+        modelPartData3.addOrReplaceChild("left_shoulder", CubeListBuilder.create().texOffs(44, 22).mirror().addBox(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F), PartPose.ZERO);
+        modelPartData.addOrReplaceChild(
+                PartNames.RIGHT_LEG, CubeListBuilder.create().texOffs(0, 22).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F), PartPose.offset(-2.0F, 12.0F, 0.0F)
         );
-        modelPartData.addChild(
-                EntityModelPartNames.LEFT_LEG,
-                ModelPartBuilder.create().uv(0, 22).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
-                ModelTransform.pivot(2.0F, 12.0F, 0.0F)
+        modelPartData.addOrReplaceChild(
+                PartNames.LEFT_LEG,
+                CubeListBuilder.create().texOffs(0, 22).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
+                PartPose.offset(2.0F, 12.0F, 0.0F)
         );
-        modelPartData.addChild(
-                EntityModelPartNames.RIGHT_ARM, ModelPartBuilder.create().uv(40, 46).cuboid(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F), ModelTransform.pivot(-5.0F, 2.0F, 0.0F)
+        modelPartData.addOrReplaceChild(
+                PartNames.RIGHT_ARM, CubeListBuilder.create().texOffs(40, 46).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F), PartPose.offset(-5.0F, 2.0F, 0.0F)
         );
-        modelPartData.addChild(
-                EntityModelPartNames.LEFT_ARM,
-                ModelPartBuilder.create().uv(40, 46).mirrored().cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F),
-                ModelTransform.pivot(5.0F, 2.0F, 0.0F)
+        modelPartData.addOrReplaceChild(
+                PartNames.LEFT_ARM,
+                CubeListBuilder.create().texOffs(40, 46).mirror().addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F),
+                PartPose.offset(5.0F, 2.0F, 0.0F)
         );
-        return TexturedModelData.of(modelData, 64, 64);
+        return LayerDefinition.create(modelData, 64, 64);
     }
 
     @Override
-    public ModelPart getPart() {
+    public ModelPart root() {
         return this.root;
     }
 
-    public void setAngles(T violege, float f, float g, float h, float i, float j) {
-        this.head.yaw = i * (float) (Math.PI / 180.0);
-        this.head.pitch = j * (float) (Math.PI / 180.0);
+    public void setupAnim(T violege, float f, float g, float h, float i, float j) {
+        this.head.yRot = i * (float) (Math.PI / 180.0);
+        this.head.xRot = j * (float) (Math.PI / 180.0);
         if (this.riding) {
-            this.rightArm.pitch = (float) (-Math.PI / 5);
-            this.rightArm.yaw = 0.0F;
-            this.rightArm.roll = 0.0F;
-            this.leftArm.pitch = (float) (-Math.PI / 5);
-            this.leftArm.yaw = 0.0F;
-            this.leftArm.roll = 0.0F;
-            this.rightLeg.pitch = -1.4137167F;
-            this.rightLeg.yaw = (float) (Math.PI / 10);
-            this.rightLeg.roll = 0.07853982F;
-            this.leftLeg.pitch = -1.4137167F;
-            this.leftLeg.yaw = (float) (-Math.PI / 10);
-            this.leftLeg.roll = -0.07853982F;
+            this.rightArm.xRot = (float) (-Math.PI / 5);
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
+            this.leftArm.xRot = (float) (-Math.PI / 5);
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
+            this.rightLeg.xRot = -1.4137167F;
+            this.rightLeg.yRot = (float) (Math.PI / 10);
+            this.rightLeg.zRot = 0.07853982F;
+            this.leftLeg.xRot = -1.4137167F;
+            this.leftLeg.yRot = (float) (-Math.PI / 10);
+            this.leftLeg.zRot = -0.07853982F;
         } else {
-            this.rightArm.pitch = MathHelper.cos(f * 0.6662F + (float) Math.PI) * 2.0F * g * 0.5F;
-            this.rightArm.yaw = 0.0F;
-            this.rightArm.roll = 0.0F;
-            this.leftArm.pitch = MathHelper.cos(f * 0.6662F) * 2.0F * g * 0.5F;
-            this.leftArm.yaw = 0.0F;
-            this.leftArm.roll = 0.0F;
-            this.rightLeg.pitch = MathHelper.cos(f * 0.6662F) * 1.4F * g * 0.5F;
-            this.rightLeg.yaw = 0.0F;
-            this.rightLeg.roll = 0.0F;
-            this.leftLeg.pitch = MathHelper.cos(f * 0.6662F + (float) Math.PI) * 1.4F * g * 0.5F;
-            this.leftLeg.yaw = 0.0F;
-            this.leftLeg.roll = 0.0F;
+            this.rightArm.xRot = Mth.cos(f * 0.6662F + (float) Math.PI) * 2.0F * g * 0.5F;
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
+            this.leftArm.xRot = Mth.cos(f * 0.6662F) * 2.0F * g * 0.5F;
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
+            this.rightLeg.xRot = Mth.cos(f * 0.6662F) * 1.4F * g * 0.5F;
+            this.rightLeg.yRot = 0.0F;
+            this.rightLeg.zRot = 0.0F;
+            this.leftLeg.xRot = Mth.cos(f * 0.6662F + (float) Math.PI) * 1.4F * g * 0.5F;
+            this.leftLeg.yRot = 0.0F;
+            this.leftLeg.zRot = 0.0F;
         }
 
         ViolegerEntity.State state = violege.getState();
         if (state == ViolegerEntity.State.ATTACKING) {
-            if (violege.getMainHandStack().isEmpty()) {
-                CrossbowPosing.meleeAttack(this.leftArm, this.rightArm, true, this.handSwingProgress, h);
+            if (violege.getMainHandItem().isEmpty()) {
+                AnimationUtils.animateZombieArms(this.leftArm, this.rightArm, true, this.attackTime, h);
             } else {
-                CrossbowPosing.meleeAttack(this.rightArm, this.leftArm, violege, this.handSwingProgress, h);
+                AnimationUtils.swingWeaponDown(this.rightArm, this.leftArm, violege, this.attackTime, h);
             }
         } else if (state == ViolegerEntity.State.SPELLCASTING) {
-            this.rightArm.pivotZ = 0.0F;
-            this.rightArm.pivotX = -5.0F;
-            this.leftArm.pivotZ = 0.0F;
-            this.leftArm.pivotX = 5.0F;
-            this.rightArm.pitch = MathHelper.cos(h * 0.6662F) * 0.25F;
-            this.leftArm.pitch = MathHelper.cos(h * 0.6662F) * 0.25F;
-            this.rightArm.roll = (float) (Math.PI * 3.0 / 4.0);
-            this.leftArm.roll = (float) (-Math.PI * 3.0 / 4.0);
-            this.rightArm.yaw = 0.0F;
-            this.leftArm.yaw = 0.0F;
+            this.rightArm.z = 0.0F;
+            this.rightArm.x = -5.0F;
+            this.leftArm.z = 0.0F;
+            this.leftArm.x = 5.0F;
+            this.rightArm.xRot = Mth.cos(h * 0.6662F) * 0.25F;
+            this.leftArm.xRot = Mth.cos(h * 0.6662F) * 0.25F;
+            this.rightArm.zRot = (float) (Math.PI * 3.0 / 4.0);
+            this.leftArm.zRot = (float) (-Math.PI * 3.0 / 4.0);
+            this.rightArm.yRot = 0.0F;
+            this.leftArm.yRot = 0.0F;
         } else if (state == ViolegerEntity.State.BOW_AND_ARROW) {
-            this.rightArm.yaw = -0.1F + this.head.yaw;
-            this.rightArm.pitch = (float) (-Math.PI / 2) + this.head.pitch;
-            this.leftArm.pitch = -0.9424779F + this.head.pitch;
-            this.leftArm.yaw = this.head.yaw - 0.4F;
-            this.leftArm.roll = (float) (Math.PI / 2);
+            this.rightArm.yRot = -0.1F + this.head.yRot;
+            this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+            this.leftArm.xRot = -0.9424779F + this.head.xRot;
+            this.leftArm.yRot = this.head.yRot - 0.4F;
+            this.leftArm.zRot = (float) (Math.PI / 2);
         } else if (state == ViolegerEntity.State.CELEBRATING) {
-            this.rightArm.pivotZ = 0.0F;
-            this.rightArm.pivotX = -5.0F;
-            this.rightArm.pitch = MathHelper.cos(h * 0.6662F) * 0.05F;
-            this.rightArm.roll = 2.670354F;
-            this.rightArm.yaw = 0.0F;
-            this.leftArm.pivotZ = 0.0F;
-            this.leftArm.pivotX = 5.0F;
-            this.leftArm.pitch = MathHelper.cos(h * 0.6662F) * 0.05F;
-            this.leftArm.roll = (float) (-Math.PI * 3.0 / 4.0);
-            this.leftArm.yaw = 0.0F;
+            this.rightArm.z = 0.0F;
+            this.rightArm.x = -5.0F;
+            this.rightArm.xRot = Mth.cos(h * 0.6662F) * 0.05F;
+            this.rightArm.zRot = 2.670354F;
+            this.rightArm.yRot = 0.0F;
+            this.leftArm.z = 0.0F;
+            this.leftArm.x = 5.0F;
+            this.leftArm.xRot = Mth.cos(h * 0.6662F) * 0.05F;
+            this.leftArm.zRot = (float) (-Math.PI * 3.0 / 4.0);
+            this.leftArm.yRot = 0.0F;
         }
 
         boolean bl = state == ViolegerEntity.State.CROSSED;
@@ -157,8 +164,8 @@ public class ViolegerModel<T extends ViolegerEntity> extends SinglePartEntityMod
         this.rightArm.visible = !bl;
     }
 
-    private ModelPart getAttackingArm(Arm arm) {
-        return arm == Arm.LEFT ? this.leftArm : this.rightArm;
+    private ModelPart getAttackingArm(HumanoidArm arm) {
+        return arm == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
     }
 
     @Override
@@ -167,7 +174,7 @@ public class ViolegerModel<T extends ViolegerEntity> extends SinglePartEntityMod
     }
 
     @Override
-    public void setArmAngle(Arm arm, MatrixStack matrices) {
-        this.getAttackingArm(arm).rotate(matrices);
+    public void translateToHand(HumanoidArm arm, PoseStack matrices) {
+        this.getAttackingArm(arm).translateAndRotate(matrices);
     }
 }

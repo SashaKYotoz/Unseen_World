@@ -1,15 +1,15 @@
 package net.sashakyotoz.common.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.data.server.tag.vanilla.VanillaGameEventTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.tags.GameEventTagsProvider;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.sashakyotoz.common.tags.ModTags;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class ModGameEventTagProvider extends VanillaGameEventTagProvider {
+public class ModGameEventTagProvider extends GameEventTagsProvider {
     private final List<GameEvent> BASIC_GAME_EVENTS = List.of(GameEvent.BLOCK_ATTACH,
             GameEvent.BLOCK_CHANGE,
             GameEvent.BLOCK_CLOSE,
@@ -42,13 +42,13 @@ public class ModGameEventTagProvider extends VanillaGameEventTagProvider {
             GameEvent.SWIM,
             GameEvent.TELEPORT);
 
-    public ModGameEventTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ModGameEventTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    public void configure(RegistryWrapper.WrapperLookup arg) {
+    public void addTags(HolderLookup.Provider arg) {
         for (GameEvent event : BASIC_GAME_EVENTS)
-            this.getOrCreateTagBuilder(ModTags.GameEvents.ELDRITCH_CAN_LISTEN).add(event);
+            this.tag(ModTags.GameEvents.ELDRITCH_CAN_LISTEN).add(event);
     }
 }

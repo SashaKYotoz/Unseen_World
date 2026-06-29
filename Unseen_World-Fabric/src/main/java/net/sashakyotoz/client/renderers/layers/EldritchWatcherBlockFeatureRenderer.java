@@ -1,38 +1,38 @@
 package net.sashakyotoz.client.renderers.layers;
 
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.models.EldritchWatcherModel;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
 import net.sashakyotoz.utils.Oscillator;
 
-public class EldritchWatcherBlockFeatureRenderer extends FeatureRenderer<EldritchWatcherEntity, EldritchWatcherModel> {
-    private final BlockRenderManager blockRenderManager;
+public class EldritchWatcherBlockFeatureRenderer extends RenderLayer<EldritchWatcherEntity, EldritchWatcherModel> {
+    private final BlockRenderDispatcher blockRenderManager;
 
-    public EldritchWatcherBlockFeatureRenderer(FeatureRendererContext<EldritchWatcherEntity, EldritchWatcherModel> context, BlockRenderManager blockRenderManager) {
+    public EldritchWatcherBlockFeatureRenderer(RenderLayerParent<EldritchWatcherEntity, EldritchWatcherModel> context, BlockRenderDispatcher blockRenderManager) {
         super(context);
         this.blockRenderManager = blockRenderManager;
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, EldritchWatcherEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+    public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, EldritchWatcherEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         if (entity.isCarringBlock()) {
-            matrices.push();
+            matrices.pushPose();
             matrices.translate(-0.45F - ((float) Oscillator.getOscillatingWithNegativeValue(ClientTicks.getTicks()) * 0.25f),
                     0.6875F + ((float) Oscillator.getOscillatingOppositeValue(ClientTicks.getTicks()) * 0.2f), -0.8F);
             matrices.scale(-0.45F, -0.45F, 0.45F);
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90.0F));
-            this.blockRenderManager.renderBlock(ModBlocks.GRIPCRYSTAL_WART.getDefaultState().with(Properties.FACING, Direction.UP), entity.getBlockPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), false, entity.getRandom());
-            matrices.pop();
+            matrices.mulPose(Axis.YP.rotationDegrees(90.0F));
+            this.blockRenderManager.renderBatched(ModBlocks.GRIPCRYSTAL_WART.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP), entity.blockPosition(), entity.level(), matrices, vertexConsumers.getBuffer(RenderType.cutout()), false, entity.getRandom());
+            matrices.popPose();
         }
     }
 }

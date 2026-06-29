@@ -1,28 +1,28 @@
 package net.sashakyotoz.client.renderers.layers;
 
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
 import net.sashakyotoz.utils.Oscillator;
 
-public class EldritchWatcherPulsatingLayer<T extends EldritchWatcherEntity, M extends SinglePartEntityModel<T>> extends FeatureRenderer<T, M> {
-    public EldritchWatcherPulsatingLayer(FeatureRendererContext<T, M> context) {
+public class EldritchWatcherPulsatingLayer<T extends EldritchWatcherEntity, M extends HierarchicalModel<T>> extends RenderLayer<T, M> {
+    public EldritchWatcherPulsatingLayer(RenderLayerParent<T, M> context) {
         super(context);
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(
+    public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderType.entityTranslucentEmissive(
                 UnseenWorld.makeID("textures/entity/eldritch_watcher/eldritch_watcher_pulsating_spots.png")
         ));
-        this.getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()));
+        this.getParentModel().renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()));
     }
 }

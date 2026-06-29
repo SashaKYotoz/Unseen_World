@@ -1,27 +1,23 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.sashakyotoz.common.entities.ai.goals.FertilizeGoal;
 import net.sashakyotoz.common.entities.ai.goals.WatcherAttackGoal;
 import net.sashakyotoz.common.tags.ModTags;
 
-public class HarmonyWatcherEntity extends PathAwareEntity {
+public class HarmonyWatcherEntity extends PathfinderMob {
     public final AnimationState death = new AnimationState();
     public final AnimationState fertilize = new AnimationState();
 
@@ -29,13 +25,13 @@ public class HarmonyWatcherEntity extends PathAwareEntity {
 
     public boolean isAngry;
 
-    public HarmonyWatcherEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public HarmonyWatcherEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         if (nbt.getString("entityType") != null) {
             for (Type type : Type.values()) {
                 if (type.typeName.equals(nbt.getString("entityType"))) {
@@ -46,8 +42,8 @@ public class HarmonyWatcherEntity extends PathAwareEntity {
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         if (this.watcherType != null)
             nbt.putString("entityType", this.watcherType.typeName);
     }
@@ -56,61 +52,61 @@ public class HarmonyWatcherEntity extends PathAwareEntity {
     public void baseTick() {
         super.baseTick();
         if (this.watcherType == null) {
-            if (this.getWorld().getBiome(this.getBlockPos()).isIn(ModTags.Biomes.CURRANTSLATE_BOULDER_SPAWNS_ON))
+            if (this.level().getBiome(this.blockPosition()).is(ModTags.Biomes.CURRANTSLATE_BOULDER_SPAWNS_ON))
                 this.watcherType = Type.DARK_CURRANTSLATE;
-            else if (this.getWorld().getBiome(this.getBlockPos()).isIn(ModTags.Biomes.HAS_AMETHYST_TREE))
+            else if (this.level().getBiome(this.blockPosition()).is(ModTags.Biomes.HAS_AMETHYST_TREE))
                 this.watcherType = HarmonyWatcherEntity.Type.TANZANITE;
             else
                 this.watcherType = Type.GLACIEMITE;
         }
-        if (this.age % 300 == 0 && this.isAngry)
+        if (this.tickCount % 300 == 0 && this.isAngry)
             this.isAngry = false;
-        if (this.goalSelector.getRunningGoals().anyMatch(goal -> goal.getGoal() instanceof FertilizeGoal) && !this.fertilize.isRunning())
-            this.fertilize.start(this.age);
+        if (this.goalSelector.getRunningGoals().anyMatch(goal -> goal.getGoal() instanceof FertilizeGoal) && !this.fertilize.isStarted())
+            this.fertilize.start(this.tickCount);
     }
 
     @Override
-    protected void initGoals() {
-        super.initGoals();
-        this.goalSelector.add(1, new LookAroundGoal(this));
-        this.goalSelector.add(1, new SwimGoal(this));
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.75, 0.15f));
-        this.goalSelector.add(2, new FertilizeGoal(this));
-        this.goalSelector.add(2, new RevengeGoal(this, HarmonyWatcherEntity.class));
-        this.goalSelector.add(3, new WatcherAttackGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.75, 0.15f));
+        this.goalSelector.addGoal(2, new FertilizeGoal(this));
+        this.goalSelector.addGoal(2, new HurtByTargetGoal(this, HarmonyWatcherEntity.class));
+        this.goalSelector.addGoal(3, new WatcherAttackGoal(this));
     }
 
     @Override
-    public boolean damage(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         if (!isAngry)
             this.isAngry = true;
-        return super.damage(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
+    public void die(DamageSource damageSource) {
         this.deathTime = -20;
-        super.onDeath(damageSource);
+        super.die(damageSource);
     }
 
     @Override
-    protected void updatePostDeath() {
-        super.updatePostDeath();
-        if (!this.death.isRunning())
-            this.death.start(this.age);
+    protected void tickDeath() {
+        super.tickDeath();
+        if (!this.death.isStarted())
+            this.death.start(this.tickCount);
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 24)
-                .add(EntityAttributes.GENERIC_ARMOR, 6)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 24)
+                .add(Attributes.ARMOR, 6)
+                .add(Attributes.ATTACK_DAMAGE, 4)
+                .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 
-    public static boolean canWatcherSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        BlockPos blockPos = pos.down();
-        return spawnReason == SpawnReason.SPAWNER || world.getBlockState(blockPos).allowsSpawning(world, blockPos, type) && random.nextInt(6) == 1;
+    public static boolean canWatcherSpawn(EntityType<? extends Mob> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        BlockPos blockPos = pos.below();
+        return spawnReason == MobSpawnType.SPAWNER || world.getBlockState(blockPos).isValidSpawn(world, blockPos, type) && random.nextInt(6) == 1;
     }
 
     public enum Type {

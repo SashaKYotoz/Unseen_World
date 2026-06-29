@@ -1,29 +1,29 @@
 package net.sashakyotoz.common.items.custom;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 
 public class GriptoniteItem extends Item {
-    public GriptoniteItem(Settings settings) {
+    public GriptoniteItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
         if (user instanceof IGrippingEntity player && player.getGrippingData() > 0) {
             GrippingData.removeGripping(player);
-            user.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.PLAYERS, 1.5f, 1);
-            itemStack.damage(1, user, p -> p.sendToolBreakStatus(hand));
-            return TypedActionResult.consume(itemStack);
+            user.playNotifySound(SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.5f, 1);
+            itemStack.hurtAndBreak(1, user, p -> p.broadcastBreakEvent(hand));
+            return InteractionResultHolder.consume(itemStack);
         }
         return super.use(world, user, hand);
     }

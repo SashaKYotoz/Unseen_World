@@ -1,11 +1,11 @@
 package net.sashakyotoz.common.networking.packets;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
@@ -15,10 +15,10 @@ import net.sashakyotoz.common.items.custom.IGrippingWeapons;
 import net.sashakyotoz.common.tags.ModTags;
 
 public class GripcrystalWeaponsC2SPacket {
-    public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler,
-                               PacketByteBuf buf, PacketSender responseSender) {
-        if (player != null && player.getMainHandStack().isIn(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS)) {
-            ItemStack stack = player.getMainHandStack();
+    public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
+                               FriendlyByteBuf buf, PacketSender responseSender) {
+        if (player != null && player.getMainHandItem().is(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS)) {
+            ItemStack stack = player.getMainHandItem();
             if (stack.getItem() instanceof EclipsebaneItem) {
                 switch (IGrippingWeapons.getPhase(stack)) {
                     case "absorption" -> IGrippingWeapons.setPhase(stack, "light_ray");

@@ -1,67 +1,67 @@
 package net.sashakyotoz.common.items.custom;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.utils.ActionsUtils;
 
 public class EclipsebaneItem extends SwordItem {
-    public EclipsebaneItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Settings settings) {
+    public EclipsebaneItem(Tier toolMaterial, int attackDamage, float attackSpeed, Properties settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (IGrippingWeapons.getPhase(user.getStackInHand(hand)).equals("absorption")
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        if (IGrippingWeapons.getPhase(user.getItemInHand(hand)).equals("absorption")
                 && GripcrystalManaData.getMana((IEntityDataSaver) user) < 48) {
-            user.setCurrentHand(hand);
-            return TypedActionResult.consume(user.getStackInHand(hand));
+            user.startUsingItem(hand);
+            return InteractionResultHolder.consume(user.getItemInHand(hand));
         }
         return super.use(world, user, hand);
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack) {
+    public int getUseDuration(ItemStack stack) {
         return IGrippingWeapons.getPhase(stack).equals("absorption") ? 72000 : 0;
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BLOCK;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BLOCK;
     }
 
     @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+    public void onUseTick(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (IGrippingWeapons.getPhase(stack).equals("absorption") && GripcrystalManaData.getMana((IEntityDataSaver) user) < 48) {
             ActionsUtils.rayCastAlong(world, user, 16, (world1, pos) ->
-                    world1.getEntitiesByClass(LivingEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()).expand(0.675),
-                            LivingEntity::canHit).stream().findFirst().ifPresent(entity -> {
+                    world1.getEntitiesOfClass(LivingEntity.class, new AABB(pos.getCenter(), pos.getCenter()).inflate(0.675),
+                            LivingEntity::isPickable).stream().findFirst().ifPresent(entity -> {
                         if (entity != user) {
-                            world1.playSound(null, pos, SoundEvents.BLOCK_CONDUIT_DEACTIVATE, SoundCategory.PLAYERS, 1.5f, 2.0f);
+                            world1.playSound(null, pos, SoundEvents.CONDUIT_DEACTIVATE, SoundSource.PLAYERS, 1.5f, 2.0f);
                             world1.addParticle(ParticleTypes.END_ROD, pos.getX() + (Math.cos(remainingUseTicks * Math.PI / 10)), pos.getY() + (Math.tan(remainingUseTicks * Math.PI / 10)), pos.getZ() + (Math.sin(remainingUseTicks * Math.PI / 10)), 0.0D, 0.0D, 0.0D);
-                            entity.setVelocity(
-                                    user.getVelocity().x - entity.getVelocity().x,
-                                    user.getVelocity().y - entity.getVelocity().y,
-                                    user.getVelocity().z - entity.getVelocity().z);
-                            entity.velocityModified = true;
-                            if (user instanceof ServerPlayerEntity player) {
+                            entity.setDeltaMovement(
+                                    user.getDeltaMovement().x - entity.getDeltaMovement().x,
+                                    user.getDeltaMovement().y - entity.getDeltaMovement().y,
+                                    user.getDeltaMovement().z - entity.getDeltaMovement().z);
+                            entity.hurtMarked = true;
+                            if (user instanceof ServerPlayer player) {
                                 GripcrystalManaData.addMana((IEntityDataSaver) player, 2);
-                                player.getHungerManager().addExhaustion(1);
-                                player.getItemCooldownManager().set(stack.getItem(), 10);
+                                player.getFoodData().addExhaustion(1);
+                                player.getCooldowns().addCooldown(stack.getItem(), 10);
                             }
                         }
                     }));
@@ -69,15 +69,15 @@ public class EclipsebaneItem extends SwordItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
         if (IGrippingWeapons.getPhase(stack).equals("blade_shield")
-                && entity.age % 10 == 0
-                && entity instanceof ServerPlayerEntity player) {
-            player.getWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(2), LivingEntity::canTakeDamage).forEach(entity1 -> {
+                && entity.tickCount % 10 == 0
+                && entity instanceof ServerPlayer player) {
+            player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(2), LivingEntity::canBeSeenAsEnemy).forEach(entity1 -> {
                 if (entity1 != player && GripcrystalManaData.getMana((IEntityDataSaver) player) >= 2) {
                     GripcrystalManaData.removeMana((IEntityDataSaver) player, 2);
-                    entity1.damage(player.getDamageSources().playerAttack(player), 6);
-                    entity1.setVelocity(entity1.getVelocity().rotateX((entity.age / 2f) % 360).rotateZ((entity.age / 2f) % 360));
+                    entity1.hurt(player.damageSources().playerAttack(player), 6);
+                    entity1.setDeltaMovement(entity1.getDeltaMovement().xRot((entity.tickCount / 2f) % 360).zRot((entity.tickCount / 2f) % 360));
                 }
             });
         }

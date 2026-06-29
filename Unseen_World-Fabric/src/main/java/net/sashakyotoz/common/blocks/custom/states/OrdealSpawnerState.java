@@ -1,8 +1,8 @@
 package net.sashakyotoz.common.blocks.custom.states;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum OrdealSpawnerState implements StringIdentifiable {
+public enum OrdealSpawnerState implements StringRepresentable {
     INACTIVE("inactive", 0, -1),
     WAITING_FOR_PLAYERS("waiting_for_players", 4, 200),
     ACTIVE("active", 8, 1000),
@@ -19,7 +19,7 @@ public enum OrdealSpawnerState implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.id;
     }
 }

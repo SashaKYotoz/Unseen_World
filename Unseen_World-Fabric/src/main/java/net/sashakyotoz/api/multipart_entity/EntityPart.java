@@ -1,18 +1,18 @@
 package net.sashakyotoz.api.multipart_entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityPart extends Entity {
@@ -20,34 +20,34 @@ public class EntityPart extends Entity {
     private final EntityDimensions hitbox;
 
     public EntityPart(Entity owner, float width, float height) {
-        super(owner.getType(), owner.getWorld());
+        super(owner.getType(), owner.level());
         this.owner = owner;
-        this.hitbox = EntityDimensions.changing(width, height);
-        this.calculateDimensions();
+        this.hitbox = EntityDimensions.scalable(width, height);
+        this.refreshDimensions();
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {}
+    protected void readAdditionalSaveData(CompoundTag nbt) {}
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {}
+    protected void addAdditionalSaveData(CompoundTag nbt) {}
 
     @Override
-    protected void initDataTracker() {}
+    protected void defineSynchedData() {}
 
     @Override
-    public boolean canHit() {
+    public boolean isPickable() {
         return true;
     }
 
     @Override
     public boolean canBeHitByProjectile() {
-        return getWorld().isClient() || !super.canBeHitByProjectile() ? false : owner.canBeHitByProjectile();
+        return level().isClientSide() || !super.canBeHitByProjectile() ? false : owner.canBeHitByProjectile();
     }
 
     @Override
-    public boolean damage(DamageSource source, float amount) {
-        return getWorld().isClient() || isInvulnerableTo(source) ? false : owner.damage(source, amount);
+    public boolean hurt(DamageSource source, float amount) {
+        return level().isClientSide() || isInvulnerableTo(source) ? false : owner.hurt(source, amount);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class EntityPart extends Entity {
     }
 
     @Override
-    public ActionResult interact(PlayerEntity player, Hand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand) {
         return owner.interact(player, hand);
     }
 
@@ -66,28 +66,28 @@ public class EntityPart extends Entity {
     }
 
     @Override
-    public boolean isPartOf(Entity entity) {
+    public boolean is(Entity entity) {
         return this == entity || owner == entity;
     }
 
     @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean shouldSave() {
+    public boolean shouldBeSaved() {
         return false;
     }
 
     @Nullable
     @Override
-    public ItemStack getPickBlockStack() {
-        return this.owner.getPickBlockStack();
+    public ItemStack getPickResult() {
+        return this.owner.getPickResult();
     }
 
     @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
+    public EntityDimensions getDimensions(Pose pose) {
         return hitbox;
     }
 
@@ -97,8 +97,8 @@ public class EntityPart extends Entity {
     }
 
     @Override
-    public boolean isTeammate(Entity entity) {
-        return owner.isTeammate(entity);
+    public boolean isAlliedTo(Entity entity) {
+        return owner.isAlliedTo(entity);
     }
 
     @Override
@@ -107,18 +107,18 @@ public class EntityPart extends Entity {
     }
 
     @Override
-    public boolean isGlowing() {
-        return owner.isGlowing();
+    public boolean isCurrentlyGlowing() {
+        return owner.isCurrentlyGlowing();
     }
 
     @Override
-    public boolean isInvisibleTo(PlayerEntity player) {
+    public boolean isInvisibleTo(Player player) {
         return owner.isInvisibleTo(player);
     }
 
     @Override
-    public boolean onKilledOther(ServerWorld level, LivingEntity entity) {
-        return owner.onKilledOther(level, entity);
+    public boolean killedEntity(ServerLevel level, LivingEntity entity) {
+        return owner.killedEntity(level, entity);
     }
 
     @Override
@@ -127,8 +127,8 @@ public class EntityPart extends Entity {
     }
 
     @Override
-    public boolean handleAttack(Entity entity) {
-        return owner.handleAttack(entity);
+    public boolean skipAttackInteraction(Entity entity) {
+        return owner.skipAttackInteraction(entity);
     }
 
     @Override
@@ -137,37 +137,37 @@ public class EntityPart extends Entity {
     }
 
     @Override
-    public boolean isInPose(EntityPose pose) {
-        return owner.isInPose(pose);
+    public boolean hasPose(Pose pose) {
+        return owner.hasPose(pose);
     }
 
     @Override
-    public boolean hasPortalCooldown() {
-        return owner.hasPortalCooldown();
+    public boolean isOnPortalCooldown() {
+        return owner.isOnPortalCooldown();
     }
 
     @Override
-    public boolean isOnGround() {
-        return owner.isOnGround();
+    public boolean onGround() {
+        return owner.onGround();
     }
 
     @Override
-    public boolean hasNoGravity() {
-        return owner.hasNoGravity();
+    public boolean isNoGravity() {
+        return owner.isNoGravity();
     }
 
     @Override
-    public boolean occludeVibrationSignals() {
+    public boolean dampensVibrations() {
         return true;
     }
 
     @Override
-    public boolean isFireImmune() {
-        return owner.isFireImmune();
+    public boolean fireImmune() {
+        return owner.fireImmune();
     }
 
     @Override
-    public boolean shouldSpawnSprintingParticles() {
+    public boolean canSpawnSprintParticle() {
         return false;
     }
 
@@ -178,25 +178,25 @@ public class EntityPart extends Entity {
      * <p><b>pitch, yaw</b> - passed X and Y rotations (in degrees), relative to which offsets will be transformed.</p>
      */
     public void setRelativePos(double x, double y, double z, double centerX, double centerY, double centerZ, double pitch, double yaw) {
-        lastRenderX = getX();
-        lastRenderY = getY();
-        lastRenderZ = getZ();
+        xOld = getX();
+        yOld = getY();
+        zOld = getZ();
 
         double cosYaw = Math.cos(-yaw * 0.017453292);
         double sinYaw = Math.sin(-yaw * 0.017453292);
         double cosPitch = Math.cos(pitch * 0.017453292);
         double sinPitch = Math.sin(pitch * 0.017453292);
-        setPosition(owner.getX() + centerX + z * sinYaw * cosPitch + x * cosYaw + y * sinYaw * sinPitch,
+        setPos(owner.getX() + centerX + z * sinYaw * cosPitch + x * cosYaw + y * sinYaw * sinPitch,
                 owner.getY() + centerY + z * -sinPitch + y * cosPitch,
                 owner.getZ() + centerZ + z * cosYaw * cosPitch + x * -sinYaw + y * cosYaw * sinPitch);
 
-        prevX = getX();
-        prevY = getY();
-        prevZ = getZ();
+        xo = getX();
+        yo = getY();
+        zo = getZ();
     }
 
     public void setRelativePos(double x, double y, double z, double centerX, double centerY, double centerZ) {
-        setRelativePos(x, y ,z, centerX, centerY, centerZ, owner.getPitch(), owner.getYaw());
+        setRelativePos(x, y ,z, centerX, centerY, centerZ, owner.getXRot(), owner.getYRot());
     }
 
     public void setRelativePos(double x, double y, double z, double pitch, double yaw) {
@@ -204,6 +204,6 @@ public class EntityPart extends Entity {
     }
 
     public void setRelativePos(double x, double y, double z) {
-        setRelativePos(x, y ,z, 0, 0, 0, owner.getPitch(), owner.getYaw());
+        setRelativePos(x, y ,z, 0, 0, 0, owner.getXRot(), owner.getYRot());
     }
 }

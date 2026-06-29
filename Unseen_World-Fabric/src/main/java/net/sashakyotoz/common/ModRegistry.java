@@ -1,28 +1,28 @@
 package net.sashakyotoz.common;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.Block;
-import net.minecraft.data.client.Model;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.potion.Potion;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.models.model.ModelTemplate;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.datagen.advancements.CuredGripcrystalEntityCriterion;
 import net.sashakyotoz.common.datagen.recipes.WarriorShieldDecorationRecipe;
@@ -34,23 +34,23 @@ import java.util.Map;
 
 public class ModRegistry {
     //constants
-    public static final CuredGripcrystalEntityCriterion CURED_GRIPCRYSTAL_ENTITY_CRITERION = Criteria.register(new CuredGripcrystalEntityCriterion());
+    public static final CuredGripcrystalEntityCriterion CURED_GRIPCRYSTAL_ENTITY_CRITERION = CriteriaTriggers.register(new CuredGripcrystalEntityCriterion());
 
-    public static final RegistryKey<Structure> WARRIOR_OF_DARKNESS_TOWER = RegistryKey.of(RegistryKeys.STRUCTURE, UnseenWorld.makeID("warrior_of_darkness_tower"));
-    public static final RegistryKey<Structure> ECLIPSE_CORE = RegistryKey.of(RegistryKeys.STRUCTURE, UnseenWorld.makeID("eclipse_core"));
+    public static final ResourceKey<Structure> WARRIOR_OF_DARKNESS_TOWER = ResourceKey.create(Registries.STRUCTURE, UnseenWorld.makeID("warrior_of_darkness_tower"));
+    public static final ResourceKey<Structure> ECLIPSE_CORE = ResourceKey.create(Registries.STRUCTURE, UnseenWorld.makeID("eclipse_core"));
 
     public static RecipeSerializer<WarriorShieldDecorationRecipe> WARRIOR_SHIELD_DECORATION = register(
-            "crafting_warrior_shield_decoration", new SpecialRecipeSerializer<>(WarriorShieldDecorationRecipe::new)
+            "crafting_warrior_shield_decoration", new SimpleCraftingRecipeSerializer<>(WarriorShieldDecorationRecipe::new)
     );
 
     private static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(String id, S serializer) {
-        return Registry.register(Registries.RECIPE_SERIALIZER, String.format("%s:%s", UnseenWorld.MOD_ID, id), serializer);
+        return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, String.format("%s:%s", UnseenWorld.MOD_ID, id), serializer);
     }
 
     public static class BlockBuilder {
-        protected BlockBuilder(Identifier id, Block block, boolean item) {
+        protected BlockBuilder(ResourceLocation id, Block block, boolean item) {
             this.id = id;
-            this.block = Registry.register(Registries.BLOCK, id, block);
+            this.block = Registry.register(BuiltInRegistries.BLOCK, id, block);
             if (item)
                 ModRegistry.ofItem(id.getPath(), new BlockItem(block, new FabricItemSettings())).build();
         }
@@ -60,25 +60,25 @@ public class ModRegistry {
             return this.block;
         }
 
-        protected Identifier id;
+        protected ResourceLocation id;
         protected Block block;
 
         public BlockBuilder drop() {
             return this.drop(this.block);
         }
 
-        public BlockBuilder drop(ItemConvertible loot) {
+        public BlockBuilder drop(ItemLike loot) {
             BLOCK_DROPS.putIfAbsent(this.block, loot);
             return this;
         }
 
-        public BlockBuilder drop_silk(ItemConvertible loot) {
+        public BlockBuilder drop_silk(ItemLike loot) {
             drop(loot);
             BLOCK_SILK_DROPS.putIfAbsent(this.block, loot);
             return this;
         }
 
-        public BlockBuilder drop_shears(ItemConvertible loot) {
+        public BlockBuilder drop_shears(ItemLike loot) {
             drop(loot);
             BLOCK_SHEARS_DROPS.putIfAbsent(this.block, loot);
             return this;
@@ -92,7 +92,7 @@ public class ModRegistry {
 
         public BlockBuilder drop_tall_shears(Block grass) {
             drop();
-            TALL_BLOCK_SHEARS_DROPS.putIfAbsent(this.block, new Pair<>(grass, this.block));
+            TALL_BLOCK_SHEARS_DROPS.putIfAbsent(this.block, new Tuple<>(grass, this.block));
             return this;
         }
 
@@ -131,10 +131,10 @@ public class ModRegistry {
             if (needed[0].equals("iron")) this.tag(BlockTags.NEEDS_IRON_TOOL);
             if (needed[0].equals("diamond")) this.tag(BlockTags.NEEDS_DIAMOND_TOOL);
 
-            if (needed[1].equals("pickaxe")) this.tag(BlockTags.PICKAXE_MINEABLE);
-            if (needed[1].equals("axe")) this.tag(BlockTags.AXE_MINEABLE);
-            if (needed[1].equals("shovel")) this.tag(BlockTags.SHOVEL_MINEABLE);
-            if (needed[1].equals("hoe")) this.tag(BlockTags.HOE_MINEABLE);
+            if (needed[1].equals("pickaxe")) this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
+            if (needed[1].equals("axe")) this.tag(BlockTags.MINEABLE_WITH_AXE);
+            if (needed[1].equals("shovel")) this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
+            if (needed[1].equals("hoe")) this.tag(BlockTags.MINEABLE_WITH_HOE);
             if (needed[1].equals("sword")) this.tag(BlockTags.SWORD_EFFICIENT);
 
             return this;
@@ -165,7 +165,7 @@ public class ModRegistry {
             return this;
         }
 
-        public BlockBuilder model(Model model) {
+        public BlockBuilder model(ModelTemplate model) {
             ITEM_MODELS.put(this.block.asItem(), model);
             return this;
         }
@@ -186,7 +186,7 @@ public class ModRegistry {
         }
 
         public BlockBuilder flammable(int duration, int spread) {
-            BLOCK_FLAMMABLE.put(this.block, new Pair<>(duration, spread));
+            BLOCK_FLAMMABLE.put(this.block, new Tuple<>(duration, spread));
             return this;
         }
 
@@ -197,9 +197,9 @@ public class ModRegistry {
     }
 
     public static class ItemBuilder {
-        protected ItemBuilder(Identifier id, Item item) {
+        protected ItemBuilder(ResourceLocation id, Item item) {
             this.id = id;
-            this.item = Registry.register(Registries.ITEM, id, item);
+            this.item = Registry.register(BuiltInRegistries.ITEM, id, item);
         }
 
         public Item build() {
@@ -207,7 +207,7 @@ public class ModRegistry {
             return this.item;
         }
 
-        protected Identifier id;
+        protected ResourceLocation id;
         protected Item item;
 
         public ItemBuilder tag(TagKey<Item> tagname) {
@@ -224,7 +224,7 @@ public class ModRegistry {
             return this;
         }
 
-        public ItemBuilder model(Model model) {
+        public ItemBuilder model(ModelTemplate model) {
             ITEM_MODELS.put(this.item, model);
             return this;
         }
@@ -262,33 +262,33 @@ public class ModRegistry {
     }
 
     public static class Foods {
-        public static final FoodComponent CRYSTIE_APPLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(2).hunger(3).statusEffect(
-                        new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 0, true, false),
+        public static final FoodProperties CRYSTIE_APPLE = new FoodProperties.Builder().alwaysEat().saturationMod(2).nutrition(3).effect(
+                        new MobEffectInstance(MobEffects.HARM, 1, 0, true, false),
                         1)
-                .statusEffect(
-                        new StatusEffectInstance(StatusEffects.HASTE, 240, 1, true, false),
+                .effect(
+                        new MobEffectInstance(MobEffects.DIG_SPEED, 240, 1, true, false),
                         1).build();
-        public static final FoodComponent GLOW_APPLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(3).hunger(3)
-                .statusEffect(
-                        new StatusEffectInstance(StatusEffects.GLOWING, 300, 1, true, false),
+        public static final FoodProperties GLOW_APPLE = new FoodProperties.Builder().alwaysEat().saturationMod(3).nutrition(3)
+                .effect(
+                        new MobEffectInstance(MobEffects.GLOWING, 300, 1, true, false),
                         1).build();
-        public static final FoodComponent BEARFRUIT_BRAMBLE = new FoodComponent.Builder().alwaysEdible().saturationModifier(1).hunger(3).statusEffect(
-                        new StatusEffectInstance(StatusEffects.REGENERATION, 100, 1, true, true),
+        public static final FoodProperties BEARFRUIT_BRAMBLE = new FoodProperties.Builder().alwaysEat().saturationMod(1).nutrition(3).effect(
+                        new MobEffectInstance(MobEffects.REGENERATION, 100, 1, true, true),
                         1)
-                .statusEffect(
-                        new StatusEffectInstance(StatusEffects.RESISTANCE, 100, 0, true, true),
+                .effect(
+                        new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0, true, true),
                         1).build();
-        public static final FoodComponent NIGHTBERRY = new FoodComponent.Builder().alwaysEdible().saturationModifier(2).hunger(2).statusEffect(
-                        new StatusEffectInstance(StatusEffects.NIGHT_VISION, 300, 0, true, true),
+        public static final FoodProperties NIGHTBERRY = new FoodProperties.Builder().alwaysEat().saturationMod(2).nutrition(2).effect(
+                        new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, true),
                         1)
-                .statusEffect(
-                        new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 100, 0, true, true),
+                .effect(
+                        new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 100, 0, true, true),
                         1).build();
-        public static final FoodComponent WARPEDVEIL_VINE_FRUIT = new FoodComponent.Builder().alwaysEdible().saturationModifier(1).hunger(3).statusEffect(
-                        new StatusEffectInstance(StatusEffects.GLOWING, 300, 0, true, true),
+        public static final FoodProperties WARPEDVEIL_VINE_FRUIT = new FoodProperties.Builder().alwaysEat().saturationMod(1).nutrition(3).effect(
+                        new MobEffectInstance(MobEffects.GLOWING, 300, 0, true, true),
                         1)
-                .statusEffect(
-                        new StatusEffectInstance(StatusEffects.SATURATION, 60, 0, true, true),
+                .effect(
+                        new MobEffectInstance(MobEffects.SATURATION, 60, 0, true, true),
                         1).build();
     }
 
@@ -319,7 +319,7 @@ public class ModRegistry {
         }
     }
 
-    public static void addDrop(Block block, ItemConvertible loot) {
+    public static void addDrop(Block block, ItemLike loot) {
         BLOCK_DROPS.putIfAbsent(block, loot);
     }
 
@@ -327,10 +327,10 @@ public class ModRegistry {
     public static List<Block> BLOCKS = new ArrayList<>();
     public static Map<TagKey<Block>, List<Block>> BLOCK_TAGS = new HashMap<>();
 
-    public static Map<Block, ItemConvertible> BLOCK_DROPS = new HashMap<>();
-    public static Map<Block, ItemConvertible> BLOCK_SILK_DROPS = new HashMap<>();
-    public static Map<Block, ItemConvertible> BLOCK_SHEARS_DROPS = new HashMap<>();
-    public static Map<Block, Pair<Block, Block>> TALL_BLOCK_SHEARS_DROPS = new HashMap<>();
+    public static Map<Block, ItemLike> BLOCK_DROPS = new HashMap<>();
+    public static Map<Block, ItemLike> BLOCK_SILK_DROPS = new HashMap<>();
+    public static Map<Block, ItemLike> BLOCK_SHEARS_DROPS = new HashMap<>();
+    public static Map<Block, Tuple<Block, Block>> TALL_BLOCK_SHEARS_DROPS = new HashMap<>();
 
     public static Map<Block, Block> BLOCK_STRIPPED = new HashMap<>();
     public static Map<Block, Map<Models, Block>> BLOCK_SETS = new HashMap<>();
@@ -339,17 +339,17 @@ public class ModRegistry {
     public static List<Block> BLOCK_CUTOUT = new ArrayList<>();
     public static List<Block> BLOCK_TRANSLUCENT = new ArrayList<>();
 
-    public static Map<Block, Pair<Integer, Integer>> BLOCK_FLAMMABLE = new HashMap<>();
+    public static Map<Block, Tuple<Integer, Integer>> BLOCK_FLAMMABLE = new HashMap<>();
 
 
     public static List<Item> ITEMS = new ArrayList<>();
     public static Map<TagKey<Item>, List<Item>> ITEM_TAGS = new HashMap<>();
-    public static Map<Item, Model> ITEM_MODELS = new HashMap<>();
-    public static Map<ItemConvertible, Integer> ITEM_BURNABLE = new HashMap<>();
+    public static Map<Item, ModelTemplate> ITEM_MODELS = new HashMap<>();
+    public static Map<ItemLike, Integer> ITEM_BURNABLE = new HashMap<>();
 
-    public static final Potion GLOWING = register("glowing", new Potion(new StatusEffectInstance(StatusEffects.GLOWING, 3600)));
+    public static final Potion GLOWING = register("glowing", new Potion(new MobEffectInstance(MobEffects.GLOWING, 3600)));
 
     private static Potion register(String name, Potion potion) {
-        return Registry.register(Registries.POTION, name, potion);
+        return Registry.register(BuiltInRegistries.POTION, name, potion);
     }
 }

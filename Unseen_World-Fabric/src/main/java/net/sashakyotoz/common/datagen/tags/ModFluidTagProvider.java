@@ -1,21 +1,21 @@
 package net.sashakyotoz.common.datagen.tags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.data.server.tag.vanilla.VanillaFluidTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.tags.FluidTags;
 import net.sashakyotoz.common.blocks.ModFluids;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModFluidTagProvider extends VanillaFluidTagProvider {
-    public ModFluidTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class ModFluidTagProvider extends FluidTagsProvider {
+    public ModFluidTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    public void configure(RegistryWrapper.WrapperLookup arg) {
-        this.getOrCreateTagBuilder(FluidTags.WATER).add(
+    public void addTags(HolderLookup.Provider arg) {
+        this.tag(FluidTags.WATER).add(
                 ModFluids.DARK_WATER,
                 ModFluids.DARK_FLOWING_WATER
         );

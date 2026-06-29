@@ -1,15 +1,15 @@
 package net.sashakyotoz.common.world.features.custom;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.sashakyotoz.common.world.features.custom.configs.AdaptiveLakeFeatureConfig;
 
 public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
@@ -20,17 +20,17 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<AdaptiveLakeFeatureConfig> context) {
-        BlockState AIR = Blocks.AIR.getDefaultState();
-        BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
-        Random random = context.getRandom();
-        AdaptiveLakeFeatureConfig config = context.getConfig();
+    public boolean place(FeaturePlaceContext<AdaptiveLakeFeatureConfig> context) {
+        BlockState AIR = Blocks.AIR.defaultBlockState();
+        BlockPos blockPos = context.origin();
+        WorldGenLevel structureWorldAccess = context.level();
+        RandomSource random = context.random();
+        AdaptiveLakeFeatureConfig config = context.config();
 
-        if (blockPos.getY() <= structureWorldAccess.getBottomY() + 4) {
+        if (blockPos.getY() <= structureWorldAccess.getMinBuildHeight() + 4) {
             return false;
         } else {
-            blockPos = blockPos.down(4);
+            blockPos = blockPos.below(4);
             boolean[] bls = new boolean[2048];
             int i = random.nextInt(4) + 4;
             for (int j = 0; j < i; j++) {
@@ -56,7 +56,7 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
                 }
             }
 
-            BlockState lakeLiquidState = config.state().get(random, blockPos);
+            BlockState lakeLiquidState = config.state().getState(random, blockPos);
             for (int s = 0; s < 16; s++) {
                 for (int t = 0; t < 16; t++) {
                     for (int u = 0; u < 8; u++) {
@@ -70,10 +70,10 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
                                         || u > 0 && bls[(s * 16 + t) * 8 + (u - 1)]
                         );
                         if (bl) {
-                            BlockState blockState2 = structureWorldAccess.getBlockState(blockPos.add(s, u, t));
-                            if (u >= 4 && blockState2.isLiquid())
+                            BlockState blockState2 = structureWorldAccess.getBlockState(blockPos.offset(s, u, t));
+                            if (u >= 4 && blockState2.liquid())
                                 return false;
-                            if (u < 4 && !blockState2.isSolid() && structureWorldAccess.getBlockState(blockPos.add(s, u, t)) != lakeLiquidState)
+                            if (u < 4 && !blockState2.isSolid() && structureWorldAccess.getBlockState(blockPos.offset(s, u, t)) != lakeLiquidState)
                                 return false;
                         }
                     }
@@ -83,18 +83,18 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
                 for (int z = 0; z < 16; z++) {
                     for (int y = 0; y < 8; y++) {
                         if (bls[(x * 16 + z) * 8 + y]) {
-                            BlockPos blockPos2 = blockPos.add(x, y, z);
+                            BlockPos blockPos2 = blockPos.offset(x, y, z);
                             if (this.canReplace(structureWorldAccess.getBlockState(blockPos2))) {
                                 boolean isTopHalf = y >= 4;
-                                structureWorldAccess.setBlockState(blockPos2, isTopHalf ? AIR : lakeLiquidState, Block.NOTIFY_LISTENERS);
+                                structureWorldAccess.setBlock(blockPos2, isTopHalf ? AIR : lakeLiquidState, Block.UPDATE_CLIENTS);
                                 if (isTopHalf)
-                                    structureWorldAccess.scheduleBlockTick(blockPos2, AIR.getBlock(), 0);
+                                    structureWorldAccess.scheduleTick(blockPos2, AIR.getBlock(), 0);
                             }
                         }
                     }
                 }
             }
-            BlockState defaultBarrierState = config.barrier().get(random, blockPos);
+            BlockState defaultBarrierState = config.barrier().getState(random, blockPos);
 
             if (!defaultBarrierState.isAir()) {
                 for (int t = 0; t < 16; t++) {
@@ -111,18 +111,18 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
                             );
 
                             if (isBorder && (v < 4 || random.nextInt(2) != 0)) {
-                                BlockPos currentPos = blockPos.add(t, v, uxx);
+                                BlockPos currentPos = blockPos.offset(t, v, uxx);
                                 BlockState currentState = structureWorldAccess.getBlockState(currentPos);
 
-                                BlockPos abovePos = currentPos.up();
+                                BlockPos abovePos = currentPos.above();
                                 BlockState stateAbove = structureWorldAccess.getBlockState(abovePos);
 
-                                if (stateAbove.isSolidBlock(structureWorldAccess, abovePos))
-                                    structureWorldAccess.setBlockState(currentPos, stateAbove, Block.NOTIFY_LISTENERS);
-                                else if (!currentState.isSolidBlock(structureWorldAccess, currentPos) && !currentState.isLiquid())
-                                    structureWorldAccess.setBlockState(currentPos, AIR, Block.NOTIFY_LISTENERS);
-                                else if (currentState.isSolid() && !currentState.isIn(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE))
-                                    structureWorldAccess.setBlockState(currentPos, defaultBarrierState, Block.NOTIFY_LISTENERS);
+                                if (stateAbove.isRedstoneConductor(structureWorldAccess, abovePos))
+                                    structureWorldAccess.setBlock(currentPos, stateAbove, Block.UPDATE_CLIENTS);
+                                else if (!currentState.isRedstoneConductor(structureWorldAccess, currentPos) && !currentState.liquid())
+                                    structureWorldAccess.setBlock(currentPos, AIR, Block.UPDATE_CLIENTS);
+                                else if (currentState.isSolid() && !currentState.is(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE))
+                                    structureWorldAccess.setBlock(currentPos, defaultBarrierState, Block.UPDATE_CLIENTS);
                             }
                         }
                     }
@@ -133,6 +133,6 @@ public class AdaptiveLakeFeature extends Feature<AdaptiveLakeFeatureConfig> {
     }
 
     private boolean canReplace(BlockState state) {
-        return !state.isIn(BlockTags.FEATURES_CANNOT_REPLACE);
+        return !state.is(BlockTags.FEATURES_CANNOT_REPLACE);
     }
 }

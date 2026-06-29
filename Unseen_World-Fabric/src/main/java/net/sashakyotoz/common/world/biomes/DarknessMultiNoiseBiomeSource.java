@@ -5,68 +5,64 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.annotation.Debug;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeCoords;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList;
-import net.minecraft.world.biome.source.util.MultiNoiseUtil;
-import net.minecraft.world.biome.source.util.VanillaBiomeParameters;
-import net.minecraft.world.gen.densityfunction.DensityFunctions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.VisibleForDebug;
+import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.levelgen.NoiseRouterData;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class DarknessMultiNoiseBiomeSource extends BiomeSource {
-    private static final MapCodec<RegistryEntry<Biome>> BIOME_CODEC = Biome.REGISTRY_CODEC.fieldOf("biome");
-    public static final MapCodec<MultiNoiseUtil.Entries<RegistryEntry<Biome>>> CUSTOM_CODEC = MultiNoiseUtil.Entries.createCodec(BIOME_CODEC).fieldOf("biomes");
-    private static final MapCodec<RegistryEntry<MultiNoiseBiomeSourceParameterList>> PRESET_CODEC = MultiNoiseBiomeSourceParameterList.REGISTRY_CODEC.fieldOf("preset").withLifecycle(Lifecycle.stable());
+    private static final MapCodec<Holder<Biome>> BIOME_CODEC = Biome.CODEC.fieldOf("biome");
+    public static final MapCodec<Climate.ParameterList<Holder<Biome>>> CUSTOM_CODEC = Climate.ParameterList.codec(BIOME_CODEC).fieldOf("biomes");
+    private static final MapCodec<Holder<MultiNoiseBiomeSourceParameterList>> PRESET_CODEC = MultiNoiseBiomeSourceParameterList.CODEC.fieldOf("preset").withLifecycle(Lifecycle.stable());
     public static final Codec<DarknessMultiNoiseBiomeSource> CODEC = Codec.mapEither(CUSTOM_CODEC, PRESET_CODEC).xmap(DarknessMultiNoiseBiomeSource::new, source -> source.biomeEntries).codec();
-    private final Either<MultiNoiseUtil.Entries<RegistryEntry<Biome>>, RegistryEntry<MultiNoiseBiomeSourceParameterList>> biomeEntries;
+    private final Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> biomeEntries;
 
-    private DarknessMultiNoiseBiomeSource(Either<MultiNoiseUtil.Entries<RegistryEntry<Biome>>, RegistryEntry<MultiNoiseBiomeSourceParameterList>> biomeEntries) {
+    private DarknessMultiNoiseBiomeSource(Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> biomeEntries) {
         this.biomeEntries = biomeEntries;
     }
 
-    public static DarknessMultiNoiseBiomeSource create(MultiNoiseUtil.Entries<RegistryEntry<Biome>> biomeEntries) {
+    public static DarknessMultiNoiseBiomeSource create(Climate.ParameterList<Holder<Biome>> biomeEntries) {
         return new DarknessMultiNoiseBiomeSource(Either.left(biomeEntries));
     }
 
-    public static DarknessMultiNoiseBiomeSource create(RegistryEntry<MultiNoiseBiomeSourceParameterList> biomeEntries) {
+    public static DarknessMultiNoiseBiomeSource create(Holder<MultiNoiseBiomeSourceParameterList> biomeEntries) {
         return new DarknessMultiNoiseBiomeSource(Either.right(biomeEntries));
     }
 
-    private MultiNoiseUtil.Entries<RegistryEntry<Biome>> getBiomeEntries() {
-        return this.biomeEntries.map(entries -> entries, parameterListEntry -> parameterListEntry.value().getEntries());
+    private Climate.ParameterList<Holder<Biome>> getBiomeEntries() {
+        return this.biomeEntries.map(entries -> entries, parameterListEntry -> parameterListEntry.value().parameters());
     }
 
     @Override
-    protected Stream<RegistryEntry<Biome>> biomeStream() {
-        return this.getBiomeEntries().getEntries().stream().map(Pair::getSecond);
+    protected Stream<Holder<Biome>> collectPossibleBiomes() {
+        return this.getBiomeEntries().values().stream().map(Pair::getSecond);
     }
 
     @Override
-    protected Codec<? extends BiomeSource> getCodec() {
+    protected Codec<? extends BiomeSource> codec() {
         return CODEC;
     }
 
     @Override
-    public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
-        RegistryEntry<Biome> candidate = this.getBiomeAtPoint(noise.sample(x, y, z));
-        int y1 = BiomeCoords.toBlock(y);
-        if (y1 > 72 && candidate.matchesKey(ModBiomes.GREYNISH_SHORE))
+    public Holder<Biome> getNoiseBiome(int x, int y, int z, Climate.Sampler noise) {
+        Holder<Biome> candidate = this.getBiomeAtPoint(noise.sample(x, y, z));
+        int y1 = QuartPos.toBlock(y);
+        if (y1 > 72 && candidate.is(ModBiomes.GREYNISH_SHORE))
             return registryEntryFromKey(ModBiomes.TEALIVY_VALLEY, candidate);
         if (y1 > 220)
-            return this.getBiomeAtPoint(noise.sample(x, BiomeCoords.fromBlock(96), z));
+            return this.getBiomeAtPoint(noise.sample(x, QuartPos.fromBlock(96), z));
         if (y1 < 32) {
             if (y1 < -40)
                 return registryEntryFromKey(ModBiomes.DEEP_GLACIEMITE_CAVES, candidate);
-            MultiNoiseUtil.NoiseValuePoint sampled = noise.sample(x, y1, z);
-            float temperature = MultiNoiseUtil.toFloat(sampled.temperatureNoise());
+            Climate.TargetPoint sampled = noise.sample(x, y1, z);
+            float temperature = Climate.unquantizeCoord(sampled.temperature());
             if (temperature > 0.0F) {
                 return registryEntryFromKey(ModBiomes.TANZANITE_CAVES, candidate);
             } else
@@ -75,28 +71,28 @@ public class DarknessMultiNoiseBiomeSource extends BiomeSource {
         return candidate;
     }
 
-    private RegistryEntry<Biome> registryEntryFromKey(RegistryKey<Biome> key, RegistryEntry<Biome> fallback) {
-        return Optional.of(this.getBiomeEntries().getEntries().stream().filter(noiseHypercubeRegistryEntryPair -> noiseHypercubeRegistryEntryPair.getSecond().matchesKey(key)).findFirst().get().getSecond()).orElse(fallback);
+    private Holder<Biome> registryEntryFromKey(ResourceKey<Biome> key, Holder<Biome> fallback) {
+        return Optional.of(this.getBiomeEntries().values().stream().filter(noiseHypercubeRegistryEntryPair -> noiseHypercubeRegistryEntryPair.getSecond().is(key)).findFirst().get().getSecond()).orElse(fallback);
     }
 
-    @Debug
-    public RegistryEntry<Biome> getBiomeAtPoint(MultiNoiseUtil.NoiseValuePoint point) {
-        return this.getBiomeEntries().get(point);
+    @VisibleForDebug
+    public Holder<Biome> getBiomeAtPoint(Climate.TargetPoint point) {
+        return this.getBiomeEntries().findValue(point);
     }
 
     @Override
-    public void addDebugInfo(List<String> info, BlockPos pos, MultiNoiseUtil.MultiNoiseSampler noiseSampler) {
-        int i = BiomeCoords.fromBlock(pos.getX());
-        int j = BiomeCoords.fromBlock(pos.getY());
-        int k = BiomeCoords.fromBlock(pos.getZ());
-        MultiNoiseUtil.NoiseValuePoint noiseValuePoint = noiseSampler.sample(i, j, k);
-        float f = MultiNoiseUtil.toFloat(noiseValuePoint.continentalnessNoise());
-        float g = MultiNoiseUtil.toFloat(noiseValuePoint.erosionNoise());
-        float h = MultiNoiseUtil.toFloat(noiseValuePoint.temperatureNoise());
-        float l = MultiNoiseUtil.toFloat(noiseValuePoint.humidityNoise());
-        float m = MultiNoiseUtil.toFloat(noiseValuePoint.weirdnessNoise());
-        double d = DensityFunctions.getPeaksValleysNoise(m);
-        VanillaBiomeParameters vanillaBiomeParameters = new VanillaBiomeParameters();
-        info.add("Biome builder PV: %s C: %s E: %s T: %s H: %s".formatted(VanillaBiomeParameters.getPeaksValleysDescription(d), vanillaBiomeParameters.getContinentalnessDescription(f), vanillaBiomeParameters.getErosionDescription(g), vanillaBiomeParameters.getTemperatureDescription(h), vanillaBiomeParameters.getHumidityDescription(l)));
+    public void addDebugInfo(List<String> info, BlockPos pos, Climate.Sampler noiseSampler) {
+        int i = QuartPos.fromBlock(pos.getX());
+        int j = QuartPos.fromBlock(pos.getY());
+        int k = QuartPos.fromBlock(pos.getZ());
+        Climate.TargetPoint noiseValuePoint = noiseSampler.sample(i, j, k);
+        float f = Climate.unquantizeCoord(noiseValuePoint.continentalness());
+        float g = Climate.unquantizeCoord(noiseValuePoint.erosion());
+        float h = Climate.unquantizeCoord(noiseValuePoint.temperature());
+        float l = Climate.unquantizeCoord(noiseValuePoint.humidity());
+        float m = Climate.unquantizeCoord(noiseValuePoint.weirdness());
+        double d = NoiseRouterData.peaksAndValleys(m);
+        OverworldBiomeBuilder vanillaBiomeParameters = new OverworldBiomeBuilder();
+        info.add("Biome builder PV: %s C: %s E: %s T: %s H: %s".formatted(OverworldBiomeBuilder.getDebugStringForPeaksAndValleys(d), vanillaBiomeParameters.getDebugStringForContinentalness(f), vanillaBiomeParameters.getDebugStringForErosion(g), vanillaBiomeParameters.getDebugStringForTemperature(h), vanillaBiomeParameters.getDebugStringForHumidity(l)));
     }
 }

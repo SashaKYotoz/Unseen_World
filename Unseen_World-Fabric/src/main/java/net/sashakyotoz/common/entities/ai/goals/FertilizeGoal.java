@@ -1,11 +1,11 @@
 package net.sashakyotoz.common.entities.ai.goals;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Fertilizable;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
 public class FertilizeGoal extends Goal {
@@ -16,21 +16,21 @@ public class FertilizeGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
-        return !this.watcher.isAngry && !this.watcher.isDead() && this.watcher.getWorld().getBlockState(this.watcher.getBlockPos().down()).isIn(BlockTags.DIRT);
+    public boolean canUse() {
+        return !this.watcher.isAngry && !this.watcher.isDeadOrDying() && this.watcher.level().getBlockState(this.watcher.blockPosition().below()).is(BlockTags.DIRT);
     }
 
     @Override
     public void start() {
         this.watcher.getNavigation().stop();
-        BlockPos pos = this.watcher.getBlockPos().down();
-        if (this.watcher.getWorld().getBlockState(pos).isIn(BlockTags.DIRT)){
-            BlockState blockState = this.watcher.getWorld().getBlockState(pos);
-            if (blockState.getBlock() instanceof Fertilizable fertilizable) {
-                if (fertilizable.isFertilizable(this.watcher.getWorld(), pos, blockState, this.watcher.getWorld().isClient)) {
-                    if (this.watcher.getWorld() instanceof ServerWorld world) {
-                        if (fertilizable.canGrow(this.watcher.getWorld(), this.watcher.getWorld().random, pos, blockState))
-                            fertilizable.grow(world, world.random, pos, blockState);
+        BlockPos pos = this.watcher.blockPosition().below();
+        if (this.watcher.level().getBlockState(pos).is(BlockTags.DIRT)){
+            BlockState blockState = this.watcher.level().getBlockState(pos);
+            if (blockState.getBlock() instanceof BonemealableBlock fertilizable) {
+                if (fertilizable.isValidBonemealTarget(this.watcher.level(), pos, blockState, this.watcher.level().isClientSide)) {
+                    if (this.watcher.level() instanceof ServerLevel world) {
+                        if (fertilizable.isBonemealSuccess(this.watcher.level(), this.watcher.level().random, pos, blockState))
+                            fertilizable.performBonemeal(world, world.random, pos, blockState);
                     }
                 }
             }

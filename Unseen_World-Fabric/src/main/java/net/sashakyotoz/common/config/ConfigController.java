@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
 import net.sashakyotoz.common.items.custom.EclipsebaneItem;
@@ -31,7 +31,7 @@ public class ConfigController implements ServerWorldEvents.Load {
     public static Map CONFIG = new TreeMap<>();
 
     @Override
-    public void onWorldLoad(MinecraftServer server, ServerWorld world) {
+    public void onWorldLoad(MinecraftServer server, ServerLevel world) {
         WorldConfigController.data.put(0, WorldConfigController.loadData(world));
         DATA_LIST = loadGrippingManaConfig();
     }
@@ -40,8 +40,8 @@ public class ConfigController implements ServerWorldEvents.Load {
         return Objects.requireNonNullElseGet(DATA_LIST, List::of);
     }
 
-    public record DataItem(Item item, String compatibilityType, Identifier spellIcon, int manaCost,
-                           @Nullable Identifier effectToRemove, @Nullable List<String> actionToPerform) {
+    public record DataItem(Item item, String compatibilityType, ResourceLocation spellIcon, int manaCost,
+                           @Nullable ResourceLocation effectToRemove, @Nullable List<String> actionToPerform) {
     }
 
     public record ItemEntry(String itemId, String compatibilityType, String spellIcon, int manaCost,
@@ -72,8 +72,8 @@ public class ConfigController implements ServerWorldEvents.Load {
             List<DataItem> spellItems = new ArrayList<>();
             for (ModEntry modEntry : config.entries()) {
                 for (ItemEntry itemEntry : modEntry.items()) {
-                    Identifier itemIdentifier = new Identifier(modEntry.modId(), itemEntry.itemId());
-                    Item item = Registries.ITEM.get(itemIdentifier);
+                    ResourceLocation itemIdentifier = new ResourceLocation(modEntry.modId(), itemEntry.itemId());
+                    Item item = BuiltInRegistries.ITEM.get(itemIdentifier);
                     DataItem spellItem = getDataItem(modEntry, itemEntry, item);
                     spellItems.add(spellItem);
                 }
@@ -101,17 +101,17 @@ public class ConfigController implements ServerWorldEvents.Load {
     }
 
     private static @NotNull DataItem getDataItem(ModEntry modEntry, ItemEntry itemEntry, Item item) {
-        Identifier spellIconIdentifier = new Identifier(itemEntry.spellIcon());
+        ResourceLocation spellIconIdentifier = new ResourceLocation(itemEntry.spellIcon());
         DataItem dataItem;
         if (itemEntry.compatibilityType.equals(Type.EFFECT_REMOVER.type) && itemEntry.effectToRemove() != null)
-            dataItem = new DataItem(item, itemEntry.compatibilityType(), spellIconIdentifier, itemEntry.manaCost(), new Identifier(modEntry.modId(), itemEntry.effectToRemove()), null);
+            dataItem = new DataItem(item, itemEntry.compatibilityType(), spellIconIdentifier, itemEntry.manaCost(), new ResourceLocation(modEntry.modId(), itemEntry.effectToRemove()), null);
         else
             dataItem = new DataItem(item, itemEntry.compatibilityType(), spellIconIdentifier, itemEntry.manaCost(), null, itemEntry.actionToPerform());
         return dataItem;
     }
 
     public static DataItem getDataToStack(ItemStack stack) {
-        if (stack.isOf(Items.AIR))
+        if (stack.is(Items.AIR))
             return null;
         if (getDataList().stream().anyMatch(data -> data.item().equals(stack.getItem())))
             return getDataList().stream().filter(data -> data.item().equals(stack.getItem())).findAny().get();

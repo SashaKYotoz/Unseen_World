@@ -1,7 +1,7 @@
 package net.sashakyotoz.utils;
 
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.model.TexturedModelData;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.sashakyotoz.api.entity_data.IModelPartExtension;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.Nullable;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelPartUtils {
-    public static List<ModelPart> collectAllModelParts(TexturedModelData texturedData) {
-        ModelPart root = texturedData.createModel();
+    public static List<ModelPart> collectAllModelParts(LayerDefinition texturedData) {
+        ModelPart root = texturedData.bakeRoot();
         List<ModelPart> parts = new ArrayList<>();
         collectRecursive(root, parts);
         return parts;

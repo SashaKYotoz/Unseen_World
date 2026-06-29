@@ -1,69 +1,69 @@
 package net.sashakyotoz.client.renderers.blocks;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.random.Random;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
 
 public class KeyHandlerStoneRenderer<T extends KeyHandlerStoneBlockEntity> implements BlockEntityRenderer<T> {
-    private final BlockEntityRendererFactory.Context context;
+    private final BlockEntityRendererProvider.Context context;
 
-    public KeyHandlerStoneRenderer(BlockEntityRendererFactory.Context context) {
+    public KeyHandlerStoneRenderer(BlockEntityRendererProvider.Context context) {
         this.context = context;
     }
 
     @Override
-    public void render(KeyHandlerStoneBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.push();
-        ItemStack stackToRender = entity.keyToRenderer(entity.getWorld(), entity.getPos());
+    public void render(KeyHandlerStoneBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        matrices.pushPose();
+        ItemStack stackToRender = entity.keyToRenderer(entity.getLevel(), entity.getBlockPos());
         if (entity.data.firstKeyIn()) {
             matrices.translate(0.5, 0.65, entity.data.firstKeyOffset() + 0.8);
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270));
-            this.context.getItemRenderer().renderItem(
+            matrices.mulPose(Axis.XP.rotationDegrees(90));
+            matrices.mulPose(Axis.YP.rotationDegrees(270));
+            this.context.getItemRenderer().renderStatic(
                     stackToRender,
-                    ModelTransformationMode.GROUND,
+                    ItemDisplayContext.GROUND,
                     light,
-                    OverlayTexture.DEFAULT_UV,
+                    OverlayTexture.NO_OVERLAY,
                     matrices,
                     vertexConsumers,
-                    entity.getWorld(),
+                    entity.getLevel(),
                     overlay
             );
         }
-        matrices.pop();
-        matrices.push();
+        matrices.popPose();
+        matrices.pushPose();
         matrices.translate(0.5, 0.65, entity.data.secondKeyOffset() + 0.2);
-        matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+        matrices.mulPose(Axis.XN.rotationDegrees(90));
+        matrices.mulPose(Axis.YP.rotationDegrees(90));
         if (entity.data.secondKeyIn()) {
-            this.context.getItemRenderer().renderItem(
+            this.context.getItemRenderer().renderStatic(
                     stackToRender,
-                    ModelTransformationMode.GROUND,
+                    ItemDisplayContext.GROUND,
                     light,
-                    OverlayTexture.DEFAULT_UV,
+                    OverlayTexture.NO_OVERLAY,
                     matrices,
                     vertexConsumers,
-                    entity.getWorld(),
+                    entity.getLevel(),
                     overlay
             );
         }
-        matrices.pop();
+        matrices.popPose();
         if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && entity.data.cooldown() > 0) {
-            matrices.push();
+            matrices.pushPose();
             matrices.scale(0.25f, 0.25f, 0.25f);
             matrices.translate(2, 5 + Math.sin(entity.ticks) * 0.25f, 2);
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotation((entity.ticks % 360) * 0.25f));
-            this.context.getRenderManager().renderBlock(Blocks.DIAMOND_BLOCK.getDefaultState(), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getSolid()), false, Random.create());
-            matrices.pop();
+            matrices.mulPose(Axis.YP.rotation((entity.ticks % 360) * 0.25f));
+            this.context.getBlockRenderDispatcher().renderBatched(Blocks.DIAMOND_BLOCK.defaultBlockState(), entity.getBlockPos(), entity.getLevel(), matrices, vertexConsumers.getBuffer(RenderType.solid()), false, RandomSource.create());
+            matrices.popPose();
         }
     }
 }

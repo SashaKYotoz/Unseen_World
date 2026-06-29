@@ -1,51 +1,51 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FernBlock;
-import net.minecraft.block.TallPlantBlock;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.TallGrassBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.sashakyotoz.common.blocks.ModBlocks;
 
-public class DarknessFernBlock extends FernBlock {
+public class DarknessFernBlock extends TallGrassBlock {
     private final boolean isLitToggleable;
-    public static final BooleanProperty LIT = Properties.LIT;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public DarknessFernBlock(Settings settings, boolean isLitToggleable) {
+    public DarknessFernBlock(Properties settings, boolean isLitToggleable) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
         this.isLitToggleable = isLitToggleable;
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LIT);
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (random.nextInt(this.isLitToggleable ? 31 : 61) == 20 && state.get(LIT) && world.getBlockState(pos.up()).isAir())
-            world.addParticle(this.isLitToggleable ? ParticleTypes.END_ROD : ParticleTypes.CRIT, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, random.nextBetween(-1, 2) / 20f, 0.1D, random.nextBetween(-1, 2) / 20f);
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        if (random.nextInt(this.isLitToggleable ? 31 : 61) == 20 && state.getValue(LIT) && world.getBlockState(pos.above()).isAir())
+            world.addParticle(this.isLitToggleable ? ParticleTypes.END_ROD : ParticleTypes.CRIT, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, random.nextIntBetweenInclusive(-1, 2) / 20f, 0.1D, random.nextIntBetweenInclusive(-1, 2) / 20f);
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
-        TallPlantBlock tallPlantBlock = (TallPlantBlock) ModBlocks.TALL_GLOOMWEED;
-        if (tallPlantBlock.getDefaultState().canPlaceAt(world, pos) && world.isAir(pos.up())) {
-            TallPlantBlock.placeAt(world, tallPlantBlock.getDefaultState(), pos, 2);
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+        DoublePlantBlock tallPlantBlock = (DoublePlantBlock) ModBlocks.TALL_GLOOMWEED;
+        if (tallPlantBlock.defaultBlockState().canSurvive(world, pos) && world.isEmptyBlock(pos.above())) {
+            DoublePlantBlock.placeAt(world, tallPlantBlock.defaultBlockState(), pos, 2);
         }
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!world.isClient() && this.isLitToggleable && random.nextFloat() > 0.76)
-            world.setBlockState(pos, state.with(LIT, !state.get(LIT)), Block.NOTIFY_LISTENERS);
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        if (!world.isClientSide() && this.isLitToggleable && random.nextFloat() > 0.76)
+            world.setBlock(pos, state.setValue(LIT, !state.getValue(LIT)), Block.UPDATE_CLIENTS);
     }
 }

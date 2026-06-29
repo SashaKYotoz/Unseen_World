@@ -1,44 +1,43 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.OcelotEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.function.ValueLists;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Ocelot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
@@ -48,21 +47,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 import java.util.function.IntFunction;
 
-public class SaberpardEntity extends AnimalEntity implements VariantHolder<SaberpardEntity.Type> {
-    private static final TrackedData<Boolean> CONVERTING = DataTracker.registerData(SaberpardEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEntity.Type> {
+    private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(SaberpardEntity.class, EntityDataSerializers.BOOLEAN);
     private int conversionTimer;
     @Nullable
     private UUID converter;
     private TemptGoal temptGoal;
-    private static final Ingredient TAMING_INGREDIENT = Ingredient.ofItems(Items.COD, Items.SALMON);
-    private static final TrackedData<Integer> TYPE = DataTracker.registerData(SaberpardEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final Ingredient TAMING_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
+    private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(SaberpardEntity.class, EntityDataSerializers.INT);
 
-    public SaberpardEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public SaberpardEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 
     @Nullable
-    public SaberpardEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
+    public SaberpardEntity getBreedOffspring(ServerLevel serverWorld, AgeableMob passiveEntity) {
         SaberpardEntity saberpard = ModEntities.SABERPARD.create(serverWorld);
         if (saberpard != null)
             saberpard.setVariant(this.random.nextBoolean() ? this.getVariant() : ((SaberpardEntity) passiveEntity).getVariant());
@@ -70,167 +69,167 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(0, new SaberpardSwimGoal());
-        this.goalSelector.add(0, new PowderSnowJumpGoal(this, this.getWorld()));
-        this.goalSelector.add(1, new SwimGoal(this));
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.8, 0.9f));
-        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
-        this.goalSelector.add(3, new AttackGoal(this));
-        this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.6F));
-        this.goalSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new SaberpardSwimGoal());
+        this.goalSelector.addGoal(0, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.8, 0.9f));
+        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 10.0F));
+        this.goalSelector.addGoal(3, new OcelotAttackGoal(this));
+        this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.6F));
+        this.goalSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, false));
         this.temptGoal = new TemptGoal(this, 0.6, TAMING_INGREDIENT, true);
-        this.goalSelector.add(3, this.temptGoal);
+        this.goalSelector.addGoal(3, this.temptGoal);
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if ((this.temptGoal == null || this.temptGoal.isActive()) && this.isBreedingItem(itemStack) && player.squaredDistanceTo(this) < 9.0) {
-            this.eat(player, hand, itemStack);
-            if (!this.getWorld().isClient) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if ((this.temptGoal == null || this.temptGoal.isRunning()) && this.isFood(itemStack) && player.distanceToSqr(this) < 9.0) {
+            this.usePlayerItem(player, hand, itemStack);
+            if (!this.level().isClientSide) {
                 if (this.random.nextInt(3) == 0) {
                     this.showEmoteParticle(true);
-                    this.getWorld().sendEntityStatus(this, EntityStatuses.TAME_OCELOT_SUCCESS);
+                    this.level().broadcastEntityEvent(this, EntityEvent.TRUSTING_SUCCEEDED);
                 } else {
                     this.showEmoteParticle(false);
-                    this.getWorld().sendEntityStatus(this, EntityStatuses.TAME_OCELOT_FAILED);
+                    this.level().broadcastEntityEvent(this, EntityEvent.TRUSTING_FAILED);
                 }
             }
-            return ActionResult.success(this.getWorld().isClient);
-        } else if (itemStack.isOf(ModItems.CRYSTIE_APPLE)) {
-            if (this.hasStatusEffect(StatusEffects.GLOWING)) {
-                if (!player.getAbilities().creativeMode)
-                    itemStack.decrement(1);
-                if (!this.getWorld().isClient)
-                    this.setConverting(player.getUuid(), this.random.nextInt(2401) + 2400);
-                return ActionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        } else if (itemStack.is(ModItems.CRYSTIE_APPLE)) {
+            if (this.hasEffect(MobEffects.GLOWING)) {
+                if (!player.getAbilities().instabuild)
+                    itemStack.shrink(1);
+                if (!this.level().isClientSide)
+                    this.setConverting(player.getUUID(), this.random.nextInt(2401) + 2400);
+                return InteractionResult.SUCCESS;
             } else
-                return ActionResult.CONSUME;
-        } else if (itemStack.isOf(ModItems.GRIPTONITE)) {
-            if (!player.getAbilities().creativeMode && player instanceof ServerPlayerEntity player1)
-                itemStack.damage(1, player1.getRandom(), player1);
-            if (!this.getWorld().isClient)
-                this.setConverting(player.getUuid(), this.random.nextInt(1201) + 1200);
-            return ActionResult.SUCCESS;
+                return InteractionResult.CONSUME;
+        } else if (itemStack.is(ModItems.GRIPTONITE)) {
+            if (!player.getAbilities().instabuild && player instanceof ServerPlayer player1)
+                itemStack.hurt(1, player1.getRandom(), player1);
+            if (!this.level().isClientSide)
+                this.setConverting(player.getUUID(), this.random.nextInt(1201) + 1200);
+            return InteractionResult.SUCCESS;
         } else
-            return super.interactMob(player, hand);
+            return super.mobInteract(player, hand);
     }
 
     private void setConverting(@Nullable UUID uuid, int delay) {
         this.converter = uuid;
         this.conversionTimer = delay;
-        this.getDataTracker().set(CONVERTING, true);
-        this.removeStatusEffect(StatusEffects.GLOWING);
-        this.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, delay, Math.min(this.getWorld().getDifficulty().getId() - 1, 0)));
-        this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_SPLASH_PARTICLES);
+        this.getEntityData().set(CONVERTING, true);
+        this.removeEffect(MobEffects.GLOWING);
+        this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, delay, Math.min(this.level().getDifficulty().getId() - 1, 0)));
+        this.level().broadcastEntityEvent(this, EntityEvent.VILLAGER_SWEAT);
     }
 
     public boolean isConverting() {
-        return this.getDataTracker().get(CONVERTING);
+        return this.getEntityData().get(CONVERTING);
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return TAMING_INGREDIENT.test(stack);
     }
 
     private void showEmoteParticle(boolean positive) {
-        ParticleEffect particleEffect = ParticleTypes.HEART;
+        ParticleOptions particleEffect = ParticleTypes.HEART;
         if (!positive)
             particleEffect = ParticleTypes.SMOKE;
         for (int i = 0; i < 7; i++) {
             double d = this.random.nextGaussian() * 0.02;
             double e = this.random.nextGaussian() * 0.02;
             double f = this.random.nextGaussian() * 0.02;
-            this.getWorld().addParticle(particleEffect, this.getParticleX(1.0), this.getRandomBodyY() + 0.5, this.getParticleZ(1.0), d, e, f);
+            this.level().addParticle(particleEffect, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
         }
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(TYPE, 0);
-        this.dataTracker.startTracking(CONVERTING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TYPE, 0);
+        this.entityData.define(CONVERTING, false);
     }
 
-    public static boolean isValidNaturalSpawn(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isIn(BlockTags.DIRT);
+    public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        return world.getBlockState(pos.below()).is(BlockTags.DIRT);
     }
 
     @Override
     public void setVariant(Type variant) {
-        this.dataTracker.set(TYPE, variant.getId());
+        this.entityData.set(TYPE, variant.getId());
     }
 
     @Override
     public Type getVariant() {
-        return Type.fromId(this.dataTracker.get(TYPE));
+        return Type.fromId(this.entityData.get(TYPE));
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        nbt.putString("Type", this.getVariant().asString());
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putString("Type", this.getVariant().getSerializedName());
         nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
         if (this.converter != null)
-            nbt.putUuid("ConversionPlayer", this.converter);
+            nbt.putUUID("ConversionPlayer", this.converter);
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
         this.setVariant(Type.byName(nbt.getString("Type")));
-        if (nbt.contains("ConversionTime", NbtElement.NUMBER_TYPE) && nbt.getInt("ConversionTime") > -1)
-            this.setConverting(nbt.containsUuid("ConversionPlayer") ? nbt.getUuid("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
+        if (nbt.contains("ConversionTime", Tag.TAG_ANY_NUMERIC) && nbt.getInt("ConversionTime") > -1)
+            this.setConverting(nbt.hasUUID("ConversionPlayer") ? nbt.getUUID("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3F)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.3F)
+                .add(Attributes.MAX_HEALTH, 16.0)
+                .add(Attributes.FOLLOW_RANGE, 32.0)
+                .add(Attributes.ATTACK_DAMAGE, 4.0);
     }
 
     @Override
     public void tick() {
-        if (!this.getWorld().isClient && this.isAlive() && this.isConverting()) {
+        if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
             this.conversionTimer--;
             if (this.conversionTimer <= 0)
-                this.finishConversion((ServerWorld) this.getWorld());
+                this.finishConversion((ServerLevel) this.level());
         }
         super.tick();
     }
 
-    private void finishConversion(ServerWorld world) {
-        OcelotEntity ocelot = this.convertTo(EntityType.OCELOT, false);
+    private void finishConversion(ServerLevel world) {
+        Ocelot ocelot = this.convertTo(EntityType.OCELOT, false);
         ActionsUtils.initializeConverting(this, ocelot, uuid);
         if (!this.isSilent())
-            world.playSound(this, this.getBlockPos(), SoundEvents.ENTITY_OCELOT_HURT, SoundCategory.NEUTRAL, 3, 2);
+            world.playSound(this, this.blockPosition(), SoundEvents.OCELOT_HURT, SoundSource.NEUTRAL, 3, 2);
     }
 
     @Nullable
     @Override
-    public EntityData initialize(
-            ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt
+    public SpawnGroupData finalizeSpawn(
+            ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt
     ) {
-        RegistryEntry<Biome> registryEntry = world.getBiome(this.getBlockPos());
+        Holder<Biome> registryEntry = world.getBiome(this.blockPosition());
         Type type = Type.fromBiome(registryEntry);
         this.setVariant(type);
         if (this.random.nextBoolean())
-            this.setBreedingAge(-24000);
-        this.initEquipment(world.getRandom(), difficulty);
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+            this.setAge(-24000);
+        this.populateDefaultEquipmentSlots(world.getRandom(), difficulty);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
-    public enum Type implements StringIdentifiable {
+    public enum Type implements StringRepresentable {
         JUNGLE(0, "jungle"),
         STEPPE(1, "steppe");
 
-        public static final StringIdentifiable.Codec<SaberpardEntity.Type> CODEC = StringIdentifiable.createCodec(SaberpardEntity.Type::values);
-        private static final IntFunction<SaberpardEntity.Type> BY_ID = ValueLists.createIdToValueFunction(
-                SaberpardEntity.Type::getId, values(), ValueLists.OutOfBoundsHandling.ZERO
+        public static final StringRepresentable.EnumCodec<SaberpardEntity.Type> CODEC = StringRepresentable.fromEnum(SaberpardEntity.Type::values);
+        private static final IntFunction<SaberpardEntity.Type> BY_ID = ByIdMap.continuous(
+                SaberpardEntity.Type::getId, values(), ByIdMap.OutOfBoundsStrategy.ZERO
         );
         private final int id;
         private final String key;
@@ -241,7 +240,7 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.key;
         }
 
@@ -250,26 +249,26 @@ public class SaberpardEntity extends AnimalEntity implements VariantHolder<Saber
         }
 
         public static SaberpardEntity.Type byName(String name) {
-            return CODEC.byId(name, JUNGLE);
+            return CODEC.byName(name, JUNGLE);
         }
 
         public static SaberpardEntity.Type fromId(int id) {
             return BY_ID.apply(id);
         }
 
-        public static SaberpardEntity.Type fromBiome(RegistryEntry<Biome> biome) {
-            return biome.isIn(ModTags.Biomes.SPAWNS_STEPPE_SABERPARD) ? STEPPE : JUNGLE;
+        public static SaberpardEntity.Type fromBiome(Holder<Biome> biome) {
+            return biome.is(ModTags.Biomes.SPAWNS_STEPPE_SABERPARD) ? STEPPE : JUNGLE;
         }
     }
 
-    class SaberpardSwimGoal extends SwimGoal {
+    class SaberpardSwimGoal extends FloatGoal {
         public SaberpardSwimGoal() {
             super(SaberpardEntity.this);
         }
 
         @Override
-        public boolean canStart() {
-            return SaberpardEntity.this.isTouchingWater() && SaberpardEntity.this.getFluidHeight(FluidTags.WATER) > 0.25 || SaberpardEntity.this.isInLava();
+        public boolean canUse() {
+            return SaberpardEntity.this.isInWater() && SaberpardEntity.this.getFluidHeight(FluidTags.WATER) > 0.25 || SaberpardEntity.this.isInLava();
         }
     }
 }

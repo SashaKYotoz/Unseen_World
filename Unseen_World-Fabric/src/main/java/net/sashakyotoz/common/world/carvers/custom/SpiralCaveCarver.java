@@ -1,30 +1,30 @@
 package net.sashakyotoz.common.world.carvers.custom;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.carver.Carver;
-import net.minecraft.world.gen.carver.CarverContext;
-import net.minecraft.world.gen.carver.CarvingMask;
-import net.minecraft.world.gen.chunk.AquiferSampler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.CarvingMask;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.Aquifer;
+import net.minecraft.world.level.levelgen.carver.CarvingContext;
+import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.sashakyotoz.common.world.carvers.custom.configs.SpiralCaveCarverConfig;
 
 import java.util.function.Function;
 
-public class SpiralCaveCarver extends Carver<SpiralCaveCarverConfig> {
-    public static final Carver<SpiralCaveCarverConfig> INSTANCE = new SpiralCaveCarver(SpiralCaveCarverConfig.CODEC);
+public class SpiralCaveCarver extends WorldCarver<SpiralCaveCarverConfig> {
+    public static final WorldCarver<SpiralCaveCarverConfig> INSTANCE = new SpiralCaveCarver(SpiralCaveCarverConfig.CODEC);
 
     public SpiralCaveCarver(Codec<SpiralCaveCarverConfig> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean carve(CarverContext context, SpiralCaveCarverConfig config, Chunk chunk, Function<BlockPos, RegistryEntry<Biome>> posToBiome, Random random, AquiferSampler aquiferSampler, ChunkPos pos, CarvingMask mask) {
+    public boolean carve(CarvingContext context, SpiralCaveCarverConfig config, ChunkAccess chunk, Function<BlockPos, Holder<Biome>> posToBiome, RandomSource random, Aquifer aquiferSampler, ChunkPos pos, CarvingMask mask) {
         double baseRadius = Math.max(1.0, config.radius());
         int length = Math.max(1, config.length());
         double turnRate = config.turnRate();
@@ -64,7 +64,7 @@ public class SpiralCaveCarver extends Carver<SpiralCaveCarverConfig> {
                             if (mask.get(localX, wy, localZ)) continue;
                             BlockPos posBlock = new BlockPos(wx, wy, wz);
                             if (!canReplaceBlock(chunk, posBlock)) continue;
-                            chunk.setBlockState(posBlock, Blocks.AIR.getDefaultState(), false);
+                            chunk.setBlockState(posBlock, Blocks.AIR.defaultBlockState(), false);
                             mask.set(localX, wy, localZ);
                             carvedAny = true;
                         }
@@ -75,14 +75,14 @@ public class SpiralCaveCarver extends Carver<SpiralCaveCarverConfig> {
         return carvedAny;
     }
 
-    private boolean canReplaceBlock(Chunk chunk, BlockPos pos) {
+    private boolean canReplaceBlock(ChunkAccess chunk, BlockPos pos) {
         if (!chunk.getPos().equals(new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4))) return false;
         var state = chunk.getBlockState(pos);
-        return !state.isOf(Blocks.BEDROCK) && state.getFluidState().isEmpty();
+        return !state.is(Blocks.BEDROCK) && state.getFluidState().isEmpty();
     }
 
     @Override
-    public boolean shouldCarve(SpiralCaveCarverConfig config, Random random) {
+    public boolean isStartChunk(SpiralCaveCarverConfig config, RandomSource random) {
         return random.nextFloat() <= config.probability;
     }
 }

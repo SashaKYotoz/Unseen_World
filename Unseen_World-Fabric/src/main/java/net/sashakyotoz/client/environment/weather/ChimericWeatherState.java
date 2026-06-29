@@ -2,15 +2,15 @@ package net.sashakyotoz.client.environment.weather;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.world.PersistentState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.sashakyotoz.common.networking.ModMessages;
 
-public class ChimericWeatherState extends PersistentState {
+public class ChimericWeatherState extends SavedData {
     private static final int MIN_CLEAR_TIME = 12000;
     private static final int MAX_CLEAR_TIME = 24000;
     private static final int GRIPPFALL_DURATION = 6000;
@@ -21,10 +21,10 @@ public class ChimericWeatherState extends PersistentState {
     private int gripFallTicks = 0;
     private int gripFallCleanTicks = MIN_CLEAR_TIME;
 
-    private ServerWorld world;
+    private ServerLevel world;
 
-    public static ChimericWeatherState get(ServerWorld world) {
-        ChimericWeatherState state = world.getPersistentStateManager().getOrCreate(
+    public static ChimericWeatherState get(ServerLevel world) {
+        ChimericWeatherState state = world.getDataStorage().computeIfAbsent(
                 ChimericWeatherState::fromNbt,
                 ChimericWeatherState::new,
                 "chimeric_weather"
@@ -33,7 +33,7 @@ public class ChimericWeatherState extends PersistentState {
         return state;
     }
 
-    public static ChimericWeatherState fromNbt(NbtCompound tag) {
+    public static ChimericWeatherState fromNbt(CompoundTag tag) {
         ChimericWeatherState state = new ChimericWeatherState();
         state.isGrippfallActive = tag.getBoolean("isGrippfallActive");
         state.direction = tag.getString("direction");
@@ -43,7 +43,7 @@ public class ChimericWeatherState extends PersistentState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public CompoundTag save(CompoundTag nbt) {
         nbt.putBoolean("isGrippfallActive", isGrippfallActive);
         nbt.putString("direction", direction);
         nbt.putInt("gripFallTicks", gripFallTicks);
@@ -59,7 +59,7 @@ public class ChimericWeatherState extends PersistentState {
                 this.isGrippfallActive = false;
                 this.gripFallCleanTicks = MIN_CLEAR_TIME + world.random.nextInt(MAX_CLEAR_TIME - MIN_CLEAR_TIME);
                 this.syncToAll();
-                this.markDirty();
+                this.setDirty();
             }
         } else {
             if (this.gripFallCleanTicks > 0) {
@@ -70,25 +70,25 @@ public class ChimericWeatherState extends PersistentState {
                 this.direction = DIRECTIONS[this.world.getRandom().nextInt(DIRECTIONS.length)];
 
                 this.syncToAll();
-                this.markDirty();
+                this.setDirty();
             }
         }
     }
 
     public void syncToAll() {
-        PacketByteBuf buf = PacketByteBufs.create();
+        FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(this.isGrippfallActive);
-        buf.writeString(this.direction);
+        buf.writeUtf(this.direction);
 
-        for (ServerPlayerEntity player : world.getPlayers()) {
+        for (ServerPlayer player : world.players()) {
             ServerPlayNetworking.send(player, ModMessages.WEATHER_PACKET_ID, buf);
         }
     }
 
-    public void syncToPlayer(ServerPlayerEntity player) {
-        PacketByteBuf buf = PacketByteBufs.create();
+    public void syncToPlayer(ServerPlayer player) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(this.isGrippfallActive);
-        buf.writeString(this.direction);
+        buf.writeUtf(this.direction);
         ServerPlayNetworking.send(player, ModMessages.WEATHER_PACKET_ID, buf);
     }
 
@@ -100,9 +100,9 @@ public class ChimericWeatherState extends PersistentState {
         } else {
             this.isGrippfallActive = false;
             this.gripFallTicks = 0;
-            this.gripFallCleanTicks = UniformIntProvider.create(MIN_CLEAR_TIME, MAX_CLEAR_TIME).get(this.world.random);
+            this.gripFallCleanTicks = UniformInt.of(MIN_CLEAR_TIME, MAX_CLEAR_TIME).sample(this.world.random);
         }
-        this.markDirty();
+        this.setDirty();
         this.syncToAll();
     }
 

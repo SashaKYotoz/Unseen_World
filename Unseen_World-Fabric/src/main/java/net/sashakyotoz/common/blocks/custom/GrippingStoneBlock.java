@@ -1,61 +1,61 @@
 package net.sashakyotoz.common.blocks.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 
-public class GrippingStoneBlock extends FacingBlock {
-    public GrippingStoneBlock(Settings settings) {
+public class GrippingStoneBlock extends DirectionalBlock {
+    public GrippingStoneBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.UP));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        Direction direction = ctx.getSide();
-        BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos().offset(direction.getOpposite()));
-        return blockState.isOf(this) && blockState.get(FACING) == direction
-                ? this.getDefaultState().with(FACING, direction.getOpposite())
-                : this.getDefaultState().with(FACING, direction);
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        Direction direction = ctx.getClickedFace();
+        BlockState blockState = ctx.getLevel().getBlockState(ctx.getClickedPos().relative(direction.getOpposite()));
+        return blockState.is(this) && blockState.getValue(FACING) == direction
+                ? this.defaultBlockState().setValue(FACING, direction.getOpposite())
+                : this.defaultBlockState().setValue(FACING, direction);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING)));
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (entity instanceof IGrippingEntity entity1
-                && entity.age % 10 == 0
+                && entity.tickCount % 10 == 0
                 && entity1.getGrippingData() < 10)
             entity1.setGrippingData(entity1.getGrippingData() + 1);
-        if (world.getBlockState(pos.up()).isAir() && world.getRandom().nextInt(4) == 1)
+        if (world.getBlockState(pos.above()).isAir() && world.getRandom().nextInt(4) == 1)
             world.addParticle(ModParticleTypes.GRIPPING_CRYSTAL, pos.getX(), pos.getY() + 0.25f, pos.getZ(), 0, 0.1f, 0);
     }
 
     @Override
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        entity.handleFallDamage(fallDistance, 0.4F, world.getDamageSources().fall());
+    public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        entity.causeFallDamage(fallDistance, 0.4F, world.damageSources().fall());
     }
 }

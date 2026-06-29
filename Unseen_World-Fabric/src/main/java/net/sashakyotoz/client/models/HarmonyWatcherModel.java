@@ -1,20 +1,22 @@
 package net.sashakyotoz.client.models;
 
-import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.ModelWithArms;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Arm;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.model.ArmedModel;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.HumanoidArm;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.config.ConfigEntries;
 import net.sashakyotoz.common.entities.animations.HarmonyWatcherAnimations;
 import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
-public class HarmonyWatcherModel extends SinglePartEntityModel<HarmonyWatcherEntity> implements ModelWithArms {
-    public static final EntityModelLayer HARMONY_WATCHER = new EntityModelLayer(UnseenWorld.makeID("harmony_watcher"), "main");
+public class HarmonyWatcherModel extends HierarchicalModel<HarmonyWatcherEntity> implements ArmedModel {
+    public static final ModelLayerLocation HARMONY_WATCHER = new ModelLayerLocation(UnseenWorld.makeID("harmony_watcher"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -32,49 +34,49 @@ public class HarmonyWatcherModel extends SinglePartEntityModel<HarmonyWatcherEnt
         this.leftArm = root.getChild("leftArm");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(24, 48).cuboid(-4.0F, -1.0F, -4.0F, 8.0F, 1.0F, 5.0F, new Dilation(0.0F))
-                .uv(44, 54).cuboid(-4.0F, -6.0F, -4.0F, 1.0F, 5.0F, 5.0F, new Dilation(0.0F))
-                .uv(0, 43).cuboid(-4.0F, -6.0F, 1.0F, 8.0F, 6.0F, 3.0F, new Dilation(0.0F))
-                .uv(0, 52).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 4.0F, 8.0F, new Dilation(0.0F))
-                .uv(32, 54).cuboid(3.0F, -6.0F, -4.0F, 1.0F, 5.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 2.0F, 0.0F));
+    public static LayerDefinition getTextureLocationdModelData() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        PartDefinition head = modelPartData.addOrReplaceChild("head", CubeListBuilder.create().texOffs(24, 48).addBox(-4.0F, -1.0F, -4.0F, 8.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(44, 54).addBox(-4.0F, -6.0F, -4.0F, 1.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 43).addBox(-4.0F, -6.0F, 1.0F, 8.0F, 6.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 52).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 4.0F, 8.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 54).addBox(3.0F, -6.0F, -4.0F, 1.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 0.0F));
 
-        ModelPartData cube_r1 = head.addChild("cube_r1", ModelPartBuilder.create().uv(0, 38).cuboid(-4.0F, -5.0F, 0.0F, 8.0F, 5.0F, 0.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -6.0F, -4.0F, 0.2618F, 0.0F, 0.0F));
+        PartDefinition cube_r1 = head.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 38).addBox(-4.0F, -5.0F, 0.0F, 8.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -6.0F, -4.0F, 0.2618F, 0.0F, 0.0F));
 
-        ModelPartData eye = head.addChild("eye", ModelPartBuilder.create().uv(0, 32).cuboid(-2.0F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.5F, -3.5F, -2.5F));
+        PartDefinition eye = head.addOrReplaceChild("eye", CubeListBuilder.create().texOffs(0, 32).addBox(-2.0F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -3.5F, -2.5F));
 
-        ModelPartData body = modelPartData.addChild("body", ModelPartBuilder.create().uv(86, 47).cuboid(-6.0F, -2.0F, -4.0F, 12.0F, 8.0F, 9.0F, new Dilation(0.0F))
-                .uv(66, 44).cuboid(-6.0F, 4.0F, -5.0F, 12.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(66, 41).cuboid(-6.0F, -2.0F, -5.0F, 12.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(0, 27).cuboid(-6.0F, 0.0F, -5.0F, 4.0F, 4.0F, 1.0F, new Dilation(0.0F))
-                .uv(0, 27).mirrored().cuboid(2.0F, 0.0F, -5.0F, 4.0F, 4.0F, 1.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(0.0F, 6.0F, 0.0F));
+        PartDefinition body = modelPartData.addOrReplaceChild("body", CubeListBuilder.create().texOffs(86, 47).addBox(-6.0F, -2.0F, -4.0F, 12.0F, 8.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(66, 44).addBox(-6.0F, 4.0F, -5.0F, 12.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(66, 41).addBox(-6.0F, -2.0F, -5.0F, 12.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 27).addBox(-6.0F, 0.0F, -5.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 27).mirror().addBox(2.0F, 0.0F, -5.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 6.0F, 0.0F));
 
-        ModelPartData middleStone = body.addChild("middleStone", ModelPartBuilder.create().uv(92, 36).cuboid(-5.0F, -2.0F, -4.0F, 10.0F, 3.0F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 11.0F, 0.0F));
+        PartDefinition middleStone = body.addOrReplaceChild("middleStone", CubeListBuilder.create().texOffs(92, 36).addBox(-5.0F, -2.0F, -4.0F, 10.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 11.0F, 0.0F));
 
-        ModelPartData bottomStone = body.addChild("bottomStone", ModelPartBuilder.create().uv(104, 29).cuboid(-3.0F, -0.5F, -3.0F, 6.0F, 1.0F, 6.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 15.5F, 0.0F));
+        PartDefinition bottomStone = body.addOrReplaceChild("bottomStone", CubeListBuilder.create().texOffs(104, 29).addBox(-3.0F, -0.5F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 15.5F, 0.0F));
 
-        ModelPartData rightArm = modelPartData.addChild("rightArm", ModelPartBuilder.create().uv(96, 0).mirrored().cuboid(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.0F)).mirrored(false)
-                .uv(116, 0).mirrored().cuboid(-8.0F, -4.0F, 0.0F, 6.0F, 12.0F, 0.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(-10.0F, 8.0F, 0.0F));
+        PartDefinition rightArm = modelPartData.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(96, 0).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(116, 0).mirror().addBox(-8.0F, -4.0F, 0.0F, 6.0F, 12.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-10.0F, 8.0F, 0.0F));
 
-        ModelPartData leftArm = modelPartData.addChild("leftArm", ModelPartBuilder.create().uv(96, 0).cuboid(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.0F))
-                .uv(116, 0).cuboid(2.0F, -4.0F, 0.0F, 6.0F, 12.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(10.0F, 8.0F, 0.0F));
-        return TexturedModelData.of(modelData, 128, 64);
+        PartDefinition leftArm = modelPartData.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(96, 0).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(116, 0).addBox(2.0F, -4.0F, 0.0F, 6.0F, 12.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(10.0F, 8.0F, 0.0F));
+        return LayerDefinition.create(modelData, 128, 64);
     }
 
     @Override
-    public void setAngles(HarmonyWatcherEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.eye.yaw = netHeadYaw * (float) (Math.PI / 180.0);
-        this.animateMovement(entity.isAngry ? HarmonyWatcherAnimations.WALK_WHEN_ANGRY : HarmonyWatcherAnimations.WALK, limbSwing, limbSwingAmount, 3.0f, 3.0f);
-        this.updateAnimation(entity.fertilize, HarmonyWatcherAnimations.FERTILIZE, ageInTicks);
+    public void setupAnim(HarmonyWatcherEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.eye.yRot = netHeadYaw * (float) (Math.PI / 180.0);
+        this.animateWalk(entity.isAngry ? HarmonyWatcherAnimations.WALK_WHEN_ANGRY : HarmonyWatcherAnimations.WALK, limbSwing, limbSwingAmount, 3.0f, 3.0f);
+        this.animate(entity.fertilize, HarmonyWatcherAnimations.FERTILIZE, ageInTicks);
         if (ConfigEntries.doAdvancedDeathForMobs)
-            this.updateAnimation(entity.death, HarmonyWatcherAnimations.DEATH, ageInTicks);
+            this.animate(entity.death, HarmonyWatcherAnimations.DEATH, ageInTicks);
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         head.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         rightArm.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
@@ -82,16 +84,16 @@ public class HarmonyWatcherModel extends SinglePartEntityModel<HarmonyWatcherEnt
     }
 
     @Override
-    public ModelPart getPart() {
+    public ModelPart root() {
         return this.root;
     }
 
     @Override
-    public void setArmAngle(Arm arm, MatrixStack matrices) {
+    public void translateToHand(HumanoidArm arm, PoseStack matrices) {
         matrices.translate(0.0F, 0.0625F, 0.1875F);
-        matrices.multiply(RotationAxis.POSITIVE_X.rotation(this.leftArm.pitch));
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotation(this.leftArm.yaw));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotation(this.leftArm.roll));
+        matrices.mulPose(Axis.XP.rotation(this.leftArm.xRot));
+        matrices.mulPose(Axis.YP.rotation(this.leftArm.yRot));
+        matrices.mulPose(Axis.ZP.rotation(this.leftArm.zRot));
         matrices.scale(0.7F, 0.7F, 0.7F);
     }
 }

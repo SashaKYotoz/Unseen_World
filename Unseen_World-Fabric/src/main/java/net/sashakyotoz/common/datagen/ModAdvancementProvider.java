@@ -2,22 +2,15 @@ package net.sashakyotoz.common.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementFrame;
-import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.advancement.criterion.ChangedDimensionCriterion;
-import net.minecraft.advancement.criterion.OnKilledCriterion;
-import net.minecraft.advancement.criterion.TickCriterion;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.entity.EntityPredicate;
-import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.predicate.entity.LootContextPredicate;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
@@ -38,47 +31,47 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
         super(output);
     }
 
-    public static class BiomeCriterion extends AbstractCriterionConditions {
-        public RegistryKey<Biome> biome;
+    public static class BiomeCriterion extends AbstractCriterionTriggerInstance {
+        public ResourceKey<Biome> biome;
 
-        private BiomeCriterion(RegistryKey<Biome> biome, int min, int max) {
-            super(Identifier.of("minecraft", "location"),
-                    LootContextPredicate.create(LocationCheckLootCondition.builder(
-                            LocationPredicate.Builder.create().biome(biome).y(NumberRange.FloatRange.between(min, max))).build()));
+        private BiomeCriterion(ResourceKey<Biome> biome, int min, int max) {
+            super(ResourceLocation.tryBuild("minecraft", "location"),
+                    ContextAwarePredicate.create(LocationCheck.checkLocation(
+                            LocationPredicate.Builder.location().setBiome(biome).setY(MinMaxBounds.Doubles.between(min, max))).build()));
         }
 
-        public static BiomeCriterion of(RegistryKey<Biome> biome) {
+        public static BiomeCriterion of(ResourceKey<Biome> biome) {
             return BiomeCriterion.of(biome, 0, 256);
         }
 
-        public static BiomeCriterion of(RegistryKey<Biome> biome, int min, int max) {
+        public static BiomeCriterion of(ResourceKey<Biome> biome, int min, int max) {
             return new BiomeCriterion(biome, min, max);
         }
     }
 
     @Override
     public void generateAdvancement(Consumer<Advancement> consumer) {
-        Advancement INTO_THE_CHIMERIC_DARKNESS = Advancement.Builder.create()
+        Advancement INTO_THE_CHIMERIC_DARKNESS = Advancement.Builder.advancement()
                 .display(ModItems.ECLIPSE_KEYSTONE,
-                        Text.translatable(BASE + "into_the_chimeric_darkness"),
-                        Text.translatable(BASE + "into_the_chimeric_darkness" + DESC),
+                        Component.translatable(BASE + "into_the_chimeric_darkness"),
+                        Component.translatable(BASE + "into_the_chimeric_darkness" + DESC),
                         UnseenWorld.makeID("textures/environment/advancements_frame.png"),
-                        AdvancementFrame.TASK,
+                        FrameType.TASK,
                         true, true, false)
-                .criterion("entered_the_chimeric_darkness", ChangedDimensionCriterion.Conditions.to(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
-                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:into_the_chimeric_darkness");
-        Advancement INTO_THE_HEART_OF_DARKNESS = Advancement.Builder.create()
+                .addCriterion("entered_the_chimeric_darkness", ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
+                .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:into_the_chimeric_darkness");
+        Advancement INTO_THE_HEART_OF_DARKNESS = Advancement.Builder.advancement()
                 .display(ModBlocks.KEY_HANDLER_STONE,
-                        Text.translatable(BASE + "into_the_heart_of_darkness"),
-                        Text.translatable(BASE + "into_the_heart_of_darkness" + DESC),
+                        Component.translatable(BASE + "into_the_heart_of_darkness"),
+                        Component.translatable(BASE + "into_the_heart_of_darkness" + DESC),
                         null,
-                        AdvancementFrame.GOAL,
+                        FrameType.GOAL,
                         true, true, false)
                 .parent(INTO_THE_CHIMERIC_DARKNESS)
-                .criterion("entered_the_darkness", BiomeCriterion.of(ModBiomes.THE_DARKNESS))
-                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:into_the_heart_of_darkness");
+                .addCriterion("entered_the_darkness", BiomeCriterion.of(ModBiomes.THE_DARKNESS))
+                .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:into_the_heart_of_darkness");
         Advancement EXPLORE_CHIMERIC_DARKNESS = requireListedBiomesVisited(
-                Advancement.Builder.create(), List.of(
+                Advancement.Builder.advancement(), List.of(
                         ModBiomes.THE_DARKNESS,
                         ModBiomes.AMETHYST_FOREST,
                         ModBiomes.CRIMSONVEIL_WOODS,
@@ -107,68 +100,68 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 )
         )
                 .display(ModItems.RED_TITANIUM_BOOTS,
-                        Text.translatable(BASE + "explore_chimeric_darkness"),
-                        Text.translatable(BASE + "explore_chimeric_darkness" + DESC),
+                        Component.translatable(BASE + "explore_chimeric_darkness"),
+                        Component.translatable(BASE + "explore_chimeric_darkness" + DESC),
                         null,
-                        AdvancementFrame.CHALLENGE,
+                        FrameType.CHALLENGE,
                         true, true, false)
                 .parent(INTO_THE_HEART_OF_DARKNESS)
-                .rewards(AdvancementRewards.Builder.experience(500)).build(consumer, "unseen_world:explore_chimeric_darkness");
-        Advancement CURE_GRIPCRYSTAL_ENTITY = Advancement.Builder.create()
+                .rewards(AdvancementRewards.Builder.experience(500)).save(consumer, "unseen_world:explore_chimeric_darkness");
+        Advancement CURE_GRIPCRYSTAL_ENTITY = Advancement.Builder.advancement()
                 .display(ModItems.GRIPTONITE,
-                        Text.translatable(BASE + "cure_gripcrystal_entity"),
-                        Text.translatable(BASE + "cure_gripcrystal_entity" + DESC),
+                        Component.translatable(BASE + "cure_gripcrystal_entity"),
+                        Component.translatable(BASE + "cure_gripcrystal_entity" + DESC),
                         null,
-                        AdvancementFrame.GOAL,
+                        FrameType.GOAL,
                         true, true, false)
                 .parent(INTO_THE_CHIMERIC_DARKNESS)
-                .criterion("cure_gripcrystal_entity", CuredGripcrystalEntityCriterion.Conditions.any())
-                .rewards(AdvancementRewards.Builder.experience(250)).build(consumer, "unseen_world:cure_gripcrystal_entity");
-        Advancement FORTRESS_IN_THE_DARKNESS = Advancement.Builder.create()
+                .addCriterion("cure_gripcrystal_entity", CuredGripcrystalEntityCriterion.Conditions.any())
+                .rewards(AdvancementRewards.Builder.experience(250)).save(consumer, "unseen_world:cure_gripcrystal_entity");
+        Advancement FORTRESS_IN_THE_DARKNESS = Advancement.Builder.advancement()
                 .display(ModItems.GRIPCRYSTAL_KEY,
-                        Text.translatable(BASE + "fortress_in_the_darkness"),
-                        Text.translatable(BASE + "fortress_in_the_darkness" + DESC),
+                        Component.translatable(BASE + "fortress_in_the_darkness"),
+                        Component.translatable(BASE + "fortress_in_the_darkness" + DESC),
                         null,
-                        AdvancementFrame.TASK,
+                        FrameType.TASK,
                         true, true, false)
                 .parent(INTO_THE_CHIMERIC_DARKNESS)
-                .criterion("fortress_in_the_darkness", TickCriterion.Conditions.createLocation(LocationPredicate.feature(ModRegistry.WARRIOR_OF_DARKNESS_TOWER)))
-                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:fortress_in_the_darkness");
-        Advancement VAULT_OF_ECLIPSE = Advancement.Builder.create()
+                .addCriterion("fortress_in_the_darkness", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(ModRegistry.WARRIOR_OF_DARKNESS_TOWER)))
+                .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:fortress_in_the_darkness");
+        Advancement VAULT_OF_ECLIPSE = Advancement.Builder.advancement()
                 .display(ModItems.ABYSSAL_KEY,
-                        Text.translatable(BASE + "vault_of_eclipse"),
-                        Text.translatable(BASE + "vault_of_eclipse" + DESC),
+                        Component.translatable(BASE + "vault_of_eclipse"),
+                        Component.translatable(BASE + "vault_of_eclipse" + DESC),
                         null,
-                        AdvancementFrame.TASK,
+                        FrameType.TASK,
                         true, true, false)
                 .parent(INTO_THE_CHIMERIC_DARKNESS)
-                .criterion("vault_of_eclipse", TickCriterion.Conditions.createLocation(LocationPredicate.feature(ModRegistry.ECLIPSE_CORE)))
-                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:vault_of_eclipse");
-        Advancement WHISPERS_OF_THE_LIGHT = Advancement.Builder.create()
+                .addCriterion("vault_of_eclipse", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(ModRegistry.ECLIPSE_CORE)))
+                .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:vault_of_eclipse");
+        Advancement WHISPERS_OF_THE_LIGHT = Advancement.Builder.advancement()
                 .display(ModItems.CHIMERIC_ROCKBREAKER_HAMMER,
-                        Text.translatable(BASE + "whispers_of_the_light"),
-                        Text.translatable(BASE + "whispers_of_the_light" + DESC),
+                        Component.translatable(BASE + "whispers_of_the_light"),
+                        Component.translatable(BASE + "whispers_of_the_light" + DESC),
                         null,
-                        AdvancementFrame.CHALLENGE,
+                        FrameType.CHALLENGE,
                         true, true, false)
                 .parent(FORTRESS_IN_THE_DARKNESS)
-                .criterion("whispers_of_the_light", OnKilledCriterion.Conditions.createPlayerKilledEntity(EntityPredicate.Builder.create().type(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS)))
-                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:whispers_of_the_light");
-        Advancement QUENCHED_SUN = Advancement.Builder.create()
+                .addCriterion("whispers_of_the_light", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS)))
+                .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:whispers_of_the_light");
+        Advancement QUENCHED_SUN = Advancement.Builder.advancement()
                 .display(ModItems.ECLIPSEBANE,
-                        Text.translatable(BASE + "quenched_sun"),
-                        Text.translatable(BASE + "quenched_sun" + DESC),
+                        Component.translatable(BASE + "quenched_sun"),
+                        Component.translatable(BASE + "quenched_sun" + DESC),
                         null,
-                        AdvancementFrame.CHALLENGE,
+                        FrameType.CHALLENGE,
                         true, true, false)
                 .parent(VAULT_OF_ECLIPSE)
-                .criterion("quenched_sun", OnKilledCriterion.Conditions.createPlayerKilledEntity(EntityPredicate.Builder.create().type(ModEntities.ECLIPSE_SENTINEL)))
-                .rewards(AdvancementRewards.NONE).build(consumer, "unseen_world:quenched_sun");
+                .addCriterion("quenched_sun", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(ModEntities.ECLIPSE_SENTINEL)))
+                .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:quenched_sun");
     }
 
-    private static Advancement.Builder requireListedBiomesVisited(Advancement.Builder builder, List<RegistryKey<Biome>> biomes) {
-        for (RegistryKey<Biome> registryKey : biomes) {
-            builder.criterion(registryKey.getValue().toString(), TickCriterion.Conditions.createLocation(LocationPredicate.biome(registryKey)));
+    private static Advancement.Builder requireListedBiomesVisited(Advancement.Builder builder, List<ResourceKey<Biome>> biomes) {
+        for (ResourceKey<Biome> registryKey : biomes) {
+            builder.addCriterion(registryKey.location().toString(), PlayerTrigger.TriggerInstance.located(LocationPredicate.inBiome(registryKey)));
         }
 
         return builder;

@@ -1,31 +1,31 @@
 package net.sashakyotoz.common.datagen.recipes;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.sashakyotoz.common.ModRegistry;
 
-public class WarriorShieldDecorationRecipe extends SpecialCraftingRecipe {
-    public WarriorShieldDecorationRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
+public class WarriorShieldDecorationRecipe extends CustomRecipe {
+    public WarriorShieldDecorationRecipe(ResourceLocation identifier, CraftingBookCategory craftingRecipeCategory) {
         super(identifier, craftingRecipeCategory);
     }
 
-    public boolean matches(RecipeInputInventory recipeInputInventory, World world) {
+    public boolean matches(CraftingContainer recipeInputInventory, Level world) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 
-        for (int i = 0; i < recipeInputInventory.size(); i++) {
-            ItemStack itemStack3 = recipeInputInventory.getStack(i);
+        for (int i = 0; i < recipeInputInventory.getContainerSize(); i++) {
+            ItemStack itemStack3 = recipeInputInventory.getItem(i);
             if (!itemStack3.isEmpty()) {
                 if (itemStack3.getItem() instanceof BannerItem) {
                     if (!itemStack2.isEmpty())
@@ -33,13 +33,13 @@ public class WarriorShieldDecorationRecipe extends SpecialCraftingRecipe {
 
                     itemStack2 = itemStack3;
                 } else {
-                    if (!itemStack3.isIn(ConventionalItemTags.SHIELDS))
+                    if (!itemStack3.is(ConventionalItemTags.SHIELDS))
                         return false;
 
                     if (!itemStack.isEmpty())
                         return false;
 
-                    if (BlockItem.getBlockEntityNbt(itemStack3) != null)
+                    if (BlockItem.getBlockEntityData(itemStack3) != null)
                         return false;
 
                     itemStack = itemStack3;
@@ -50,16 +50,17 @@ public class WarriorShieldDecorationRecipe extends SpecialCraftingRecipe {
         return !itemStack.isEmpty() && !itemStack2.isEmpty();
     }
 
-    public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager dynamicRegistryManager) {
+    @Override
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack itemStack = ItemStack.EMPTY;
         ItemStack itemStack2 = ItemStack.EMPTY;
 
-        for (int i = 0; i < recipeInputInventory.size(); i++) {
-            ItemStack itemStack3 = recipeInputInventory.getStack(i);
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            ItemStack itemStack3 = container.getItem(i);
             if (!itemStack3.isEmpty()) {
                 if (itemStack3.getItem() instanceof BannerItem)
                     itemStack = itemStack3;
-                else if (itemStack3.isIn(ConventionalItemTags.SHIELDS))
+                else if (itemStack3.is(ConventionalItemTags.SHIELDS))
                     itemStack2 = itemStack3.copy();
             }
         }
@@ -67,16 +68,16 @@ public class WarriorShieldDecorationRecipe extends SpecialCraftingRecipe {
         if (itemStack2.isEmpty()) {
             return itemStack2;
         } else {
-            NbtCompound nbtCompound = BlockItem.getBlockEntityNbt(itemStack);
-            NbtCompound nbtCompound2 = nbtCompound == null ? new NbtCompound() : nbtCompound.copy();
+            CompoundTag nbtCompound = BlockItem.getBlockEntityData(itemStack);
+            CompoundTag nbtCompound2 = nbtCompound == null ? new CompoundTag() : nbtCompound.copy();
             nbtCompound2.putInt("Base", ((BannerItem) itemStack.getItem()).getColor().getId());
-            BlockItem.setBlockEntityNbt(itemStack2, BlockEntityType.BANNER, nbtCompound2);
+            BlockItem.setBlockEntityData(itemStack2, BlockEntityType.BANNER, nbtCompound2);
             return itemStack2;
         }
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 

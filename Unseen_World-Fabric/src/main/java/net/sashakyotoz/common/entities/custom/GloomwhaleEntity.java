@@ -1,39 +1,39 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.GuardianEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.sashakyotoz.common.entities.custom.basic.WhaleEntity;
 
 public class GloomwhaleEntity extends WhaleEntity {
 
-    public GloomwhaleEntity(EntityType<? extends WhaleEntity> entityType, World world) {
+    public GloomwhaleEntity(EntityType<? extends WhaleEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected void initGoals() {
-        super.initGoals();
-        this.goalSelector.add(1, new MeleeAttackGoal(this, 1.2F, true));
-        this.targetSelector.add(1, new RevengeGoal(this, PlayerEntity.class).setGroupRevenge());
-        this.targetSelector.add(2, new RevengeGoal(this, GuardianEntity.class).setGroupRevenge());
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, ShimmerEntity.class, true));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2F, true));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, Player.class).setAlertOthers());
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this, Guardian.class).setAlertOthers());
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, ShimmerEntity.class, true));
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 80)
-                .add(EntityAttributes.GENERIC_ARMOR, 10)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 2)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 6)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 80)
+                .add(Attributes.ARMOR, 10)
+                .add(Attributes.ARMOR_TOUGHNESS, 2)
+                .add(Attributes.ATTACK_DAMAGE, 6)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1)
+                .add(Attributes.MOVEMENT_SPEED, 0.5);
     }
 }

@@ -1,71 +1,71 @@
 package net.sashakyotoz.client.renderers.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.DoubleBlockProperties;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.block.entity.ChestBlockEntityRenderer;
-import net.minecraft.client.render.block.entity.LightmapCoordinatesRetriever;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BrightnessCombiner;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.sashakyotoz.common.blocks.custom.chests.ModChestBlock;
 import net.sashakyotoz.common.blocks.custom.chests.entities.ModChestBlockEntity;
 
-public class ModChestRenderer<T extends ModChestBlockEntity> extends ChestBlockEntityRenderer<T> {
+public class ModChestRenderer<T extends ModChestBlockEntity> extends ChestRenderer<T> {
 
     private final ModelPart chestBottom;
     private final ModelPart chestLid;
     private final ModelPart chestLock;
 
-    public ModChestRenderer(BlockEntityRendererFactory.Context context) {
+    public ModChestRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
-        ModelPart modelPart = context.getLayerModelPart(EntityModelLayers.CHEST);
+        ModelPart modelPart = context.bakeLayer(ModelLayers.CHEST);
         this.chestBottom = modelPart.getChild("bottom");
         this.chestLid = modelPart.getChild("lid");
         this.chestLock = modelPart.getChild("lock");
     }
 
     @Override
-    public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        World world = entity.getWorld();
-        BlockState blockState = world != null ? entity.getCachedState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
+    public void render(T entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        Level world = entity.getLevel();
+        BlockState blockState = world != null ? entity.getBlockState() : Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
         if (blockState.getBlock() instanceof ModChestBlock chest) {
-            matrices.push();
-            float f = blockState.get(ChestBlock.FACING).asRotation();
+            matrices.pushPose();
+            float f = blockState.getValue(ChestBlock.FACING).toYRot();
             matrices.translate(0.5F, 0.5F, 0.5F);
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-f));
+            matrices.mulPose(Axis.YP.rotationDegrees(-f));
             matrices.translate(-0.5F, -0.5F, -0.5F);
-            DoubleBlockProperties.PropertySource<? extends ChestBlockEntity> propertySource;
+            DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> propertySource;
             if (world != null)
-                propertySource = chest.getBlockEntitySource(blockState, world, entity.getPos(), true);
+                propertySource = chest.combine(blockState, world, entity.getBlockPos(), true);
             else
-                propertySource = DoubleBlockProperties.PropertyRetriever::getFallback;
-            float g = propertySource.apply(ChestBlock.getAnimationProgressRetriever(entity)).get(tickDelta);
+                propertySource = DoubleBlockCombiner.Combiner::acceptNone;
+            float g = propertySource.apply(ChestBlock.opennessCombiner(entity)).get(tickDelta);
             g = 1.0F - g;
             g = 1.0F - g * g * g;
-            int i = propertySource.apply(new LightmapCoordinatesRetriever<>()).applyAsInt(light);
-            SpriteIdentifier spriteIdentifier = new SpriteIdentifier(TexturedRenderLayers.CHEST_ATLAS_TEXTURE, chest.getType().texture);
-            VertexConsumer vertexConsumer = spriteIdentifier.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
+            int i = propertySource.apply(new BrightnessCombiner<>()).applyAsInt(light);
+            Material spriteIdentifier = new Material(Sheets.CHEST_SHEET, chest.getType().texture);
+            VertexConsumer vertexConsumer = spriteIdentifier.buffer(vertexConsumers, RenderType::entityCutout);
             this.render(matrices, vertexConsumer, this.chestLock, this.chestLid, this.chestBottom, g, i, overlay);
 
-            matrices.pop();
+            matrices.popPose();
         }
     }
 
-    private void render(MatrixStack matrices, VertexConsumer vertices, ModelPart lock, ModelPart lid, ModelPart base, float openFactor, int light, int overlay) {
-        lid.pitch = -(openFactor * (float) (Math.PI / 2));
-        lock.pitch = lid.pitch;
+    private void render(PoseStack matrices, VertexConsumer vertices, ModelPart lock, ModelPart lid, ModelPart base, float openFactor, int light, int overlay) {
+        lid.xRot = -(openFactor * (float) (Math.PI / 2));
+        lock.xRot = lid.xRot;
         lid.render(matrices, vertices, light, overlay);
         lock.render(matrices, vertices, light, overlay);
         base.render(matrices, vertices, light, overlay);

@@ -1,9 +1,9 @@
 package net.sashakyotoz.common;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.sashakyotoz.UnseenWorld;
 
 public class ModSoundEvents {
@@ -19,8 +19,8 @@ public class ModSoundEvents {
 
 
     private static SoundEvent registerSoundEvent(String name) {
-        Identifier id = UnseenWorld.makeID(name);
-        return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
+        ResourceLocation id = UnseenWorld.makeID(name);
+        return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
     }
 
     public static void registerSounds() {

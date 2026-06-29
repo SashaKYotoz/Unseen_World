@@ -1,60 +1,55 @@
 package net.sashakyotoz.common.datagen.advancements;
 
 import com.google.gson.JsonObject;
-import net.minecraft.advancement.criterion.AbstractCriterion;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
-import net.minecraft.predicate.entity.EntityPredicate;
-import net.minecraft.predicate.entity.LootContextPredicate;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
 
-public class CuredGripcrystalEntityCriterion extends AbstractCriterion<CuredGripcrystalEntityCriterion.Conditions> {
-    static final Identifier ID = new Identifier("cured_gripcrystal_entity");
+public class CuredGripcrystalEntityCriterion extends SimpleCriterionTrigger<CuredGripcrystalEntityCriterion.Conditions> {
+    static final ResourceLocation ID = new ResourceLocation("cured_gripcrystal_entity");
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return ID;
     }
 
-    public CuredGripcrystalEntityCriterion.Conditions conditionsFromJson(
-            JsonObject jsonObject, LootContextPredicate lootContextPredicate, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer
+    public CuredGripcrystalEntityCriterion.Conditions createInstance(
+            JsonObject jsonObject, ContextAwarePredicate lootContextPredicate, DeserializationContext advancementEntityPredicateDeserializer
     ) {
-        LootContextPredicate lootContextPredicate2 = EntityPredicate.contextPredicateFromJson(jsonObject, "gripcrystalled", advancementEntityPredicateDeserializer);
-        LootContextPredicate lootContextPredicate3 = EntityPredicate.contextPredicateFromJson(jsonObject, "entity", advancementEntityPredicateDeserializer);
+        ContextAwarePredicate lootContextPredicate2 = EntityPredicate.fromJson(jsonObject, "gripcrystalled", advancementEntityPredicateDeserializer);
+        ContextAwarePredicate lootContextPredicate3 = EntityPredicate.fromJson(jsonObject, "entity", advancementEntityPredicateDeserializer);
         return new CuredGripcrystalEntityCriterion.Conditions(lootContextPredicate, lootContextPredicate2, lootContextPredicate3);
     }
 
-    public void trigger(ServerPlayerEntity player, LivingEntity sickEntity, LivingEntity entity) {
-        LootContext lootContext = EntityPredicate.createAdvancementEntityLootContext(player, sickEntity);
-        LootContext lootContext2 = EntityPredicate.createAdvancementEntityLootContext(player, entity);
+    public void trigger(ServerPlayer player, LivingEntity sickEntity, LivingEntity entity) {
+        LootContext lootContext = EntityPredicate.createContext(player, sickEntity);
+        LootContext lootContext2 = EntityPredicate.createContext(player, entity);
         this.trigger(player, conditions -> conditions.matches(lootContext, lootContext2));
     }
 
-    public static class Conditions extends AbstractCriterionConditions {
-        private final LootContextPredicate gripcrystalled;
-        private final LootContextPredicate entity;
+    public static class Conditions extends AbstractCriterionTriggerInstance {
+        private final ContextAwarePredicate gripcrystalled;
+        private final ContextAwarePredicate entity;
 
-        public Conditions(LootContextPredicate player, LootContextPredicate gripcrystalled, LootContextPredicate entity) {
+        public Conditions(ContextAwarePredicate player, ContextAwarePredicate gripcrystalled, ContextAwarePredicate entity) {
             super(CuredGripcrystalEntityCriterion.ID, player);
             this.gripcrystalled = gripcrystalled;
             this.entity = entity;
         }
 
         public static CuredGripcrystalEntityCriterion.Conditions any() {
-            return new CuredGripcrystalEntityCriterion.Conditions(LootContextPredicate.EMPTY, LootContextPredicate.EMPTY, LootContextPredicate.EMPTY);
+            return new CuredGripcrystalEntityCriterion.Conditions(ContextAwarePredicate.ANY, ContextAwarePredicate.ANY, ContextAwarePredicate.ANY);
         }
 
         public boolean matches(LootContext zombieContext, LootContext villagerContext) {
-            return this.gripcrystalled.test(zombieContext) && this.entity.test(villagerContext);
+            return this.gripcrystalled.matches(zombieContext) && this.entity.matches(villagerContext);
         }
 
         @Override
-        public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
-            JsonObject jsonObject = super.toJson(predicateSerializer);
+        public JsonObject serializeToJson(SerializationContext predicateSerializer) {
+            JsonObject jsonObject = super.serializeToJson(predicateSerializer);
             jsonObject.add("gripcrystalled", this.gripcrystalled.toJson(predicateSerializer));
             jsonObject.add("entity", this.entity.toJson(predicateSerializer));
             return jsonObject;

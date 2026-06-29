@@ -1,29 +1,29 @@
 package net.sashakyotoz.mixin.client;
 
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.sashakyotoz.common.items.custom.ChimericRockbreakerHammerItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HeldItemRenderer.class)
+@Mixin(ItemInHandRenderer.class)
 public abstract class HeldItemRendererMixin {
 
-    @Inject(method = "renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+    @Inject(method = "renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At("HEAD"))
-    private void renderItem(LivingEntity entity, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (stack.getItem() instanceof ChimericRockbreakerHammerItem && stack.isOf(entity.getActiveItem().getItem())) {
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotation(MathHelper.sin(entity.getItemUseTime() % 60)));
-            matrices.multiply(RotationAxis.POSITIVE_X.rotation(MathHelper.sin(entity.getItemUseTime() % 135)));
+    private void renderItem(LivingEntity entity, ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource vertexConsumers, int light, CallbackInfo ci) {
+        if (stack.getItem() instanceof ChimericRockbreakerHammerItem && stack.is(entity.getUseItem().getItem())) {
+            matrices.mulPose(Axis.YP.rotationDegrees(90));
+            matrices.mulPose(Axis.ZP.rotation(Mth.sin(entity.getTicksUsingItem() % 60)));
+            matrices.mulPose(Axis.XP.rotation(Mth.sin(entity.getTicksUsingItem() % 135)));
         }
     }
 }

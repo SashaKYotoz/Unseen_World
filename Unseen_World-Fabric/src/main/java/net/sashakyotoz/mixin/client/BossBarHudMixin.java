@@ -1,10 +1,10 @@
 package net.sashakyotoz.mixin.client;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.BossBarHud;
-import net.minecraft.client.gui.hud.ClientBossBar;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.BossHealthOverlay;
+import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.sashakyotoz.client.gui.BossBarHudHooks;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,17 +16,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 import java.util.UUID;
 
-@Mixin(BossBarHud.class)
+@Mixin(BossHealthOverlay.class)
 public class BossBarHudMixin {
     @Final
     @Shadow
-    private MinecraftClient client;
+    private Minecraft minecraft;
     @Final
     @Shadow
-    final Map<UUID, ClientBossBar> bossBars = Maps.newLinkedHashMap();
+    final Map<UUID, LerpingBossEvent> events = Maps.newLinkedHashMap();
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void renderBossBar(DrawContext context, CallbackInfo ci) {
-        BossBarHudHooks.render(client, bossBars, context);
+    private void renderBossBar(GuiGraphics context, CallbackInfo ci) {
+        BossBarHudHooks.render(minecraft, events, context);
     }
 }

@@ -1,12 +1,12 @@
 package net.sashakyotoz.common.world.features.custom;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.sashakyotoz.common.world.features.custom.configs.BoulderFeatureConfig;
 
 import java.util.ArrayList;
@@ -20,18 +20,18 @@ public class BoulderFeature extends Feature<BoulderFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<BoulderFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos origin = context.getOrigin();
-        Random random = context.getRandom();
-        BoulderFeatureConfig config = context.getConfig();
+    public boolean place(FeaturePlaceContext<BoulderFeatureConfig> context) {
+        WorldGenLevel world = context.level();
+        BlockPos origin = context.origin();
+        RandomSource random = context.random();
+        BoulderFeatureConfig config = context.config();
 
         List<BlockPos> toPlace = new ArrayList<>();
 
-        BlockPos pos = origin.mutableCopy();
-        int size = config.size().get(random);
-        Direction primary = Direction.fromHorizontal(random.nextInt(4));
-        Direction secondary = random.nextBoolean() ? primary.rotateYClockwise() : primary.rotateYCounterclockwise();
+        BlockPos pos = origin.mutable();
+        int size = config.size().sample(random);
+        Direction primary = Direction.from2DDataValue(random.nextInt(4));
+        Direction secondary = random.nextBoolean() ? primary.getClockWise() : primary.getCounterClockWise();
 
         this.spike(toPlace, pos, 1);
         pos = this.move(pos, primary, secondary, random, world);
@@ -42,22 +42,22 @@ public class BoulderFeature extends Feature<BoulderFeatureConfig> {
         this.spike(toPlace, pos, 1);
 
         for (BlockPos place : toPlace)
-            this.setBlockStateIf(world, place, config.block().get(random, place), block -> block.isTransparent(world, place));
+            this.safeSetBlock(world, place, config.block().getState(random, place), block -> block.propagatesSkylightDown(world, place));
 
         return true;
     }
 
-    public BlockPos move(BlockPos pos, Direction primary, Direction secondary, Random random, StructureWorldAccess world) {
-        pos = pos.offset(primary);
+    public BlockPos move(BlockPos pos, Direction primary, Direction secondary, RandomSource random, WorldGenLevel world) {
+        pos = pos.relative(primary);
 
-        if (random.nextInt(4) == 0) pos = pos.offset(primary.rotateYClockwise());
-        else if (random.nextInt(4) == 0) pos = pos.offset(primary.rotateYCounterclockwise());
-        else if (random.nextInt(4) == 0) pos = pos.offset(secondary);
+        if (random.nextInt(4) == 0) pos = pos.relative(primary.getClockWise());
+        else if (random.nextInt(4) == 0) pos = pos.relative(primary.getCounterClockWise());
+        else if (random.nextInt(4) == 0) pos = pos.relative(secondary);
 
-        if (!world.getBlockState(pos).isTransparent(world, pos))
-            pos = pos.up();
-        if (world.getBlockState(pos.down()).isTransparent(world, pos))
-            pos = pos.down();
+        if (!world.getBlockState(pos).propagatesSkylightDown(world, pos))
+            pos = pos.above();
+        if (world.getBlockState(pos.below()).propagatesSkylightDown(world, pos))
+            pos = pos.below();
 
         return pos;
     }
@@ -65,12 +65,12 @@ public class BoulderFeature extends Feature<BoulderFeatureConfig> {
     public void spike(List<BlockPos> world, BlockPos pos, int layer) {
         if (layer <= 0) {
             world.add(pos);
-            world.add(pos.up());
-            world.add(pos.down());
+            world.add(pos.above());
+            world.add(pos.below());
             return;
         }
 
         for (Direction dir : Direction.values())
-            this.spike(world, pos.offset(dir), layer - 1);
+            this.spike(world, pos.relative(dir), layer - 1);
     }
 }

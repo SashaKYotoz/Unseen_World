@@ -1,7 +1,7 @@
 package net.sashakyotoz.client.renderers.bosses;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.models.WarriorOfChimericDarknessModel;
 import net.sashakyotoz.client.renderers.DeathFixedMobRenderer;
@@ -10,18 +10,18 @@ import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
 
 public class WarriorOfChimericDarknessRenderer extends DeathFixedMobRenderer<WarriorOfChimericDarkness, WarriorOfChimericDarknessModel> {
 
-    public WarriorOfChimericDarknessRenderer(EntityRendererFactory.Context context) {
-        super(context, new WarriorOfChimericDarknessModel(context.getPart(WarriorOfChimericDarknessModel.WARRIOR_OF_CHIMERIC_DARKNESS)), 0.5f);
-        this.addFeature(new WarriorOfDarknessEroflameLayer<>(this));
+    public WarriorOfChimericDarknessRenderer(EntityRendererProvider.Context context) {
+        super(context, new WarriorOfChimericDarknessModel(context.bakeLayer(WarriorOfChimericDarknessModel.WARRIOR_OF_CHIMERIC_DARKNESS)), 0.5f);
+        this.addLayer(new WarriorOfDarknessEroflameLayer<>(this));
     }
 
     @Override
     protected boolean isShaking(WarriorOfChimericDarkness entity) {
-        return entity.isDead();
+        return entity.isDeadOrDying();
     }
 
     @Override
-    public Identifier getTexture(WarriorOfChimericDarkness entity) {
+    public ResourceLocation getTextureLocation(WarriorOfChimericDarkness entity) {
         return UnseenWorld.makeID("textures/entity/warrior_of_darkness/warrior_of_chimeric_darkness.png");
     }
 }

@@ -2,25 +2,25 @@ package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.feature.TreeFeature;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.foliage.BlobFoliagePlacer;
-import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.foliage.FoliagePlacerType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.material.Fluids;
 import net.sashakyotoz.common.blocks.custom.plants.LeafDroppingLeaveBlock;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 import org.jetbrains.annotations.NotNull;
 
 public class HangingBlobFoliagePlacer extends BlobFoliagePlacer {
     public static final Codec<HangingBlobFoliagePlacer> CODEC = RecordCodecBuilder.create(
-            instance -> createCodec(instance)
+            instance -> blobParts(instance)
                     .and(Codec.floatRange(0F, 1F).fieldOf("hanging_leaves_chance").forGetter(foliagePlacer -> foliagePlacer.hangingLeavesChance))
                     .and(Codec.floatRange(0F, 1F).fieldOf("hanging_leaves_extension_chance").forGetter(foliagePlacer -> foliagePlacer.hangingLeavesExtensionChance))
                     .apply(instance, HangingBlobFoliagePlacer::new)
@@ -41,80 +41,80 @@ public class HangingBlobFoliagePlacer extends BlobFoliagePlacer {
     }
 
     @Override
-    protected @NotNull FoliagePlacerType<?> getType() {
+    protected @NotNull FoliagePlacerType<?> type() {
         return ModTreePlacerTypes.HANGING_BLOB_FOLIAGE_PLACER;
     }
 
     @Override
-    protected void generate(
-            TestableWorld world,
-            BlockPlacer placer,
-            Random random,
-            TreeFeatureConfig config,
+    protected void createFoliage(
+            LevelSimulatedReader world,
+            FoliageSetter placer,
+            RandomSource random,
+            TreeConfiguration config,
             int trunkHeight,
-            TreeNode treeNode,
+            FoliageAttachment treeNode,
             int j,
             int k,
             int l
     ) {
         for (int yOffset = l; yOffset >= l - j; yOffset--) {
-            int n = k + treeNode.getFoliageRadius() - 1 - yOffset;
+            int n = k + treeNode.radiusOffset() - 1 - yOffset;
             if (yOffset <= l - j) {
-                this.generateSquareWithHangingLeaves(
+                this.placeLeavesRowWithHangingLeavesBelow(
                         world,
                         placer,
                         random,
                         config,
-                        treeNode.getCenter(),
+                        treeNode.pos(),
                         n,
                         yOffset,
-                        treeNode.isGiantTrunk(),
+                        treeNode.doubleTrunk(),
                         this.hangingLeavesChance,
                         this.hangingLeavesExtensionChance
                 );
             } else {
-                this.generateSquare(
+                this.placeLeavesRow(
                         world,
                         placer,
                         random,
                         config,
-                        treeNode.getCenter(),
+                        treeNode.pos(),
                         n,
                         yOffset,
-                        treeNode.isGiantTrunk()
+                        treeNode.doubleTrunk()
                 );
             }
         }
     }
     @Override
-    public void generateSquare(
-            TestableWorld world, FoliagePlacer.BlockPlacer placer, Random random, TreeFeatureConfig config, BlockPos centerPos, int radius, int y, boolean giantTrunk
+    public void placeLeavesRow(
+            LevelSimulatedReader world, FoliagePlacer.FoliageSetter placer, RandomSource random, TreeConfiguration config, BlockPos centerPos, int radius, int y, boolean giantTrunk
     ) {
         int i = giantTrunk ? 1 : 0;
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         for (int j = -radius; j <= radius + i; j++) {
             for (int k = -radius; k <= radius + i; k++) {
-                if (!this.isPositionInvalid(random, j, y, k, radius, giantTrunk)) {
-                    mutable.set(centerPos, j, y, k);
+                if (!this.shouldSkipLocationSigned(random, j, y, k, radius, giantTrunk)) {
+                    mutable.setWithOffset(centerPos, j, y, k);
                     placeOvergrownFoliageBlock(world, placer, random, config, mutable);
                 }
             }
         }
     }
 
-    protected static void placeOvergrownFoliageBlock(TestableWorld world, BlockPlacer placer, Random random, TreeFeatureConfig config, BlockPos pos) {
-        if (TreeFeature.canReplace(world, pos)) {
-            BlockState blockState = config.foliageProvider.get(random, pos);
-            if (blockState.contains(Properties.WATERLOGGED))
-                blockState = blockState.with(Properties.WATERLOGGED, world.testFluidState(pos, fluidState -> fluidState.isEqualAndStill(Fluids.WATER)));
-            if (blockState.contains(LeafDroppingLeaveBlock.OVERGROWN))
-                blockState = blockState.with(LeafDroppingLeaveBlock.OVERGROWN, random.nextBoolean());
-            placer.placeBlock(pos, blockState);
+    protected static void placeOvergrownFoliageBlock(LevelSimulatedReader world, FoliageSetter placer, RandomSource random, TreeConfiguration config, BlockPos pos) {
+        if (TreeFeature.validTreePos(world, pos)) {
+            BlockState blockState = config.foliageProvider.getState(random, pos);
+            if (blockState.hasProperty(BlockStateProperties.WATERLOGGED))
+                blockState = blockState.setValue(BlockStateProperties.WATERLOGGED, world.isFluidAtPosition(pos, fluidState -> fluidState.isSourceOfType(Fluids.WATER)));
+            if (blockState.hasProperty(LeafDroppingLeaveBlock.OVERGROWN))
+                blockState = blockState.setValue(LeafDroppingLeaveBlock.OVERGROWN, random.nextBoolean());
+            placer.set(pos, blockState);
         }
     }
 
     @Override
-    protected boolean isInvalidForLeaves(Random randomSource, int x, int y, int z, int radius, boolean doubleTrunk) {
+    protected boolean shouldSkipLocation(RandomSource randomSource, int x, int y, int z, int radius, boolean doubleTrunk) {
         boolean isCorner = x == radius && z == radius;
         if (y > 0) return isCorner && randomSource.nextBoolean();
         return isCorner;

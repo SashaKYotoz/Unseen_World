@@ -1,22 +1,22 @@
 package net.sashakyotoz.client.renderers.layers;
 
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.common.config.ConfigEntries;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class DarkeningLayer<T extends LivingEntity, M extends EntityModel<T>> extends StuckObjectsRenderer<T, M> {
-    private final Identifier TEXTURE = UnseenWorld.makeID("textures/entity/layers/darkening_layer.png");
+    private final ResourceLocation TEXTURE = UnseenWorld.makeID("textures/entity/layers/darkening_layer.png");
 
     public DarkeningLayer(LivingEntityRenderer<T, M> livingEntityRenderer) {
         super(livingEntityRenderer);
@@ -32,9 +32,9 @@ public class DarkeningLayer<T extends LivingEntity, M extends EntityModel<T>> ex
     }
 
     @Override
-    protected void renderModelPartOverlay(ModelPart part, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
+    protected void renderModelPartOverlay(ModelPart part, PoseStack matrices, MultiBufferSource vertexConsumers, int light, Entity entity) {
         if (entity instanceof IGrippingEntity iGrippingEntity)
-            part.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(TEXTURE)), light, OverlayTexture.DEFAULT_UV, 1, 1, 1, iGrippingEntity.getDarkeningData() / 10f);
+            part.render(matrices, vertexConsumers.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE)), light, OverlayTexture.NO_OVERLAY, 1, 1, 1, iGrippingEntity.getDarkeningData() / 10f);
     }
 
     @Override
@@ -43,6 +43,6 @@ public class DarkeningLayer<T extends LivingEntity, M extends EntityModel<T>> ex
     }
 
     @Override
-    protected void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity) {
+    protected void renderObject(PoseStack matrices, MultiBufferSource vertexConsumers, int light, Entity entity) {
     }
 }

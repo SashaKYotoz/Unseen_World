@@ -4,20 +4,20 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.event.BlockPositionSource;
-import net.minecraft.world.event.PositionSource;
-import net.minecraft.world.event.PositionSourceType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.level.gameevent.PositionSource;
+import net.minecraft.world.level.gameevent.PositionSourceType;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 
 import java.util.Locale;
 
-public class LightVibrationParticleEffect implements ParticleEffect {
+public class LightVibrationParticleEffect implements ParticleOptions {
     public static final Codec<LightVibrationParticleEffect> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                             PositionSource.CODEC.fieldOf("destination").forGetter(effect -> effect.destination),
@@ -25,8 +25,8 @@ public class LightVibrationParticleEffect implements ParticleEffect {
                     )
                     .apply(instance, LightVibrationParticleEffect::new)
     );
-    public static final Factory<LightVibrationParticleEffect> PARAMETERS_FACTORY = new Factory<>() {
-        public LightVibrationParticleEffect read(ParticleType<LightVibrationParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException {
+    public static final Deserializer<LightVibrationParticleEffect> PARAMETERS_FACTORY = new Deserializer<>() {
+        public LightVibrationParticleEffect fromCommand(ParticleType<LightVibrationParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException {
             stringReader.expect(' ');
             float f = (float) stringReader.readDouble();
             stringReader.expect(' ');
@@ -35,12 +35,12 @@ public class LightVibrationParticleEffect implements ParticleEffect {
             float h = (float) stringReader.readDouble();
             stringReader.expect(' ');
             int i = stringReader.readInt();
-            BlockPos blockPos = BlockPos.ofFloored(f, g, h);
+            BlockPos blockPos = BlockPos.containing(f, g, h);
             return new LightVibrationParticleEffect(new BlockPositionSource(blockPos), i);
         }
 
-        public LightVibrationParticleEffect read(ParticleType<LightVibrationParticleEffect> particleType, PacketByteBuf packetByteBuf) {
-            PositionSource positionSource = PositionSourceType.read(packetByteBuf);
+        public LightVibrationParticleEffect fromNetwork(ParticleType<LightVibrationParticleEffect> particleType, FriendlyByteBuf packetByteBuf) {
+            PositionSource positionSource = PositionSourceType.fromNetwork(packetByteBuf);
             int i = packetByteBuf.readVarInt();
             return new LightVibrationParticleEffect(positionSource, i);
         }
@@ -54,18 +54,18 @@ public class LightVibrationParticleEffect implements ParticleEffect {
     }
 
     @Override
-    public void write(PacketByteBuf buf) {
-        PositionSourceType.write(this.destination, buf);
+    public void writeToNetwork(FriendlyByteBuf buf) {
+        PositionSourceType.toNetwork(this.destination, buf);
         buf.writeVarInt(this.arrivalInTicks);
     }
 
     @Override
-    public String asString() {
-        Vec3d vec3d = this.destination.getPos(null).get();
-        double d = vec3d.getX();
-        double e = vec3d.getY();
-        double f = vec3d.getZ();
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %d", Registries.PARTICLE_TYPE.getId(this.getType()), d, e, f, this.arrivalInTicks);
+    public String writeToString() {
+        Vec3 vec3d = this.destination.getPosition(null).get();
+        double d = vec3d.x();
+        double e = vec3d.y();
+        double f = vec3d.z();
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %d", BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), d, e, f, this.arrivalInTicks);
     }
 
     @Override

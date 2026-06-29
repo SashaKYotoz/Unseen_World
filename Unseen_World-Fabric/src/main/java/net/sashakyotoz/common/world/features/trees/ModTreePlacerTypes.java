@@ -1,8 +1,8 @@
 package net.sashakyotoz.common.world.features.trees;
 
-import net.minecraft.world.gen.foliage.FoliagePlacerType;
-import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.world.features.trees.placers.*;
 import net.sashakyotoz.mixin.access.FoliagePlacerTypeInvoker;

@@ -1,8 +1,8 @@
 package net.sashakyotoz.mixin.world;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
@@ -15,28 +15,28 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ServerWorld.class)
+@Mixin(ServerLevel.class)
 public abstract class ServerWorldMixin implements WorldMultipartHelper {
-    @Inject(method = "getDragonPart", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getEntityOrPart", at = @At("RETURN"), cancellable = true)
     public void getEntityParts(int id, CallbackInfoReturnable<Entity> cir) {
         Entity entity = cir.getReturnValue();
         if (entity == null) cir.setReturnValue(getPMEPartMap().get(id));
     }
 
     @Shadow
-    public abstract ServerWorld toServerWorld();
+    public abstract ServerLevel getLevel();
 
     //weather
-    @Inject(method = "tickWeather", at = @At(value = "TAIL"))
+    @Inject(method = "advanceWeatherCycle", at = @At(value = "TAIL"))
     public void tickWeather(CallbackInfo ci) {
-        if (toServerWorld().getDimensionKey().equals(ModDimensions.CHIMERIC_DARKNESS_TYPE))
-            ChimericWeatherState.get((ServerWorld) (Object) this).tick();
+        if (getLevel().dimensionTypeId().equals(ModDimensions.CHIMERIC_DARKNESS_TYPE))
+            ChimericWeatherState.get((ServerLevel) (Object) this).tick();
     }
 
-    @Inject(method = "onPlayerConnected", at = @At("TAIL"))
-    private void onPlayerJoinDimension(ServerPlayerEntity player, CallbackInfo ci) {
-        if (this.toServerWorld().getRegistryKey().equals(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
-            ChimericWeatherState.get((ServerWorld) (Object) this).syncToPlayer(player);
+    @Inject(method = "addNewPlayer", at = @At("TAIL"))
+    private void onPlayerJoinDimension(ServerPlayer player, CallbackInfo ci) {
+        if (this.getLevel().dimension().equals(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
+            ChimericWeatherState.get((ServerLevel) (Object) this).syncToPlayer(player);
         GripcrystalManaData.addMana((IEntityDataSaver) player, 0);
     }
 }

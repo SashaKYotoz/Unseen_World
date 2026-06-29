@@ -1,26 +1,31 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.NoPenaltyTargeting;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.function.ValueLists;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.entities.ai.goals.spells.BlindTargetGoal;
 import net.sashakyotoz.common.entities.ai.goals.spells.ConjureBoltsGoal;
 import net.sashakyotoz.common.entities.ai.goals.spells.InvisibilityGoal;
@@ -31,52 +36,52 @@ import java.util.function.IntFunction;
 import java.util.function.ToIntFunction;
 
 public class VenomerEntity extends ViolegerEntity {
-    private static final TrackedData<Byte> SPELL = DataTracker.registerData(VenomerEntity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final EntityDataAccessor<Byte> SPELL = SynchedEntityData.defineId(VenomerEntity.class, EntityDataSerializers.BYTE);
     protected int spellTicks;
     private Spell spell = Spell.NONE;
 
-    public VenomerEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public VenomerEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 30)
-                .add(EntityAttributes.GENERIC_ARMOR, 4)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 2)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.ARMOR, 4)
+                .add(Attributes.ARMOR_TOUGHNESS, 2)
+                .add(Attributes.ATTACK_DAMAGE, 4)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0)
+                .add(Attributes.MOVEMENT_SPEED, 0.3);
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new LookAtTargetGoal(this));
-        this.goalSelector.add(3, new ConjureBoltsGoal(this));
-        this.goalSelector.add(4, new BlindTargetGoal(this));
-        this.goalSelector.add(5, new InvisibilityGoal(this));
-        this.goalSelector.add(8, new WanderAroundGoal(this, 0.6));
-        this.goalSelector.add(9, new LookAtEntityGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.add(10, new LookAtEntityGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.add(1, new RevengeGoal(this, ViolegerEntity.class).setGroupRevenge());
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true).setMaxTimeWithoutVisibility(300));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, MerchantEntity.class, false).setMaxTimeWithoutVisibility(300));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, IronGolemEntity.class, false).setMaxTimeWithoutVisibility(300));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new LookAtTargetGoal(this));
+        this.goalSelector.addGoal(3, new ConjureBoltsGoal(this));
+        this.goalSelector.addGoal(4, new BlindTargetGoal(this));
+        this.goalSelector.addGoal(5, new InvisibilityGoal(this));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 0.6));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, ViolegerEntity.class).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(300));
     }
 
     public void flee(int hDistanceOfFlee){
         if (this.getTarget() != null) {
-            Vec3d vec3d = NoPenaltyTargeting.findFrom(this, hDistanceOfFlee, 7, this.getTarget().getPos());
+            Vec3 vec3d = DefaultRandomPos.getPosAway(this, hDistanceOfFlee, 7, this.getTarget().position());
             if (vec3d != null)
-                this.getNavigation().startMovingAlong(this.getNavigation().findPathTo(vec3d.x, vec3d.y, vec3d.z, 0), 1.5f);
+                this.getNavigation().moveTo(this.getNavigation().createPath(vec3d.x, vec3d.y, vec3d.z, 0), 1.5f);
         }
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(SPELL, (byte) 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SPELL, (byte) 0);
     }
 
     @Override
@@ -89,21 +94,21 @@ public class VenomerEntity extends ViolegerEntity {
     }
 
     public boolean isSpellcasting() {
-        return this.getWorld().isClient ? this.dataTracker.get(SPELL) > 0 : this.spellTicks > 0;
+        return this.level().isClientSide ? this.entityData.get(SPELL) > 0 : this.spellTicks > 0;
     }
 
     public void setSpell(Spell spell) {
         this.spell = spell;
-        this.dataTracker.set(SPELL, (byte) spell.id);
+        this.entityData.set(SPELL, (byte) spell.id);
     }
 
     protected Spell getSpell() {
-        return !this.getWorld().isClient ? this.spell : Spell.byId(this.dataTracker.get(SPELL));
+        return !this.level().isClientSide ? this.spell : Spell.byId(this.entityData.get(SPELL));
     }
 
     @Override
-    protected void mobTick() {
-        super.mobTick();
+    protected void customServerAiStep() {
+        super.customServerAiStep();
         if (this.spellTicks > 0) {
             this.spellTicks--;
         }
@@ -112,16 +117,16 @@ public class VenomerEntity extends ViolegerEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.getWorld().isClient && this.isSpellcasting()) {
+        if (this.level().isClientSide && this.isSpellcasting()) {
             Spell spell = this.getSpell();
             double d = spell.particleVelocity[0];
             double e = spell.particleVelocity[1];
             double f = spell.particleVelocity[2];
-            float g = this.bodyYaw * (float) (Math.PI / 180.0) + MathHelper.cos((float) this.age * 0.6662F) * 0.25F;
-            float h = MathHelper.cos(g);
-            float i = MathHelper.sin(g);
-            this.getWorld().addParticle(ParticleTypes.LANDING_OBSIDIAN_TEAR, this.getX() + (double) h * 0.6, this.getY() + 1.8, this.getZ() + (double) i * 0.6, d, e, f);
-            this.getWorld().addParticle(ParticleTypes.LANDING_OBSIDIAN_TEAR, this.getX() - (double) h * 0.6, this.getY() + 1.8, this.getZ() - (double) i * 0.6, d, e, f);
+            float g = this.yBodyRot * (float) (Math.PI / 180.0) + Mth.cos((float) this.tickCount * 0.6662F) * 0.25F;
+            float h = Mth.cos(g);
+            float i = Mth.sin(g);
+            this.level().addParticle(ParticleTypes.LANDING_OBSIDIAN_TEAR, this.getX() + (double) h * 0.6, this.getY() + 1.8, this.getZ() + (double) i * 0.6, d, e, f);
+            this.level().addParticle(ParticleTypes.LANDING_OBSIDIAN_TEAR, this.getX() - (double) h * 0.6, this.getY() + 1.8, this.getZ() - (double) i * 0.6, d, e, f);
         }
     }
 
@@ -130,7 +135,7 @@ public class VenomerEntity extends ViolegerEntity {
     }
 
     protected SoundEvent getCastSpellSound() {
-        return SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL;
+        return SoundEvents.ILLUSIONER_CAST_SPELL;
     }
 
     public abstract static class CastSpellGoal extends Goal {
@@ -143,26 +148,26 @@ public class VenomerEntity extends ViolegerEntity {
         }
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             LivingEntity livingEntity = venomer.getTarget();
             if (livingEntity == null || !livingEntity.isAlive()) {
                 return false;
             } else {
-                return !venomer.isSpellcasting() && venomer.age >= this.startTime;
+                return !venomer.isSpellcasting() && venomer.tickCount >= this.startTime;
             }
         }
 
         @Override
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             LivingEntity livingEntity = venomer.getTarget();
             return livingEntity != null && livingEntity.isAlive() && this.spellCooldown > 0;
         }
 
         @Override
         public void start() {
-            this.spellCooldown = this.getTickCount(this.getInitialCooldown());
+            this.spellCooldown = this.adjustedTickDelay(this.getInitialCooldown());
             venomer.spellTicks = this.getSpellTicks();
-            this.startTime = venomer.age + this.startTimeDelay();
+            this.startTime = venomer.tickCount + this.startTimeDelay();
             SoundEvent soundEvent = this.getSoundPrepare();
             if (soundEvent != null) {
                 venomer.playSound(soundEvent, 1.0F, 1.0F);
@@ -201,12 +206,12 @@ public class VenomerEntity extends ViolegerEntity {
 
         public LookAtTargetGoal(VenomerEntity venomerEntity) {
             this.venomer = venomerEntity;
-            this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
 
         @Override
-        public boolean canStart() {
+        public boolean canUse() {
             return venomer.getSpellTicks() > 0;
         }
 
@@ -226,10 +231,10 @@ public class VenomerEntity extends ViolegerEntity {
         public void tick() {
             if (venomer.getTarget() != null) {
                 venomer.getLookControl()
-                        .lookAt(
+                        .setLookAt(
                                 venomer.getTarget(),
-                                (float) venomer.getMaxHeadRotation(),
-                                (float) venomer.getMaxLookPitchChange()
+                                (float) venomer.getMaxHeadYRot(),
+                                (float) venomer.getMaxHeadXRot()
                         );
             }
         }
@@ -241,7 +246,7 @@ public class VenomerEntity extends ViolegerEntity {
         DISAPPEAR(2, 0.3, 0.3, 0.8),
         BLINDNESS(3, 0.1, 0.1, 0.2);
 
-        private static final IntFunction<Spell> BY_ID = ValueLists.createIdToValueFunction((ToIntFunction<Spell>) spell -> spell.id, values(), ValueLists.OutOfBoundsHandling.ZERO);
+        private static final IntFunction<Spell> BY_ID = ByIdMap.continuous((ToIntFunction<Spell>) spell -> spell.id, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
         final int id;
         final double[] particleVelocity;
 

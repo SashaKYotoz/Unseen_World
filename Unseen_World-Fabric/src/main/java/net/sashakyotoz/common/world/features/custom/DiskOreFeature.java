@@ -1,13 +1,13 @@
 package net.sashakyotoz.common.world.features.custom;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.sashakyotoz.common.world.features.custom.configs.DiskOreFeatureConfig;
 
 public class DiskOreFeature extends Feature<DiskOreFeatureConfig> {
@@ -18,19 +18,19 @@ public class DiskOreFeature extends Feature<DiskOreFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<DiskOreFeatureConfig> context) {
-        DiskOreFeatureConfig diskFeatureConfig = context.getConfig();
-        BlockPos blockPos = context.getOrigin();
-        StructureWorldAccess structureWorldAccess = context.getWorld();
-        Random random = context.getRandom();
+    public boolean place(FeaturePlaceContext<DiskOreFeatureConfig> context) {
+        DiskOreFeatureConfig diskFeatureConfig = context.config();
+        BlockPos blockPos = context.origin();
+        WorldGenLevel structureWorldAccess = context.level();
+        RandomSource random = context.random();
         boolean bl = false;
         int i = blockPos.getY();
         int j = i + diskFeatureConfig.halfHeight();
         int k = i - diskFeatureConfig.halfHeight() - 1;
-        int l = diskFeatureConfig.radius().get(random);
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        int l = diskFeatureConfig.radius().sample(random);
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
-        for (BlockPos blockPos2 : BlockPos.iterate(blockPos.add(-l, 0, -l), blockPos.add(l, 0, l))) {
+        for (BlockPos blockPos2 : BlockPos.betweenClosed(blockPos.offset(-l, 0, -l), blockPos.offset(l, 0, l))) {
             int m = blockPos2.getX() - blockPos.getX();
             int n = blockPos2.getZ() - blockPos.getZ();
             if (m * m + n * n <= l * l) {
@@ -41,15 +41,15 @@ public class DiskOreFeature extends Feature<DiskOreFeatureConfig> {
         return bl;
     }
 
-    protected boolean placeBlock(DiskOreFeatureConfig config, StructureWorldAccess world, Random random, int topY, int bottomY, BlockPos.Mutable pos) {
+    protected boolean placeBlock(DiskOreFeatureConfig config, WorldGenLevel world, RandomSource random, int topY, int bottomY, BlockPos.MutableBlockPos pos) {
         boolean bl = false;
         for (int i = topY; i > bottomY; i--) {
             pos.setY(i);
             if (config.target().test(world, pos)) {
-                BlockState blockState = config.stateProvider().getBlockState(world, random, pos);
-                BlockState oreState = config.oreStateProvider().getBlockState(world, random, pos);
-                world.setBlockState(pos, random.nextFloat() > 0.8f ? oreState : blockState, Block.NOTIFY_LISTENERS);
-                this.markBlocksAboveForPostProcessing(world, pos);
+                BlockState blockState = config.stateProvider().getState(world, random, pos);
+                BlockState oreState = config.oreStateProvider().getState(world, random, pos);
+                world.setBlock(pos, random.nextFloat() > 0.8f ? oreState : blockState, Block.UPDATE_CLIENTS);
+                this.markAboveForPostProcessing(world, pos);
                 bl = true;
             }
         }

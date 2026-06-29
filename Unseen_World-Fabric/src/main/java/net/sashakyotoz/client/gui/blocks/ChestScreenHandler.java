@@ -4,17 +4,17 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel;
 import io.github.cottonmc.cotton.gui.widget.data.Insets;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Items;
 import net.sashakyotoz.common.blocks.custom.chests.ModChestBlock;
 
 public class ChestScreenHandler extends SyncedGuiDescription {
-    Inventory inventory;
+    Container inventory;
 
-    public ChestScreenHandler(ScreenHandlerType<?> type, ModChestBlock.ChestTypes chestType, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
+    public ChestScreenHandler(MenuType<?> type, ModChestBlock.ChestTypes chestType, int syncId, Inventory playerInventory, ContainerLevelAccess context) {
         super(type, syncId, playerInventory, getBlockInventory(context, chestType.size), null);
         inventory = blockInventory;
         int rows = chestType.getRowCount();

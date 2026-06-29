@@ -1,11 +1,11 @@
 package net.sashakyotoz.common.entities.ai.goals.spells;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.sashakyotoz.common.entities.custom.VenomerEntity;
 
 public class BlindTargetGoal extends VenomerEntity.CastSpellGoal {
@@ -16,15 +16,15 @@ public class BlindTargetGoal extends VenomerEntity.CastSpellGoal {
     private int targetId;
 
     @Override
-    public boolean canStart() {
-        if (!super.canStart())
+    public boolean canUse() {
+        if (!super.canUse())
             return false;
-        else if (venomer.hasStatusEffect(StatusEffects.INVISIBILITY))
+        else if (venomer.hasEffect(MobEffects.INVISIBILITY))
             return false;
         else if (venomer.getTarget() == null)
             return false;
         else
-            return venomer.getTarget().getId() != this.targetId && venomer.getWorld().getLocalDifficulty(venomer.getBlockPos()).isHarderThan((float) Difficulty.NORMAL.ordinal());
+            return venomer.getTarget().getId() != this.targetId && venomer.level().getCurrentDifficultyAt(venomer.blockPosition()).isHarderThan((float) Difficulty.NORMAL.ordinal());
     }
 
     @Override
@@ -54,12 +54,12 @@ public class BlindTargetGoal extends VenomerEntity.CastSpellGoal {
     @Override
     protected void castSpell() {
         if (venomer.getTarget() != null)
-            venomer.getTarget().addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200), venomer);
+            venomer.getTarget().addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200), venomer);
     }
 
     @Override
     protected SoundEvent getSoundPrepare() {
-        return SoundEvents.ENTITY_ILLUSIONER_PREPARE_BLINDNESS;
+        return SoundEvents.ILLUSIONER_PREPARE_BLINDNESS;
     }
 
     @Override

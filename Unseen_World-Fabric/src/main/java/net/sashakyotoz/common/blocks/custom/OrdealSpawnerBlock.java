@@ -1,60 +1,60 @@
 package net.sashakyotoz.common.blocks.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.custom.entities.OrdealSpawnerBlockEntity;
 import net.sashakyotoz.common.blocks.custom.states.OrdealSpawnerState;
 
-public class OrdealSpawnerBlock extends BlockWithEntity {
-    public static final BooleanProperty GRIPPING = BooleanProperty.of("gripping");
-    public static final EnumProperty<OrdealSpawnerState> STATE = EnumProperty.of("state", OrdealSpawnerState.class);
-    public static final EnumProperty<Type> TYPE = EnumProperty.of("type", Type.class);
+public class OrdealSpawnerBlock extends BaseEntityBlock {
+    public static final BooleanProperty GRIPPING = BooleanProperty.create("gripping");
+    public static final EnumProperty<OrdealSpawnerState> STATE = EnumProperty.create("state", OrdealSpawnerState.class);
+    public static final EnumProperty<Type> TYPE = EnumProperty.create("type", Type.class);
 
-    public OrdealSpawnerBlock(Settings settings) {
+    public OrdealSpawnerBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(GRIPPING, false)
-                .with(STATE, OrdealSpawnerState.INACTIVE)
-                .with(TYPE, Type.GRIPCRYSTAL));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(GRIPPING, false)
+                .setValue(STATE, OrdealSpawnerState.INACTIVE)
+                .setValue(TYPE, Type.GRIPCRYSTAL));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(GRIPPING).add(STATE).add(TYPE);
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new OrdealSpawnerBlockEntity(pos, state);
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
-        return super.onUse(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, ModBlockEntities.ORDEAL_SPAWNER, OrdealSpawnerBlockEntity::tick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        return createTickerHelper(type, ModBlockEntities.ORDEAL_SPAWNER, OrdealSpawnerBlockEntity::tick);
     }
 
-    public enum Type implements StringIdentifiable {
+    public enum Type implements StringRepresentable {
         GRIPCRYSTAL("gripcrystal"),
         ABYSSAL("abyssal"),
         AURIC("auric");
@@ -66,7 +66,7 @@ public class OrdealSpawnerBlock extends BlockWithEntity {
         public final String name;
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
     }

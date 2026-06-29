@@ -9,13 +9,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.potion.Potions;
-import net.minecraft.recipe.BrewingRecipeRegistry;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.Potions;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
@@ -64,8 +64,8 @@ public class UnseenWorld implements ModInitializer {
         ModBlocks.register();
         ModBlockEntities.register();
 
-        TrackedDataHandlerRegistry.register(WarriorOfChimericDarkness.WARRIOR_POSE);
-        TrackedDataHandlerRegistry.register(EclipseSentinel.SENTINEL_POSE);
+        EntityDataSerializers.registerSerializer(WarriorOfChimericDarkness.WARRIOR_POSE);
+        EntityDataSerializers.registerSerializer(EclipseSentinel.SENTINEL_POSE);
 
         ModSoundEvents.registerSounds();
         ModEntities.register();
@@ -82,23 +82,23 @@ public class UnseenWorld implements ModInitializer {
         ModWorldGeneration.register();
         ServerWorldEvents.LOAD.register(new ConfigController());
 
-        BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, ModItems.GLOW_APPLE, ModRegistry.GLOWING);
-        BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, ModItems.WARPEDVEIL_VINE_FRUIT, ModRegistry.GLOWING);
+        PotionBrewing.addMix(Potions.AWKWARD, ModItems.GLOW_APPLE, ModRegistry.GLOWING);
+        PotionBrewing.addMix(Potions.AWKWARD, ModItems.WARPEDVEIL_VINE_FRUIT, ModRegistry.GLOWING);
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            if (environment.integrated) {
-                dispatcher.register(CommandManager.literal("set_gripcrystal_mana")
-                        .requires(source -> source.hasPermissionLevel(2))
-                        .then(CommandManager
+            if (environment.includeIntegrated) {
+                dispatcher.register(Commands.literal("set_gripcrystal_mana")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands
                                 .argument("amount", IntegerArgumentType.integer(0, 48))
                                 .executes(context -> {
-                                    if (context.getSource().getEntity() instanceof ServerPlayerEntity player) {
+                                    if (context.getSource().getEntity() instanceof ServerPlayer player) {
                                         GripcrystalManaData.addMana((IEntityDataSaver) player, Math.max(0, IntegerArgumentType.getInteger(context, "amount")));
                                         return 1;
                                     } else {
                                         context.getSource()
-                                                .sendFeedback(
-                                                        () -> Text.literal("Called /set_gripcrystal_mana with no arguments."), false);
+                                                .sendSuccess(
+                                                        () -> Component.literal("Called /set_gripcrystal_mana with no arguments."), false);
                                         return 0;
                                     }
                                 })
@@ -117,14 +117,14 @@ public class UnseenWorld implements ModInitializer {
                 for (EntityPart part : multipartEntity.getParts()) partMap.remove(part.getId());
             }
         });
-        ServerTickEvents.END_WORLD_TICK.register(world -> world.getPlayers().stream()
+        ServerTickEvents.END_WORLD_TICK.register(world -> world.players().stream()
                 .filter(player -> !player.isSpectator()
                 && GripcrystalManaData.getOpacity(((IEntityDataSaver) player)) > 0)
                 .forEach(player -> GripcrystalManaData.removeOpacity((IEntityDataSaver) player, 0.02f)));
     }
 
-    public static Identifier makeID(String id) {
-        return new Identifier(MOD_ID, id);
+    public static ResourceLocation makeID(String id) {
+        return new ResourceLocation(MOD_ID, id);
     }
 
     public static <T> T log(T message) {

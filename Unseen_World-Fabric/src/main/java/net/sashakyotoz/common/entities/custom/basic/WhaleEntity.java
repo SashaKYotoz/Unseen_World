@@ -1,56 +1,55 @@
 package net.sashakyotoz.common.entities.custom.basic;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.control.AquaticMoveControl;
-import net.minecraft.entity.ai.control.YawAdjustingLookControl;
-import net.minecraft.entity.ai.goal.BreatheAirGoal;
-import net.minecraft.entity.ai.goal.MoveIntoWaterGoal;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.PathNodeNavigator;
-import net.minecraft.entity.ai.pathing.SwimNavigation;
-import net.minecraft.entity.ai.pathing.WaterPathNodeMaker;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.WaterCreatureEntity;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.util.TypeFilter;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
+import net.minecraft.world.entity.ai.goal.BreathAirGoal;
+import net.minecraft.world.entity.ai.goal.TryFindWaterGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.entities.ai.goals.GloomwhaleJumpGoal;
 import net.sashakyotoz.common.entities.ai.goals.SwimAroundFarGoal;
 
-public class WhaleEntity extends WaterCreatureEntity {
-    public WhaleEntity(EntityType<? extends WaterCreatureEntity> entityType, World world) {
+public class WhaleEntity extends WaterAnimal {
+    public WhaleEntity(EntityType<? extends WaterAnimal> entityType, Level world) {
         super(entityType, world);
-        this.moveControl = new AquaticMoveControl(this, 70, 10, 0.2F, 0.1F, true);
-        this.lookControl = new YawAdjustingLookControl(this, 10);
+        this.moveControl = new SmoothSwimmingMoveControl(this, 70, 10, 0.2F, 0.1F, true);
+        this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
-    public static boolean canWhaleSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getFluidState(pos.up()).isIn(FluidTags.WATER)
-                && world.getEntitiesByType(TypeFilter.instanceOf(WhaleEntity.class), type.getDimensions().getBoxAt(pos.toCenterPos()).expand(32), LivingEntity::isAlive).size() < 4
+    public static boolean canWhaleSpawn(EntityType<? extends Mob> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        return world.getFluidState(pos.above()).is(FluidTags.WATER)
+                && world.getEntities(EntityTypeTest.forClass(WhaleEntity.class), type.getDimensions().makeBoundingBox(pos.getCenter()).inflate(32), LivingEntity::isAlive).size() < 4
                 && random.nextInt(7) == 3;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.isInsideWaterOrBubbleColumn() && this.age % 20 == 0) {
-            this.setVelocity(this.getRandom().nextBetween(-1, 2) / 10f, 0.15f, this.getRandom().nextBetween(-1, 2) / 10f);
-            this.velocityModified = true;
+        if (!this.isInWaterOrBubble() && this.tickCount % 20 == 0) {
+            this.setDeltaMovement(this.getRandom().nextIntBetweenInclusive(-1, 2) / 10f, 0.15f, this.getRandom().nextIntBetweenInclusive(-1, 2) / 10f);
+            this.hurtMarked = true;
         }
     }
 
     @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
+    public EntityDimensions getDimensions(Pose pose) {
         float length = 3.5F;
         float thickness = 2F;
-        float pitchInRadians = Math.abs(this.headYaw / (float) (Math.PI / 180.0));
-        float horizontalFactor = Math.abs(MathHelper.sin(pitchInRadians));
-        float verticalFactor = Math.abs(MathHelper.cos(pitchInRadians));
+        float pitchInRadians = Math.abs(this.yHeadRot / (float) (Math.PI / 180.0));
+        float horizontalFactor = Math.abs(Mth.sin(pitchInRadians));
+        float verticalFactor = Math.abs(Mth.cos(pitchInRadians));
         float currentWidth = thickness + (length - thickness) * horizontalFactor;
         float currentHeight = thickness + (length - thickness) * verticalFactor;
 
@@ -58,75 +57,75 @@ public class WhaleEntity extends WaterCreatureEntity {
     }
 
     @Override
-    public void tickWaterBreathingAir(int air) {
+    public void handleAirSupply(int air) {
     }
 
     @Override
-    public boolean canBreatheInWater() {
+    public boolean canBreatheUnderwater() {
         return false;
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(0, new BreatheAirGoal(this));
-        this.goalSelector.add(1, new MoveIntoWaterGoal(this));
-        this.goalSelector.add(4, new SwimAroundFarGoal(this, 0.8f, 0.65f));
-        this.goalSelector.add(5, new GloomwhaleJumpGoal(this, 10));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new BreathAirGoal(this));
+        this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
+        this.goalSelector.addGoal(4, new SwimAroundFarGoal(this, 0.8f, 0.65f));
+        this.goalSelector.addGoal(5, new GloomwhaleJumpGoal(this, 10));
     }
 
     @Override
-    public int getMaxAir() {
+    public int getMaxAirSupply() {
         return 6000;
     }
 
     @Override
-    protected int getNextAirOnLand(int air) {
-        return this.getMaxAir();
+    protected int increaseAirSupply(int air) {
+        return this.getMaxAirSupply();
     }
 
     @Override
-    public int getMaxLookPitchChange() {
+    public int getMaxHeadXRot() {
         return 1;
     }
 
     @Override
-    public int getMaxHeadRotation() {
+    public int getMaxHeadYRot() {
         return 1;
     }
 
     @Override
-    public void travel(Vec3d movementInput) {
-        if (this.canMoveVoluntarily() && this.isTouchingWater()) {
-            this.updateVelocity(this.getMovementSpeed(), movementInput);
-            this.move(MovementType.SELF, this.getVelocity());
-            this.setVelocity(this.getVelocity().multiply(0.9));
-            if (this.getTarget() == null && this.getVelocity().lengthSquared() < 0.005)
-                this.setVelocity(this.getVelocity().add(0.0, -0.00125, 0.0));
+    public void travel(Vec3 movementInput) {
+        if (this.isEffectiveAi() && this.isInWater()) {
+            this.moveRelative(this.getSpeed(), movementInput);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+            if (this.getTarget() == null && this.getDeltaMovement().lengthSqr() < 0.005)
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.00125, 0.0));
         } else
             super.travel(movementInput);
     }
 
     @Override
-    protected EntityNavigation createNavigation(World world) {
+    protected PathNavigation createNavigation(Level world) {
         return new WhaleSwimNavigation(this, world);
     }
 
-    public static class WhaleSwimNavigation extends SwimNavigation {
+    public static class WhaleSwimNavigation extends WaterBoundPathNavigation {
         private boolean canJumpOutOfWater;
 
-        public WhaleSwimNavigation(MobEntity mobEntity, World world) {
+        public WhaleSwimNavigation(Mob mobEntity, Level world) {
             super(mobEntity, world);
         }
 
         @Override
-        protected PathNodeNavigator createPathNodeNavigator(int range) {
-            this.canJumpOutOfWater = this.entity instanceof WhaleEntity;
-            this.nodeMaker = new WaterPathNodeMaker(this.canJumpOutOfWater);
-            return new PathNodeNavigator(this.nodeMaker, range);
+        protected PathFinder createPathFinder(int range) {
+            this.canJumpOutOfWater = this.mob instanceof WhaleEntity;
+            this.nodeEvaluator = new SwimNodeEvaluator(this.canJumpOutOfWater);
+            return new PathFinder(this.nodeEvaluator, range);
         }
 
         @Override
-        protected boolean isAtValidPosition() {
+        protected boolean canUpdatePath() {
             return this.canJumpOutOfWater || this.isInLiquid();
         }
     }

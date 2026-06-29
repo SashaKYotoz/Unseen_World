@@ -10,21 +10,21 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
-import net.minecraft.block.Block;
-import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.client.color.world.GrassColors;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
-import net.minecraft.client.render.DimensionEffects;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.render.block.entity.BrushableBlockEntityRenderer;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.BundleItem;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.BundleItem;
+import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.MultipartEntity;
@@ -67,33 +67,33 @@ public class UnseenWorldClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         for (Block block : ModRegistry.BLOCK_CUTOUT)
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         for (Block block : ModRegistry.BLOCK_TRANSLUCENT)
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent());
+            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.translucent());
 
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.DARK_WATER, ModFluids.DARK_FLOWING_WATER,
                 new SimpleFluidRenderHandler(UnseenWorld.makeID("block/dark_water_still"),
                         UnseenWorld.makeID("block/dark_water_flow"),
                         0x75050005
                 ));
-        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), ModFluids.DARK_WATER, ModFluids.DARK_FLOWING_WATER);
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderType.translucent(), ModFluids.DARK_WATER, ModFluids.DARK_FLOWING_WATER);
 
-        EntityModelLayerRegistry.registerModelLayer(GleamcarverModel.GLEAMCARVER, GleamcarverModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(HarmonyWatcherModel.HARMONY_WATCHER, HarmonyWatcherModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ViolegerModel.VIOLEGER, ViolegerModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(AuricPatriarchModel.AURIC_PATRIARCH, AuricPatriarchModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(WarriorOfChimericDarknessModel.WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarknessModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ShieldOfWarriorModel.SHIELD_OF_WARRIOR, ShieldOfWarriorModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(EclipseSentinelModel.ECLIPSE_SENTINEL, EclipseSentinelModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(GloomwhaleModel.GLOOMWHALE, GloomwhaleModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ShimmerModel.SHIMMER, ShimmerModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(SaberpardModel.SABERPARD, SaberpardModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(EspyerModel.ESPYER, EspyerModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(EldritchWatcherModel.ELDRITCH_WATCHER, EldritchWatcherModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(TuskhogModel.TUSKHOG, TuskhogModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DreadflapModel.DREADFLAP, DreadflapModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ReaverModel.REAVER, ReaverModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(VexalBeetleModel.VEXAL_BEETLE, VexalBeetleModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(GleamcarverModel.GLEAMCARVER, GleamcarverModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(HarmonyWatcherModel.HARMONY_WATCHER, HarmonyWatcherModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(ViolegerModel.VIOLEGER, ViolegerModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(AuricPatriarchModel.AURIC_PATRIARCH, AuricPatriarchModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(WarriorOfChimericDarknessModel.WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarknessModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(ShieldOfWarriorModel.SHIELD_OF_WARRIOR, ShieldOfWarriorModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(EclipseSentinelModel.ECLIPSE_SENTINEL, EclipseSentinelModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(GloomwhaleModel.GLOOMWHALE, GloomwhaleModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(ShimmerModel.SHIMMER, ShimmerModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(SaberpardModel.SABERPARD, SaberpardModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(EspyerModel.ESPYER, EspyerModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(EldritchWatcherModel.ELDRITCH_WATCHER, EldritchWatcherModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(TuskhogModel.TUSKHOG, TuskhogModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(DreadflapModel.DREADFLAP, DreadflapModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(ReaverModel.REAVER, ReaverModel::getTextureLocationdModelData);
+        EntityModelLayerRegistry.registerModelLayer(VexalBeetleModel.VEXAL_BEETLE, VexalBeetleModel::getTextureLocationdModelData);
 
         EntityRendererRegistry.register(ModEntities.GLEAMCARVER, GleamcarverRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONY_WATCHER, HarmonyWatcherRenderer::new);
@@ -113,18 +113,18 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, GrippingCrystalProjectileRenderer::new);
 
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) ->
-                        world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getDefaultColor(),
+                        world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
                 ModBlocks.GLOOMWEED,
                 ModBlocks.TALL_GLOOMWEED);
 
         EntityRendererRegistry.register(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarknessRenderer::new);
         EntityRendererRegistry.register(ModEntities.ECLIPSE_SENTINEL, EclipseSentinelRenderer::new);
 
-        BlockEntityRendererFactories.register(ModBlockEntities.KEY_HANDLER, KeyHandlerStoneRenderer::new);
-        BlockEntityRendererFactories.register(ModBlockEntities.TRANSLOCATONE, TranslocatoneRenderer::new);
-        BlockEntityRendererFactories.register(ModBlockEntities.SUSBLOCK, BrushableBlockEntityRenderer::new);
-        BlockEntityRendererFactories.register(ModBlockEntities.DARK_CURRANTSLATE_CHEST, ModChestRenderer::new);
-        BlockEntityRendererFactories.register(ModBlockEntities.GLACIEMITE_CHEST, ModChestRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.KEY_HANDLER, KeyHandlerStoneRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.TRANSLOCATONE, TranslocatoneRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.SUSBLOCK, BrushableBlockRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.DARK_CURRANTSLATE_CHEST, ModChestRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.GLACIEMITE_CHEST, ModChestRenderer::new);
 
         ParticleFactoryRegistry.getInstance().register(ModParticleTypes.WIND_VIBRATION, WindVibrationParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticleTypes.LIGHT_VIBRATION, LightVibrationParticle.Factory::new);
@@ -138,36 +138,36 @@ public class UnseenWorldClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(new ClientTicks());
 
         DimensionRenderingRegistry.registerDimensionEffects(UnseenWorld.makeID("the_chimeric_darkness"),
-                new DimensionEffects(Float.NaN, false, DimensionEffects.SkyType.NONE, false, true) {
+                new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, true) {
                     @Override
-                    public Vec3d adjustFogColor(Vec3d color, float sunHeight) {
-                        return color.multiply(0.1);
+                    public Vec3 getBrightnessDependentFogColor(Vec3 color, float sunHeight) {
+                        return color.scale(0.1);
                     }
 
                     @Override
-                    public boolean useThickFog(int camX, int camY) {
+                    public boolean isFoggyAt(int camX, int camY) {
                         return true;
                     }
                 });
         DimensionRenderingRegistry.registerSkyRenderer(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY, new ChimericDarknessSkyRenderer());
         DimensionRenderingRegistry.registerWeatherRenderer(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY, new Grippfall());
 
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, new Identifier("pull"), (stack, world, entity, seed) -> {
+        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, new ResourceLocation("pull"), (stack, world, entity, seed) -> {
             if (entity == null)
                 return 0.0F;
             else
-                return entity.getActiveItem() != stack ? 0.0F : (float) (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / 20.0F;
+                return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
         });
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, new Identifier("pulling"), (stack, world, entity, seed) -> entity != null
-                && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> switch (IGrippingWeapons.getPhase(stack)) {
+        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, new ResourceLocation("pulling"), (stack, world, entity, seed) -> entity != null
+                && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> switch (IGrippingWeapons.getPhase(stack)) {
             case "crystal_crushing", "crystal_suctioning" -> 2;
             case "crystal_rain" -> 1;
             default -> 0;
         });
-        ModelPredicateProviderRegistry.register(ModItems.SHIELD_OF_CHIMERIC_WARRIOR, new Identifier("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_BUNDLE, new Identifier("filled"), (stack, world, entity, seed) -> BundleItem.getAmountFilled(stack));
-        ModelPredicateProviderRegistry.register(ModItems.GRIPPING_GAUNTLET, new Identifier("grip"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.SHIELD_OF_CHIMERIC_WARRIOR, new ResourceLocation("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.GRIPPING_BUNDLE, new ResourceLocation("filled"), (stack, world, entity, seed) -> BundleItem.getFullnessDisplay(stack));
+        ItemProperties.register(ModItems.GRIPPING_GAUNTLET, new ResourceLocation("grip"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 
         ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity instanceof MultipartEntity multipartEntity) {
@@ -182,17 +182,17 @@ public class UnseenWorldClient implements ClientModInitializer {
             }
         });
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-            if (entityRenderer instanceof PlayerEntityRenderer)
+            if (entityRenderer instanceof PlayerRenderer)
                 registrationHelper.register(new BladeShieldLayer<>(entityRenderer, context));
             registrationHelper.register(new GrippingLayer<>(entityRenderer, context));
             registrationHelper.register(new DarkeningLayer<>(entityRenderer));
         });
-        HandledScreens.register(
+        MenuScreens.register(
                 ModScreenHandlers.DARK_CURRANTSLATE_CHEST,
-                (ChestScreenHandler handler, PlayerInventory inv, Text title) -> new CottonInventoryScreen<>(handler, inv.player, title)
+                (ChestScreenHandler handler, Inventory inv, Component title) -> new CottonInventoryScreen<>(handler, inv.player, title)
         );
-        HandledScreens.register(ModScreenHandlers.GLACIEMITE_CHEST,
-                (ChestScreenHandler handler, PlayerInventory inv, Text title) -> new CottonInventoryScreen<>(handler, inv.player, title)
+        MenuScreens.register(ModScreenHandlers.GLACIEMITE_CHEST,
+                (ChestScreenHandler handler, Inventory inv, Component title) -> new CottonInventoryScreen<>(handler, inv.player, title)
         );
     }
 }

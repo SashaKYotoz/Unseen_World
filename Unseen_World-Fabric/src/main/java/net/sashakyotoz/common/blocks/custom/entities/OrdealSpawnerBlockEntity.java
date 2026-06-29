@@ -1,20 +1,20 @@
 package net.sashakyotoz.common.blocks.custom.entities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
@@ -32,27 +32,27 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void load(CompoundTag nbt) {
         this.ticks = nbt.getInt("ticks");
-        super.readNbt(nbt);
+        super.load(nbt);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void saveAdditional(CompoundTag nbt) {
         nbt.putInt("ticks", ticks);
-        super.writeNbt(nbt);
+        super.saveAdditional(nbt);
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, OrdealSpawnerBlockEntity entity) {
-        if (state.contains(OrdealSpawnerBlock.STATE) && !state.get(OrdealSpawnerBlock.STATE).id.equals("inactive")) {
-            switch (state.get(OrdealSpawnerBlock.STATE)) {
+    public static void tick(Level world, BlockPos pos, BlockState state, OrdealSpawnerBlockEntity entity) {
+        if (state.hasProperty(OrdealSpawnerBlock.STATE) && !state.getValue(OrdealSpawnerBlock.STATE).id.equals("inactive")) {
+            switch (state.getValue(OrdealSpawnerBlock.STATE)) {
                 case COOLDOWN -> {
                     if (entity.ticks > 24000)
                         entity.ticks++;
                     else {
                         entity.ticks = 0;
-                        world.setBlockState(pos, state.with(OrdealSpawnerBlock.STATE, OrdealSpawnerState.INACTIVE), 3);
-                        world.playSound(null, pos, ModSoundEvents.ORDEAL_SPAWNER_REWARDING, SoundCategory.BLOCKS, 0.75F, 1.75F);
+                        world.setBlock(pos, state.setValue(OrdealSpawnerBlock.STATE, OrdealSpawnerState.INACTIVE), 3);
+                        world.playSound(null, pos, ModSoundEvents.ORDEAL_SPAWNER_REWARDING, SoundSource.BLOCKS, 0.75F, 1.75F);
                     }
                 }
                 case EJECTING_REWARD -> {
@@ -61,39 +61,39 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
                     else {
                         entity.ticks = 0;
                         var lootTableId = UnseenWorld.makeID("chests/ordeal_spawner_%s"
-                                .formatted(state.get(OrdealSpawnerBlock.TYPE).name));
-                        if (world instanceof ServerWorld serverWorld) {
-                            var lootTable = serverWorld.getServer().getLootManager()
+                                .formatted(state.getValue(OrdealSpawnerBlock.TYPE).name));
+                        if (world instanceof ServerLevel serverWorld) {
+                            var lootTable = serverWorld.getServer().getLootData()
                                     .getLootTable(lootTableId);
 
-                            var lootParams = new LootContextParameterSet.Builder(serverWorld)
-                                    .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos))
-                                    .add(LootContextParameters.BLOCK_STATE, state)
-                                    .add(LootContextParameters.BLOCK_ENTITY, entity)
-                                    .build(LootContextTypes.CHEST);
-                            List<ItemStack> generatedLoot = lootTable.generateLoot(lootParams);
+                            var lootParams = new LootParams.Builder(serverWorld)
+                                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                                    .withParameter(LootContextParams.BLOCK_STATE, state)
+                                    .withParameter(LootContextParams.BLOCK_ENTITY, entity)
+                                    .create(LootContextParamSets.CHEST);
+                            List<ItemStack> generatedLoot = lootTable.getRandomItems(lootParams);
 
                             for (ItemStack stack : generatedLoot)
-                                Block.dropStack(world, pos, stack);
-                            world.setBlockState(pos, state.with(OrdealSpawnerBlock.STATE, OrdealSpawnerState.COOLDOWN), 3);
-                            world.playSound(null, pos, ModSoundEvents.ORDEAL_SPAWNER_REWARDING, SoundCategory.BLOCKS, 1.0F, 0.75F);
+                                Block.popResource(world, pos, stack);
+                            world.setBlock(pos, state.setValue(OrdealSpawnerBlock.STATE, OrdealSpawnerState.COOLDOWN), 3);
+                            world.playSound(null, pos, ModSoundEvents.ORDEAL_SPAWNER_REWARDING, SoundSource.BLOCKS, 1.0F, 0.75F);
                         }
                     }
                 }
                 case WAITING_FOR_PLAYERS -> {
-                    if (world.getPlayers().stream().anyMatch(player ->
+                    if (world.players().stream().anyMatch(player ->
                             !player.isSpectator()
-                                    && !player.isDead()
+                                    && !player.isDeadOrDying()
                                     && !player.isCreative()
-                                    && player.squaredDistanceTo(pos.getX(), pos.getY(), pos.getZ()) <= 9
+                                    && player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) <= 9
                     )) {
                         if (entity.ticks < 300) {
                             entity.ticks++;
                             if (entity.ticks % 20 == 0)
-                                world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 0.75F, 1.75F);
+                                world.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.75F, 1.75F);
                         } else {
-                            world.setBlockState(pos, state.with(OrdealSpawnerBlock.STATE, OrdealSpawnerState.ACTIVE), 3);
-                            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1.25F, 0.9F);
+                            world.setBlock(pos, state.setValue(OrdealSpawnerBlock.STATE, OrdealSpawnerState.ACTIVE), 3);
+                            world.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.25F, 0.9F);
                         }
                     }
                 }
@@ -101,13 +101,13 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
         }
     }
 
-    private static void createEntity(World world, BlockPos pos, BlockState state) {
-        if (!world.isClient() && world instanceof ServerWorld serverWorld) {
+    private static void createEntity(Level world, BlockPos pos, BlockState state) {
+        if (!world.isClientSide() && world instanceof ServerLevel serverWorld) {
             int amount = serverWorld.random.nextInt(4) + 2;
             for (int i = 0; i < amount; i++) {
                 int randomE = serverWorld.getRandom().nextInt(3);
-                PathAwareEntity entity;
-                switch (state.get(OrdealSpawnerBlock.TYPE)) {
+                PathfinderMob entity;
+                switch (state.getValue(OrdealSpawnerBlock.TYPE)) {
                     case GRIPCRYSTAL -> {
                         switch (randomE) {
                             case 0 -> entity = ModEntities.ESPYER.create(world);

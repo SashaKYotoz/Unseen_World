@@ -1,16 +1,16 @@
 package net.sashakyotoz.common.world.features.custom;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.sashakyotoz.common.world.features.custom.configs.SpiralSpikeFeatureConfig;
 
 import java.util.HashSet;
@@ -25,15 +25,15 @@ public class SpiralSpikeFeature extends Feature<SpiralSpikeFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<SpiralSpikeFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos origin = context.getOrigin();
-        Random random = context.getRandom();
-        SpiralSpikeFeatureConfig config = context.getConfig();
+    public boolean place(FeaturePlaceContext<SpiralSpikeFeatureConfig> context) {
+        WorldGenLevel world = context.level();
+        BlockPos origin = context.origin();
+        RandomSource random = context.random();
+        SpiralSpikeFeatureConfig config = context.config();
 
-        int height = config.size().get(random) + random.nextInt(5) + 5;
+        int height = config.size().sample(random) + random.nextInt(5) + 5;
         int span = height + random.nextInt(height / 2);
-        int radius = Math.max(1, (config.size().get(random) - 1) / 2);
+        int radius = Math.max(1, (config.size().sample(random) - 1) / 2);
 
         double angle = random.nextDouble() * Math.PI * 2;
         double startX = origin.getX();
@@ -47,8 +47,8 @@ public class SpiralSpikeFeature extends Feature<SpiralSpikeFeatureConfig> {
         double controlX = (startX + endX) / 2.0;
         double controlZ = (startZ + endZ) / 2.0;
         double controlY = startY + height * 1.5;
-        if (world.isRegionLoaded(origin, BlockPos.ofFloored(endX, endY, endZ))) {
-            BlockState baseBlock = config.state().get(random, origin);
+        if (world.hasChunksAt(origin, BlockPos.containing(endX, endY, endZ))) {
+            BlockState baseBlock = config.state().getState(random, origin);
             Set<BlockPos> placedPositions = new HashSet<>();
 
             int steps = span * 4;
@@ -80,20 +80,20 @@ public class SpiralSpikeFeature extends Feature<SpiralSpikeFeatureConfig> {
                     for (int y = -currentRadius; y <= currentRadius; y++) {
                         for (int z = -currentRadius; z <= currentRadius; z++) {
                             if (x * x + y * y + z * z <= currentRadius * currentRadius) {
-                                BlockPos pos = centerPos.add(x, y, z);
+                                BlockPos pos = centerPos.offset(x, y, z);
 
                                 if (!placedPositions.add(pos)) continue;
 
-                                if (world.getBlockState(pos).isAir() || !world.getBlockState(pos).isOpaque()) {
-                                    BlockState topBlock = config.facing_state().get(random, pos);
+                                if (world.getBlockState(pos).isAir() || !world.getBlockState(pos).canOcclude()) {
+                                    BlockState topBlock = config.facing_state().getState(random, pos);
                                     Direction direction = getFreeSide(world, pos);
-                                    if (topBlock.contains(Properties.FACING))
-                                        topBlock = topBlock.with(Properties.FACING, direction);
-                                    this.setBlockState(world, pos, random.nextInt(3) == 1 ? topBlock : baseBlock);
-                                    if (world.getBlockState(pos.offset(direction, 2)).isAir() && random.nextFloat() < 0.125) {
-                                        BlockState decorativeState = config.decorating_state().get(random, pos);
-                                        decorativeState = decorativeState.with(Properties.FACING, direction);
-                                        this.setBlockState(world, pos.offset(direction), decorativeState);
+                                    if (topBlock.hasProperty(BlockStateProperties.FACING))
+                                        topBlock = topBlock.setValue(BlockStateProperties.FACING, direction);
+                                    this.setBlock(world, pos, random.nextInt(3) == 1 ? topBlock : baseBlock);
+                                    if (world.getBlockState(pos.relative(direction, 2)).isAir() && random.nextFloat() < 0.125) {
+                                        BlockState decorativeState = config.decorating_state().getState(random, pos);
+                                        decorativeState = decorativeState.setValue(BlockStateProperties.FACING, direction);
+                                        this.setBlock(world, pos.relative(direction), decorativeState);
                                     }
                                 }
                             }
@@ -111,25 +111,25 @@ public class SpiralSpikeFeature extends Feature<SpiralSpikeFeatureConfig> {
         return true;
     }
 
-    private void fillDownToGround(StructureWorldAccess world, BlockPos pos, BlockState state) {
-        BlockPos.Mutable mutable = pos.mutableCopy();
+    private void fillDownToGround(WorldGenLevel world, BlockPos pos, BlockState state) {
+        BlockPos.MutableBlockPos mutable = pos.mutable();
         for (int i = 0; i < 32; i++) {
             mutable.move(Direction.DOWN);
-            if (world.getBlockState(mutable).isAir() || !world.getBlockState(mutable).isOpaque()) {
-                this.setBlockState(world, mutable, state);
+            if (world.getBlockState(mutable).isAir() || !world.getBlockState(mutable).canOcclude()) {
+                this.setBlock(world, mutable, state);
             } else {
                 mutable.move(Direction.DOWN);
-                this.setBlockState(world, mutable, state);
+                this.setBlock(world, mutable, state);
                 break;
             }
         }
     }
 
-    public static Direction getFreeSide(TestableWorld world, BlockPos pos) {
+    public static Direction getFreeSide(LevelSimulatedReader world, BlockPos pos) {
         AtomicReference<Direction> freeSide = new AtomicReference<>(Direction.UP);
         Direction.stream()
-                .filter(direction -> direction.getAxis().isHorizontal() && world.testBlockState(pos.offset(direction),
-                        AbstractBlock.AbstractBlockState::isAir))
+                .filter(direction -> direction.getAxis().isHorizontal() && world.isStateAtPosition(pos.relative(direction),
+                        BlockBehaviour.BlockStateBase::isAir))
                 .findFirst().ifPresent(freeSide::set);
         return freeSide.get();
     }

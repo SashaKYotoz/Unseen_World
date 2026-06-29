@@ -1,9 +1,9 @@
 package net.sashakyotoz.common.entities.ai.goals.spells;
 
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.sashakyotoz.common.entities.custom.VenomerEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,11 +13,11 @@ public class InvisibilityGoal extends VenomerEntity.CastSpellGoal {
     }
 
     @Override
-    public boolean canStart() {
-        return super.canStart()
-                && !venomer.hasStatusEffect(StatusEffects.INVISIBILITY)
+    public boolean canUse() {
+        return super.canUse()
+                && !venomer.hasEffect(MobEffects.INVISIBILITY)
                 && venomer.getTarget() != null
-                && venomer.getTarget().squaredDistanceTo(venomer) < 9;
+                && venomer.getTarget().distanceToSqr(venomer) < 9;
     }
 
     @Override
@@ -37,14 +37,14 @@ public class InvisibilityGoal extends VenomerEntity.CastSpellGoal {
 
     @Override
     protected void castSpell() {
-        venomer.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 200));
+        venomer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 200));
         venomer.flee(16);
     }
 
     @Nullable
     @Override
     protected SoundEvent getSoundPrepare() {
-        return SoundEvents.ENTITY_ILLUSIONER_PREPARE_MIRROR;
+        return SoundEvents.ILLUSIONER_PREPARE_MIRROR;
     }
 
     @Override

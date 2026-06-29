@@ -1,48 +1,48 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
-import net.minecraft.block.AmethystClusterBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AmethystClusterBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 import net.sashakyotoz.utils.ActionsUtils;
 
 public class GripcrystalWartBlock extends AmethystClusterBlock {
-    public GripcrystalWartBlock(Settings settings) {
+    public GripcrystalWartBlock(Properties settings) {
         super(12, 3, settings);
     }
 
     @Override
-    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        super.onLandedUpon(world, state, pos, entity, fallDistance);
-        gripNearby(entity.getWorld(), entity.getBlockPos());
+    public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        super.fallOn(world, state, pos, entity, fallDistance);
+        gripNearby(entity.level(), entity.blockPosition());
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (random.nextInt(9) == 1) {
-            if (world.getBlockState(pos.up()).isAir())
-                gripNearby(world, pos.up());
-            if (world.getBlockState(pos.down()).isAir())
-                gripNearby(world, pos.down(2));
+            if (world.getBlockState(pos.above()).isAir())
+                gripNearby(world, pos.above());
+            if (world.getBlockState(pos.below()).isAir())
+                gripNearby(world, pos.below(2));
         }
     }
 
-    private void gripNearby(World world, BlockPos pos) {
-        world.getEntitiesByClass(LivingEntity.class,
-                new Box(pos.toCenterPos(), pos.toCenterPos()).expand(6), entity ->
+    private void gripNearby(Level world, BlockPos pos) {
+        world.getEntitiesOfClass(LivingEntity.class,
+                new AABB(pos.getCenter(), pos.getCenter()).inflate(6), entity ->
                         entity instanceof IGrippingEntity).forEach(entity -> {
             GrippingData.addGrippingSeconds((IGrippingEntity) entity, 4);
-            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.BLOCKS, 1.2F, 1.8F);
+            world.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1.2F, 1.8F);
             ActionsUtils.spawnParticle(ParticleTypes.BUBBLE_POP, world, pos.getX(), pos.getY(), pos.getZ(), 4f);
         });
     }

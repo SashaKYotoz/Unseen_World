@@ -1,45 +1,41 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.EscapeSunlightGoal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FleeSunGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 
-public class GleamcarverEntity extends PathAwareEntity {
+public class GleamcarverEntity extends PathfinderMob {
     public final AnimationState death = new AnimationState();
     public Type gleamcarverType;
 
-    public GleamcarverEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public GleamcarverEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         if (nbt.getString("entityType") != null) {
             for (Type type : Type.values()) {
                 if (type.typeName.equals(nbt.getString("entityType"))) {
@@ -51,41 +47,41 @@ public class GleamcarverEntity extends PathAwareEntity {
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         if (this.gleamcarverType != null)
             nbt.putString("entityType", this.gleamcarverType.typeName);
     }
 
     @Override
-    protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (player.getStackInHand(hand).getItem() instanceof PickaxeItem && this.gleamcarverType != null) {
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (player.getItemInHand(hand).getItem() instanceof PickaxeItem && this.gleamcarverType != null) {
             switch (this.gleamcarverType) {
                 case ABYSSAL -> {
-                    this.dropItem(ModItems.RAW_ABYSSAL_ORE);
+                    this.spawnAtLocation(ModItems.RAW_ABYSSAL_ORE);
                     this.gleamcarverType = Type.GLACIEMITE;
-                    player.getStackInHand(hand).damage(1, player, p -> p.sendToolBreakStatus(hand));
-                    player.getItemCooldownManager().set(player.getStackInHand(hand).getItem(), 40);
-                    return ActionResult.success(true);
+                    player.getItemInHand(hand).hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                    player.getCooldowns().addCooldown(player.getItemInHand(hand).getItem(), 40);
+                    return InteractionResult.sidedSuccess(true);
                 }
                 case TANZANITE -> {
-                    this.dropItem(ModBlocks.TANZANITE_BLOCK);
+                    this.spawnAtLocation(ModBlocks.TANZANITE_BLOCK);
                     this.gleamcarverType = Type.DARK_CURRANTSLATE;
-                    player.getStackInHand(hand).damage(1, player, p -> p.sendToolBreakStatus(hand));
-                    player.getItemCooldownManager().set(player.getStackInHand(hand).getItem(), 40);
-                    return ActionResult.success(true);
+                    player.getItemInHand(hand).hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                    player.getCooldowns().addCooldown(player.getItemInHand(hand).getItem(), 40);
+                    return InteractionResult.sidedSuccess(true);
                 }
                 case UNSEENIUM -> {
-                    this.dropItem(ModItems.RAW_UNSEENIUM_ORE);
+                    this.spawnAtLocation(ModItems.RAW_UNSEENIUM_ORE);
                     this.gleamcarverType = Type.DARK_CURRANTSLATE;
-                    player.getStackInHand(hand).damage(1, player, p -> p.sendToolBreakStatus(hand));
-                    player.getItemCooldownManager().set(player.getStackInHand(hand).getItem(), 40);
-                    return ActionResult.success(true);
+                    player.getItemInHand(hand).hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                    player.getCooldowns().addCooldown(player.getItemInHand(hand).getItem(), 40);
+                    return InteractionResult.sidedSuccess(true);
                 }
             }
-            this.getWorld().playSound(this, this.getBlockPos(), SoundEvents.BLOCK_DEEPSLATE_HIT, SoundCategory.NEUTRAL, 2, 2);
+            this.level().playSound(this, this.blockPosition(), SoundEvents.DEEPSLATE_HIT, SoundSource.NEUTRAL, 2, 2);
         }
-        return super.interactMob(player, hand);
+        return super.mobInteract(player, hand);
     }
     @Override
     protected SoundEvent getAmbientSound() {
@@ -94,8 +90,8 @@ public class GleamcarverEntity extends PathAwareEntity {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (!this.getWorld().isClient()) {
-            if (this.age % 1000 == 0 && this.gleamcarverType != null) {
+        if (!this.level().isClientSide()) {
+            if (this.tickCount % 1000 == 0 && this.gleamcarverType != null) {
                 switch (this.gleamcarverType) {
                     case GLACIEMITE -> {
                         if (this.random.nextBoolean())
@@ -109,47 +105,47 @@ public class GleamcarverEntity extends PathAwareEntity {
             }
         }
         if (this.gleamcarverType == null) {
-            if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(ModBiomes.DEEP_GLACIEMITE_CAVES))
+            if (this.level().getBiome(this.blockPosition()).is(ModBiomes.DEEP_GLACIEMITE_CAVES))
                 this.gleamcarverType = Type.ABYSSAL;
-            else if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(ModBiomes.TANZANITE_CAVES))
+            else if (this.level().getBiome(this.blockPosition()).is(ModBiomes.TANZANITE_CAVES))
                 this.gleamcarverType = Type.TANZANITE;
             else
                 this.gleamcarverType = this.getRandom().nextBoolean() ? Type.DARK_CURRANTSLATE : Type.UNSEENIUM;
         }
     }
 
-    public static boolean canGleamcarverSpawn(EntityType<? extends GleamcarverEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.up()).isAir() && pos.getY() < 16;
+    public static boolean canGleamcarverSpawn(EntityType<? extends GleamcarverEntity> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        return world.getBlockState(pos.above()).isAir() && pos.getY() < 16;
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
+    public void die(DamageSource damageSource) {
         this.deathTime = -20;
-        super.onDeath(damageSource);
+        super.die(damageSource);
     }
 
     @Override
-    protected void updatePostDeath() {
-        super.updatePostDeath();
-        if (!this.death.isRunning())
-            this.death.start(this.age);
+    protected void tickDeath() {
+        super.tickDeath();
+        if (!this.death.isStarted())
+            this.death.start(this.tickCount);
     }
 
     @Override
-    protected void initGoals() {
-        super.initGoals();
-        this.goalSelector.add(1, new LookAroundGoal(this));
-        this.goalSelector.add(1, new EscapeSunlightGoal(this, 1));
-        this.goalSelector.add(2, new SwimGoal(this));
-        this.goalSelector.add(2, new WanderAroundFarGoal(this, 0.75, 0.05f));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new FleeSunGoal(this, 1));
+        this.goalSelector.addGoal(2, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.75, 0.05f));
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 12)
-                .add(EntityAttributes.GENERIC_ARMOR, 4)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 12)
+                .add(Attributes.ARMOR, 4)
+                .add(Attributes.ATTACK_DAMAGE, 2)
+                .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 
     public enum Type {

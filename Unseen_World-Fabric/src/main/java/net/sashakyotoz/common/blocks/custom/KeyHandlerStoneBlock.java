@@ -1,29 +1,33 @@
 package net.sashakyotoz.common.blocks.custom;
 
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.entities.KeyHandlerStoneBlockEntity;
@@ -36,100 +40,100 @@ import net.sashakyotoz.common.items.ModItems;
 
 import java.util.function.Consumer;
 
-public class KeyHandlerStoneBlock extends BlockWithEntity {
-    public static final BooleanProperty LOCKED = Properties.LOCKED;
+public class KeyHandlerStoneBlock extends BaseEntityBlock {
+    public static final BooleanProperty LOCKED = BlockStateProperties.LOCKED;
 
-    public static final EnumProperty<KeyHandlerType> HANDLER_TYPE = EnumProperty.of("handler_type", KeyHandlerType.class);
+    public static final EnumProperty<KeyHandlerType> HANDLER_TYPE = EnumProperty.create("handler_type", KeyHandlerType.class);
 
-    private final VoxelShape KEY_HANDLER_STONE = VoxelShapes.union(
-            KeyHandlerStoneBlock.createCuboidShape(0, 0, 0, 16, 4, 16),
-            KeyHandlerStoneBlock.createCuboidShape(1, 4, 1, 15, 6, 15),
-            KeyHandlerStoneBlock.createCuboidShape(3, 6, 3, 13, 14, 13),
-            KeyHandlerStoneBlock.createCuboidShape(1, 14, 1, 15, 16, 15),
-            KeyHandlerStoneBlock.createCuboidShape(2, 16, 2, 14, 18, 14));
+    private final VoxelShape KEY_HANDLER_STONE = Shapes.or(
+            KeyHandlerStoneBlock.box(0, 0, 0, 16, 4, 16),
+            KeyHandlerStoneBlock.box(1, 4, 1, 15, 6, 15),
+            KeyHandlerStoneBlock.box(3, 6, 3, 13, 14, 13),
+            KeyHandlerStoneBlock.box(1, 14, 1, 15, 16, 15),
+            KeyHandlerStoneBlock.box(2, 16, 2, 14, 18, 14));
 
-    public KeyHandlerStoneBlock(Settings settings) {
+    public KeyHandlerStoneBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(HANDLER_TYPE, KeyHandlerType.GLACIEMITE).with(LOCKED, true));
+        this.registerDefaultState(this.defaultBlockState().setValue(HANDLER_TYPE, KeyHandlerType.GLACIEMITE).setValue(LOCKED, true));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LOCKED).add(HANDLER_TYPE);
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new KeyHandlerStoneBlockEntity(pos, state);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return KEY_HANDLER_STONE;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof KeyHandlerStoneBlockEntity entity && entity.data.cooldown() <= 0) {
-            if (!state.get(LOCKED) && player instanceof ServerPlayerEntity serverPlayer)
-                serverPlayer.sendMessage(Text.translatable("gameplay.unseen_world.key_handler_cooldown", entity.data.cooldown()), true);
+            if (!state.getValue(LOCKED) && player instanceof ServerPlayer serverPlayer)
+                serverPlayer.displayClientMessage(Component.translatable("gameplay.unseen_world.key_handler_cooldown", entity.data.cooldown()), true);
             Item requiredKey;
             Consumer<BlockPos> entitySpawner;
-            switch (state.get(HANDLER_TYPE)) {
+            switch (state.getValue(HANDLER_TYPE)) {
                 case DARK_CURRANTSLATE -> {
                     requiredKey = ModItems.ABYSSAL_KEY;
                     entitySpawner = (targetPos) -> {
                         EclipseSentinel entityToSpawn = new EclipseSentinel(ModEntities.ECLIPSE_SENTINEL, world);
-                        entityToSpawn.teleport(targetPos.getX(), targetPos.getY() + 0.5f, targetPos.getZ());
-                        world.spawnEntity(entityToSpawn);
+                        entityToSpawn.teleportToWithTicket(targetPos.getX(), targetPos.getY() + 0.5f, targetPos.getZ());
+                        world.addFreshEntity(entityToSpawn);
                     };
                 }
                 case GLACIEMITE -> {
                     requiredKey = ModItems.GRIPCRYSTAL_KEY;
                     entitySpawner = (targetPos) -> {
                         WarriorOfChimericDarkness entityToSpawn = new WarriorOfChimericDarkness(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS, world);
-                        entityToSpawn.teleport(targetPos.getX(), targetPos.getY() + 0.5f, targetPos.getZ());
-                        world.spawnEntity(entityToSpawn);
+                        entityToSpawn.teleportToWithTicket(targetPos.getX(), targetPos.getY() + 0.5f, targetPos.getZ());
+                        world.addFreshEntity(entityToSpawn);
                     };
                 }
                 case GOLDEN -> {
                     requiredKey = ModItems.AURIC_KEY;
                     entitySpawner = (targetPos) -> {
                         WarriorOfChimericDarkness entityToSpawn = new WarriorOfChimericDarkness(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS, world);
-                        entityToSpawn.teleport(targetPos.getX(), targetPos.getY() + 0.5f, targetPos.getZ());
-                        world.spawnEntity(entityToSpawn);
+                        entityToSpawn.teleportToWithTicket(targetPos.getX(), targetPos.getY() + 0.5f, targetPos.getZ());
+                        world.addFreshEntity(entityToSpawn);
                     };
                 }
                 default -> {
-                    return super.onUse(state, world, pos, player, hand, hit);
+                    return super.use(state, world, pos, player, hand, hit);
                 }
             }
 
-            if (player.getMainHandStack().isOf(requiredKey)) {
-                player.getItemCooldownManager().set(player.getMainHandStack().getItem(), 20);
+            if (player.getMainHandItem().is(requiredKey)) {
+                player.getCooldowns().addCooldown(player.getMainHandItem().getItem(), 20);
 
                 entity.data = entity.data.firstKeyIn() ? new KeyHandlerStoneData(true, entity.data.firstKeyOffset(), true, -1f, entity.data.cooldown())
                         : new KeyHandlerStoneData(true, 1, entity.data.secondKeyIn(), entity.data.secondKeyOffset(), entity.data.cooldown());
 
-                player.getMainHandStack().decrement(1);
-                world.playSound(player, pos, SoundEvents.BLOCK_METAL_HIT, SoundCategory.BLOCKS, 2.5f, 2);
+                player.getMainHandItem().shrink(1);
+                world.playSound(player, pos, SoundEvents.METAL_HIT, SoundSource.BLOCKS, 2.5f, 2);
             }
 
-            if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && !world.isClient()) {
-                world.playSound(player, pos, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 2, 2);
-                world.setBlockState(pos, state.with(LOCKED, false));
+            if (entity.data.firstKeyIn() && entity.data.secondKeyIn() && !world.isClientSide()) {
+                world.playSound(player, pos, SoundEvents.PORTAL_TRIGGER, SoundSource.BLOCKS, 2, 2);
+                world.setBlockAndUpdate(pos, state.setValue(LOCKED, false));
 
                 BlockPos targetPos = getPosOfTranslocatone(world, pos);
-                world.getEntitiesByClass(PlayerEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()),
+                world.getEntitiesOfClass(Player.class, new AABB(pos.getCenter(), pos.getCenter()),
                                 player1 -> player1.isAlive() && !player1.isCreative() && !player1.isSpectator())
-                        .forEach(entity1 -> entity1.teleport(entity1.getX(), targetPos.getY() + 1, entity1.getZ()));
+                        .forEach(entity1 -> entity1.teleportToWithTicket(entity1.getX(), targetPos.getY() + 1, entity1.getZ()));
                 setCooldown(entity);
 
                 if (!pos.equals(targetPos))
                     entitySpawner.accept(targetPos);
             }
         }
-        return super.onUse(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
 
@@ -143,15 +147,15 @@ public class KeyHandlerStoneBlock extends BlockWithEntity {
         );
     }
 
-    private BlockPos getPosOfTranslocatone(World world, BlockPos pos) {
+    private BlockPos getPosOfTranslocatone(Level world, BlockPos pos) {
         int radius = 3;
         int height = 31;
         for (int y = -height; y < height; y++) {
             for (int x = -radius; x < radius; x++) {
                 for (int z = -radius; z < radius; z++) {
-                    BlockPos pos1 = pos.add(x, y, z);
-                    if (world.getBlockState(pos1).isOf(ModBlocks.GLACIEMITE_TRANSLOCATONE)) {
-                        world.setBlockState(pos1, world.getBlockState(pos1).with(Properties.TRIGGERED, true));
+                    BlockPos pos1 = pos.offset(x, y, z);
+                    if (world.getBlockState(pos1).is(ModBlocks.GLACIEMITE_TRANSLOCATONE)) {
+                        world.setBlockAndUpdate(pos1, world.getBlockState(pos1).setValue(BlockStateProperties.TRIGGERED, true));
                         return pos1;
                     }
                 }
@@ -161,17 +165,17 @@ public class KeyHandlerStoneBlock extends BlockWithEntity {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, ModBlockEntities.KEY_HANDLER,
-                world.isClient() ? KeyHandlerStoneBlockEntity::clientTick : KeyHandlerStoneBlockEntity::serverTick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        return createTickerHelper(type, ModBlockEntities.KEY_HANDLER,
+                world.isClientSide() ? KeyHandlerStoneBlockEntity::clientTick : KeyHandlerStoneBlockEntity::serverTick);
     }
 
-    public enum KeyHandlerType implements StringIdentifiable {
+    public enum KeyHandlerType implements StringRepresentable {
         GLACIEMITE("glaciemite"),
         DARK_CURRANTSLATE("dark_currantslate"),
         GOLDEN("golden");
@@ -182,7 +186,7 @@ public class KeyHandlerStoneBlock extends BlockWithEntity {
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.id;
         }
     }

@@ -2,8 +2,8 @@ package net.sashakyotoz.common.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.item.BlockItem;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.BlockItem;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.ModRegistry;
 
@@ -73,16 +73,16 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("advancement.unseen_world.quenched_sun.desc", "The one who hided eternal eclipse - defeated");
 
         ModRegistry.BLOCKS.forEach(block -> {
-            if (!block.getTranslationKey().contains("sign"))
-                translationBuilder.add(block, convertToName(block.getTranslationKey(), true));
+            if (!block.getDescriptionId().contains("sign"))
+                translationBuilder.add(block, convertToName(block.getDescriptionId(), true));
         });
         ModRegistry.ITEMS.forEach(item -> {
             if (!(item instanceof BlockItem))
-                translationBuilder.add(item, convertToName(item.getTranslationKey(), false));
+                translationBuilder.add(item, convertToName(item.getDescriptionId(), false));
         });
-        Registries.ENTITY_TYPE.forEach(entityType -> {
-            if (entityType.getTranslationKey().contains(UnseenWorld.MOD_ID))
-                translationBuilder.add(entityType, convertToName(entityType.getTranslationKey(), true));
+        BuiltInRegistries.ENTITY_TYPE.forEach(entityType -> {
+            if (entityType.getDescriptionId().contains(UnseenWorld.MOD_ID))
+                translationBuilder.add(entityType, convertToName(entityType.getDescriptionId(), true));
         });
     }
 

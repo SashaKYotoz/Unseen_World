@@ -1,51 +1,51 @@
 package net.sashakyotoz.common.blocks.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class BulbLikeBlock extends Block {
-    public static final BooleanProperty LIT = Properties.LIT;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public BulbLikeBlock(Settings settings) {
+    public BulbLikeBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(LIT, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false));
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(LIT, ctx.getWorld().isReceivingRedstonePower(ctx.getBlockPos()));
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(LIT, ctx.getLevel().hasNeighborSignal(ctx.getClickedPos()));
     }
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-        if (!world.isClient) {
-            boolean bl = state.get(LIT);
-            if (bl != world.isReceivingRedstonePower(pos)) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+        if (!world.isClientSide) {
+            boolean bl = state.getValue(LIT);
+            if (bl != world.hasNeighborSignal(pos)) {
                 if (bl)
-                    world.scheduleBlockTick(pos, this, 4);
+                    world.scheduleTick(pos, this, 4);
                 else
-                    world.setBlockState(pos, state.cycle(LIT), Block.NOTIFY_LISTENERS);
+                    world.setBlock(pos, state.cycle(LIT), Block.UPDATE_CLIENTS);
             }
         }
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (state.get(LIT) && !world.isReceivingRedstonePower(pos)) {
-            world.setBlockState(pos, state.cycle(LIT), Block.NOTIFY_LISTENERS);
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        if (state.getValue(LIT) && !world.hasNeighborSignal(pos)) {
+            world.setBlock(pos, state.cycle(LIT), Block.UPDATE_CLIENTS);
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LIT);
     }
 }

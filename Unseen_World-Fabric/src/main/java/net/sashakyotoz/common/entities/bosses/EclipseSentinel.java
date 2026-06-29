@@ -1,48 +1,47 @@
 package net.sashakyotoz.common.entities.bosses;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.boss.BossBar;
-import net.minecraft.entity.boss.ServerBossBar;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.DragonFireballEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtIntArray;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
-import net.minecraft.world.event.BlockPositionSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.BossEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.DragonFireball;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
@@ -79,20 +78,20 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
     public final EclipseSentinelPartEntity body;
     public final EclipseSentinelPartEntity crack;
 
-    private final ServerBossBar bossBar = new ServerBossBar(Text.translatable("entity.unseen_world.eclipse_sentinel"), BossBar.Color.BLUE, BossBar.Style.NOTCHED_6);
-    public static final TrackedDataHandler<EclipseSentinel.SentinelPose> SENTINEL_POSE = TrackedDataHandler.ofEnum(EclipseSentinel.SentinelPose.class);
-    public static final TrackedData<EclipseSentinel.SentinelPose> PHASE = DataTracker.registerData(EclipseSentinel.class, SENTINEL_POSE);
-    public static final TrackedData<Boolean> IS_EXALTED = DataTracker.registerData(EclipseSentinel.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.eclipse_sentinel"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
+    public static final EntityDataSerializer<EclipseSentinel.SentinelPose> SENTINEL_POSE = EntityDataSerializer.simpleEnum(EclipseSentinel.SentinelPose.class);
+    public static final EntityDataAccessor<EclipseSentinel.SentinelPose> PHASE = SynchedEntityData.defineId(EclipseSentinel.class, SENTINEL_POSE);
+    public static final EntityDataAccessor<Boolean> IS_EXALTED = SynchedEntityData.defineId(EclipseSentinel.class, EntityDataSerializers.BOOLEAN);
     private BlockPos pos;
     private int timeOfAbility = 0;
 
-    public EclipseSentinel(EntityType<? extends BossLikePathfinderMob> entityType, World world) {
+    public EclipseSentinel(EntityType<? extends BossLikePathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = WITHER_XP;
-        this.pos = this.getBlockPos().add(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4);
-        this.setStepHeight(1.5f);
-        MobNavigation mobNavigation = (MobNavigation) this.getNavigation();
-        mobNavigation.setCanSwim(true);
+        this.xpReward = XP_REWARD_BOSS;
+        this.pos = this.blockPosition().offset(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4);
+        this.setMaxUpStep(1.5f);
+        GroundPathNavigation mobNavigation = (GroundPathNavigation) this.getNavigation();
+        mobNavigation.setCanFloat(true);
         mobNavigation.setCanWalkOverFences(true);
         this.body = new EclipseSentinelPartEntity(this, "body", 0.45F, 0.35F);
         this.crack = new EclipseSentinelPartEntity(this, "cape", 0.45F, 0.35F);
@@ -100,24 +99,24 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
     }
 
     @Override
-    public int getMaxHeadRotation() {
-        return this.isInSentinelPose(SentinelPose.BEAMING) ? 10 : super.getMaxHeadRotation();
+    public int getMaxHeadYRot() {
+        return this.isInSentinelPose(SentinelPose.BEAMING) ? 10 : super.getMaxHeadYRot();
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(PHASE, SentinelPose.IDLING);
-        this.dataTracker.startTracking(IS_EXALTED, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(PHASE, SentinelPose.IDLING);
+        this.entityData.define(IS_EXALTED, false);
     }
 
     @Override
-    public ServerBossBar bossInfo() {
+    public ServerBossEvent bossInfo() {
         return bossBar;
     }
 
     @Override
-    public void onTrackedDataSet(TrackedData<?> data) {
+    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
         if (PHASE.equals(data)) {
             if (!this.isInSentinelPose(SentinelPose.DARKNESS))
                 this.darkness.stop();
@@ -128,211 +127,211 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
             if (!this.isInSentinelPose(SentinelPose.EXALTING))
                 this.exalting.stop();
             switch (this.getSentinelPose()) {
-                case DYING -> this.death.start(this.age);
+                case DYING -> this.death.start(this.tickCount);
                 case RUSH_AND_SWING -> {
                     this.exalting.stop();
                     this.navigation.stop();
-                    this.rush_and_swing.start(this.age);
-                    this.queueServerWork(35, () -> this.setVelocity(
-                            this.getXVector(1, this.getYaw()),
+                    this.rush_and_swing.start(this.tickCount);
+                    this.queueServerWork(35, () -> this.setDeltaMovement(
+                            this.getXVector(1, this.getYRot()),
                             0.65,
-                            this.getZVector(1, this.getYaw())));
+                            this.getZVector(1, this.getYRot())));
                     this.queueServerWork(60, () -> {
-                        this.playSound(SoundEvents.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.5f, 1);
+                        this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1.5f, 1);
                         spawnWorldParticle(ModParticleTypes.GRIPPING_CRYSTAL,
-                                this.getX() + getXVector(1, this.getYaw()),
+                                this.getX() + getXVector(1, this.getYRot()),
                                 this.getY() + 1.5f,
-                                this.getZ() + getZVector(1, this.getYaw()),
+                                this.getZ() + getZVector(1, this.getYRot()),
                                 7, 0, 0, 0, 1
                         );
                         if (this.getTarget() != null) {
                             if (this.getTarget() instanceof IGrippingEntity entity1)
                                 GrippingData.addGrippingSeconds(entity1, 8);
-                            if (this.squaredDistanceTo(this.getTarget()) < 7f) {
-                                this.tryAttack(this.getTarget());
-                                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2, World.ExplosionSourceType.NONE);
+                            if (this.distanceToSqr(this.getTarget()) < 7f) {
+                                this.doHurtTarget(this.getTarget());
+                                this.level().explode(this, this.getX(), this.getY(), this.getZ(), 2, Level.ExplosionInteraction.NONE);
                             }
                         }
                     });
                 }
                 case IDLING -> {
-                    this.idling.startIfNotRunning(this.age);
-                    this.spawnParticle(ParticleTypes.DRAGON_BREATH, this.getWorld(), this.getX(), this.getY() + 1, this.getZ(), 2);
+                    this.idling.startIfStopped(this.tickCount);
+                    this.spawnParticle(ParticleTypes.DRAGON_BREATH, this.level(), this.getX(), this.getY() + 1, this.getZ(), 2);
                 }
                 case SWORD_SWING -> {
-                    this.sword_swing.start(this.age);
+                    this.sword_swing.start(this.tickCount);
                     this.queueServerWork(25, () -> {
-                        if (this.getTarget() != null && this.getTarget().squaredDistanceTo(this) < 5)
-                            this.tryAttack(this.getTarget());
-                        this.playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1, 1.5f);
+                        if (this.getTarget() != null && this.getTarget().distanceToSqr(this) < 5)
+                            this.doHurtTarget(this.getTarget());
+                        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 1, 1.5f);
                         float scaling = 0;
-                        World world = this.getWorld();
-                        BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(12)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
+                        Level world = this.level();
+                        BlockPos particlePos = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(12)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
                         spawnWorldParticle(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
                         for (int i1 = 0; i1 < 12; i1++) {
-                            BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            if (!this.getWorld().getBlockState(pos).isOpaque())
+                            BlockPos pos = world.clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
+                            if (!this.level().getBlockState(pos).canOcclude())
                                 scaling = scaling + 1;
-                            BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
+                            BlockPos pos1 = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
+                            List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos1.getCenter(), pos1.getCenter()).inflate(1.25), LivingEntity::isPickable);
                             for (LivingEntity entity : entities) {
                                 if (entity != this)
-                                    entity.damage(this.getDamageSources().magic(), 12);
+                                    entity.hurt(this.damageSources().magic(), 12);
                             }
                         }
                     });
                     this.queueServerWork(45, () -> {
-                        if (this.getTarget() != null && this.getTarget().squaredDistanceTo(this) < 5)
-                            this.tryAttack(this.getTarget());
+                        if (this.getTarget() != null && this.getTarget().distanceToSqr(this) < 5)
+                            this.doHurtTarget(this.getTarget());
                         float scaling = 0;
-                        this.playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1, 1.5f);
-                        World world = this.getWorld();
-                        BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(13)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
+                        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 1, 1.5f);
+                        Level world = this.level();
+                        BlockPos particlePos = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(13)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
                         spawnWorldParticle(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
                         for (int i1 = 0; i1 < 13; i1++) {
-                            BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            if (!this.getWorld().getBlockState(pos).isOpaque())
+                            BlockPos pos = world.clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
+                            if (!this.level().getBlockState(pos).canOcclude())
                                 scaling = scaling + 1;
-                            BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
+                            BlockPos pos1 = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
+                            List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos1.getCenter(), pos1.getCenter()).inflate(1.25), LivingEntity::isPickable);
                             for (LivingEntity entity : entities) {
                                 if (entity != this)
-                                    entity.damage(this.getDamageSources().magic(), 12);
+                                    entity.hurt(this.damageSources().magic(), 12);
                             }
                         }
                     });
                 }
                 case HEAVY_SWING -> {
-                    this.heavy_swing.start(this.age);
+                    this.heavy_swing.start(this.tickCount);
                     if (this.getTarget() instanceof IGrippingEntity entity1)
                         GrippingData.addGrippingSeconds(entity1, 4);
                     this.navigation.stop();
                     this.queueServerWork(50, () -> {
                         float scaling = 0;
-                        World world = this.getWorld();
-                        BlockPos particlePos = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(11)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
+                        Level world = this.level();
+                        BlockPos particlePos = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(11)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
                         spawnWorldParticle(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
                         for (int i1 = 0; i1 < 12; i1++) {
-                            BlockPos pos = world.raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            if (!this.getWorld().getBlockState(pos).isOpaque())
+                            BlockPos pos = world.clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
+                            if (!this.level().getBlockState(pos).canOcclude())
                                 scaling = scaling + 1;
-                            BlockPos pos1 = this.getWorld().raycast(new RaycastContext(this.getEyePos(), this.getEyePos().add(this.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos1.toCenterPos(), pos1.toCenterPos()).expand(1.25), LivingEntity::canHit);
+                            BlockPos pos1 = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
+                            List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos1.getCenter(), pos1.getCenter()).inflate(1.25), LivingEntity::isPickable);
                             for (LivingEntity entity : entities) {
                                 if (entity != this)
-                                    entity.damage(this.getDamageSources().magic(), 10);
+                                    entity.hurt(this.damageSources().magic(), 10);
                             }
                         }
                     });
                     this.queueServerWork(60, () -> {
                         this.hitNearbyMobs(10, 6);
-                        this.spawnParticle(ParticleTypes.END_ROD, this.getWorld(), this.getX(), this.getY() + 0.5f, this.getZ(), 2);
-                        this.playSound(SoundEvents.ENTITY_PHANTOM_SWOOP, 2, 2.5f);
+                        this.spawnParticle(ParticleTypes.END_ROD, this.level(), this.getX(), this.getY() + 0.5f, this.getZ(), 2);
+                        this.playSound(SoundEvents.PHANTOM_SWOOP, 2, 2.5f);
                     });
                 }
                 case BACKFLIP -> {
-                    this.backflip.start(this.age);
+                    this.backflip.start(this.tickCount);
                     this.queueServerWork(10, () -> {
-                        this.setVelocity(this.getXVector(-1.5, this.getYaw()),
+                        this.setDeltaMovement(this.getXVector(-1.5, this.getYRot()),
                                 0.75,
-                                this.getZVector(-1.5, this.getYaw()));
+                                this.getZVector(-1.5, this.getYRot()));
                         this.setPhase();
                     });
                 }
                 case DARKNESS -> {
-                    this.darkness.startIfNotRunning(this.age);
-                    pos = this.getBlockPos().add(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
-                    AreaEffectCloudEntity areaEffectCloudEntity = getAreaEffectCloudEntity();
-                    areaEffectCloudEntity.addEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 70, 1));
-                    areaEffectCloudEntity.setPosition(this.getX(), this.getY() + 0.5f, this.getZ());
-                    this.getWorld().syncWorldEvent(WorldEvents.DRAGON_BREATH_CLOUD_SPAWNS, this.getBlockPos(), this.isSilent() ? -1 : 1);
-                    this.getWorld().spawnEntity(areaEffectCloudEntity);
+                    this.darkness.startIfStopped(this.tickCount);
+                    pos = this.blockPosition().offset(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
+                    AreaEffectCloud areaEffectCloudEntity = getAreaEffectCloudEntity();
+                    areaEffectCloudEntity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 70, 1));
+                    areaEffectCloudEntity.setPos(this.getX(), this.getY() + 0.5f, this.getZ());
+                    this.level().levelEvent(LevelEvent.PARTICLES_DRAGON_FIREBALL_SPLASH, this.blockPosition(), this.isSilent() ? -1 : 1);
+                    this.level().addFreshEntity(areaEffectCloudEntity);
                 }
                 case BEAMING -> {
-                    this.beaming.startIfNotRunning(this.age);
+                    this.beaming.startIfStopped(this.tickCount);
                     this.getNavigation().stop();
                 }
                 case BLASTING_EROFLAME -> {
-                    this.blasting_eroflame.start(this.age);
-                    this.spawnParticle(ParticleTypes.SQUID_INK, this.getWorld(), this.getX(), this.getEyeY(), this.getZ(), 1.5f);
+                    this.blasting_eroflame.start(this.tickCount);
+                    this.spawnParticle(ParticleTypes.SQUID_INK, this.level(), this.getX(), this.getEyeY(), this.getZ(), 1.5f);
                     this.queueServerWork(15, () -> {
                         ItemStack stack = getFirework();
-                        ProjectileEntity projectile = new FireworkRocketEntity(this.getWorld(), stack, this, this.getX(), this.getEyeY() - 0.15F, this.getZ(), true);
-                        Vec3d vec31 = this.getOppositeRotationVector(1.0F);
+                        Projectile projectile = new FireworkRocketEntity(this.level(), stack, this, this.getX(), this.getEyeY() - 0.15F, this.getZ(), true);
+                        Vec3 vec31 = this.getUpVector(1.0F);
                         Quaternionf quaternionf = (new Quaternionf()).setAngleAxis(0, vec31.x, vec31.y, vec31.z);
-                        Vec3d vec3 = this.getRotationVec(1.0F);
+                        Vec3 vec3 = this.getViewVector(1.0F);
                         Vector3f vector3f = vec3.toVector3f().rotate(quaternionf);
-                        projectile.setVelocity(vector3f.x(), vector3f.y(), vector3f.z(), 3.15F, 1);
-                        this.getWorld().spawnEntity(projectile);
+                        projectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), 3.15F, 1);
+                        this.level().addFreshEntity(projectile);
                     });
                 }
                 case EXALTATION -> {
-                    this.exaltation.start(this.age);
+                    this.exaltation.start(this.tickCount);
                     if (!this.isExalted())
                         this.queueServerWork(80, () -> {
                             this.exaltation.stop();
-                            this.playSound(SoundEvents.ENTITY_WARDEN_ROAR, 2, 2f);
+                            this.playSound(SoundEvents.WARDEN_ROAR, 2, 2f);
                             this.setExaltation(true);
                             this.setSentinelPose(SentinelPose.EXALTING);
                         });
                 }
-                case EXALTING -> this.exalting.startIfNotRunning(this.age);
+                case EXALTING -> this.exalting.startIfStopped(this.tickCount);
                 case SKY_JUMPING -> {
-                    this.sky_jumping.start(this.age);
+                    this.sky_jumping.start(this.tickCount);
                     this.navigation.stop();
-                    this.spawnParticle(ParticleTypes.SQUID_INK, this.getWorld(), this.getX(), this.getY() + 1, this.getZ(), 1.5f);
-                    this.setVelocity(0, 1, 0);
+                    this.spawnParticle(ParticleTypes.SQUID_INK, this.level(), this.getX(), this.getY() + 1, this.getZ(), 1.5f);
+                    this.setDeltaMovement(0, 1, 0);
                     this.queueServerWork(15, () -> {
                         if (this.getTarget() != null) {
-                            Vec3d vec3d = new Vec3d(
+                            Vec3 vec3d = new Vec3(
                                     (this.getX() - this.getTarget().getX()) * 0.1,
                                     0.5,
                                     (this.getZ() - this.getTarget().getZ()) * 0.1
                             );
                             vec3d.normalize();
-                            this.setVelocity(vec3d);
+                            this.setDeltaMovement(vec3d);
                         }
                     });
                     this.queueServerWork(30, () -> {
                         if (this.getTarget() != null) {
-                            this.teleport(this.getTarget().getX(), this.getTarget().getY() + 2, this.getTarget().getZ());
-                            this.getTarget().damage(this.getDamageSources().magic(), 6);
-                            this.playSound(SoundEvents.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 2);
-                            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2, World.ExplosionSourceType.NONE);
+                            this.teleportToWithTicket(this.getTarget().getX(), this.getTarget().getY() + 2, this.getTarget().getZ());
+                            this.getTarget().hurt(this.damageSources().magic(), 6);
+                            this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1, 2);
+                            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 2, Level.ExplosionInteraction.NONE);
                             setPhase();
                         }
                     });
                 }
             }
         }
-        super.onTrackedDataSet(data);
+        super.onSyncedDataUpdated(data);
     }
 
-    private @NotNull AreaEffectCloudEntity getAreaEffectCloudEntity() {
-        AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.getWorld(), this.getX(), this.getY() + 1f, this.getZ());
+    private @NotNull AreaEffectCloud getAreaEffectCloudEntity() {
+        AreaEffectCloud areaEffectCloudEntity = new AreaEffectCloud(this.level(), this.getX(), this.getY() + 1f, this.getZ());
         areaEffectCloudEntity.setOwner(this);
-        areaEffectCloudEntity.setParticleType(ParticleTypes.FALLING_OBSIDIAN_TEAR);
+        areaEffectCloudEntity.setParticle(ParticleTypes.FALLING_OBSIDIAN_TEAR);
         areaEffectCloudEntity.setRadius(4.0F);
         areaEffectCloudEntity.setDuration(120);
-        areaEffectCloudEntity.setRadiusGrowth((7.0F - areaEffectCloudEntity.getRadius()) / (float) areaEffectCloudEntity.getDuration());
+        areaEffectCloudEntity.setRadiusPerTick((7.0F - areaEffectCloudEntity.getRadius()) / (float) areaEffectCloudEntity.getDuration());
         return areaEffectCloudEntity;
     }
 
     private ItemStack getFirework() {
-        ItemStack stack = Items.FIREWORK_ROCKET.getDefaultStack();
-        NbtCompound tag = stack.getOrCreateSubNbt("Fireworks");
-        NbtList list = new NbtList();
-        NbtCompound explosion = new NbtCompound();
+        ItemStack stack = Items.FIREWORK_ROCKET.getDefaultInstance();
+        CompoundTag tag = stack.getOrCreateTagElement("Fireworks");
+        ListTag list = new ListTag();
+        CompoundTag explosion = new CompoundTag();
         explosion.putByte("Type", (byte) 1);
         explosion.putByte("Trail", (byte) 1);
-        NbtIntArray colors = new NbtIntArray(List.of(
+        IntArrayTag colors = new IntArrayTag(List.of(
                 2651799,
                 11250603,
                 6719955,
                 15790320
         ));
         explosion.put("Colors", colors);
-        NbtIntArray fadecolors = new NbtIntArray(List.of(
+        IntArrayTag fadecolors = new IntArrayTag(List.of(
                 8073150,
                 11250603,
                 12801229
@@ -345,11 +344,11 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
     }
 
     @Override
-    protected void initGoals() {
-        super.initGoals();
-        this.goalSelector.add(4, new SentinelMovementGoal(this));
-        this.targetSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
-        this.targetSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 32, 1));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(4, new SentinelMovementGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, false));
+        this.targetSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 32, 1));
     }
 
     public void setPhase() {
@@ -382,40 +381,40 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
 
     @Override
     public boolean haveToDropLoot(DamageSource source) {
-        return source.getAttacker() instanceof PlayerEntity;
+        return source.getEntity() instanceof Player;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.isDead() && !this.isInSentinelPose(SentinelPose.DYING))
+        if (this.isDeadOrDying() && !this.isInSentinelPose(SentinelPose.DYING))
             this.setSentinelPose(SentinelPose.DYING);
-        if (this.isInSentinelPose(SentinelPose.IDLING) && !this.idling.isRunning())
-            this.idling.start(this.age);
+        if (this.isInSentinelPose(SentinelPose.IDLING) && !this.idling.isStarted())
+            this.idling.start(this.tickCount);
         if (this.timeOfAbility > 0)
             this.timeOfAbility--;
         if (this.getTarget() != null) {
-            if (this.getTarget().squaredDistanceTo(this) > 784 && this.isInSentinelPose(SentinelPose.BEAMING))
+            if (this.getTarget().distanceToSqr(this) > 784 && this.isInSentinelPose(SentinelPose.BEAMING))
                 this.setSentinelPose(SentinelPose.HARD_RUSH);
-            if (this.age % ((this.getHealth() < this.getMaxHealth() / 2f) ? 20 : 40) == 0)
-                this.pos = this.random.nextBoolean() ? this.getBlockPos().add(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4)
-                        : this.getTarget().getBlockPos().up();
+            if (this.tickCount % ((this.getHealth() < this.getMaxHealth() / 2f) ? 20 : 40) == 0)
+                this.pos = this.random.nextBoolean() ? this.blockPosition().offset(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4)
+                        : this.getTarget().blockPosition().above();
             if (this.timeOfAbility <= 0 && !this.isInSentinelPose(SentinelPose.DYING))
                 this.setPhase();
             if (this.isInSentinelPose(SentinelPose.IDLING))
                 this.navigation.stop();
             if (this.isInSentinelPose(SentinelPose.DARKNESS)) {
                 this.navigation.stop();
-                if (this.age % 20 == 0) {
-                    this.playSound(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, 2, 1);
+                if (this.tickCount % 20 == 0) {
+                    this.playSound(SoundEvents.ILLUSIONER_CAST_SPELL, 2, 1);
                     for (int i = -3; i < 3; i++) {
                         if (i % 2 == 0) {
-                            spawnWorldParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OBSIDIAN.getDefaultState()), pos.getX() + i, pos.getY() + 0.25, pos.getZ() + i, 9, 0, 1, 0, 1);
-                            if (this.age % 5 == 0) {
-                                List<LivingEntity> entities = this.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos, pos).expand(1), LivingEntity::canHit);
+                            spawnWorldParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OBSIDIAN.defaultBlockState()), pos.getX() + i, pos.getY() + 0.25, pos.getZ() + i, 9, 0, 1, 0, 1);
+                            if (this.tickCount % 5 == 0) {
+                                List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos, pos).inflate(1), LivingEntity::isPickable);
                                 for (LivingEntity entity : entities) {
                                     if (entity != this)
-                                        entity.damage(this.getDamageSources().magic(), 8);
+                                        entity.hurt(this.damageSources().magic(), 8);
                                 }
                             }
                         }
@@ -423,67 +422,67 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
                     this.heal(6);
                 }
             }
-            if (this.isInSentinelPose(SentinelPose.HARD_RUSH) && this.age % 10 == 0) {
-                spawnWorldParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.OBSIDIAN.getDefaultState()),
-                        this.getX() + this.getXVector(1, this.getYaw()), this.getY() + 1, this.getZ() + this.getZVector(1, this.getYaw()),
+            if (this.isInSentinelPose(SentinelPose.HARD_RUSH) && this.tickCount % 10 == 0) {
+                spawnWorldParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OBSIDIAN.defaultBlockState()),
+                        this.getX() + this.getXVector(1, this.getYRot()), this.getY() + 1, this.getZ() + this.getZVector(1, this.getYRot()),
                         9, 0, 1, 0, 1);
                 this.hitNearbyMobs(4, 2);
-                this.playSound(SoundEvents.BLOCK_DEEPSLATE_FALL, 3, 2.5f);
+                this.playSound(SoundEvents.DEEPSLATE_FALL, 3, 2.5f);
             }
-            if (this.isInSentinelPose(SentinelPose.BEAMING) && this.age % 5 == 0) {
-                ActionsUtils.rayCastAlong(this.getWorld(), this, 16, (world, pos1) ->
-                        world.getEntitiesByClass(LivingEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()).expand(0.75),
-                                LivingEntity::canHit).forEach(entity -> {
+            if (this.isInSentinelPose(SentinelPose.BEAMING) && this.tickCount % 5 == 0) {
+                ActionsUtils.rayCastAlong(this.level(), this, 16, (world, pos1) ->
+                        world.getEntitiesOfClass(LivingEntity.class, new AABB(pos.getCenter(), pos.getCenter()).inflate(0.75),
+                                LivingEntity::isPickable).forEach(entity -> {
                             if (entity != this)
-                                entity.damage(this.getDamageSources().magic(), 6);
+                                entity.hurt(this.damageSources().magic(), 6);
                         }));
             }
             if (this.isInSentinelPose(SentinelPose.EXALTING)) {
-                if (this.age % 4 == 0 && isSolidBlockBelow()) {
-                    this.addVelocity(0, 0.5f, 0);
-                    scheduleVelocityUpdate();
+                if (this.tickCount % 4 == 0 && isSolidBlockBelow()) {
+                    this.push(0, 0.5f, 0);
+                    markHurt();
                 }
-                if (this.age % 30 == 0) {
-                    Vec3d vec3d3 = this.getRotationVec(1.0F);
-                    double l = this.getCameraPosVec(1).getX() - vec3d3.x;
-                    double m = this.getBodyY(0.75) + 0.4;
-                    double n = this.getCameraPosVec(1).getZ() - vec3d3.z;
+                if (this.tickCount % 30 == 0) {
+                    Vec3 vec3d3 = this.getViewVector(1.0F);
+                    double l = this.getEyePosition(1).x() - vec3d3.x;
+                    double m = this.getY(0.75) + 0.4;
+                    double n = this.getEyePosition(1).z() - vec3d3.z;
                     double o = this.getTarget().getX() - l;
-                    double p = this.getTarget().getBodyY(0.5) - m;
+                    double p = this.getTarget().getY(0.5) - m;
                     double q = this.getTarget().getZ() - n;
-                    DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.getWorld(), this, o, p, q);
-                    dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
-                    this.getWorld().spawnEntity(dragonFireballEntity);
+                    DragonFireball dragonFireballEntity = new DragonFireball(this.level(), this, o, p, q);
+                    dragonFireballEntity.moveTo(l, m, n, 0.0F, 0.0F);
+                    this.level().addFreshEntity(dragonFireballEntity);
                 }
             }
         }
     }
 
-    private void spawnWorldParticle(ParticleEffect type, double x, double y, double z, int count, double xV, double yV, double zV, float speed) {
-        if (this.getWorld() instanceof ServerWorld world)
-            world.spawnParticles(type, x, y, z, count, xV, yV, zV, speed);
+    private void spawnWorldParticle(ParticleOptions type, double x, double y, double z, int count, double xV, double yV, double zV, float speed) {
+        if (this.level() instanceof ServerLevel world)
+            world.sendParticles(type, x, y, z, count, xV, yV, zV, speed);
     }
 
     @Override
-    public void tickMovement() {
-        super.tickMovement();
-        float f14 = this.getHeadYaw() * ((float) Math.PI / 180F);
-        float f1 = MathHelper.sin(f14);
-        float f15 = MathHelper.cos(f14);
-        Vec3d[] vec3ds = new Vec3d[this.parts.length];
+    public void aiStep() {
+        super.aiStep();
+        float f14 = this.getYHeadRot() * ((float) Math.PI / 180F);
+        float f1 = Mth.sin(f14);
+        float f15 = Mth.cos(f14);
+        Vec3[] vec3ds = new Vec3[this.parts.length];
         for (int s = 0; s < this.parts.length; s++) {
-            vec3ds[s] = new Vec3d(this.parts[s].getX(), this.parts[s].getY(), this.parts[s].getZ());
+            vec3ds[s] = new Vec3(this.parts[s].getX(), this.parts[s].getY(), this.parts[s].getZ());
         }
 
         this.movePart(this.body, f1 * -0.75F, 1.65D, -f15 * -0.75F);
         this.movePart(this.crack, f1 * 0.75F, 1.5D, -f15 * 0.75F);
         for (int ac = 0; ac < this.parts.length; ac++) {
-            this.parts[ac].prevX = vec3ds[ac].x;
-            this.parts[ac].prevY = vec3ds[ac].y;
-            this.parts[ac].prevZ = vec3ds[ac].z;
-            this.parts[ac].lastRenderX = vec3ds[ac].x;
-            this.parts[ac].lastRenderY = vec3ds[ac].y;
-            this.parts[ac].lastRenderZ = vec3ds[ac].z;
+            this.parts[ac].xo = vec3ds[ac].x;
+            this.parts[ac].yo = vec3ds[ac].y;
+            this.parts[ac].zo = vec3ds[ac].z;
+            this.parts[ac].xOld = vec3ds[ac].x;
+            this.parts[ac].yOld = vec3ds[ac].y;
+            this.parts[ac].zOld = vec3ds[ac].z;
         }
     }
 
@@ -492,20 +491,20 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
     }
 
     private void movePart(EclipseSentinelPartEntity partEntity, double dx, double dy, double dz) {
-        partEntity.setPosition(this.getX() + dx, this.getY() + dy, this.getZ() + dz);
+        partEntity.setPos(this.getX() + dx, this.getY() + dy, this.getZ() + dz);
     }
 
     private boolean isSolidBlockBelow() {
         for (int i = 0; i < 5; i++) {
-            if (this.getWorld().getBlockState(this.getBlockPos().down(i)).isOpaque())
+            if (this.level().getBlockState(this.blockPosition().below(i)).canOcclude())
                 return true;
         }
         return false;
     }
 
     @Override
-    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-        super.onSpawnPacket(packet);
+    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+        super.recreateFromPacket(packet);
         EclipseSentinelPartEntity[] bodyParts = this.getBodyParts();
         for (int i = 0; i < bodyParts.length; i++) {
             bodyParts[i].setId(i + packet.getId());
@@ -513,107 +512,107 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
     }
 
     @Override
-    public void pushAwayFrom(Entity entity) {
+    public void push(Entity entity) {
         if (!(this.isInSentinelPose(SentinelPose.IDLING)
                 || this.isInSentinelPose(SentinelPose.EXALTATION)
                 || this.isInSentinelPose(SentinelPose.EXALTING)
                 || this.isInSentinelPose(SentinelPose.DYING)))
-            super.pushAwayFrom(entity);
+            super.push(entity);
     }
 
     @Override
-    protected void pushAway(Entity entity) {
+    protected void doPush(Entity entity) {
         if (!(this.isInSentinelPose(SentinelPose.IDLING)
                 || this.isInSentinelPose(SentinelPose.EXALTATION)
                 || this.isInSentinelPose(SentinelPose.EXALTING)
                 || this.isInSentinelPose(SentinelPose.DYING)))
-            super.pushAway(entity);
+            super.doPush(entity);
     }
 
     @Override
-    protected void pushOutOfBlocks(double x, double y, double z) {
+    protected void moveTowardsClosestSpace(double x, double y, double z) {
         if (!(this.isInSentinelPose(SentinelPose.IDLING)
                 || this.isInSentinelPose(SentinelPose.EXALTATION)
                 || this.isInSentinelPose(SentinelPose.EXALTING)
                 || this.isInSentinelPose(SentinelPose.DYING)))
-            super.pushOutOfBlocks(x, y, z);
+            super.moveTowardsClosestSpace(x, y, z);
     }
 
     @Override
-    protected int computeFallDamage(float fallDistance, float damageMultiplier) {
-        return this.isExalted() ? 0 : Math.round(super.computeFallDamage(fallDistance, damageMultiplier) / 2f);
+    protected int calculateFallDamage(float fallDistance, float damageMultiplier) {
+        return this.isExalted() ? 0 : Math.round(super.calculateFallDamage(fallDistance, damageMultiplier) / 2f);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         nbt.putBoolean("exaltingStatus", this.isExalted());
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
         this.setExaltation(nbt.getBoolean("exaltingStatus"));
     }
 
     @Override
-    public boolean damage(DamageSource source, float amount) {
-        if (source.isOf(DamageTypes.EXPLOSION))
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.EXPLOSION))
             return false;
-        if (source.isOf(DamageTypes.ARROW))
+        if (source.is(DamageTypes.ARROW))
             return false;
-        if (source.isOf(DamageTypes.CACTUS))
+        if (source.is(DamageTypes.CACTUS))
             return false;
-        if (source.isOf(DamageTypes.INDIRECT_MAGIC))
+        if (source.is(DamageTypes.INDIRECT_MAGIC))
             return false;
-        if (source.isOf(DamageTypes.DRAGON_BREATH))
+        if (source.is(DamageTypes.DRAGON_BREATH))
             return false;
         if (!this.isExalted() && this.getHealth() < this.getMaxHealth() / 2f && this.isInSentinelPose(SentinelPose.IDLING))
             this.setSentinelPose(SentinelPose.EXALTATION);
         if (!this.isExalted() && this.getHealth() < this.getMaxHealth() / 2f && !this.isInSentinelPose(SentinelPose.IDLING))
             return false;
         if (isExalted())
-            return super.damage(source, amount / 2f);
-        return super.damage(source, amount);
+            return super.hurt(source, amount / 2f);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return this.isInSentinelPose(SentinelPose.SKY_JUMPING);
     }
 
-    public static DefaultAttributeContainer.Builder createAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 400)
-                .add(EntityAttributes.GENERIC_ARMOR, 10)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 4)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.5)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 400)
+                .add(Attributes.ARMOR, 10)
+                .add(Attributes.ARMOR_TOUGHNESS, 4)
+                .add(Attributes.FOLLOW_RANGE, 48)
+                .add(Attributes.ATTACK_DAMAGE, 10)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
+                .add(Attributes.MOVEMENT_SPEED, 0.3);
     }
 
     @Override
-    public void onDeath(DamageSource damageSource) {
+    public void die(DamageSource damageSource) {
         this.deathTime = -30;
-        if (this.getWorld() instanceof ServerWorld world) {
+        if (this.level() instanceof ServerLevel world) {
             ChimericDarknessData data = WorldConfigController.data.get(0);
             WorldConfigController.saveController(world, data.starsUnlock(), true, data.galacticUnlock());
             WorldConfigController.updateSave(world);
         }
-        updateTranslocatone(this.getWorld(), this.getBlockPos());
-        super.onDeath(damageSource);
+        updateTranslocatone(this.level(), this.blockPosition());
+        super.die(damageSource);
     }
 
-    private void updateTranslocatone(World world, BlockPos pos) {
+    private void updateTranslocatone(Level world, BlockPos pos) {
         int radius = 21;
         int height = 6;
         for (int y = -height; y < height; y++) {
             for (int x = -radius; x < radius; x++) {
                 for (int z = -radius; z < radius; z++) {
-                    BlockPos pos1 = pos.add(x, y, z);
-                    if (world.getBlockState(pos1).isOf(ModBlocks.GLACIEMITE_TRANSLOCATONE)) {
-                        world.setBlockState(pos1, world.getBlockState(pos1).with(Properties.TRIGGERED, false));
+                    BlockPos pos1 = pos.offset(x, y, z);
+                    if (world.getBlockState(pos1).is(ModBlocks.GLACIEMITE_TRANSLOCATONE)) {
+                        world.setBlockAndUpdate(pos1, world.getBlockState(pos1).setValue(BlockStateProperties.TRIGGERED, false));
                         break;
                     }
                 }
@@ -622,27 +621,27 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
     }
 
     @Override
-    protected void updatePostDeath() {
-        super.updatePostDeath();
+    protected void tickDeath() {
+        super.tickDeath();
         if (this.deathTime == -15)
             this.setSentinelPose(SentinelPose.DYING);
     }
 
     public void setSentinelPose(EclipseSentinel.SentinelPose pose) {
-        this.dataTracker.set(PHASE, pose);
+        this.entityData.set(PHASE, pose);
         this.timeOfAbility = pose.getAbilityTime;
     }
 
     public EclipseSentinel.SentinelPose getSentinelPose() {
-        return this.dataTracker.get(PHASE);
+        return this.entityData.get(PHASE);
     }
 
     public void setExaltation(boolean status) {
-        this.dataTracker.set(IS_EXALTED, status);
+        this.entityData.set(IS_EXALTED, status);
     }
 
     public boolean isExalted() {
-        return this.dataTracker.get(IS_EXALTED);
+        return this.entityData.get(IS_EXALTED);
     }
 
     public boolean isInSentinelPose(EclipseSentinel.SentinelPose pose) {

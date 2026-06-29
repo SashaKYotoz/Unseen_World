@@ -2,31 +2,31 @@ package net.sashakyotoz.common.items.custom;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.client.particles.ModParticleTypes;
@@ -38,93 +38,93 @@ import net.sashakyotoz.utils.ActionsUtils;
 import java.util.List;
 
 public class GrippingAbyssalBowItem extends BowItem {
-    public GrippingAbyssalBowItem(Settings settings) {
+    public GrippingAbyssalBowItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack stack = user.getItemInHand(hand);
         if (IGrippingWeapons.getPhase(stack).isEmpty())
             return super.use(world, user, hand);
-        else if (user instanceof ServerPlayerEntity player &&
+        else if (user instanceof ServerPlayer player &&
                 (GripcrystalManaData.getMana((IEntityDataSaver) player) > 0 || IGrippingWeapons.getPhase(stack).equals("crystal_suctioning"))) {
-            user.setCurrentHand(hand);
-            return TypedActionResult.consume(stack);
+            user.startUsingItem(hand);
+            return InteractionResultHolder.consume(stack);
         } else
-            return TypedActionResult.fail(stack);
+            return InteractionResultHolder.fail(stack);
     }
 
     @Override
-    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return ingredient.isOf(ModItems.GRIPCRYSTAL) || super.canRepair(stack, ingredient);
+    public boolean isValidRepairItem(ItemStack stack, ItemStack ingredient) {
+        return ingredient.is(ModItems.GRIPCRYSTAL) || super.isValidRepairItem(stack, ingredient);
     }
 
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (user instanceof PlayerEntity playerEntity) {
-            int i = this.getMaxUseTime(stack) - remainingUseTicks;
-            float f = getPullProgress(i);
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
+        if (user instanceof Player playerEntity) {
+            int i = this.getUseDuration(stack) - remainingUseTicks;
+            float f = getPowerForTime(i);
             switch (IGrippingWeapons.getPhase(stack)) {
                 case "crystal_crushing" -> {
-                    if (playerEntity instanceof ServerPlayerEntity player && GripcrystalManaData.getMana((IEntityDataSaver) player) > 2) {
+                    if (playerEntity instanceof ServerPlayer player && GripcrystalManaData.getMana((IEntityDataSaver) player) > 2) {
                         GripcrystalManaData.removeMana((IEntityDataSaver) player, 2);
-                        if (!world.isClient) {
-                            GrippingCrystalProjectileEntity projectile = new GrippingCrystalProjectileEntity(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, player.getWorld());
-                            projectile.setPunch(3);
+                        if (!world.isClientSide) {
+                            GrippingCrystalProjectileEntity projectile = new GrippingCrystalProjectileEntity(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, player.level());
+                            projectile.setKnockback(3);
                             projectile.setOwner(player);
-                            projectile.refreshPositionAfterTeleport(player.getX(), player.getEyeY(), player.getZ());
-                            projectile.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, f * 3.0F, 1.0F);
-                            stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(playerEntity.getActiveHand()));
-                            world.spawnEntity(projectile);
+                            projectile.moveTo(player.getX(), player.getEyeY(), player.getZ());
+                            projectile.shootFromRotation(playerEntity, playerEntity.getXRot(), playerEntity.getYRot(), 0.0F, f * 3.0F, 1.0F);
+                            stack.hurtAndBreak(1, playerEntity, p -> p.broadcastBreakEvent(playerEntity.getUsedItemHand()));
+                            world.addFreshEntity(projectile);
                         }
-                        player.playSound(SoundEvents.BLOCK_GLASS_HIT, SoundCategory.PLAYERS, 2, 2);
-                        player.getServerWorld().spawnParticles(ModParticleTypes.GRIPPING_CRYSTAL,
+                        player.playNotifySound(SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 2, 2);
+                        player.serverLevel().sendParticles(ModParticleTypes.GRIPPING_CRYSTAL,
                                 player.getX(), player.getY(), player.getZ(), 9,
-                                ActionsUtils.getXVector(2, player.getYaw()),
-                                ActionsUtils.getYVector(1, player.getPitch()),
-                                ActionsUtils.getZVector(2, player.getYaw()), 1);
+                                ActionsUtils.getXVector(2, player.getYRot()),
+                                ActionsUtils.getYVector(1, player.getXRot()),
+                                ActionsUtils.getZVector(2, player.getYRot()), 1);
                     }
                 }
                 case "crystal_rain" -> {
-                    if (playerEntity instanceof ServerPlayerEntity player && GripcrystalManaData.getMana((IEntityDataSaver) player) > 6) {
+                    if (playerEntity instanceof ServerPlayer player && GripcrystalManaData.getMana((IEntityDataSaver) player) > 6) {
                         GripcrystalManaData.removeMana((IEntityDataSaver) player, 6);
-                        if (!world.isClient()) {
+                        if (!world.isClientSide()) {
                             for (int j = -2; j < 2; j++) {
-                                GrippingCrystalProjectileEntity projectile = new GrippingCrystalProjectileEntity(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, player.getWorld());
+                                GrippingCrystalProjectileEntity projectile = new GrippingCrystalProjectileEntity(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, player.level());
                                 projectile.setOwner(player);
-                                projectile.refreshPositionAfterTeleport(player.getX(), player.getEyeY(), player.getZ());
-                                projectile.setVelocity(playerEntity, playerEntity.getPitch() + 15 * j, playerEntity.getYaw() + 15 * j, 0.0F, f * 1.5F, 0.75F);
-                                world.spawnEntity(projectile);
+                                projectile.moveTo(player.getX(), player.getEyeY(), player.getZ());
+                                projectile.shootFromRotation(playerEntity, playerEntity.getXRot() + 15 * j, playerEntity.getYRot() + 15 * j, 0.0F, f * 1.5F, 0.75F);
+                                world.addFreshEntity(projectile);
                             }
                             for (int j = 2; j > -2; j--) {
-                                GrippingCrystalProjectileEntity projectile = new GrippingCrystalProjectileEntity(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, player.getWorld());
+                                GrippingCrystalProjectileEntity projectile = new GrippingCrystalProjectileEntity(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, player.level());
                                 projectile.setOwner(player);
-                                projectile.refreshPositionAfterTeleport(player.getX(), player.getEyeY(), player.getZ());
-                                projectile.setVelocity(playerEntity, playerEntity.getPitch() + 15 * j, playerEntity.getYaw() - 15 * j, 0.0F, f * 1.5F, 0.75F);
-                                world.spawnEntity(projectile);
+                                projectile.moveTo(player.getX(), player.getEyeY(), player.getZ());
+                                projectile.shootFromRotation(playerEntity, playerEntity.getXRot() + 15 * j, playerEntity.getYRot() - 15 * j, 0.0F, f * 1.5F, 0.75F);
+                                world.addFreshEntity(projectile);
                             }
                         }
-                        stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(playerEntity.getActiveHand()));
-                        player.playSound(SoundEvents.BLOCK_GLASS_PLACE, SoundCategory.PLAYERS, 2, 2);
+                        stack.hurtAndBreak(1, playerEntity, p -> p.broadcastBreakEvent(playerEntity.getUsedItemHand()));
+                        player.playNotifySound(SoundEvents.GLASS_PLACE, SoundSource.PLAYERS, 2, 2);
                     }
                 }
                 case "crystal_suctioning" -> {
                     float scaling = 0;
-                    if (playerEntity instanceof ServerPlayerEntity player && GripcrystalManaData.getMana((IEntityDataSaver) player) < 12) {
+                    if (playerEntity instanceof ServerPlayer player && GripcrystalManaData.getMana((IEntityDataSaver) player) < 12) {
                         for (int j = 0; j < 7; j++) {
-                            BlockPos pos = playerEntity.getWorld().raycast(new RaycastContext(playerEntity.getEyePos(), playerEntity.getEyePos().add(playerEntity.getRotationVec(1f).multiply(scaling)), RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, playerEntity)).getBlockPos();
-                            if (!playerEntity.getWorld().getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).isOpaque())
+                            BlockPos pos = playerEntity.level().clip(new ClipContext(playerEntity.getEyePosition(), playerEntity.getEyePosition().add(playerEntity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, playerEntity)).getBlockPos();
+                            if (!playerEntity.level().getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).canOcclude())
                                 scaling = scaling + 1;
-                            List<LivingEntity> entities = playerEntity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(pos.toCenterPos(), pos.toCenterPos()).expand(1.5), LivingEntity::canHit);
+                            List<LivingEntity> entities = playerEntity.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos.getCenter(), pos.getCenter()).inflate(1.5), LivingEntity::isPickable);
                             for (LivingEntity entity : entities) {
                                 if (entity != playerEntity) {
-                                    entity.damage(playerEntity.getDamageSources().generic(), 6);
+                                    entity.hurt(playerEntity.damageSources().generic(), 6);
                                     playerEntity.heal(6);
                                     GripcrystalManaData.addMana((IEntityDataSaver) player, 4);
-                                    stack.damage(2, playerEntity, p -> p.sendToolBreakStatus(playerEntity.getActiveHand()));
-                                    playerEntity.playSound(SoundEvents.BLOCK_GLASS_STEP, SoundCategory.PLAYERS, 2, 2.5f);
-                                    entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1));
+                                    stack.hurtAndBreak(2, playerEntity, p -> p.broadcastBreakEvent(playerEntity.getUsedItemHand()));
+                                    playerEntity.playNotifySound(SoundEvents.GLASS_STEP, SoundSource.PLAYERS, 2, 2.5f);
+                                    entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
                                     break;
                                 }
                             }
@@ -132,31 +132,31 @@ public class GrippingAbyssalBowItem extends BowItem {
                     }
                 }
                 default -> {
-                    boolean bl = playerEntity.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0;
-                    ItemStack itemStack = playerEntity.getProjectileType(stack);
+                    boolean bl = playerEntity.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
+                    ItemStack itemStack = playerEntity.getProjectile(stack);
                     if (!itemStack.isEmpty() || bl) {
                         if (itemStack.isEmpty())
                             itemStack = new ItemStack(Items.ARROW);
                         if (!((double) f < 0.1)) {
-                            boolean bl2 = bl && itemStack.isOf(Items.ARROW);
-                            if (!world.isClient()) {
+                            boolean bl2 = bl && itemStack.is(Items.ARROW);
+                            if (!world.isClientSide()) {
                                 ArrowItem arrowItem = (ArrowItem) (itemStack.getItem() instanceof ArrowItem ? itemStack.getItem() : Items.ARROW);
-                                PersistentProjectileEntity projectile = arrowItem.createArrow(world, itemStack, playerEntity);
-                                projectile.setVelocity(playerEntity, playerEntity.getPitch(), playerEntity.getYaw(), 0.0F, f * 3.0F, 1.0F);
+                                AbstractArrow projectile = arrowItem.createArrow(world, itemStack, playerEntity);
+                                projectile.shootFromRotation(playerEntity, playerEntity.getXRot(), playerEntity.getYRot(), 0.0F, f * 3.0F, 1.0F);
                                 if (f == 1.0F)
-                                    projectile.setCritical(true);
-                                int j = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
+                                    projectile.setCritArrow(true);
+                                int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
                                 if (j > 0)
-                                    projectile.setDamage(projectile.getDamage() + (double) j * 0.5 + 0.5);
-                                int k = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
+                                    projectile.setBaseDamage(projectile.getBaseDamage() + (double) j * 0.5 + 0.5);
+                                int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
                                 if (k > 0)
-                                    projectile.setPunch(k);
-                                if (EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0)
-                                    projectile.setOnFireFor(100);
-                                stack.damage(1, playerEntity, p -> p.sendToolBreakStatus(playerEntity.getActiveHand()));
-                                if (bl2 || playerEntity.getAbilities().creativeMode && (itemStack.isOf(Items.SPECTRAL_ARROW) || itemStack.isOf(Items.TIPPED_ARROW)))
-                                    projectile.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
-                                world.spawnEntity(projectile);
+                                    projectile.setKnockback(k);
+                                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0)
+                                    projectile.setSecondsOnFire(100);
+                                stack.hurtAndBreak(1, playerEntity, p -> p.broadcastBreakEvent(playerEntity.getUsedItemHand()));
+                                if (bl2 || playerEntity.getAbilities().instabuild && (itemStack.is(Items.SPECTRAL_ARROW) || itemStack.is(Items.TIPPED_ARROW)))
+                                    projectile.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                                world.addFreshEntity(projectile);
                             }
 
                             world.playSound(
@@ -164,18 +164,18 @@ public class GrippingAbyssalBowItem extends BowItem {
                                     playerEntity.getX(),
                                     playerEntity.getY(),
                                     playerEntity.getZ(),
-                                    SoundEvents.ENTITY_ARROW_SHOOT,
-                                    SoundCategory.PLAYERS,
+                                    SoundEvents.ARROW_SHOOT,
+                                    SoundSource.PLAYERS,
                                     1.0F,
                                     1.0F / (world.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F
                             );
-                            if (!bl2 && !playerEntity.getAbilities().creativeMode) {
-                                itemStack.decrement(1);
+                            if (!bl2 && !playerEntity.getAbilities().instabuild) {
+                                itemStack.shrink(1);
                                 if (itemStack.isEmpty())
-                                    playerEntity.getInventory().removeOne(itemStack);
+                                    playerEntity.getInventory().removeItem(itemStack);
                             }
 
-                            playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
+                            playerEntity.awardStat(Stats.ITEM_USED.get(this));
                         }
                     }
                 }
@@ -184,18 +184,18 @@ public class GrippingAbyssalBowItem extends BowItem {
     }
 
     @Override
-    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         if (ActionsUtils.isModLoaded("bettercombat")) {
-            ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
             builder.put(
-                    EntityAttributes.GENERIC_ATTACK_DAMAGE,
-                    new EntityAttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, "Weapon modifier", 5, EntityAttributeModifier.Operation.ADDITION)
+                    Attributes.ATTACK_DAMAGE,
+                    new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 5, AttributeModifier.Operation.ADDITION)
             );
             builder.put(
-                    EntityAttributes.GENERIC_ATTACK_SPEED,
-                    new EntityAttributeModifier(ATTACK_SPEED_MODIFIER_ID, "Weapon modifier", -2, EntityAttributeModifier.Operation.ADDITION)
+                    Attributes.ATTACK_SPEED,
+                    new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2, AttributeModifier.Operation.ADDITION)
             );
-            return slot == EquipmentSlot.MAINHAND ? builder.build() : super.getAttributeModifiers(slot);
+            return slot == EquipmentSlot.MAINHAND ? builder.build() : super.getDefaultAttributeModifiers(slot);
         } else
             return super.getAttributeModifiers(stack, slot);
     }

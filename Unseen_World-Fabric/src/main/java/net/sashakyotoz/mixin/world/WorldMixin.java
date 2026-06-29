@@ -2,10 +2,10 @@ package net.sashakyotoz.mixin.world;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.TypeFilter;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.function.Predicate;
 
-@Mixin(World.class)
+@Mixin(Level.class)
 public abstract class WorldMixin implements WorldMultipartHelper {
     @Unique
     private final Int2ObjectMap<EntityPart> URDragonParts = new Int2ObjectOpenHashMap<>();
@@ -26,16 +26,16 @@ public abstract class WorldMixin implements WorldMultipartHelper {
         return URDragonParts;
     }
 
-    @Inject(method = "getOtherEntities", at = @At("TAIL"))
-    private void getEntityParts(Entity except, Box box, Predicate<? super Entity> predicate, CallbackInfoReturnable<List<Entity>> cir) {
+    @Inject(method = "getEntities", at = @At("TAIL"))
+    private void getEntityParts(Entity except, AABB box, Predicate<? super Entity> predicate, CallbackInfoReturnable<List<Entity>> cir) {
         for (EntityPart part : getPMEParts())
             if (part != null && part != except && part.getBoundingBox().intersects(box) && predicate.test(part)) cir.getReturnValue().add(part);
     }
 
-    @Inject(method = "getEntitiesByType", at = @At("TAIL"))
-    private <T extends Entity> void getEntityPartsByType(TypeFilter<Entity, T> filter, Box box, Predicate<? super T> predicate, CallbackInfoReturnable<List<T>> cir) {
+    @Inject(method = "getEntities(Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;", at = @At("TAIL"))
+    private <T extends Entity> void getEntityPartsByType(EntityTypeTest<Entity, T> filter, AABB box, Predicate<? super T> predicate, CallbackInfoReturnable<List<T>> cir) {
         for (EntityPart part : getPMEParts()) {
-            T type = filter.downcast(part);
+            T type = filter.tryCast(part);
             if (type != null && part.getBoundingBox().intersects(box) && predicate.test(type)) cir.getReturnValue().add(type);
         }
     }

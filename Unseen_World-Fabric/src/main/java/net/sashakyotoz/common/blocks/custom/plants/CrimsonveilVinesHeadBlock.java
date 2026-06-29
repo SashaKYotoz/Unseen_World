@@ -1,90 +1,94 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
-import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.phys.BlockHitResult;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
 
-public class CrimsonveilVinesHeadBlock extends AbstractPlantStemBlock implements Fertilizable, CrimsonvielVines {
+public class CrimsonveilVinesHeadBlock extends GrowingPlantHeadBlock implements BonemealableBlock, CrimsonvielVines {
 
-    public CrimsonveilVinesHeadBlock(AbstractBlock.Settings settings) {
+    public CrimsonveilVinesHeadBlock(BlockBehaviour.Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false, 0.1);
-        this.setDefaultState(this.stateManager.getDefaultState().with(AGE, 0).with(BERRIES, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0).setValue(BERRIES, Boolean.FALSE));
     }
 
     @Override
-    protected int getGrowthLength(Random random) {
+    protected int getBlocksToGrowWhenBonemealed(RandomSource random) {
         return 1;
     }
 
     @Override
-    protected boolean chooseStemState(BlockState state) {
+    protected boolean canGrowInto(BlockState state) {
         return state.isAir();
     }
 
     @Override
-    protected Block getPlant() {
+    protected Block getBodyBlock() {
         return ModBlocks.CRIMSONVEIL_VINE_PLANT;
     }
 
     @Override
-    protected BlockState copyState(BlockState from, BlockState to) {
-        return to.with(BERRIES, from.get(BERRIES));
+    protected BlockState updateBodyAfterConvertedFromHead(BlockState from, BlockState to) {
+        return to.setValue(BERRIES, from.getValue(BERRIES));
     }
 
     @Override
-    protected BlockState age(BlockState state, Random random) {
-        return super.age(state, random).with(BERRIES, random.nextFloat() < 0.11F);
+    protected BlockState getGrowIntoState(BlockState state, RandomSource random) {
+        return super.getGrowIntoState(state, random).setValue(BERRIES, random.nextFloat() < 0.11F);
     }
 
     @Override
-    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
         return new ItemStack(ModItems.WARPEDVEIL_VINE_FRUIT);
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return CrimsonvielVines.pickBerries(player, state, world, pos);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(BERRIES);
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        BlockPos blockPos = pos.offset(this.growthDirection.getOpposite());
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        BlockPos blockPos = pos.relative(this.growthDirection.getOpposite());
         BlockState blockState = world.getBlockState(blockPos);
-        return this.canAttachTo(blockState) && (blockState.isOf(this.getStem()) || blockState.isOf(this.getPlant()) || blockState.isSideSolidFullSquare(world, blockPos, this.growthDirection) || blockState.isIn(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON));
+        return this.canAttachTo(blockState) && (blockState.is(this.getHeadBlock()) || blockState.is(this.getBodyBlock()) || blockState.isFaceSturdy(world, blockPos, this.growthDirection) || blockState.is(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON));
     }
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, boolean isClient) {
-        return !(Boolean)state.get(BERRIES);
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+        return !(Boolean)state.getValue(BERRIES);
     }
 
     @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
-        world.setBlockState(pos, state.with(BERRIES, Boolean.TRUE), Block.NOTIFY_LISTENERS);
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+        world.setBlock(pos, state.setValue(BERRIES, Boolean.TRUE), Block.UPDATE_CLIENTS);
     }
 }

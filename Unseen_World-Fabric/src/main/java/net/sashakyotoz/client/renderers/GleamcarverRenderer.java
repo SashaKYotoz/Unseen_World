@@ -1,19 +1,19 @@
 package net.sashakyotoz.client.renderers;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.models.GleamcarverModel;
 import net.sashakyotoz.common.entities.custom.GleamcarverEntity;
 
 public class GleamcarverRenderer extends DeathFixedMobRenderer<GleamcarverEntity, GleamcarverModel> {
 
-    public GleamcarverRenderer(EntityRendererFactory.Context context) {
-        super(context, new GleamcarverModel(context.getPart(GleamcarverModel.GLEAMCARVER)), 0.5f);
+    public GleamcarverRenderer(EntityRendererProvider.Context context) {
+        super(context, new GleamcarverModel(context.bakeLayer(GleamcarverModel.GLEAMCARVER)), 0.5f);
     }
 
     @Override
-    public Identifier getTexture(GleamcarverEntity entity) {
+    public ResourceLocation getTextureLocation(GleamcarverEntity entity) {
         return entity.gleamcarverType == null ? UnseenWorld.makeID("textures/entity/gleamcarver/gleamcarver_dark_currantslate.png")
                 : UnseenWorld.makeID("textures/entity/gleamcarver/gleamcarver_" + entity.gleamcarverType.typeName + ".png");
     }

@@ -1,12 +1,12 @@
 package net.sashakyotoz.common.world.features.custom;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.sashakyotoz.common.blocks.custom.plants.StandingFruitBlock;
 import net.sashakyotoz.common.world.features.custom.configs.StandingFlowerBunchFeatureConfig;
 
@@ -18,30 +18,30 @@ public class StandingFlowerBunchFeature extends Feature<StandingFlowerBunchFeatu
     }
 
     @Override
-    public boolean generate(FeatureContext<StandingFlowerBunchFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos origin = context.getOrigin();
-        Random random = context.getRandom();
-        StandingFlowerBunchFeatureConfig config = context.getConfig();
-        BlockState state = config.block().get(random, origin);
-        int radius = config.radius().get(random) + 1;
+    public boolean place(FeaturePlaceContext<StandingFlowerBunchFeatureConfig> context) {
+        WorldGenLevel world = context.level();
+        BlockPos origin = context.origin();
+        RandomSource random = context.random();
+        StandingFlowerBunchFeatureConfig config = context.config();
+        BlockState state = config.block().getState(random, origin);
+        int radius = config.radius().sample(random) + 1;
         int height = Math.round(radius / 2f);
         for (int y = -height; y < height; y++) {
             for (int x = -radius; x < radius; x++) {
                 for (int z = -radius; z < radius; z++) {
                     if (random.nextBoolean()){
                         if (state.getBlock() instanceof StandingFruitBlock block &&
-                                world.getBlockState(origin.add(x, y, z)).isIn(block.canStayOn) &&
-                                world.getBlockState(origin.add(x, y, z).up()).isAir()) {
+                                world.getBlockState(origin.offset(x, y, z)).is(block.canStayOn) &&
+                                world.getBlockState(origin.offset(x, y, z).above()).isAir()) {
                             int sHeight = random.nextInt(height) + 1;
-                            BlockPos pos = origin.add(x, y, z);
+                            BlockPos pos = origin.offset(x, y, z);
                             for (int i = 0; i < sHeight; i++) {
-                                BlockPos pos1 = pos.add(0,i,0);
-                                if (world.getBlockState(pos1).isAir() && (world.getBlockState(pos1.down()).getBlock() instanceof StandingFruitBlock
-                                        || world.getBlockState(pos1.down()).isIn(block.canStayOn))){
-                                    this.setBlockState(world, pos1.up(), state.with(StandingFruitBlock.HAS_FRUIT,world.getBlockState(pos1.down()).getBlock() instanceof StandingFruitBlock &&
-                                            random.nextBoolean()).with(StandingFruitBlock.HAS_FLOWER,world.getBlockState(pos1.up(2)).isAir()).with(StandingFruitBlock.LUMINANCE,random.nextInt(11)));
-                                    this.setBlockState(world, pos1, state.with(StandingFruitBlock.HAS_FRUIT,false).with(StandingFruitBlock.HAS_FLOWER,false));
+                                BlockPos pos1 = pos.offset(0,i,0);
+                                if (world.getBlockState(pos1).isAir() && (world.getBlockState(pos1.below()).getBlock() instanceof StandingFruitBlock
+                                        || world.getBlockState(pos1.below()).is(block.canStayOn))){
+                                    this.setBlock(world, pos1.above(), state.setValue(StandingFruitBlock.HAS_FRUIT,world.getBlockState(pos1.below()).getBlock() instanceof StandingFruitBlock &&
+                                            random.nextBoolean()).setValue(StandingFruitBlock.HAS_FLOWER,world.getBlockState(pos1.above(2)).isAir()).setValue(StandingFruitBlock.LUMINANCE,random.nextInt(11)));
+                                    this.setBlock(world, pos1, state.setValue(StandingFruitBlock.HAS_FRUIT,false).setValue(StandingFruitBlock.HAS_FLOWER,false));
                                 }
                             }
                         }

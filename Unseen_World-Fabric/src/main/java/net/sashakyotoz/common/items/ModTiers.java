@@ -1,14 +1,14 @@
 package net.sashakyotoz.common.items;
 
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
-public enum ModTiers implements ToolMaterial {
-    UNSEENIUM(4,1263,12f,4f,36,Ingredient.ofItems(ModItems.UNSEENIUM_INGOT)),
-    ABYSSAL(5,2350,13f,5f,24,Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
-    TITANIUM(5,2485,14f,5f,20,Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT)),
-    ROCKBREAKER_HAMMER(4,2374,10f,7f,30,Ingredient.ofItems(ModItems.ABYSSAL_INGOT)),
-    ECLIPSEBANE(3,2169,8f,8f,32,Ingredient.ofItems(ModItems.RED_TITANIUM_INGOT));
+public enum ModTiers implements Tier {
+    UNSEENIUM(4,1263,12f,4f,36,Ingredient.of(ModItems.UNSEENIUM_INGOT)),
+    ABYSSAL(5,2350,13f,5f,24,Ingredient.of(ModItems.ABYSSAL_INGOT)),
+    TITANIUM(5,2485,14f,5f,20,Ingredient.of(ModItems.RED_TITANIUM_INGOT)),
+    ROCKBREAKER_HAMMER(4,2374,10f,7f,30,Ingredient.of(ModItems.ABYSSAL_INGOT)),
+    ECLIPSEBANE(3,2169,8f,8f,32,Ingredient.of(ModItems.RED_TITANIUM_INGOT));
 
     private final int durability;
     private final float speed;
@@ -27,27 +27,27 @@ public enum ModTiers implements ToolMaterial {
     }
 
     @Override
-    public int getDurability() {
+    public int getUses() {
         return this.durability;
     }
 
     @Override
-    public float getMiningSpeedMultiplier() {
+    public float getSpeed() {
         return this.speed;
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
         return this.damage;
     }
 
     @Override
-    public int getMiningLevel() {
+    public int getLevel() {
         return this.mining_level;
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 

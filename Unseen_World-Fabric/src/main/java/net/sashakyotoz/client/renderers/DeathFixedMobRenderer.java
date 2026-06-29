@@ -1,47 +1,47 @@
 package net.sashakyotoz.client.renderers;
 
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
 import net.sashakyotoz.common.config.ConfigEntries;
 
-public abstract class DeathFixedMobRenderer<T extends MobEntity, M extends EntityModel<T>> extends MobEntityRenderer<T, M> {
-    public DeathFixedMobRenderer(EntityRendererFactory.Context context, M entityModel, float f) {
+public abstract class DeathFixedMobRenderer<T extends Mob, M extends EntityModel<T>> extends MobRenderer<T, M> {
+    public DeathFixedMobRenderer(EntityRendererProvider.Context context, M entityModel, float f) {
         super(context, entityModel, f);
     }
 
-    protected void setupTransforms(T entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta) {
+    protected void setupRotations(T entity, PoseStack matrices, float animationProgress, float bodyYaw, float tickDelta) {
         if (entity.deathTime > 0 && !ConfigEntries.doAdvancedDeathForMobs) {
             float f = ((float) entity.deathTime + tickDelta - 1.0F) / 20.0F * 1.6F;
-            f = Math.min(1, MathHelper.sqrt(f));
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(f * this.getLyingAngle(entity)));
+            f = Math.min(1, Mth.sqrt(f));
+            matrices.mulPose(Axis.ZP.rotationDegrees(f * this.getFlipDegrees(entity)));
         }
         if (this.isShaking(entity))
-            bodyYaw += (float) (Math.cos((double) entity.age * 3.25) * Math.PI * 0.4F);
-        if (!entity.isInPose(EntityPose.SLEEPING))
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F - bodyYaw));
-        if (entity.isUsingRiptide()) {
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90.0F - entity.getPitch()));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(((float) entity.age + tickDelta) * -75.0F));
-        } else if (entity.isInPose(EntityPose.SLEEPING)) {
-            Direction direction = entity.getSleepingDirection();
-            float g = direction != null ? getYaw(direction) : bodyYaw;
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(g));
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(this.getLyingAngle(entity)));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270.0F));
-        } else if (shouldFlipUpsideDown(entity)) {
-            matrices.translate(0.0F, entity.getHeight() + 0.1F, 0.0F);
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0F));
+            bodyYaw += (float) (Math.cos((double) entity.tickCount * 3.25) * Math.PI * 0.4F);
+        if (!entity.hasPose(Pose.SLEEPING))
+            matrices.mulPose(Axis.YP.rotationDegrees(180.0F - bodyYaw));
+        if (entity.isAutoSpinAttack()) {
+            matrices.mulPose(Axis.XP.rotationDegrees(-90.0F - entity.getXRot()));
+            matrices.mulPose(Axis.YP.rotationDegrees(((float) entity.tickCount + tickDelta) * -75.0F));
+        } else if (entity.hasPose(Pose.SLEEPING)) {
+            Direction direction = entity.getBedOrientation();
+            float g = direction != null ? sleepDirectionToRotation(direction) : bodyYaw;
+            matrices.mulPose(Axis.YP.rotationDegrees(g));
+            matrices.mulPose(Axis.ZP.rotationDegrees(this.getFlipDegrees(entity)));
+            matrices.mulPose(Axis.YP.rotationDegrees(270.0F));
+        } else if (isEntityUpsideDown(entity)) {
+            matrices.translate(0.0F, entity.getBbHeight() + 0.1F, 0.0F);
+            matrices.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
     }
 
-    private float getYaw(Direction direction) {
+    private float sleepDirectionToRotation(Direction direction) {
         return switch (direction) {
             case SOUTH -> 90.0F;
             case NORTH -> 270.0F;
