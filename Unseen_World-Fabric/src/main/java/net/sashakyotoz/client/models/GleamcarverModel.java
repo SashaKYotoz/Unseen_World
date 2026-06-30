@@ -87,8 +87,6 @@ public class GleamcarverModel extends HierarchicalModel<GleamcarverEntity> {
     public void setupAnim(GleamcarverEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animateWalk(GleamcarverAnimations.WALK, limbSwing, limbSwingAmount, 4.0F, 2.5F);
-        if (ModMainConfig.doAdvancedDeathForMobs)
-            this.animate(entity.death, GleamcarverAnimations.DEATH, ageInTicks);
     }
 
     @Override

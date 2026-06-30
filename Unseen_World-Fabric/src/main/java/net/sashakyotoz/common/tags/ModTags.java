@@ -18,7 +18,6 @@ public class ModTags {
         public static final TagKey<Item> GRIZZLY_LOGS = create("grizzly_logs");
         public static final TagKey<Item> CRIMSONVEIL_LOGS = create("crimsonveil_logs");
 
-        public static final TagKey<Item> CAN_BE_CHARGED_BY_GRIPCRYSTALS = create("can_be_charged_by_gripcrystals");
         public static final TagKey<Item> GRIPPING_BUNDLE_CAN_HANDLE = create("gripping_bundle_can_handle");
 
         private static TagKey<Item> create(String name) {

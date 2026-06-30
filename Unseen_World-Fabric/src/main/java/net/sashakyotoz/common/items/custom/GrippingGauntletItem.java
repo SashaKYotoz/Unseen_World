@@ -15,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
-import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.utils.ActionsUtils;
 
 import java.util.Arrays;
@@ -46,8 +45,7 @@ public class GrippingGauntletItem extends Item {
                         if (entity != player && world1 instanceof ServerLevel serverWorld) {
                             entity.playSound(SoundEvents.CONDUIT_ACTIVATE);
                             serverWorld.sendParticles(ParticleTypes.ASH, pos.getX() + (Math.cos(remainingUseTicks * Math.PI / 10)), pos.getY() + (Math.tan(remainingUseTicks * Math.PI / 10)), pos.getZ() + (Math.sin(remainingUseTicks * Math.PI / 10)), 9, 0.0D, 0.0D, 0.0D, 1);
-                            if (player instanceof ServerPlayer && GripcrystalManaData.getMana((IEntityDataSaver) player) >= 12) {
-                                GripcrystalManaData.removeMana((IEntityDataSaver) player, 6);
+                            if (player instanceof ServerPlayer) {
                                 if (entity instanceof InventoryCarrier owner && !owner.getInventory().isEmpty()) {
                                     ItemStack stack1 = owner.getInventory().items.stream().filter(itemStack -> !itemStack.isEmpty()).findFirst().orElse(ItemStack.EMPTY);
                                     if (!stack1.isEmpty()) {

@@ -1,25 +1,18 @@
 package net.sashakyotoz;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.lcc.sollib.api.common.SolRegistries;
 import net.lcc.sollib.api.common.logger.SolLogger;
 import net.lcc.sollib.api.common.registry.SolModContainer;
-import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
-import net.sashakyotoz.api.entity_data.IEntityDataSaver;
-import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
 import net.sashakyotoz.api.multipart_entity.MultipartEntity;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
@@ -32,7 +25,8 @@ import net.sashakyotoz.common.UnseenWorldDataGenerator;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModFluids;
-import net.sashakyotoz.common.config.ConfigController;
+import net.sashakyotoz.common.config.ModMainConfig;
+import net.sashakyotoz.common.config.WorldConfigController;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
@@ -57,7 +51,7 @@ public class UnseenWorld implements ModInitializer {
                 .destDimID(makeID("chimeric_darkness"))
                 .tintColor(0x000)
                 .registerPortal();
-        ConfigController.loadConfig();
+        MOD.createConfig("unseen_world", 1, ModMainConfig::build);
         ModFluids.register();
         ModItems.register();
         ModItemGroups.register();
@@ -86,31 +80,11 @@ public class UnseenWorld implements ModInitializer {
             source.sendSuccess(() -> Component.translatable("commands.unseen_world.weather.set.grippfall"), true);
         });
 
-        ServerWorldEvents.LOAD.register(new ConfigController());
+        ServerWorldEvents.LOAD.register((minecraftServer, serverLevel) -> WorldConfigController.data.put(0, WorldConfigController.loadData(serverLevel)));
 
         PotionBrewing.addMix(Potions.AWKWARD, ModItems.GLOW_APPLE, ModRegistry.GLOWING);
         PotionBrewing.addMix(Potions.AWKWARD, ModItems.WARPEDVEIL_VINE_FRUIT, ModRegistry.GLOWING);
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            if (environment.includeIntegrated) {
-                dispatcher.register(Commands.literal("set_gripcrystal_mana")
-                        .requires(source -> source.hasPermission(2))
-                        .then(Commands
-                                .argument("amount", IntegerArgumentType.integer(0, 48))
-                                .executes(context -> {
-                                    if (context.getSource().getEntity() instanceof ServerPlayer player) {
-                                        GripcrystalManaData.addMana((IEntityDataSaver) player, Math.max(0, IntegerArgumentType.getInteger(context, "amount")));
-                                        return 1;
-                                    } else {
-                                        context.getSource()
-                                                .sendSuccess(
-                                                        () -> Component.literal("Called /set_gripcrystal_mana with no arguments."), false);
-                                        return 0;
-                                    }
-                                })
-                        ));
-            }
-        });
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity instanceof MultipartEntity multipartEntity) {
                 Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).getPMEPartMap();
@@ -123,10 +97,6 @@ public class UnseenWorld implements ModInitializer {
                 for (EntityPart part : multipartEntity.getParts()) partMap.remove(part.getId());
             }
         });
-        ServerTickEvents.END_WORLD_TICK.register(world -> world.players().stream()
-                .filter(player -> !player.isSpectator()
-                        && GripcrystalManaData.getOpacity(((IEntityDataSaver) player)) > 0)
-                .forEach(player -> GripcrystalManaData.removeOpacity((IEntityDataSaver) player, 0.02f)));
     }
 
     public static ResourceLocation makeID(String id) {

@@ -130,16 +130,16 @@ public class ModItems {
                     new FabricItemSettings().rarity(Rarity.RARE).fireResistant())).build();
     //bosses' stuff
     public static final Item CHIMERIC_ROCKBREAKER_HAMMER = ModRegistry.ofItem("chimeric_rockbreaker_hammer",
-            new ChimericRockbreakerHammerItem(4, -3.1f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+            new ChimericRockbreakerHammerItem(4, -3.1f, new FabricItemSettings().rarity(Rarity.EPIC))).build();
     public static final Item SHIELD_OF_CHIMERIC_WARRIOR = ModRegistry.ofItem("shield_of_chimeric_warrior",
             new ShieldOfChimericWarriorItem(new FabricItemSettings().rarity(Rarity.EPIC).stacksTo(1).durability(893))).tag(ConventionalItemTags.SHIELDS).build();
     public static final Item ECLIPSEBANE = ModRegistry.ofItem("eclipsebane",
-            new EclipsebaneItem(ModTiers.ECLIPSEBANE, 4, -2.5f, new FabricItemSettings().rarity(Rarity.EPIC))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+            new EclipsebaneItem(ModTiers.ECLIPSEBANE, 4, -2.5f, new FabricItemSettings().rarity(Rarity.EPIC))).build();
     public static final Item GRIPPING_ABYSSAL_BOW = ModRegistry.ofItem("gripping_abyssal_bow",
-            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE).durability(984))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS, ConventionalItemTags.BOWS).build();
+            new GrippingAbyssalBowItem(new FabricItemSettings().rarity(Rarity.RARE).durability(984))).tag(ConventionalItemTags.BOWS).build();
     //artifacts
-    public static final Item GRIPPING_BUNDLE = ModRegistry.ofItem("gripping_bundle", new GrippingBundleItem(new FabricItemSettings().rarity(Rarity.EPIC).stacksTo(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
-    public static final Item GRIPPING_GAUNTLET = ModRegistry.ofItem("gripping_gauntlet", new GrippingGauntletItem(new FabricItemSettings().rarity(Rarity.EPIC).stacksTo(1))).tag(ModTags.Items.CAN_BE_CHARGED_BY_GRIPCRYSTALS).build();
+    public static final Item GRIPPING_BUNDLE = ModRegistry.ofItem("gripping_bundle", new GrippingBundleItem(new FabricItemSettings().rarity(Rarity.EPIC).stacksTo(1))).build();
+    public static final Item GRIPPING_GAUNTLET = ModRegistry.ofItem("gripping_gauntlet", new GrippingGauntletItem(new FabricItemSettings().rarity(Rarity.EPIC).stacksTo(1))).build();
     //food
     public static final Item CRYSTIE_APPLE = ModRegistry.ofItem("crystie_apple",
             new Item(new FabricItemSettings().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.CRYSTIE_APPLE))).model(ModelTemplates.FLAT_ITEM).build();

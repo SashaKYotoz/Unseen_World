@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -16,23 +17,20 @@ import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.models.EclipseSentinelModel;
-import net.sashakyotoz.client.renderers.DeathFixedMobRenderer;
 import net.sashakyotoz.client.renderers.layers.bosses.EclipseSentinelEroflameLayer;
 import net.sashakyotoz.client.renderers.layers.bosses.EclipseSentinelGlowingLayer;
-import net.sashakyotoz.client.renderers.layers.player.BladeShieldLayer;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 import java.awt.*;
 
-public class EclipseSentinelRenderer extends DeathFixedMobRenderer<EclipseSentinel, EclipseSentinelModel> {
+public class EclipseSentinelRenderer extends MobRenderer<EclipseSentinel, EclipseSentinelModel> {
 
     public EclipseSentinelRenderer(EntityRendererProvider.Context context) {
         super(context, new EclipseSentinelModel(context.bakeLayer(EclipseSentinelModel.ECLIPSE_SENTINEL)), 0.5f);
         this.addLayer(new EclipseSentinelGlowingLayer<>(this));
         this.addLayer(new EclipseSentinelEroflameLayer<>(this));
-        this.addLayer(new BladeShieldLayer<>(this, context));
     }
 
     private Vec3 fromLerpedPosition(LivingEntity entity, double yOffset, float delta) {

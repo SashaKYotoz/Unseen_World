@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
-import net.sashakyotoz.common.config.ConfigController;
+import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.networking.ModMessages;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +29,7 @@ public class MinecraftClientMixin {
     private void attackHandler(CallbackInfo ci) {
         if (hitResult != null && hitResult.getType() == HitResult.Type.MISS && player != null) {
             ItemStack stack = player.getMainHandItem();
-            if (ConfigController.canHandleGripcrystalAbility(stack))
+            if (stack.is(ModItems.ECLIPSEBANE))
                 ClientPlayNetworking.send(ModMessages.ABILITY_CLICK_HANDLER, PacketByteBufs.create());
         }
     }

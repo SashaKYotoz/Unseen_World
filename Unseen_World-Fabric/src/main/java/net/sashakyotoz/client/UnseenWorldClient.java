@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +33,6 @@ import net.sashakyotoz.client.environment.ChimericDarknessSkyRenderer;
 import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.environment.weather.Grippfall;
 import net.sashakyotoz.client.gui.FullScreenOverlay;
-import net.sashakyotoz.client.gui.GripCrystalHUDOverlay;
 import net.sashakyotoz.client.gui.blocks.ChestScreenHandler;
 import net.sashakyotoz.client.gui.blocks.ModScreenHandlers;
 import net.sashakyotoz.client.models.*;
@@ -51,7 +49,6 @@ import net.sashakyotoz.client.renderers.bosses.EclipseSentinelRenderer;
 import net.sashakyotoz.client.renderers.bosses.WarriorOfChimericDarknessRenderer;
 import net.sashakyotoz.client.renderers.layers.DarkeningLayer;
 import net.sashakyotoz.client.renderers.layers.GrippingLayer;
-import net.sashakyotoz.client.renderers.layers.player.BladeShieldLayer;
 import net.sashakyotoz.client.renderers.projectiles.GrippingCrystalProjectileRenderer;
 import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
@@ -59,8 +56,6 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModFluids;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
-import net.sashakyotoz.common.items.custom.IGrippingWeapons;
-import net.sashakyotoz.common.networking.KeyInputHandler;
 import net.sashakyotoz.common.networking.ModMessages;
 import net.sashakyotoz.common.world.ModDimensions;
 
@@ -148,10 +143,7 @@ public class UnseenWorldClient implements ClientModInitializer {
                         world != null && pos != null ? BiomeColors.getAverageGrassColor(world, pos) : GrassColor.getDefaultColor(),
                 ModBlocks.GLOOMWEED,
                 ModBlocks.TALL_GLOOMWEED);
-
-        KeyInputHandler.register();
         ModMessages.registerS2CPackets();
-        HudRenderCallback.EVENT.register(new GripCrystalHUDOverlay());
         HudRenderCallback.EVENT.register(new FullScreenOverlay());
         ClientTickEvents.END_CLIENT_TICK.register(new ClientTicks());
 
@@ -178,11 +170,6 @@ public class UnseenWorldClient implements ClientModInitializer {
         });
         ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, new ResourceLocation("pulling"), (stack, world, entity, seed) -> entity != null
                 && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, UnseenWorld.makeID("charge"), (stack, world, entity, seed) -> switch (IGrippingWeapons.getPhase(stack)) {
-            case "crystal_crushing", "crystal_suctioning" -> 2;
-            case "crystal_rain" -> 1;
-            default -> 0;
-        });
         ItemProperties.register(ModItems.SHIELD_OF_CHIMERIC_WARRIOR, new ResourceLocation("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
         ItemProperties.register(ModItems.GRIPPING_BUNDLE, new ResourceLocation("filled"), (stack, world, entity, seed) -> BundleItem.getFullnessDisplay(stack));
         ItemProperties.register(ModItems.GRIPPING_GAUNTLET, new ResourceLocation("grip"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
@@ -200,8 +187,6 @@ public class UnseenWorldClient implements ClientModInitializer {
             }
         });
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-            if (entityRenderer instanceof PlayerRenderer)
-                registrationHelper.register(new BladeShieldLayer<>(entityRenderer, context));
             registrationHelper.register(new GrippingLayer<>(entityRenderer, context));
             registrationHelper.register(new DarkeningLayer<>(entityRenderer));
         });

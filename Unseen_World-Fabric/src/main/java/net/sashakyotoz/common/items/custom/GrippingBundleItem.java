@@ -27,7 +27,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
-import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
@@ -39,40 +38,6 @@ import java.util.stream.Stream;
 public class GrippingBundleItem extends Item {
     public GrippingBundleItem(Properties settings) {
         super(settings);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-        if (entity instanceof ServerPlayer player && player.tickCount % 20 == 0) {
-            int i = getGrippingModifier(stack);
-            IEntityDataSaver keeper = (IEntityDataSaver) player;
-            if (i < 0) {
-                if (entity instanceof IGrippingEntity entity1 && entity1.getGrippingData() > 0)
-                    GrippingData.addGrippingSeconds(entity1, i);
-                else
-                    GripcrystalManaData.removeMana(keeper, Math.abs(Math.round(i / 2f)));
-            } else {
-                if (GripcrystalManaData.getMana(keeper) > 49 && entity instanceof IGrippingEntity entity1 && entity1.getGrippingData() < 10)
-                    GrippingData.addGrippingSeconds(entity1, i);
-                else
-                    GripcrystalManaData.addMana(keeper, i);
-            }
-            if (((entity instanceof IGrippingEntity entity1 && entity1.getGrippingData() > 0) || (GripcrystalManaData.getMana(keeper) < 48)))
-                decrementFirstStack(stack);
-        }
-    }
-
-    private int getGrippingModifier(ItemStack stack) {
-        if (getBundleOccupancy(stack) > 0) {
-            Item item = getBundledStacks(stack).toList().get(0).getItem();
-            if (item.getDescriptionId().contains("gripcrystal"))
-                return item.getDescriptionId().contains("granulated") ? 1 : 4;
-
-            if (item.getDescriptionId().contains("griptonite"))
-                return item.getDescriptionId().contains("granulated") ? -3 : -6;
-        }
-        return 0;
     }
 
     @Override

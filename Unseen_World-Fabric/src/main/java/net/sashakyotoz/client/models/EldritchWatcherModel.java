@@ -101,8 +101,6 @@ public class EldritchWatcherModel extends HierarchicalModel<EldritchWatcherEntit
         if (!entity.isDeadOrDying())
             this.body.zRot = (float) Oscillator.getOscillatingWithNegativeValue(ClientTicks.getTicks()) * 0.35f;
         this.animate(entity.attack, EldritchWatcherAnimations.ATTACK, ageInTicks);
-        if (ModMainConfig.doAdvancedDeathForMobs)
-            this.animate(entity.death, EldritchWatcherAnimations.DEATH, ageInTicks);
         if (entity.isCarringBlock()) {
             this.right_arm.xRot = -0.5F;
             this.right_arm.zRot = 0.05F;

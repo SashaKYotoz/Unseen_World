@@ -3,8 +3,6 @@ package net.sashakyotoz.mixin.world;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.sashakyotoz.api.entity_data.IEntityDataSaver;
-import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
 import net.sashakyotoz.common.world.ModDimensions;
@@ -37,6 +35,5 @@ public abstract class ServerWorldMixin implements WorldMultipartHelper {
     private void onPlayerJoinDimension(ServerPlayer player, CallbackInfo ci) {
         if (this.getLevel().dimension().equals(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
             ChimericWeatherState.get((ServerLevel) (Object) this).syncToPlayer(player);
-        GripcrystalManaData.addMana((IEntityDataSaver) player, 0);
     }
 }

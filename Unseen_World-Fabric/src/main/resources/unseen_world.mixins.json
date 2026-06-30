@@ -9,7 +9,6 @@
     "access.TrunkPlacerTypeInvoker",
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
-    "entity.PlayerMixin",
     "entity.ThreadedAnvilChunkStorageMixin",
     "world.ServerWorldMixin",
     "world.SurfaceBuilderMixin",
@@ -21,7 +20,6 @@
   "client": [
     "client.ArmorFeatureRendererMixin",
     "client.BuiltinModelItemRendererMixin",
-    "client.DrawContextMixin",
     "client.HeldItemRendererMixin",
     "client.LightmapTextureManagerMixin",
     "client.MinecraftClientMixin",

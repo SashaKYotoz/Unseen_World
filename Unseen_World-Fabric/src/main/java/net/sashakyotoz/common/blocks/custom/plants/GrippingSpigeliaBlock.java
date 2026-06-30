@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.sashakyotoz.api.entity_data.IEntityDataSaver;
-import net.sashakyotoz.api.entity_data.data.GripcrystalManaData;
 import net.sashakyotoz.common.blocks.custom.GrippingStoneBlock;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,17 +48,6 @@ public class GrippingSpigeliaBlock extends BushBlock {
             BlockState state1 = state.cycle(AGE);
             world.setBlock(pos, state1, UPDATE_ALL);
         }
-    }
-
-    @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (state.getValue(AGE) > 0 && player instanceof ServerPlayer player1) {
-            GripcrystalManaData.addMana((IEntityDataSaver) player1, state.getValue(AGE) * 4);
-            player1.playNotifySound(SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.5f, 1.7f);
-            world.setBlockAndUpdate(pos, state.setValue(AGE, 0));
-            return InteractionResult.CONSUME;
-        }
-        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Nullable
