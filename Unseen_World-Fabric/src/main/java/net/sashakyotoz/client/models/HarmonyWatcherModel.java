@@ -11,12 +11,11 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.HumanoidArm;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.animations.HarmonyWatcherAnimations;
 import net.sashakyotoz.common.entities.custom.HarmonyWatcherEntity;
 
 public class HarmonyWatcherModel extends HierarchicalModel<HarmonyWatcherEntity> implements ArmedModel {
-    public static final ModelLayerLocation HARMONY_WATCHER = new ModelLayerLocation(UnseenWorld.makeID("harmony_watcher"), "main");
+    public static final ModelLayerLocation HARMONY_WATCHER = new ModelLayerLocation(UnseenWorld.MOD.makeID("harmony_watcher"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -34,7 +33,7 @@ public class HarmonyWatcherModel extends HierarchicalModel<HarmonyWatcherEntity>
         this.leftArm = root.getChild("leftArm");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition head = modelPartData.addOrReplaceChild("head", CubeListBuilder.create().texOffs(24, 48).addBox(-4.0F, -1.0F, -4.0F, 8.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
@@ -69,7 +68,7 @@ public class HarmonyWatcherModel extends HierarchicalModel<HarmonyWatcherEntity>
     public void setupAnim(HarmonyWatcherEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.eye.yRot = netHeadYaw * (float) (Math.PI / 180.0);
-        this.animateWalk(entity.isAngry ? HarmonyWatcherAnimations.WALK_WHEN_ANGRY : HarmonyWatcherAnimations.WALK, limbSwing, limbSwingAmount, 3.0f, 3.0f);
+        this.animateWalk(entity.isAngry() ? HarmonyWatcherAnimations.WALK_WHEN_ANGRY : HarmonyWatcherAnimations.WALK, limbSwing, limbSwingAmount, 3.0f, 3.0f);
         this.animate(entity.fertilize, HarmonyWatcherAnimations.FERTILIZE, ageInTicks);
     }
 

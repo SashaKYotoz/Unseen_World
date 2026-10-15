@@ -12,7 +12,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.ShimmerEntity;
 
 public class ShimmerModel extends HierarchicalModel<ShimmerEntity> {
-    public static final ModelLayerLocation SHIMMER = new ModelLayerLocation(UnseenWorld.makeID("shimmer"), "main");
+    public static final ModelLayerLocation SHIMMER = new ModelLayerLocation(UnseenWorld.MOD.makeID("shimmer"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -44,7 +44,7 @@ public class ShimmerModel extends HierarchicalModel<ShimmerEntity> {
         this.tentacle_7 = diagonal.getChild("tentacle_7");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition head = modelPartData.addOrReplaceChild("head", CubeListBuilder.create().texOffs(84, 0).addBox(-5.5F, -16.0F, -5.5F, 11.0F, 16.0F, 11.0F, new CubeDeformation(0.0F))

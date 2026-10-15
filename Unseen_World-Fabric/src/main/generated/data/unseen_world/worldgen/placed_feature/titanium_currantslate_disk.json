@@ -22,7 +22,8 @@
         "type": "minecraft:matching_blocks",
         "blocks": [
           "unseen_world:tanzanite_block",
-          "minecraft:calcite"
+          "minecraft:calcite",
+          "unseen_world:corona_stone"
         ]
       }
     },

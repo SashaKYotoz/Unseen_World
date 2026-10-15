@@ -8,12 +8,14 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 
 public record ClusterSpikeFeatureConfig(BlockStateProvider state,
                                         BlockStateProvider cluster_state,
+                                        BlockStateProvider covered_cluster_state,
                                         IntProvider integration_size,
                                         IntProvider height) implements FeatureConfiguration {
     public static Codec<ClusterSpikeFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     BlockStateProvider.CODEC.fieldOf("state").forGetter(ClusterSpikeFeatureConfig::state),
                     BlockStateProvider.CODEC.fieldOf("cluster_state").forGetter(ClusterSpikeFeatureConfig::cluster_state),
+                    BlockStateProvider.CODEC.fieldOf("covered_cluster_state").forGetter(ClusterSpikeFeatureConfig::covered_cluster_state),
                     IntProvider.POSITIVE_CODEC.fieldOf("integration_size").forGetter(ClusterSpikeFeatureConfig::integration_size),
                     IntProvider.POSITIVE_CODEC.fieldOf("height").forGetter(ClusterSpikeFeatureConfig::height)
             ).apply(instance, ClusterSpikeFeatureConfig::new));

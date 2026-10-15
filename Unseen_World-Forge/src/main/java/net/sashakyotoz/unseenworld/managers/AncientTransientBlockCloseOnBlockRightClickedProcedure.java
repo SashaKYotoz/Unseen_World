@@ -9,7 +9,7 @@ import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 public class AncientTransientBlockCloseOnBlockRightClickedProcedure {
-    public static void execute(LevelAccessor world, double x, double y, double z, Player player) {
+    public static void execute(LevelAccessor level, double x, double y, double z, Player player) {
         if (player == null)
             return;
         double sx, sy, sz;
@@ -20,10 +20,10 @@ public class AncientTransientBlockCloseOnBlockRightClickedProcedure {
                 for (int index1 = 0; index1 < 6; index1++) {
                     sz = -3;
                     for (int index2 = 0; index2 < 6; index2++) {
-                        if ((world.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).getBlock() == UnseenWorldBlocks.ANCIENT_TRANSIENT_BLOCK_CLOSE.get()) {
+                        if ((level.getBlockState(BlockPos.containing(x + sx, y + sy, z + sz))).is(UnseenWorldBlocks.ANCIENT_TRANSIENT_BLOCK_CLOSE.get())) {
                             BlockPos pos = BlockPos.containing(x + sx, y + sy, z + sz);
                             BlockState state = UnseenWorldBlocks.ANCIENT_TRANSIENT_BLOCK_OPEN.get().defaultBlockState();
-                            world.setBlock(pos, state, 3);
+                            level.setBlock(pos, state, 3);
                         }
                         sz = sz + 1;
                     }

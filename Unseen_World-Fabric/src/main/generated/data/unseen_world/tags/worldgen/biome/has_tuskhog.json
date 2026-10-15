@@ -1,13 +1,11 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:greenish_meadow",
-    "unseen_world:greenish_valley",
-    "unseen_world:tealivy_valley",
-    "unseen_world:harmony_grove",
     "unseen_world:dark_wasteland",
+    "unseen_world:gloomweed_plains",
+    "unseen_world:ashen_marsh",
+    "unseen_world:crimsonveil_woods",
     "unseen_world:old_growth_crimsonveil_woods",
-    "unseen_world:crimsonveil_plateau",
-    "unseen_world:crimsonveil_woods"
+    "unseen_world:penumbral_steppe"
   ]
 }

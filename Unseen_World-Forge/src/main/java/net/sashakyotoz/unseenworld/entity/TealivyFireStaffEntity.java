@@ -2,32 +2,31 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.NetworkHooks;
+import net.sashakyotoz.unseenworld.managers.FireLikeStaffProjectileFlyingTick;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.util.RandomSource;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
-
-import net.sashakyotoz.unseenworld.managers.FireLikeStaffProjectileFlyingTick;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldSounds;
+
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplier{
+public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplier {
     private static final EntityDataAccessor<Boolean> IS_MAIN_SHARD = SynchedEntityData.defineId(TealivyFireStaffEntity.class, EntityDataSerializers.BOOLEAN);
 
     public TealivyFireStaffEntity(EntityType<? extends TealivyFireStaffEntity> type, Level world) {
@@ -63,6 +62,7 @@ public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplie
         super.doPostHurtEffects(entity);
         entity.setArrowCount(entity.getArrowCount() - 1);
     }
+
     @Override
     public void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
@@ -74,7 +74,7 @@ public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplie
     @Override
     public void tick() {
         super.tick();
-        FireLikeStaffProjectileFlyingTick.onTickParticles(UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get(),this.level(), this.getX(), this.getY(), this.getZ(),0.5f,0,1f);
+        FireLikeStaffProjectileFlyingTick.onTickParticles(UnseenWorldParticleTypes.BLUE_VOID_PARTICLE.get(), this.level(), this.getX(), this.getY(), this.getZ(), 0.5f, 0, 1f, this.tickCount);
         if (this.inGround) {
             if (this.entityData.get(IS_MAIN_SHARD)) {
                 for (int i = 0; i < 2; i++) {
@@ -86,7 +86,7 @@ public class TealivyFireStaffEntity extends AbstractArrow implements ItemSupplie
                     this.setYHeadRot(this.getYRot());
                     this.yRotO = this.getYRot();
                     this.xRotO = this.getXRot();
-                    if(!this.level().isClientSide() && this.getOwner() != null)
+                    if (!this.level().isClientSide() && this.getOwner() != null)
                         this.shootSmallShard(new BlockPos((int) this.getX() + random.nextIntBetweenInclusive(-5, 5), (int) this.getY() + 1, (int) this.getZ() + random.nextIntBetweenInclusive(-5, 5)));
                 }
             }

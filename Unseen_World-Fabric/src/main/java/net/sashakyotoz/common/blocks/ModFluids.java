@@ -16,6 +16,6 @@ public class ModFluids {
     public static final FlowingFluid DARK_WATER = registerFluid("dark_water", new DarkWaterFluid.Still());
 
     private static <T extends Fluid> T registerFluid(String id, T value) {
-        return Registry.register(BuiltInRegistries.FLUID, UnseenWorld.makeID(id), value);
+        return Registry.register(BuiltInRegistries.FLUID, UnseenWorld.MOD.makeID(id), value);
     }
 }

@@ -1,10 +1,18 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
     "foliage_color": 336860160,
     "grass_color": 336860160,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 2.0,
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000
+    },
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
@@ -18,19 +26,24 @@
     "water_fog_color": 0
   },
   "features": [
+    [
+      "unseen_world:dark_currantslate_boulder"
+    ],
     [],
-    [],
-    [],
+    [
+      "unseen_world:griptonite_cluster_spike"
+    ],
     [],
     [],
     [],
     [
-      "unseen_world:iron_ore"
+      "unseen_world:iron_ore_upper"
     ],
     [],
     [],
     [
-      "unseen_world:gloomweed_patch"
+      "unseen_world:crimsonveil_tree",
+      "unseen_world:tall_gloomweed_patch"
     ]
   ],
   "has_precipitation": false,
@@ -38,12 +51,19 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "unseen_world:saberpard",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 4
+      }
+    ],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.5
+  "temperature": 0.9
 }

@@ -14,6 +14,6 @@ public class GloomwhaleRenderer extends MobRenderer<GloomwhaleEntity, Gloomwhale
 
     @Override
     public ResourceLocation getTextureLocation(GloomwhaleEntity entity) {
-        return UnseenWorld.makeID("textures/entity/gloomwhale/gloomwhale.png");
+        return UnseenWorld.MOD.makeID("textures/entity/gloomwhale/gloomwhale.png");
     }
 }

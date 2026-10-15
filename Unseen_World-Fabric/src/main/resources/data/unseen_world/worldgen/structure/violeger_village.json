@@ -4,8 +4,7 @@
     "unseen_world:dark_wasteland",
     "unseen_world:amethyst_forest",
     "unseen_world:amethyst_chimeries",
-    "unseen_world:grizzly_thicket",
-    "unseen_world:dark_badlands"
+    "unseen_world:grizzly_thicket"
   ],
   "step": "surface_structures",
   "spawn_overrides": {

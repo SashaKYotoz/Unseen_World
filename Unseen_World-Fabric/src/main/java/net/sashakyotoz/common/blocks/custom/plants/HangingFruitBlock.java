@@ -22,12 +22,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.tags.ModTags;
 
+import java.util.function.Supplier;
+
 public class HangingFruitBlock extends HangingPlantBlock implements BonemealableBlock {
-    public ItemLike drop;
+    public Supplier<ItemLike> drop;
 
     public static final BooleanProperty HAS_FRUIT = BooleanProperty.create("has_fruit");
 
-    public HangingFruitBlock(Properties settings, ItemLike drop, TagKey<Block> growable_on, VoxelShape shape) {
+    public HangingFruitBlock(Properties settings, Supplier<ItemLike> drop, TagKey<Block> growable_on, VoxelShape shape) {
         super(settings.randomTicks(), growable_on, shape);
         this.drop = drop;
         this.registerDefaultState(this.defaultBlockState().setValue(HAS_FRUIT, false));
@@ -52,19 +54,15 @@ public class HangingFruitBlock extends HangingPlantBlock implements Bonemealable
     @Override
     public void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack tool, boolean dropExperience) {
         if (state.getValue(HAS_FRUIT))
-            world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop)));
+            world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop.get())));
         super.spawnAfterBreak(state, world, pos, tool, dropExperience);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (state.getValue(HAS_FRUIT)) {
-            world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(this.drop)));
-            world.setBlockAndUpdate(pos, state.setValue(HAS_FRUIT, false));
-
-            return InteractionResult.SUCCESS;
+            return FruitBearing.harvest(world, pos, state.setValue(HAS_FRUIT, false), new ItemStack(this.drop.get()), player);
         }
-
         return super.use(state, world, pos, player, hand, hit);
     }
 
@@ -89,6 +87,10 @@ public class HangingFruitBlock extends HangingPlantBlock implements Bonemealable
         if (state.is(ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.below()).isAir()) {
             world.setBlockAndUpdate(pos, ModBlocks.CRIMSONVEIL_VINE_PLANT.defaultBlockState());
             world.setBlockAndUpdate(pos.below(), ModBlocks.CRIMSONVEIL_VINE.defaultBlockState());
+        }
+        if (state.is(ModTags.Blocks.GLOWROOT_VINES_GROWABLE_ON) && random.nextInt(4) == 0 && world.getBlockState(pos.below()).isAir()) {
+            world.setBlockAndUpdate(pos, ModBlocks.GLOWROOT_VINE_PLANT.defaultBlockState());
+            world.setBlockAndUpdate(pos.below(), ModBlocks.GLOWROOT_VINE.defaultBlockState());
         }
         if (state.is(ModTags.Blocks.HANGING_BURLYWOOD_LEAVES_GROWABLE_ON)
                 && state.hasProperty(HAS_FRUIT)

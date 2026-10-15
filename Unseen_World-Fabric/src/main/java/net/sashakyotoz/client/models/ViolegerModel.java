@@ -16,7 +16,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.ViolegerEntity;
 
 public class ViolegerModel<T extends ViolegerEntity> extends HierarchicalModel<T> implements ArmedModel, HeadedModel {
-    public static final ModelLayerLocation VIOLEGER = new ModelLayerLocation(UnseenWorld.makeID("violeger"), "main");
+    public static final ModelLayerLocation VIOLEGER = new ModelLayerLocation(UnseenWorld.MOD.makeID("violeger"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -39,7 +39,7 @@ public class ViolegerModel<T extends ViolegerEntity> extends HierarchicalModel<T
         this.rightArm = root.getChild(PartNames.RIGHT_ARM);
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition modelPartData2 = modelPartData.addOrReplaceChild(

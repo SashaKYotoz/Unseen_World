@@ -4,7 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModEntitiesTagProvider extends EntityTypeTagsProvider {
     public ModEntitiesTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, future, UnseenWorldMod.MODID, existingFileHelper);
+        super(output, future, UnseenWorld.MOD_ID, existingFileHelper);
     }
 
     @Override

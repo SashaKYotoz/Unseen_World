@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagProvider extends ItemTagsProvider {
     public ModItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, BlockTagsProvider provider, ExistingFileHelper exFileHelper) {
-        super(output, lookupProvider, provider.contentsGetter(), UnseenWorldMod.MODID, exFileHelper);
+        super(output, lookupProvider, provider.contentsGetter(), UnseenWorld.MOD_ID, exFileHelper);
     }
 
     @Override

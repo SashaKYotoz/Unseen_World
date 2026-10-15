@@ -27,10 +27,10 @@ public class ModLanternBlock extends LanternBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        if (random.nextInt(8) == 3) {
+        if (state.is(ModBlocks.GRIPTONITE_LANTERN) && random.nextInt(8) == 3) {
             List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(16), entity ->
                     entity instanceof IGrippingEntity entity1 && entity1.getGrippingData() > 0);
-            if (!entities.isEmpty() && state.is(ModBlocks.GRIPTONITE_LANTERN)) {
+            if (!entities.isEmpty()) {
                 entities.forEach(entity -> {
                     if (entity instanceof IGrippingEntity entity1)
                         GrippingData.removeGripping(entity1);

@@ -15,7 +15,7 @@ public class GleamcarverRenderer extends MobRenderer<GleamcarverEntity, Gleamcar
 
     @Override
     public ResourceLocation getTextureLocation(GleamcarverEntity entity) {
-        return entity.gleamcarverType == null ? UnseenWorld.makeID("textures/entity/gleamcarver/gleamcarver_dark_currantslate.png")
-                : UnseenWorld.makeID("textures/entity/gleamcarver/gleamcarver_" + entity.gleamcarverType.typeName + ".png");
+        return entity.gleamcarverType == null ? UnseenWorld.MOD.makeID("textures/entity/gleamcarver/gleamcarver_dark_currantslate.png")
+                : UnseenWorld.MOD.makeID("textures/entity/gleamcarver/gleamcarver_" + entity.gleamcarverType.typeName + ".png");
     }
 }

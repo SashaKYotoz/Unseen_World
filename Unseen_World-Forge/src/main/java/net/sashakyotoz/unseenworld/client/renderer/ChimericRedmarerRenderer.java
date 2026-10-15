@@ -2,11 +2,11 @@
 package net.sashakyotoz.unseenworld.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.sashakyotoz.unseenworld.client.model.ModelChimericRedmarerWithSaddle;
-import net.sashakyotoz.unseenworld.entity.ChimericRedmarerEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.sashakyotoz.unseenworld.client.model.ModelChimericRedmarerWithSaddle;
+import net.sashakyotoz.unseenworld.entity.ChimericRedmarerEntity;
 
 public class ChimericRedmarerRenderer extends MobRenderer<ChimericRedmarerEntity, ModelChimericRedmarerWithSaddle<ChimericRedmarerEntity>> {
     private static final ResourceLocation REDMARER_LOCATION = new ResourceLocation("unseen_world:textures/entities/chimeric_redmarer.png");

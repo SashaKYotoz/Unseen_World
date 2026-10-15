@@ -5,32 +5,25 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
@@ -41,27 +34,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.entity.EntityTypeTest;
-import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.common.entities.ModEntities;
-import net.sashakyotoz.common.entities.custom.brain.TuskhogBrain;
-import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.entities.ai.brains.TuskhogBrain;
+import net.sashakyotoz.common.entities.util.GripConversion;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
 import java.util.function.IntFunction;
 
 public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity.Type> {
     private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(TuskhogEntity.class, EntityDataSerializers.BOOLEAN);
-    private int conversionTimer;
-    @Nullable
-    private UUID converter;
+    private final GripConversion conversion = new GripConversion(this, CONVERTING, this::finishConversion);
     private static final Ingredient TAMING_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(TuskhogEntity.class, EntityDataSerializers.INT);
     public static final EntityDimensions LONG_JUMPING_DIMENSIONS = EntityDimensions.scalable(0.9F, 1.3F).scale(0.7F);
@@ -105,12 +92,6 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(1.0);
         else
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(2.0);
-    }
-
-    @Override
-    protected void registerGoals() {
-        TemptGoal temptGoal = new TemptGoal(this, 0.6, TAMING_INGREDIENT, true);
-        this.goalSelector.addGoal(3, temptGoal);
     }
 
     @Override
@@ -206,23 +187,13 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
         if (actionResult.consumesAction() && this.isFood(itemStack)) {
             this.level()
                     .playSound(null, this, this.getEatingSound(itemStack), SoundSource.NEUTRAL, 1.0F, Mth.randomBetween(this.level().random, 0.8F, 1.2F));
-        } else if (itemStack.is(ModItems.CRYSTIE_APPLE)) {
-            if (this.hasEffect(MobEffects.GLOWING)) {
-                if (!player.getAbilities().instabuild)
-                    itemStack.shrink(1);
-                if (!this.level().isClientSide)
-                    this.setConverting(player.getUUID(), this.random.nextInt(2401) + 2400);
-                return InteractionResult.SUCCESS;
-            } else
-                return InteractionResult.CONSUME;
-        } else if (itemStack.is(ModItems.GRIPTONITE)) {
-            if (!player.getAbilities().instabuild && player instanceof ServerPlayer player1)
-                itemStack.hurt(1, player1.getRandom(), player1);
-            if (!this.level().isClientSide)
-                this.setConverting(player.getUUID(), this.random.nextInt(1201) + 1200);
-            return InteractionResult.SUCCESS;
+            return actionResult;
         }
-        return actionResult;
+        InteractionResult result = this.conversion.tryCrystieApple(player, hand, 2400, 2400);
+        if (result == InteractionResult.PASS) {
+            result = this.conversion.tryGriptonite(player, hand, 1200, 1200);
+        }
+        return result != InteractionResult.PASS ? result : actionResult;
     }
 
     @Override
@@ -249,19 +220,17 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
 
     @Override
     public void tick() {
-        if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
-            this.conversionTimer--;
-            if (this.conversionTimer <= 0)
-                this.finishConversion((ServerLevel) this.level());
-        }
+        this.conversion.tick();
         super.tick();
     }
 
-    private void finishConversion(ServerLevel world) {
+    private void finishConversion(ServerLevel world, GripConversion state) {
         Pig pig = this.convertTo(EntityType.PIG, false);
-        ActionsUtils.initializeConverting(this, pig, uuid);
+        if (pig != null) {
+            ActionsUtils.initializeConverting(this, pig, state.converter());
+        }
         if (!this.isSilent())
-            world.playSound(this, this.blockPosition(), SoundEvents.OCELOT_HURT, SoundSource.NEUTRAL, 3, 2);
+            world.playSound(null, this.blockPosition(), SoundEvents.PIG_HURT, SoundSource.NEUTRAL, 3, 2);
     }
 
     @Override
@@ -278,17 +247,8 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
         return (float) this.headPitch / 20.0F * 30.0F * (float) (Math.PI / 180.0);
     }
 
-    private void setConverting(@Nullable UUID uuid, int delay) {
-        this.converter = uuid;
-        this.conversionTimer = delay;
-        this.getEntityData().set(CONVERTING, true);
-        this.removeEffect(MobEffects.GLOWING);
-        this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, delay, Math.min(this.level().getDifficulty().getId() - 1, 0)));
-        this.level().broadcastEntityEvent(this, EntityEvent.VILLAGER_SWEAT);
-    }
-
     public boolean isConverting() {
-        return this.getEntityData().get(CONVERTING);
+        return this.conversion.isConverting();
     }
 
     @Override
@@ -300,7 +260,7 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(TYPE, 0);
-        this.entityData.define(CONVERTING, false);
+        GripConversion.define(this.entityData, CONVERTING);
     }
 
     @Override
@@ -317,9 +277,7 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putString("Type", this.getVariant().getSerializedName());
-        nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
-        if (this.converter != null)
-            nbt.putUUID("ConversionPlayer", this.converter);
+        this.conversion.save(nbt);
     }
 
     @Nullable
@@ -340,14 +298,7 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         this.setVariant(Type.byName(nbt.getString("Type")));
-        if (nbt.contains("ConversionTime", Tag.TAG_ANY_NUMERIC) && nbt.getInt("ConversionTime") > -1)
-            this.setConverting(nbt.hasUUID("ConversionPlayer") ? nbt.getUUID("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
-    }
-
-    public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        return world.getBlockState(pos.below()).is(BlockTags.DIRT)
-                && world.getEntities(EntityTypeTest.forClass(TuskhogEntity.class), new AABB(pos).inflate(64), LivingEntity::isAlive).size() < 4
-                && random.nextInt(4) == 1;
+        this.conversion.load(nbt);
     }
 
     public enum Type implements StringRepresentable {

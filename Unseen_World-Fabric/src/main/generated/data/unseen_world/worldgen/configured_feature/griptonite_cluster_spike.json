@@ -11,6 +11,15 @@
         }
       }
     },
+    "covered_cluster_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:griptonited_dark_currantslate",
+        "Properties": {
+          "facing": "up"
+        }
+      }
+    },
     "height": {
       "type": "minecraft:uniform",
       "value": {

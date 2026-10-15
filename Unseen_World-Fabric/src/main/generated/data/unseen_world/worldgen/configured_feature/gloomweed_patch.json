@@ -23,12 +23,6 @@
                 }
               },
               {
-                "Name": "unseen_world:gloomweed",
-                "Properties": {
-                  "lit": "true"
-                }
-              },
-              {
                 "Name": "unseen_world:murktuft",
                 "Properties": {
                   "lit": "true"

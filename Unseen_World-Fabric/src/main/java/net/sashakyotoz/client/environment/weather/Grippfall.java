@@ -31,7 +31,7 @@ import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.utils.Oscillator;
 
 public class Grippfall implements DimensionRenderingRegistry.WeatherRenderer {
-    private static final ResourceLocation GRIPPFALL = UnseenWorld.makeID("textures/environment/grippfall.png");
+    private static final ResourceLocation GRIPPFALL = UnseenWorld.MOD.makeID("textures/environment/grippfall.png");
     private final float[] NORMAL_LINE_DX = new float[1024];
     private final float[] NORMAL_LINE_DZ = new float[1024];
 

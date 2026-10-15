@@ -9,6 +9,8 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -57,10 +59,6 @@ public class ModPlacements {
 
     public static final ResourceKey<PlacedFeature> GRIPCRYSTAL_WART_PATCH = create("gripcrystal_wart_patch");
 
-    public static final ResourceKey<PlacedFeature> WATER_LAKE = create("water_lake");
-    public static final ResourceKey<PlacedFeature> DARK_WATER_LAKE = create("dark_water_lake");
-    public static final ResourceKey<PlacedFeature> CRIMSONVEIL_DARK_WATER_LAKE = create("crimsonveil_dark_water_lake");
-
     public static final ResourceKey<PlacedFeature> BEARFRUIT_BRAMBLE_PATCH = create("bearfruit_bramble_patch");
     public static final ResourceKey<PlacedFeature> MIDNIGHT_LILY_PATCH = create("midnight_lily_patch");
     public static final ResourceKey<PlacedFeature> BUSH_LIKE_TREE_PATCH = create("bush_like_tree_patch");
@@ -77,6 +75,32 @@ public class ModPlacements {
 
     public static final ResourceKey<PlacedFeature> UNSEENIUM_CURRANTSLATE_DISK = create("unseenium_currantslate_disk");
     public static final ResourceKey<PlacedFeature> TITANIUM_CURRANTSLATE_DISK = create("titanium_currantslate_disk");
+
+    public static final ResourceKey<PlacedFeature> CORONA_STONE_BOULDER = create("corona_stone_boulder");
+    public static final ResourceKey<PlacedFeature> GILDED_CURRANTSLATE_BOULDER = create("gilded_currantslate_boulder");
+    public static final ResourceKey<PlacedFeature> CORONA_STONE_RING = create("corona_stone_ring");
+    public static final ResourceKey<PlacedFeature> CORONA_BLOOM_PATCH = create("corona_bloom_patch");
+    public static final ResourceKey<PlacedFeature> FROSTBLOOM_PATCH = create("frostbloom_patch");
+    public static final ResourceKey<PlacedFeature> ASHREED_PATCH = create("ashreed_patch");
+    public static final ResourceKey<PlacedFeature> GLOWROOT_VINES = create("glowroot_vines");
+    public static final ResourceKey<PlacedFeature> UMBRAL_CORAL_REEF = create("umbral_coral_reef");
+    public static final ResourceKey<PlacedFeature> DEAD_UMBRAL_CORAL_REEF = create("dead_umbral_coral_reef");
+    public static final ResourceKey<PlacedFeature> CHIMERIC_FREEZE = create("chimeric_freeze");
+
+    public static final ResourceKey<PlacedFeature> IRON_ORE_UPPER = create("iron_ore_upper");
+    public static final ResourceKey<PlacedFeature> HOLLOWS_FLOOR_MOSS = create("hollows_floor_moss");
+    public static final ResourceKey<PlacedFeature> HOLLOWS_CEILING_MOSS = create("hollows_ceiling_moss");
+    public static final ResourceKey<PlacedFeature> HOLLOWS_GLOW_LICHEN = create("hollows_glow_lichen");
+    public static final ResourceKey<PlacedFeature> HOLLOWS_BURLYWOOD_TREE = create("hollows_burlywood_tree");
+    public static final ResourceKey<PlacedFeature> HOLLOWS_BURLYWOOD_BUSH = create("hollows_burlywood_bush");
+    public static final ResourceKey<PlacedFeature> SHINY_ICE_CEILING_BOULDER = create("shiny_ice_ceiling_boulder");
+    public static final ResourceKey<PlacedFeature> SHINY_FROSTBLOOM = create("shiny_frostbloom");
+    public static final ResourceKey<PlacedFeature> FROZEN_CAVE_POOL = create("frozen_cave_pool");
+    public static final ResourceKey<PlacedFeature> TAPROOT_TREE = create("taproot_tree");
+    public static final ResourceKey<PlacedFeature> HOARFROST_PATCH = create("hoarfrost_patch");
+    public static final ResourceKey<PlacedFeature> HOLLOWS_GLEAMCARVER_NEST = create("hollows_gleamcarver_nest");
+    public static final ResourceKey<PlacedFeature> TANZANITE_GLEAMCARVER_NEST = create("tanzanite_gleamcarver_nest");
+    public static final ResourceKey<PlacedFeature> SHINY_GLEAMCARVER_NEST = create("shiny_gleamcarver_nest");
 
     public static void boostrap(BootstapContext<PlacedFeature> context) {
         var configLookup = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -214,22 +238,6 @@ public class ModPlacements {
                 CountPlacement.of(1), RarityFilter.onAverageOnceEvery(4), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()
         );
 
-        register(context, WATER_LAKE, configLookup.getOrThrow(ModConfiguredFeatures.WATER_LAKE),
-                RarityFilter.onAverageOnceEvery(6),
-                InSquarePlacement.spread(),
-                PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
-                BiomeFilter.biome());
-        register(context, DARK_WATER_LAKE, configLookup.getOrThrow(ModConfiguredFeatures.DARK_WATER_LAKE),
-                RarityFilter.onAverageOnceEvery(24),
-                InSquarePlacement.spread(),
-                PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
-                BiomeFilter.biome());
-        register(context, CRIMSONVEIL_DARK_WATER_LAKE, configLookup.getOrThrow(ModConfiguredFeatures.CRIMSONVEIL_DARK_WATER_LAKE),
-                CountPlacement.of(2),
-                InSquarePlacement.spread(),
-                PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
-                BiomeFilter.biome());
-
         register(context, BEARFRUIT_BRAMBLE_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.BEARFRUIT_BRAMBLE_PATCH),
                 InSquarePlacement.spread(),
                 PlacementUtils.HEIGHTMAP,
@@ -322,7 +330,7 @@ public class ModPlacements {
                 configLookup.getOrThrow(ModConfiguredFeatures.UNSEENIUM_CURRANTSLATE_DISK),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(32)),
                 InSquarePlacement.spread(),
-                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE))),
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE, ModBlocks.CORONA_STONE))),
                 BiomeFilter.biome()
         );
         register(
@@ -331,13 +339,149 @@ public class ModPlacements {
                 configLookup.getOrThrow(ModConfiguredFeatures.TITANIUM_CURRANTSLATE_DISK),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(-48), VerticalAnchor.absolute(16)),
-                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE))),
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE, ModBlocks.CORONA_STONE))),
                 BiomeFilter.biome()
         );
+
+        register(context, CORONA_STONE_BOULDER, configLookup.getOrThrow(ModConfiguredFeatures.CORONA_STONE_BOULDER),
+                RarityFilter.onAverageOnceEvery(3),
+                InSquarePlacement.spread(),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES),
+                BiomeFilter.biome());
+        register(context, GILDED_CURRANTSLATE_BOULDER, configLookup.getOrThrow(ModConfiguredFeatures.GILDED_CURRANTSLATE_BOULDER),
+                RarityFilter.onAverageOnceEvery(4),
+                InSquarePlacement.spread(),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES),
+                BiomeFilter.biome());
+        register(context, CORONA_STONE_RING, configLookup.getOrThrow(ModConfiguredFeatures.CORONA_STONE_RING),
+                RarityFilter.onAverageOnceEvery(12),
+                InSquarePlacement.spread(),
+                PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
+                BiomeFilter.biome());
+        register(context, CORONA_BLOOM_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.CORONA_BLOOM_PATCH),
+                RarityFilter.onAverageOnceEvery(2),
+                InSquarePlacement.spread(),
+                PlacementUtils.HEIGHTMAP,
+                BiomeFilter.biome());
+        register(context, FROSTBLOOM_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.FROSTBLOOM_PATCH),
+                RarityFilter.onAverageOnceEvery(3),
+                InSquarePlacement.spread(),
+                PlacementUtils.HEIGHTMAP,
+                BiomeFilter.biome());
+        register(context, ASHREED_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.ASHREED_PATCH),
+                CountPlacement.of(4),
+                InSquarePlacement.spread(),
+                PlacementUtils.HEIGHTMAP,
+                BiomeFilter.biome());
+        register(context, GLOWROOT_VINES, configLookup.getOrThrow(ModConfiguredFeatures.GLOWROOT_VINES),
+                CountPlacement.of(96),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BiomeFilter.biome());
+        register(context, UMBRAL_CORAL_REEF, configLookup.getOrThrow(ModConfiguredFeatures.UMBRAL_CORAL_REEF),
+                NoiseBasedCountPlacement.of(10, 400.0D, 0.0D),
+                InSquarePlacement.spread(),
+                PlacementUtils.HEIGHTMAP_TOP_SOLID,
+                BiomeFilter.biome());
+        register(context, DEAD_UMBRAL_CORAL_REEF, configLookup.getOrThrow(ModConfiguredFeatures.DEAD_UMBRAL_CORAL_REEF),
+                RarityFilter.onAverageOnceEvery(2),
+                CountPlacement.of(2),
+                InSquarePlacement.spread(),
+                PlacementUtils.HEIGHTMAP_TOP_SOLID,
+                BiomeFilter.biome());
+        register(context, CHIMERIC_FREEZE, configLookup.getOrThrow(ModConfiguredFeatures.CHIMERIC_FREEZE), BiomeFilter.biome());
+
+        register(context, IRON_ORE_UPPER, configLookup.getOrThrow(ModConfiguredFeatures.IRON_ORE),
+                ModOrePlacement.modifiersWithCount(6,
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(32), VerticalAnchor.absolute(160))));
+        register(context, HOLLOWS_FLOOR_MOSS, configLookup.getOrThrow(ModConfiguredFeatures.HOLLOWS_FLOOR_MOSS),
+                CountPlacement.of(125),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                BiomeFilter.biome());
+        register(context, HOLLOWS_CEILING_MOSS, configLookup.getOrThrow(ModConfiguredFeatures.HOLLOWS_CEILING_MOSS),
+                CountPlacement.of(125),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BiomeFilter.biome());
+        register(context, HOLLOWS_GLOW_LICHEN, configLookup.getOrThrow(ModConfiguredFeatures.HOLLOWS_GLOW_LICHEN),
+                CountPlacement.of(UniformInt.of(60, 100)),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                BiomeFilter.biome());
+        register(context, HOLLOWS_BURLYWOOD_TREE, configLookup.getOrThrow(ModConfiguredFeatures.SMALL_BURLYWOOD_TREE),
+                caveFloorPlant(3, ModBlocks.BURLYWOOD_SAPLING));
+        register(context, HOLLOWS_BURLYWOOD_BUSH, configLookup.getOrThrow(ModConfiguredFeatures.BUSH_BURLYWOOD_TREE),
+                caveFloorPlant(8, ModBlocks.BURLYWOOD_SAPLING));
+        register(context, SHINY_ICE_CEILING_BOULDER, configLookup.getOrThrow(ModConfiguredFeatures.SHINY_ICE_CEILING_BOULDER),
+                CountPlacement.of(16),
+                InSquarePlacement.spread(),
+                BiomeFilter.biome(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 6),
+                RandomOffsetPlacement.vertical(ConstantInt.of(1)));
+        register(context, SHINY_FROSTBLOOM, configLookup.getOrThrow(ModConfiguredFeatures.FROSTBLOOM_PATCH),
+                CountPlacement.of(6),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                BiomeFilter.biome());
+        register(context, FROZEN_CAVE_POOL, configLookup.getOrThrow(ModConfiguredFeatures.FROZEN_CAVE_POOL),
+                CountPlacement.of(24),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.matchesBlocks(ModBlocks.DARK_WATER), BlockPredicate.ONLY_IN_AIR_PREDICATE, 16),
+                BiomeFilter.biome());
+        register(context, TAPROOT_TREE, configLookup.getOrThrow(ModConfiguredFeatures.TAPROOT_TREE),
+                CountPlacement.of(2),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BiomeFilter.biome());
+        register(context, HOARFROST_PATCH, configLookup.getOrThrow(ModConfiguredFeatures.HOARFROST_PATCH),
+                CountPlacement.of(10),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                BiomeFilter.biome());
+        register(context, HOLLOWS_GLEAMCARVER_NEST, configLookup.getOrThrow(ModConfiguredFeatures.HOLLOWS_GLEAMCARVER_NEST), caveNest());
+        register(context, TANZANITE_GLEAMCARVER_NEST, configLookup.getOrThrow(ModConfiguredFeatures.TANZANITE_GLEAMCARVER_NEST), caveNest());
+        register(context, SHINY_GLEAMCARVER_NEST, configLookup.getOrThrow(ModConfiguredFeatures.SHINY_GLEAMCARVER_NEST), caveNest());
+    }
+
+    private static List<PlacementModifier> caveNest() {
+        return List.of(
+                CountPlacement.of(6),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                RarityFilter.onAverageOnceEvery(8),
+                BiomeFilter.biome());
+    }
+
+    private static List<PlacementModifier> caveFloorPlant(int count, Block sapling) {
+        return List.of(
+                CountPlacement.of(count),
+                InSquarePlacement.spread(),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(sapling.defaultBlockState(), BlockPos.ZERO)),
+                BiomeFilter.biome());
     }
 
     public static ResourceKey<PlacedFeature> create(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, UnseenWorld.makeID(name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, UnseenWorld.MOD.makeID(name));
     }
 
     private static void register(BootstapContext<PlacedFeature> context,

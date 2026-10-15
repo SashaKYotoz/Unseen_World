@@ -1,0 +1,32 @@
+{
+  "fallback": "unseen_world:violeger_camp_ruins/remains",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_camp_remains/violeger_camp_remains",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_camp_remains/violeger_camp_remains1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_camp_remains/violeger_camp_remains2",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

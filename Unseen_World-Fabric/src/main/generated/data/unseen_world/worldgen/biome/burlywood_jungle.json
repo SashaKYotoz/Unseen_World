@@ -1,16 +1,24 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
     "foliage_color": 6717235,
     "grass_color": 6717235,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 2.0,
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000
+    },
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.game"
+        "sound_id": "minecraft:music.overworld.jungle"
       }
     },
     "sky_color": 4605011,
@@ -24,13 +32,18 @@
     [],
     [],
     [],
-    [],
+    [
+      "unseen_world:iron_ore_upper"
+    ],
     [],
     [],
     [
+      "unseen_world:burlywood_tree",
+      "unseen_world:small_burlywood_tree",
+      "unseen_world:bush_burlywood_tree",
       "unseen_world:burlywood_violet_patch",
-      "unseen_world:rare_gloomweed_patch",
-      "minecraft:patch_grass_jungle"
+      "minecraft:patch_grass_jungle",
+      "unseen_world:rare_gloomweed_patch"
     ],
     [
       "unseen_world:bush_like_tree_patch"
@@ -41,12 +54,19 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "unseen_world:saberpard",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.75
+  "temperature": 0.95
 }

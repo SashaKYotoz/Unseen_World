@@ -1,5 +1,7 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
@@ -30,14 +32,18 @@
     "water_fog_color": 0
   },
   "features": [
+    [
+      "unseen_world:glaciemite_boulder"
+    ],
     [],
-    [],
-    [],
+    [
+      "unseen_world:darkness_spiral_spike"
+    ],
     [],
     [],
     [],
     [
-      "unseen_world:ancient_debris"
+      "unseen_world:iron_ore_upper"
     ],
     [
       "unseen_world:dark_currantslate_ceiling_boulder"
@@ -50,11 +56,25 @@
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {
-    "ambient": [],
+    "ambient": [
+      {
+        "type": "unseen_world:eldritch_watcher",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
     "axolotls": [],
     "creature": [],
     "misc": [],
-    "monster": [],
+    "monster": [
+      {
+        "type": "unseen_world:espyer",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 3
+      }
+    ],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []

@@ -15,44 +15,46 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.managers.AncientTransientBlockOpenEntityCollidesInTheBlockProcedure;
 
 public class AncientTransientBlockOpenBlock extends Block {
-	public AncientTransientBlockOpenBlock() {
-		super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.SHROOMLIGHT).strength(10f).lightLevel(s -> 1).noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
-				.emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
-	}
-	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
-		return true;
-	}
+    public AncientTransientBlockOpenBlock() {
+        super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.SHROOMLIGHT).strength(10f).lightLevel(s -> 1).noCollission().noOcclusion().hasPostProcess((bs, br, bp) -> true)
+                .emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
+    }
 
-	@Override
-	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
-		return 0;
-	}
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+        return true;
+    }
 
-	@Override
-	public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return Shapes.empty();
-	}
+    @Override
+    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
+        return 0;
+    }
 
-	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return box(5, 5, 5, 11, 11, 11);
-	}
+    @Override
+    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
+    }
 
-	@Override
-	public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-		if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
-			return tieredItem.getTier().getLevel() >= 4;
-		return false;
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return box(5, 5, 5, 11, 11, 11);
+    }
 
-	@Override
-	public void entityInside(BlockState blockstate, Level world, BlockPos pos, Entity entity) {
-		super.entityInside(blockstate, world, pos, entity);
-		UnseenWorldMod.queueServerWork(60, () -> AncientTransientBlockOpenEntityCollidesInTheBlockProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ()));
-	}
+    @Override
+    public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
+        if (player.getInventory().getSelected().getItem() instanceof PickaxeItem tieredItem)
+            return tieredItem.getTier().getLevel() >= 4;
+        return false;
+    }
+
+    @Override
+    public void entityInside(BlockState blockstate, Level level, BlockPos pos, Entity entity) {
+        super.entityInside(blockstate, level, pos, entity);
+        if (!level.isClientSide())
+            UnseenWorld.queueServerWork(60, () -> AncientTransientBlockOpenEntityCollidesInTheBlockProcedure.execute(level, pos.getX(), pos.getY(), pos.getZ()));
+    }
 }

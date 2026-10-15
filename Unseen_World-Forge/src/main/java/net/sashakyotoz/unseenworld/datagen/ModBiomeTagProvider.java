@@ -9,23 +9,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ModBiomeTagProvider extends BiomeTagsProvider {
-    public static final ResourceKey<Biome> DARK_OCEAN = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "dark_ocean"));
-    public static final ResourceKey<Biome> DARK_LIFELESS_OCEAN = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "dark_lifeless_ocean"));
-    public static final ResourceKey<Biome> GREYNISH_BEACH = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "greynish_beach"));
-    public static final ResourceKey<Biome> GRIZZLY_STEPPE = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "grizzly_steppe"));
-    public static final ResourceKey<Biome> GRIZZLY_FOREST = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "grizzly_forest"));
-    public static final ResourceKey<Biome> GREENISH_VALLEY = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "greenish_valley"));
-    public static final ResourceKey<Biome> TEALIVE_VALLEY = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorldMod.MODID, "tealive_luminous_valley"));
+    public static final ResourceKey<Biome> DARK_OCEAN = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "dark_ocean"));
+    public static final ResourceKey<Biome> DARK_LIFELESS_OCEAN = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "dark_lifeless_ocean"));
+    public static final ResourceKey<Biome> GREYNISH_BEACH = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "greynish_beach"));
+    public static final ResourceKey<Biome> GRIZZLY_STEPPE = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "grizzly_steppe"));
+    public static final ResourceKey<Biome> GRIZZLY_FOREST = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "grizzly_forest"));
+    public static final ResourceKey<Biome> GREENISH_VALLEY = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "greenish_valley"));
+    public static final ResourceKey<Biome> TEALIVE_VALLEY = ResourceKey.create(Registries.BIOME, new ResourceLocation(UnseenWorld.MOD_ID, "tealive_luminous_valley"));
 
     public ModBiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, future, UnseenWorldMod.MODID, existingFileHelper);
+        super(output, future, UnseenWorld.MOD_ID, existingFileHelper);
     }
 
     @Override

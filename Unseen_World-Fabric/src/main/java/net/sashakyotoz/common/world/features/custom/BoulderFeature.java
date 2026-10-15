@@ -3,6 +3,7 @@ package net.sashakyotoz.common.world.features.custom;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -25,6 +26,10 @@ public class BoulderFeature extends Feature<BoulderFeatureConfig> {
         BlockPos origin = context.origin();
         RandomSource random = context.random();
         BoulderFeatureConfig config = context.config();
+
+        if (world.getFluidState(origin.below(2)).is(FluidTags.WATER)) {
+            return false;
+        }
 
         List<BlockPos> toPlace = new ArrayList<>();
 

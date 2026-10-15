@@ -1,0 +1,35 @@
+{
+  "type": "unseen_world:ceiling_boulder",
+  "config": {
+    "block": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:packed_ice"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "unseen_world:rime_ice"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:blue_ice"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 6,
+        "min_inclusive": 3
+      }
+    }
+  }
+}

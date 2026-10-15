@@ -1,28 +1,21 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ByIdMap;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -35,23 +28,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.sashakyotoz.common.entities.ModEntities;
-import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.entities.util.GripConversion;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
 import java.util.function.IntFunction;
 
 public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEntity.Type> {
     private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(SaberpardEntity.class, EntityDataSerializers.BOOLEAN);
-    private int conversionTimer;
-    @Nullable
-    private UUID converter;
+    private final GripConversion conversion = new GripConversion(this, CONVERTING, this::finishConversion);
     private TemptGoal temptGoal;
     private static final Ingredient TAMING_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(SaberpardEntity.class, EntityDataSerializers.INT);
@@ -97,36 +86,16 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
                 }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else if (itemStack.is(ModItems.CRYSTIE_APPLE)) {
-            if (this.hasEffect(MobEffects.GLOWING)) {
-                if (!player.getAbilities().instabuild)
-                    itemStack.shrink(1);
-                if (!this.level().isClientSide)
-                    this.setConverting(player.getUUID(), this.random.nextInt(2401) + 2400);
-                return InteractionResult.SUCCESS;
-            } else
-                return InteractionResult.CONSUME;
-        } else if (itemStack.is(ModItems.GRIPTONITE)) {
-            if (!player.getAbilities().instabuild && player instanceof ServerPlayer player1)
-                itemStack.hurt(1, player1.getRandom(), player1);
-            if (!this.level().isClientSide)
-                this.setConverting(player.getUUID(), this.random.nextInt(1201) + 1200);
-            return InteractionResult.SUCCESS;
-        } else
-            return super.mobInteract(player, hand);
-    }
-
-    private void setConverting(@Nullable UUID uuid, int delay) {
-        this.converter = uuid;
-        this.conversionTimer = delay;
-        this.getEntityData().set(CONVERTING, true);
-        this.removeEffect(MobEffects.GLOWING);
-        this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, delay, Math.min(this.level().getDifficulty().getId() - 1, 0)));
-        this.level().broadcastEntityEvent(this, EntityEvent.VILLAGER_SWEAT);
+        }
+        InteractionResult result = this.conversion.tryCrystieApple(player, hand, 2400, 2400);
+        if (result == InteractionResult.PASS) {
+            result = this.conversion.tryGriptonite(player, hand, 1200, 1200);
+        }
+        return result != InteractionResult.PASS ? result : super.mobInteract(player, hand);
     }
 
     public boolean isConverting() {
-        return this.getEntityData().get(CONVERTING);
+        return this.conversion.isConverting();
     }
 
     @Override
@@ -150,11 +119,7 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(TYPE, 0);
-        this.entityData.define(CONVERTING, false);
-    }
-
-    public static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        return world.getBlockState(pos.below()).is(BlockTags.DIRT);
+        GripConversion.define(this.entityData, CONVERTING);
     }
 
     @Override
@@ -171,17 +136,14 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putString("Type", this.getVariant().getSerializedName());
-        nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
-        if (this.converter != null)
-            nbt.putUUID("ConversionPlayer", this.converter);
+        this.conversion.save(nbt);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         this.setVariant(Type.byName(nbt.getString("Type")));
-        if (nbt.contains("ConversionTime", Tag.TAG_ANY_NUMERIC) && nbt.getInt("ConversionTime") > -1)
-            this.setConverting(nbt.hasUUID("ConversionPlayer") ? nbt.getUUID("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
+        this.conversion.load(nbt);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -194,19 +156,17 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
 
     @Override
     public void tick() {
-        if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
-            this.conversionTimer--;
-            if (this.conversionTimer <= 0)
-                this.finishConversion((ServerLevel) this.level());
-        }
+        this.conversion.tick();
         super.tick();
     }
 
-    private void finishConversion(ServerLevel world) {
+    private void finishConversion(ServerLevel world, GripConversion state) {
         Ocelot ocelot = this.convertTo(EntityType.OCELOT, false);
-        ActionsUtils.initializeConverting(this, ocelot, uuid);
+        if (ocelot != null) {
+            ActionsUtils.initializeConverting(this, ocelot, state.converter());
+        }
         if (!this.isSilent())
-            world.playSound(this, this.blockPosition(), SoundEvents.OCELOT_HURT, SoundSource.NEUTRAL, 3, 2);
+            world.playSound(null, this.blockPosition(), SoundEvents.OCELOT_HURT, SoundSource.NEUTRAL, 3, 2);
     }
 
     @Nullable

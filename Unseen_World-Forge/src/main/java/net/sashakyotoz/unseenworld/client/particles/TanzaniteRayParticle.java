@@ -1,11 +1,14 @@
 package net.sashakyotoz.unseenworld.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
-import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
-import net.sashakyotoz.anitexlib.client.particles.parents.rendertypes.GlowingParticleRenderType;
+import net.sashakyotoz.anitexlib.api.client.particle.custom.parent.GlowingLikeParticle;
+import net.sashakyotoz.anitexlib.api.client.particle.render.GlowingParticleRenderType;
 
 public class TanzaniteRayParticle extends GlowingLikeParticle {
     public static TanzaniteRayParticle.TanzaniteParticleProvider provider(SpriteSet spriteSet) {

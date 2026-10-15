@@ -9,26 +9,21 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ambient.AmbientCreature;
-import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 
 public class DreadflapEntity extends AmbientCreature {
-    public static final int field_28637 = Mth.ceil(2.4166098F);
+    public static final int TICKS_PER_FLAP = Mth.ceil(2.4166098F);
     private static final EntityDataAccessor<Byte> BAT_FLAGS = SynchedEntityData.defineId(DreadflapEntity.class, EntityDataSerializers.BYTE);
     private static final TargetingConditions CLOSE_PLAYER_PREDICATE = TargetingConditions.forNonCombat().range(4.0);
     public final AnimationState flying = new AnimationState();
@@ -36,9 +31,9 @@ public class DreadflapEntity extends AmbientCreature {
     @Nullable
     private BlockPos hangingPosition;
 
-    public DreadflapEntity(EntityType<? extends DreadflapEntity> entityType, Level world) {
-        super(entityType, world);
-        if (!world.isClientSide)
+    public DreadflapEntity(EntityType<? extends DreadflapEntity> entityType, Level level) {
+        super(entityType, level);
+        if (!level.isClientSide())
             this.setRoosting(true);
     }
 
@@ -48,7 +43,7 @@ public class DreadflapEntity extends AmbientCreature {
 
     @Override
     public boolean isFlapping() {
-        return !this.isRoosting() && this.tickCount % field_28637 == 0;
+        return !this.isRoosting() && this.tickCount % TICKS_PER_FLAP == 0;
     }
 
     @Override
@@ -223,26 +218,6 @@ public class DreadflapEntity extends AmbientCreature {
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putByte("BatFlags", this.entityData.get(BAT_FLAGS));
-    }
-
-    public static boolean canSpawn(EntityType<Bat> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        if (pos.getY() >= world.getSeaLevel()) {
-            return false;
-        } else {
-            int i = world.getMaxLocalRawBrightness(pos);
-            int j = 3;
-            if (isTodayAroundHalloween()) {
-                j = 6;
-            } else if (random.nextBoolean()) return false;
-            return i <= random.nextInt(j) && checkMobSpawnRules(type, world, spawnReason, pos, random);
-        }
-    }
-
-    private static boolean isTodayAroundHalloween() {
-        LocalDate localDate = LocalDate.now();
-        int i = localDate.getDayOfMonth();
-        int j = localDate.get(ChronoField.MONTH_OF_YEAR);
-        return j == 10 && i >= 20 || j == 11 && i <= 3;
     }
 
     @Override

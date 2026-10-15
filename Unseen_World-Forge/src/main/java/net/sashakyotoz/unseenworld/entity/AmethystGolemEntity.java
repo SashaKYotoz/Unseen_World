@@ -24,7 +24,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PlayMessages;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;

@@ -30,9 +30,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,7 +96,7 @@ public class SnowdrifterEntity extends Animal implements NeutralMob {
         } else {
             if (this.level().getBlockState(this.getOnPos().below()).is(Blocks.SNOW_BLOCK)) {
                 this.digging.start(this.tickCount);
-                UnseenWorldMod.queueServerWork(20, () -> this.entityData.set(UNDER_SNOW, true));
+                UnseenWorld.queueServerWork(20, () -> this.entityData.set(UNDER_SNOW, true));
             }
         }
     }

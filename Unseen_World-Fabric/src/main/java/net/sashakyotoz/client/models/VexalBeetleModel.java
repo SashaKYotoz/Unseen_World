@@ -13,7 +13,7 @@ import net.sashakyotoz.common.entities.animations.VexalBeetleAnimations;
 import net.sashakyotoz.common.entities.custom.VexalBeetleEntity;
 
 public class VexalBeetleModel extends HierarchicalModel<VexalBeetleEntity> {
-    public static final ModelLayerLocation VEXAL_BEETLE = new ModelLayerLocation(UnseenWorld.makeID("vexal_beetle"), "main");
+    public static final ModelLayerLocation VEXAL_BEETLE = new ModelLayerLocation(UnseenWorld.MOD.makeID("vexal_beetle"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -45,7 +45,7 @@ public class VexalBeetleModel extends HierarchicalModel<VexalBeetleEntity> {
         this.left_leg_f = root.getChild("left_leg_f");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition head = modelPartData.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 4).addBox(-4.0F, -3.0F, -8.0F, 8.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, -3.0F));

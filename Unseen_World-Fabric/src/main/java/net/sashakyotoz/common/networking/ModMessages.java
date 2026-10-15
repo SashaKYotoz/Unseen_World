@@ -1,27 +1,22 @@
 package net.sashakyotoz.common.networking;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.client.environment.weather.Grippfall;
-import net.sashakyotoz.common.networking.packets.AbilityClickC2SPacket;
 
-public class ModMessages {
-    public static final ResourceLocation ABILITY_CLICK_HANDLER = UnseenWorld.makeID("left_click_handler");
-    public static final ResourceLocation WEATHER_PACKET_ID = UnseenWorld.makeID("weather_sync");
+public final class ModMessages {
+    public static final ResourceLocation WEATHER_PACKET_ID = UnseenWorld.MOD.makeID("weather_sync");
 
-    public static void registerC2SPackets() {
-        ServerPlayNetworking.registerGlobalReceiver(ABILITY_CLICK_HANDLER, AbilityClickC2SPacket::receive);
+    private ModMessages() {
     }
-    public static void registerS2CPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.WEATHER_PACKET_ID, (client, handler, buf, responseSender) -> {
-            boolean active = buf.readBoolean();
-            String direction = buf.readUtf();
-            client.execute(() -> {
-                Grippfall.isGrippfallActive = active;
-                Grippfall.direction = direction;
-            });
-        });
+
+    public static void sendWeather(ServerPlayer player, boolean active, String direction) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        buf.writeBoolean(active);
+        buf.writeUtf(direction);
+        ServerPlayNetworking.send(player, WEATHER_PACKET_ID, buf);
     }
 }

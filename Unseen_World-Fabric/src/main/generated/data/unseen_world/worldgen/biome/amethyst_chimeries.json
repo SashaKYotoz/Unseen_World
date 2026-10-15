@@ -1,5 +1,7 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
@@ -33,13 +35,15 @@
     [],
     [],
     [
-      "unseen_world:iron_ore"
+      "unseen_world:iron_ore_upper"
     ],
     [
       "unseen_world:amethyst_ceiling_boulder"
     ],
     [],
     [
+      "unseen_world:small_amethyst_tree",
+      "unseen_world:amethyst_flowers",
       "unseen_world:amethyst_bush"
     ]
   ],

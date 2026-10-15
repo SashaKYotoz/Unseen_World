@@ -1,8 +1,9 @@
 package net.sashakyotoz.unseenworld.entity.animations;
-import net.minecraft.client.animation.KeyframeAnimations;
-import net.minecraft.client.animation.Keyframe;
-import net.minecraft.client.animation.AnimationDefinition;
+
 import net.minecraft.client.animation.AnimationChannel;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.animation.Keyframe;
+import net.minecraft.client.animation.KeyframeAnimations;
 public class BlazerAnimations {
     public static final AnimationDefinition STRIKE = AnimationDefinition.Builder.withLength(0.5f)
             .addAnimation("head",

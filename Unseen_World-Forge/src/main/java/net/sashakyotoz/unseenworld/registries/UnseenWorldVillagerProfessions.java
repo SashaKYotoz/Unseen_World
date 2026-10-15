@@ -14,7 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +25,15 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class UnseenWorldVillagerProfessions {
 	private static final Map<String, ProfessionPoiType> POI_TYPES = new HashMap<>();
-	public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, UnseenWorldMod.MODID);
-	public static final RegistryObject<VillagerProfession> SEEKER_WAYFARER = registerProfession("seeker_wayfarer", () -> UnseenWorldBlocks.BEACON_OF_WEAPONS.get(),
+	public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, UnseenWorld.MOD_ID);
+	public static final RegistryObject<VillagerProfession> SEEKER_WAYFARER = registerProfession("seeker_wayfarer", UnseenWorldBlocks.BEACON_OF_WEAPONS,
 			() -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("unseen_world:fire_staff_shot")));
 
 	private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<Block> block, Supplier<SoundEvent> soundEvent) {
 		POI_TYPES.put(name, new ProfessionPoiType(block, null));
 		return PROFESSIONS.register(name, () -> {
 			Predicate<Holder<PoiType>> poiPredicate = poiTypeHolder -> (POI_TYPES.get(name).poiType != null) && (poiTypeHolder.get() == POI_TYPES.get(name).poiType.get());
-			return new VillagerProfession(UnseenWorldMod.MODID + ":" + name, poiPredicate, poiPredicate, ImmutableSet.of(), ImmutableSet.of(), soundEvent.get());
+			return new VillagerProfession(UnseenWorld.MOD_ID + ":" + name, poiPredicate, poiPredicate, ImmutableSet.of(), ImmutableSet.of(), soundEvent.get());
 		});
 	}
 
@@ -45,7 +45,7 @@ public class UnseenWorldVillagerProfessions {
 				String name = entry.getKey();
 				Optional<Holder<PoiType>> existingCheck = PoiTypes.forState(block.defaultBlockState());
 				if (existingCheck.isPresent()) {
-					UnseenWorldMod.LOGGER.error("Skipping villager profession " + name + " that uses POI block " + block + " that is already in use by " + existingCheck);
+					UnseenWorld.LOGGER.error("Skipping villager profession " + name + " that uses POI block " + block + " that is already in use by " + existingCheck);
 					continue;
 				}
 				PoiType poiType = new PoiType(ImmutableSet.copyOf(block.getStateDefinition().getPossibleStates()), 1, 1);

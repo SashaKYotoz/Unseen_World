@@ -27,7 +27,7 @@ public class TuskhogRenderer extends MobRenderer<TuskhogEntity, TuskhogModel<Tus
 
     public ResourceLocation getTextureLocation(TuskhogEntity tuskhog) {
         return tuskhog.getVariant() == TuskhogEntity.Type.WARM ?
-                UnseenWorld.makeID("textures/entity/tuskhog/tuskhog_warm.png") :
-                UnseenWorld.makeID("textures/entity/tuskhog/tuskhog_temperate.png");
+                UnseenWorld.MOD.makeID("textures/entity/tuskhog/tuskhog_warm.png") :
+                UnseenWorld.MOD.makeID("textures/entity/tuskhog/tuskhog_temperate.png");
     }
 }

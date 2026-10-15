@@ -1,10 +1,8 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:crimsonveil_woods",
-    "unseen_world:old_growth_crimsonveil_woods",
-    "unseen_world:amethyst_chimeries",
-    "unseen_world:tealivy_valley",
-    "unseen_world:harmony_grove"
+    "unseen_world:gloomweed_plains",
+    "unseen_world:greenish_valley",
+    "unseen_world:tealivy_valley"
   ]
 }

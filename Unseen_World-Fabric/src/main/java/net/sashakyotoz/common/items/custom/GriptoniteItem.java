@@ -17,14 +17,16 @@ public class GriptoniteItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getItemInHand(hand);
-        if (user instanceof IGrippingEntity player && player.getGrippingData() > 0) {
-            GrippingData.removeGripping(player);
-            user.playNotifySound(SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.5f, 1);
-            itemStack.hurtAndBreak(1, user, p -> p.broadcastBreakEvent(hand));
-            return InteractionResultHolder.consume(itemStack);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!(player instanceof IGrippingEntity gripping) || gripping.getGrippingData() <= 0) {
+            return InteractionResultHolder.pass(stack);
         }
-        return super.use(world, user, hand);
+        if (!level.isClientSide) {
+            GrippingData.removeGripping(gripping);
+            player.playNotifySound(SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.5F, 1.0F);
+            stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(hand));
+        }
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 }

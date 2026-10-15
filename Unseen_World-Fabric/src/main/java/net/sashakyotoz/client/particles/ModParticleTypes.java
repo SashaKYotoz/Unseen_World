@@ -19,7 +19,9 @@ public class ModParticleTypes {
         UnseenWorld.log().debug("Registering Particles for modid : " + UnseenWorld.MOD_ID);
     }
 
-    public static final SimpleParticleType GRIPPING_CRYSTAL = Registry.register(BuiltInRegistries.PARTICLE_TYPE, UnseenWorld.makeID("gripping_crystal"),
+    public static final SimpleParticleType GRIPPING_CRYSTAL = Registry.register(BuiltInRegistries.PARTICLE_TYPE, UnseenWorld.MOD.makeID("gripping_crystal"),
+            FabricParticleTypes.simple());
+    public static final SimpleParticleType EXPLOSION_CIRCLE = Registry.register(BuiltInRegistries.PARTICLE_TYPE, UnseenWorld.MOD.makeID("explosion_circle"),
             FabricParticleTypes.simple());
 
     public static final ParticleType<WindVibrationParticleEffect> WIND_VIBRATION = register(

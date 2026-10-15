@@ -12,7 +12,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.SaberpardEntity;
 
 public class SaberpardModel extends HierarchicalModel<SaberpardEntity> {
-    public static final ModelLayerLocation SABERPARD = new ModelLayerLocation(UnseenWorld.makeID("saberpard"), "main");
+    public static final ModelLayerLocation SABERPARD = new ModelLayerLocation(UnseenWorld.MOD.makeID("saberpard"), "main");
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;
@@ -37,7 +37,7 @@ public class SaberpardModel extends HierarchicalModel<SaberpardEntity> {
         this.rightFrontLeg = this.body.getChild("frontLegR");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition body = modelPartData.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 0.0F));

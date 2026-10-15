@@ -1,10 +1,10 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
 
 public class LivingEntityIsHitWithTreasureWeaponProcedure {
 	public static void onHit(LivingEntity entity, ItemStack itemstack) {

@@ -25,7 +25,8 @@ public class ClusterSpikeFeature extends Feature<ClusterSpikeFeatureConfig> {
         BlockPos origin = context.origin();
         RandomSource random = context.random();
         ClusterSpikeFeatureConfig config = context.config();
-        BlockState blockState = config.state().getState(random, origin);
+        BlockState stoneState = config.state().getState(random, origin);
+        BlockState clusterCoveredState = config.covered_cluster_state().getState(random, origin);
         int spread = config.integration_size().sample(random);
         if (world.isStateAtPosition(origin.below(), state -> !state.isAir() && !state.canBeReplaced())) {
             int height = 13 + config.height().sample(random);
@@ -41,7 +42,7 @@ public class ClusterSpikeFeature extends Feature<ClusterSpikeFeatureConfig> {
                         BlockPos offset = origin.offset((int) x, 0, (int) z);
                         BlockPos heightMapPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, offset);
                         if (world.isStateAtPosition(heightMapPos, state -> !state.isAir() && !state.canBeReplaced())) {
-                            this.setBlock(world, heightMapPos, blockState);
+                            this.setBlock(world, heightMapPos, stoneState);
                         }
                     }
                 }
@@ -70,19 +71,26 @@ public class ClusterSpikeFeature extends Feature<ClusterSpikeFeatureConfig> {
                                     for (int i = 1; i <= dropDistance; i++) {
                                         BlockPos fallingPos = blockPos.below(i);
                                         if (world.isStateAtPosition(fallingPos, state -> state.isAir() || state.canBeReplaced()))
-                                            this.setBlock(world, fallingPos, blockState);
+                                            this.setBlock(world, fallingPos, stoneState);
                                         else
                                             break;
                                     }
                                 }
 
-                                this.setBlock(world, blockPos, blockState);
+                                this.setBlock(world, blockPos, stoneState);
 
                                 if (y > height / 2 && random.nextBoolean()) {
                                     Direction direction = SpiralSpikeFeature.getFreeSide(world, blockPos);
-                                    this.setBlock(world, blockPos
-                                            .relative(direction), config.cluster_state().getState(random, blockPos)
-                                            .trySetValue(BlockStateProperties.FACING, direction));
+                                    this.setBlock(
+                                            world,
+                                            blockPos.relative(direction),
+                                            config.cluster_state().getState(random, blockPos).trySetValue(BlockStateProperties.FACING, direction));
+                                    if (!clusterCoveredState.getBlock().equals(stoneState.getBlock())) {
+                                        this.setBlock(
+                                                world,
+                                                blockPos,
+                                                clusterCoveredState.trySetValue(BlockStateProperties.FACING, direction));
+                                    }
                                 }
                             }
                         }

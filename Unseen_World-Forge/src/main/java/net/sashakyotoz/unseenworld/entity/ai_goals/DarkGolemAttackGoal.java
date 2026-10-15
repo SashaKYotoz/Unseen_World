@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.entity.DarkGolemEntity;
 import net.sashakyotoz.unseenworld.managers.EventManager;
 
@@ -152,7 +152,7 @@ public class DarkGolemAttackGoal extends Goal {
             this.mob.setAttacking(true);
             int tmpDuration = 15;
             this.resetAttackCooldown();
-            UnseenWorldMod.queueServerWork(tmpDuration, () -> {
+            UnseenWorld.queueServerWork(tmpDuration, () -> {
                 switch (this.mob.getAttackType()){
                     default->{
                         this.mob.doHurtTarget(entity);

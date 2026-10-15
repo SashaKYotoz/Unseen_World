@@ -14,8 +14,16 @@
   "gleamcarver_ambient_sound": {
     "subtitle": "sounds.unseen_world.gleamcarver_ambient_sound",
     "sounds": [
-      "unseen_world:gleamcarver_ambient_sound",
-      "unseen_world:gleamcarver_ambient_sound1"
+      "unseen_world:entity/gleamcarver_ambient_sound",
+      "unseen_world:entity/gleamcarver_ambient_sound1"
+    ]
+  },
+  "wind_slide": {
+    "subtitle": "sounds.unseen_world.wind_slide_sound",
+    "sounds": [
+      "unseen_world:entity/wind_slide_sound",
+      "unseen_world:entity/wind_slide_sound1",
+      "unseen_world:entity/wind_slide_sound2"
     ]
   }
 }

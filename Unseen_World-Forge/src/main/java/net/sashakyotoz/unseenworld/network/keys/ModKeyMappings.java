@@ -1,5 +1,6 @@
 package net.sashakyotoz.unseenworld.network.keys;
 
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -9,7 +10,6 @@ import net.sashakyotoz.unseenworld.network.BlazerHelmetAbilityMessage;
 import net.sashakyotoz.unseenworld.network.MiningBootsAbilityMessage;
 import net.sashakyotoz.unseenworld.network.ModNetwork;
 import org.lwjgl.glfw.GLFW;
-import net.minecraft.client.KeyMapping;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class ModKeyMappings {

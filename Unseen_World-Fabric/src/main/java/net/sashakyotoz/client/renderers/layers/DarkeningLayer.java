@@ -16,7 +16,7 @@ import net.sashakyotoz.common.config.ModMainConfig;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class DarkeningLayer<T extends LivingEntity, M extends EntityModel<T>> extends StuckObjectsRenderer<T, M> {
-    private final ResourceLocation TEXTURE = UnseenWorld.makeID("textures/entity/layers/darkening_layer.png");
+    private final ResourceLocation TEXTURE = UnseenWorld.MOD.makeID("textures/entity/layers/darkening_layer.png");
 
     public DarkeningLayer(LivingEntityRenderer<T, M> livingEntityRenderer) {
         super(livingEntityRenderer);

@@ -11,12 +11,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.entity.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class UnseenWorldEntities {
-    public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, UnseenWorldMod.MODID);
+    public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, UnseenWorld.MOD_ID);
     public static final RegistryObject<EntityType<TealivyVoidSpearEntity>> TEALIVY_VOID_SPEAR = register("projectile_tealivy_void_spear", EntityType.Builder.<TealivyVoidSpearEntity>of(TealivyVoidSpearEntity::new, MobCategory.MISC)
             .setCustomClientFactory(TealivyVoidSpearEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(20).sized(0.5f, 0.5f));
     public static final RegistryObject<EntityType<UnseenTitaniumSpearEntity>> UNSEEN_TITANIUM_SPEAR = register("projectile_unseen_titanium_spear", EntityType.Builder.<UnseenTitaniumSpearEntity>of(UnseenTitaniumSpearEntity::new, MobCategory.MISC)

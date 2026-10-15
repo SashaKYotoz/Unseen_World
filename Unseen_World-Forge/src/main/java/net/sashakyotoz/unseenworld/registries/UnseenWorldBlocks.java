@@ -44,7 +44,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.tags.ITag;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.block.*;
 import net.sashakyotoz.unseenworld.entity.*;
 import net.sashakyotoz.unseenworld.world.treegrowers.*;
@@ -52,7 +52,7 @@ import net.sashakyotoz.unseenworld.world.treegrowers.*;
 import java.util.function.Supplier;
 
 public class UnseenWorldBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, UnseenWorldMod.MODID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, UnseenWorld.MOD_ID);
     public static final RegistryObject<Block> CRIMSERRY_SOUL_CROP = registerBlock("small_crimserry_soul_berry", CrimserrySoulCropBlock::new);
     public static final RegistryObject<Block> MISTERY_CROP_FLOWER = registerBlock("misteryflower_sapling", MisteryFlowerBlock::new);
     public static final RegistryObject<Block> NIGHTDEW_OF_CHIMERIC_DARKNESS = registerBlock("nightdew_of_chimeric_darkness", NightdewOfChimericDarknessBlock::new);

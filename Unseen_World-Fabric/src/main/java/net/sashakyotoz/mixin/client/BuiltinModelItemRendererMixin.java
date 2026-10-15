@@ -39,10 +39,10 @@ public class BuiltinModelItemRendererMixin {
     private ShieldOfWarriorModel shieldOfWarriorModel;
     @Unique
     private static final Material SHIELD_BASE = new Material(
-            Sheets.SHIELD_SHEET, UnseenWorld.makeID("textures/item/shield_of_warrior_patterned.png")
+            Sheets.SHIELD_SHEET, UnseenWorld.MOD.makeID("textures/item/shield_of_warrior_patterned.png")
     );
     @Unique
-    private final ResourceLocation shieldLocation = UnseenWorld.makeID("textures/item/shield_of_warrior.png");
+    private final ResourceLocation shieldLocation = UnseenWorld.MOD.makeID("textures/item/shield_of_warrior.png");
 
     @Inject(method = "onResourceManagerReload", at = @At("HEAD"))
     public void onReload(ResourceManager manager, CallbackInfo ci) {

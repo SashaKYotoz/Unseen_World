@@ -11,8 +11,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.sashakyotoz.api.entity_data.IGrippingEntity;
-import net.sashakyotoz.client.particles.ModParticleTypes;
 
 public class GrippingStoneBlock extends DirectionalBlock {
     public GrippingStoneBlock(Properties settings) {
@@ -42,16 +40,6 @@ public class GrippingStoneBlock extends DirectionalBlock {
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
-    }
-
-    @Override
-    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-        if (entity instanceof IGrippingEntity entity1
-                && entity.tickCount % 10 == 0
-                && entity1.getGrippingData() < 10)
-            entity1.setGrippingData(entity1.getGrippingData() + 1);
-        if (world.getBlockState(pos.above()).isAir() && world.getRandom().nextInt(4) == 1)
-            world.addParticle(ModParticleTypes.GRIPPING_CRYSTAL, pos.getX(), pos.getY() + 0.25f, pos.getZ(), 0, 0.1f, 0);
     }
 
     @Override

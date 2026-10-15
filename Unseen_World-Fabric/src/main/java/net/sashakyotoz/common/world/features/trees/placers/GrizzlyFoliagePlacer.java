@@ -12,11 +12,21 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 
 public class GrizzlyFoliagePlacer extends FoliagePlacer {
-    public static final Codec<GrizzlyFoliagePlacer> CODEC = RecordCodecBuilder.create(instance ->
-            foliagePlacerParts(instance).apply(instance, GrizzlyFoliagePlacer::new));
+    public static final Codec<GrizzlyFoliagePlacer> CODEC = RecordCodecBuilder.create(instance -> foliagePlacerParts(instance)
+            .and(instance.group(
+                    Codec.intRange(1, 4).fieldOf("height").forGetter(placer -> placer.height),
+                    Codec.floatRange(0.0F, 1.0F).fieldOf("edge_hole_chance").forGetter(placer -> placer.edgeHoleChance)))
+            .apply(instance, GrizzlyFoliagePlacer::new));
 
-    public GrizzlyFoliagePlacer(IntProvider radius, IntProvider offset) {
+    private static final float SHELL = 0.6F;
+
+    private final int height;
+    private final float edgeHoleChance;
+
+    public GrizzlyFoliagePlacer(IntProvider radius, IntProvider offset, int height, float edgeHoleChance) {
         super(radius, offset);
+        this.height = height;
+        this.edgeHoleChance = edgeHoleChance;
     }
 
     @Override
@@ -25,28 +35,28 @@ public class GrizzlyFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    protected void createFoliage(LevelSimulatedReader world, FoliageSetter placer, RandomSource random, TreeConfiguration config, int trunkHeight,
-                            FoliageAttachment treeNode, int foliageHeight, int radius, int offset) {
-
-        BlockPos origin = treeNode.pos().below();
-        if (!world.isStateAtPosition(origin.above(), state -> state.is(config.trunkProvider.getState(random,origin).getBlock())))
-            radius = random.nextIntBetweenInclusive(3, 5);
-        else radius = random.nextIntBetweenInclusive(2, 4);
-
-        this.placeLeavesRow(world, placer, random, config, origin, radius-1, -1, treeNode.doubleTrunk());
-        this.placeLeavesRow(world, placer, random, config, origin, radius, 0, treeNode.doubleTrunk());
-        this.placeLeavesRow(world, placer, random, config, origin.above(), radius, 0, treeNode.doubleTrunk());
-        this.placeLeavesRow(world, placer, random, config, origin, radius-1, 1, treeNode.doubleTrunk());
-        this.placeLeavesRow(world, placer, random, config, origin, radius-2, 2, treeNode.doubleTrunk());
+    protected void createFoliage(LevelSimulatedReader level, FoliageSetter foliageSetter, RandomSource random, TreeConfiguration config, int maxFreeTreeHeight, FoliageAttachment attachment, int foliageHeight, int foliageRadius, int offset) {
+        int radius = Math.max(foliageRadius + attachment.radiusOffset(), 1);
+        BlockPos center = attachment.pos().above(offset);
+        this.placeLeavesRow(level, foliageSetter, random, config, center, radius - 1, -1, attachment.doubleTrunk());
+        for (int localY = 0; localY <= this.height; localY++) {
+            this.placeLeavesRow(level, foliageSetter, random, config, center, radius, localY, attachment.doubleTrunk());
+        }
     }
 
     @Override
-    public int foliageHeight(RandomSource random, int trunkHeight, TreeConfiguration config) {
-        return 1;
+    public int foliageHeight(RandomSource random, int height, TreeConfiguration config) {
+        return this.height;
     }
 
     @Override
-    protected boolean shouldSkipLocation(RandomSource random, int dx, int y, int dz, int radius, boolean giantTrunk) {
-        return dx*dx + dz*dz > radius*radius + y/2;
+    protected boolean shouldSkipLocation(RandomSource random, int localX, int localY, int localZ, int range, boolean large) {
+        float horizontal = range + 0.5F;
+        float vertical = this.height + 0.5F;
+        float value = (localX * localX + localZ * localZ) / (horizontal * horizontal) + (localY * localY) / (vertical * vertical);
+        if (value > 1.0F) {
+            return true;
+        }
+        return value > SHELL && random.nextFloat() < this.edgeHoleChance;
     }
 }

@@ -11,6 +11,8 @@ public class ClientTicks implements ClientTickEvents.EndTick {
     @Override
     public void onEndTick(Minecraft client) {
         halfTicks.put(0, halfTicks.get(0) == null ? 0.5f : halfTicks.get(0) + 0.5f);
+
+        ChimericFog.tick(client);
     }
 
     public static int getTicks() {

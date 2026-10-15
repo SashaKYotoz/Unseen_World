@@ -1,0 +1,66 @@
+{
+  "type": "unseen_world:stone_ring",
+  "config": {
+    "broken_chance": 0.3,
+    "cap": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:corona_stone_bricks_slab",
+        "Properties": {
+          "type": "bottom",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "flower": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:corona_bloom"
+      }
+    },
+    "pillar": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "unseen_world:corona_stone_bricks"
+          },
+          "weight": 4
+        },
+        {
+          "data": {
+            "Name": "unseen_world:cracked_corona_stone_bricks"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "unseen_world:corona_stone"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "pillar_count": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 11,
+        "min_inclusive": 7
+      }
+    },
+    "pillar_height": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 5,
+        "min_inclusive": 2
+      }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 7,
+        "min_inclusive": 4
+      }
+    }
+  }
+}

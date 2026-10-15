@@ -8,10 +8,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.entities.bosses.BossLikePathfinderMob;
+import net.sashakyotoz.common.entities.animations.AuricPatriarchAnimations;
+import net.sashakyotoz.common.entities.bosses.AuricPatriarch;
 
-public class AuricPatriarchModel extends HierarchicalModel<BossLikePathfinderMob> {
-    public static final ModelLayerLocation AURIC_PATRIARCH = new ModelLayerLocation(UnseenWorld.makeID("auric_patriarch"), "main");
+public class AuricPatriarchModel extends HierarchicalModel<AuricPatriarch> {
+    public static final ModelLayerLocation AURIC_PATRIARCH = new ModelLayerLocation(UnseenWorld.MOD.makeID("auric_patriarch"), "main");
     private final ModelPart root;
     private final ModelPart general;
     private final ModelPart head;
@@ -24,14 +25,15 @@ public class AuricPatriarchModel extends HierarchicalModel<BossLikePathfinderMob
         this.head = chest.getChild("head");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
-        MeshDefinition modelData = new MeshDefinition();
-        PartDefinition modelPartData = modelData.getRoot();
-        PartDefinition general = modelPartData.addOrReplaceChild("general", CubeListBuilder.create(), PartPose.offset(0.0F, -8.0F, 0.0F));
+    public static LayerDefinition getModelData() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = general.addOrReplaceChild("body", CubeListBuilder.create().texOffs(76, 75).addBox(-5.0F, -15.0F, -0.5F, 10.0F, 10.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 14.0F, -1.0F));
+        PartDefinition general = partdefinition.addOrReplaceChild("general", CubeListBuilder.create(), PartPose.offset(0.0F, -8.0F, 0.0F));
 
-        PartDefinition chest = body.addOrReplaceChild("chest", CubeListBuilder.create().texOffs(0, 48).addBox(-7.5F, -12.0F, -2.0F, 15.0F, 12.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -15.0F, 0.0F));
+        PartDefinition body = general.addOrReplaceChild("body", CubeListBuilder.create().texOffs(76, 75).addBox(-5.0F, -13.0F, -1.5F, 10.0F, 10.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 12.0F, 0.0F));
+
+        PartDefinition chest = body.addOrReplaceChild("chest", CubeListBuilder.create().texOffs(0, 48).addBox(-7.5F, -12.0F, -2.0F, 15.0F, 12.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -13.0F, -1.0F));
 
         PartDefinition head = chest.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-16.0F, -23.0F, 10.7071F, 32.0F, 24.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -12.0F, 2.2929F));
 
@@ -123,7 +125,8 @@ public class AuricPatriarchModel extends HierarchicalModel<BossLikePathfinderMob
         PartDefinition right_leg = general.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(20, 68).mirror().addBox(-3.0F, 0.0F, -3.0F, 6.0F, 24.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-4.0F, 8.0F, 2.0F));
 
         PartDefinition left_leg = general.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(20, 68).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 24.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(4.0F, 8.0F, 2.0F));
-        return LayerDefinition.create(modelData, 128, 128);
+
+        return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
 
@@ -138,9 +141,28 @@ public class AuricPatriarchModel extends HierarchicalModel<BossLikePathfinderMob
     }
 
     @Override
-    public void setupAnim(BossLikePathfinderMob entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(AuricPatriarch entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
         this.head.xRot = headPitch / (180F / (float) Math.PI);
+
+        this.animateWalk(entity.isFlying() ? AuricPatriarchAnimations.FLYING : AuricPatriarchAnimations.WALK,
+                limbSwing,
+                limbSwingAmount,
+                2.0F,
+                2.5F);
+        this.animate(entity.idleTransition, AuricPatriarchAnimations.IDLE_TRANSITION, ageInTicks, entity.getIdleTransitionSpeed());
+        this.animate(entity.flyingTransition, AuricPatriarchAnimations.FLYING_TRANSITION, ageInTicks, entity.getFlyingTransitionSpeed());
+
+        this.animate(entity.idle, AuricPatriarchAnimations.IDLE, ageInTicks);
+        this.animate(entity.skyBurst, AuricPatriarchAnimations.SKY_BURST, ageInTicks);
+        this.animate(entity.vexTime, AuricPatriarchAnimations.VEX_TIME, ageInTicks);
+        this.animate(entity.divineTouch, AuricPatriarchAnimations.DIVINE_TOUCH, ageInTicks);
+        this.animate(entity.auricBarrier, AuricPatriarchAnimations.AURIC_BARRIER, ageInTicks);
+        this.animate(entity.wingKnockback, AuricPatriarchAnimations.WING_KNOCKBACK, ageInTicks);
+        this.animate(entity.suddenBeam, AuricPatriarchAnimations.SUDDEN_BEAM, ageInTicks, 0.5f);
+        this.animate(entity.grabAndStrike, AuricPatriarchAnimations.GRAB_AND_STRIKE, ageInTicks);
+        this.animate(entity.aureateUndead, AuricPatriarchAnimations.AUREATE_UNDEAD, ageInTicks);
+        this.animate(entity.death, AuricPatriarchAnimations.DEATH, ageInTicks, 0.5f);
     }
 }

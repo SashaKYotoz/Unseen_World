@@ -9,6 +9,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -27,7 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
 
@@ -58,40 +58,28 @@ public class TreeBushLikeBlock extends BushBlock implements BonemealableBlock {
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
-        BlockState floor = world.getBlockState(pos.below());
-        BlockState north = world.getBlockState(pos.north());
-        BlockState south = world.getBlockState(pos.south());
-        BlockState east = world.getBlockState(pos.east());
-        BlockState west = world.getBlockState(pos.west());
-        if (north.is(ModBlocks.GLOW_APPLE_BUSH) && north.getValue(TYPE) == BushTypes.TURN_STEM)
-            return this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(TYPE, BushTypes.CROOKED_STEM);
-        if (south.is(ModBlocks.GLOW_APPLE_BUSH) && south.getValue(TYPE) == BushTypes.TURN_STEM)
-            return this.defaultBlockState().setValue(FACING, Direction.SOUTH).setValue(TYPE, BushTypes.CROOKED_STEM);
-        if (east.is(ModBlocks.GLOW_APPLE_BUSH) && east.getValue(TYPE) == BushTypes.TURN_STEM)
-            return this.defaultBlockState().setValue(FACING, Direction.EAST).setValue(TYPE, BushTypes.CROOKED_STEM);
-        if (west.is(ModBlocks.GLOW_APPLE_BUSH) && west.getValue(TYPE) == BushTypes.TURN_STEM)
-            return this.defaultBlockState().setValue(FACING, Direction.WEST).setValue(TYPE, BushTypes.CROOKED_STEM);
-        if (floor.is(ModBlocks.GLOW_APPLE_BUSH) && (floor.getValue(TYPE) == BushTypes.CROOKED_STEM
-                || floor.getValue(TYPE) == BushTypes.STEM))
-            return this.defaultBlockState().setValue(FACING, ctx.getNearestLookingDirection().getOpposite()).setValue(TYPE, ctx.getPlayer().getRandom().nextBoolean() ? BushTypes.BUSH : BushTypes.STEM);
-        if (floor.is(ModBlocks.GLOW_APPLE_BUSH) && floor.getValue(TYPE) == BushTypes.BUSH) {
-            world.setBlockAndUpdate(pos.below(), floor.setValue(TYPE, BushTypes.STEM));
-            return this.defaultBlockState().setValue(FACING, ctx.getNearestLookingDirection().getOpposite()).setValue(TYPE, BushTypes.STEM);
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            if (isBushOfType(world.getBlockState(pos.relative(direction)), BushTypes.TURN_STEM)) {
+                return this.defaultBlockState().setValue(FACING, direction).setValue(TYPE, BushTypes.CROOKED_STEM);
+            }
         }
-        return this.defaultBlockState().setValue(FACING, ctx.getNearestLookingDirection().getOpposite()).setValue(TYPE, BushTypes.BUSH);
+        BlockState floor = world.getBlockState(pos.below());
+        Direction facing = ctx.getNearestLookingDirection().getOpposite();
+        if (isBushOfType(floor, BushTypes.CROOKED_STEM) || isBushOfType(floor, BushTypes.STEM)) {
+            return this.defaultBlockState().setValue(FACING, facing).setValue(TYPE, world.getRandom().nextBoolean() ? BushTypes.BUSH : BushTypes.STEM);
+        }
+        if (isBushOfType(floor, BushTypes.BUSH)) {
+            world.setBlockAndUpdate(pos.below(), floor.setValue(TYPE, BushTypes.STEM));
+            return this.defaultBlockState().setValue(FACING, facing).setValue(TYPE, BushTypes.STEM);
+        }
+        return this.defaultBlockState().setValue(FACING, facing).setValue(TYPE, BushTypes.BUSH);
     }
 
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        BlockState north = world.getBlockState(pos.north());
-        BlockState south = world.getBlockState(pos.south());
-        BlockState east = world.getBlockState(pos.east());
-        BlockState west = world.getBlockState(pos.west());
-        if ((north.is(ModBlocks.GLOW_APPLE_BUSH) && north.getValue(TYPE) == BushTypes.CROOKED_STEM)
-                && (south.is(ModBlocks.GLOW_APPLE_BUSH) && south.getValue(TYPE) == BushTypes.CROOKED_STEM)
-                && (east.is(ModBlocks.GLOW_APPLE_BUSH) && east.getValue(TYPE) == BushTypes.CROOKED_STEM)
-                && (west.is(ModBlocks.GLOW_APPLE_BUSH) && west.getValue(TYPE) == BushTypes.CROOKED_STEM))
+        if (Direction.Plane.HORIZONTAL.stream().allMatch(side -> isBushOfType(world.getBlockState(pos.relative(side)), BushTypes.CROOKED_STEM))) {
             return state.setValue(TYPE, BushTypes.CROSSING_STEM);
+        }
         return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
@@ -105,8 +93,7 @@ public class TreeBushLikeBlock extends BushBlock implements BonemealableBlock {
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (state.getValue(GROWN) && state.getValue(TYPE) == BushTypes.BUSH) {
-            player.spawnAtLocation(ModItems.GLOW_APPLE);
-            world.setBlockAndUpdate(pos, state.setValue(GROWN, false));
+            return FruitBearing.harvest(world, pos, state.setValue(GROWN, false), new ItemStack(ModItems.GLOW_APPLE), player);
         }
         return super.use(state, world, pos, player, hand, hit);
     }
@@ -131,29 +118,22 @@ public class TreeBushLikeBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockState neighbor = world.getBlockState(pos.relative(direction));
+            if (isBushOfType(neighbor, BushTypes.TURN_STEM) || isBushOfType(neighbor, BushTypes.CROSSING_STEM)) {
+                return true;
+            }
+        }
         BlockState floor = world.getBlockState(pos.below());
-        BlockState north = world.getBlockState(pos.north());
-        BlockState south = world.getBlockState(pos.south());
-        BlockState east = world.getBlockState(pos.east());
-        BlockState west = world.getBlockState(pos.west());
-        if ((north.getBlock() instanceof TreeBushLikeBlock && north.getValue(TYPE) == BushTypes.TURN_STEM)
-                || (south.getBlock() instanceof TreeBushLikeBlock && south.getValue(TYPE) == BushTypes.TURN_STEM)
-                || (east.getBlock() instanceof TreeBushLikeBlock && east.getValue(TYPE) == BushTypes.TURN_STEM)
-                || (west.getBlock() instanceof TreeBushLikeBlock && west.getValue(TYPE) == BushTypes.TURN_STEM))
+        if (isBushOfType(floor, BushTypes.STEM) || isBushOfType(floor, BushTypes.CROOKED_STEM)
+                || (isBushOfType(floor, BushTypes.BUSH) && !floor.getValue(GROWN))) {
             return true;
-        if ((north.getBlock() instanceof TreeBushLikeBlock && north.getValue(TYPE) == BushTypes.CROSSING_STEM)
-                || (south.getBlock() instanceof TreeBushLikeBlock && south.getValue(TYPE) == BushTypes.CROSSING_STEM)
-                || (east.getBlock() instanceof TreeBushLikeBlock && east.getValue(TYPE) == BushTypes.CROSSING_STEM)
-                || (west.getBlock() instanceof TreeBushLikeBlock && west.getValue(TYPE) == BushTypes.CROSSING_STEM))
-            return true;
-        if (floor.is(ModBlocks.GLOW_APPLE_BUSH)) {
-            if ((floor.getValue(TYPE) == BushTypes.BUSH && !floor.getValue(GROWN))
-                    || (floor.getValue(TYPE) == BushTypes.STEM))
-                return true;
-            if (floor.getValue(TYPE) == BushTypes.CROOKED_STEM)
-                return true;
         }
         return super.canSurvive(state, world, pos);
+    }
+
+    private static boolean isBushOfType(BlockState state, BushTypes type) {
+        return state.getBlock() instanceof TreeBushLikeBlock && state.getValue(TYPE) == type;
     }
 
     @Override

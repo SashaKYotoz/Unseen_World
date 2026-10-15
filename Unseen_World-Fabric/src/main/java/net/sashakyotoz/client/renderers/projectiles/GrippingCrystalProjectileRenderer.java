@@ -7,7 +7,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.projectiles.GrippingCrystalProjectileEntity;
 
 public class GrippingCrystalProjectileRenderer extends ArrowRenderer<GrippingCrystalProjectileEntity> {
-    public static final ResourceLocation TEXTURE = UnseenWorld.makeID("textures/entity/projectiles/gripping_crystal.png");
+    public static final ResourceLocation TEXTURE = UnseenWorld.MOD.makeID("textures/entity/projectiles/gripping_crystal.png");
 
     public GrippingCrystalProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);

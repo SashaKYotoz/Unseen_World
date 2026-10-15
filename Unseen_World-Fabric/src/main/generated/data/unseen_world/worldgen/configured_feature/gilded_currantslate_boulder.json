@@ -1,0 +1,29 @@
+{
+  "type": "unseen_world:boulder",
+  "config": {
+    "block": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "unseen_world:gilded_currantslate"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "unseen_world:dark_currantslate"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 7,
+        "min_inclusive": 3
+      }
+    }
+  }
+}

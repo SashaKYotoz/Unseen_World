@@ -2,7 +2,9 @@ package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.LevelSimulatedReader;
@@ -16,13 +18,25 @@ import net.minecraft.world.level.material.Fluids;
 import net.sashakyotoz.common.blocks.custom.plants.LeafDroppingLeaveBlock;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 
-public class BurlywoodFoliagePlacer extends FoliagePlacer {
-    public static final Codec<BurlywoodFoliagePlacer> CODEC = RecordCodecBuilder.create(instance ->
-            foliagePlacerParts(instance).apply(instance, BurlywoodFoliagePlacer::new)
-    );
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-    public BurlywoodFoliagePlacer(IntProvider radius, IntProvider offset) {
+public class BurlywoodFoliagePlacer extends FoliagePlacer {
+    public static final Codec<BurlywoodFoliagePlacer> CODEC = RecordCodecBuilder.create(instance -> foliagePlacerParts(instance)
+            .and(Codec.floatRange(0.0F, 1.0F).fieldOf("skirt_chance").forGetter(placer -> placer.skirtChance))
+            .apply(instance, BurlywoodFoliagePlacer::new));
+
+    private static final int MAX_LEAF_REACH = 6;
+    private static final float CROWN_EDGE_KEEP = 0.7F;
+    private static final float BRIM_EDGE_KEEP = 0.85F;
+    private static final double OVERGROWN_THRESHOLD = 0.89D;
+
+    private final float skirtChance;
+
+    public BurlywoodFoliagePlacer(IntProvider radius, IntProvider offset, float skirtChance) {
         super(radius, offset);
+        this.skirtChance = skirtChance;
     }
 
     @Override
@@ -31,70 +45,91 @@ public class BurlywoodFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    protected void createFoliage(
-            LevelSimulatedReader world,
-            FoliagePlacer.FoliageSetter placer,
-            RandomSource random,
-            TreeConfiguration config,
-            int trunkHeight,
-            FoliagePlacer.FoliageAttachment treeNode,
-            int foliageHeight,
-            int radius,
-            int offset
-    ) {
-        BlockPos center = treeNode.pos().above(offset);
-        boolean giant = treeNode.doubleTrunk();
+    protected void createFoliage(LevelSimulatedReader level, FoliageSetter foliageSetter, RandomSource random, TreeConfiguration config, int maxFreeTreeHeight, FoliageAttachment attachment, int foliageHeight, int foliageRadius, int offset) {
+        int radius = Math.max(foliageRadius + attachment.radiusOffset(), 1);
+        BlockPos center = attachment.pos().above(offset);
+        boolean giant = attachment.doubleTrunk();
+        List<int[]> cells = new ArrayList<>();
+        this.collectLayer(random, cells, 1, radius - 1, radius - 1.5F, CROWN_EDGE_KEEP, giant);
+        this.collectLayer(random, cells, 0, radius, radius - 0.5F, BRIM_EDGE_KEEP, giant);
+        this.collectLayer(random, cells, -1, radius, radius - 1.0F, this.skirtChance, giant);
+        cells.sort(Comparator.comparingInt(cell -> cell[3]));
 
-        if (giant) {
-            this.placeLeavesRow(world, placer, random, config, center, radius, -1, giant);
-            this.placeLeavesRow(world, placer, random, config, center, radius + 1, 0, giant);
-            this.placeLeavesRow(world, placer, random, config, center, radius, 1, giant);
-        } else {
-            this.placeLeavesRow(world, placer, random, config, center, radius + 1, -1, giant);
-            this.placeLeavesRow(world, placer, random, config, center, radius, 0, giant);
+        Long2IntOpenHashMap distances = new Long2IntOpenHashMap();
+        distances.defaultReturnValue(Integer.MAX_VALUE);
+        int extra = giant ? 1 : 0;
+        for (int x = 0; x <= extra; x++) {
+            for (int z = 0; z <= extra; z++) {
+                distances.put(BlockPos.asLong(x, -1, z), 0);
+            }
         }
-    }
-
-    @Override
-    public void placeLeavesRow(
-            LevelSimulatedReader world, FoliagePlacer.FoliageSetter placer, RandomSource random, TreeConfiguration config, BlockPos centerPos, int radius, int y, boolean giantTrunk
-    ) {
-        int i = giantTrunk ? 1 : 0;
-        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-        for (int j = -radius; j <= radius + i; j++) {
-            for (int k = -radius; k <= radius + i; k++) {
-                if (!this.shouldSkipLocationSigned(random, j, y, k, radius, giantTrunk)) {
-                    mutable.setWithOffset(centerPos, j, y, k);
-                    placeOvergrownFoliageBlock(world, placer, random, config, mutable);
-                }
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+        for (int[] cell : cells) {
+            int nearest = Integer.MAX_VALUE;
+            for (Direction direction : Direction.values()) {
+                nearest = Math.min(nearest, distances.get(BlockPos.asLong(cell[0] + direction.getStepX(), cell[1] + direction.getStepY(), cell[2] + direction.getStepZ())));
+            }
+            if (nearest >= MAX_LEAF_REACH) {
+                continue;
+            }
+            cursor.setWithOffset(center, cell[0], cell[1], cell[2]);
+            if (placeOvergrownFoliageBlock(level, foliageSetter, random, config, cursor)) {
+                distances.put(BlockPos.asLong(cell[0], cell[1], cell[2]), nearest + 1);
             }
         }
     }
 
-    protected static void placeOvergrownFoliageBlock(LevelSimulatedReader world, FoliageSetter placer, RandomSource random, TreeConfiguration config, BlockPos pos) {
-        if (TreeFeature.validTreePos(world, pos)) {
-            BlockState blockState = config.foliageProvider.getState(random, pos);
-            if (blockState.hasProperty(BlockStateProperties.WATERLOGGED))
-                blockState = blockState.setValue(BlockStateProperties.WATERLOGGED, world.isFluidAtPosition(pos, fluidState -> fluidState.isSourceOfType(Fluids.WATER)));
-            if (blockState.hasProperty(LeafDroppingLeaveBlock.OVERGROWN))
-                blockState = blockState.setValue(LeafDroppingLeaveBlock.OVERGROWN, random.nextDouble() > 0.89f);
-            placer.set(pos, blockState);
+    private void collectLayer(RandomSource random, List<int[]> cells, int y, int radius, float innerRadius, float edgeKeepChance, boolean giant) {
+        if (radius < 0) {
+            return;
+        }
+        int extra = giant ? 1 : 0;
+        float outerSq = (radius + 0.5F) * (radius + 0.5F);
+        float innerSq = innerRadius < 0.0F ? -1.0F : innerRadius * innerRadius;
+        boolean ringOnly = y < 0;
+        for (int dx = -radius; dx <= radius + extra; dx++) {
+            for (int dz = -radius; dz <= radius + extra; dz++) {
+                int distanceX = this.axisDistance(dx, giant);
+                int distanceZ = this.axisDistance(dz, giant);
+                int distanceSq = distanceX * distanceX + distanceZ * distanceZ;
+                if (distanceSq > outerSq) {
+                    continue;
+                }
+                boolean edge = distanceSq > innerSq;
+                if ((ringOnly && !edge) || (edge && random.nextFloat() >= edgeKeepChance)) {
+                    continue;
+                }
+                cells.add(new int[]{dx, y, dz, distanceX + distanceZ + Math.abs(y + 1)});
+            }
         }
     }
 
-    @Override
-    public int foliageHeight(RandomSource random, int trunkHeight, TreeConfiguration config) {
-        return 2 + random.nextInt(2);
+    private int axisDistance(int offset, boolean giant) {
+        return giant && offset > 0 ? offset - 1 : Math.abs(offset);
+    }
+
+    protected static boolean placeOvergrownFoliageBlock(LevelSimulatedReader level, FoliageSetter foliageSetter, RandomSource random, TreeConfiguration config, BlockPos pos) {
+        if (!TreeFeature.validTreePos(level, pos)) {
+            return false;
+        }
+        BlockState state = config.foliageProvider.getState(random, pos);
+        if (state.hasProperty(BlockStateProperties.WATERLOGGED)) {
+            state = state.setValue(BlockStateProperties.WATERLOGGED, level.isFluidAtPosition(pos, fluid -> fluid.isSourceOfType(Fluids.WATER)));
+        }
+        if (state.hasProperty(LeafDroppingLeaveBlock.OVERGROWN)) {
+            state = state.setValue(LeafDroppingLeaveBlock.OVERGROWN, random.nextDouble() > OVERGROWN_THRESHOLD);
+        }
+        foliageSetter.set(pos.immutable(), state);
+        return true;
     }
 
     @Override
-    protected boolean shouldSkipLocation(RandomSource random, int dx, int y, int dz, int radius, boolean giantTrunk) {
-        if (y == -1 && (dx == radius || dz == radius) && random.nextFloat() < 0.35f) {
-            return true;
-        } else {
-            boolean bl = dx == radius && dz == radius;
-            boolean bl2 = radius > 2;
-            return bl2 ? bl || dx + dz > radius * 2 - 2 && random.nextFloat() < 0.5f : bl && random.nextFloat() < 0.5f;
-        }
+    public int foliageHeight(RandomSource random, int height, TreeConfiguration config) {
+        return 2;
+    }
+
+    @Override
+    protected boolean shouldSkipLocation(RandomSource random, int localX, int localY, int localZ, int range, boolean large) {
+        return false;
     }
 }

@@ -9,9 +9,9 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 
 public class FullScreenOverlay implements HudRenderCallback {
-    private static final ResourceLocation GRIPPING = UnseenWorld.makeID(
+    private static final ResourceLocation GRIPPING = UnseenWorld.MOD.makeID(
             "textures/gui/gripping.png");
-    private static final ResourceLocation DARKENING = UnseenWorld.makeID(
+    private static final ResourceLocation DARKENING = UnseenWorld.MOD.makeID(
             "textures/gui/darkening.png");
 
     @Override

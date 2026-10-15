@@ -23,13 +23,6 @@ public class DarknessGrassBlock extends GrassBlock {
         super(settings);
     }
 
-//    @Override
-//    public void afterBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
-//        super.afterBreak(world, player, pos, state, blockEntity, tool);
-//        if (player instanceof ServerPlayerEntity player1)
-//            GrippingData.addGrippingSeconds((IEntityDataSaver) player1,10);
-//    }
-
     @Override
     public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
         BlockPos blockPos = pos.above();

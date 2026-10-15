@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.sashakyotoz.UnseenWorld;
 
 public class ShieldOfWarriorModel extends Model {
-	public static final ModelLayerLocation SHIELD_OF_WARRIOR = new ModelLayerLocation(UnseenWorld.makeID("shield_of_warrior"), "main");
+	public static final ModelLayerLocation SHIELD_OF_WARRIOR = new ModelLayerLocation(UnseenWorld.MOD.makeID("shield_of_warrior"), "main");
 
 	private final ModelPart base;
 	private final ModelPart handle;
@@ -20,7 +20,7 @@ public class ShieldOfWarriorModel extends Model {
 		this.base = root.getChild("base");
 		this.handle = root.getChild("handle");
 	}
-	public static LayerDefinition getTextureLocationdModelData() {
+	public static LayerDefinition getModelData() {
 		MeshDefinition modelData = new MeshDefinition();
 		PartDefinition modelPartData = modelData.getRoot();
 

@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.Tags;
-import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
+import net.sashakyotoz.anitexlib.api.client.particle.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
@@ -37,7 +37,7 @@ public class BeaconOfWeaponsBlock extends BaseEntityBlock {
         for (BlockPos blockpos : RUNE_OFFSETS) {
             if (source.nextInt(12) == 0 && isValidRune(level, pos, blockpos))
                 level.addParticle(level.getBiome(pos).is(Tags.Biomes.IS_HOT) ? UnseenWorldParticleTypes.REDNESS.get() : new ColorableParticleOption("sparkle",0.1f,0.25f,1f),
-                        pos.getX() + 0.5D, pos.getY() + 2.0D, pos.getZ() + 0.5D, ((float) blockpos.getX() + source.nextFloat()) - 0.5D, (float) blockpos.getY() - source.nextFloat() - 1.0F, ((float) blockpos.getZ() + source.nextFloat()) - 0.5D);
+                        pos.getX() + 0.5D, pos.getY() + 2.0D, pos.getZ() + 0.5D, (blockpos.getX() + source.nextFloat()) - 0.5D, blockpos.getY() - source.nextFloat() - 1.0F, (blockpos.getZ() + source.nextFloat()) - 0.5D);
         }
     }
 
@@ -46,13 +46,13 @@ public class BeaconOfWeaponsBlock extends BaseEntityBlock {
         return new BeaconOfWeaponsBlockEntity(pos, state);
     }
 
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity tileentity = worldIn.getBlockEntity(pos);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        BlockEntity tileentity = level.getBlockEntity(pos);
         if (tileentity instanceof BeaconOfWeaponsBlockEntity beacon) {
-            Containers.dropContents(worldIn, pos, beacon);
-            worldIn.updateNeighbourForOutputSignal(pos, this);
+            Containers.dropContents(level, pos, beacon);
+            level.updateNeighbourForOutputSignal(pos, this);
         }
-        super.onRemove(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override

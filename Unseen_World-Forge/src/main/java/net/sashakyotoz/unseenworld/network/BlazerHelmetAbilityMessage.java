@@ -1,9 +1,8 @@
 package net.sashakyotoz.unseenworld.network;
-import net.minecraftforge.network.NetworkEvent;
 
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
-
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkEvent;
 import net.sashakyotoz.unseenworld.managers.BlazerHelmetShiftEventProcedure;
 
 import java.util.Objects;

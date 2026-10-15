@@ -4,12 +4,12 @@ license = "AGNYA License"
 
 [[mods]]
 modId = "unseen_world"
-version = "3.5.2"
+version = "3.5.3"
 displayName = "Unseen World"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/unseen-world"
 logoFile = "logo.png"
 authors = "SashaKYotoz"
-description = "Unseen World, world of darkness, are waiting for you"
+description = "Unseen World, world of darkness, is waiting for you"
 
 [[dependencies.unseen_world]]
     modId = "minecraft"
@@ -20,7 +20,7 @@ description = "Unseen World, world of darkness, are waiting for you"
 [[dependencies.unseen_world]]
     modId = "anitexlib"
     mandatory = true
-    versionRange = "[0.4,)"
+    versionRange = "[1.0,)"
     ordering = "BEFORE"
     side = "BOTH"
 

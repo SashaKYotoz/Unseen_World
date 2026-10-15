@@ -55,13 +55,13 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 .display(ModItems.ECLIPSE_KEYSTONE,
                         Component.translatable(BASE + "into_the_chimeric_darkness"),
                         Component.translatable(BASE + "into_the_chimeric_darkness" + DESC),
-                        UnseenWorld.makeID("textures/environment/advancements_frame.png"),
+                        UnseenWorld.MOD.makeID("textures/environment/advancements_frame.png"),
                         FrameType.TASK,
                         true, true, false)
                 .addCriterion("entered_the_chimeric_darkness", ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
                 .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:into_the_chimeric_darkness");
         Advancement INTO_THE_HEART_OF_DARKNESS = Advancement.Builder.advancement()
-                .display(ModBlocks.KEY_HANDLER_STONE,
+                .display(ModBlocks.GRIPPING_SPIGELIA,
                         Component.translatable(BASE + "into_the_heart_of_darkness"),
                         Component.translatable(BASE + "into_the_heart_of_darkness" + DESC),
                         null,
@@ -71,33 +71,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 .addCriterion("entered_the_darkness", BiomeCriterion.of(ModBiomes.THE_DARKNESS))
                 .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:into_the_heart_of_darkness");
         Advancement EXPLORE_CHIMERIC_DARKNESS = requireListedBiomesVisited(
-                Advancement.Builder.advancement(), List.of(
-                        ModBiomes.THE_DARKNESS,
-                        ModBiomes.AMETHYST_FOREST,
-                        ModBiomes.CRIMSONVEIL_WOODS,
-                        ModBiomes.GRIZZLY_THICKET,
-                        ModBiomes.BURLYWOOD_JUNGLE,
-                        ModBiomes.OLD_GROWTH_CRIMSONVEIL_WOODS,
-                        ModBiomes.AMETHYST_CHIMERIES,
-                        ModBiomes.GREENISH_VALLEY,
-                        ModBiomes.GREENISH_MEADOW,
-                        ModBiomes.TEALIVY_VALLEY,
-                        ModBiomes.DARK_WASTELAND,
-                        ModBiomes.CRIMSONVEIL_PLATEAU,
-                        ModBiomes.HARMONY_GROVE,
-                        ModBiomes.GRIZZLY_HIGHLANDS,
-                        ModBiomes.TEALIVY_HIGHLANDS,
-                        ModBiomes.CURRANTSLATE_PEAKS,
-                        ModBiomes.SHINY_CAVERNS,
-                        ModBiomes.TANZANITE_CAVES,
-                        ModBiomes.DEEP_GLACIEMITE_CAVES,
-                        ModBiomes.DARK_RIVER,
-                        ModBiomes.LUKEWARM_DARK_RIVER,
-                        ModBiomes.DARK_OCEAN,
-                        ModBiomes.DARK_LIFELESS_OCEAN,
-                        ModBiomes.GREYNISH_SHORE,
-                        ModBiomes.DARK_BADLANDS
-                )
+                Advancement.Builder.advancement(), ModBiomes.ALL
         )
                 .display(ModItems.RED_TITANIUM_BOOTS,
                         Component.translatable(BASE + "explore_chimeric_darkness"),

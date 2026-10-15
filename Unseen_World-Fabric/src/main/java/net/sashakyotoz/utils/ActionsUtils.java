@@ -23,6 +23,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
 import net.sashakyotoz.common.ModRegistry;
+import net.sashakyotoz.common.effects.ModMobEffects;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.items.custom.ModArmorItem;
 
@@ -34,20 +35,34 @@ import java.util.function.DoubleSupplier;
 public class ActionsUtils {
     @FunctionalInterface
     public interface BlockPosAction {
-        void apply(Level world, BlockPos pos);
+        void apply(Level level, BlockPos pos);
     }
 
     public static void rayCastAlong(
-            Level world,
+            Level level,
             Entity entity,
             float maxDistance,
             BlockPosAction action) {
         float scaling = 0;
         for (int i = 0; i < maxDistance; i++) {
-            BlockPos pos = world.clip(new ClipContext(entity.getEyePosition(), entity.getEyePosition().add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos();
-            if (!world.getBlockState(pos).canOcclude() || world.getBlockState(pos).is(ConventionalBlockTags.GLASS_BLOCKS) || world.getBlockState(pos).getBlock().getDescriptionId().contains("glass"))
+            BlockPos pos = level.clip(new ClipContext(entity.getEyePosition(), entity.getEyePosition().add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos();
+            if (!level.getBlockState(pos).canOcclude() || level.getBlockState(pos).is(ConventionalBlockTags.GLASS_BLOCKS) || level.getBlockState(pos).getBlock().getDescriptionId().contains("glass"))
                 ++scaling;
-            action.apply(world, pos);
+            action.apply(level, pos);
+        }
+    }
+    public static void rayCastAlong(
+            Level level,
+            Entity entity,
+            Vec3 entityPos,
+            float maxDistance,
+            BlockPosAction action) {
+        float scaling = 0;
+        for (int i = 0; i < maxDistance; i++) {
+            BlockPos pos = level.clip(new ClipContext(entityPos, entityPos.add(entity.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity)).getBlockPos();
+            if (!level.getBlockState(pos).canOcclude() || level.getBlockState(pos).is(ConventionalBlockTags.GLASS_BLOCKS) || level.getBlockState(pos).getBlock().getDescriptionId().contains("glass"))
+                ++scaling;
+            action.apply(level, pos);
         }
     }
 
@@ -102,6 +117,7 @@ public class ActionsUtils {
     public static boolean isEntityInCover(LivingEntity livingEntity, ServerLevel world) {
         return !ChimericWeatherState.get(world).isGrippfallActive()
                 || ModArmorItem.isAbyssalArmorSet(livingEntity)
+                || livingEntity.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.get())
                 || (ChimericWeatherState.get(world).isGrippfallActive()
                 && world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, livingEntity.blockPosition()).getY() > livingEntity.blockPosition().getY());
     }

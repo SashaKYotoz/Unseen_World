@@ -31,7 +31,7 @@ public class GoldenChestBlockEntity extends RandomizableContainerBlockEntity imp
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
 	public GoldenChestBlockEntity(BlockPos position, BlockState state) {
-		super(UnseenWorldBlockEntities.GOLDENCHEST.get(), position, state);
+		super(UnseenWorldBlockEntities.GOLDEN_CHEST.get(), position, state);
 	}
 
 	@Override

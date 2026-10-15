@@ -28,15 +28,10 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.entities.ai.goals.GrippingAbyssalBowAttackGoal;
 import net.sashakyotoz.common.items.ModItems;
-import net.sashakyotoz.utils.ActionsUtils;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Predicate;
 
 public class ViolegerEntity extends Monster implements RangedAttackMob {
     protected static final EntityDataAccessor<Boolean> CELEBRATING = SynchedEntityData.defineId(ViolegerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -84,21 +79,6 @@ public class ViolegerEntity extends Monster implements RangedAttackMob {
             }
         }
         this.setShiftKeyDown(this.isUsingItem());
-    }
-
-    public boolean isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape, Predicate<LivingEntity> predicate, DoubleSupplier... entityYChecks) {
-        if (predicate.test(entity)) {
-            Vec3 vec3d = entity.getViewVector(1.0F).normalize();
-            for (DoubleSupplier doubleSupplier : entityYChecks) {
-                Vec3 vec3d2 = new Vec3(this.getX() - entity.getX(), doubleSupplier.getAsDouble() - entity.getEyeY(), this.getZ() - entity.getZ());
-                double e = vec3d2.length();
-                vec3d2 = vec3d2.normalize();
-                double f = vec3d.dot(vec3d2);
-                if (f > 1.0 - d / (bl ? e : 1.0))
-                    return ActionsUtils.canSee(this, visualShape ? ClipContext.Block.VISUAL : ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, doubleSupplier);
-            }
-        }
-        return false;
     }
 
     public void reassessWeaponGoal() {
@@ -163,9 +143,6 @@ public class ViolegerEntity extends Monster implements RangedAttackMob {
         }
         if (!this.isHostile() && item.is(ModItems.GRANULATED_GRIPCRYSTAL)) {
             this.lookAt(player, 30, 30);
-//            ActionsUtils.dropItem(this, this.getInventory().getStack(6));
-//            item.decrement(1);
-//            this.getInventory().setStack(6, ItemStack.EMPTY);
             this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             if (this.level().isClientSide())
                 this.playSound(SoundEvents.VILLAGER_TRADE, 1.2f, 1);

@@ -11,10 +11,12 @@ import net.sashakyotoz.common.blocks.custom.chests.ModChestBlock;
 public class ModScreenHandlers {
     public static MenuType<ChestScreenHandler> DARK_CURRANTSLATE_CHEST;
     public static MenuType<ChestScreenHandler> GLACIEMITE_CHEST;
+    public static MenuType<ChestScreenHandler> CORONA_STONE_CHEST;
 
     public static void register() {
         DARK_CURRANTSLATE_CHEST = register("dark_currantslate_chest", (syncId, inventory) -> new ChestScreenHandler(DARK_CURRANTSLATE_CHEST, ModChestBlock.ChestTypes.DARK_CURRANTSLATE, syncId, inventory, ContainerLevelAccess.NULL));
         GLACIEMITE_CHEST = register("glaciemite_chest", (syncId, inventory) -> new ChestScreenHandler(GLACIEMITE_CHEST, ModChestBlock.ChestTypes.GLACIEMITE, syncId, inventory, ContainerLevelAccess.NULL));
+        CORONA_STONE_CHEST = register("corona_stone_chest", (syncId, inventory) -> new ChestScreenHandler(CORONA_STONE_CHEST, ModChestBlock.ChestTypes.CORONA_STONE, syncId, inventory, ContainerLevelAccess.NULL));
     }
 
     private static <T extends AbstractContainerMenu> MenuType<T> register(String id, MenuType.MenuSupplier<T> factory) {

@@ -1,21 +1,20 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.util.RandomSource;
-import net.minecraft.util.Mth;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
-
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
+import net.sashakyotoz.unseenworld.entity.RedBlazeEntity;
 import net.sashakyotoz.unseenworld.entity.TheBlazerEntity;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
-import net.sashakyotoz.unseenworld.entity.RedBlazeEntity;
-import net.sashakyotoz.unseenworld.entity.NetheriumStaffEntity;
 
 public class TheBlazerOnEntityTickUpdateProcedure {
     public static void execute(LevelAccessor accessor, double x, double y, double z, TheBlazerEntity entity) {

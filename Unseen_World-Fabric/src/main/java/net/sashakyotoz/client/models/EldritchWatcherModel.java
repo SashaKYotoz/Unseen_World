@@ -10,13 +10,12 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.environment.ClientTicks;
-import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.animations.EldritchWatcherAnimations;
 import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
 import net.sashakyotoz.utils.Oscillator;
 
 public class EldritchWatcherModel extends HierarchicalModel<EldritchWatcherEntity> {
-    public static final ModelLayerLocation ELDRITCH_WATCHER = new ModelLayerLocation(UnseenWorld.makeID("eldritch_watcher"), "main");
+    public static final ModelLayerLocation ELDRITCH_WATCHER = new ModelLayerLocation(UnseenWorld.MOD.makeID("eldritch_watcher"), "main");
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart right_arm;
@@ -36,7 +35,7 @@ public class EldritchWatcherModel extends HierarchicalModel<EldritchWatcherEntit
         this.left_leg = this.root.getChild("left_leg");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition root = modelPartData.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, -4.0F, 0.0F));
@@ -100,8 +99,10 @@ public class EldritchWatcherModel extends HierarchicalModel<EldritchWatcherEntit
         this.animateWalk(EldritchWatcherAnimations.WALK, limbSwing, limbSwingAmount, 2, 2);
         if (!entity.isDeadOrDying())
             this.body.zRot = (float) Oscillator.getOscillatingWithNegativeValue(ClientTicks.getTicks()) * 0.35f;
+
         this.animate(entity.attack, EldritchWatcherAnimations.ATTACK, ageInTicks);
-        if (entity.isCarringBlock()) {
+
+        if (entity.isCarryingBlock()) {
             this.right_arm.xRot = -0.5F;
             this.right_arm.zRot = 0.05F;
         }

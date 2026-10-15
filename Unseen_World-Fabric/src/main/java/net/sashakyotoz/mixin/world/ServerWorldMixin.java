@@ -1,7 +1,6 @@
 package net.sashakyotoz.mixin.world;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
@@ -24,16 +23,9 @@ public abstract class ServerWorldMixin implements WorldMultipartHelper {
     @Shadow
     public abstract ServerLevel getLevel();
 
-    //weather
     @Inject(method = "advanceWeatherCycle", at = @At(value = "TAIL"))
     public void tickWeather(CallbackInfo ci) {
         if (getLevel().dimensionTypeId().equals(ModDimensions.CHIMERIC_DARKNESS_TYPE))
             ChimericWeatherState.get((ServerLevel) (Object) this).tick();
-    }
-
-    @Inject(method = "addNewPlayer", at = @At("TAIL"))
-    private void onPlayerJoinDimension(ServerPlayer player, CallbackInfo ci) {
-        if (this.getLevel().dimension().equals(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
-            ChimericWeatherState.get((ServerLevel) (Object) this).syncToPlayer(player);
     }
 }

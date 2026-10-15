@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.entity.VoidArrowEntity;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -61,7 +61,7 @@ public class VoidArrowRenderer<T extends VoidArrowEntity> extends EntityRenderer
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        return new ResourceLocation(UnseenWorldMod.MODID,"textures/entities/void_arrow.png");
+        return new ResourceLocation(UnseenWorld.MOD_ID,"textures/entities/void_arrow.png");
     }
 
     public void vertex(Matrix4f pMatrix, Matrix3f pNormal, VertexConsumer pConsumer, int pX, int pY, int pZ, float pU, float pV, int pNormalX, int pNormalZ, int pNormalY, int pPackedLight) {

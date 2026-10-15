@@ -21,7 +21,7 @@ public class EldritchWatcherPulsatingLayer<T extends EldritchWatcherEntity, M ex
     @Override
     public void render(PoseStack matrices, MultiBufferSource vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderType.entityTranslucentEmissive(
-                UnseenWorld.makeID("textures/entity/eldritch_watcher/eldritch_watcher_pulsating_spots.png")
+                UnseenWorld.MOD.makeID("textures/entity/eldritch_watcher/eldritch_watcher_pulsating_spots.png")
         ));
         this.getParentModel().renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()));
     }

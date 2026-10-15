@@ -3,6 +3,8 @@ package net.sashakyotoz.common.items.custom;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,77 +18,110 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.config.ModMainConfig;
-import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.items.ModArmorMaterials;
 import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ModArmorItem extends ArmorItem {
+    private static final EquipmentSlot[] ARMOR_SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+    private static final int VOID_RESCUE_MARGIN = 32;
+    private static final int VOID_RESCUE_GRIPPING_SECONDS = 10;
+    private static final int FIRE_RESISTANCE_TICKS = 160;
+    private static final int UNSEENIUM_REPAIR_INTERVAL = 200;
+    private static final int UNSEENIUM_REPAIR_AMOUNT = 2;
+    private static final double UNSEENIUM_SOLITUDE_RADIUS = 16.0D;
+
     public ModArmorItem(ArmorMaterial material, Type type, Properties settings) {
         super(material, type, settings);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-        if (entity instanceof LivingEntity livingEntity) {
-            ItemStack headStack = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-            ItemStack chestStack = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
-            ItemStack leggingsStack = livingEntity.getItemBySlot(EquipmentSlot.LEGS);
-            ItemStack bootsStack = livingEntity.getItemBySlot(EquipmentSlot.FEET);
-            if (isAbyssalArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
-                if (livingEntity.getY() < -96 && ModMainConfig.doAbyssalArmorSaveFromVoid.get()) {
-                    world.playSound(livingEntity, livingEntity.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.NEUTRAL, 3f, 2.5f);
-                    BlockPos surfacePos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, entity.blockPosition());
-                    livingEntity.teleportToWithTicket(surfacePos.getX(), surfacePos.getY() + 2, surfacePos.getZ());
-                    livingEntity.fallDistance = 0;
-                    ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, world, surfacePos.getX(), surfacePos.getY() + 1, surfacePos.getZ(), 1.5f);
-                    if (livingEntity instanceof IGrippingEntity entity1)
-                        GrippingData.addGrippingSeconds(entity1, 10);
-                    headStack.hurtAndBreak(2, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.HEAD));
-                    chestStack.hurtAndBreak(2, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.CHEST));
-                    leggingsStack.hurtAndBreak(2, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.LEGS));
-                    bootsStack.hurtAndBreak(2, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.FEET));
-                }
-                if (livingEntity.tickCount % 10 == 0 && livingEntity.hasEffect(MobEffects.DARKNESS)) {
-                    livingEntity.removeAllEffects();
-                    ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, world, livingEntity.getX(), livingEntity.getY() + 1, livingEntity.getZ(), 1.5f);
-                    headStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.HEAD));
-                    chestStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.CHEST));
-                    leggingsStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.LEGS));
-                    bootsStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.FEET));
-                }
-            }
-            if (isRedTitaniumArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
-                if ((livingEntity.isOnFire() || livingEntity.isInLava()) && !livingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 160, 0));
-                    headStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.HEAD));
-                    chestStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.CHEST));
-                    leggingsStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.LEGS));
-                    bootsStack.hurtAndBreak(1, livingEntity, livingEntity1 -> livingEntity1.broadcastBreakEvent(EquipmentSlot.FEET));
-                }
-            }
-            if (isUnseeniumArmorSet(headStack, chestStack, leggingsStack, bootsStack)) {
-                if (livingEntity.tickCount % 200 == 0) {
-                    List<LivingEntity> entities = livingEntity.level().getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(16), livingEntity1 -> livingEntity1 != livingEntity);
-                    if (entities.isEmpty()) {
-                        if (headStack.getDamageValue() < headStack.getMaxDamage())
-                            headStack.setDamageValue(headStack.getDamageValue() - 2);
-                        if (chestStack.getDamageValue() < chestStack.getMaxDamage())
-                            chestStack.setDamageValue(chestStack.getDamageValue() - 2);
-                        if (leggingsStack.getDamageValue() < leggingsStack.getMaxDamage())
-                            leggingsStack.setDamageValue(leggingsStack.getDamageValue() - 2);
-                        if (bootsStack.getDamageValue() < bootsStack.getMaxDamage())
-                            bootsStack.setDamageValue(bootsStack.getDamageValue() - 2);
-                    }
-                }
-                if (livingEntity.tickCount % 20 == 0 && livingEntity.hasEffect(MobEffects.GLOWING))
-                    livingEntity.removeAllEffects();
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, level, entity, slot, selected);
+        if (level.isClientSide || this.getType() != Type.HELMET || !(entity instanceof ServerPlayer player)) {
+            return;
+        }
+        if (player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
+            return;
+        }
+        ArmorSet set = ArmorSet.of(this.getMaterial());
+        if (set == null || !set.isWornBy(player)) {
+            return;
+        }
+        switch (set) {
+            case ABYSSAL -> tickAbyssal(player);
+            case RED_TITANIUM -> tickRedTitanium(player);
+            case UNSEENIUM -> tickUnseenium(player);
+        }
+    }
+
+    private static void tickAbyssal(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        if (ModMainConfig.doAbyssalArmorSaveFromVoid.get() && player.getY() < level.getMinBuildHeight() - VOID_RESCUE_MARGIN) {
+            rescueFromVoid(player, level);
+        }
+        if (player.hasEffect(MobEffects.DARKNESS)) {
+            player.removeEffect(MobEffects.DARKNESS);
+            ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, level, player.getX(), player.getY() + 1, player.getZ(), 1.5f);
+            damageSet(player, 1);
+        }
+    }
+
+    private static void rescueFromVoid(ServerPlayer player, ServerLevel level) {
+        BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition());
+        double x = surface.getX() + 0.5D;
+        double y = surface.getY() + 2;
+        double z = surface.getZ() + 0.5D;
+        player.teleportTo(level, x, y, z, player.getYRot(), player.getXRot());
+        player.fallDistance = 0.0F;
+        player.setDeltaMovement(Vec3.ZERO);
+        player.hurtMarked = true;
+        level.playSound(null, x, y, z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 3.0F, 2.5F);
+        ActionsUtils.spawnParticle(ModParticleTypes.GRIPPING_CRYSTAL, level, x, surface.getY() + 1, z, 1.5f);
+        if (player instanceof IGrippingEntity grippingEntity) {
+            GrippingData.addGrippingSeconds(grippingEntity, VOID_RESCUE_GRIPPING_SECONDS);
+        }
+        damageSet(player, 2);
+    }
+
+    private static void tickRedTitanium(ServerPlayer player) {
+        if ((player.isOnFire() || player.isInLava()) && !player.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+            player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, FIRE_RESISTANCE_TICKS, 0));
+            damageSet(player, 1);
+        }
+    }
+
+    private static void tickUnseenium(ServerPlayer player) {
+        if (player.hasEffect(MobEffects.GLOWING)) {
+            player.removeEffect(MobEffects.GLOWING);
+        }
+        if (player.tickCount % UNSEENIUM_REPAIR_INTERVAL == 0 && isAlone(player)) {
+            repairSet(player, UNSEENIUM_REPAIR_AMOUNT);
+        }
+    }
+
+    private static boolean isAlone(ServerPlayer player) {
+        return player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(UNSEENIUM_SOLITUDE_RADIUS), other -> other != player).isEmpty();
+    }
+
+    private static void damageSet(ServerPlayer player, int amount) {
+        for (EquipmentSlot slot : ARMOR_SLOTS) {
+            player.getItemBySlot(slot).hurtAndBreak(amount, player, wearer -> wearer.broadcastBreakEvent(slot));
+        }
+    }
+
+    private static void repairSet(ServerPlayer player, int amount) {
+        for (EquipmentSlot slot : ARMOR_SLOTS) {
+            ItemStack piece = player.getItemBySlot(slot);
+            if (piece.isDamaged()) {
+                piece.setDamageValue(Math.max(0, piece.getDamageValue() - amount));
             }
         }
     }
@@ -95,68 +130,58 @@ public class ModArmorItem extends ArmorItem {
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
         super.appendHoverText(stack, world, tooltip, context);
         tooltip.add(Component.translatable("item.unseen_world.armor_tips").withStyle(ChatFormatting.BLUE));
-        if (stack.is(ModItems.ABYSSAL_HELMET)
-                || stack.is(ModItems.ABYSSAL_CHESTPLATE)
-                || stack.is(ModItems.ABYSSAL_LEGGINGS)
-                || stack.is(ModItems.ABYSSAL_BOOTS)
-        )
-            tooltip.add(Component.translatable("item.unseen_world.abyssal_armor_tooltip"));
-        if (stack.is(ModItems.RED_TITANIUM_HELMET)
-                || stack.is(ModItems.RED_TITANIUM_CHESTPLATE)
-                || stack.is(ModItems.RED_TITANIUM_LEGGINGS)
-                || stack.is(ModItems.RED_TITANIUM_BOOTS)
-        )
-            tooltip.add(Component.translatable("item.unseen_world.titanium_armor_tooltip"));
-        if (stack.is(ModItems.UNSEENIUM_HELMET)
-                || stack.is(ModItems.UNSEENIUM_CHESTPLATE)
-                || stack.is(ModItems.UNSEENIUM_LEGGINGS)
-                || stack.is(ModItems.UNSEENIUM_BOOTS)
-        ) {
-            tooltip.add(Component.translatable("item.unseen_world.unseenium_armor_tooltip"));
-            tooltip.add(Component.translatable("item.unseen_world.unseenium_armor_tooltip1"));
+        ArmorSet set = ArmorSet.of(this.getMaterial());
+        if (set != null) {
+            for (String key : set.tooltipKeys) {
+                tooltip.add(Component.translatable(key));
+            }
         }
     }
 
-    public static boolean isAbyssalArmorSet(ItemStack head, ItemStack chest, ItemStack legs, ItemStack feet) {
-        return head.is(ModItems.ABYSSAL_HELMET)
-                && chest.is(ModItems.ABYSSAL_CHESTPLATE)
-                && legs.is(ModItems.ABYSSAL_LEGGINGS)
-                && feet.is(ModItems.ABYSSAL_BOOTS);
-    }
-
     public static boolean isAbyssalArmorSet(LivingEntity entity) {
-        ItemStack headStack = entity.getItemBySlot(EquipmentSlot.HEAD);
-        ItemStack chestStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-        ItemStack leggingsStack = entity.getItemBySlot(EquipmentSlot.LEGS);
-        ItemStack bootsStack = entity.getItemBySlot(EquipmentSlot.FEET);
-        return isAbyssalArmorSet(headStack, chestStack, leggingsStack, bootsStack);
+        return ArmorSet.ABYSSAL.isWornBy(entity);
     }
 
-    public static boolean isRedTitaniumArmorSet(ItemStack headSlot, ItemStack chestSlot, ItemStack legsSlot, ItemStack feetSlot) {
-        return feetSlot.is(ModItems.RED_TITANIUM_HELMET)
-                && legsSlot.is(ModItems.RED_TITANIUM_LEGGINGS)
-                && chestSlot.is(ModItems.RED_TITANIUM_CHESTPLATE)
-                && headSlot.is(ModItems.RED_TITANIUM_HELMET);
-    }
     public static boolean isRedTitaniumArmorSet(LivingEntity entity) {
-        ItemStack headStack = entity.getItemBySlot(EquipmentSlot.HEAD);
-        ItemStack chestStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-        ItemStack leggingsStack = entity.getItemBySlot(EquipmentSlot.LEGS);
-        ItemStack bootsStack = entity.getItemBySlot(EquipmentSlot.FEET);
-        return isRedTitaniumArmorSet(headStack, chestStack, leggingsStack, bootsStack);
+        return ArmorSet.RED_TITANIUM.isWornBy(entity);
     }
 
-    public static boolean isUnseeniumArmorSet(ItemStack headSlot, ItemStack chestSlot, ItemStack legsSlot, ItemStack feetSlot) {
-        return feetSlot.is(ModItems.UNSEENIUM_BOOTS)
-                && legsSlot.is(ModItems.UNSEENIUM_LEGGINGS)
-                && chestSlot.is(ModItems.UNSEENIUM_CHESTPLATE)
-                && headSlot.is(ModItems.UNSEENIUM_HELMET);
-    }
     public static boolean isUnseeniumArmorSet(LivingEntity entity) {
-        ItemStack headStack = entity.getItemBySlot(EquipmentSlot.HEAD);
-        ItemStack chestStack = entity.getItemBySlot(EquipmentSlot.CHEST);
-        ItemStack leggingsStack = entity.getItemBySlot(EquipmentSlot.LEGS);
-        ItemStack bootsStack = entity.getItemBySlot(EquipmentSlot.FEET);
-        return isUnseeniumArmorSet(headStack, chestStack, leggingsStack, bootsStack);
+        return ArmorSet.UNSEENIUM.isWornBy(entity);
+    }
+
+    private enum ArmorSet {
+        ABYSSAL(ModArmorMaterials.ABYSSAL, "item.unseen_world.abyssal_armor_tooltip"),
+        RED_TITANIUM(ModArmorMaterials.TITANIUM, "item.unseen_world.titanium_armor_tooltip"),
+        UNSEENIUM(ModArmorMaterials.UNSEENIUM, "item.unseen_world.unseenium_armor_tooltip", "item.unseen_world.unseenium_armor_tooltip1");
+
+        private final ArmorMaterial material;
+        private final String[] tooltipKeys;
+
+        ArmorSet(ArmorMaterial material, String... tooltipKeys) {
+            this.material = material;
+            this.tooltipKeys = tooltipKeys;
+        }
+
+        @Nullable
+        private static ArmorSet of(ArmorMaterial material) {
+            for (ArmorSet set : values()) {
+                if (set.material == material) {
+                    return set;
+                }
+            }
+            return null;
+        }
+
+        private boolean isWornBy(LivingEntity entity) {
+            for (EquipmentSlot slot : ARMOR_SLOTS) {
+                if (!(entity.getItemBySlot(slot).getItem() instanceof ArmorItem armor)
+                        || armor.getMaterial() != this.material
+                        || armor.getEquipmentSlot() != slot) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

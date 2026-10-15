@@ -7,8 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.block.DarknessPortalBlock;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldTags;
@@ -17,24 +16,24 @@ import java.util.HashMap;
 
 public class AdvancementManager {
 	private static final HashMap<ResourceLocation,ResourceLocation> ADVANCEMENT_MAP = new HashMap<>();
-	public static final ResourceLocation WELCOME_TO_UNSEEN_WORLD_ADV = new ResourceLocation(UnseenWorldMod.MODID,"welcometo_unseen_world");
-	public static final ResourceLocation UNSEEN_WORLD_ADV = new ResourceLocation(UnseenWorldMod.MODID,"goto_darkness");
-	public static final ResourceLocation UNDER_THE_CHIMERIC_DARKNESS_ADV = new ResourceLocation(UnseenWorldMod.MODID,"under_the_chimeric_darkness");
-	public static final ResourceLocation DARK_WARRIOR_ADV = new ResourceLocation(UnseenWorldMod.MODID,"biguncle");
-	public static final ResourceLocation THE_BLAZER_ADV = new ResourceLocation(UnseenWorldMod.MODID,"the_blazer_advancement");
-	public static final ResourceLocation THE_WITHER_KNIGHT_ADV = new ResourceLocation(UnseenWorldMod.MODID,"golden_knight");
-	public static final ResourceLocation FOUND_TREASURE_ADV = new ResourceLocation(UnseenWorldMod.MODID,"found_treasure");
-	public static final ResourceLocation RED_TITANIUM_INGOT_ADV = new ResourceLocation(UnseenWorldMod.MODID,"hotmetal");
-	public static final ResourceLocation VOID_INGOT_ADV = new ResourceLocation(UnseenWorldMod.MODID,"isitingotfromvoid");
-	public static final ResourceLocation NATURERIUM_INGOT_ADV = new ResourceLocation(UnseenWorldMod.MODID,"uncommoningot");
-	public static final ResourceLocation FLIGHT_OF_FANTASIES_ADV = new ResourceLocation(UnseenWorldMod.MODID,"flight_of_fantasies");
-	public static final ResourceLocation METEORITESTROPHY_ADV = new ResourceLocation(UnseenWorldMod.MODID,"survive_per_the_meteoritestrophy");
-	public static final ResourceLocation STAFF_OF_VOID_ADV = new ResourceLocation(UnseenWorldMod.MODID,"staff_of_void");
-	public static final ResourceLocation STAFF_OF_TANZANITE_ADV = new ResourceLocation(UnseenWorldMod.MODID,"tanzanite_staff_advancement");
-	public static final ResourceLocation STAFF_OF_FIRE_ADV = new ResourceLocation(UnseenWorldMod.MODID,"staffof_fire");
-	public static final ResourceLocation STAFF_OF_TEALIVY_FIRE_ADV = new ResourceLocation(UnseenWorldMod.MODID,"tealivy_fire_staff_advancement");
-	public static final ResourceLocation UPGRADE_YOUR_SET_ADV = new ResourceLocation(UnseenWorldMod.MODID,"upgrade_your_set");
-	public static final ResourceLocation PETIFICATE_THE_WAYWARD = new ResourceLocation(UnseenWorldMod.MODID,"petificate_the_wayward");
+	public static final ResourceLocation WELCOME_TO_UNSEEN_WORLD_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"welcometo_unseen_world");
+	public static final ResourceLocation UNSEEN_WORLD_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"goto_darkness");
+	public static final ResourceLocation UNDER_THE_CHIMERIC_DARKNESS_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"under_the_chimeric_darkness");
+	public static final ResourceLocation DARK_WARRIOR_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"biguncle");
+	public static final ResourceLocation THE_BLAZER_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"the_blazer_advancement");
+	public static final ResourceLocation THE_WITHER_KNIGHT_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"golden_knight");
+	public static final ResourceLocation FOUND_TREASURE_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"found_treasure");
+	public static final ResourceLocation RED_TITANIUM_INGOT_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"hotmetal");
+	public static final ResourceLocation VOID_INGOT_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"isitingotfromvoid");
+	public static final ResourceLocation NATURERIUM_INGOT_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"uncommoningot");
+	public static final ResourceLocation FLIGHT_OF_FANTASIES_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"flight_of_fantasies");
+	public static final ResourceLocation METEORITESTROPHY_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"survive_per_the_meteoritestrophy");
+	public static final ResourceLocation STAFF_OF_VOID_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"staff_of_void");
+	public static final ResourceLocation STAFF_OF_TANZANITE_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"tanzanite_staff_advancement");
+	public static final ResourceLocation STAFF_OF_FIRE_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"staffof_fire");
+	public static final ResourceLocation STAFF_OF_TEALIVY_FIRE_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"tealivy_fire_staff_advancement");
+	public static final ResourceLocation UPGRADE_YOUR_SET_ADV = new ResourceLocation(UnseenWorld.MOD_ID,"upgrade_your_set");
+	public static final ResourceLocation PETIFICATE_THE_WAYWARD = new ResourceLocation(UnseenWorld.MOD_ID,"petificate_the_wayward");
 	static {
 		ADVANCEMENT_MAP.put(WELCOME_TO_UNSEEN_WORLD_ADV,WELCOME_TO_UNSEEN_WORLD_ADV);
 		ADVANCEMENT_MAP.put(UNSEEN_WORLD_ADV,UNSEEN_WORLD_ADV);
@@ -90,11 +89,11 @@ public class AdvancementManager {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,STAFF_OF_FIRE_ADV);
 		}
-		if (entity.getY() <= 0 && level.dimension().equals(DarknessPortalBlock.CHIMERIC_DARKNESS)) {
+		if (entity.getY() <= 0 && level.dimension().equals(UnseenWorld.THE_DARKNESS)) {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UNDER_THE_CHIMERIC_DARKNESS_ADV);
 		}
-		if (level.dimension().equals(DarknessPortalBlock.CHIMERIC_DARKNESS)) {
+		if (level.dimension().equals(UnseenWorld.THE_DARKNESS)) {
 			if (entity instanceof ServerPlayer player)
 				addAdvancement(player,UNSEEN_WORLD_ADV);
 		}

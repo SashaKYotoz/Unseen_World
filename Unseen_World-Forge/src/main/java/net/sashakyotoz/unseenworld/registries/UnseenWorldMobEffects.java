@@ -4,11 +4,11 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.effects.*;
 
 public class UnseenWorldMobEffects {
-	public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, UnseenWorldMod.MODID);
+	public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, UnseenWorld.MOD_ID);
 	public static final RegistryObject<MobEffect> DARK_VOID = REGISTRY.register("dark_void", DarkVoidMobEffect::new);
 	public static final RegistryObject<MobEffect> UNSEENIUM = REGISTRY.register("unseenium", UnseeniumMobEffect::new);
 	public static final RegistryObject<MobEffect> SOUL_OVERGROWTH = REGISTRY.register("soul_overgrowth", SoulOvergrowthMobEffect::new);

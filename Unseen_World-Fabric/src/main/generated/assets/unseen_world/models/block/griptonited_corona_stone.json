@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "unseen_world:block/corona_stone",
+    "particle": "unseen_world:block/corona_stone",
+    "side": "unseen_world:block/griptonited_corona_stone",
+    "top": "unseen_world:block/griptonited_lump"
+  }
+}

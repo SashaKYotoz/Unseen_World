@@ -1,7 +1,28 @@
 {
   "type": "minecraft:tree",
   "config": {
-    "decorators": [],
+    "decorators": [
+      {
+        "type": "minecraft:vines_to_leaves_decorator",
+        "block": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "unseen_world:hanging_burlywood_leaves",
+            "Properties": {
+              "has_fruit": "false"
+            }
+          }
+        },
+        "height": {
+          "type": "minecraft:uniform",
+          "value": {
+            "max_inclusive": 4,
+            "min_inclusive": 1
+          }
+        },
+        "probability": 0.12
+      }
+    ],
     "dirt_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
@@ -10,20 +31,15 @@
     },
     "foliage_placer": {
       "type": "minecraft:burlywood_foliage_placer",
-      "offset": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 1,
-          "min_inclusive": 0
-        }
-      },
+      "offset": 0,
       "radius": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 2,
-          "min_inclusive": 1
+          "max_inclusive": 4,
+          "min_inclusive": 3
         }
-      }
+      },
+      "skirt_chance": 0.45
     },
     "foliage_provider": {
       "type": "minecraft:simple_state_provider",
@@ -50,9 +66,32 @@
     "trunk_placer": {
       "type": "minecraft:burlywood_trunk_placer",
       "base_height": 12,
+      "branches": {
+        "count": {
+          "type": "minecraft:uniform",
+          "value": {
+            "max_inclusive": 6,
+            "min_inclusive": 4
+          }
+        },
+        "length": {
+          "type": "minecraft:uniform",
+          "value": {
+            "max_inclusive": 5,
+            "min_inclusive": 3
+          }
+        },
+        "sub_branch_chance": 0.5
+      },
+      "bridge": {
+        "chance": 0.6,
+        "range": 12,
+        "targets": "unseen_world:burlywood_log"
+      },
+      "fork_height": 0.45,
       "height_rand_a": 2,
-      "height_rand_b": 3,
-      "should_search_wood": true
+      "height_rand_b": 2,
+      "root_chance": 0.6
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

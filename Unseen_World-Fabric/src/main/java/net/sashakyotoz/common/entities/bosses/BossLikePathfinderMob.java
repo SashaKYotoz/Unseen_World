@@ -1,56 +1,49 @@
 package net.sashakyotoz.common.entities.bosses;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.sashakyotoz.utils.ActionsUtils;
+import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.api.entity_data.IGrippingEntity;
+import net.sashakyotoz.api.entity_data.data.GrippingData;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Comparator;
+import java.util.List;
 
 public abstract class BossLikePathfinderMob extends PathfinderMob implements Enemy {
-    private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
+    private static final int RING_PARTICLES = 18;
+    private static final float UNBREAKABLE_HARDNESS = 50.0F;
 
-    public BossLikePathfinderMob(EntityType<? extends BossLikePathfinderMob> entityType, Level world) {
-        super(entityType, world);
-    }
+    public int stateTicks = 0;
 
-    public void queueServerWork(int tick, Runnable action) {
-        workQueue.add(new AbstractMap.SimpleEntry<>(action, tick));
+    public BossLikePathfinderMob(EntityType<? extends BossLikePathfinderMob> entityType, Level level) {
+        super(entityType, level);
     }
 
     @Override
-    protected boolean shouldStayCloseToLeashHolder() {
+    public boolean canBeLeashed(Player player) {
         return false;
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        List<AbstractMap.SimpleEntry<Runnable, Integer>> toExecute = new ArrayList<>();
-        workQueue.forEach(entry -> {
-            entry.setValue(entry.getValue() - 1);
-            if (entry.getValue() <= 0)
-                toExecute.add(entry);
-        });
-        if (!toExecute.isEmpty())
-            workQueue.removeAll(toExecute);
-        toExecute.forEach(entry -> entry.getKey().run());
     }
 
     @Override
@@ -60,19 +53,18 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
 
     public abstract boolean haveToDropLoot(DamageSource source);
 
+    public abstract ServerBossEvent bossInfo();
+
     @Override
     protected void dropAllDeathLoot(DamageSource source) {
         Entity entity = source.getEntity();
-        int i;
-        if (entity instanceof Player)
-            i = EnchantmentHelper.getMobLooting((LivingEntity) entity);
-        else
-            i = 0;
-        boolean bl = this.lastHurtByPlayerTime > 0;
+        int looting = entity instanceof LivingEntity living ? EnchantmentHelper.getMobLooting(living) : 0;
+        boolean hitByPlayer = this.lastHurtByPlayerTime > 0;
         if (this.shouldDropLoot() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-            if (haveToDropLoot(source))
-                this.dropFromLootTable(source, bl);
-            this.dropCustomDeathLoot(source, i, bl);
+            if (this.haveToDropLoot(source)) {
+                this.dropFromLootTable(source, hitByPlayer);
+            }
+            this.dropCustomDeathLoot(source, looting, hitByPlayer);
         }
         this.dropEquipment();
         this.dropExperience();
@@ -82,45 +74,6 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
     public boolean removeWhenFarAway(double distanceSquared) {
         return false;
     }
-
-    public void provokeEarthquake(int radius) {
-        if (!ActionsUtils.isModLoaded("sodium")) {
-            Level world = this.level();
-            if (!world.isClientSide())
-                for (int y = -2; y < 2; y++) {
-                    for (int x = -radius; x < radius; x++) {
-                        for (int z = -radius; z < radius; z++) {
-                            BlockPos pos = this.blockPosition().offset(x, y, z);
-                            if (world.getBlockState(pos) != null && world.getBlockState(pos).canOcclude() && world.getBlockState(pos).getDestroySpeed(this.level(), pos) < 10 && world.getBlockState(pos.above()).isAir()) {
-                                FallingBlockEntity.fall(world, pos.above(3), world.getBlockState(pos));
-                                world.destroyBlock(pos, false);
-                            }
-                        }
-                    }
-                }
-        }
-    }
-
-    public void spawnParticle(ParticleOptions type, Level world, double x, double y, double z, float modifier) {
-        for (int i = 0; i < 360; i++) {
-            if (i % 20 == 0)
-                world.addParticle(type, x + 0.25, y, z + 0.25, Math.cos(i) * 0.25d * modifier, 0.2d, Math.sin(i) * 0.25d * modifier);
-        }
-    }
-
-    public void hitNearbyMobs(float damage, int radius) {
-        List<LivingEntity> entityList = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.position(), this.position()).inflate(radius), e -> true)
-                .stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(this.position()))).toList();
-        for (LivingEntity entityIterator : entityList) {
-            if (entityIterator != this) {
-                entityIterator.hurt(this.damageSources().magic(), damage);
-                this.spawnParticle(new BlockParticleOption(ParticleTypes.BLOCK, entityIterator.getFeetBlockState()),
-                        this.level(), this.getX(), this.getY() + 0.5f, this.getZ(), 2);
-            }
-        }
-    }
-
-    public abstract ServerBossEvent bossInfo();
 
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
@@ -140,11 +93,185 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
         this.bossInfo().setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-    public double getXVector(double speed, double yaw) {
-        return speed * Math.cos((yaw + 90) * (Math.PI / 180));
+    public double getXVector(double distance, float yRot) {
+        return -Mth.sin(yRot * Mth.DEG_TO_RAD) * distance;
     }
 
-    public double getZVector(double speed, double yaw) {
-        return speed * Math.sin((yaw + 90) * (Math.PI / 180));
+    public double getZVector(double distance, float yRot) {
+        return Mth.cos(yRot * Mth.DEG_TO_RAD) * distance;
+    }
+
+    public Vec3 horizontalForward() {
+        return new Vec3(this.getXVector(1.0D, this.getYRot()), 0.0D, this.getZVector(1.0D, this.getYRot()));
+    }
+
+    public Vec3 horizontalLeft() {
+        Vec3 forward = this.horizontalForward();
+        return new Vec3(forward.z, 0.0D, -forward.x);
+    }
+
+    public double halfWidth() {
+        return this.getBbWidth() * 0.5D;
+    }
+
+    public void spawnParticle(ParticleOptions type, double x, double y, double z, float modifier) {
+        for (int i = 0; i < RING_PARTICLES; i++) {
+            double angle = i * (Math.PI * 2.0D / RING_PARTICLES);
+            double vx = Math.cos(angle) * 0.25D * modifier;
+            double vz = Math.sin(angle) * 0.25D * modifier;
+            if (this.level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(type, x, y, z, 0, vx, 0.2D, vz, 1.0D);
+            } else {
+                this.level().addParticle(type, x, y, z, vx, 0.2D, vz);
+            }
+        }
+    }
+
+    public void serverParticles(ParticleOptions type, double x, double y, double z, int count, double spreadX, double spreadY, double spreadZ, double speed) {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(type, x, y, z, count, spreadX, spreadY, spreadZ, speed);
+        }
+    }
+
+    public void groundBurst(Vec3 pos, int count, double spread) {
+        BlockPos ground = BlockPos.containing(pos.x, pos.y - 0.2D, pos.z);
+        BlockState state = this.level().getBlockState(ground);
+        if (!state.isAir()) {
+            this.serverParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), pos.x, pos.y + 0.1D, pos.z, count, spread, 0.1D, spread, 0.15D);
+        }
+    }
+
+    public Vec3 snapToGround(Vec3 pos, int maxDepth) {
+        BlockPos.MutableBlockPos cursor = BlockPos.containing(pos.x, pos.y + 1.0D, pos.z).mutable();
+        for (int i = 0; i < maxDepth; i++) {
+            BlockPos below = cursor.below();
+            if (!this.level().getBlockState(below).getCollisionShape(this.level(), below).isEmpty()) {
+                return new Vec3(pos.x, cursor.getY(), pos.z);
+            }
+            cursor.move(Direction.DOWN);
+        }
+        return pos;
+    }
+
+    public boolean isEnemy(LivingEntity entity) {
+        if (entity == this || !entity.isAlive() || entity.isAlliedTo(this) || this.isAlliedTo(entity)) {
+            return false;
+        }
+        if (entity instanceof Player player) {
+            return !player.isCreative() && !player.isSpectator();
+        }
+        return !(entity instanceof BossLikePathfinderMob);
+    }
+
+    public List<LivingEntity> enemiesIn(AABB box) {
+        return this.level().getEntitiesOfClass(LivingEntity.class, box, this::isEnemy);
+    }
+
+    public List<LivingEntity> enemiesInRadius(double radius, double height) {
+        Vec3 origin = this.position();
+        AABB box = new AABB(origin.x - radius, origin.y - 1.0D, origin.z - radius, origin.x + radius, origin.y + height, origin.z + radius);
+        return this.enemiesIn(box).stream()
+                .filter(entity -> horizontalDistanceSqr(entity.position(), origin) <= (radius + entity.getBbWidth() * 0.5D) * (radius + entity.getBbWidth() * 0.5D))
+                .sorted(Comparator.comparingDouble(entity -> horizontalDistanceSqr(entity.position(), origin)))
+                .toList();
+    }
+
+    public List<LivingEntity> enemiesInLine(double from, double to, double sideReach, double height) {
+        Vec3 origin = this.position();
+        Vec3 forward = this.horizontalForward();
+        Vec3 left = this.horizontalLeft();
+        Vec3 end = origin.add(forward.scale(to));
+        AABB box = new AABB(origin, end).inflate(sideReach + 1.0D, 0.0D, sideReach + 1.0D).expandTowards(0.0D, height, 0.0D).expandTowards(0.0D, -1.0D, 0.0D);
+        return this.enemiesIn(box).stream().filter(entity -> {
+            Vec3 offset = entity.position().subtract(origin);
+            double along = offset.x * forward.x + offset.z * forward.z;
+            double side = Math.abs(offset.x * left.x + offset.z * left.z);
+            double reach = entity.getBbWidth() * 0.5D;
+            return along >= from - reach && along <= to + reach && side <= sideReach + reach;
+        }).toList();
+    }
+
+    public List<LivingEntity> enemiesInArc(double radius, double halfAngleDegrees, double height) {
+        Vec3 origin = this.position();
+        Vec3 forward = this.horizontalForward();
+        double minDot = Math.cos(Math.toRadians(halfAngleDegrees));
+        return this.enemiesInRadius(radius, height).stream().filter(entity -> {
+            Vec3 offset = entity.position().subtract(origin);
+            double length = Math.sqrt(offset.x * offset.x + offset.z * offset.z);
+            if (length < this.halfWidth()) {
+                return true;
+            }
+            return (offset.x * forward.x + offset.z * forward.z) / length >= minDot;
+        }).toList();
+    }
+
+    public float attackDamage(float multiplier) {
+        return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * multiplier;
+    }
+
+    public boolean strike(LivingEntity entity, float multiplier) {
+        return entity.hurt(this.damageSources().mobAttack(this), this.attackDamage(multiplier));
+    }
+
+    public boolean strikeMagic(LivingEntity entity, float multiplier) {
+        return entity.hurt(this.damageSources().indirectMagic(this, this), this.attackDamage(multiplier));
+    }
+
+    public void impulse(Entity entity, Vec3 velocity) {
+        double factor = 1.0D;
+        if (entity instanceof LivingEntity living) {
+            factor = Math.max(0.4D, 1.0D - living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+        }
+        entity.setDeltaMovement(entity.getDeltaMovement().add(velocity.scale(factor)));
+        entity.hasImpulse = true;
+        entity.hurtMarked = true;
+    }
+
+    public void grip(LivingEntity entity, int seconds) {
+        if (entity instanceof IGrippingEntity gripping) {
+            GrippingData.addGrippingSeconds(gripping, seconds);
+        }
+    }
+
+    public boolean canGrief() {
+        return this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+    }
+
+    public boolean breakBlock(BlockPos pos, boolean drop) {
+        BlockState state = this.level().getBlockState(pos);
+        if (state.isAir() || state.getBlock() instanceof LiquidBlock || state.is(BlockTags.WITHER_IMMUNE)) {
+            return false;
+        }
+        float hardness = state.getDestroySpeed(this.level(), pos);
+        if (hardness < 0.0F || hardness >= UNBREAKABLE_HARDNESS) {
+            return false;
+        }
+        return this.level().destroyBlock(pos, drop, this);
+    }
+
+    public void hitNearbyMobs(float damage, int radius) {
+        for (LivingEntity entity : this.enemiesInRadius(radius, radius)) {
+            entity.hurt(this.damageSources().indirectMagic(this, this), damage);
+            this.groundBurst(entity.position(), 8, 0.4D);
+        }
+    }
+
+    public void faceTowards(Entity target, float maxStep) {
+        double dx = target.getX() - this.getX();
+        double dz = target.getZ() - this.getZ();
+        float desired = (float) (Mth.atan2(dz, dx) * Mth.RAD_TO_DEG) - 90.0F;
+        this.setFacing(Mth.approachDegrees(this.getYRot(), desired, maxStep));
+    }
+
+    public void setFacing(float yaw) {
+        this.setYRot(yaw);
+        this.yBodyRot = yaw;
+        this.yHeadRot = yaw;
+    }
+
+    protected static double horizontalDistanceSqr(Vec3 a, Vec3 b) {
+        double dx = a.x - b.x;
+        double dz = a.z - b.z;
+        return dx * dx + dz * dz;
     }
 }

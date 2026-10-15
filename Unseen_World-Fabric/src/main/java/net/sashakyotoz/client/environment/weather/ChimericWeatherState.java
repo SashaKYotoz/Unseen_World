@@ -1,9 +1,6 @@
 package net.sashakyotoz.client.environment.weather;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -76,20 +73,13 @@ public class ChimericWeatherState extends SavedData {
     }
 
     public void syncToAll() {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(this.isGrippfallActive);
-        buf.writeUtf(this.direction);
-
-        for (ServerPlayer player : world.players()) {
-            ServerPlayNetworking.send(player, ModMessages.WEATHER_PACKET_ID, buf);
+        for (ServerPlayer player : this.world.players()) {
+            this.syncTo(player);
         }
     }
 
-    public void syncToPlayer(ServerPlayer player) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(this.isGrippfallActive);
-        buf.writeUtf(this.direction);
-        ServerPlayNetworking.send(player, ModMessages.WEATHER_PACKET_ID, buf);
+    public void syncTo(ServerPlayer player) {
+        ModMessages.sendWeather(player, this.isGrippfallActive, this.direction);
     }
 
     public void setGrippfallDuration(int duration) {

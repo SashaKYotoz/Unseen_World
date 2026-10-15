@@ -5,10 +5,10 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 public class UnseenWorldParticleTypes {
-	public static final DeferredRegister<ParticleType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, UnseenWorldMod.MODID);
+	public static final DeferredRegister<ParticleType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, UnseenWorld.MOD_ID);
 	public static final RegistryObject<SimpleParticleType> BLUE_VOID_PARTICLE = REGISTRY.register("blue_void_particle", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> REDNESS = REGISTRY.register("redness", () -> new SimpleParticleType(true));
 	public static final RegistryObject<SimpleParticleType> GOLDEN = REGISTRY.register("golden", () -> new SimpleParticleType(false));

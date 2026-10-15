@@ -6,7 +6,7 @@
   "refmap": "unseen_world.refmap.json",
   "mixins": [],
   "client": [
-    "BossesHealthOverMixin",
+    "BossHealthOverlayMixin",
     "ItemInHandRendererMixin"
   ],
   "injectors": {

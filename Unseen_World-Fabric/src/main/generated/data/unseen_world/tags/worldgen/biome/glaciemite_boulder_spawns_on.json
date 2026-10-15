@@ -1,10 +1,8 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:tealivy_valley",
-    "unseen_world:tealivy_highlands",
-    "unseen_world:the_darkness",
-    "unseen_world:crimsonveil_plateau",
-    "unseen_world:old_growth_crimsonveil_woods"
+    "unseen_world:glaciemite_tundra",
+    "unseen_world:snowy_grizzly_thicket",
+    "unseen_world:the_darkness"
   ]
 }

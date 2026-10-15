@@ -1,5 +1,7 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
@@ -7,8 +9,8 @@
     "grass_color": 5013401,
     "mood_sound": {
       "block_search_extent": 8,
-      "offset": 4.0,
-      "sound": "minecraft:ambient.warped_forest.mood",
+      "offset": 2.0,
+      "sound": "minecraft:ambient.cave",
       "tick_delay": 6000
     },
     "music": {
@@ -31,7 +33,15 @@
     [],
     [],
     [
-      "unseen_world:iron_ore"
+      "unseen_world:iron_ore_upper"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:gloomweed_patch"
+    ],
+    [
+      "unseen_world:chimeric_freeze"
     ]
   ],
   "has_precipitation": false,
@@ -46,5 +56,5 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.5
+  "temperature": 0.35
 }

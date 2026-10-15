@@ -1,5 +1,7 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
@@ -31,7 +33,14 @@
     [],
     [],
     [
-      "unseen_world:iron_ore"
+      "unseen_world:iron_ore_upper"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:tealive_tree",
+      "unseen_world:gloomweed_patch",
+      "unseen_world:tall_gloomweed_patch"
     ]
   ],
   "has_precipitation": false,
@@ -39,7 +48,14 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "unseen_world:harmony_watcher",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 4
+      }
+    ],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],

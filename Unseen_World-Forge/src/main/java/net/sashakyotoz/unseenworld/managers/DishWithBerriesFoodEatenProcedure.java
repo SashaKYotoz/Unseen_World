@@ -1,9 +1,9 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldMobEffects;
 
 public class DishWithBerriesFoodEatenProcedure {
     public static void onEaten(LivingEntity livingEntity) {

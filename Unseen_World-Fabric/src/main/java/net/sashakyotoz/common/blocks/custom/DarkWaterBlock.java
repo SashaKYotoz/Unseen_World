@@ -21,7 +21,7 @@ public class DarkWaterBlock extends LiquidBlock {
 
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-        if (entity instanceof LivingEntity livingEntity && livingEntity.tickCount % 20 == 0) {
+        if (!world.isClientSide && entity instanceof LivingEntity livingEntity && livingEntity.tickCount % 20 == 0) {
             if (!(livingEntity.hasEffect(MobEffects.GLOWING)
                     || EnchantmentHelper.hasAquaAffinity(livingEntity))) {
                 if (entity instanceof IGrippingEntity entity1 && entity1.getDarkeningData() < 10 && world.getFluidState(pos.above()).is(ModFluids.DARK_WATER))

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUIMenu> {
 	public GoldenChestGUIScreen(GoldenChestGUIMenu container, Inventory inventory, Component text) {
@@ -14,7 +15,8 @@ public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUI
 		this.imageHeight = 170;
 	}
 
-	private static final ResourceLocation texture = new ResourceLocation("unseen_world:textures/screens/golden_chest_gui.png");
+	private static final ResourceLocation BACKGROUND = UnseenWorld.makeId("textures/screens/golden_chest_gui.png");
+	private static final ResourceLocation DECOR = UnseenWorld.makeId("textures/screens/golden_chest_decor.png");
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
@@ -28,8 +30,8 @@ public class GoldenChestGUIScreen extends AbstractContainerScreen<GoldenChestGUI
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		guiGraphics.blit(texture, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
-		guiGraphics.blit(new ResourceLocation("unseen_world:textures/screens/golden_chest_decor.png"), this.leftPos + 50, this.topPos + 36, 0, 0, 96, 32, 96, 32);
+		guiGraphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
+		guiGraphics.blit(DECOR, this.leftPos + 50, this.topPos + 36, 0, 0, 96, 32, 96, 32);
 
 		RenderSystem.disableBlend();
 	}

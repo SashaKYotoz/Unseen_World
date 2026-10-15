@@ -11,11 +11,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class UnseenWorldTabs {
-	public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, UnseenWorldMod.MODID);
+	public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, UnseenWorld.MOD_ID);
 	public static final RegistryObject<CreativeModeTab> UNSEEN_WORLD_TOOLS = REGISTRY.register("unseen_world_tools",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.unseen_world.unseen_world_tools")).icon(() -> new ItemStack(UnseenWorldItems.VOID_INGOT_PICKAXE.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(UnseenWorldItems.DEEP_GEM_PICKAXE.get());

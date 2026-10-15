@@ -5,14 +5,15 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 import java.util.Map;
 import java.util.UUID;
 
 public class BossesHealthOverlayHooks {
-    private static final ResourceLocation DARK_WARRIOR_BOSSBAR_FRAMES = new ResourceLocation("unseen_world:textures/screens/boss_bars/dark_warrior_bossbar_frame.png");
-    private static final ResourceLocation BLAZER_BOSSBAR_FRAMES = new ResourceLocation("unseen_world:textures/screens/boss_bars/blazer_bossbar_frame.png");
-    private static final ResourceLocation KNIGHT_BOSSBAR_FRAMES = new ResourceLocation("unseen_world:textures/screens/boss_bars/wither_knight_bossbar_frame.png");
+    private static final ResourceLocation DARK_WARRIOR_BOSSBAR_FRAMES = UnseenWorld.makeId("textures/screens/boss_bars/dark_warrior_bossbar_frame.png");
+    private static final ResourceLocation BLAZER_BOSSBAR_FRAMES = UnseenWorld.makeId("textures/screens/boss_bars/blazer_bossbar_frame.png");
+    private static final ResourceLocation KNIGHT_BOSSBAR_FRAMES = UnseenWorld.makeId("textures/screens/boss_bars/wither_knight_bossbar_frame.png");
 
     public BossesHealthOverlayHooks() {
     }

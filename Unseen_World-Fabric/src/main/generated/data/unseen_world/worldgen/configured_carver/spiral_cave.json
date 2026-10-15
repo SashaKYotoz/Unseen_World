@@ -2,7 +2,7 @@
   "type": "unseen_world:spiral_cave",
   "config": {
     "lava_level": {
-      "absolute": 10
+      "above_bottom": 10
     },
     "length": 384,
     "probability": 0.35,
@@ -17,7 +17,7 @@
         "absolute": 32
       },
       "min_inclusive": {
-        "absolute": -48
+        "above_bottom": 8
       }
     },
     "yScale": 1.0

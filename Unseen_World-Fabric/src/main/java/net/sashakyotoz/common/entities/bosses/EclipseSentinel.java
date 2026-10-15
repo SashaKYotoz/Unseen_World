@@ -1,382 +1,778 @@
 package net.sashakyotoz.common.entities.bosses;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.DustColorTransitionOptions;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.DragonFireball;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.sashakyotoz.api.entity_data.IGrippingEntity;
-import net.sashakyotoz.api.entity_data.data.GrippingData;
-import net.sashakyotoz.api.multipart_entity.EntityPart;
-import net.sashakyotoz.api.multipart_entity.MultipartEntity;
-import net.sashakyotoz.client.particles.ModParticleTypes;
-import net.sashakyotoz.client.particles.custom.effects.LightVibrationParticleEffect;
-import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.config.ChimericDarknessData;
-import net.sashakyotoz.common.config.WorldConfigController;
-import net.sashakyotoz.common.entities.ai.bosses_goals.SentinelMovementGoal;
-import net.sashakyotoz.common.entities.bosses.parts.EclipseSentinelPartEntity;
-import net.sashakyotoz.utils.ActionsUtils;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import net.sashakyotoz.common.entities.util.BossParticles;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Queue;
 
-public class EclipseSentinel extends BossLikePathfinderMob implements MultipartEntity {
+public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose> {
+    public static final EntityDataSerializer<SentinelPose> SENTINEL_STATE = EntityDataSerializer.simpleEnum(SentinelPose.class);
+    public static final EntityDataAccessor<SentinelPose> PHASE = SynchedEntityData.defineId(EclipseSentinel.class, SENTINEL_STATE);
+
+    public static final int ECLIPSE_PURPLE = 0x9B4DFF;
+    public static final int CORONA = 0xD7B8FF;
+    public static final int UMBRA = 0x12061F;
+    private static final DustParticleOptions PURPLE_DUST = BossParticles.dust(ECLIPSE_PURPLE, 1.3F);
+    private static final DustParticleOptions CORONA_DUST = BossParticles.dust(CORONA, 0.9F);
+    private static final DustColorTransitionOptions FADING_DUST = BossParticles.fade(ECLIPSE_PURPLE, UMBRA, 1.5F);
+
+    public static final int CLEAVE_HIT_TICK = 15;
+    public static final int SLASH_HIT_TICK = 20;
+    public static final int DASH_LOCK_TICK = 20;
+    public static final int DASH_HIT_TICK = 30;
+    public static final int RISE_HIT_TICK = 20;
+    public static final int HYPER_TARGET_TICK = 10;
+    public static final int HYPER_LAUNCH_TICK = 15;
+    public static final int HYPER_LAND_TICK = 44;
+    public static final int LASER_CHARGE_TICKS = 15;
+    public static final int LASER_FIRE_TICKS = 70;
+    public static final double LASER_FORWARD = 1.25D;
+    public static final double LASER_HEIGHT = 1.78D;
+    public static final int PULSE_HIT_TICK = 20;
+    public static final double PULSE_RADIUS = 5.0D;
+    private static final double PULSE_PUSH = 2.2D;
+    private static final int PULSE_COOLDOWN = 140;
+    private static final int MELEE_WINDOW = 60;
+    private static final int MELEE_HITS_TO_PULSE = 3;
+    private static final int HUG_TICKS_TO_PULSE = 50;
+    private static final double HUG_GAP = 2.0D;
+    private static final int ECLIPSE_FADE_TICKS = 6;
+    private static final double LASER_RANGE = 32.0D;
+    private static final double HYPER_APEX = 10.0D;
+    private static final double HYPER_MAX_DISTANCE = 18.0D;
+
+    public final AnimationState idleTransition = new AnimationState();
+    public final AnimationState idle = new AnimationState();
+    public final AnimationState laserTransition = new AnimationState();
+    public final AnimationState laser = new AnimationState();
+    public final AnimationState cleave = new AnimationState();
+    public final AnimationState slash = new AnimationState();
+    public final AnimationState rise = new AnimationState();
+    public final AnimationState dash = new AnimationState();
+    public final AnimationState hyper_burst = new AnimationState();
     public final AnimationState death = new AnimationState();
-    public final AnimationState backflip = new AnimationState();
-    public final AnimationState sword_swing = new AnimationState();
-    public final AnimationState sky_jumping = new AnimationState();
-    public final AnimationState darkness = new AnimationState();
-    public final AnimationState idling = new AnimationState();
-    public final AnimationState beaming = new AnimationState();
-    public final AnimationState rush_and_swing = new AnimationState();
-    public final AnimationState blasting_eroflame = new AnimationState();
-    public final AnimationState exaltation = new AnimationState();
-    public final AnimationState exalting = new AnimationState();
-    public final AnimationState heavy_swing = new AnimationState();
 
-    private final EclipseSentinelPartEntity[] parts;
-    public final EclipseSentinelPartEntity body;
-    public final EclipseSentinelPartEntity crack;
+    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.eclipse_sentinel"), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.NOTCHED_6);
 
-    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.eclipse_sentinel"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
-    public static final EntityDataSerializer<EclipseSentinel.SentinelPose> SENTINEL_POSE = EntityDataSerializer.simpleEnum(EclipseSentinel.SentinelPose.class);
-    public static final EntityDataAccessor<EclipseSentinel.SentinelPose> PHASE = SynchedEntityData.defineId(EclipseSentinel.class, SENTINEL_POSE);
-    public static final EntityDataAccessor<Boolean> IS_EXALTED = SynchedEntityData.defineId(EclipseSentinel.class, EntityDataSerializers.BOOLEAN);
-    private BlockPos pos;
-    private int timeOfAbility = 0;
+    private float laserPitch;
+    private double dashDistance;
+    private Vec3 jumpStart = Vec3.ZERO;
+    private Vec3 landing = Vec3.ZERO;
+    private boolean landed;
+    private int lastHyperBurstTick = -1000;
+    private int lastLaserTick = -1000;
+    private int lastPulseTick = -1000;
+    private int meleeHits;
+    private int meleeWindowStart;
+    private int hugTicks;
+    private boolean pulsePending;
 
-    public EclipseSentinel(EntityType<? extends BossLikePathfinderMob> entityType, Level world) {
-        super(entityType, world);
-        this.xpReward = XP_REWARD_BOSS;
-        this.pos = this.blockPosition().offset(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4);
-        this.setMaxUpStep(1.5f);
-        GroundPathNavigation mobNavigation = (GroundPathNavigation) this.getNavigation();
-        mobNavigation.setCanFloat(true);
-        mobNavigation.setCanWalkOverFences(true);
-        this.body = new EclipseSentinelPartEntity(this, "body", 0.45F, 0.35F);
-        this.crack = new EclipseSentinelPartEntity(this, "cape", 0.45F, 0.35F);
-        this.parts = new EclipseSentinelPartEntity[]{this.body, this.crack};
+    public EclipseSentinel(EntityType<? extends BossLikePathfinderMob> entityType, Level level) {
+        super(entityType, level, SentinelPose.class,
+                new PartLayout("body", 0.45F, 0.35F, 0.75D, 1.9D, false),
+                new PartLayout("crack", 0.45F, 0.35F, -0.75D, 1.75D, true));
+        this.setMaxUpStep(1.5F);
+        if (this.getNavigation() instanceof GroundPathNavigation navigation) {
+            navigation.setCanFloat(true);
+            navigation.setCanWalkOverFences(true);
+        }
+        this.bindAnimation(this.idleTransition, SentinelPose.AWAKE_TO_IDLE, SentinelPose.IDLE_TO_AWAKE);
+        this.bindAnimation(this.idle, SentinelPose.IDLING);
+        this.bindAnimation(this.laserTransition, SentinelPose.TO_LASER, SentinelPose.FROM_LASER);
+        this.bindAnimation(this.laser, SentinelPose.LASER);
+        this.bindAnimation(this.cleave, SentinelPose.CLEAVE);
+        this.bindAnimation(this.slash, SentinelPose.SLASH);
+        this.bindAnimation(this.rise, SentinelPose.RISE, SentinelPose.ECLIPSE_PULSE);
+        this.bindAnimation(this.dash, SentinelPose.DASH);
+        this.bindAnimation(this.hyper_burst, SentinelPose.HYPER_BURST);
+        this.bindAnimation(this.death, SentinelPose.DYING);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 400.0D)
+                .add(Attributes.ARMOR, 12.0D)
+                .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
+                .add(Attributes.ATTACK_DAMAGE, 12.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.8D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
     @Override
-    public int getMaxHeadYRot() {
-        return this.isInSentinelPose(SentinelPose.BEAMING) ? 10 : super.getMaxHeadYRot();
+    protected EntityDataAccessor<SentinelPose> stateAccessor() {
+        return PHASE;
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PHASE, SentinelPose.IDLING);
-        this.entityData.define(IS_EXALTED, false);
+    protected SentinelPose initialState() {
+        return SentinelPose.IDLING;
+    }
+
+    @Override
+    protected SentinelPose standingState() {
+        return SentinelPose.STANDING;
+    }
+
+    @Override
+    protected SentinelPose idlingState() {
+        return SentinelPose.IDLING;
+    }
+
+    @Override
+    protected SentinelPose sleepTransitionState() {
+        return SentinelPose.AWAKE_TO_IDLE;
+    }
+
+    @Override
+    protected SentinelPose wakeTransitionState() {
+        return SentinelPose.IDLE_TO_AWAKE;
+    }
+
+    @Override
+    protected SentinelPose dyingState() {
+        return SentinelPose.DYING;
+    }
+
+    @Override
+    protected int decisionDelay() {
+        return this.isEnraged() ? 18 : 30;
+    }
+
+    @Override
+    protected double chaseSpeed() {
+        return this.isEnraged() ? 1.2D : 1.0D;
+    }
+
+    @Override
+    protected double engageDistance() {
+        return 2.5D;
+    }
+
+    @Override
+    protected boolean ignoresFallDamage(SentinelPose state) {
+        return state == SentinelPose.HYPER_BURST;
+    }
+
+    public boolean isEnraged() {
+        return this.getHealth() < this.getMaxHealth() * 0.5F;
+    }
+
+    public SentinelPose getSentinelPose() {
+        return this.getBossState();
+    }
+
+    public float getLaserTransitionSpeed() {
+        return this.getBossState() == SentinelPose.FROM_LASER ? -1.0F : 1.0F;
+    }
+
+    public Vec3 laserOrigin(float partialTick) {
+        float yaw = Mth.rotLerp(partialTick, this.yBodyRotO, this.yBodyRot) * Mth.DEG_TO_RAD;
+        double x = Mth.lerp(partialTick, this.xo, this.getX()) - Mth.sin(yaw) * LASER_FORWARD;
+        double y = Mth.lerp(partialTick, this.yo, this.getY()) + LASER_HEIGHT;
+        double z = Mth.lerp(partialTick, this.zo, this.getZ()) + Mth.cos(yaw) * LASER_FORWARD;
+        return new Vec3(x, y, z);
+    }
+
+    @Override
+    protected void onStateChanged(SentinelPose previous, SentinelPose next) {
+        if (next.isAttack()) {
+            this.getNavigation().stop();
+            this.lockedYaw = this.getYRot();
+        }
+        switch (next) {
+            case ECLIPSE_PULSE -> {
+                this.lastPulseTick = this.tickCount;
+                this.pulsePending = false;
+            }
+            case HYPER_BURST -> {
+                this.landed = false;
+                this.lastHyperBurstTick = this.tickCount;
+            }
+            case TO_LASER -> {
+                this.lastLaserTick = this.tickCount;
+                this.laserPitch = 0.0F;
+                this.setAbilityPos(this.laserOrigin(1.0F));
+            }
+            default -> {
+            }
+        }
+    }
+
+    @Override
+    protected void tickAbility(SentinelPose state, int ticks, @Nullable LivingEntity target) {
+        switch (state) {
+            case CLEAVE -> {
+                this.trackThenLock(target, ticks, CLEAVE_HIT_TICK - 3, 10.0F);
+                if (ticks == CLEAVE_HIT_TICK) {
+                    this.performCleave();
+                }
+            }
+            case SLASH -> {
+                this.trackThenLock(target, ticks, SLASH_HIT_TICK - 4, 10.0F);
+                if (ticks == SLASH_HIT_TICK) {
+                    this.performSlash();
+                }
+            }
+            case DASH -> {
+                this.trackThenLock(target, ticks, DASH_LOCK_TICK, 8.0F);
+                if (ticks == DASH_LOCK_TICK) {
+                    this.dashDistance = target == null ? 4.0D : Mth.clamp(this.gapTo(target) + 0.5D, 0.0D, 9.0D);
+                    this.playSound(SoundEvents.TRIDENT_RIPTIDE_2, 1.5F, 0.7F);
+                }
+                if (ticks > DASH_LOCK_TICK + 2 && ticks <= DASH_HIT_TICK) {
+                    Vec3 forward = this.horizontalForward();
+                    double speed = this.dashDistance / (DASH_HIT_TICK - DASH_LOCK_TICK - 2);
+                    this.setDeltaMovement(forward.x * speed, this.getDeltaMovement().y, forward.z * speed);
+                }
+                if (ticks == DASH_HIT_TICK) {
+                    this.performDash();
+                }
+            }
+            case RISE -> {
+                if (target != null && ticks < RISE_HIT_TICK - 5) {
+                    this.faceTowards(target, 8.0F);
+                }
+                if (ticks == RISE_HIT_TICK) {
+                    this.performRise();
+                }
+            }
+            case ECLIPSE_PULSE -> {
+                if (target != null && ticks < PULSE_HIT_TICK - 5) {
+                    this.faceTowards(target, 12.0F);
+                }
+                if (ticks == PULSE_HIT_TICK) {
+                    this.performEclipsePulse(target);
+                }
+            }
+            case HYPER_BURST -> this.tickHyperBurst(ticks, target);
+            case TO_LASER -> {
+                if (target != null) {
+                    this.aimAt(target, 6.0F);
+                }
+                this.setAbilityPos(this.laserOrigin(1.0F));
+                if (ticks == 1) {
+                    this.playSound(SoundEvents.WARDEN_SONIC_CHARGE, 2.0F, 1.3F);
+                }
+                if (ticks >= LASER_CHARGE_TICKS) {
+                    this.chainState(SentinelPose.LASER);
+                }
+            }
+            case LASER -> {
+                this.tickLaser(ticks, target);
+                if (ticks >= LASER_FIRE_TICKS) {
+                    this.chainState(SentinelPose.FROM_LASER);
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
+    private void aimAt(LivingEntity target, float step) {
+        this.faceTowards(target, step);
+        Vec3 origin = this.laserOrigin(1.0F);
+        double dx = target.getX() - origin.x;
+        double dz = target.getZ() - origin.z;
+        double dy = target.getY(0.5D) - origin.y;
+        float desiredPitch = (float) (-Mth.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * Mth.RAD_TO_DEG);
+        this.laserPitch = Mth.clamp(Mth.approachDegrees(this.laserPitch, desiredPitch, step), -60.0F, 60.0F);
+    }
+
+    private void performCleave() {
+        Vec3 forward = this.horizontalForward();
+        double front = this.halfWidth();
+        for (LivingEntity entity : this.enemiesInLine(0.0D, front + 3.0D, 1.0D, 3.5D)) {
+            this.strike(entity, 1.2F);
+            this.impulse(entity, forward.scale(0.4D).add(0.0D, 0.2D, 0.0D));
+        }
+        for (LivingEntity entity : this.enemiesInLine(front + 4.0D, front + 8.0D, 1.25D, 4.0D)) {
+            this.strike(entity, 0.4F);
+            this.impulse(entity, forward.scale(0.15D).add(0.0D, 1.15D, 0.0D));
+        }
+        this.playSound(SoundEvents.IRON_GOLEM_ATTACK, 2.0F, 0.6F);
+        this.playSound(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, 1.0F, 0.5F);
+        for (double d = 0.5D; d <= front + 8.0D; d += 1.0D) {
+            Vec3 point = this.position().add(forward.scale(d));
+            this.groundBurst(point, d > front + 4.0D ? 10 : 5, 0.3D);
+            if (d > front + 4.0D) {
+                this.serverParticles(PURPLE_DUST, point.x, point.y + 0.6D, point.z, 6, 0.3D, 0.6D, 0.3D, 0.0D);
+            }
+        }
+        this.broadcastImpact();
+    }
+
+    private void performSlash() {
+        Vec3 left = this.horizontalLeft();
+        for (LivingEntity entity : this.enemiesInArc(this.halfWidth() + 3.0D, 75.0D, 3.5D)) {
+            this.strike(entity, 1.0F);
+            this.impulse(entity, left.scale(1.3D).add(0.0D, 0.35D, 0.0D));
+        }
+        this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 2.0F, 0.6F);
+        this.playSound(SoundEvents.IRON_GOLEM_ATTACK, 1.5F, 0.8F);
+    }
+
+    private void performDash() {
+        this.setDeltaMovement(0.0D, this.getDeltaMovement().y, 0.0D);
+        for (LivingEntity entity : this.enemiesInLine(0.0D, this.halfWidth() + 2.5D, 1.2D, 3.5D)) {
+            if (this.strike(entity, 1.4F)) {
+                this.serverParticles(ParticleTypes.CRIT, entity.getX(), entity.getY(0.5D), entity.getZ(), 20, 0.3D, 0.4D, 0.3D, 0.4D);
+            }
+            this.impulse(entity, new Vec3(0.0D, 1.2D, 0.0D));
+            this.grip(entity, 6);
+        }
+        this.playSound(SoundEvents.TRIDENT_HIT, 2.0F, 0.6F);
+        this.playSound(SoundEvents.PLAYER_ATTACK_CRIT, 1.5F, 0.7F);
+    }
+
+    private void performRise() {
+        Vec3 center = this.position();
+        DamageSource source = this.damageSources().explosion(this, this);
+        for (LivingEntity entity : this.enemiesInRadius(6.0D, 4.0D)) {
+            double distance = Math.sqrt(horizontalDistanceSqr(entity.position(), center));
+            float falloff = (float) Mth.clamp(1.0D - distance / 7.0D, 0.35D, 1.0D);
+            entity.hurt(source, this.attackDamage(1.0F) * falloff);
+            Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+            outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
+            this.impulse(entity, outward.scale(0.9D * falloff).add(0.0D, 0.6D, 0.0D));
+            entity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 140, 0), this);
+        }
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 2.0F, 0.7F);
+        this.playSound(SoundEvents.WARDEN_SONIC_BOOM, 1.0F, 1.4F);
+        this.serverParticles(ParticleTypes.EXPLOSION_EMITTER, center.x, center.y + 0.2D, center.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        for (int ring = 1; ring <= 3; ring++) {
+            double radius = ring * 1.75D;
+            for (int i = 0; i < 8; i++) {
+                double angle = i * Math.PI / 4.0D + ring * 0.3D;
+                this.groundBurst(center.add(Math.cos(angle) * radius, 0.0D, Math.sin(angle) * radius), 6, 0.35D);
+            }
+        }
+        this.broadcastImpact();
+    }
+
+    private void performEclipsePulse(@Nullable LivingEntity target) {
+        Vec3 center = this.position();
+        for (LivingEntity entity : this.enemiesInRadius(PULSE_RADIUS, 4.0D)) {
+            Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+            outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
+            this.strikeMagic(entity, 0.3F);
+            this.impulse(entity, outward.scale(PULSE_PUSH).add(0.0D, 0.55D, 0.0D));
+        }
+        this.playSound(SoundEvents.WARDEN_SONIC_BOOM, 2.0F, 0.8F);
+        this.playSound(SoundEvents.BEACON_DEACTIVATE, 2.0F, 0.6F);
+        this.serverParticles(ParticleTypes.SONIC_BOOM, center.x, center.y + LASER_HEIGHT, center.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        this.broadcastImpact();
+        this.meleeHits = 0;
+        this.hugTicks = 0;
+        this.tactics.clear();
+        boolean enraged = this.isEnraged();
+        if (target != null && this.tickCount - this.lastLaserTick > (enraged ? 60 : 100)) {
+            this.tactics.add(SentinelPose.TO_LASER);
+        } else if (target != null && this.tickCount - this.lastHyperBurstTick > (enraged ? 80 : 140)) {
+            this.tactics.add(SentinelPose.HYPER_BURST);
+        } else {
+            this.tactics.add(this.random.nextBoolean() ? SentinelPose.CLEAVE : SentinelPose.DASH);
+        }
+    }
+
+    @Override
+    protected void tickStanding(@Nullable LivingEntity target) {
+        if (target != null && this.gapTo(target) <= HUG_GAP) {
+            this.hugTicks++;
+        } else {
+            this.hugTicks = Math.max(0, this.hugTicks - 2);
+        }
+        if (this.pulsePending && this.tickCount - this.meleeWindowStart > MELEE_WINDOW * 2) {
+            this.pulsePending = false;
+        }
+        if (target != null && (this.pulsePending || this.hugTicks >= HUG_TICKS_TO_PULSE) && this.isPulseReady()) {
+            this.pulsePending = false;
+            this.setBossState(SentinelPose.ECLIPSE_PULSE);
+            return;
+        }
+        super.tickStanding(target);
+    }
+
+    private boolean isPulseReady() {
+        return this.tickCount - this.lastPulseTick > PULSE_COOLDOWN;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        boolean result = super.hurt(source, amount);
+        if (result && !this.level().isClientSide() && this.isAlive() && source.getEntity() instanceof LivingEntity attacker
+                && source.getDirectEntity() == attacker && this.gapTo(attacker) <= 3.5D) {
+            if (this.tickCount - this.meleeWindowStart > MELEE_WINDOW) {
+                this.meleeWindowStart = this.tickCount;
+                this.meleeHits = 0;
+            }
+            this.meleeHits++;
+            if (this.meleeHits >= (this.isEnraged() ? MELEE_HITS_TO_PULSE - 1 : MELEE_HITS_TO_PULSE) && this.isPulseReady()) {
+                this.pulsePending = true;
+            }
+        }
+        return result;
+    }
+
+    public float getEclipseCircleAlpha(float ageInTicks) {
+        SentinelPose pose = this.getBossState();
+        if (pose == SentinelPose.TO_LASER || pose == SentinelPose.LASER || pose == SentinelPose.FROM_LASER) {
+            return 1.0F;
+        }
+        if (pose != SentinelPose.ECLIPSE_PULSE && pose != SentinelPose.RISE && pose != SentinelPose.HYPER_BURST) {
+            return 0.0F;
+        }
+        float elapsed = this.clientStateTicks + (ageInTicks - (int) ageInTicks);
+        float fadeIn = Mth.clamp(elapsed / ECLIPSE_FADE_TICKS, 0.0F, 1.0F);
+        float fadeOut = Mth.clamp((pose.duration() - elapsed) / ECLIPSE_FADE_TICKS, 0.0F, 1.0F);
+        return fadeIn * fadeOut;
+    }
+
+    private void tickHyperBurst(int ticks, @Nullable LivingEntity target) {
+        if (ticks < HYPER_LAUNCH_TICK && target != null) {
+            this.faceTowards(target, 10.0F);
+        }
+        if (ticks == HYPER_TARGET_TICK) {
+            Vec3 aim = target != null ? target.position() : this.position().add(this.horizontalForward().scale(6.0D));
+            Vec3 offset = aim.subtract(this.position());
+            double horizontal = Math.sqrt(offset.x * offset.x + offset.z * offset.z);
+            if (horizontal > HYPER_MAX_DISTANCE) {
+                aim = this.position().add(offset.x / horizontal * HYPER_MAX_DISTANCE, offset.y, offset.z / horizontal * HYPER_MAX_DISTANCE);
+            }
+            this.landing = this.snapToGround(aim, 12);
+            this.setAbilityPos(this.landing);
+            this.playSound(SoundEvents.WARDEN_SONIC_CHARGE, 1.5F, 1.6F);
+        }
+        if (ticks == HYPER_LAUNCH_TICK) {
+            this.jumpStart = this.position();
+            this.groundBurst(this.position(), 30, 0.8D);
+            this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 2.0F, 0.6F);
+        }
+        if (this.landed) {
+            return;
+        }
+        if (ticks >= HYPER_LAUNCH_TICK && ticks <= HYPER_LAND_TICK) {
+            double t = Mth.clamp((ticks - HYPER_LAUNCH_TICK + 1) / (double) (HYPER_LAND_TICK - HYPER_LAUNCH_TICK), 0.0D, 1.0D);
+            Vec3 desired = this.jumpStart.lerp(this.landing, t).add(0.0D, HYPER_APEX * 4.0D * t * (1.0D - t), 0.0D);
+            this.setDeltaMovement(desired.subtract(this.position()));
+            this.faceTowardsPoint(this.landing);
+        } else if (ticks > HYPER_LAND_TICK) {
+            this.setDeltaMovement(0.0D, -1.2D, 0.0D);
+        }
+        if (ticks > HYPER_LAUNCH_TICK + 15 && (this.onGround() || ticks >= HYPER_LAND_TICK + 6)) {
+            this.performHyperLanding();
+        }
+    }
+
+    private void faceTowardsPoint(Vec3 point) {
+        double dx = point.x - this.getX();
+        double dz = point.z - this.getZ();
+        if (dx * dx + dz * dz > 0.25D) {
+            this.setFacing((float) (Mth.atan2(dz, dx) * Mth.RAD_TO_DEG) - 90.0F);
+        }
+    }
+
+    private void performHyperLanding() {
+        this.landed = true;
+        this.setDeltaMovement(Vec3.ZERO);
+        Vec3 center = this.position();
+        for (LivingEntity entity : this.enemiesInRadius(7.0D, 5.0D)) {
+            double distance = Math.sqrt(horizontalDistanceSqr(entity.position(), center));
+            float falloff = distance <= 3.0D ? 1.0F : (float) Mth.lerp((distance - 3.0D) / 4.0D, 1.0D, 0.6D);
+            this.strike(entity, 1.3F * falloff);
+            this.grip(entity, 6);
+            Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+            outward = outward.lengthSqr() < 1.0E-4D ? Vec3.ZERO : outward.normalize();
+            this.impulse(entity, outward.scale(0.8D).add(0.0D, 0.7D, 0.0D));
+        }
+        this.setAbilityPos(center);
+        this.level().playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 2.5F, 0.6F);
+        this.playSound(SoundEvents.ANVIL_LAND, 2.0F, 0.5F);
+        this.serverParticles(ParticleTypes.EXPLOSION_EMITTER, center.x, center.y + 0.3D, center.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        for (int i = 0; i < 16; i++) {
+            double angle = i * Math.PI / 8.0D;
+            double radius = 2.0D + (i % 3) * 2.0D;
+            this.groundBurst(center.add(Math.cos(angle) * radius, 0.0D, Math.sin(angle) * radius), 8, 0.4D);
+        }
+        this.broadcastImpact();
+    }
+
+    private void tickLaser(int ticks, @Nullable LivingEntity target) {
+        if (target != null) {
+            this.aimAt(target, this.isEnraged() ? 2.0F : 1.5F);
+        } else {
+            this.setFacing(this.getYRot());
+        }
+        Vec3 start = this.laserOrigin(1.0F);
+        Vec3 direction = Vec3.directionFromRotation(this.laserPitch, this.getYRot());
+        Vec3 end = start.add(direction.scale(LASER_RANGE));
+        BlockHitResult hit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        Vec3 hitPos = hit.getType() == HitResult.Type.MISS ? end : hit.getLocation();
+        this.setAbilityPos(hitPos);
+
+        if (ticks % 5 == 0) {
+            AABB sweep = new AABB(start, hitPos).inflate(1.0D);
+            for (LivingEntity entity : this.enemiesIn(sweep)) {
+                if (entity.getBoundingBox().inflate(0.35D).clip(start, hitPos).isPresent()) {
+                    this.strikeMagic(entity, 0.3F);
+                }
+            }
+        }
+        if (ticks % 8 == 0 && hit.getType() == HitResult.Type.BLOCK && this.canGrief()) {
+            this.breakBlock(hit.getBlockPos(), true);
+        }
+        if (ticks % 20 == 1) {
+            this.playSound(SoundEvents.BEACON_AMBIENT, 2.5F, 1.8F);
+        }
+    }
+
+    @Override
+    protected void planTactics(LivingEntity target, Queue<SentinelPose> plan) {
+        double gap = this.gapTo(target);
+        double dy = target.getY() - this.getY();
+        boolean enraged = this.isEnraged();
+        boolean hyperReady = this.tickCount - this.lastHyperBurstTick > (enraged ? 160 : 260);
+        boolean laserReady = this.tickCount - this.lastLaserTick > (enraged ? 140 : 220);
+        int roll = this.random.nextInt(3);
+
+        if (dy > 3.0D || (gap > 3.5D && !this.canReach(target))) {
+            if (hyperReady && gap < HYPER_MAX_DISTANCE) {
+                plan.add(SentinelPose.HYPER_BURST);
+            } else if (laserReady) {
+                plan.add(SentinelPose.TO_LASER);
+            } else {
+                plan.add(SentinelPose.CLEAVE);
+            }
+            return;
+        }
+        if (gap <= 3.5D) {
+            switch (roll) {
+                case 0 -> {
+                    plan.add(SentinelPose.SLASH);
+                    plan.add(SentinelPose.CLEAVE);
+                }
+                case 1 -> {
+                    plan.add(SentinelPose.CLEAVE);
+                    plan.add(SentinelPose.RISE);
+                }
+                default -> {
+                    plan.add(SentinelPose.SLASH);
+                    plan.add(SentinelPose.RISE);
+                }
+            }
+            if (enraged && this.random.nextBoolean()) {
+                plan.add(SentinelPose.DASH);
+            }
+        } else if (gap <= 9.0D) {
+            if (hyperReady && roll == 0) {
+                plan.add(SentinelPose.HYPER_BURST);
+            } else if (roll == 1 && gap >= 3.5D) {
+                plan.add(SentinelPose.CLEAVE);
+            } else {
+                plan.add(SentinelPose.DASH);
+                plan.add(SentinelPose.SLASH);
+            }
+        } else if (gap <= 18.0D) {
+            if (laserReady) {
+                plan.add(SentinelPose.TO_LASER);
+            } else if (hyperReady) {
+                plan.add(SentinelPose.HYPER_BURST);
+            }
+        }
+    }
+
+    @Override
+    protected void tickAbilityClient(SentinelPose state, int ticks) {
+        Level level = this.level();
+        Vec3 chest = this.position().add(0.0D, LASER_HEIGHT, 0.0D);
+        switch (state) {
+            case IDLING -> {
+                if (this.tickCount % 4 == 0) {
+                    BossParticles.converge(level, this.random, ParticleTypes.PORTAL, chest, 2.5D, 2);
+                }
+            }
+            case IDLE_TO_AWAKE -> {
+                if (ticks == 1) {
+                    this.playClientSound(SoundEvents.BEACON_POWER_SELECT, 1.5F, 0.6F);
+                    BossParticles.burst(level, this.random, ParticleTypes.REVERSE_PORTAL, chest, 40, 0.3D);
+                }
+            }
+            case TO_LASER -> {
+                Vec3 origin = this.laserOrigin(1.0F);
+                BossParticles.converge(level, this.random, ParticleTypes.PORTAL, origin, 3.0D, 6);
+                level.addParticle(CORONA_DUST, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
+            }
+            case LASER -> {
+                Vec3 end = this.getAbilityPos();
+                BossParticles.burst(level, this.random, PURPLE_DUST, end, 3, 0.2D);
+                if (ticks % 2 == 0) {
+                    level.addParticle(ParticleTypes.DRAGON_BREATH, end.x, end.y, end.z, 0.0D, 0.05D, 0.0D);
+                    level.addParticle(ParticleTypes.LARGE_SMOKE, end.x, end.y, end.z, 0.0D, 0.03D, 0.0D);
+                }
+                if (ticks % 4 == 0) {
+                    Vec3 origin = this.laserOrigin(1.0F);
+                    BossParticles.burst(level, this.random, ParticleTypes.END_ROD, origin, 2, 0.08D);
+                }
+            }
+            case FROM_LASER -> {
+                if (ticks == 1) {
+                    Vec3 origin = this.laserOrigin(1.0F);
+                    BossParticles.burst(level, this.random, ParticleTypes.LARGE_SMOKE, origin, 8, 0.05D);
+                }
+            }
+            case CLEAVE -> {
+                if (ticks > 5 && ticks < CLEAVE_HIT_TICK) {
+                    level.addParticle(CORONA_DUST, this.getRandomX(1.0D), this.getY() + this.getBbHeight() * (0.6D + this.random.nextDouble() * 0.4D), this.getRandomZ(1.0D), 0.0D, 0.0D, 0.0D);
+                }
+                if (ticks == CLEAVE_HIT_TICK) {
+                    Vec3 forward = this.horizontalForward();
+                    double front = this.halfWidth();
+                    BossParticles.line(level, ParticleTypes.SQUID_INK, this.position().add(0.0D, 0.1D, 0.0D), this.position().add(forward.scale(front + 3.0D)).add(0.0D, 0.1D, 0.0D), 0.4D, 0.02D);
+                    for (double d = front + 4.0D; d <= front + 8.0D; d += 0.5D) {
+                        Vec3 point = this.position().add(forward.scale(d));
+                        level.addParticle(ParticleTypes.CLOUD, point.x, point.y + 0.2D, point.z, 0.0D, 0.35D, 0.0D);
+                        level.addParticle(ParticleTypes.REVERSE_PORTAL, point.x, point.y + 0.5D, point.z, 0.0D, 0.25D, 0.0D);
+                    }
+                }
+            }
+            case SLASH -> {
+                if (ticks >= SLASH_HIT_TICK - 2 && ticks <= SLASH_HIT_TICK + 1) {
+                    double progress = (ticks - (SLASH_HIT_TICK - 2)) / 3.0D;
+                    double angle = Math.toRadians(70.0D - progress * 140.0D);
+                    Vec3 forward = this.horizontalForward();
+                    Vec3 left = this.horizontalLeft();
+                    double radius = this.halfWidth() + 1.8D;
+                    for (int i = -1; i <= 1; i++) {
+                        double a = angle + i * 0.15D;
+                        Vec3 point = this.position().add(forward.scale(Math.cos(a) * radius)).add(left.scale(-Math.sin(a) * radius)).add(0.0D, 1.6D, 0.0D);
+                        level.addParticle(ParticleTypes.SWEEP_ATTACK, point.x, point.y, point.z, 0.0D, 0.0D, 0.0D);
+                        level.addParticle(PURPLE_DUST, point.x, point.y + 0.3D, point.z, 0.0D, 0.0D, 0.0D);
+                    }
+                }
+            }
+            case DASH -> {
+                if (ticks > DASH_LOCK_TICK && ticks <= DASH_HIT_TICK) {
+                    BossParticles.motes(level, this.random, FADING_DUST, this.position(), 0.6D, this.getBbHeight(), 6, 0.0D);
+                    level.addParticle(ParticleTypes.REVERSE_PORTAL, this.getX(), this.getY(0.5D), this.getZ(), 0.0D, 0.0D, 0.0D);
+                }
+                if (ticks == DASH_HIT_TICK) {
+                    Vec3 tip = this.localPoint(this.halfWidth() + 1.5D, 1.6D, 0.0D);
+                    BossParticles.burst(level, this.random, ParticleTypes.CRIT, tip, 20, 0.5D);
+                    BossParticles.burst(level, this.random, PURPLE_DUST, tip, 12, 0.3D);
+                }
+            }
+            case RISE -> {
+                if (ticks > 5 && ticks < RISE_HIT_TICK) {
+                    double radius = 6.0D * (1.0D - (ticks - 5) / (double) (RISE_HIT_TICK - 5));
+                    BossParticles.ring(level, PURPLE_DUST, this.position().add(0.0D, 0.15D, 0.0D), Math.max(0.5D, radius), 20, 0.0D, 0.0D);
+                }
+            }
+            case ECLIPSE_PULSE -> {
+                if (ticks == 1) {
+                    this.playClientSound(SoundEvents.WARDEN_SONIC_CHARGE, 1.5F, 1.4F);
+                }
+                if (ticks > 3 && ticks < PULSE_HIT_TICK) {
+                    Vec3 circle = this.localPoint(-1.0D, LASER_HEIGHT, 0.0D);
+                    BossParticles.converge(level, this.random, ParticleTypes.PORTAL, circle, 2.5D, 4);
+                }
+            }
+            case HYPER_BURST -> {
+                if (ticks >= HYPER_TARGET_TICK && ticks <= HYPER_LAND_TICK && ticks % 3 == 0) {
+                    BossParticles.ring(level, PURPLE_DUST, this.getAbilityPos().add(0.0D, 0.15D, 0.0D), 7.0D, 36, 0.0D, 0.0D);
+                }
+                if (ticks > HYPER_LAUNCH_TICK && !this.onGround()) {
+                    level.addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(), this.getZ(), 0.0D, -0.05D, 0.0D);
+                    level.addParticle(FADING_DUST, this.getRandomX(0.8D), this.getY() + 0.5D, this.getRandomZ(0.8D), 0.0D, 0.0D, 0.0D);
+                }
+            }
+            case DYING -> {
+                double progress = Math.min(1.0D, ticks / (double) DEATH_ANIMATION_TICKS);
+                BossParticles.converge(level, this.random, ParticleTypes.PORTAL, chest, 3.5D - progress * 2.0D, 3 + (int) (progress * 6.0D));
+                BossParticles.motes(level, this.random, FADING_DUST, this.position(), 1.0D, this.getBbHeight(), 2, 0.02D);
+                if (ticks == DEATH_ANIMATION_TICKS - 2) {
+                    level.addParticle(ParticleTypes.SONIC_BOOM, chest.x, chest.y, chest.z, 0.0D, 0.0D, 0.0D);
+                    BossParticles.burst(level, this.random, ParticleTypes.REVERSE_PORTAL, chest, 80, 0.8D);
+                    this.playClientSound(SoundEvents.WARDEN_SONIC_BOOM, 1.5F, 0.6F);
+                }
+            }
+            default -> {
+                if (this.isAwake() && this.tickCount % 4 == 0) {
+                    BossParticles.motes(level, this.random, CORONA_DUST, this.position(), 0.7D, this.getBbHeight(), 1, 0.02D);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onImpactClient(SentinelPose state) {
+        Level level = this.level();
+        Vec3 base = this.position().add(0.0D, 0.15D, 0.0D);
+        switch (state) {
+            case ECLIPSE_PULSE -> {
+                BossParticles.ring(level, ParticleTypes.CLOUD, base, 1.0D, 36, 1.1D, 0.05D);
+                BossParticles.ring(level, PURPLE_DUST, base.add(0.0D, 1.0D, 0.0D), PULSE_RADIUS, 40, 0.0D, 0.0D);
+                BossParticles.ring(level, ParticleTypes.REVERSE_PORTAL, base.add(0.0D, LASER_HEIGHT, 0.0D), 0.8D, 24, 0.6D, 0.0D);
+            }
+            case HYPER_BURST -> {
+                level.addParticle(ParticleTypes.SONIC_BOOM, base.x, base.y + 1.0D, base.z, 0.0D, 0.0D, 0.0D);
+                BossParticles.ring(level, ParticleTypes.CLOUD, base, 1.5D, 40, 0.9D, 0.05D);
+                BossParticles.ring(level, PURPLE_DUST, base, 7.0D, 48, 0.0D, 0.0D);
+            }
+            case RISE -> {
+                BossParticles.ring(level, ParticleTypes.SQUID_INK, base, 1.0D, 36, 0.7D, 0.05D);
+                BossParticles.column(level, this.random, ParticleTypes.SCULK_SOUL, base, 4.0D, 24, 0.15D);
+            }
+            case CLEAVE -> BossParticles.ring(level, ParticleTypes.CLOUD, this.localPoint(this.halfWidth() + 1.0D, 0.15D, 0.0D), 0.5D, 12, 0.3D, 0.0D);
+            default -> {
+            }
+        }
+    }
+
+    @Override
+    public float alphaIntensity() {
+        return switch (this.getBossState()) {
+            case IDLING, AWAKE_TO_IDLE -> 0.15F;
+            case TO_LASER, FROM_LASER -> 0.7F;
+            case LASER, HYPER_BURST -> 1.0F;
+            case CLEAVE, SLASH, DASH, RISE -> 0.6F;
+            case ECLIPSE_PULSE -> 0.9F;
+            case DYING -> 0.0F;
+            default -> 0.35F;
+        };
     }
 
     @Override
     public ServerBossEvent bossInfo() {
-        return bossBar;
-    }
-
-    @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
-        if (PHASE.equals(data)) {
-            if (!this.isInSentinelPose(SentinelPose.DARKNESS))
-                this.darkness.stop();
-            if (!this.isInSentinelPose(SentinelPose.IDLING))
-                this.idling.stop();
-            if (!this.isInSentinelPose(SentinelPose.BEAMING))
-                this.beaming.stop();
-            if (!this.isInSentinelPose(SentinelPose.EXALTING))
-                this.exalting.stop();
-            switch (this.getSentinelPose()) {
-                case DYING -> this.death.start(this.tickCount);
-                case RUSH_AND_SWING -> {
-                    this.exalting.stop();
-                    this.navigation.stop();
-                    this.rush_and_swing.start(this.tickCount);
-                    this.queueServerWork(35, () -> this.setDeltaMovement(
-                            this.getXVector(1, this.getYRot()),
-                            0.65,
-                            this.getZVector(1, this.getYRot())));
-                    this.queueServerWork(60, () -> {
-                        this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1.5f, 1);
-                        spawnWorldParticle(ModParticleTypes.GRIPPING_CRYSTAL,
-                                this.getX() + getXVector(1, this.getYRot()),
-                                this.getY() + 1.5f,
-                                this.getZ() + getZVector(1, this.getYRot()),
-                                7, 0, 0, 0, 1
-                        );
-                        if (this.getTarget() != null) {
-                            if (this.getTarget() instanceof IGrippingEntity entity1)
-                                GrippingData.addGrippingSeconds(entity1, 8);
-                            if (this.distanceToSqr(this.getTarget()) < 7f) {
-                                this.doHurtTarget(this.getTarget());
-                                this.level().explode(this, this.getX(), this.getY(), this.getZ(), 2, Level.ExplosionInteraction.NONE);
-                            }
-                        }
-                    });
-                }
-                case IDLING -> {
-                    this.idling.startIfStopped(this.tickCount);
-                    this.spawnParticle(ParticleTypes.DRAGON_BREATH, this.level(), this.getX(), this.getY() + 1, this.getZ(), 2);
-                }
-                case SWORD_SWING -> {
-                    this.sword_swing.start(this.tickCount);
-                    this.queueServerWork(25, () -> {
-                        if (this.getTarget() != null && this.getTarget().distanceToSqr(this) < 5)
-                            this.doHurtTarget(this.getTarget());
-                        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 1, 1.5f);
-                        float scaling = 0;
-                        Level world = this.level();
-                        BlockPos particlePos = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(12)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                        spawnWorldParticle(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
-                        for (int i1 = 0; i1 < 12; i1++) {
-                            BlockPos pos = world.clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                            if (!this.level().getBlockState(pos).canOcclude())
-                                scaling = scaling + 1;
-                            BlockPos pos1 = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos1.getCenter(), pos1.getCenter()).inflate(1.25), LivingEntity::isPickable);
-                            for (LivingEntity entity : entities) {
-                                if (entity != this)
-                                    entity.hurt(this.damageSources().magic(), 12);
-                            }
-                        }
-                    });
-                    this.queueServerWork(45, () -> {
-                        if (this.getTarget() != null && this.getTarget().distanceToSqr(this) < 5)
-                            this.doHurtTarget(this.getTarget());
-                        float scaling = 0;
-                        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 1, 1.5f);
-                        Level world = this.level();
-                        BlockPos particlePos = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(13)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                        spawnWorldParticle(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
-                        for (int i1 = 0; i1 < 13; i1++) {
-                            BlockPos pos = world.clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                            if (!this.level().getBlockState(pos).canOcclude())
-                                scaling = scaling + 1;
-                            BlockPos pos1 = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos1.getCenter(), pos1.getCenter()).inflate(1.25), LivingEntity::isPickable);
-                            for (LivingEntity entity : entities) {
-                                if (entity != this)
-                                    entity.hurt(this.damageSources().magic(), 12);
-                            }
-                        }
-                    });
-                }
-                case HEAVY_SWING -> {
-                    this.heavy_swing.start(this.tickCount);
-                    if (this.getTarget() instanceof IGrippingEntity entity1)
-                        GrippingData.addGrippingSeconds(entity1, 4);
-                    this.navigation.stop();
-                    this.queueServerWork(50, () -> {
-                        float scaling = 0;
-                        Level world = this.level();
-                        BlockPos particlePos = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(11)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                        spawnWorldParticle(new LightVibrationParticleEffect(new BlockPositionSource(particlePos), 10), this.getX(), this.getY() + 1, this.getZ(), 3, 0, 0, 0, 1);
-                        for (int i1 = 0; i1 < 12; i1++) {
-                            BlockPos pos = world.clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                            if (!this.level().getBlockState(pos).canOcclude())
-                                scaling = scaling + 1;
-                            BlockPos pos1 = this.level().clip(new ClipContext(this.getEyePosition(), this.getEyePosition().add(this.getViewVector(1f).scale(scaling)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this)).getBlockPos();
-                            List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos1.getCenter(), pos1.getCenter()).inflate(1.25), LivingEntity::isPickable);
-                            for (LivingEntity entity : entities) {
-                                if (entity != this)
-                                    entity.hurt(this.damageSources().magic(), 10);
-                            }
-                        }
-                    });
-                    this.queueServerWork(60, () -> {
-                        this.hitNearbyMobs(10, 6);
-                        this.spawnParticle(ParticleTypes.END_ROD, this.level(), this.getX(), this.getY() + 0.5f, this.getZ(), 2);
-                        this.playSound(SoundEvents.PHANTOM_SWOOP, 2, 2.5f);
-                    });
-                }
-                case BACKFLIP -> {
-                    this.backflip.start(this.tickCount);
-                    this.queueServerWork(10, () -> {
-                        this.setDeltaMovement(this.getXVector(-1.5, this.getYRot()),
-                                0.75,
-                                this.getZVector(-1.5, this.getYRot()));
-                        this.setPhase();
-                    });
-                }
-                case DARKNESS -> {
-                    this.darkness.startIfStopped(this.tickCount);
-                    pos = this.blockPosition().offset(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
-                    AreaEffectCloud areaEffectCloudEntity = getAreaEffectCloudEntity();
-                    areaEffectCloudEntity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 70, 1));
-                    areaEffectCloudEntity.setPos(this.getX(), this.getY() + 0.5f, this.getZ());
-                    this.level().levelEvent(LevelEvent.PARTICLES_DRAGON_FIREBALL_SPLASH, this.blockPosition(), this.isSilent() ? -1 : 1);
-                    this.level().addFreshEntity(areaEffectCloudEntity);
-                }
-                case BEAMING -> {
-                    this.beaming.startIfStopped(this.tickCount);
-                    this.getNavigation().stop();
-                }
-                case BLASTING_EROFLAME -> {
-                    this.blasting_eroflame.start(this.tickCount);
-                    this.spawnParticle(ParticleTypes.SQUID_INK, this.level(), this.getX(), this.getEyeY(), this.getZ(), 1.5f);
-                    this.queueServerWork(15, () -> {
-                        ItemStack stack = getFirework();
-                        Projectile projectile = new FireworkRocketEntity(this.level(), stack, this, this.getX(), this.getEyeY() - 0.15F, this.getZ(), true);
-                        Vec3 vec31 = this.getUpVector(1.0F);
-                        Quaternionf quaternionf = (new Quaternionf()).setAngleAxis(0, vec31.x, vec31.y, vec31.z);
-                        Vec3 vec3 = this.getViewVector(1.0F);
-                        Vector3f vector3f = vec3.toVector3f().rotate(quaternionf);
-                        projectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), 3.15F, 1);
-                        this.level().addFreshEntity(projectile);
-                    });
-                }
-                case EXALTATION -> {
-                    this.exaltation.start(this.tickCount);
-                    if (!this.isExalted())
-                        this.queueServerWork(80, () -> {
-                            this.exaltation.stop();
-                            this.playSound(SoundEvents.WARDEN_ROAR, 2, 2f);
-                            this.setExaltation(true);
-                            this.setSentinelPose(SentinelPose.EXALTING);
-                        });
-                }
-                case EXALTING -> this.exalting.startIfStopped(this.tickCount);
-                case SKY_JUMPING -> {
-                    this.sky_jumping.start(this.tickCount);
-                    this.navigation.stop();
-                    this.spawnParticle(ParticleTypes.SQUID_INK, this.level(), this.getX(), this.getY() + 1, this.getZ(), 1.5f);
-                    this.setDeltaMovement(0, 1, 0);
-                    this.queueServerWork(15, () -> {
-                        if (this.getTarget() != null) {
-                            Vec3 vec3d = new Vec3(
-                                    (this.getX() - this.getTarget().getX()) * 0.1,
-                                    0.5,
-                                    (this.getZ() - this.getTarget().getZ()) * 0.1
-                            );
-                            vec3d.normalize();
-                            this.setDeltaMovement(vec3d);
-                        }
-                    });
-                    this.queueServerWork(30, () -> {
-                        if (this.getTarget() != null) {
-                            this.teleportToWithTicket(this.getTarget().getX(), this.getTarget().getY() + 2, this.getTarget().getZ());
-                            this.getTarget().hurt(this.damageSources().magic(), 6);
-                            this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1, 2);
-                            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 2, Level.ExplosionInteraction.NONE);
-                            setPhase();
-                        }
-                    });
-                }
-            }
-        }
-        super.onSyncedDataUpdated(data);
-    }
-
-    private @NotNull AreaEffectCloud getAreaEffectCloudEntity() {
-        AreaEffectCloud areaEffectCloudEntity = new AreaEffectCloud(this.level(), this.getX(), this.getY() + 1f, this.getZ());
-        areaEffectCloudEntity.setOwner(this);
-        areaEffectCloudEntity.setParticle(ParticleTypes.FALLING_OBSIDIAN_TEAR);
-        areaEffectCloudEntity.setRadius(4.0F);
-        areaEffectCloudEntity.setDuration(120);
-        areaEffectCloudEntity.setRadiusPerTick((7.0F - areaEffectCloudEntity.getRadius()) / (float) areaEffectCloudEntity.getDuration());
-        return areaEffectCloudEntity;
-    }
-
-    private ItemStack getFirework() {
-        ItemStack stack = Items.FIREWORK_ROCKET.getDefaultInstance();
-        CompoundTag tag = stack.getOrCreateTagElement("Fireworks");
-        ListTag list = new ListTag();
-        CompoundTag explosion = new CompoundTag();
-        explosion.putByte("Type", (byte) 1);
-        explosion.putByte("Trail", (byte) 1);
-        IntArrayTag colors = new IntArrayTag(List.of(
-                2651799,
-                11250603,
-                6719955,
-                15790320
-        ));
-        explosion.put("Colors", colors);
-        IntArrayTag fadecolors = new IntArrayTag(List.of(
-                8073150,
-                11250603,
-                12801229
-        ));
-        explosion.put("FadeColors", fadecolors);
-        list.add(explosion);
-        tag.put("Explosions", list);
-        tag.putByte("Flight", (byte) 4);
-        return stack;
-    }
-
-    @Override
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(4, new SentinelMovementGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, false));
-        this.targetSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 32, 1));
-    }
-
-    public void setPhase() {
-        if (!this.isExalted()) {
-            switch (this.getSentinelPose()) {
-                case IDLING -> this.setSentinelPose(SentinelPose.RUSH_AND_SWING);
-                case RUSH_AND_SWING -> this.setSentinelPose(SentinelPose.BACKFLIP);
-                case BACKFLIP -> this.setSentinelPose(SentinelPose.BEAMING);
-                case BEAMING -> this.setSentinelPose(SentinelPose.DARKNESS);
-                case DARKNESS -> this.setSentinelPose(SentinelPose.SKY_JUMPING);
-                case SKY_JUMPING -> this.setSentinelPose(SentinelPose.SWORD_SWING);
-                case SWORD_SWING -> this.setSentinelPose(SentinelPose.BLASTING_EROFLAME);
-                case BLASTING_EROFLAME -> this.setSentinelPose(SentinelPose.HARD_RUSH);
-                default -> this.setSentinelPose(SentinelPose.IDLING);
-            }
-        } else {
-            switch (this.getSentinelPose()) {
-                case EXALTING -> this.setSentinelPose(SentinelPose.RUSH_AND_SWING);
-                case RUSH_AND_SWING -> this.setSentinelPose(SentinelPose.BACKFLIP);
-                case BACKFLIP -> this.setSentinelPose(SentinelPose.BEAMING);
-                case BEAMING -> this.setSentinelPose(SentinelPose.DARKNESS);
-                case DARKNESS -> this.setSentinelPose(SentinelPose.SKY_JUMPING);
-                case SKY_JUMPING -> this.setSentinelPose(SentinelPose.HEAVY_SWING);
-                case HEAVY_SWING -> this.setSentinelPose(SentinelPose.BLASTING_EROFLAME);
-                case BLASTING_EROFLAME -> this.setSentinelPose(SentinelPose.HARD_RUSH);
-                default -> this.setSentinelPose(SentinelPose.EXALTING);
-            }
-        }
+        return this.bossBar;
     }
 
     @Override
@@ -384,293 +780,44 @@ public class EclipseSentinel extends BossLikePathfinderMob implements MultipartE
         return source.getEntity() instanceof Player;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.isDeadOrDying() && !this.isInSentinelPose(SentinelPose.DYING))
-            this.setSentinelPose(SentinelPose.DYING);
-        if (this.isInSentinelPose(SentinelPose.IDLING) && !this.idling.isStarted())
-            this.idling.start(this.tickCount);
-        if (this.timeOfAbility > 0)
-            this.timeOfAbility--;
-        if (this.getTarget() != null) {
-            if (this.getTarget().distanceToSqr(this) > 784 && this.isInSentinelPose(SentinelPose.BEAMING))
-                this.setSentinelPose(SentinelPose.HARD_RUSH);
-            if (this.tickCount % ((this.getHealth() < this.getMaxHealth() / 2f) ? 20 : 40) == 0)
-                this.pos = this.random.nextBoolean() ? this.blockPosition().offset(this.random.nextInt(8) - 4, 0, this.random.nextInt(8) - 4)
-                        : this.getTarget().blockPosition().above();
-            if (this.timeOfAbility <= 0 && !this.isInSentinelPose(SentinelPose.DYING))
-                this.setPhase();
-            if (this.isInSentinelPose(SentinelPose.IDLING))
-                this.navigation.stop();
-            if (this.isInSentinelPose(SentinelPose.DARKNESS)) {
-                this.navigation.stop();
-                if (this.tickCount % 20 == 0) {
-                    this.playSound(SoundEvents.ILLUSIONER_CAST_SPELL, 2, 1);
-                    for (int i = -3; i < 3; i++) {
-                        if (i % 2 == 0) {
-                            spawnWorldParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OBSIDIAN.defaultBlockState()), pos.getX() + i, pos.getY() + 0.25, pos.getZ() + i, 9, 0, 1, 0, 1);
-                            if (this.tickCount % 5 == 0) {
-                                List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos, pos).inflate(1), LivingEntity::isPickable);
-                                for (LivingEntity entity : entities) {
-                                    if (entity != this)
-                                        entity.hurt(this.damageSources().magic(), 8);
-                                }
-                            }
-                        }
-                    }
-                    this.heal(6);
-                }
-            }
-            if (this.isInSentinelPose(SentinelPose.HARD_RUSH) && this.tickCount % 10 == 0) {
-                spawnWorldParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OBSIDIAN.defaultBlockState()),
-                        this.getX() + this.getXVector(1, this.getYRot()), this.getY() + 1, this.getZ() + this.getZVector(1, this.getYRot()),
-                        9, 0, 1, 0, 1);
-                this.hitNearbyMobs(4, 2);
-                this.playSound(SoundEvents.DEEPSLATE_FALL, 3, 2.5f);
-            }
-            if (this.isInSentinelPose(SentinelPose.BEAMING) && this.tickCount % 5 == 0) {
-                ActionsUtils.rayCastAlong(this.level(), this, 16, (world, pos1) ->
-                        world.getEntitiesOfClass(LivingEntity.class, new AABB(pos.getCenter(), pos.getCenter()).inflate(0.75),
-                                LivingEntity::isPickable).forEach(entity -> {
-                            if (entity != this)
-                                entity.hurt(this.damageSources().magic(), 6);
-                        }));
-            }
-            if (this.isInSentinelPose(SentinelPose.EXALTING)) {
-                if (this.tickCount % 4 == 0 && isSolidBlockBelow()) {
-                    this.push(0, 0.5f, 0);
-                    markHurt();
-                }
-                if (this.tickCount % 30 == 0) {
-                    Vec3 vec3d3 = this.getViewVector(1.0F);
-                    double l = this.getEyePosition(1).x() - vec3d3.x;
-                    double m = this.getY(0.75) + 0.4;
-                    double n = this.getEyePosition(1).z() - vec3d3.z;
-                    double o = this.getTarget().getX() - l;
-                    double p = this.getTarget().getY(0.5) - m;
-                    double q = this.getTarget().getZ() - n;
-                    DragonFireball dragonFireballEntity = new DragonFireball(this.level(), this, o, p, q);
-                    dragonFireballEntity.moveTo(l, m, n, 0.0F, 0.0F);
-                    this.level().addFreshEntity(dragonFireballEntity);
-                }
-            }
-        }
-    }
+    public enum SentinelPose implements BossState {
+        STANDING(0, 0, false),
+        TO_LASER(1, 0, true),
+        LASER(2, 0, true),
+        FROM_LASER(3, LASER_CHARGE_TICKS, false),
+        CLEAVE(4, 35, true),
+        SLASH(5, 35, true),
+        RISE(6, 40, true),
+        DASH(7, 50, true),
+        HYPER_BURST(8, 60, true),
+        ECLIPSE_PULSE(13, 40, true),
+        DYING(9, 0, false),
+        AWAKE_TO_IDLE(10, 0, false),
+        IDLING(11, 0, false),
+        IDLE_TO_AWAKE(12, 0, false);
 
-    private void spawnWorldParticle(ParticleOptions type, double x, double y, double z, int count, double xV, double yV, double zV, float speed) {
-        if (this.level() instanceof ServerLevel world)
-            world.sendParticles(type, x, y, z, count, xV, yV, zV, speed);
-    }
+        private final int id;
+        private final int duration;
+        private final boolean attack;
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        float f14 = this.getYHeadRot() * ((float) Math.PI / 180F);
-        float f1 = Mth.sin(f14);
-        float f15 = Mth.cos(f14);
-        Vec3[] vec3ds = new Vec3[this.parts.length];
-        for (int s = 0; s < this.parts.length; s++) {
-            vec3ds[s] = new Vec3(this.parts[s].getX(), this.parts[s].getY(), this.parts[s].getZ());
+        SentinelPose(int id, int duration, boolean attack) {
+            this.id = id;
+            this.duration = duration;
+            this.attack = attack;
         }
 
-        this.movePart(this.body, f1 * -0.75F, 1.65D, -f15 * -0.75F);
-        this.movePart(this.crack, f1 * 0.75F, 1.5D, -f15 * 0.75F);
-        for (int ac = 0; ac < this.parts.length; ac++) {
-            this.parts[ac].xo = vec3ds[ac].x;
-            this.parts[ac].yo = vec3ds[ac].y;
-            this.parts[ac].zo = vec3ds[ac].z;
-            this.parts[ac].xOld = vec3ds[ac].x;
-            this.parts[ac].yOld = vec3ds[ac].y;
-            this.parts[ac].zOld = vec3ds[ac].z;
+        public int id() {
+            return this.id;
         }
-    }
 
-    public EclipseSentinelPartEntity[] getBodyParts() {
-        return this.parts;
-    }
-
-    private void movePart(EclipseSentinelPartEntity partEntity, double dx, double dy, double dz) {
-        partEntity.setPos(this.getX() + dx, this.getY() + dy, this.getZ() + dz);
-    }
-
-    private boolean isSolidBlockBelow() {
-        for (int i = 0; i < 5; i++) {
-            if (this.level().getBlockState(this.blockPosition().below(i)).canOcclude())
-                return true;
+        @Override
+        public int duration() {
+            return this.duration;
         }
-        return false;
-    }
 
-    @Override
-    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
-        super.recreateFromPacket(packet);
-        EclipseSentinelPartEntity[] bodyParts = this.getBodyParts();
-        for (int i = 0; i < bodyParts.length; i++) {
-            bodyParts[i].setId(i + packet.getId());
-        }
-    }
-
-    @Override
-    public void push(Entity entity) {
-        if (!(this.isInSentinelPose(SentinelPose.IDLING)
-                || this.isInSentinelPose(SentinelPose.EXALTATION)
-                || this.isInSentinelPose(SentinelPose.EXALTING)
-                || this.isInSentinelPose(SentinelPose.DYING)))
-            super.push(entity);
-    }
-
-    @Override
-    protected void doPush(Entity entity) {
-        if (!(this.isInSentinelPose(SentinelPose.IDLING)
-                || this.isInSentinelPose(SentinelPose.EXALTATION)
-                || this.isInSentinelPose(SentinelPose.EXALTING)
-                || this.isInSentinelPose(SentinelPose.DYING)))
-            super.doPush(entity);
-    }
-
-    @Override
-    protected void moveTowardsClosestSpace(double x, double y, double z) {
-        if (!(this.isInSentinelPose(SentinelPose.IDLING)
-                || this.isInSentinelPose(SentinelPose.EXALTATION)
-                || this.isInSentinelPose(SentinelPose.EXALTING)
-                || this.isInSentinelPose(SentinelPose.DYING)))
-            super.moveTowardsClosestSpace(x, y, z);
-    }
-
-    @Override
-    protected int calculateFallDamage(float fallDistance, float damageMultiplier) {
-        return this.isExalted() ? 0 : Math.round(super.calculateFallDamage(fallDistance, damageMultiplier) / 2f);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag nbt) {
-        super.addAdditionalSaveData(nbt);
-        nbt.putBoolean("exaltingStatus", this.isExalted());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag nbt) {
-        super.readAdditionalSaveData(nbt);
-        this.setExaltation(nbt.getBoolean("exaltingStatus"));
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.EXPLOSION))
-            return false;
-        if (source.is(DamageTypes.ARROW))
-            return false;
-        if (source.is(DamageTypes.CACTUS))
-            return false;
-        if (source.is(DamageTypes.INDIRECT_MAGIC))
-            return false;
-        if (source.is(DamageTypes.DRAGON_BREATH))
-            return false;
-        if (!this.isExalted() && this.getHealth() < this.getMaxHealth() / 2f && this.isInSentinelPose(SentinelPose.IDLING))
-            this.setSentinelPose(SentinelPose.EXALTATION);
-        if (!this.isExalted() && this.getHealth() < this.getMaxHealth() / 2f && !this.isInSentinelPose(SentinelPose.IDLING))
-            return false;
-        if (isExalted())
-            return super.hurt(source, amount / 2f);
-        return super.hurt(source, amount);
-    }
-
-    @Override
-    public boolean isNoGravity() {
-        return this.isInSentinelPose(SentinelPose.SKY_JUMPING);
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 400)
-                .add(Attributes.ARMOR, 10)
-                .add(Attributes.ARMOR_TOUGHNESS, 4)
-                .add(Attributes.FOLLOW_RANGE, 48)
-                .add(Attributes.ATTACK_DAMAGE, 10)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
-                .add(Attributes.MOVEMENT_SPEED, 0.3);
-    }
-
-    @Override
-    public void die(DamageSource damageSource) {
-        this.deathTime = -30;
-        if (this.level() instanceof ServerLevel world) {
-            ChimericDarknessData data = WorldConfigController.data.get(0);
-            WorldConfigController.saveController(world, data.starsUnlock(), true, data.galacticUnlock());
-            WorldConfigController.updateSave(world);
-        }
-        updateTranslocatone(this.level(), this.blockPosition());
-        super.die(damageSource);
-    }
-
-    private void updateTranslocatone(Level world, BlockPos pos) {
-        int radius = 21;
-        int height = 6;
-        for (int y = -height; y < height; y++) {
-            for (int x = -radius; x < radius; x++) {
-                for (int z = -radius; z < radius; z++) {
-                    BlockPos pos1 = pos.offset(x, y, z);
-                    if (world.getBlockState(pos1).is(ModBlocks.GLACIEMITE_TRANSLOCATONE)) {
-                        world.setBlockAndUpdate(pos1, world.getBlockState(pos1).setValue(BlockStateProperties.TRIGGERED, false));
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void tickDeath() {
-        super.tickDeath();
-        if (this.deathTime == -15)
-            this.setSentinelPose(SentinelPose.DYING);
-    }
-
-    public void setSentinelPose(EclipseSentinel.SentinelPose pose) {
-        this.entityData.set(PHASE, pose);
-        this.timeOfAbility = pose.getAbilityTime;
-    }
-
-    public EclipseSentinel.SentinelPose getSentinelPose() {
-        return this.entityData.get(PHASE);
-    }
-
-    public void setExaltation(boolean status) {
-        this.entityData.set(IS_EXALTED, status);
-    }
-
-    public boolean isExalted() {
-        return this.entityData.get(IS_EXALTED);
-    }
-
-    public boolean isInSentinelPose(EclipseSentinel.SentinelPose pose) {
-        return this.getSentinelPose() == pose;
-    }
-
-    @Override
-    public EntityPart[] getParts() {
-        return this.parts;
-    }
-
-    public enum SentinelPose {
-        IDLING(100),
-        DARKNESS(120),
-        BACKFLIP(60),
-        SWORD_SWING(80),
-        HEAVY_SWING(70),
-        HARD_RUSH(80),
-        BLASTING_EROFLAME(50),
-        RUSH_AND_SWING(60),
-        SKY_JUMPING(80),
-        BEAMING(160),
-        EXALTATION(80),
-        EXALTING(200),
-        DYING(300);
-        public final int getAbilityTime;
-
-        SentinelPose(int abilityTime) {
-            this.getAbilityTime = abilityTime;
+        @Override
+        public boolean isAttack() {
+            return this.attack;
         }
     }
 }

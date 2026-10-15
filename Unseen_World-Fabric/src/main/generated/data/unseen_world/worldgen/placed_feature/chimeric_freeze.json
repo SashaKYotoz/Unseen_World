@@ -1,0 +1,8 @@
+{
+  "feature": "unseen_world:chimeric_freeze",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

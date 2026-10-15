@@ -18,6 +18,8 @@ public class ModEntityTagProvider extends FabricTagProvider.EntityTypeTagProvide
         this.getOrCreateTagBuilder(ModTags.Entities.GRIPPING_IMMUNE_ENTITY_TYPES).add(
                 ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS,
                 ModEntities.ECLIPSE_SENTINEL,
+                ModEntities.AURIC_PATRIARCH,
+                ModEntities.REAVER,
                 ModEntities.VIOLEGER,
                 ModEntities.VENOMER,
                 ModEntities.SABERPARD,

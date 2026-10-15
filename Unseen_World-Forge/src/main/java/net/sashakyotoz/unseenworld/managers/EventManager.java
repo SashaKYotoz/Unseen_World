@@ -3,7 +3,7 @@ package net.sashakyotoz.unseenworld.managers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,7 +17,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,8 +39,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.registries.*;
 
 @Mod.EventBusSubscriber
@@ -131,7 +134,7 @@ public class EventManager {
     public static void waveFlaming(ParticleOptions options,Level level, BlockPos pos){
         for (int i = 0; i < 3; i++) {
             int finalI = i;
-            UnseenWorldMod.queueServerWork(20 + 10 * i,()-> addParticles(options,level,pos.getX(),pos.getY(),pos.getZ(),2 * finalI));
+            UnseenWorld.queueServerWork(20 + 10 * i,()-> addParticles(options,level,pos.getX(),pos.getY(),pos.getZ(),2 * finalI));
         }
     }
     public static void addParticles(ParticleOptions type, Level level, double x, double y, double z, float modifier) {

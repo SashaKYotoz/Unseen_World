@@ -2,9 +2,6 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import com.google.common.collect.Sets;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -43,7 +40,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.PathFinder;
@@ -52,6 +48,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldFluids;
 
 import javax.annotation.Nullable;
 import java.util.Set;

@@ -31,7 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
 import net.sashakyotoz.unseenworld.entity.ai_goals.DarkGolemAttackGoal;
 import net.sashakyotoz.unseenworld.managers.AdvancementManager;
@@ -151,14 +151,14 @@ public class DarkGolemEntity extends Monster implements Enemy {
     }
 
     private void throwHammer() {
-        UnseenWorldMod.queueServerWork(20, () -> {
+        UnseenWorld.queueServerWork(20, () -> {
             VoidHammerEntity thrownHammer = new VoidHammerEntity(this.level(), this);
             thrownHammer.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 4F, 1.0F);
             this.level().addFreshEntity(thrownHammer);
             this.level().playSound(null, thrownHammer, SoundEvents.ANVIL_BREAK, SoundSource.VOICE, 1.0F, 1.0F);
             this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         });
-        UnseenWorldMod.queueServerWork(100, () -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldItems.VOID_HAMMER.get())));
+        UnseenWorld.queueServerWork(100, () -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(UnseenWorldItems.VOID_HAMMER.get())));
     }
 
     @Override

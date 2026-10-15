@@ -19,16 +19,16 @@ public class BeaconOfWeaponsBlockEntity extends BlockEntity implements WorldlyCo
         item = ItemStack.EMPTY;
     }
     @Override
-    public int[] getSlotsForFace(Direction p_19238_) {
+    public int[] getSlotsForFace(Direction direction) {
         return new int[0];
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int p_19235_, ItemStack p_19236_, @Nullable Direction p_19237_) {
+    public boolean canPlaceItemThroughFace(int p_19235_, ItemStack stack, @Nullable Direction direction) {
         return false;
     }
     @Override
-    public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
+    public boolean canTakeItemThroughFace(int p_19239_, ItemStack stack, Direction direction) {
         return false;
     }
 

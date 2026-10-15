@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.world.features;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -10,12 +11,10 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.util.valueproviders.WeightedListInt;
+import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.PinkPetalsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -42,7 +41,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.blocks.custom.BurlywoodHeartBlock;
 import net.sashakyotoz.common.blocks.custom.plants.DarknessFernBlock;
+import net.sashakyotoz.common.entities.ModEntities;
+import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.common.world.features.custom.*;
 import net.sashakyotoz.common.world.features.custom.configs.*;
 import net.sashakyotoz.common.world.features.trees.placers.*;
@@ -84,10 +86,6 @@ public class ModConfiguredFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRIPCRYSTAL_WART_PATCH = create("gripcrystal_wart_patch");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> WATER_LAKE = create("water_lake");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> DARK_WATER_LAKE = create("dark_water_lake");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> CRIMSONVEIL_DARK_WATER_LAKE = create("crimsonveil_dark_water_lake");
-
     public static final ResourceKey<ConfiguredFeature<?, ?>> BEARFRUIT_BRAMBLE_PATCH = create("bearfruit_bramble_patch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MIDNIGHT_LILY_PATCH = create("midnight_lily_patch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BUSH_LIKE_TREE_PATCH = create("bush_like_tree_patch");
@@ -108,20 +106,38 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> UNSEENIUM_CURRANTSLATE_DISK = create("unseenium_currantslate_disk");
     public static final ResourceKey<ConfiguredFeature<?, ?>> TITANIUM_CURRANTSLATE_DISK = create("titanium_currantslate_disk");
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CORONA_STONE_BOULDER = create("corona_stone_boulder");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GILDED_CURRANTSLATE_BOULDER = create("gilded_currantslate_boulder");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CORONA_STONE_RING = create("corona_stone_ring");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CORONA_BLOOM_PATCH = create("corona_bloom_patch");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> FROSTBLOOM_PATCH = create("frostbloom_patch");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ASHREED_PATCH = create("ashreed_patch");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLOWROOT_VINES = create("glowroot_vines");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> UMBRAL_CORAL_REEF = create("umbral_coral_reef");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_UMBRAL_CORAL_REEF = create("dead_umbral_coral_reef");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CHIMERIC_FREEZE = create("chimeric_freeze");
+
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOLLOWS_FLOOR_VEGETATION = create("hollows_floor_vegetation");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOLLOWS_FLOOR_MOSS = create("hollows_floor_moss");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOLLOWS_CEILING_MOSS = create("hollows_ceiling_moss");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOLLOWS_GLOW_LICHEN = create("hollows_glow_lichen");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SHINY_ICE_CEILING_BOULDER = create("shiny_ice_ceiling_boulder");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> FROZEN_CAVE_POOL = create("frozen_cave_pool");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> TAPROOT_TREE = create("taproot_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOARFROST_PATCH = create("hoarfrost_patch");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HOLLOWS_GLEAMCARVER_NEST = create("hollows_gleamcarver_nest");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> TANZANITE_GLEAMCARVER_NEST = create("tanzanite_gleamcarver_nest");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SHINY_GLEAMCARVER_NEST = create("shiny_gleamcarver_nest");
+
 
     public static void boostrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<Block> registryEntryLookup = context.lookup(Registries.BLOCK);
         register(context, AMETHYST_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.AMETHYST_LOG),
-                new GrizzlyTrunkPlacer(8, 2, 2, 2),
+                new ThornTrunkPlacer(10, 2, 1, UniformInt.of(3, 5), 1, 1.8F, UniformInt.of(3, 5)),
                 BlockStateProvider.simple(ModBlocks.AMETHYST_LEAVES),
-                new HangingBlobFoliagePlacer(
-                        UniformInt.of(2, 3),
-                        ConstantInt.of(1),
-                        2,
-                        0.5F,
-                        1F),
-                new TwoLayersFeatureSize(1, 2, 1))
+                new ThornFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(0), 1, 0.2F),
+                new TwoLayersFeatureSize(1, 1, 2))
                 .decorators(
                         List.of(
                                 new VinesToLeavesTreeDecorator(
@@ -133,15 +149,10 @@ public class ModConfiguredFeatures {
                 .dirt(BlockStateProvider.simple(ModBlocks.AMETHYST_GRASS_BLOCK)).forceDirt().build());
         register(context, SMALL_AMETHYST_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.AMETHYST_LOG),
-                new GrizzlyTrunkPlacer(4, 2, 2, 1),
+                new ThornTrunkPlacer(5, 2, 1, UniformInt.of(1, 2), 1, 1.6F, UniformInt.of(3, 5)),
                 BlockStateProvider.simple(ModBlocks.AMETHYST_LEAVES),
-                new HangingBlobFoliagePlacer(
-                        UniformInt.of(2, 3),
-                        UniformInt.of(0, 1),
-                        2,
-                        0.5F,
-                        0.5F),
-                new TwoLayersFeatureSize(1, 1, 1))
+                new ThornFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 1, 0.25F),
+                new TwoLayersFeatureSize(1, 0, 1))
                 .dirt(BlockStateProvider.simple(ModBlocks.AMETHYST_GRASS_BLOCK)).forceDirt().build());
         register(context, AMETHYST_BUSH, Feature.TREE,
                 new TreeConfiguration.TreeConfigurationBuilder(
@@ -216,30 +227,42 @@ public class ModConfiguredFeatures {
         ).ignoreVines().build());
         register(context, GRIZZLY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LOG),
-                new GrizzlyTrunkPlacer(4, 3, 5, 0),
+                new GrizzlyTrunkPlacer(8, 2, 1, 0.4F, UniformInt.of(2, 3), UniformInt.of(2, 3), 0.15F),
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LEAVES),
-                new GrizzlyFoliagePlacer(UniformInt.of(3, 5), ConstantInt.of(0)),
+                new GrizzlyFoliagePlacer(UniformInt.of(3, 4), ConstantInt.of(0), 2, 0.3F),
                 new TwoLayersFeatureSize(1, 0, 2)
         ).dirt(BlockStateProvider.simple(ModBlocks.GRIMWOOD_GRASS_BLOCK)).build());
         register(context, TALL_GRIZZLY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LOG),
-                new GrizzlyTrunkPlacer(9, 4, 5, 1),
+                new GrizzlyTrunkPlacer(12, 3, 2, 0.45F, UniformInt.of(2, 3), UniformInt.of(3, 4), 0.2F),
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LEAVES),
-                new GrizzlyFoliagePlacer(ConstantInt.of(2), UniformInt.of(0, 1)),
+                new GrizzlyFoliagePlacer(UniformInt.of(3, 4), UniformInt.of(0, 1), 3, 0.3F),
                 new TwoLayersFeatureSize(1, 1, 2)
         ).dirt(BlockStateProvider.simple(ModBlocks.GRIMWOOD_GRASS_BLOCK)).build());
         register(context, BURLYWOOD_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.BURLYWOOD_LOG),
-                new BurlywoodTrunkPlacer(12, 2, 3, true),
+                new BurlywoodTrunkPlacer(12, 2, 2, 0.45F,
+                        new BurlywoodTrunkPlacer.BranchSettings(UniformInt.of(4, 6), UniformInt.of(3, 5), 0.5F), 0.6F,
+                        Optional.of(new BurlywoodTrunkPlacer.BridgeSettings(0.6F, 12,
+                                HolderSet.direct(Block::builtInRegistryHolder, ModBlocks.BURLYWOOD_LOG)))),
                 BlockStateProvider.simple(ModBlocks.BURLYWOOD_LEAVES),
-                new BurlywoodFoliagePlacer(UniformInt.of(1, 2), UniformInt.of(0, 1)),
+                new BurlywoodFoliagePlacer(UniformInt.of(3, 4), ConstantInt.of(0), 0.45F),
                 new ThreeLayersFeatureSize(1, 1, 1, 1, 2, OptionalInt.empty())
+        ).decorators(
+                List.of(
+                        new VinesToLeavesTreeDecorator(
+                                0.12F,
+                                BlockStateProvider.simple(ModBlocks.HANGING_BURLYWOOD_LEAVES),
+                                UniformInt.of(1, 4)
+                        )
+                )
         ).ignoreVines().dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().build());
         register(context, SMALL_BURLYWOOD_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.BURLYWOOD_LOG),
-                new BurlywoodTrunkPlacer(8, 1, 2, false),
+                new BurlywoodTrunkPlacer(8, 1, 2, 0.5F,
+                        new BurlywoodTrunkPlacer.BranchSettings(UniformInt.of(3, 4), UniformInt.of(2, 3), 0.3F), 0.4F, Optional.empty()),
                 BlockStateProvider.simple(ModBlocks.BURLYWOOD_LEAVES),
-                new BurlywoodFoliagePlacer(UniformInt.of(1, 2), UniformInt.of(0, 1)),
+                new BurlywoodFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(0), 0.35F),
                 new ThreeLayersFeatureSize(1, 1, 1, 1, 2, OptionalInt.empty())
         ).decorators(
                 List.of(
@@ -260,21 +283,27 @@ public class ModConfiguredFeatures {
 
         RuleTest glaciemiteReplacables = new BlockMatchTest(ModBlocks.GLACIEMITE);
         RuleTest darkCurrantslateReplacables = new BlockMatchTest(ModBlocks.DARK_CURRANTSLATE);
+        RuleTest coronaStoneReplacables = new BlockMatchTest(ModBlocks.CORONA_STONE);
         List<OreConfiguration.TargetBlockState> unseeniumOres =
                 List.of(OreConfiguration.target(glaciemiteReplacables, ModBlocks.UNSEENIUM_ORE_IN_GLACIEMITE.defaultBlockState()),
-                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()));
+                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()),
+                        OreConfiguration.target(coronaStoneReplacables, ModBlocks.UNSEENIUM_ORE_IN_CORONA_STONE.defaultBlockState()));
         List<OreConfiguration.TargetBlockState> titaniumOres =
-                List.of(OreConfiguration.target(glaciemiteReplacables, ModBlocks.RED_TITANIUM_IN_GLACIEMITE.defaultBlockState()),
-                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()));
+                List.of(OreConfiguration.target(glaciemiteReplacables, ModBlocks.RED_TITANIUM_ORE_IN_GLACIEMITE.defaultBlockState()),
+                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()),
+                        OreConfiguration.target(coronaStoneReplacables, ModBlocks.RED_TITANIUM_ORE_IN_CORONA_STONE.defaultBlockState()));
         List<OreConfiguration.TargetBlockState> abyssalOres =
                 List.of(OreConfiguration.target(glaciemiteReplacables, ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE.defaultBlockState()),
-                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()));
+                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()),
+                        OreConfiguration.target(coronaStoneReplacables, ModBlocks.ABYSSAL_ORE_IN_CORONA_STONE.defaultBlockState()));
         List<OreConfiguration.TargetBlockState> ironOres =
                 List.of(OreConfiguration.target(glaciemiteReplacables, ModBlocks.IRON_ORE_IN_GLACIEMITE.defaultBlockState()),
-                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()));
+                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE.defaultBlockState()),
+                        OreConfiguration.target(coronaStoneReplacables, ModBlocks.IRON_ORE_IN_CORONA_STONE.defaultBlockState()));
         List<OreConfiguration.TargetBlockState> ancientDebrisOres =
                 List.of(OreConfiguration.target(glaciemiteReplacables, ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE.defaultBlockState()),
-                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE.defaultBlockState()));
+                        OreConfiguration.target(darkCurrantslateReplacables, ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE.defaultBlockState()),
+                        OreConfiguration.target(coronaStoneReplacables, ModBlocks.ANCIENT_DEBRIS_IN_CORONA_STONE.defaultBlockState()));
         register(context, UNSEENIUM_ORE, Feature.ORE, new OreConfiguration(unseeniumOres, 4, 0.25f));
         register(context, RED_TITANIUM_ORE, Feature.ORE, new OreConfiguration(titaniumOres, 2, 0.1f));
         register(context, ABYSSAL_ORE, Feature.ORE, new OreConfiguration(abyssalOres, 4, 0.25f));
@@ -293,21 +322,18 @@ public class ModConfiguredFeatures {
 
         register(context, UNSEENIUM_CURRANTSLATE_DISK, DiskOreFeature.INSTANCE, new DiskOreFeatureConfig(
                 RuleBasedBlockStateProvider.simple(ModBlocks.DARK_CURRANTSLATE), RuleBasedBlockStateProvider.simple(ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE),
-                BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE)), UniformInt.of(2, 5), 2));
+                BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE, ModBlocks.CORONA_STONE)), UniformInt.of(2, 5), 2));
         register(context, TITANIUM_CURRANTSLATE_DISK, DiskOreFeature.INSTANCE, new DiskOreFeatureConfig(
-                RuleBasedBlockStateProvider.simple(ModBlocks.GLACIEMITE), RuleBasedBlockStateProvider.simple(ModBlocks.RED_TITANIUM_IN_GLACIEMITE),
-                BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE)), UniformInt.of(2, 4), 2));
+                RuleBasedBlockStateProvider.simple(ModBlocks.GLACIEMITE), RuleBasedBlockStateProvider.simple(ModBlocks.RED_TITANIUM_ORE_IN_GLACIEMITE),
+                BlockPredicate.matchesBlocks(List.of(ModBlocks.TANZANITE_BLOCK, Blocks.CALCITE, ModBlocks.CORONA_STONE)), UniformInt.of(2, 4), 2));
 
         register(context, DARKNESS_SPIRAL_SPIKE, SpiralSpikeFeature.INSTANCE, new SpiralSpikeFeatureConfig(BlockStateProvider.simple(ModBlocks.GLACIEMITE), BlockStateProvider.simple(ModBlocks.GRIPPING_GLACIEMITE), BlockStateProvider.simple(ModBlocks.GRIPCRYSTAL_WART), UniformInt.of(4, 12)));
-        register(context, GRIPTONITE_CLUSTER_SPIKE, ClusterSpikeFeature.INSTANCE, new ClusterSpikeFeatureConfig(BlockStateProvider.simple(ModBlocks.DARK_CURRANTSLATE), BlockStateProvider.simple(ModBlocks.GRIPTONITE_CLUSTER), UniformInt.of(11, 15), UniformInt.of(13, 27)));
+        register(context, GRIPTONITE_CLUSTER_SPIKE, ClusterSpikeFeature.INSTANCE, new ClusterSpikeFeatureConfig(BlockStateProvider.simple(ModBlocks.DARK_CURRANTSLATE), BlockStateProvider.simple(ModBlocks.GRIPTONITE_CLUSTER), BlockStateProvider.simple(ModBlocks.GRIPTONITED_DARK_CURRANTSLATE), UniformInt.of(11, 15), UniformInt.of(13, 27)));
 
         SimpleWeightedRandomList.Builder<BlockState> amethystSpike = SimpleWeightedRandomList.builder();
         amethystSpike.add(Blocks.MEDIUM_AMETHYST_BUD.defaultBlockState(),3);
         amethystSpike.add(Blocks.LARGE_AMETHYST_BUD.defaultBlockState(),1);
-        register(context, AMETHYST_CLUSTER_SPIKE, ClusterSpikeFeature.INSTANCE, new ClusterSpikeFeatureConfig(BlockStateProvider.simple(Blocks.AMETHYST_BLOCK), new WeightedStateProvider(amethystSpike), UniformInt.of(7, 11), UniformInt.of(9, 19)));
-
-        register(context, WATER_LAKE, AdaptiveLakeFeature.INSTANCE, new AdaptiveLakeFeatureConfig(BlockStateProvider.simple(Blocks.WATER), BlockStateProvider.simple(Blocks.STONE)));
-        register(context, DARK_WATER_LAKE, AdaptiveLakeFeature.INSTANCE, new AdaptiveLakeFeatureConfig(BlockStateProvider.simple(ModBlocks.DARK_WATER), BlockStateProvider.simple(ModBlocks.DARK_CURRANTSLATE)));
+        register(context, AMETHYST_CLUSTER_SPIKE, ClusterSpikeFeature.INSTANCE, new ClusterSpikeFeatureConfig(BlockStateProvider.simple(Blocks.AMETHYST_BLOCK), new WeightedStateProvider(amethystSpike), BlockStateProvider.simple(Blocks.AMETHYST_BLOCK), UniformInt.of(7, 11), UniformInt.of(7, 17)));
 
         register(context, BEARFRUIT_BRAMBLE_PATCH, StandingFlowerBunchFeature.INSTANCE, new StandingFlowerBunchFeatureConfig(UniformInt.of(3, 7), BlockStateProvider.simple(ModBlocks.BEARFRUIT_BRAMBLE)));
         register(context, MIDNIGHT_LILY_PATCH, MidnightLilyPadFeature.INSTANCE, NoneFeatureConfiguration.INSTANCE);
@@ -334,9 +360,6 @@ public class ModConfiguredFeatures {
                                 )
                         )
                 ));
-
-        register(context, CRIMSONVEIL_DARK_WATER_LAKE, AdaptiveLakeFeature.INSTANCE, new AdaptiveLakeFeatureConfig(
-                BlockStateProvider.simple(ModBlocks.DARK_WATER), BlockStateProvider.simple(Blocks.AIR)));
 
         register(context, UMBRAL_KELP, UmbralKelpFeature.INSTANCE, new NoneFeatureConfiguration());
         SimpleWeightedRandomList.Builder<BlockState> petals = SimpleWeightedRandomList.builder();
@@ -387,7 +410,6 @@ public class ModConfiguredFeatures {
                                                 0.020833334F,
                                                 List.of(
                                                         ModBlocks.GLOOMWEED.defaultBlockState(),
-                                                        ModBlocks.GLOOMWEED.defaultBlockState().setValue(DarknessFernBlock.LIT, true),
                                                         ModBlocks.MURKTUFT.defaultBlockState().setValue(DarknessFernBlock.LIT, true)
                                                 )
                                         )
@@ -442,14 +464,197 @@ public class ModConfiguredFeatures {
                         0.25f
                 )
         );
+
+        register(context, CORONA_STONE_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformInt.of(3, 6), BlockStateProvider.simple(ModBlocks.CORONA_STONE)));
+        register(context, GILDED_CURRANTSLATE_BOULDER, BoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformInt.of(3, 7),
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(ModBlocks.GILDED_CURRANTSLATE.defaultBlockState(), 3)
+                        .add(ModBlocks.DARK_CURRANTSLATE.defaultBlockState(), 1))));
+
+        register(context, CORONA_STONE_RING, StoneRingFeature.INSTANCE, new StoneRingFeatureConfig(
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(ModBlocks.CORONA_STONE_BRICKS.defaultBlockState(), 4)
+                        .add(ModBlocks.CRACKED_CORONA_STONE_BRICKS.defaultBlockState(), 2)
+                        .add(ModBlocks.CORONA_STONE.defaultBlockState(), 1)),
+                BlockStateProvider.simple(ModBlocks.CORONA_STONE_BRICKS_SLAB),
+                BlockStateProvider.simple(ModBlocks.CORONA_BLOOM),
+                UniformInt.of(4, 7),
+                UniformInt.of(7, 11),
+                UniformInt.of(2, 5),
+                0.3F));
+
+        register(context, CORONA_BLOOM_PATCH, Feature.FLOWER, new RandomPatchConfiguration(
+                48, 6, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.CORONA_BLOOM)))));
+        register(context, FROSTBLOOM_PATCH, Feature.FLOWER, new RandomPatchConfiguration(
+                32, 5, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.FROSTBLOOM)))));
+
+        register(context, ASHREED_PATCH, Feature.RANDOM_PATCH, new RandomPatchConfiguration(
+                20, 4, 0, PlacementUtils.filtered(
+                Feature.BLOCK_COLUMN,
+                BlockColumnConfiguration.simple(BiasedToBottomInt.of(2, 4), BlockStateProvider.simple(ModBlocks.ASHREED)),
+                BlockPredicate.allOf(
+                        BlockPredicate.ONLY_IN_AIR_PREDICATE,
+                        BlockPredicate.wouldSurvive(ModBlocks.ASHREED.defaultBlockState(), BlockPos.ZERO)))));
+
+        BlockState glowrootBody = ModBlocks.GLOWROOT_VINE_PLANT.defaultBlockState();
+        BlockState glowrootHead = ModBlocks.GLOWROOT_VINE.defaultBlockState();
+        register(context, GLOWROOT_VINES, Feature.BLOCK_COLUMN, new BlockColumnConfiguration(
+                List.of(
+                        BlockColumnConfiguration.layer(
+                                new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder()
+                                        .add(UniformInt.of(0, 14), 2)
+                                        .add(UniformInt.of(0, 2), 3)
+                                        .add(UniformInt.of(0, 6), 10)
+                                        .build()),
+                                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                                        .add(glowrootBody, 4)
+                                        .add(glowrootBody.trySetValue(BlockStateProperties.BERRIES, true), 1))),
+                        BlockColumnConfiguration.layer(
+                                ConstantInt.of(1),
+                                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                                        .add(glowrootHead, 4)
+                                        .add(glowrootHead.trySetValue(BlockStateProperties.BERRIES, true), 1)))),
+                Direction.DOWN,
+                BlockPredicate.ONLY_IN_AIR_PREDICATE,
+                true));
+
+        register(context, UMBRAL_CORAL_REEF, CoralReefFeature.INSTANCE, new CoralReefFeatureConfig(
+                ModBlocks.UMBRAL_CORAL_BLOCK.defaultBlockState(),
+                ModBlocks.UMBRAL_CORAL.defaultBlockState(),
+                ModBlocks.UMBRAL_CORAL_FAN.defaultBlockState(),
+                ModBlocks.UMBRAL_CORAL_WALL_FAN.defaultBlockState(),
+                UniformInt.of(2, 5),
+                UniformInt.of(1, 3),
+                0.2F));
+        register(context, DEAD_UMBRAL_CORAL_REEF, CoralReefFeature.INSTANCE, new CoralReefFeatureConfig(
+                ModBlocks.DEAD_UMBRAL_CORAL_BLOCK.defaultBlockState(),
+                ModBlocks.DEAD_UMBRAL_CORAL.defaultBlockState(),
+                ModBlocks.DEAD_UMBRAL_CORAL_FAN.defaultBlockState(),
+                ModBlocks.DEAD_UMBRAL_CORAL_WALL_FAN.defaultBlockState(),
+                UniformInt.of(1, 3),
+                UniformInt.of(0, 2),
+                0.1F));
+
+        register(context, CHIMERIC_FREEZE, ChimericFreezeFeature.INSTANCE, NoneFeatureConfiguration.INSTANCE);
+
+        registerCaveContent(context);
+    }
+
+    private static void registerCaveContent(BootstapContext<ConfiguredFeature<?, ?>> context) {
+        HolderGetter<ConfiguredFeature<?, ?>> configured = context.lookup(Registries.CONFIGURED_FEATURE);
+
+        register(context, HOLLOWS_FLOOR_VEGETATION, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(Blocks.GRASS.defaultBlockState(), 50)
+                        .add(Blocks.MOSS_CARPET.defaultBlockState(), 25)
+                        .add(ModBlocks.BURLYWOOD_VIOLET.defaultBlockState(), 8)
+                        .add(Blocks.AZALEA.defaultBlockState(), 4)
+                        .add(Blocks.FLOWERING_AZALEA.defaultBlockState(), 4))));
+        register(context, HOLLOWS_FLOOR_MOSS, Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
+                ModTags.Blocks.CHIMERIC_DARKNESS_STONES,
+                BlockStateProvider.simple(Blocks.MOSS_BLOCK),
+                PlacementUtils.inlinePlaced(configured.getOrThrow(HOLLOWS_FLOOR_VEGETATION)),
+                CaveSurface.FLOOR,
+                ConstantInt.of(1),
+                0.0F,
+                5,
+                0.8F,
+                UniformInt.of(4, 7),
+                0.3F));
+        register(context, HOLLOWS_CEILING_MOSS, Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
+                ModTags.Blocks.CHIMERIC_DARKNESS_STONES,
+                BlockStateProvider.simple(Blocks.MOSS_BLOCK),
+                PlacementUtils.inlinePlaced(configured.getOrThrow(GLOWROOT_VINES)),
+                CaveSurface.CEILING,
+                UniformInt.of(1, 2),
+                0.0F,
+                5,
+                0.08F,
+                UniformInt.of(4, 7),
+                0.3F));
+        register(context, HOLLOWS_GLOW_LICHEN, Feature.MULTIFACE_GROWTH, new MultifaceGrowthConfiguration(
+                (MultifaceBlock) Blocks.GLOW_LICHEN,
+                20,
+                false,
+                true,
+                true,
+                0.5F,
+                HolderSet.direct(Block::builtInRegistryHolder, ModBlocks.DARK_CURRANTSLATE, Blocks.MOSS_BLOCK, Blocks.ROOTED_DIRT)));
+
+        register(context, SHINY_ICE_CEILING_BOULDER, CeilingBoulderFeature.INSTANCE, new BoulderFeatureConfig(UniformInt.of(3, 6),
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(Blocks.PACKED_ICE.defaultBlockState(), 3)
+                        .add(ModBlocks.RIME_ICE.defaultBlockState(), 2)
+                        .add(Blocks.BLUE_ICE.defaultBlockState(), 1))));
+        register(context, FROZEN_CAVE_POOL, Feature.DISK, new DiskConfiguration(
+                RuleBasedBlockStateProvider.simple(ModBlocks.RIME_ICE),
+                BlockPredicate.allOf(
+                        BlockPredicate.matchesBlocks(ModBlocks.DARK_WATER),
+                        BlockPredicate.matchesBlocks(new BlockPos(0, 1, 0), Blocks.AIR, Blocks.CAVE_AIR)),
+                UniformInt.of(2, 4),
+                0));
+        register(context, TAPROOT_TREE, TaprootTreeFeature.INSTANCE, new TaprootTreeFeatureConfig(
+                BlockStateProvider.simple(ModBlocks.BURLYWOOD_LOG),
+                BlockStateProvider.simple(ModBlocks.BURLYWOOD_LEAVES),
+                BlockStateProvider.simple(ModBlocks.HANGING_BURLYWOOD_LEAVES),
+                BlockStateProvider.simple(Blocks.HANGING_ROOTS),
+                BlockStateProvider.simple(Blocks.ROOTED_DIRT),
+                ModBlocks.BURLYWOOD_HEART.defaultBlockState().trySetValue(BurlywoodHeartBlock.PERSISTENT, false),
+                ModTags.Blocks.CHIMERIC_DARKNESS_STONES,
+                UniformInt.of(4, 7),
+                UniformInt.of(2, 3),
+                0.1F));
+        register(context, HOARFROST_PATCH, SurfaceCoatingFeature.INSTANCE, new SurfaceCoatingFeatureConfig(
+                BlockStateProvider.simple(ModBlocks.HOARFROST),
+                UniformInt.of(3, 6),
+                0.85F));
+
+        register(context, HOLLOWS_GLEAMCARVER_NEST, NestFeature.INSTANCE, new NestFeatureConfig(
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(Blocks.MOSS_BLOCK.defaultBlockState(), 3)
+                        .add(Blocks.ROOTED_DIRT.defaultBlockState(), 1)),
+                BlockStateProvider.simple(Blocks.MOSS_BLOCK),
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(ModBlocks.BURLYWOOD_VIOLET.defaultBlockState(), 2)
+                        .add(Blocks.MOSS_CARPET.defaultBlockState(), 3)),
+                BlockStateProvider.simple(ModBlocks.BURLYWOOD_VIOLET),
+                UniformInt.of(2, 3),
+                0.5F,
+                ModEntities.GLEAMCARVER,
+                UniformInt.of(1, 3)));
+        register(context, TANZANITE_GLEAMCARVER_NEST, NestFeature.INSTANCE, new NestFeatureConfig(
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(ModBlocks.CORONA_STONE.defaultBlockState(), 3)
+                        .add(Blocks.CALCITE.defaultBlockState(), 1)),
+                BlockStateProvider.simple(Blocks.CALCITE),
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(Blocks.SMALL_AMETHYST_BUD.defaultBlockState(), 3)
+                        .add(Blocks.MEDIUM_AMETHYST_BUD.defaultBlockState(), 1)),
+                BlockStateProvider.simple(Blocks.AMETHYST_CLUSTER),
+                UniformInt.of(2, 3),
+                0.4F,
+                ModEntities.GLEAMCARVER,
+                UniformInt.of(1, 3)));
+        register(context, SHINY_GLEAMCARVER_NEST, NestFeature.INSTANCE, new NestFeatureConfig(
+                new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                        .add(ModBlocks.CORONA_STONE.defaultBlockState(), 2)
+                        .add(Blocks.PACKED_ICE.defaultBlockState(), 2)
+                        .add(ModBlocks.GLACIEMITE.defaultBlockState(), 1)),
+                BlockStateProvider.simple(Blocks.SNOW_BLOCK),
+                BlockStateProvider.simple(Blocks.SNOW),
+                BlockStateProvider.simple(ModBlocks.FROSTBLOOM),
+                UniformInt.of(2, 3),
+                0.5F,
+                ModEntities.GLEAMCARVER,
+                UniformInt.of(1, 3)));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> create(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, UnseenWorld.makeID(name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, UnseenWorld.MOD.makeID(name));
     }
 
     private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstapContext<ConfiguredFeature<?, ?>> context,
-                                                                                   ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {
+                                                                                          ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {
         context.register(key, new ConfiguredFeature<>(feature, config));
     }
 }

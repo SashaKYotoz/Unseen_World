@@ -1,9 +1,6 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,6 +23,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.UnseenWorld;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 
 import javax.annotation.Nullable;
 
@@ -190,7 +190,7 @@ public class TealivyVoidSpearEntity extends AbstractArrow {
 		this.spearItem = stack.copy();
 		this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(stack));
 		this.entityData.set(ID_FOIL, stack.hasFoil());
-		UnseenWorldMod.LOGGER.debug("Bytes: " + (byte) EnchantmentHelper.getLoyalty(stack));
+		UnseenWorld.LOGGER.debug("Bytes: " + (byte) EnchantmentHelper.getLoyalty(stack));
 	}
 
 	protected void defineSynchedData() {

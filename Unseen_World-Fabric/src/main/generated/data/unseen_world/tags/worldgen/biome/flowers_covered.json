@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:greenish_meadow",
-    "unseen_world:greenish_valley",
-    "unseen_world:harmony_grove"
+    "unseen_world:greenish_valley"
   ]
 }

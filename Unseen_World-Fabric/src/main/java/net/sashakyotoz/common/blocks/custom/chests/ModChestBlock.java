@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.gui.blocks.ChestScreenHandler;
@@ -22,6 +21,9 @@ import net.sashakyotoz.client.gui.blocks.ModScreenHandlers;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.custom.chests.entities.ModChestBlockEntity;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public class ModChestBlock extends ChestBlock {
     private final ChestTypes type;
@@ -38,33 +40,46 @@ public class ModChestBlock extends ChestBlock {
         return this.type.makeEntity(pos, state);
     }
 
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        Direction direction = ctx.getHorizontalDirection().getOpposite();
-        FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
-        return this.defaultBlockState().setValue(FACING, direction).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState()
+                .setValue(FACING, context.getHorizontalDirection().getOpposite())
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
     }
 
     public ChestTypes getType() {
-        return type;
+        return this.type;
     }
 
+    @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return world.isClientSide & type == this.type.getBlockEntityType() ? (world1, pos, state1, blockEntity) -> ((ModChestBlockEntity) blockEntity).clientTick() : null;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide && type == this.type.getBlockEntityType()
+                ? (tickLevel, pos, tickState, blockEntity) -> ((ModChestBlockEntity) blockEntity).clientTick()
+                : null;
     }
 
     public enum ChestTypes {
-        DARK_CURRANTSLATE(27, 9, UnseenWorld.makeID("chest/dark_currantslate_chest")),
-        GLACIEMITE(27, 9, UnseenWorld.makeID("chest/glaciemite_chest"));
+        DARK_CURRANTSLATE("dark_currantslate_chest", () -> ModBlocks.DARK_CURRANTSLATE_CHEST,
+                () -> ModBlockEntities.DARK_CURRANTSLATE_CHEST, () -> ModScreenHandlers.DARK_CURRANTSLATE_CHEST),
+        GLACIEMITE("glaciemite_chest", () -> ModBlocks.GLACIEMITE_CHEST,
+                () -> ModBlockEntities.GLACIEMITE_CHEST, () -> ModScreenHandlers.GLACIEMITE_CHEST),
+        CORONA_STONE("corona_stone_chest", () -> ModBlocks.CORONA_STONE_CHEST,
+                () -> ModBlockEntities.CORONA_STONE_CHEST, () -> ModScreenHandlers.CORONA_STONE_CHEST);
 
-        public final int size;
-        public final int rowLength;
+        public final int size = 27;
+        public final int rowLength = 9;
         public final ResourceLocation texture;
+        private final Supplier<Block> block;
+        private final Supplier<BlockEntityType<ModChestBlockEntity>> blockEntityType;
+        private final Supplier<MenuType<ChestScreenHandler>> menuType;
 
-        ChestTypes(int size, int rowLength, ResourceLocation texture) {
-            this.size = size;
-            this.rowLength = rowLength;
-            this.texture = texture;
+        ChestTypes(String id, Supplier<Block> block, Supplier<BlockEntityType<ModChestBlockEntity>> blockEntityType,
+                   Supplier<MenuType<ChestScreenHandler>> menuType) {
+            this.texture = UnseenWorld.MOD.makeID("chest/" + id);
+            this.block = block;
+            this.blockEntityType = blockEntityType;
+            this.menuType = menuType;
         }
 
         public int getRowCount() {
@@ -72,31 +87,19 @@ public class ModChestBlock extends ChestBlock {
         }
 
         public static Block get(ChestTypes type) {
-            return switch (type) {
-                case DARK_CURRANTSLATE -> ModBlocks.DARK_CURRANTSLATE_CHEST;
-                case GLACIEMITE -> ModBlocks.GLACIEMITE_CHEST;
-            };
+            return type.block.get();
         }
 
         public ChestBlockEntity makeEntity(BlockPos pos, BlockState state) {
-            return switch (this) {
-                case DARK_CURRANTSLATE -> ModBlockEntities.DARK_CURRANTSLATE_CHEST.create(pos, state);
-                case GLACIEMITE -> ModBlockEntities.GLACIEMITE_CHEST.create(pos, state);
-            };
+            return new ModChestBlockEntity(this, pos, state);
         }
 
         public MenuType<ChestScreenHandler> getScreenHandlerType() {
-            return switch (this) {
-                case DARK_CURRANTSLATE -> ModScreenHandlers.DARK_CURRANTSLATE_CHEST;
-                case GLACIEMITE -> ModScreenHandlers.GLACIEMITE_CHEST;
-            };
+            return this.menuType.get();
         }
 
-        public BlockEntityType<? extends ChestBlockEntity> getBlockEntityType() {
-            return switch (this) {
-                case DARK_CURRANTSLATE -> ModBlockEntities.DARK_CURRANTSLATE_CHEST;
-                case GLACIEMITE -> ModBlockEntities.GLACIEMITE_CHEST;
-            };
+        public BlockEntityType<ModChestBlockEntity> getBlockEntityType() {
+            return this.blockEntityType.get();
         }
     }
 }

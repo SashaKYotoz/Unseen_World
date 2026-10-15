@@ -17,6 +17,6 @@ public class ViolegerRenderer extends MobRenderer<ViolegerEntity, ViolegerModel<
 
     @Override
     public ResourceLocation getTextureLocation(ViolegerEntity entity) {
-        return UnseenWorld.makeID("textures/entity/violegers/violeger.png");
+        return UnseenWorld.MOD.makeID("textures/entity/violegers/violeger.png");
     }
 }

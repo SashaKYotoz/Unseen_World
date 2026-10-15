@@ -11,55 +11,74 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.sashakyotoz.common.datagen.*;
+import net.sashakyotoz.common.datagen.loot.ModBlockLootTableProvider;
+import net.sashakyotoz.common.datagen.loot.ModChestLootTableProvider;
+import net.sashakyotoz.common.datagen.loot.OrdealLootTableProvider;
 import net.sashakyotoz.common.datagen.tags.*;
 import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.carvers.ModCarvers;
 import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
 import net.sashakyotoz.common.world.features.placements.ModPlacements;
+import net.sashakyotoz.common.world.noise.ModDensityFunctions;
+import net.sashakyotoz.common.world.noise.ModNoiseSettings;
+import net.sashakyotoz.common.world.noise.ModNoises;
 
 import java.util.Map;
 
 public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
-	@Override
-	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
+    @Override
+    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+        FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
-		pack.addProvider(ModAdvancementProvider::new);
-		pack.addProvider(ModBlockTagProvider::new);
-		pack.addProvider(ModFluidTagProvider::new);
-		pack.addProvider(ModBiomeTagProvider::new);
-		pack.addProvider(ModItemTagProvider::new);
-		pack.addProvider(ModGameEventTagProvider::new);
-		pack.addProvider(ModEntityTagProvider::new);
-		pack.addProvider(ModBlockLootTableProvider::new);
-		pack.addProvider(ModModelProvider::new);
-		pack.addProvider(ModWorldGenerator::new);
-		pack.addProvider(ModLanguageProvider::new);
-		pack.addProvider(ModRecipeProvider::new);
-	}
-	@Override
-	public void buildRegistry(RegistrySetBuilder registryBuilder) {
-		registryBuilder.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::boostrap);
-		registryBuilder.add(Registries.PLACED_FEATURE, ModPlacements::boostrap);
-		registryBuilder.add(Registries.BIOME, ModBiomes::boostrap);
-		registryBuilder.add(Registries.CONFIGURED_CARVER, ModCarvers::boostrap);
-		registryBuilder.add(Registries.DIMENSION_TYPE, ModDimensions::bootstrapType);
-	}
-	public static void registerFuels() {
-		for (Map.Entry<ItemLike, Integer> entry : ModRegistry.ITEM_BURNABLE.entrySet())
-			FuelRegistry.INSTANCE.add(entry.getKey(), entry.getValue());
-	}
+        pack.addProvider(ModAdvancementProvider::new);
 
-	public static void registerBurnable() {
-		FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();
-		for (Map.Entry<Block, Tuple<Integer, Integer>> entry : ModRegistry.BLOCK_FLAMMABLE.entrySet()) {
-			registry.add(entry.getKey(), entry.getValue().getA(), entry.getValue().getB());
-		}
-	}
+        pack.addProvider(ModBlockTagProvider::new);
+        pack.addProvider(ModFluidTagProvider::new);
+        pack.addProvider(ModBiomeTagProvider::new);
+        pack.addProvider(ModItemTagProvider::new);
+        pack.addProvider(ModGameEventTagProvider::new);
+        pack.addProvider(ModEntityTagProvider::new);
 
-	public static void registerStripped() {
-		for (Map.Entry<Block, Block> entry : ModRegistry.BLOCK_STRIPPED.entrySet())
-			StrippableBlockRegistry.register(entry.getKey(), entry.getValue());
-	}
+        pack.addProvider(ModBlockLootTableProvider::new);
+        pack.addProvider(OrdealLootTableProvider::new);
+        pack.addProvider(ModChestLootTableProvider::new);
+
+        pack.addProvider(ModModelProvider::new);
+
+        pack.addProvider(ModWorldGenerator::new);
+        pack.addProvider(ModDimensionProvider::new);
+
+        pack.addProvider(ModLanguageProvider::new);
+        pack.addProvider(ModRecipeProvider::new);
+    }
+
+    @Override
+    public void buildRegistry(RegistrySetBuilder registryBuilder) {
+        registryBuilder.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::boostrap);
+        registryBuilder.add(Registries.PLACED_FEATURE, ModPlacements::boostrap);
+        registryBuilder.add(Registries.BIOME, ModBiomes::boostrap);
+        registryBuilder.add(Registries.CONFIGURED_CARVER, ModCarvers::boostrap);
+        registryBuilder.add(Registries.DIMENSION_TYPE, ModDimensions::bootstrap);
+        registryBuilder.add(Registries.NOISE, ModNoises::bootstrap);
+        registryBuilder.add(Registries.DENSITY_FUNCTION, ModDensityFunctions::bootstrap);
+        registryBuilder.add(Registries.NOISE_SETTINGS, ModNoiseSettings::bootstrap);
+    }
+
+    public static void registerFuels() {
+        for (Map.Entry<ItemLike, Integer> entry : ModRegistry.ITEM_BURNABLE.entrySet())
+            FuelRegistry.INSTANCE.add(entry.getKey(), entry.getValue());
+    }
+
+    public static void registerBurnable() {
+        FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();
+        for (Map.Entry<Block, Tuple<Integer, Integer>> entry : ModRegistry.BLOCK_FLAMMABLE.entrySet()) {
+            registry.add(entry.getKey(), entry.getValue().getA(), entry.getValue().getB());
+        }
+    }
+
+    public static void registerStripped() {
+        for (Map.Entry<Block, Block> entry : ModRegistry.BLOCK_STRIPPED.entrySet())
+            StrippableBlockRegistry.register(entry.getKey(), entry.getValue());
+    }
 }

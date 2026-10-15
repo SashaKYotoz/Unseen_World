@@ -24,10 +24,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 public class StandingFruitBlock extends BushBlock implements BonemealableBlock {
-    public ItemLike drop;
+    public Supplier<ItemLike> drop;
     public final TagKey<Block> canStayOn;
     private final VoxelShape plantShape;
 
@@ -36,7 +37,7 @@ public class StandingFruitBlock extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty LUMINANCE = IntegerProperty.create("luminance",0,12);
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE = state -> (Integer)state.getValue(LUMINANCE);
 
-    public StandingFruitBlock(Properties settings, ItemLike drop, TagKey<Block> growable_on, VoxelShape shape) {
+    public StandingFruitBlock(Properties settings, Supplier<ItemLike> drop, TagKey<Block> growable_on, VoxelShape shape) {
         super(settings.randomTicks());
         this.drop = drop;
         this.canStayOn = growable_on;
@@ -67,7 +68,7 @@ public class StandingFruitBlock extends BushBlock implements BonemealableBlock {
     @Override
     public void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack tool, boolean dropExperience) {
         if (state.getValue(HAS_FRUIT))
-            world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop)));
+            world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this.drop.get())));
         super.spawnAfterBreak(state, world, pos, tool, dropExperience);
     }
 
@@ -81,9 +82,7 @@ public class StandingFruitBlock extends BushBlock implements BonemealableBlock {
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (state.getValue(HAS_FRUIT)) {
-            world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(this.drop)));
-            world.setBlockAndUpdate(pos, state.setValue(HAS_FRUIT, false).setValue(HAS_FLOWER, false));
-            return InteractionResult.SUCCESS;
+            return FruitBearing.harvest(world, pos, state.setValue(HAS_FRUIT, false).setValue(HAS_FLOWER, false), new ItemStack(this.drop.get()), player);
         }
         return super.use(state, world, pos, player, hand, hit);
     }

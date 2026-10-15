@@ -5,6 +5,12 @@
     "fog_color": 4605011,
     "foliage_color": 0,
     "grass_color": 0,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 4.0,
+      "sound": "minecraft:ambient.basalt_deltas.mood",
+      "tick_delay": 6000
+    },
     "music": {
       "max_delay": 24000,
       "min_delay": 12000,
@@ -20,8 +26,15 @@
   "features": [
     [],
     [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
     [
-      "unseen_world:midnight_lily_patch"
+      "unseen_world:dead_umbral_coral_reef"
     ]
   ],
   "has_precipitation": false,
@@ -34,7 +47,20 @@
     "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
-    "water_creature": []
+    "water_creature": [
+      {
+        "type": "unseen_world:gloomwhale",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 8
+      },
+      {
+        "type": "unseen_world:gripping_gloomwhale",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 3
+      }
+    ]
   },
-  "temperature": 0.25
+  "temperature": 0.3
 }

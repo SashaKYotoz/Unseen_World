@@ -1,5 +1,7 @@
 {
-  "carvers": {},
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
   "downfall": 0.0,
   "effects": {
     "fog_color": 4605011,
@@ -16,25 +18,39 @@
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.nether.basalt_deltas"
+        "sound_id": "minecraft:music.overworld.badlands"
       }
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:ash"
+      },
+      "probability": 0.01
     },
     "sky_color": 4605011,
     "water_color": 0,
     "water_fog_color": 0
   },
   "features": [
-    [],
+    [
+      "unseen_world:dark_currantslate_boulder"
+    ],
     [],
     [],
     [],
     [],
     [],
     [
-      "unseen_world:ancient_debris"
+      "unseen_world:iron_ore_upper"
     ],
     [
-      "unseen_world:dark_currantslate_ceiling_boulder"
+      "unseen_world:dark_currantslate_ceiling_boulder",
+      "unseen_world:gripping_dark_currantslate_patch_floor"
+    ],
+    [],
+    [
+      "unseen_world:gloomweed_patch",
+      "unseen_world:tall_gloomweed_patch"
     ]
   ],
   "has_precipitation": false,
@@ -42,12 +58,25 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "unseen_world:tuskhog",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 6
+      },
+      {
+        "type": "unseen_world:saberpard",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 3
+      }
+    ],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 0.2
+  "temperature": 1.0
 }

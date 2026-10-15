@@ -1,10 +1,9 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
-
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 public class SoulOvergrowthOnEffectActiveTickProcedure {

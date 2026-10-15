@@ -2,6 +2,7 @@ package net.sashakyotoz.common.entities.ai.listeners;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
@@ -11,12 +12,7 @@ import net.sashakyotoz.client.particles.custom.effects.WindVibrationParticleEffe
 import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
 import net.sashakyotoz.common.tags.ModTags;
 
-public class EldritchEventListener implements GameEventListener {
-    private final EldritchWatcherEntity watcher;
-
-    public EldritchEventListener(EldritchWatcherEntity watcher) {
-        this.watcher = watcher;
-    }
+public record EldritchEventListener(EldritchWatcherEntity watcher) implements GameEventListener {
 
     @Override
     public PositionSource getListenerSource() {
@@ -25,13 +21,16 @@ public class EldritchEventListener implements GameEventListener {
 
     @Override
     public int getListenerRadius() {
-        return 20;
+        return 16;
     }
 
     @Override
-    public boolean handleGameEvent(ServerLevel world, GameEvent event, GameEvent.Context emitter, Vec3 emitterPos) {
-        if (event.is(ModTags.GameEvents.ELDRITCH_CAN_LISTEN) && !(emitter.sourceEntity() instanceof EldritchWatcherEntity)
-                && (emitter.sourceEntity() != null && !emitter.sourceEntity().isShiftKeyDown()) && this.watcher.getNavigation().isDone()) {
+    public boolean handleGameEvent(ServerLevel world, GameEvent event, GameEvent.Context context, Vec3 emitterPos) {
+        Entity entity = context.sourceEntity();
+        if (event.is(ModTags.GameEvents.ELDRITCH_CAN_LISTEN) &&
+                !(entity instanceof EldritchWatcherEntity) &&
+                entity != null &&
+                this.watcher.getNavigation().isDone()) {
             world.sendParticles(new WindVibrationParticleEffect(new EntityPositionSource(watcher, watcher.getEyeHeight()), 15),
                     emitterPos.x(), emitterPos.y(), emitterPos.z(), 2, 0, 0, 0, 1);
             watcher.lookAt(EntityAnchorArgument.Anchor.EYES, emitterPos);

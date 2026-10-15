@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.block.BeaconOfWeaponsBlock;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
@@ -35,7 +35,7 @@ public class TreasureWeaponOnBeaconClick {
                     ItemStack finalStack = stack;
                     player.getInventory().clearOrCountMatchingItems(p -> finalStack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     BeaconOfWeaponsBlockEntity.item = stack;
-                    UnseenWorldMod.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
+                    UnseenWorld.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
                 } else if (itemstack.is(UnseenWorldItems.LIGHT_TULVAR.get())) {
                     ItemStack stack = ItemStack.EMPTY;
                     if (player.getInventory().contains(new ItemStack(UnseenWorldItems.VOID_INGOT.get()))) {
@@ -56,7 +56,7 @@ public class TreasureWeaponOnBeaconClick {
                     ItemStack finalStack = stack;
                     player.getInventory().clearOrCountMatchingItems(p -> finalStack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     BeaconOfWeaponsBlockEntity.item = stack;
-                    UnseenWorldMod.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
+                    UnseenWorld.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
                 } else if (itemstack.is(UnseenWorldItems.FIERY_SABER.get())) {
                     ItemStack stack = ItemStack.EMPTY;
                     if (player.getInventory().contains(new ItemStack(UnseenWorldItems.VOID_INGOT.get()))) {
@@ -77,7 +77,7 @@ public class TreasureWeaponOnBeaconClick {
                     ItemStack finalStack = stack;
                     player.getInventory().clearOrCountMatchingItems(p -> finalStack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     BeaconOfWeaponsBlockEntity.item = stack;
-                    UnseenWorldMod.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
+                    UnseenWorld.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
                 } else if (itemstack.is(UnseenWorldItems.BLASTING_LANCER.get())) {
                     ItemStack stack = ItemStack.EMPTY;
                     if (player.getInventory().contains(new ItemStack(UnseenWorldItems.VOID_INGOT.get()))) {
@@ -98,7 +98,7 @@ public class TreasureWeaponOnBeaconClick {
                     ItemStack finalStack = stack;
                     player.getInventory().clearOrCountMatchingItems(p -> finalStack.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     BeaconOfWeaponsBlockEntity.item = stack;
-                    UnseenWorldMod.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
+                    UnseenWorld.queueServerWork(60, () -> BeaconOfWeaponsBlockEntity.item = ItemStack.EMPTY);
                 }
             }
         }

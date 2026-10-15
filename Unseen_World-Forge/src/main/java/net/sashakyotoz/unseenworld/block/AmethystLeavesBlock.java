@@ -51,14 +51,14 @@ public class AmethystLeavesBlock extends Block implements BonemealableBlock, Sim
         return 1;
     }
 
-    public BlockState updateShape(BlockState state, Direction direction, BlockState p_54442_, LevelAccessor p_54443_, BlockPos p_54444_, BlockPos p_54445_) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState p_54442_, LevelAccessor accessor, BlockPos p_54444_, BlockPos p_54445_) {
         if (state.getValue(WATERLOGGED)) {
-            p_54443_.scheduleTick(p_54444_, Fluids.WATER, Fluids.WATER.getTickDelay(p_54443_));
+            accessor.scheduleTick(p_54444_, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
         }
 
         int i = getDistanceAt(p_54442_) + 1;
         if (i != 1 || state.getValue(DISTANCE) != i) {
-            p_54443_.scheduleTick(p_54444_, this, 1);
+            accessor.scheduleTick(p_54444_, this, 1);
         }
 
         return state;

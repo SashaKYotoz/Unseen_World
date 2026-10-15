@@ -1,11 +1,15 @@
 {
   "structures": [
     {
-      "structure": "unseen_world:guardian_camp_remains",
+      "structure": "unseen_world:violeger_camp_remains",
       "weight": 1
     },
     {
       "structure": "unseen_world:glaciemite_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:sentinel_ruins",
       "weight": 1
     },
     {

@@ -2,7 +2,7 @@
 package net.sashakyotoz.unseenworld.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -15,9 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.registries.*;
-import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
@@ -42,22 +40,20 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
     }
 
     @Override
-    public void onHitBlock(@NotNull BlockHitResult blockHitResult) {
+    public void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        if (this.getOwner() != null && this.getOwner() instanceof Player player) {
-            if (this.level().isClientSide())
-                this.level().addParticle(UnseenWorldParticleTypes.VOID_PORTAL.get(), player.getX(), player.getY() + 2.5, player.getZ(), 1, 1, 1);
-            BlockPos hitPos = blockHitResult.getBlockPos().above();
-            UnseenWorldMod.queueServerWork(20, () -> {
-                float x = hitPos.getX();
-                float y = hitPos.getY();
-                float z = hitPos.getZ();
-                player.teleportTo(x, y, z);
-                this.level().addParticle(UnseenWorldParticleTypes.VOID_PORTAL.get(), x, y + 1.5, z, 1, 1, 1);
-                if (player instanceof ServerPlayer serverPlayer)
-                    serverPlayer.connection.teleport(x, y, z, player.getYRot(), player.getXRot());
-            });
-        }
+        BlockPos hitPos = blockHitResult.getBlockPos().above();
+        float x = hitPos.getX();
+        float y = hitPos.getY();
+        float z = hitPos.getZ();
+        if (this.level() instanceof ServerLevel serverLevel)
+            serverLevel.sendParticles(UnseenWorldParticleTypes.VOID_PORTAL.get(),
+                    x,
+                    y,
+                    z,
+                    1, 0, 0, 0, 1);
+        if (this.getOwner() instanceof Player player && !this.level().isClientSide())
+            player.teleportTo(x, y, z);
     }
 
     @Override
@@ -76,22 +72,6 @@ public class VoidStaffEntity extends AbstractArrow implements ItemSupplier {
         staffEntity.setKnockback(knockback);
         level.addFreshEntity(staffEntity);
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
-        return staffEntity;
-    }
-
-    public static VoidStaffEntity shoot(LivingEntity entity, LivingEntity target) {
-        VoidStaffEntity staffEntity = new VoidStaffEntity(UnseenWorldEntities.VOID_STAFF.get(), entity, entity.level());
-        double dx = target.getX() - entity.getX();
-        double dy = target.getY() + target.getEyeHeight() - 1.1;
-        double dz = target.getZ() - entity.getZ();
-        staffEntity.shoot(dx, dy - staffEntity.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
-        staffEntity.setSilent(true);
-        staffEntity.setBaseDamage(4);
-        staffEntity.setKnockback(2);
-        staffEntity.setCritArrow(false);
-        entity.level().addFreshEntity(staffEntity);
-        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), UnseenWorldSounds.ITEM_STAFF_SHOT, SoundSource.PLAYERS, 1,
-                1f / (RandomSource.create().nextFloat() * 0.5f + 1));
         return staffEntity;
     }
 

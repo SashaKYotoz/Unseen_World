@@ -2,11 +2,7 @@
 package net.sashakyotoz.unseenworld.world.features;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -18,13 +14,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldBlocks;
 
 import java.util.List;
-import java.util.Set;
 
 public class TealivyBigTreeFeature extends Feature<NoneFeatureConfiguration> {
-	private final Set<ResourceKey<Level>> generate_dimensions = Set.of(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("unseen_world:the_darkness")));
 	private final List<Block> base_blocks;
 	private StructureTemplate template = null;
 
@@ -38,10 +33,10 @@ public class TealivyBigTreeFeature extends Feature<NoneFeatureConfiguration> {
 		WorldGenLevel level = context.level();
 		RandomSource random = context.random();
 		BlockPos pos = context.origin();
-		if (!generate_dimensions.contains(level.getLevel().dimension()))
+		if (!level.getLevel().dimension().equals(UnseenWorld.THE_DARKNESS))
 			return false;
 		if (template == null)
-			template = level.getLevel().getStructureManager().getOrCreate(new ResourceLocation("unseen_world", "tealivy_big_tree"));
+			template = level.getLevel().getStructureManager().getOrCreate(UnseenWorld.makeId("tealivy_big_tree"));
 		boolean anyPlaced = false;
 		if ((random.nextInt(1000000) + 1) <= 250000) {
 			int count = random.nextInt(1) + 1;

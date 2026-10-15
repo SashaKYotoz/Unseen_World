@@ -6,41 +6,9 @@ import net.minecraft.data.tags.GameEventTagsProvider;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.sashakyotoz.common.tags.ModTags;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModGameEventTagProvider extends GameEventTagsProvider {
-    private final List<GameEvent> BASIC_GAME_EVENTS = List.of(GameEvent.BLOCK_ATTACH,
-            GameEvent.BLOCK_CHANGE,
-            GameEvent.BLOCK_CLOSE,
-            GameEvent.BLOCK_DESTROY,
-            GameEvent.BLOCK_DETACH,
-            GameEvent.BLOCK_OPEN,
-            GameEvent.BLOCK_PLACE,
-            GameEvent.BLOCK_ACTIVATE,
-            GameEvent.BLOCK_DEACTIVATE,
-            GameEvent.CONTAINER_CLOSE,
-            GameEvent.CONTAINER_OPEN,
-            GameEvent.DRINK,
-            GameEvent.EAT,
-            GameEvent.ENTITY_DAMAGE,
-            GameEvent.ENTITY_PLACE,
-            GameEvent.ENTITY_ROAR,
-            GameEvent.ENTITY_SHAKE,
-            GameEvent.EQUIP,
-            GameEvent.EXPLODE,
-            GameEvent.HIT_GROUND,
-            GameEvent.INSTRUMENT_PLAY,
-            GameEvent.ITEM_INTERACT_FINISH,
-            GameEvent.LIGHTNING_STRIKE,
-            GameEvent.NOTE_BLOCK_PLAY,
-            GameEvent.PROJECTILE_LAND,
-            GameEvent.PROJECTILE_SHOOT,
-            GameEvent.SHEAR,
-            GameEvent.SPLASH,
-            GameEvent.STEP,
-            GameEvent.SWIM,
-            GameEvent.TELEPORT);
 
     public ModGameEventTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
@@ -48,7 +16,23 @@ public class ModGameEventTagProvider extends GameEventTagsProvider {
 
     @Override
     public void addTags(HolderLookup.Provider arg) {
-        for (GameEvent event : BASIC_GAME_EVENTS)
-            this.tag(ModTags.GameEvents.ELDRITCH_CAN_LISTEN).add(event);
+        this.tag(ModTags.GameEvents.ELDRITCH_CAN_LISTEN)
+                .add(GameEvent.BLOCK_PLACE)
+                .add(GameEvent.BLOCK_ACTIVATE)
+                .add(GameEvent.BLOCK_DESTROY)
+                .add(GameEvent.PROJECTILE_LAND)
+                .add(GameEvent.PROJECTILE_SHOOT)
+                .add(GameEvent.ITEM_INTERACT_FINISH)
+                .add(GameEvent.BLOCK_CHANGE);
+
+        this.tag(ModTags.GameEvents.ENTITY_SHOOT)
+                .add(GameEvent.EXPLODE)
+                .add(GameEvent.PROJECTILE_SHOOT)
+                .add(GameEvent.SHRIEK);
+
+        this.tag(ModTags.GameEvents.ENTITY_MOVE)
+                .add(GameEvent.STEP)
+                .add(GameEvent.ELYTRA_GLIDE)
+                .add(GameEvent.TELEPORT);
     }
 }

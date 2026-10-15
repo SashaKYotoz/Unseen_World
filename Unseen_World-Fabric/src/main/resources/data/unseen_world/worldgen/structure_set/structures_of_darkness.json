@@ -1,11 +1,15 @@
 {
   "structures": [
     {
-      "structure": "unseen_world:warrior_of_darkness_tower",
+      "structure": "unseen_world:sentinel_stronghold",
       "weight": 1
     },
     {
-      "structure": "unseen_world:eclipse_core",
+      "structure": "unseen_world:patriarch_citadel",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:warrior_fortress",
       "weight": 1
     }
   ],

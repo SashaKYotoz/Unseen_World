@@ -17,7 +17,7 @@ public class HarmonyWatcherRenderer extends MobRenderer<HarmonyWatcherEntity, Ha
 
     @Override
     public ResourceLocation getTextureLocation(HarmonyWatcherEntity entity) {
-        return entity.watcherType == null ? UnseenWorld.makeID("textures/entity/harmony_watcher/harmony_watcher_glaciemite.png")
-                : UnseenWorld.makeID("textures/entity/harmony_watcher/harmony_watcher_" + entity.watcherType.typeName + ".png");
+        return entity.getWatcherType() == null ? UnseenWorld.MOD.makeID("textures/entity/harmony_watcher/harmony_watcher_glaciemite.png")
+                : UnseenWorld.MOD.makeID("textures/entity/harmony_watcher/harmony_watcher_" + entity.getWatcherType().typeName + ".png");
     }
 }

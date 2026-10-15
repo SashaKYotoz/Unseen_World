@@ -6,7 +6,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
@@ -46,9 +45,7 @@ public class MidnightLilyPadBlock extends BushBlock implements BonemealableBlock
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (state.getValue(HAS_BERRY)) {
-            world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModItems.NIGHTBERRY)));
-            world.setBlockAndUpdate(pos, state.setValue(HAS_BERRY, false));
-            return InteractionResult.SUCCESS;
+            return FruitBearing.harvest(world, pos, state.setValue(HAS_BERRY, false), new ItemStack(ModItems.NIGHTBERRY), player);
         }
         return super.use(state, world, pos, player, hand, hit);
     }

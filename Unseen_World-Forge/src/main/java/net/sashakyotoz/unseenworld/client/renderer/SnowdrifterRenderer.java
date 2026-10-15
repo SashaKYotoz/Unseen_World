@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.client.model.ModelSnowdrifter;
 import net.sashakyotoz.unseenworld.entity.SnowdrifterEntity;
 
@@ -26,6 +26,6 @@ public class SnowdrifterRenderer extends MobRenderer<SnowdrifterEntity, ModelSno
 
     @Override
     public ResourceLocation getTextureLocation(SnowdrifterEntity entity) {
-        return new ResourceLocation(UnseenWorldMod.MODID,"textures/entities/snowdrifter.png");
+        return new ResourceLocation(UnseenWorld.MOD_ID,"textures/entities/snowdrifter.png");
     }
 }

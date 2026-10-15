@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -18,10 +17,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.common.entities.util.EntityShapes;
 
 public class ShimmerEntity extends WaterAnimal {
     public float tiltAngle;
@@ -41,6 +40,7 @@ public class ShimmerEntity extends WaterAnimal {
     private float swimX;
     private float swimY;
     private float swimZ;
+    private int dimensionBucket = -1;
 
     public ShimmerEntity(EntityType<? extends WaterAnimal> entityType, Level world) {
         super(entityType, world);
@@ -65,15 +65,7 @@ public class ShimmerEntity extends WaterAnimal {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        float length = 2.5F;
-        float thickness = 0.9F;
-        float pitchInRadians = Math.abs(this.tiltAngle * (float)(Math.PI / 180.0));
-        float horizontalFactor = Math.abs(Mth.sin(pitchInRadians));
-        float verticalFactor = Math.abs(Mth.cos(pitchInRadians));
-        float currentWidth = thickness + (length - thickness) * horizontalFactor;
-        float currentHeight = thickness + (length - thickness) * verticalFactor;
-
-        return EntityDimensions.fixed(currentWidth, currentHeight);
+        return EntityShapes.oriented(2.5F, 0.9F, this.dimensionBucket * 15.0F);
     }
 
     @Override
@@ -118,7 +110,7 @@ public class ShimmerEntity extends WaterAnimal {
         this.prevThrustTimer = this.thrustTimer;
         this.prevTentacleAngle = this.tentacleAngle;
         this.thrustTimer = this.thrustTimer + this.thrustTimerSpeed;
-        if ((double)this.thrustTimer > Math.PI * 2) {
+        if ((double) this.thrustTimer > Math.PI * 2) {
             if (this.level().isClientSide) {
                 this.thrustTimer = (float) (Math.PI * 2);
             } else {
@@ -135,7 +127,7 @@ public class ShimmerEntity extends WaterAnimal {
             if (this.thrustTimer < (float) Math.PI) {
                 float f = this.thrustTimer / (float) Math.PI;
                 this.tentacleAngle = Mth.sin(f * f * (float) Math.PI) * (float) Math.PI * 0.25F;
-                if ((double)f > 0.75) {
+                if ((double) f > 0.75) {
                     this.swimVelocityScale = 1.0F;
                     this.turningSpeed = 1.0F;
                 } else {
@@ -155,16 +147,16 @@ public class ShimmerEntity extends WaterAnimal {
 
             Vec3 vec3d = this.getDeltaMovement();
             double d = vec3d.horizontalDistance();
-            this.yBodyRot = this.yBodyRot + (-((float)Mth.atan2(vec3d.x, vec3d.z)) * (180.0F / (float)Math.PI) - this.yBodyRot) * 0.1F;
+            this.yBodyRot = this.yBodyRot + (-((float) Mth.atan2(vec3d.x, vec3d.z)) * (180.0F / (float) Math.PI) - this.yBodyRot) * 0.1F;
             this.setYRot(this.yBodyRot);
             this.rollAngle = this.rollAngle + (float) Math.PI * this.turningSpeed * 1.5F;
-            this.tiltAngle = this.tiltAngle + (-((float)Mth.atan2(d, vec3d.y)) * (180.0F / (float)Math.PI) - this.tiltAngle) * 0.1F;
+            this.tiltAngle = this.tiltAngle + (-((float) Mth.atan2(d, vec3d.y)) * (180.0F / (float) Math.PI) - this.tiltAngle) * 0.1F;
         } else {
             this.tentacleAngle = Mth.abs(Mth.sin(this.thrustTimer)) * (float) Math.PI * 0.25F;
             if (!this.level().isClientSide) {
                 double e = this.getDeltaMovement().y;
                 if (this.hasEffect(MobEffects.LEVITATION)) {
-                    e = 0.05 * (double)(this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1);
+                    e = 0.05 * (double) (this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1);
                 } else if (!this.isNoGravity()) {
                     e -= 0.08;
                 }
@@ -175,7 +167,11 @@ public class ShimmerEntity extends WaterAnimal {
             this.tiltAngle = this.tiltAngle + (-90.0F - this.tiltAngle) * 0.02F;
         }
 
-        this.refreshDimensions();
+        int bucket = EntityShapes.orientationBucket(this.tiltAngle, 15.0F);
+        if (bucket != this.dimensionBucket) {
+            this.dimensionBucket = bucket;
+            this.refreshDimensions();
+        }
     }
 
     @Override
@@ -199,9 +195,9 @@ public class ShimmerEntity extends WaterAnimal {
         Vec3 vec3d = this.applyBodyRotations(new Vec3(0.0, -1.0, 0.0)).add(this.getX(), this.getY(), this.getZ());
 
         for (int i = 0; i < 30; i++) {
-            Vec3 vec3d2 = this.applyBodyRotations(new Vec3((double)this.random.nextFloat() * 0.6 - 0.3, -1.0, (double)this.random.nextFloat() * 0.6 - 0.3));
-            Vec3 vec3d3 = vec3d2.scale(0.3 + (double)(this.random.nextFloat() * 2.0F));
-            ((ServerLevel)this.level()).sendParticles(this.getInkParticle(), vec3d.x, vec3d.y + 0.5, vec3d.z, 0, vec3d3.x, vec3d3.y, vec3d3.z, 0.1F);
+            Vec3 vec3d2 = this.applyBodyRotations(new Vec3((double) this.random.nextFloat() * 0.6 - 0.3, -1.0, (double) this.random.nextFloat() * 0.6 - 0.3));
+            Vec3 vec3d3 = vec3d2.scale(0.3 + (double) (this.random.nextFloat() * 2.0F));
+            ((ServerLevel) this.level()).sendParticles(this.getInkParticle(), vec3d.x, vec3d.y + 0.5, vec3d.z, 0, vec3d3.x, vec3d3.y, vec3d3.z, 0.1F);
         }
     }
 
@@ -282,11 +278,11 @@ public class ShimmerEntity extends WaterAnimal {
                         vec3d = vec3d.subtract(0.0, vec3d.y, 0.0);
                     }
 
-                    ShimmerEntity.this.setSwimmingVector((float)vec3d.x / 20.0F, (float)vec3d.y / 20.0F, (float)vec3d.z / 20.0F);
+                    ShimmerEntity.this.setSwimmingVector((float) vec3d.x / 20.0F, (float) vec3d.y / 20.0F, (float) vec3d.z / 20.0F);
                 }
 
-                if (this.timer % 10 == 5) {
-                    ShimmerEntity.this.level().addParticle(ParticleTypes.ASH, ShimmerEntity.this.getX(), ShimmerEntity.this.getY(), ShimmerEntity.this.getZ(), 0.0, 0.0, 0.0);
+                if (this.timer % 10 == 5 && ShimmerEntity.this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ParticleTypes.ASH, ShimmerEntity.this.getX(), ShimmerEntity.this.getY(), ShimmerEntity.this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                 }
             }
         }
@@ -318,9 +314,10 @@ public class ShimmerEntity extends WaterAnimal {
             }
         }
     }
-    public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<? extends WaterAnimal> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        int i = world.getSeaLevel();
-        int j = i - 6;
-        return pos.getY() >= j && pos.getY() <= i && world.getFluidState(pos.below()).is(FluidTags.WATER) && world.getFluidState(pos.above()).is(FluidTags.WATER);
+
+    public float getGlowBrightness(float partialTicks) {
+        float angle = Mth.lerp(partialTicks, this.prevTentacleAngle, this.tentacleAngle);
+        float brightness = Mth.sin(angle);
+        return Mth.clamp(brightness, 0.2F, 1.0F);
     }
 }

@@ -1,13 +1,11 @@
 package net.sashakyotoz.unseenworld.managers;
 
-import net.minecraft.sounds.SoundEvents;
-
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.Level;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class GoldenChestGUIUpdate {
     public static void execute(Level world, double x, double y, double z) {

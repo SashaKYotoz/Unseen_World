@@ -12,7 +12,7 @@ import net.sashakyotoz.common.entities.animations.DreadflapAnimations;
 import net.sashakyotoz.common.entities.custom.DreadflapEntity;
 
 public class DreadflapModel extends HierarchicalModel<DreadflapEntity> {
-    public static final ModelLayerLocation DREADFLAP = new ModelLayerLocation(UnseenWorld.makeID("dreadflap"), "main");
+    public static final ModelLayerLocation DREADFLAP = new ModelLayerLocation(UnseenWorld.MOD.makeID("dreadflap"), "main");
 
     private final ModelPart root;
     private final ModelPart body;
@@ -24,7 +24,7 @@ public class DreadflapModel extends HierarchicalModel<DreadflapEntity> {
         this.head = this.body.getChild("head");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition body = modelPartData.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 11.0F, 0.0F));

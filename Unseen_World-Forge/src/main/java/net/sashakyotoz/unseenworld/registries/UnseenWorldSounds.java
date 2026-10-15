@@ -8,10 +8,10 @@ import net.minecraftforge.common.util.ForgeSoundType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 public class UnseenWorldSounds {
-	public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, UnseenWorldMod.MODID);
+	public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, UnseenWorld.MOD_ID);
 	public static final SoundEvent BIOME_AMETHYST_FOREST = create("biome.amethyst_forest");
 	public static final SoundEvent BIOME_TEALIVE_VALLEY = create("biome.tealivy_valley");
 	public static final SoundEvent BIOME_GRIZZLY_FOREST = create("biome.grizzly_forest");
@@ -27,7 +27,7 @@ public class UnseenWorldSounds {
 			() -> SoundEvents.LODESTONE_HIT, () -> SoundEvents.NETHER_BRICKS_HIT,
 			() -> SoundEvents.SCULK_CATALYST_FALL);
 	private static SoundEvent create(String name) {
-		ResourceLocation location = new ResourceLocation(UnseenWorldMod.MODID,name);
+		ResourceLocation location = new ResourceLocation(UnseenWorld.MOD_ID,name);
 		SoundEvent sound = SoundEvent.createVariableRangeEvent(location);
 		ForgeRegistries.SOUND_EVENTS.register(location, sound);
 		return sound;

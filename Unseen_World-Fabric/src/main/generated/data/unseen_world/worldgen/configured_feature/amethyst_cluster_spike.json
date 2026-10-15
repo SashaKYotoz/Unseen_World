@@ -26,11 +26,17 @@
         }
       ]
     },
+    "covered_cluster_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:amethyst_block"
+      }
+    },
     "height": {
       "type": "minecraft:uniform",
       "value": {
-        "max_inclusive": 19,
-        "min_inclusive": 9
+        "max_inclusive": 17,
+        "min_inclusive": 7
       }
     },
     "integration_size": {

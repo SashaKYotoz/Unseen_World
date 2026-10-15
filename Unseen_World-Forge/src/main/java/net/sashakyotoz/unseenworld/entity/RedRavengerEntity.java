@@ -1,10 +1,8 @@
 
 package net.sashakyotoz.unseenworld.entity;
 
-import net.minecraft.nbt.CompoundTag;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
-import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -37,6 +35,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
+import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

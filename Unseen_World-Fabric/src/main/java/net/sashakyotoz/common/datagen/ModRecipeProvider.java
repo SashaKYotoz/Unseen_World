@@ -121,54 +121,54 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.AMETHYST_WOOD,
                 Ingredient.of(ModBlocks.AMETHYST_LOG))
                 .unlockedBy(getHasName(ModBlocks.AMETHYST_LOG), has(ModBlocks.AMETHYST_LOG))
-                .group("amethyst_wood").save(exporter, UnseenWorld.makeID("amethyst_wood"));
+                .group("amethyst_wood").save(exporter, UnseenWorld.MOD.makeID("amethyst_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STRIPPED_AMETHYST_WOOD,
                 Ingredient.of(ModBlocks.STRIPPED_AMETHYST_LOG))
                 .unlockedBy(getHasName(ModBlocks.STRIPPED_AMETHYST_LOG), has(ModBlocks.STRIPPED_AMETHYST_LOG))
-                .group("stripped_amethyst_wood").save(exporter, UnseenWorld.makeID("stripped_amethyst_wood"));
+                .group("stripped_amethyst_wood").save(exporter, UnseenWorld.MOD.makeID("stripped_amethyst_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRIZZLY_WOOD,
                 Ingredient.of(ModBlocks.GRIZZLY_LOG))
                 .unlockedBy(getHasName(ModBlocks.GRIZZLY_LOG), has(ModBlocks.AMETHYST_LOG))
-                .group("grizzly_wood").save(exporter, UnseenWorld.makeID("grizzly_wood"));
+                .group("grizzly_wood").save(exporter, UnseenWorld.MOD.makeID("grizzly_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STRIPPED_GRIZZLY_WOOD,
                 Ingredient.of(ModBlocks.STRIPPED_GRIZZLY_LOG))
                 .unlockedBy(getHasName(ModBlocks.STRIPPED_GRIZZLY_LOG), has(ModBlocks.STRIPPED_GRIZZLY_LOG))
-                .group("stripped_grizzly_wood").save(exporter, UnseenWorld.makeID("stripped_grizzly_wood"));
+                .group("stripped_grizzly_wood").save(exporter, UnseenWorld.MOD.makeID("stripped_grizzly_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.TEALIVE_WOOD,
                 Ingredient.of(ModBlocks.TEALIVE_LOG))
                 .unlockedBy(getHasName(ModBlocks.TEALIVE_LOG), has(ModBlocks.TEALIVE_LOG))
-                .group("tealive_wood").save(exporter, UnseenWorld.makeID("tealive_wood"));
+                .group("tealive_wood").save(exporter, UnseenWorld.MOD.makeID("tealive_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STRIPPED_TEALIVE_WOOD,
                 Ingredient.of(ModBlocks.STRIPPED_TEALIVE_LOG))
                 .unlockedBy(getHasName(ModBlocks.STRIPPED_TEALIVE_LOG), has(ModBlocks.STRIPPED_TEALIVE_LOG))
-                .group("stripped_tealive_wood").save(exporter, UnseenWorld.makeID("stripped_tealive_wood"));
+                .group("stripped_tealive_wood").save(exporter, UnseenWorld.MOD.makeID("stripped_tealive_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CRIMSONVEIL_WOOD,
                 Ingredient.of(ModBlocks.CRIMSONVEIL_LOG))
                 .unlockedBy(getHasName(ModBlocks.CRIMSONVEIL_LOG), has(ModBlocks.CRIMSONVEIL_LOG))
-                .group("crimsonveil_wood").save(exporter, UnseenWorld.makeID("crimsonveil_wood"));
+                .group("crimsonveil_wood").save(exporter, UnseenWorld.MOD.makeID("crimsonveil_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STRIPPED_CRIMSONVEIL_WOOD,
                 Ingredient.of(ModBlocks.STRIPPED_CRIMSONVEIL_LOG))
                 .unlockedBy(getHasName(ModBlocks.STRIPPED_CRIMSONVEIL_LOG), has(ModBlocks.STRIPPED_CRIMSONVEIL_LOG))
-                .group("stripped_crimsonveil_wood").save(exporter, UnseenWorld.makeID("stripped_crimsonveil_wood"));
+                .group("stripped_crimsonveil_wood").save(exporter, UnseenWorld.MOD.makeID("stripped_crimsonveil_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BURLYWOOD_WOOD,
                 Ingredient.of(ModBlocks.BURLYWOOD_LOG))
                 .unlockedBy(getHasName(ModBlocks.BURLYWOOD_LOG), has(ModBlocks.BURLYWOOD_LOG))
-                .group("burlywood_wood").save(exporter, UnseenWorld.makeID("burlywood_wood"));
+                .group("burlywood_wood").save(exporter, UnseenWorld.MOD.makeID("burlywood_wood"));
         polishedBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.STRIPPED_BURLYWOOD_WOOD,
                 Ingredient.of(ModBlocks.STRIPPED_BURLYWOOD_LOG))
                 .unlockedBy(getHasName(ModBlocks.STRIPPED_BURLYWOOD_LOG), has(ModBlocks.STRIPPED_BURLYWOOD_LOG))
-                .group("stripped_burlywood_wood").save(exporter, UnseenWorld.makeID("stripped_burlywood_wood"));
+                .group("stripped_burlywood_wood").save(exporter, UnseenWorld.MOD.makeID("stripped_burlywood_wood"));
 
         //ingots recipes
-        oreBlasting(exporter, List.of(ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE, ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE),
+        oreBlasting(exporter, List.of(ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE, ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE, ModBlocks.ABYSSAL_ORE_IN_CORONA_STONE),
                 RecipeCategory.TOOLS, ModItems.RAW_ABYSSAL_ORE, 10, 400, "abyssal_ore");
-        oreBlasting(exporter, List.of(ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE, ModBlocks.UNSEENIUM_ORE_IN_GLACIEMITE),
+        oreBlasting(exporter, List.of(ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE, ModBlocks.UNSEENIUM_ORE_IN_GLACIEMITE, ModBlocks.UNSEENIUM_ORE_IN_CORONA_STONE),
                 RecipeCategory.TOOLS, ModItems.RAW_UNSEENIUM_ORE, 5, 300, "unseenium_ore");
-        oreBlasting(exporter, List.of(ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE, ModBlocks.RED_TITANIUM_IN_GLACIEMITE),
+        oreBlasting(exporter, List.of(ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE, ModBlocks.RED_TITANIUM_ORE_IN_GLACIEMITE, ModBlocks.RED_TITANIUM_ORE_IN_CORONA_STONE),
                 RecipeCategory.TOOLS, ModItems.RAW_RED_TITANIUM_ORE, 10, 500, "titanium_ore");
-        oreBlasting(exporter, List.of(ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE, ModBlocks.IRON_ORE_IN_GLACIEMITE),
+        oreBlasting(exporter, List.of(ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE, ModBlocks.IRON_ORE_IN_GLACIEMITE, ModBlocks.IRON_ORE_IN_CORONA_STONE),
                 RecipeCategory.TOOLS, Items.IRON_NUGGET, 5, 300, "iron_ore");
-        oreBlasting(exporter, List.of(ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE, ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE),
+        oreBlasting(exporter, List.of(ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE, ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE, ModBlocks.ANCIENT_DEBRIS_IN_CORONA_STONE),
                 RecipeCategory.TOOLS, Items.NETHERITE_SCRAP, 10, 500, "ancient_debris");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.UNSEENIUM_INGOT)
@@ -203,6 +203,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         twoByTwoPacker(exporter, RecipeCategory.BUILDING_BLOCKS, ModBlocks.GLIMMERGRAIN_SANDSTONE, ModBlocks.GLIMMERGRAIN_SAND);
 
         oneToOneConversionRecipe(exporter, Items.PURPLE_DYE, ModBlocks.BURLYWOOD_VIOLET, "purple_dye");
+        oneToOneConversionRecipe(exporter, Items.LIGHT_BLUE_DYE, ModBlocks.FROSTBLOOM, "light_blue_dye");
+        oneToOneConversionRecipe(exporter, Items.ORANGE_DYE, ModBlocks.CORONA_BLOOM, "orange_dye");
+
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.RIMEHORN_MEAT), RecipeCategory.FOOD, ModItems.COOKED_RIMEHORN_MEAT, 0.5F, 300).unlockedBy("has_meat", has(ModItems.RIMEHORN_MEAT)).save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.PAPER, 3)
+                .define('#', ModBlocks.ASHREED)
+                .pattern("###")
+                .unlockedBy("has_reeds", has(ModBlocks.ASHREED))
+                .save(exporter);
 
         oreBlasting(exporter, List.of(ModBlocks.GLIMMERGRAIN_SAND), RecipeCategory.BUILDING_BLOCKS, Blocks.BLACK_STAINED_GLASS, 5, 200, "black_stained_glass");
 

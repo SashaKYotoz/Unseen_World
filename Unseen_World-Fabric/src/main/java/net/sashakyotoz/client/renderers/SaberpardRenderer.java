@@ -42,7 +42,7 @@ public class SaberpardRenderer extends MobRenderer<SaberpardEntity, SaberpardMod
     @Override
     public ResourceLocation getTextureLocation(SaberpardEntity entity) {
         return entity.getVariant() == SaberpardEntity.Type.JUNGLE ?
-                UnseenWorld.makeID("textures/entity/saberpard/saberpard_jungle.png") :
-                UnseenWorld.makeID("textures/entity/saberpard/saberpard_steppe.png");
+                UnseenWorld.MOD.makeID("textures/entity/saberpard/saberpard_jungle.png") :
+                UnseenWorld.MOD.makeID("textures/entity/saberpard/saberpard_steppe.png");
     }
 }

@@ -14,7 +14,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.TuskhogEntity;
 
 public class TuskhogModel<T extends TuskhogEntity> extends AgeableListModel<T> {
-    public static final ModelLayerLocation TUSKHOG = new ModelLayerLocation(UnseenWorld.makeID("tuskhog"), "main");
+    public static final ModelLayerLocation TUSKHOG = new ModelLayerLocation(UnseenWorld.MOD.makeID("tuskhog"), "main");
     private final ModelPart root;
     protected final ModelPart head;
     protected final ModelPart body;
@@ -34,7 +34,7 @@ public class TuskhogModel<T extends TuskhogEntity> extends AgeableListModel<T> {
         this.leftFrontLeg = root.getChild(PartNames.LEFT_FRONT_LEG);
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition head = modelPartData.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -8.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))

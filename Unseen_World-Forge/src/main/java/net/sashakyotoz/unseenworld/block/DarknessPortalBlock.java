@@ -3,9 +3,7 @@ package net.sashakyotoz.unseenworld.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import net.sashakyotoz.unseenworld.world.teleporter.TheDarknessPortalShape;
@@ -32,7 +30,6 @@ import net.sashakyotoz.unseenworld.world.teleporter.TheDarknessTeleporter;
 import java.util.Optional;
 
 public class DarknessPortalBlock extends NetherPortalBlock {
-	public static ResourceKey<Level> CHIMERIC_DARKNESS = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(UnseenWorldMod.MODID,"the_darkness"));
 	public DarknessPortalBlock() {
 		super(BlockBehaviour.Properties.of().noCollission().randomTicks().pushReaction(PushReaction.BLOCK).strength(-1.0F).sound(SoundType.GLASS).lightLevel(s -> 8).noLootTable());
 	}
@@ -94,9 +91,9 @@ public class DarknessPortalBlock extends NetherPortalBlock {
 		if (entity.canChangeDimensions() && !entity.level().isClientSide()) {
 			if (entity.isOnPortalCooldown()) {
 				entity.setPortalCooldown();
-			} else if (entity.level().dimension() != CHIMERIC_DARKNESS) {
+			} else if (entity.level().dimension() != UnseenWorld.THE_DARKNESS) {
 				entity.setPortalCooldown();
-				teleportToDimension(entity, pos, CHIMERIC_DARKNESS);
+				teleportToDimension(entity, pos, UnseenWorld.THE_DARKNESS);
 			} else {
 				entity.setPortalCooldown();
 				teleportToDimension(entity, pos, Level.OVERWORLD);

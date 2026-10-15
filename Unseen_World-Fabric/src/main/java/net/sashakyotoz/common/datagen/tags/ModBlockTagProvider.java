@@ -33,6 +33,7 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.AMETHYST_GRASS_BLOCK,
                 ModBlocks.GRIMWOOD_GRASS_BLOCK,
                 ModBlocks.NIGHTDARK_GRASS_BLOCK,
+                ModBlocks.PENUMBRAL_GRASS_BLOCK,
                 ModBlocks.NIGHTDARK_DIRT,
                 ModBlocks.TEALIVY_GRASS_BLOCK,
                 ModBlocks.TEALIVY_DIRT,
@@ -48,8 +49,9 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         this.getOrCreateTagBuilder(ModTags.Blocks.CHIMERIC_DARKNESS_STONES).add(
                 ModBlocks.DARK_CURRANTSLATE,
                 ModBlocks.TANZANITE_BLOCK,
-                Blocks.CALCITE,
-                ModBlocks.GLACIEMITE
+                ModBlocks.CORONA_STONE,
+                ModBlocks.GLACIEMITE,
+                Blocks.CALCITE
         );
     }
 }

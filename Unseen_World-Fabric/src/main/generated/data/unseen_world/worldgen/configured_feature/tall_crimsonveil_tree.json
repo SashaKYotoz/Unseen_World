@@ -31,6 +31,9 @@
     },
     "foliage_placer": {
       "type": "minecraft:hanging_blob_foliage_placer",
+      "hanging_leaves_chance": 0.5,
+      "hanging_leaves_extension_chance": 0.25,
+      "height": 2,
       "offset": 0,
       "radius": {
         "type": "minecraft:uniform",

@@ -8,10 +8,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.common.entities.animations.ReaverEntityModelAnimations;
 import net.sashakyotoz.common.entities.custom.ReaverEntity;
 
 public class ReaverModel extends HierarchicalModel<ReaverEntity> {
-    public static final ModelLayerLocation REAVER = new ModelLayerLocation(UnseenWorld.makeID("reaver"), "main");
+    public static final ModelLayerLocation REAVER = new ModelLayerLocation(UnseenWorld.MOD.makeID("reaver"), "main");
 
     private final ModelPart root;
     private final ModelPart body;
@@ -31,7 +32,7 @@ public class ReaverModel extends HierarchicalModel<ReaverEntity> {
         this.right_leg = root.getChild("right_leg");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition body = modelPartData.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 52).addBox(0.0F, -1.0F, -1.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
@@ -54,7 +55,13 @@ public class ReaverModel extends HierarchicalModel<ReaverEntity> {
 
     @Override
     public void setupAnim(ReaverEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
+        this.head.xRot = headPitch / (180F / (float) Math.PI);
 
+        this.animateWalk(ReaverEntityModelAnimations.WALK, limbSwing, limbSwingAmount, 2.0f, 2.0f);
+
+        this.animate(entity.attack, entity.getRandom().nextBoolean() ? ReaverEntityModelAnimations.ATTACK : ReaverEntityModelAnimations.ATTACK_1, ageInTicks);
     }
 
     @Override

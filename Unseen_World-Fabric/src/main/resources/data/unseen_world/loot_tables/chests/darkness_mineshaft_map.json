@@ -8,7 +8,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "destination": "unseen_world:map_can_locate_underground",
+              "destination": "unseen_world:structures_map_can_locate",
               "decoration": "red_x",
               "function": "minecraft:exploration_map",
               "skip_existing_chunks": false,
@@ -17,7 +17,7 @@
             {
               "function": "minecraft:set_name",
               "name": {
-                "translate": "filled_map.unseen_world.eclipse_core"
+                "translate": "filled_map.unseen_world.structures"
               }
             }
           ],

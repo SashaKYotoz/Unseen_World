@@ -17,7 +17,7 @@ public class FertilizeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !this.watcher.isAngry && !this.watcher.isDeadOrDying() && this.watcher.level().getBlockState(this.watcher.blockPosition().below()).is(BlockTags.DIRT);
+        return !this.watcher.isAngry() && !this.watcher.isDeadOrDying() && this.watcher.level().getBlockState(this.watcher.blockPosition().below()).is(BlockTags.DIRT);
     }
 
     @Override

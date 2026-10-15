@@ -8,12 +8,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.config.ModMainConfig;
 import net.sashakyotoz.common.entities.animations.GleamcarverAnimations;
 import net.sashakyotoz.common.entities.custom.GleamcarverEntity;
 
 public class GleamcarverModel extends HierarchicalModel<GleamcarverEntity> {
-    public static final ModelLayerLocation GLEAMCARVER = new ModelLayerLocation(UnseenWorld.makeID("gleamcarver"), "main");
+    public static final ModelLayerLocation GLEAMCARVER = new ModelLayerLocation(UnseenWorld.MOD.makeID("gleamcarver"), "main");
 
     private final ModelPart root;
     private final ModelPart head;
@@ -37,7 +36,7 @@ public class GleamcarverModel extends HierarchicalModel<GleamcarverEntity> {
         this.backLeftPaw = root.getChild("backLeftPaw");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition head = modelPartData.addOrReplaceChild("head", CubeListBuilder.create().texOffs(50, 0).addBox(-2.5F, -1.0F, -1.5F, 5.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 21.0F, -5.0F));

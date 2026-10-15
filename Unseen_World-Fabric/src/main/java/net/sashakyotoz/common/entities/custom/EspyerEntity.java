@@ -1,24 +1,20 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -30,32 +26,22 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.entities.ai.goals.EspyerIgniteGoal;
-import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.entities.util.EntityShapes;
+import net.sashakyotoz.common.entities.util.GripConversion;
 import net.sashakyotoz.utils.ActionsUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.UUID;
-import java.util.function.DoubleSupplier;
-import java.util.function.Predicate;
 
 public class EspyerEntity extends Monster implements PowerableMob {
     private static final EntityDataAccessor<Integer> FUSE_SPEED = SynchedEntityData.defineId(EspyerEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> CHARGED = SynchedEntityData.defineId(EspyerEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IGNITED = SynchedEntityData.defineId(EspyerEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(EspyerEntity.class, EntityDataSerializers.BOOLEAN);
-    private int conversionTimer;
-    @Nullable
-    private UUID converter;
+    private final GripConversion conversion = new GripConversion(this, CONVERTING, this::finishConversion);
     private int lastFuseTime;
     private int currentFuseTime;
     private int fuseTime = 30;
@@ -101,11 +87,11 @@ public class EspyerEntity extends Monster implements PowerableMob {
         this.entityData.define(FUSE_SPEED, -1);
         this.entityData.define(CHARGED, false);
         this.entityData.define(IGNITED, false);
-        this.entityData.define(CONVERTING, false);
+        GripConversion.define(this.entityData, CONVERTING);
     }
 
     public boolean isConverting() {
-        return this.getEntityData().get(CONVERTING);
+        return this.conversion.isConverting();
     }
 
     @Override
@@ -113,9 +99,7 @@ public class EspyerEntity extends Monster implements PowerableMob {
         super.addAdditionalSaveData(nbt);
         if (this.entityData.get(CHARGED))
             nbt.putBoolean("powered", true);
-        nbt.putInt("ConversionTime", this.isConverting() ? this.conversionTimer : -1);
-        if (this.converter != null)
-            nbt.putUUID("ConversionPlayer", this.converter);
+        this.conversion.save(nbt);
         nbt.putShort("Fuse", (short) this.fuseTime);
         nbt.putByte("ExplosionRadius", (byte) this.explosionRadius);
         nbt.putBoolean("ignited", this.isIgnited());
@@ -124,8 +108,7 @@ public class EspyerEntity extends Monster implements PowerableMob {
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
-        if (nbt.contains("ConversionTime", Tag.TAG_ANY_NUMERIC) && nbt.getInt("ConversionTime") > -1)
-            this.setConverting(nbt.hasUUID("ConversionPlayer") ? nbt.getUUID("ConversionPlayer") : null, nbt.getInt("ConversionTime"));
+        this.conversion.load(nbt);
         this.entityData.set(CHARGED, nbt.getBoolean("powered"));
         if (nbt.contains("Fuse", Tag.TAG_ANY_NUMERIC))
             this.fuseTime = nbt.getShort("Fuse");
@@ -133,15 +116,6 @@ public class EspyerEntity extends Monster implements PowerableMob {
             this.explosionRadius = nbt.getByte("ExplosionRadius");
         if (nbt.getBoolean("ignited"))
             this.ignite();
-    }
-
-    private void setConverting(@Nullable UUID uuid, int delay) {
-        this.converter = uuid;
-        this.conversionTimer = delay;
-        this.getEntityData().set(CONVERTING, true);
-        this.removeEffect(MobEffects.GLOWING);
-        this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, delay, Math.min(this.level().getDifficulty().getId() - 1, 0)));
-        this.level().broadcastEntityEvent(this, EntityEvent.VILLAGER_SWEAT);
     }
 
     @Override
@@ -164,39 +138,24 @@ public class EspyerEntity extends Monster implements PowerableMob {
                 this.currentFuseTime = this.fuseTime;
                 this.explode();
             }
-            if (this.getTarget() != null && !this.isEntityLookingAtMe(this.getTarget(), 0.5, false, true, LivingEntity::isPickable, this::getEyeY, this::getY, () -> (this.getEyeY() + this.getY()) / 2.0))
-                this.getNavigation().moveTo(this.getTarget(), 1);
-            else
-                this.getNavigation().stop();
-            if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
-                this.conversionTimer--;
-                if (this.conversionTimer <= 0)
-                    this.finishConversion((ServerLevel) this.level());
+            if (!this.level().isClientSide()) {
+                if (this.getTarget() != null && !EntityShapes.isLookedAtBy(this, this.getTarget(), 0.5, false, true, LivingEntity::isPickable, this::getEyeY, this::getY, () -> (this.getEyeY() + this.getY()) / 2.0))
+                    this.getNavigation().moveTo(this.getTarget(), 1);
+                else
+                    this.getNavigation().stop();
             }
+            this.conversion.tick();
         }
         super.tick();
     }
 
-    private void finishConversion(ServerLevel world) {
+    private void finishConversion(ServerLevel world, GripConversion state) {
         Creeper creeper = this.convertTo(EntityType.CREEPER, false);
-        ActionsUtils.initializeConverting(this, creeper, uuid);
-        if (!this.isSilent())
-            world.playSound(this, this.blockPosition(), SoundEvents.CREEPER_HURT, SoundSource.NEUTRAL, 2, 2);
-    }
-
-    public boolean isEntityLookingAtMe(LivingEntity entity, double d, boolean bl, boolean visualShape, Predicate<LivingEntity> predicate, DoubleSupplier... entityYChecks) {
-        if (predicate.test(entity)) {
-            Vec3 vec3d = entity.getViewVector(1.0F).normalize();
-            for (DoubleSupplier doubleSupplier : entityYChecks) {
-                Vec3 vec3d2 = new Vec3(this.getX() - entity.getX(), doubleSupplier.getAsDouble() - entity.getEyeY(), this.getZ() - entity.getZ());
-                double e = vec3d2.length();
-                vec3d2 = vec3d2.normalize();
-                double f = vec3d.dot(vec3d2);
-                if (f > 1.0 - d / (bl ? e : 1.0))
-                    return ActionsUtils.canSee(this, visualShape ? ClipContext.Block.VISUAL : ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, doubleSupplier);
-            }
+        if (creeper != null) {
+            ActionsUtils.initializeConverting(this, creeper, state.converter());
         }
-        return false;
+        if (!this.isSilent())
+            world.playSound(null, this.blockPosition(), SoundEvents.CREEPER_HURT, SoundSource.NEUTRAL, 2, 2);
     }
 
     @Override
@@ -258,15 +217,9 @@ public class EspyerEntity extends Monster implements PowerableMob {
             }
 
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else if (itemStack.is(ModItems.GRIPTONITE)) {
-            if (!player.getAbilities().instabuild && player instanceof ServerPlayer player1)
-                itemStack.hurt(1, player1.getRandom(), player1);
-            if (!this.level().isClientSide)
-                this.setConverting(player.getUUID(), this.random.nextInt(1201) + 600);
-            return InteractionResult.SUCCESS;
-        } else {
-            return super.mobInteract(player, hand);
         }
+        InteractionResult result = this.conversion.tryGriptonite(player, hand, 600, 1200);
+        return result != InteractionResult.PASS ? result : super.mobInteract(player, hand);
     }
 
     private void explode() {
@@ -277,16 +230,6 @@ public class EspyerEntity extends Monster implements PowerableMob {
             this.discard();
             this.spawnEffectsCloud();
         }
-    }
-
-    public static boolean canEspyerSpawn(EntityType<? extends Mob> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        BlockPos blockPos = pos.below();
-        return spawnReason == MobSpawnType.SPAWNER
-                || (world.getBlockState(blockPos).isValidSpawn(world, blockPos, type)
-                && world.getEntities(EntityTypeTest.forClass(EspyerEntity.class), new AABB(pos).inflate(64), LivingEntity::isAlive).size() < 3
-                && blockPos.getY() < 32
-                && !world.canSeeSky(pos)
-                && world.hasNearbyAlivePlayer(pos.getX(), pos.getY(), pos.getZ(), 32));
     }
 
     private void spawnEffectsCloud() {

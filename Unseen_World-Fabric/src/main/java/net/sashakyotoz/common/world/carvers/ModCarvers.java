@@ -24,9 +24,9 @@ public class ModCarvers {
         HolderGetter<Block> registryEntryLookup = context.lookup(Registries.BLOCK);
         register(context, SPIRAL_CAVE, SpiralCaveCarver.INSTANCE, new SpiralCaveCarverConfig(
                 0.35F,
-                UniformHeight.of(VerticalAnchor.absolute(-48),VerticalAnchor.absolute(32)),
+                UniformHeight.of(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(32)),
                 ConstantFloat.of(1.0F),
-                VerticalAnchor.absolute(10),
+                VerticalAnchor.aboveBottom(10),
                 CarverDebugSettings.DEFAULT,
                 registryEntryLookup.getOrThrow(ModTags.Blocks.CHIMERIC_DARKNESS_STONES),
                 6.5f,
@@ -38,11 +38,11 @@ public class ModCarvers {
     }
 
     private static ResourceKey<ConfiguredWorldCarver<?>> create(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_CARVER, UnseenWorld.makeID(name));
+        return ResourceKey.create(Registries.CONFIGURED_CARVER, UnseenWorld.MOD.makeID(name));
     }
 
     private static <FC extends CarverConfiguration, F extends WorldCarver<FC>> void register(BootstapContext<ConfiguredWorldCarver<?>> context,
-                                                                                 ResourceKey<ConfiguredWorldCarver<?>> key, F feature, FC config) {
+                                                                                             ResourceKey<ConfiguredWorldCarver<?>> key, F feature, FC config) {
         context.register(key, new ConfiguredWorldCarver<>(feature, config));
     }
 }

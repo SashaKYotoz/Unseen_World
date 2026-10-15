@@ -14,7 +14,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
+import net.sashakyotoz.common.effects.ModMobEffects;
 import net.sashakyotoz.utils.ActionsUtils;
+
+import java.util.List;
 
 public class GripcrystalWartBlock extends AmethystClusterBlock {
     public GripcrystalWartBlock(Properties settings) {
@@ -38,12 +41,19 @@ public class GripcrystalWartBlock extends AmethystClusterBlock {
     }
 
     private void gripNearby(Level world, BlockPos pos) {
-        world.getEntitiesOfClass(LivingEntity.class,
-                new AABB(pos.getCenter(), pos.getCenter()).inflate(6), entity ->
-                        entity instanceof IGrippingEntity).forEach(entity -> {
-            GrippingData.addGrippingSeconds((IGrippingEntity) entity, 4);
-            world.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1.2F, 1.8F);
-            ActionsUtils.spawnParticle(ParticleTypes.BUBBLE_POP, world, pos.getX(), pos.getY(), pos.getZ(), 4f);
+        if (world.isClientSide) {
+            return;
+        }
+        List<LivingEntity> gripped = world.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(6), entity -> entity instanceof IGrippingEntity);
+        if (gripped.isEmpty()) {
+            return;
+        }
+        gripped.forEach(entity -> {
+            if (!entity.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.get())) {
+                GrippingData.addGrippingSeconds((IGrippingEntity) entity, 6);
+            }
         });
+        world.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1.2F, 1.8F);
+        ActionsUtils.spawnParticle(ParticleTypes.BUBBLE_POP, world, pos.getX(), pos.getY(), pos.getZ(), 4f);
     }
 }

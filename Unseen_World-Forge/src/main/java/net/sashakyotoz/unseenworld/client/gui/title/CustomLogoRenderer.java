@@ -4,11 +4,11 @@ import net.minecraft.client.gui.components.LogoRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 
 @OnlyIn(Dist.CLIENT)
 public class CustomLogoRenderer extends LogoRenderer {
-    private static final ResourceLocation UNSEEN_WORLD_LOGO = new ResourceLocation(UnseenWorldMod.MODID, "textures/screens/title/unseen_world.png");
+    private static final ResourceLocation UNSEEN_WORLD_LOGO = new ResourceLocation(UnseenWorld.MOD_ID, "textures/screens/title/unseen_world.png");
 
     public CustomLogoRenderer(boolean pKeepLogoThroughFade) {
         super(pKeepLogoThroughFade);

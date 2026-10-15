@@ -22,7 +22,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> extends StuckObjectsRenderer<T, M> {
     private final EntityRendererProvider.Context context;
-    private final ResourceLocation TEXTURE = UnseenWorld.makeID("textures/entity/layers/gripping_layer.png");
+    private final ResourceLocation TEXTURE = UnseenWorld.MOD.makeID("textures/entity/layers/gripping_layer.png");
 
     public GrippingLayer(LivingEntityRenderer<T, M> livingEntityRenderer, EntityRendererProvider.Context context) {
         super(livingEntityRenderer);

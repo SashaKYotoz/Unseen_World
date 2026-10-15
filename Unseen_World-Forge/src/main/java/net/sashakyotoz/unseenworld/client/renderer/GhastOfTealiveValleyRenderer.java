@@ -1,14 +1,12 @@
 
 package net.sashakyotoz.unseenworld.client.renderer;
 
-import net.sashakyotoz.unseenworld.client.model.ModelGhast_Of_Tealive_Valley;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-
-import net.sashakyotoz.unseenworld.entity.GhastOfTealiveValleyEntity;
-
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.sashakyotoz.unseenworld.client.model.ModelGhast_Of_Tealive_Valley;
+import net.sashakyotoz.unseenworld.entity.GhastOfTealiveValleyEntity;
 
 public class GhastOfTealiveValleyRenderer extends MobRenderer<GhastOfTealiveValleyEntity, ModelGhast_Of_Tealive_Valley<GhastOfTealiveValleyEntity>> {
 	private static final ResourceLocation GHAST_LOCATION = new ResourceLocation("unseen_world:textures/entities/ghast_of_tealive_valley0.png");

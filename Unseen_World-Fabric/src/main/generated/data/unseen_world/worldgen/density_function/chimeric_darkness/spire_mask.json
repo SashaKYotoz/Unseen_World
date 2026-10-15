@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:cache_2d",
+  "argument": {
+    "type": "minecraft:mul",
+    "argument1": {
+      "type": "minecraft:mul",
+      "argument1": {
+        "type": "minecraft:clamp",
+        "input": {
+          "type": "minecraft:mul",
+          "argument1": -12.500002607703752,
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": 0.1899999976158142,
+            "argument2": "minecraft:overworld/continents"
+          }
+        },
+        "max": 1.0,
+        "min": 0.0
+      },
+      "argument2": {
+        "type": "minecraft:clamp",
+        "input": {
+          "type": "minecraft:mul",
+          "argument1": 12.500002607703752,
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": 1.0499999523162842,
+            "argument2": "minecraft:overworld/continents"
+          }
+        },
+        "max": 1.0,
+        "min": 0.0
+      }
+    },
+    "argument2": {
+      "type": "minecraft:clamp",
+      "input": {
+        "type": "minecraft:mul",
+        "argument1": -12.500002607703752,
+        "argument2": {
+          "type": "minecraft:add",
+          "argument1": 0.44999998807907104,
+          "argument2": "unseen_world:chimeric_darkness/temperature"
+        }
+      },
+      "max": 1.0,
+      "min": 0.0
+    }
+  }
+}

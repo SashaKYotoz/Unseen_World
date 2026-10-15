@@ -1,15 +1,17 @@
 
 package net.sashakyotoz.unseenworld.client.particles;
 
-import net.minecraft.client.particle.*;
-import net.minecraft.util.RandomSource;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.sashakyotoz.anitexlib.client.particles.parents.GlowingLikeParticle;
-import net.sashakyotoz.anitexlib.client.particles.parents.rendertypes.GlowingParticleRenderType;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.sashakyotoz.anitexlib.api.client.particle.custom.parent.GlowingLikeParticle;
+import net.sashakyotoz.anitexlib.api.client.particle.render.GlowingParticleRenderType;
 import org.antlr.v4.runtime.misc.Triple;
 
 @OnlyIn(Dist.CLIENT)

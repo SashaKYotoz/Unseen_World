@@ -12,7 +12,7 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.EspyerEntity;
 
 public class EspyerModel extends HierarchicalModel<EspyerEntity> {
-    public static final ModelLayerLocation ESPYER = new ModelLayerLocation(UnseenWorld.makeID("espyer"), "main");
+    public static final ModelLayerLocation ESPYER = new ModelLayerLocation(UnseenWorld.MOD.makeID("espyer"), "main");
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;
@@ -31,7 +31,7 @@ public class EspyerModel extends HierarchicalModel<EspyerEntity> {
         this.leftFrontLeg = this.body.getChild("leftFrontLeg");
     }
 
-    public static LayerDefinition getTextureLocationdModelData() {
+    public static LayerDefinition getModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         PartDefinition body = modelPartData.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, -22.0F, -1.0F, 8.0F, 12.0F, 5.0F, new CubeDeformation(0.0F))

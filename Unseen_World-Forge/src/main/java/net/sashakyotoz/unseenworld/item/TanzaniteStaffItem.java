@@ -29,7 +29,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.sashakyotoz.anitexlib.client.particles.parents.options.ColorableParticleOption;
+import net.sashakyotoz.anitexlib.api.client.particle.options.ColorableParticleOption;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEnchantments;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldParticleTypes;
 import org.jetbrains.annotations.NotNull;
@@ -69,13 +69,15 @@ public class TanzaniteStaffItem extends Item {
         }
         return super.getDefaultAttributeModifiers(slot);
     }
+
     @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         super.onUseTick(level, user, stack, remainingUseTicks);
         float sin = (float) Math.sin(remainingUseTicks * Math.PI / 10);
         float cos = (float) Math.cos(remainingUseTicks * Math.PI / 10);
-        level.addParticle(new ColorableParticleOption("wisp",0.75f,0.125f,0.5f), user.getX() + sin, user.getEyeY() - 0.5, user.getZ() + cos, 0, 0, 0);
+        level.addParticle(new ColorableParticleOption("wisp", 0.75f, 0.125f, 0.5f), user.getX() + sin, user.getEyeY() - 0.5, user.getZ() + cos, 0, 0, 0);
     }
+
     @Override
     public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
@@ -111,10 +113,10 @@ public class TanzaniteStaffItem extends Item {
                                 public Component getLocalizedDeathMessage(@NotNull LivingEntity _msgEntity) {
                                     return Component.translatable("death.attack.unseen_world.tanzanite_ray_attack");
                                 }
-                            },  damage);
+                            }, damage);
                             if (target.isAlive())
                                 player.doHurtTarget(target);
-                            player.level().playSound(player,player.getOnPos(), SoundEvents.LARGE_AMETHYST_BUD_BREAK, SoundSource.PLAYERS,1,1);
+                            player.level().playSound(player, player.getOnPos(), SoundEvents.LARGE_AMETHYST_BUD_BREAK, SoundSource.PLAYERS, 1, 1);
                             player.getCooldowns().addCooldown(itemstack.getItem(), Mth.randomBetweenInclusive(RandomSource.create(), 40, 80));
                         }
                     }

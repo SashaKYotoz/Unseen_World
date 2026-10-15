@@ -1,14 +1,14 @@
 package net.sashakyotoz.unseenworld.managers;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.sashakyotoz.unseenworld.entity.DarkPearlEntity;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldEntities;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.Entity;
 
 public class DarkPearlRightClickedProcedure {
     public static void execute(Player player) {

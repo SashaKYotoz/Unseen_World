@@ -39,7 +39,7 @@ public class BurlywoodHeartBlock extends Block {
     public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(world, player, pos, state, blockEntity, tool);
         if (!state.getValue(PERSISTENT)) {
-            world.playLocalSound(pos, SoundEvents.SHULKER_AMBIENT, SoundSource.BLOCKS, 1.5f, 0.1f, true);
+            world.playSound(null, pos, SoundEvents.SHULKER_AMBIENT, SoundSource.BLOCKS, 1.5f, 0.1f);
             if (!player.level().isClientSide())
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 1));
             if (player.level() instanceof ServerLevel world1)
@@ -51,7 +51,7 @@ public class BurlywoodHeartBlock extends Block {
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (random.nextDouble() < 0.27 && world.getBlockState(pos.below()).is(ModTags.Blocks.CHIMERIC_DARKNESS_STONES)) {
             world.sendParticles(ParticleTypes.GLOW, pos.getX(), pos.getY(), pos.getZ(), 9, 0.5, 0.5, 0.5, 0.5);
-            world.playLocalSound(pos, SoundEvents.AZALEA_LEAVES_HIT, SoundSource.BLOCKS, 1.5f, 0.5f, false);
+            world.playSound(null, pos, SoundEvents.AZALEA_LEAVES_HIT, SoundSource.BLOCKS, 1.5f, 0.5f);
             world.setBlock(pos.below(), Blocks.STONE.defaultBlockState(), 3);
         }
     }

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:deep_glaciemite_caves",
+    "unseen_world:shiny_caverns",
+    "unseen_world:frigid_spire_ocean",
+    "unseen_world:glaciemite_tundra",
+    "unseen_world:snowy_grizzly_thicket",
+    "unseen_world:glaciemite_peaks"
+  ]
+}

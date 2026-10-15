@@ -20,8 +20,8 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.UnseenWorldConfigs;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
 import net.sashakyotoz.unseenworld.registries.UnseenWorldItems;
 import org.apache.commons.lang3.mutable.MutableObject;
 
@@ -53,7 +53,7 @@ public class UnseenWorldMenuButton extends Button {
                 titleScreen.panorama = new PanoramaRenderer(TitleScreen.CUBE_MAP);
                 titleScreen.logoRenderer = new LogoRenderer(false);
             } else {
-                ResourceLocation base = new ResourceLocation(UnseenWorldMod.MODID, "textures/screens/title/background/panorama");
+                ResourceLocation base = UnseenWorld.makeId("textures/screens/title/background/panorama");
                 TitleScreen.CUBE_MAP = new CubeMap(base);
                 titleScreen.panorama = new PanoramaRenderer(TitleScreen.CUBE_MAP);
                 titleScreen.logoRenderer = new CustomLogoRenderer(false);

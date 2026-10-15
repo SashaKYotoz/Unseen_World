@@ -16,7 +16,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
@@ -36,8 +35,8 @@ public class ModRegistry {
     //constants
     public static final CuredGripcrystalEntityCriterion CURED_GRIPCRYSTAL_ENTITY_CRITERION = CriteriaTriggers.register(new CuredGripcrystalEntityCriterion());
 
-    public static final ResourceKey<Structure> WARRIOR_OF_DARKNESS_TOWER = ResourceKey.create(Registries.STRUCTURE, UnseenWorld.makeID("warrior_of_darkness_tower"));
-    public static final ResourceKey<Structure> ECLIPSE_CORE = ResourceKey.create(Registries.STRUCTURE, UnseenWorld.makeID("eclipse_core"));
+    public static final ResourceKey<Structure> WARRIOR_OF_DARKNESS_TOWER = ResourceKey.create(Registries.STRUCTURE, UnseenWorld.MOD.makeID("warrior_of_darkness_tower"));
+    public static final ResourceKey<Structure> ECLIPSE_CORE = ResourceKey.create(Registries.STRUCTURE, UnseenWorld.MOD.makeID("eclipse_core"));
 
     public static RecipeSerializer<WarriorShieldDecorationRecipe> WARRIOR_SHIELD_DECORATION = register(
             "crafting_warrior_shield_decoration", new SimpleCraftingRecipeSerializer<>(WarriorShieldDecorationRecipe::new)
@@ -262,13 +261,13 @@ public class ModRegistry {
     }
 
     public static class Foods {
-        public static final FoodProperties CRYSTIE_APPLE = new FoodProperties.Builder().alwaysEat().saturationMod(2).nutrition(3).effect(
+        public static final FoodProperties CRYSTIE_APPLE = new FoodProperties.Builder().saturationMod(2).nutrition(3).effect(
                         new MobEffectInstance(MobEffects.HARM, 1, 0, true, false),
                         1)
                 .effect(
                         new MobEffectInstance(MobEffects.DIG_SPEED, 240, 1, true, false),
                         1).build();
-        public static final FoodProperties GLOW_APPLE = new FoodProperties.Builder().alwaysEat().saturationMod(3).nutrition(3)
+        public static final FoodProperties GLOW_APPLE = new FoodProperties.Builder().saturationMod(3).nutrition(3)
                 .effect(
                         new MobEffectInstance(MobEffects.GLOWING, 300, 1, true, false),
                         1).build();
@@ -284,12 +283,14 @@ public class ModRegistry {
                 .effect(
                         new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 100, 0, true, true),
                         1).build();
-        public static final FoodProperties WARPEDVEIL_VINE_FRUIT = new FoodProperties.Builder().alwaysEat().saturationMod(1).nutrition(3).effect(
+        public static final FoodProperties WARPEDVEIL_VINE_FRUIT = new FoodProperties.Builder().saturationMod(1).nutrition(3).effect(
                         new MobEffectInstance(MobEffects.GLOWING, 300, 0, true, true),
-                        1)
-                .effect(
+                        1).build();
+        public static final FoodProperties GLOWROOT_BULB = new FoodProperties.Builder().saturationMod(1).nutrition(3).effect(
                         new MobEffectInstance(MobEffects.SATURATION, 60, 0, true, true),
                         1).build();
+        public static final FoodProperties RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(2).nutrition(3).build();
+        public static final FoodProperties COOKED_RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(3).nutrition(6).build();
     }
 
 
@@ -298,11 +299,11 @@ public class ModRegistry {
     }
 
     public static BlockBuilder ofBlock(String id, Block block, boolean item) {
-        return new BlockBuilder(UnseenWorld.makeID(id), block, item);
+        return new BlockBuilder(UnseenWorld.MOD.makeID(id), block, item);
     }
 
     public static ItemBuilder ofItem(String id, Item item) {
-        return new ItemBuilder(UnseenWorld.makeID(id), item);
+        return new ItemBuilder(UnseenWorld.MOD.makeID(id), item);
     }
 
 
@@ -346,10 +347,4 @@ public class ModRegistry {
     public static Map<TagKey<Item>, List<Item>> ITEM_TAGS = new HashMap<>();
     public static Map<Item, ModelTemplate> ITEM_MODELS = new HashMap<>();
     public static Map<ItemLike, Integer> ITEM_BURNABLE = new HashMap<>();
-
-    public static final Potion GLOWING = register("glowing", new Potion(new MobEffectInstance(MobEffects.GLOWING, 3600)));
-
-    private static Potion register(String name, Potion potion) {
-        return Registry.register(BuiltInRegistries.POTION, name, potion);
-    }
 }

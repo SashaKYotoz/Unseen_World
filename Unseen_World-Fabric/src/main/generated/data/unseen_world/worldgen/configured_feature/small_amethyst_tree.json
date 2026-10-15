@@ -12,21 +12,11 @@
       }
     },
     "foliage_placer": {
-      "type": "minecraft:hanging_blob_foliage_placer",
-      "offset": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 1,
-          "min_inclusive": 0
-        }
-      },
-      "radius": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 3,
-          "min_inclusive": 2
-        }
-      }
+      "type": "unseen_world:thorn_foliage_placer",
+      "edge_hole_chance": 0.25,
+      "max_depth": 1,
+      "offset": 0,
+      "radius": 2
     },
     "foliage_provider": {
       "type": "minecraft:simple_state_provider",
@@ -45,15 +35,30 @@
     "minimum_size": {
       "type": "minecraft:two_layers_feature_size",
       "limit": 1,
-      "lower_size": 1,
+      "lower_size": 0,
       "upper_size": 1
     },
     "trunk_placer": {
-      "type": "minecraft:grizzly_trunk_placer",
-      "base_height": 4,
+      "type": "unseen_world:thorn_trunk_placer",
+      "base_height": 5,
+      "base_radius": 1,
+      "curvature": 1.6,
+      "foliage_clearance": {
+        "type": "minecraft:uniform",
+        "value": {
+          "max_inclusive": 5,
+          "min_inclusive": 3
+        }
+      },
       "height_rand_a": 2,
-      "height_rand_b": 2,
-      "platform_height": 1
+      "height_rand_b": 1,
+      "lean": {
+        "type": "minecraft:uniform",
+        "value": {
+          "max_inclusive": 2,
+          "min_inclusive": 1
+        }
+      }
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

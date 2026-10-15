@@ -14,7 +14,7 @@ public class WatcherAttackGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.watcher.isAngry && this.watcher.getTarget() != null;
+        return this.watcher.isAngry() && this.watcher.getTarget() != null;
     }
 
     @Override

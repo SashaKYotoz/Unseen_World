@@ -33,6 +33,54 @@
       },
       "trigger": "minecraft:location"
     },
+    "unseen_world:ashen_marsh": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:ashen_marsh"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:auric_heights": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:auric_heights"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:burlywood_hollows": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:burlywood_hollows"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
     "unseen_world:burlywood_jungle": {
       "conditions": {
         "player": [
@@ -42,6 +90,22 @@
             "predicate": {
               "location": {
                 "biome": "unseen_world:burlywood_jungle"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:crimsonveil_mire": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:crimsonveil_mire"
               }
             }
           }
@@ -90,22 +154,6 @@
             "predicate": {
               "location": {
                 "biome": "unseen_world:currantslate_peaks"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
-    },
-    "unseen_world:dark_badlands": {
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "unseen_world:dark_badlands"
               }
             }
           }
@@ -193,7 +241,7 @@
       },
       "trigger": "minecraft:location"
     },
-    "unseen_world:greenish_meadow": {
+    "unseen_world:frigid_spire_ocean": {
       "conditions": {
         "player": [
           {
@@ -201,7 +249,55 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "biome": "unseen_world:greenish_meadow"
+                "biome": "unseen_world:frigid_spire_ocean"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:glaciemite_peaks": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:glaciemite_peaks"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:glaciemite_tundra": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:glaciemite_tundra"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:gloomweed_plains": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:gloomweed_plains"
               }
             }
           }
@@ -273,22 +369,6 @@
       },
       "trigger": "minecraft:location"
     },
-    "unseen_world:harmony_grove": {
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "unseen_world:harmony_grove"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:location"
-    },
     "unseen_world:lukewarm_dark_river": {
       "conditions": {
         "player": [
@@ -321,6 +401,22 @@
       },
       "trigger": "minecraft:location"
     },
+    "unseen_world:penumbral_steppe": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:penumbral_steppe"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
     "unseen_world:shiny_caverns": {
       "conditions": {
         "player": [
@@ -330,6 +426,22 @@
             "predicate": {
               "location": {
                 "biome": "unseen_world:shiny_caverns"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "unseen_world:snowy_grizzly_thicket": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "unseen_world:snowy_grizzly_thicket"
               }
             }
           }
@@ -420,43 +532,79 @@
   },
   "requirements": [
     [
-      "unseen_world:the_darkness"
+      "unseen_world:deep_glaciemite_caves"
     ],
     [
-      "unseen_world:amethyst_forest"
+      "unseen_world:tanzanite_caves"
     ],
     [
-      "unseen_world:crimsonveil_woods"
+      "unseen_world:shiny_caverns"
     ],
     [
-      "unseen_world:grizzly_thicket"
+      "unseen_world:burlywood_hollows"
     ],
     [
-      "unseen_world:burlywood_jungle"
+      "unseen_world:dark_ocean"
     ],
     [
-      "unseen_world:old_growth_crimsonveil_woods"
+      "unseen_world:dark_lifeless_ocean"
     ],
     [
-      "unseen_world:amethyst_chimeries"
+      "unseen_world:frigid_spire_ocean"
     ],
     [
-      "unseen_world:greenish_valley"
+      "unseen_world:dark_river"
     ],
     [
-      "unseen_world:greenish_meadow"
+      "unseen_world:lukewarm_dark_river"
     ],
     [
-      "unseen_world:tealivy_valley"
+      "unseen_world:greynish_shore"
     ],
     [
       "unseen_world:dark_wasteland"
     ],
     [
-      "unseen_world:crimsonveil_plateau"
+      "unseen_world:gloomweed_plains"
     ],
     [
-      "unseen_world:harmony_grove"
+      "unseen_world:ashen_marsh"
+    ],
+    [
+      "unseen_world:crimsonveil_mire"
+    ],
+    [
+      "unseen_world:glaciemite_tundra"
+    ],
+    [
+      "unseen_world:greenish_valley"
+    ],
+    [
+      "unseen_world:tealivy_valley"
+    ],
+    [
+      "unseen_world:amethyst_forest"
+    ],
+    [
+      "unseen_world:grizzly_thicket"
+    ],
+    [
+      "unseen_world:snowy_grizzly_thicket"
+    ],
+    [
+      "unseen_world:crimsonveil_woods"
+    ],
+    [
+      "unseen_world:old_growth_crimsonveil_woods"
+    ],
+    [
+      "unseen_world:burlywood_jungle"
+    ],
+    [
+      "unseen_world:amethyst_chimeries"
+    ],
+    [
+      "unseen_world:crimsonveil_plateau"
     ],
     [
       "unseen_world:grizzly_highlands"
@@ -468,31 +616,16 @@
       "unseen_world:currantslate_peaks"
     ],
     [
-      "unseen_world:shiny_caverns"
+      "unseen_world:glaciemite_peaks"
     ],
     [
-      "unseen_world:tanzanite_caves"
+      "unseen_world:the_darkness"
     ],
     [
-      "unseen_world:deep_glaciemite_caves"
+      "unseen_world:penumbral_steppe"
     ],
     [
-      "unseen_world:dark_river"
-    ],
-    [
-      "unseen_world:lukewarm_dark_river"
-    ],
-    [
-      "unseen_world:dark_ocean"
-    ],
-    [
-      "unseen_world:dark_lifeless_ocean"
-    ],
-    [
-      "unseen_world:greynish_shore"
-    ],
-    [
-      "unseen_world:dark_badlands"
+      "unseen_world:auric_heights"
     ]
   ],
   "rewards": {

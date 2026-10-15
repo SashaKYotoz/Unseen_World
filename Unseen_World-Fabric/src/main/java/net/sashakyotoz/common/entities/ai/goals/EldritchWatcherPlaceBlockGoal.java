@@ -26,7 +26,7 @@ public class EldritchWatcherPlaceBlockGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.watcher.isCarringBlock())
+        if (!this.watcher.isCarryingBlock())
             return false;
         else
             return this.watcher.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.watcher.getRandom().nextInt(reducedTickDelay(2000)) == 0;

@@ -6,21 +6,20 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.Level;
-import net.sashakyotoz.unseenworld.UnseenWorldMod;
+import net.sashakyotoz.unseenworld.UnseenWorld;
 import net.sashakyotoz.unseenworld.block.entity.BeaconOfWeaponsBlockEntity;
 import net.sashakyotoz.unseenworld.client.model.ModelBeaconOfWeapons;
 
 import java.util.Calendar;
 
 public class BeaconOfWeaponsRenderer <T extends BeaconOfWeaponsBlockEntity> implements BlockEntityRenderer<T> {
-    public static ResourceLocation TEXTURE = new ResourceLocation(UnseenWorldMod.MODID, "textures/entities/beacon_of_weapons.png");
-    public static ResourceLocation CHRISTMAS_TEXTURE = new ResourceLocation(UnseenWorldMod.MODID, "textures/entities/beacon_of_weapons_christmas.png");
+    public static ResourceLocation TEXTURE = new ResourceLocation(UnseenWorld.MOD_ID, "textures/entities/beacon_of_weapons.png");
+    public static ResourceLocation CHRISTMAS_TEXTURE = new ResourceLocation(UnseenWorld.MOD_ID, "textures/entities/beacon_of_weapons_christmas.png");
     private final ItemRenderer itemRenderer;
     private boolean xmasTexture = false;
     private static ModelBeaconOfWeapons beacon;
