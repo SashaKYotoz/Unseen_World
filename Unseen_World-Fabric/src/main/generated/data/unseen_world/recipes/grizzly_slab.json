@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
+  "group": "grizzly_slab",
   "key": {
     "#": {
       "item": "unseen_world:grizzly_planks"

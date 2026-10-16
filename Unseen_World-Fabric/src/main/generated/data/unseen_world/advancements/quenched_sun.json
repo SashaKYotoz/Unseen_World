@@ -1,5 +1,5 @@
 {
-  "parent": "unseen_world:vault_of_eclipse",
+  "parent": "unseen_world:ring_of_the_corona",
   "criteria": {
     "quenched_sun": {
       "conditions": {

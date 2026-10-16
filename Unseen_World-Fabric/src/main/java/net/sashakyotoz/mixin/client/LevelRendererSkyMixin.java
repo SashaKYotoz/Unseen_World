@@ -2,10 +2,10 @@ package net.sashakyotoz.mixin.client;
 
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.compat.IrisCompat;
 import net.sashakyotoz.client.environment.ChimericDarknessEffects;
 import net.sashakyotoz.client.environment.ChimericDarknessSkyRenderer;
@@ -13,7 +13,6 @@ import net.sashakyotoz.client.environment.ChimericFog;
 import net.sashakyotoz.common.world.ModDimensions;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LevelRenderer.class)
 public abstract class LevelRendererSkyMixin {
-    @Unique
-    private static final Logger UNSEEN_WORLD$LOGGER = LogUtils.getLogger();
     @Unique
     private static boolean unseen_world$effectsChecked;
 
@@ -39,7 +36,7 @@ public abstract class LevelRendererSkyMixin {
         if (!unseen_world$effectsChecked) {
             unseen_world$effectsChecked = true;
             if (!(clientLevel.effects() instanceof ChimericDarknessEffects)) {
-                UNSEEN_WORLD$LOGGER.warn("Dimension {} uses effects {} instead of ChimericDarknessEffects; check the effects id in its dimension_type", clientLevel.dimension().location(), clientLevel.dimensionType().effectsLocation());
+                UnseenWorld.log().warn("Dimension {} uses effects {} instead of ChimericDarknessEffects; check the effects id in its dimension_type", clientLevel.dimension().location(), clientLevel.dimensionType().effectsLocation());
             }
         }
         if (!ChimericFog.isBossFog() && ChimericFog.hasClearView(camera)) {

@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_grizzly_log": {
+    "has_log": {
       "conditions": {
         "items": [
           {
             "items": [
-              "unseen_world:amethyst_log"
+              "unseen_world:grizzly_log"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_grizzly_log",
+      "has_log",
       "has_the_recipe"
     ]
   ],

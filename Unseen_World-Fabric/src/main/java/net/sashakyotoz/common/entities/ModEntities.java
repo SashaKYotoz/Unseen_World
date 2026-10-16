@@ -1,12 +1,12 @@
 package net.sashakyotoz.common.entities;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
+import com.google.common.collect.ImmutableSet;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
+import net.lcc.sollib.api.common.registry.holder.EntityHolder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.flag.FeatureFlags;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.bosses.AuricPatriarch;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
@@ -15,107 +15,110 @@ import net.sashakyotoz.common.entities.custom.*;
 import net.sashakyotoz.common.entities.custom.projectiles.GrippingCrystalProjectileEntity;
 import net.sashakyotoz.common.entities.custom.projectiles.ParticleProjectileEntity;
 import net.sashakyotoz.common.entities.custom.projectiles.ThrownAuricArc;
+import net.sashakyotoz.common.tags.ModTags;
+
+import java.util.function.Supplier;
 
 public class ModEntities {
     public static void register() {
         UnseenWorld.log().debug("Registering Entities for modid : " + UnseenWorld.MOD_ID);
-        FabricDefaultAttributeRegistry.register(GLEAMCARVER, GleamcarverEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(HARMONY_WATCHER, HarmonyWatcherEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(VIOLEGER, ViolegerEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(VENOMER, VenomerEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarkness.createAttributes());
-        FabricDefaultAttributeRegistry.register(ECLIPSE_SENTINEL, EclipseSentinel.createAttributes());
-        FabricDefaultAttributeRegistry.register(AURIC_PATRIARCH, AuricPatriarch.createAttributes());
-        FabricDefaultAttributeRegistry.register(GLOOMWHALE, GloomwhaleEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(GRIPPING_GLOOMWHALE, GrippingGloomwhaleEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(SHIMMER, ShimmerEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(SABERPARD, SaberpardEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(ESPYER, EspyerEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(ELDRITCH_WATCHER, EldritchWatcherEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(TUSKHOG, TuskhogEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(DREADFLAP, DreadflapEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(REAVER, ReaverEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(VEXAL_BEETLE, VexalBeetleEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(AUREATE_VEX, AureateVexEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(RIMEHORN, RimehornEntity.createAttributes());
-        FabricDefaultAttributeRegistry.register(ECLIPSED_ACOLYTE, EclipsedAcolyteEntity.createAttributes());
     }
 
-    public static final EntityType<GleamcarverEntity> GLEAMCARVER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("gleamcarver"), FabricEntityTypeBuilder.create(MobCategory.AMBIENT, GleamcarverEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.6f, 0.6f)).build());
-    public static final EntityType<HarmonyWatcherEntity> HARMONY_WATCHER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("harmony_watcher"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, HarmonyWatcherEntity::new)
-                    .dimensions(EntityDimensions.fixed(1.4f, 1.8f)).build());
-    public static final EntityType<ViolegerEntity> VIOLEGER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("violeger"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, ViolegerEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.8f, 1.9f)).build());
-    public static final EntityType<VenomerEntity> VENOMER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("venomer"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, VenomerEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.8f, 1.9f)).build());
-    public static final EntityType<GloomwhaleEntity> GLOOMWHALE = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("gloomwhale"), FabricEntityTypeBuilder.create(MobCategory.WATER_CREATURE, GloomwhaleEntity::new)
-                    .dimensions(EntityDimensions.fixed(3.5f, 2.5f)).build());
-    public static final EntityType<GrippingGloomwhaleEntity> GRIPPING_GLOOMWHALE = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("gripping_gloomwhale"), FabricEntityTypeBuilder.create(MobCategory.WATER_CREATURE, GrippingGloomwhaleEntity::new)
-                    .dimensions(EntityDimensions.fixed(3.5f, 2.5f)).build());
-    public static final EntityType<ShimmerEntity> SHIMMER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("shimmer"), FabricEntityTypeBuilder.create(MobCategory.WATER_CREATURE, ShimmerEntity::new)
-                    .dimensions(EntityDimensions.fixed(2f, 2.5f)).build());
-    public static final EntityType<SaberpardEntity> SABERPARD = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("saberpard"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, SaberpardEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.65F, 0.75F)).build());
-    public static final EntityType<EspyerEntity> ESPYER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("espyer"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, EspyerEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.6F, 1.6F)).build());
-    public static final EntityType<EldritchWatcherEntity> ELDRITCH_WATCHER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("eldritch_watcher"), FabricEntityTypeBuilder.create(MobCategory.AMBIENT, EldritchWatcherEntity::new)
-                    .dimensions(EntityDimensions.fixed(1.3F, 3.8F)).build());
-    public static final EntityType<ReaverEntity> REAVER = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("reaver"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, ReaverEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.9F, 2.1F)).build());
-    public static final EntityType<TuskhogEntity> TUSKHOG = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("tuskhog"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, TuskhogEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.9F, 0.9F)).build());
-    public static final EntityType<DreadflapEntity> DREADFLAP = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("dreadflap"), FabricEntityTypeBuilder.create(MobCategory.AMBIENT, DreadflapEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.7F, 1.1F)).build());
-    public static final EntityType<VexalBeetleEntity> VEXAL_BEETLE = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("vexal_beetle"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, VexalBeetleEntity::new)
-                    .dimensions(EntityDimensions.fixed(1.3F, 1F)).build());
-    public static final EntityType<RimehornEntity> RIMEHORN = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("rimehorn"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, RimehornEntity::new)
-                    .dimensions(EntityDimensions.scalable(0.95F, 1.5F)).trackRangeChunks(10).build());
-    public static final EntityType<EclipsedAcolyteEntity> ECLIPSED_ACOLYTE = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("eclipsed_acolyte"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, EclipsedAcolyteEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.8F, 2.3F)).trackRangeChunks(8).build());
-    public static final EntityType<AureateVexEntity> AUREATE_VEX = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("aureate_vex"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, AureateVexEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.5F, 0.9F)).fireImmune().trackRangeChunks(8).build());
+    private static final TagKey<EntityType<?>> GRIPPING_IMMUNE = ModTags.Entities.GRIPPING_IMMUNE_ENTITY_TYPES;
+    private static final Spec BOSS = Spec.fixed(1.0F, 1.0F).fireImmune().tracking(10, 2);
+    private static final Spec PROJECTILE = Spec.fixed(0.5F, 0.5F).tracking(4, 20);
 
-    public static final EntityType<WarriorOfChimericDarkness> WARRIOR_OF_CHIMERIC_DARKNESS = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("warrior_of_chimeric_darkness"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, WarriorOfChimericDarkness::new)
-                    .dimensions(EntityDimensions.fixed(2.75f, 3.5f)).trackRangeChunks(10).trackedUpdateRate(2).build());
-    public static final EntityType<EclipseSentinel> ECLIPSE_SENTINEL = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("eclipse_sentinel"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, EclipseSentinel::new)
-                    .dimensions(EntityDimensions.fixed(1.6f, 3.5f)).trackRangeChunks(10).trackedUpdateRate(2).build());
-    public static final EntityType<AuricPatriarch> AURIC_PATRIARCH = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("auric_patriarch"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, AuricPatriarch::new)
-                    .dimensions(EntityDimensions.fixed(1.6f, 3.75f)).build());
+    public static final EntityType<GleamcarverEntity> GLEAMCARVER = mob("gleamcarver", GleamcarverEntity::new, MobCategory.AMBIENT,
+            Spec.fixed(0.6F, 0.6F), GleamcarverEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<HarmonyWatcherEntity> HARMONY_WATCHER = mob("harmony_watcher", HarmonyWatcherEntity::new, MobCategory.CREATURE,
+            Spec.fixed(1.4F, 1.8F), HarmonyWatcherEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<ViolegerEntity> VIOLEGER = mob("violeger", ViolegerEntity::new, MobCategory.CREATURE,
+            Spec.fixed(0.8F, 1.9F), ViolegerEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<VenomerEntity> VENOMER = mob("venomer", VenomerEntity::new, MobCategory.MONSTER,
+            Spec.fixed(0.8F, 1.9F), VenomerEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<GloomwhaleEntity> GLOOMWHALE = mob("gloomwhale", GloomwhaleEntity::new, MobCategory.WATER_CREATURE,
+            Spec.fixed(3.5F, 2.5F), GloomwhaleEntity::createAttributes);
+    public static final EntityType<GrippingGloomwhaleEntity> GRIPPING_GLOOMWHALE = mob("gripping_gloomwhale", GrippingGloomwhaleEntity::new, MobCategory.WATER_CREATURE,
+            Spec.fixed(3.5F, 2.5F), GrippingGloomwhaleEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<ShimmerEntity> SHIMMER = mob("shimmer", ShimmerEntity::new, MobCategory.WATER_CREATURE,
+            Spec.fixed(2.0F, 2.5F), ShimmerEntity::createAttributes);
+    public static final EntityType<SaberpardEntity> SABERPARD = mob("saberpard", SaberpardEntity::new, MobCategory.CREATURE,
+            Spec.fixed(0.65F, 0.75F), SaberpardEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<EspyerEntity> ESPYER = mob("espyer", EspyerEntity::new, MobCategory.MONSTER,
+            Spec.fixed(0.6F, 1.6F), EspyerEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<EldritchWatcherEntity> ELDRITCH_WATCHER = mob("eldritch_watcher", EldritchWatcherEntity::new, MobCategory.AMBIENT,
+            Spec.fixed(1.3F, 3.8F), EldritchWatcherEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<ReaverEntity> REAVER = mob("reaver", ReaverEntity::new, MobCategory.MONSTER,
+            Spec.fixed(0.9F, 2.1F), ReaverEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<TuskhogEntity> TUSKHOG = mob("tuskhog", TuskhogEntity::new, MobCategory.CREATURE,
+            Spec.fixed(0.9F, 0.9F), TuskhogEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<DreadflapEntity> DREADFLAP = mob("dreadflap", DreadflapEntity::new, MobCategory.AMBIENT,
+            Spec.fixed(0.7F, 1.1F), DreadflapEntity::createAttributes);
+    public static final EntityType<VexalBeetleEntity> VEXAL_BEETLE = mob("vexal_beetle", VexalBeetleEntity::new, MobCategory.CREATURE,
+            Spec.fixed(1.3F, 1.0F), VexalBeetleEntity::createAttributes);
+    public static final EntityType<RimehornEntity> RIMEHORN = mob("rimehorn", RimehornEntity::new, MobCategory.CREATURE,
+            Spec.scalable(0.95F, 1.5F).tracking(10, 3), RimehornEntity::createAttributes);
+    public static final EntityType<EclipsedAcolyteEntity> ECLIPSED_ACOLYTE = mob("eclipsed_acolyte", EclipsedAcolyteEntity::new, MobCategory.MONSTER,
+            Spec.fixed(0.8F, 2.3F).tracking(8, 3), EclipsedAcolyteEntity::createAttributes, GRIPPING_IMMUNE);
+    public static final EntityType<AureateVexEntity> AUREATE_VEX = mob("aureate_vex", AureateVexEntity::new, MobCategory.MONSTER,
+            Spec.fixed(0.5F, 0.9F).tracking(8, 3).fireImmune(), AureateVexEntity::createAttributes);
 
-    public static final EntityType<GrippingCrystalProjectileEntity> GRIPPING_CRYSTAL_PROJECTILE = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("gripping_crystal_projectile"), FabricEntityTypeBuilder.create(MobCategory.MISC, GrippingCrystalProjectileEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.5f, 0.5f)).trackRangeChunks(4).trackedUpdateRate(20).build());
-    public static final EntityType<ParticleProjectileEntity> PARTICLE_PROJECTILE = Registry.register(
-            BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("particle_projectile"), FabricEntityTypeBuilder.<ParticleProjectileEntity>create(MobCategory.MISC, ParticleProjectileEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.5f, 0.5f)).trackRangeChunks(4).trackedUpdateRate(20).build()
-    );
-    public static final EntityType<ThrownAuricArc> THROWN_AURIC_ARC = Registry.register(BuiltInRegistries.ENTITY_TYPE,
-            UnseenWorld.MOD.makeID("thrown_auric_arc"),
-            FabricEntityTypeBuilder.create(MobCategory.MISC, ThrownAuricArc::new)
-                    .dimensions(EntityDimensions.fixed(0.5F, 0.5F))
-                    .trackRangeChunks(4)
-                    .trackedUpdateRate(20)
-                    .build());
+    public static final EntityType<WarriorOfChimericDarkness> WARRIOR_OF_CHIMERIC_DARKNESS = mob("warrior_of_chimeric_darkness", WarriorOfChimericDarkness::new, MobCategory.MONSTER,
+            BOSS.size(2.75F, 3.5F), WarriorOfChimericDarkness::createAttributes, GRIPPING_IMMUNE, ConventionalEntityTypeTags.BOSSES);
+    public static final EntityType<EclipseSentinel> ECLIPSE_SENTINEL = mob("eclipse_sentinel", EclipseSentinel::new, MobCategory.MONSTER,
+            BOSS.size(1.6F, 3.5F), EclipseSentinel::createAttributes, GRIPPING_IMMUNE, ConventionalEntityTypeTags.BOSSES);
+    public static final EntityType<AuricPatriarch> AURIC_PATRIARCH = mob("auric_patriarch", AuricPatriarch::new, MobCategory.MONSTER,
+            BOSS.size(1.6F, 3.75F), AuricPatriarch::createAttributes, GRIPPING_IMMUNE, ConventionalEntityTypeTags.BOSSES);
+
+    public static final EntityType<GrippingCrystalProjectileEntity> GRIPPING_CRYSTAL_PROJECTILE = entity("gripping_crystal_projectile",
+            GrippingCrystalProjectileEntity::new, MobCategory.MISC, PROJECTILE);
+    public static final EntityType<ParticleProjectileEntity> PARTICLE_PROJECTILE = entity("particle_projectile",
+            ParticleProjectileEntity::new, MobCategory.MISC, PROJECTILE);
+    public static final EntityType<ThrownAuricArc> THROWN_AURIC_ARC = entity("thrown_auric_arc",
+            ThrownAuricArc::new, MobCategory.MISC, PROJECTILE);
+
+    private static <T extends Entity> EntityType<T> entity(String name, EntityType.EntityFactory<T> factory, MobCategory category, Spec spec) {
+        return cast(UnseenWorld.MOD.register(EntityHolder.class, name, () -> spec.build(factory, category)));
+    }
+
+    @SafeVarargs
+    private static <T extends LivingEntity> EntityType<T> mob(String name, EntityType.EntityFactory<T> factory, MobCategory category, Spec spec,
+                                                              Supplier<AttributeSupplier.Builder> attributes, TagKey<EntityType<?>>... tags) {
+        return cast(UnseenWorld.MOD.register(EntityHolder.class, name, () -> spec.build(factory, category))
+                .withAttributes(attributes)
+                .withTags(tags));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Entity> EntityType<T> cast(EntityHolder holder) {
+        return (EntityType<T>) holder.get();
+    }
+
+    private record Spec(EntityDimensions dimensions, int trackRange, int updateInterval, boolean fireproof) {
+        static Spec fixed(float width, float height) {
+            return new Spec(EntityDimensions.fixed(width, height), 5, 3, false);
+        }
+
+        static Spec scalable(float width, float height) {
+            return new Spec(EntityDimensions.scalable(width, height), 5, 3, false);
+        }
+
+        Spec size(float width, float height) {
+            return new Spec(EntityDimensions.fixed(width, height), this.trackRange, this.updateInterval, this.fireproof);
+        }
+
+        Spec tracking(int trackRange, int updateInterval) {
+            return new Spec(this.dimensions, trackRange, updateInterval, this.fireproof);
+        }
+
+        Spec fireImmune() {
+            return new Spec(this.dimensions, this.trackRange, this.updateInterval, true);
+        }
+
+        <T extends Entity> EntityType<T> build(EntityType.EntityFactory<T> factory, MobCategory category) {
+            return new EntityType<>(factory, category, true, true, this.fireproof,
+                    category == MobCategory.CREATURE || category == MobCategory.MISC, ImmutableSet.of(),
+                    this.dimensions, this.trackRange, this.updateInterval, FeatureFlags.VANILLA_SET);
+        }
+    }
 }

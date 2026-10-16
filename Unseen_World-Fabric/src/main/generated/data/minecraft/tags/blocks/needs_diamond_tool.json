@@ -1,20 +1,20 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:abyssal_ore_in_dark_currantslate",
-    "unseen_world:abyssal_ore_in_glaciemite",
+    "unseen_world:ancient_debris_in_dark_currantslate",
     "unseen_world:abyssal_ore_in_corona_stone",
-    "unseen_world:abyssal_ingot_block",
+    "unseen_world:unseenium_ore_in_glaciemite",
     "unseen_world:red_titanium_ore_in_dark_currantslate",
-    "unseen_world:red_titanium_ore_in_glaciemite",
     "unseen_world:red_titanium_ore_in_corona_stone",
+    "unseen_world:unseenium_ore_in_corona_stone",
+    "unseen_world:abyssal_ingot_block",
+    "unseen_world:ancient_debris_in_corona_stone",
+    "unseen_world:ancient_debris_in_glaciemite",
+    "unseen_world:abyssal_ore_in_dark_currantslate",
     "unseen_world:red_titanium_ingot_block",
     "unseen_world:unseenium_ore_in_dark_currantslate",
-    "unseen_world:unseenium_ore_in_glaciemite",
-    "unseen_world:unseenium_ore_in_corona_stone",
-    "unseen_world:unseenium_ingot_block",
-    "unseen_world:ancient_debris_in_dark_currantslate",
-    "unseen_world:ancient_debris_in_glaciemite",
-    "unseen_world:ancient_debris_in_corona_stone"
+    "unseen_world:abyssal_ore_in_glaciemite",
+    "unseen_world:red_titanium_ore_in_glaciemite",
+    "unseen_world:unseenium_ingot_block"
   ]
 }

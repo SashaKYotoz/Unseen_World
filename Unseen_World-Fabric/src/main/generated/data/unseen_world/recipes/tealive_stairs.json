@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
+  "group": "tealive_stairs",
   "key": {
     "#": {
       "item": "unseen_world:tealive_planks"

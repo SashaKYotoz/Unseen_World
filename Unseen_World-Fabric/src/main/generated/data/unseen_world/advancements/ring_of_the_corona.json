@@ -1,0 +1,45 @@
+{
+  "parent": "unseen_world:into_the_penumbral_steppe",
+  "criteria": {
+    "found_sentinel_stronghold": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "unseen_world:sentinel_stronghold"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.unseen_world.ring_of_the_corona.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "unseen_world:abyssal_key"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.unseen_world.ring_of_the_corona"
+    }
+  },
+  "requirements": [
+    [
+      "found_sentinel_stronghold"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": true
+}

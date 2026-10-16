@@ -6,6 +6,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -29,14 +30,17 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.common.entities.custom.EclipsedAcolyteEntity;
 import net.sashakyotoz.common.entities.util.BossParticles;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
-import java.util.Queue;
+import java.util.*;
 
 public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose> {
     public static final EntityDataSerializer<SentinelPose> SENTINEL_STATE = EntityDataSerializer.simpleEnum(SentinelPose.class);
     public static final EntityDataAccessor<SentinelPose> PHASE = SynchedEntityData.defineId(EclipseSentinel.class, SENTINEL_STATE);
+    public static final EntityDataAccessor<Vector3f> SECOND_BEAM = SynchedEntityData.defineId(EclipseSentinel.class, EntityDataSerializers.VECTOR3);
 
     public static final int ECLIPSE_PURPLE = 0x9B4DFF;
     public static final int CORONA = 0xD7B8FF;
@@ -69,6 +73,20 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
     private static final double LASER_RANGE = 32.0D;
     private static final double HYPER_APEX = 10.0D;
     private static final double HYPER_MAX_DISTANCE = 18.0D;
+    private static final float[] PHASES = {0.5F};
+    public static final int TOTALITY_TICK = 30;
+    public static final int[] CORONA_RING_STARTS = {20, 34};
+    public static final double CORONA_RING_SPEED = 0.45D;
+    public static final double CORONA_RING_MIN_RADIUS = 1.5D;
+    public static final double CORONA_RING_MAX_RADIUS = 16.0D;
+    private static final double CORONA_RING_HALF_WIDTH = 0.7D;
+    private static final double CORONA_RING_CLEARANCE = 0.9D;
+    private static final int CORONA_RING_COOLDOWN = 200;
+    private static final int ECHO_SLASH_TICK = 45;
+    private static final float SPLIT_LASER_START_SPREAD = 38.0F;
+    private static final float SPLIT_LASER_END_SPREAD = 7.0F;
+    private static final double TOTALITY_RANGE = 32.0D;
+    private static final double ACOLYTE_WAKE_RANGE = 40.0D;
 
     public final AnimationState idleTransition = new AnimationState();
     public final AnimationState idle = new AnimationState();
@@ -79,6 +97,7 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
     public final AnimationState rise = new AnimationState();
     public final AnimationState dash = new AnimationState();
     public final AnimationState hyper_burst = new AnimationState();
+    public final AnimationState coronaRing = new AnimationState();
     public final AnimationState death = new AnimationState();
 
     private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.eclipse_sentinel"), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.NOTCHED_6);
@@ -95,6 +114,10 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
     private int meleeWindowStart;
     private int hugTicks;
     private boolean pulsePending;
+    private int lastCoronaRingTick = -1000;
+    private final List<Set<UUID>> coronaRingHits = List.of(new HashSet<>(), new HashSet<>());
+    private Vec3 echoOrigin = Vec3.ZERO;
+    private Vec3 echoFacing = Vec3.ZERO;
 
     public EclipseSentinel(EntityType<? extends BossLikePathfinderMob> entityType, Level level) {
         super(entityType, level, SentinelPose.class,
@@ -111,7 +134,8 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         this.bindAnimation(this.laser, SentinelPose.LASER);
         this.bindAnimation(this.cleave, SentinelPose.CLEAVE);
         this.bindAnimation(this.slash, SentinelPose.SLASH);
-        this.bindAnimation(this.rise, SentinelPose.RISE, SentinelPose.ECLIPSE_PULSE);
+        this.bindAnimation(this.rise, SentinelPose.RISE, SentinelPose.ECLIPSE_PULSE, SentinelPose.TOTALITY);
+        this.bindAnimation(this.coronaRing, SentinelPose.CORONA_RING);
         this.bindAnimation(this.dash, SentinelPose.DASH);
         this.bindAnimation(this.hyper_burst, SentinelPose.HYPER_BURST);
         this.bindAnimation(this.death, SentinelPose.DYING);
@@ -119,7 +143,7 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 400.0D)
+                .add(Attributes.MAX_HEALTH, 500.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
@@ -184,7 +208,46 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
     }
 
     public boolean isEnraged() {
-        return this.getHealth() < this.getMaxHealth() * 0.5F;
+        return this.getBossPhase() >= 1;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SECOND_BEAM, new Vector3f());
+    }
+
+    @Override
+    protected float[] phaseThresholds() {
+        return PHASES;
+    }
+
+    @Override
+    protected SentinelPose phaseTransitionState(int phase) {
+        return SentinelPose.TOTALITY;
+    }
+
+    @Override
+    protected BossEvent.BossBarColor phaseBarColor(int phase) {
+        return phase >= 1 ? BossEvent.BossBarColor.PURPLE : BossEvent.BossBarColor.PINK;
+    }
+
+    public boolean isSplitLaser() {
+        return this.getBossPhase() >= 1;
+    }
+
+    public Vec3 getSecondBeamEnd() {
+        Vector3f pos = this.entityData.get(SECOND_BEAM);
+        return new Vec3(pos.x(), pos.y(), pos.z());
+    }
+
+    public double coronaRingRadius(int ring, float ticks) {
+        float elapsed = ticks - CORONA_RING_STARTS[ring];
+        if (this.getBossState() != SentinelPose.CORONA_RING || elapsed < 0.0F) {
+            return -1.0D;
+        }
+        double radius = CORONA_RING_MIN_RADIUS + elapsed * CORONA_RING_SPEED;
+        return radius > CORONA_RING_MAX_RADIUS ? -1.0D : radius;
     }
 
     public SentinelPose getSentinelPose() {
@@ -218,6 +281,10 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 this.landed = false;
                 this.lastHyperBurstTick = this.tickCount;
             }
+            case CORONA_RING -> {
+                this.lastCoronaRingTick = this.tickCount;
+                this.coronaRingHits.forEach(Set::clear);
+            }
             case TO_LASER -> {
                 this.lastLaserTick = this.tickCount;
                 this.laserPitch = 0.0F;
@@ -248,6 +315,14 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 if (ticks == DASH_LOCK_TICK) {
                     this.dashDistance = target == null ? 4.0D : Mth.clamp(this.gapTo(target) + 0.5D, 0.0D, 9.0D);
                     this.playSound(SoundEvents.TRIDENT_RIPTIDE_2, 1.5F, 0.7F);
+                    if (this.isEnraged()) {
+                        this.echoOrigin = this.position();
+                        this.echoFacing = this.horizontalForward();
+                        this.setAbilityPos(this.echoOrigin);
+                    }
+                }
+                if (ticks == ECHO_SLASH_TICK && this.isEnraged()) {
+                    this.performEchoSlash();
                 }
                 if (ticks > DASH_LOCK_TICK + 2 && ticks <= DASH_HIT_TICK) {
                     Vec3 forward = this.horizontalForward();
@@ -275,6 +350,19 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 }
             }
             case HYPER_BURST -> this.tickHyperBurst(ticks, target);
+            case TOTALITY -> {
+                if (target != null && ticks < TOTALITY_TICK) {
+                    this.faceTowards(target, 6.0F);
+                }
+                if (ticks == 1) {
+                    this.playSound(SoundEvents.BEACON_POWER_SELECT, 2.5F, 0.5F);
+                    this.playSound(SoundEvents.WARDEN_SONIC_CHARGE, 2.0F, 0.7F);
+                }
+                if (ticks == TOTALITY_TICK) {
+                    this.performTotality(target);
+                }
+            }
+            case CORONA_RING -> this.tickCoronaRing(ticks, target);
             case TO_LASER -> {
                 if (target != null) {
                     this.aimAt(target, 6.0F);
@@ -379,6 +467,83 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         this.broadcastImpact();
     }
 
+    private void performEchoSlash() {
+        Vec3 left = new Vec3(this.echoFacing.z, 0.0D, -this.echoFacing.x);
+        for (LivingEntity entity : this.enemiesInArcAt(this.echoOrigin, this.echoFacing, this.halfWidth() + 3.0D, 75.0D, 3.5D)) {
+            this.strike(entity, 0.9F);
+            this.impulse(entity, left.scale(1.2D).add(0.0D, 0.35D, 0.0D));
+        }
+        Vec3 sweep = this.echoOrigin.add(this.echoFacing.scale(this.halfWidth() + 1.5D)).add(0.0D, 1.6D, 0.0D);
+        this.serverParticles(ParticleTypes.SWEEP_ATTACK, sweep.x, sweep.y, sweep.z, 3, 0.8D, 0.2D, 0.8D, 0.0D);
+        this.serverParticles(FADING_DUST, this.echoOrigin.x, this.echoOrigin.y + 1.5D, this.echoOrigin.z, 30, 0.4D, 1.0D, 0.4D, 0.0D);
+        this.level().playSound(null, this.echoOrigin.x, this.echoOrigin.y, this.echoOrigin.z, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2.0F, 0.5F);
+    }
+
+    private void performTotality(@Nullable LivingEntity target) {
+        Vec3 center = this.position();
+        for (Player player : this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(TOTALITY_RANGE), this::isEnemy)) {
+            player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 100, 0), this);
+        }
+        for (LivingEntity entity : this.enemiesInRadius(5.0D, 4.0D)) {
+            Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+            outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
+            this.impulse(entity, outward.scale(1.4D).add(0.0D, 0.4D, 0.0D));
+        }
+        if (target != null) {
+            for (EclipsedAcolyteEntity acolyte : this.level().getEntitiesOfClass(EclipsedAcolyteEntity.class, this.getBoundingBox().inflate(ACOLYTE_WAKE_RANGE), LivingEntity::isAlive)) {
+                acolyte.setTarget(target);
+            }
+        }
+        this.playSound(SoundEvents.WARDEN_SONIC_BOOM, 2.5F, 0.6F);
+        this.playSound(SoundEvents.BEACON_DEACTIVATE, 2.5F, 0.4F);
+        this.serverParticles(ParticleTypes.SONIC_BOOM, center.x, center.y + LASER_HEIGHT, center.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        this.broadcastImpact();
+    }
+
+    private void tickCoronaRing(int ticks, @Nullable LivingEntity target) {
+        if (ticks < CORONA_RING_STARTS[0] - 4) {
+            if (target != null) {
+                this.faceTowards(target, 8.0F);
+            }
+            this.lockedYaw = this.getYRot();
+        } else {
+            this.setFacing(this.lockedYaw);
+        }
+        Vec3 center = this.position();
+        for (int ring = 0; ring < CORONA_RING_STARTS.length; ring++) {
+            if (ticks == CORONA_RING_STARTS[ring]) {
+                this.playSound(SoundEvents.FIRECHARGE_USE, 2.0F, 0.5F);
+                this.playSound(SoundEvents.WARDEN_SONIC_BOOM, 0.8F, 1.6F);
+                if (ring == 0) {
+                    Vec3 front = this.localPoint(this.halfWidth() + 0.8D, 0.1D, 0.0D);
+                    this.groundBurst(front, 30, 0.6D);
+                    this.broadcastImpact();
+                }
+            }
+            double radius = this.coronaRingRadius(ring, ticks);
+            if (radius < 0.0D) {
+                continue;
+            }
+            Set<UUID> hits = this.coronaRingHits.get(ring);
+            for (LivingEntity entity : this.enemiesInRadius(radius + CORONA_RING_HALF_WIDTH + 1.0D, 3.0D)) {
+                double distance = Math.sqrt(horizontalDistanceSqr(entity.position(), center));
+                boolean grounded = entity.getY() < this.getY() + CORONA_RING_CLEARANCE && entity.getY() > this.getY() - 2.0D;
+                if (Math.abs(distance - radius) <= CORONA_RING_HALF_WIDTH + entity.getBbWidth() * 0.5D && grounded && hits.add(entity.getUUID())) {
+                    if (this.strikeMagic(entity, 0.7F)) {
+                        entity.setSecondsOnFire(4);
+                    }
+                    Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+                    outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
+                    this.impulse(entity, outward.scale(0.5D).add(0.0D, 0.4D, 0.0D));
+                }
+            }
+        }
+    }
+
+    private boolean isCoronaRingReady() {
+        return this.isEnraged() && this.tickCount - this.lastCoronaRingTick > CORONA_RING_COOLDOWN;
+    }
+
     private void performEclipsePulse(@Nullable LivingEntity target) {
         Vec3 center = this.position();
         for (LivingEntity entity : this.enemiesInRadius(PULSE_RADIUS, 4.0D)) {
@@ -395,7 +560,9 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         this.hugTicks = 0;
         this.tactics.clear();
         boolean enraged = this.isEnraged();
-        if (target != null && this.tickCount - this.lastLaserTick > (enraged ? 60 : 100)) {
+        if (target != null && this.isCoronaRingReady() && this.random.nextBoolean()) {
+            this.tactics.add(SentinelPose.CORONA_RING);
+        } else if (target != null && this.tickCount - this.lastLaserTick > (enraged ? 60 : 100)) {
             this.tactics.add(SentinelPose.TO_LASER);
         } else if (target != null && this.tickCount - this.lastHyperBurstTick > (enraged ? 80 : 140)) {
             this.tactics.add(SentinelPose.HYPER_BURST);
@@ -448,7 +615,8 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         if (pose == SentinelPose.TO_LASER || pose == SentinelPose.LASER || pose == SentinelPose.FROM_LASER) {
             return 1.0F;
         }
-        if (pose != SentinelPose.ECLIPSE_PULSE && pose != SentinelPose.RISE && pose != SentinelPose.HYPER_BURST) {
+        if (pose != SentinelPose.ECLIPSE_PULSE && pose != SentinelPose.RISE && pose != SentinelPose.HYPER_BURST
+                && pose != SentinelPose.TOTALITY && pose != SentinelPose.CORONA_RING) {
             return 0.0F;
         }
         float elapsed = this.clientStateTicks + (ageInTicks - (int) ageInTicks);
@@ -533,12 +701,24 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
             this.setFacing(this.getYRot());
         }
         Vec3 start = this.laserOrigin(1.0F);
-        Vec3 direction = Vec3.directionFromRotation(this.laserPitch, this.getYRot());
+        if (this.isSplitLaser()) {
+            float spread = Mth.lerp(Mth.clamp(ticks / (float) LASER_FIRE_TICKS, 0.0F, 1.0F), SPLIT_LASER_START_SPREAD, SPLIT_LASER_END_SPREAD);
+            this.setAbilityPos(this.fireBeam(start, this.getYRot() + spread, ticks, true));
+            Vec3 second = this.fireBeam(start, this.getYRot() - spread, ticks, false);
+            this.entityData.set(SECOND_BEAM, new Vector3f((float) second.x, (float) second.y, (float) second.z));
+        } else {
+            this.setAbilityPos(this.fireBeam(start, this.getYRot(), ticks, true));
+        }
+        if (ticks % 20 == 1) {
+            this.playSound(SoundEvents.BEACON_AMBIENT, 2.5F, 1.8F);
+        }
+    }
+
+    private Vec3 fireBeam(Vec3 start, float yaw, int ticks, boolean breaksBlocks) {
+        Vec3 direction = Vec3.directionFromRotation(this.laserPitch, yaw);
         Vec3 end = start.add(direction.scale(LASER_RANGE));
         BlockHitResult hit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         Vec3 hitPos = hit.getType() == HitResult.Type.MISS ? end : hit.getLocation();
-        this.setAbilityPos(hitPos);
-
         if (ticks % 5 == 0) {
             AABB sweep = new AABB(start, hitPos).inflate(1.0D);
             for (LivingEntity entity : this.enemiesIn(sweep)) {
@@ -547,12 +727,10 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 }
             }
         }
-        if (ticks % 8 == 0 && hit.getType() == HitResult.Type.BLOCK && this.canGrief()) {
+        if (breaksBlocks && ticks % 8 == 0 && hit.getType() == HitResult.Type.BLOCK && this.canGrief()) {
             this.breakBlock(hit.getBlockPos(), true);
         }
-        if (ticks % 20 == 1) {
-            this.playSound(SoundEvents.BEACON_AMBIENT, 2.5F, 1.8F);
-        }
+        return hitPos;
     }
 
     @Override
@@ -564,6 +742,10 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         boolean laserReady = this.tickCount - this.lastLaserTick > (enraged ? 140 : 220);
         int roll = this.random.nextInt(3);
 
+        if (this.isCoronaRingReady() && gap <= 10.0D && dy <= 3.0D && (roll == 0 || this.hugTicks > 20)) {
+            plan.add(SentinelPose.CORONA_RING);
+            return;
+        }
         if (dy > 3.0D || (gap > 3.5D && !this.canReach(target))) {
             if (hyperReady && gap < HYPER_MAX_DISTANCE) {
                 plan.add(SentinelPose.HYPER_BURST);
@@ -634,6 +816,13 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
             case LASER -> {
                 Vec3 end = this.getAbilityPos();
                 BossParticles.burst(level, this.random, PURPLE_DUST, end, 3, 0.2D);
+                if (this.isSplitLaser()) {
+                    Vec3 second = this.getSecondBeamEnd();
+                    BossParticles.burst(level, this.random, PURPLE_DUST, second, 3, 0.2D);
+                    if (ticks % 2 == 0) {
+                        level.addParticle(ParticleTypes.DRAGON_BREATH, second.x, second.y, second.z, 0.0D, 0.05D, 0.0D);
+                    }
+                }
                 if (ticks % 2 == 0) {
                     level.addParticle(ParticleTypes.DRAGON_BREATH, end.x, end.y, end.z, 0.0D, 0.05D, 0.0D);
                     level.addParticle(ParticleTypes.LARGE_SMOKE, end.x, end.y, end.z, 0.0D, 0.03D, 0.0D);
@@ -680,6 +869,9 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 }
             }
             case DASH -> {
+                if (this.isEnraged() && ticks > DASH_LOCK_TICK && ticks <= ECHO_SLASH_TICK && ticks % 2 == 0) {
+                    BossParticles.motes(level, this.random, FADING_DUST, this.getAbilityPos(), 0.5D, this.getBbHeight(), 3, 0.0D);
+                }
                 if (ticks > DASH_LOCK_TICK && ticks <= DASH_HIT_TICK) {
                     BossParticles.motes(level, this.random, FADING_DUST, this.position(), 0.6D, this.getBbHeight(), 6, 0.0D);
                     level.addParticle(ParticleTypes.REVERSE_PORTAL, this.getX(), this.getY(0.5D), this.getZ(), 0.0D, 0.0D, 0.0D);
@@ -703,6 +895,27 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 if (ticks > 3 && ticks < PULSE_HIT_TICK) {
                     Vec3 circle = this.localPoint(-1.0D, LASER_HEIGHT, 0.0D);
                     BossParticles.converge(level, this.random, ParticleTypes.PORTAL, circle, 2.5D, 4);
+                }
+            }
+            case TOTALITY -> {
+                if (ticks < TOTALITY_TICK) {
+                    BossParticles.converge(level, this.random, ParticleTypes.PORTAL, chest, 4.0D, 6);
+                    BossParticles.converge(level, this.random, FADING_DUST, chest, 5.0D, 2);
+                } else if (ticks % 4 == 0) {
+                    BossParticles.ring(level, FADING_DUST, this.position().add(0.0D, 0.15D, 0.0D), 3.0D, 24, 0.2D, 0.0D);
+                }
+            }
+            case CORONA_RING -> {
+                if (ticks < CORONA_RING_STARTS[0]) {
+                    BossParticles.converge(level, this.random, CORONA_DUST, this.localPoint(-1.0D, LASER_HEIGHT, 0.0D), 2.5D, 3);
+                }
+                for (int ring = 0; ring < CORONA_RING_STARTS.length; ring++) {
+                    double radius = this.coronaRingRadius(ring, ticks);
+                    if (radius > 0.0D) {
+                        int count = Math.min(90, (int) (radius * 5.0D));
+                        BossParticles.ring(level, CORONA_DUST, this.position().add(0.0D, 0.2D, 0.0D), radius, count, 0.0D, 0.03D);
+                        BossParticles.ring(level, ParticleTypes.SOUL_FIRE_FLAME, this.position().add(0.0D, 0.1D, 0.0D), radius, count / 3, 0.0D, 0.06D);
+                    }
                 }
             }
             case HYPER_BURST -> {
@@ -752,6 +965,12 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 BossParticles.column(level, this.random, ParticleTypes.SCULK_SOUL, base, 4.0D, 24, 0.15D);
             }
             case CLEAVE -> BossParticles.ring(level, ParticleTypes.CLOUD, this.localPoint(this.halfWidth() + 1.0D, 0.15D, 0.0D), 0.5D, 12, 0.3D, 0.0D);
+            case TOTALITY -> {
+                BossParticles.ring(level, ParticleTypes.REVERSE_PORTAL, base, 2.0D, 60, 1.4D, 0.1D);
+                BossParticles.ring(level, FADING_DUST, base.add(0.0D, 1.0D, 0.0D), 6.0D, 64, 0.0D, 0.05D);
+                BossParticles.column(level, this.random, ParticleTypes.SCULK_SOUL, base, 5.0D, 30, 0.2D);
+            }
+            case CORONA_RING -> BossParticles.ring(level, ParticleTypes.CLOUD, this.localPoint(this.halfWidth() + 0.8D, 0.15D, 0.0D), 0.8D, 20, 0.45D, 0.03D);
             default -> {
             }
         }
@@ -762,9 +981,9 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         return switch (this.getBossState()) {
             case IDLING, AWAKE_TO_IDLE -> 0.15F;
             case TO_LASER, FROM_LASER -> 0.7F;
-            case LASER, HYPER_BURST -> 1.0F;
+            case LASER, HYPER_BURST, TOTALITY -> 1.0F;
             case CLEAVE, SLASH, DASH, RISE -> 0.6F;
-            case ECLIPSE_PULSE -> 0.9F;
+            case ECLIPSE_PULSE, CORONA_RING -> 0.9F;
             case DYING -> 0.0F;
             default -> 0.35F;
         };
@@ -794,7 +1013,9 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         DYING(9, 0, false),
         AWAKE_TO_IDLE(10, 0, false),
         IDLING(11, 0, false),
-        IDLE_TO_AWAKE(12, 0, false);
+        IDLE_TO_AWAKE(12, 0, false),
+        TOTALITY(14, 60, false),
+        CORONA_RING(15, 70, true);
 
         private final int id;
         private final int duration;
@@ -818,6 +1039,11 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         @Override
         public boolean isAttack() {
             return this.attack;
+        }
+
+        @Override
+        public boolean isPhaseTransition() {
+            return this == TOTALITY;
         }
     }
 }

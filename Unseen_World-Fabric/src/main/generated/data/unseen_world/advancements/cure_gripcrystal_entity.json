@@ -3,7 +3,7 @@
   "criteria": {
     "cure_gripcrystal_entity": {
       "conditions": {},
-      "trigger": "minecraft:cured_gripcrystal_entity"
+      "trigger": "unseen_world:cured_gripcrystal_entity"
     }
   },
   "display": {

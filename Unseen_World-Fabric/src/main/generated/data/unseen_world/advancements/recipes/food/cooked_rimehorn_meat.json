@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_meat": {
+    "has_rimehorn_meat": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_meat",
+      "has_rimehorn_meat",
       "has_the_recipe"
     ]
   ],

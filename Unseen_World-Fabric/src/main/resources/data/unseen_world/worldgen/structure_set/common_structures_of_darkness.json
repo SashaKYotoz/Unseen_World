@@ -13,6 +13,14 @@
       "weight": 1
     },
     {
+      "structure": "unseen_world:patriarch_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:warrior_ruins",
+      "weight": 1
+    },
+    {
       "structure": "unseen_world:grizzly_mineshaft",
       "weight": 1
     },

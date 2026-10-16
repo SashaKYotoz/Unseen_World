@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -68,7 +69,6 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     private static final int MAX_REAVERS_PER_SUMMON = 4;
     private static final int MAX_REAVERS_ALIVE = 5;
     private static final int REAVER_RESUMMON_THRESHOLD = 1;
-    private static final float ASCENSION_HEALTH_FRACTION = 0.6F;
     private static final int ASCENSION_PRESSURE_HITS = 5;
     private static final int ASCENSION_PRESSURE_WINDOW = 80;
     private static final double ASCENSION_MELEE_RANGE_SQR = 36.0D;
@@ -76,8 +76,39 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     private static final int AERIAL_DECISION_DELAY = 40;
     private static final double HOVER_RADIUS = 6.0D;
     private static final double HOVER_HEIGHT = 7.0D;
+    private static final float[] PHASES = {0.6F, 0.25F};
+    private static final int RITE_TICKS = 40;
+    private static final int REASCEND_DELAY = 260;
+    private static final int FALLING_SUN_IMPACT_TICK = 30;
+    private static final int FALLING_SUN_TICKS = 60;
+    public static final int JUDGEMENT_FIRST_TICK = 15;
+    private static final int JUDGEMENT_INTERVAL = 4;
+    private static final int JUDGEMENT_LAST_TICK = 63;
+    private static final int JUDGEMENT_TICKS = 80;
+    private static final int JUDGEMENT_DELAY = 10;
+    private static final double JUDGEMENT_STEP = 2.2D;
+    private static final double JUDGEMENT_START_OFFSET = 8.0D;
+    private static final double PILLAR_RADIUS = 1.4D;
+    private static final double PILLAR_HEIGHT = 5.0D;
+    private static final double CHAIN_MIN_RANGE = 20.0D;
+    private static final double CHAIN_MAX_RANGE = 48.0D;
+    private static final int CHAIN_COOLDOWN = 140;
+    private static final int SACRIFICE_TICK = 25;
+    private static final int SACRIFICE_TICKS = 50;
+    private static final float SACRIFICE_HEAL_PER_MINION = 0.03F;
+    private static final float SACRIFICE_MAX_HEAL = 0.15F;
+    private static final int EMPOWERED_ATTACKS = 2;
+    private static final float EMPOWER_FACTOR = 1.5F;
+    public static final int SUNBURST_CHANNEL_TICK = 10;
+    public static final int SUNBURST_BLAST_TICK = 110;
+    private static final int SUNBURST_TICKS = 130;
+    public static final double SUNBURST_RADIUS = 16.0D;
+    private static final double SANCTUARY_RADIUS = 2.5D;
+    private static final int SANCTUARY_COUNT = 2;
+    private static final float SUNBURST_STAGGER_DAMAGE = 45.0F;
+    private static final int SUNBURST_COOLDOWN = 700;
 
-    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.auric_patriarch"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS);
+    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.auric_patriarch"), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.NOTCHED_10);
     public final DynamicGameEventListener<PatriarchEventListener> listener = new DynamicGameEventListener<>(
             new PatriarchEventListener(this, new EntityPositionSource(this, this.getEyeHeight())));
     private final List<LivingEntity> minions = new ArrayList<>();
@@ -93,6 +124,8 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     public final AnimationState grabAndStrike = new AnimationState();
     public final AnimationState suddenBeam = new AnimationState();
     public final AnimationState aureateUndead = new AnimationState();
+    public final AnimationState fallingSun = new AnimationState();
+    public final AnimationState finalSunburst = new AnimationState();
     public final AnimationState death = new AnimationState();
 
     private final GroundPathNavigation groundNavigation;
@@ -107,6 +140,14 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     private int pressureHits = 0;
     private int pressureWindowStart = Integer.MIN_VALUE;
     private final Map<PatriarchState, Integer> lastUsed = new EnumMap<>(PatriarchState.class);
+    private final TelegraphedStrikes judgement = new TelegraphedStrikes(new JudgementHandler());
+    private final List<Vec3> sanctuaries = new ArrayList<>();
+    private Vec3 judgementCursor = Vec3.ZERO;
+    private int lastLandedTick = -1000;
+    private int lastChainTick = -1000;
+    private int empoweredStrikes = 0;
+    private boolean empoweredAttack = false;
+    private float sunburstDamage = 0.0F;
     @Nullable
     private PatriarchState lastTactic;
 
@@ -138,14 +179,16 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         this.bindAnimation(this.idleTransition, PatriarchState.AWAKE_TO_IDLE, PatriarchState.IDLE_TO_AWAKE);
         this.bindAnimation(this.idle, PatriarchState.IDLING);
         this.bindAnimation(this.flyingTransition, PatriarchState.TO_FLYING, PatriarchState.TO_GROUND);
-        this.bindAnimation(this.vexTime, PatriarchState.VEX_TIME);
+        this.bindAnimation(this.vexTime, PatriarchState.VEX_TIME, PatriarchState.ASCENSION_RITE);
         this.bindAnimation(this.skyBurst, PatriarchState.SKY_BURST);
         this.bindAnimation(this.divineTouch, PatriarchState.DIVINE_TOUCH);
         this.bindAnimation(this.auricBarrier, PatriarchState.AURIC_BARRIER);
         this.bindAnimation(this.wingKnockback, PatriarchState.WING_KNOCKBACK);
         this.bindAnimation(this.grabAndStrike, PatriarchState.GRAB_AND_STRIKE);
-        this.bindAnimation(this.aureateUndead, PatriarchState.AUREATE_UNDEAD);
-        this.bindAnimation(this.suddenBeam, PatriarchState.SUDDEN_BEAM);
+        this.bindAnimation(this.aureateUndead, PatriarchState.AUREATE_UNDEAD, PatriarchState.SACRIFICE);
+        this.bindAnimation(this.suddenBeam, PatriarchState.SUDDEN_BEAM, PatriarchState.SOLAR_JUDGEMENT);
+        this.bindAnimation(this.fallingSun, PatriarchState.FALLING_SUN);
+        this.bindAnimation(this.finalSunburst, PatriarchState.FINAL_SUNBURST);
     }
 
     @Override
@@ -192,6 +235,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     protected int decisionDelay() {
         if (this.isInAerialPhase()) {
             return AERIAL_DECISION_DELAY;
+        }
+        if (this.getBossPhase() >= 2) {
+            return 30;
         }
         return this.getHealth() < this.getMaxHealth() * 0.4F ? 35 : 50;
     }
@@ -272,6 +318,43 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         this.aerialPhaseTicks = this.isFlying() ? Math.max(0, compound.getInt("AerialPhaseTicks")) : 0;
     }
 
+    @Override
+    protected float[] phaseThresholds() {
+        return PHASES;
+    }
+
+    @Override
+    protected PatriarchState phaseTransitionState(int phase) {
+        return phase >= 2 ? PatriarchState.FALLING_SUN : PatriarchState.ASCENSION_RITE;
+    }
+
+    @Override
+    protected BossEvent.BossBarColor phaseBarColor(int phase) {
+        return switch (phase) {
+            case 0 -> BossEvent.BossBarColor.YELLOW;
+            case 1 -> BossEvent.BossBarColor.WHITE;
+            default -> BossEvent.BossBarColor.RED;
+        };
+    }
+
+    @Override
+    protected void onPhaseChanged(int phase) {
+        this.judgement.clear();
+        this.sanctuaries.clear();
+        if (phase >= 2) {
+            this.aerialPhaseTicks = 0;
+            this.forcedTakeoff = false;
+            this.hasUsedVexTimeInFlight = false;
+            this.setGroundMovement();
+            this.setFlying(false);
+            this.lastUsed.put(PatriarchState.FINAL_SUNBURST, this.tickCount - SUNBURST_COOLDOWN + 100);
+        }
+    }
+
+    private float power() {
+        return this.empoweredAttack ? EMPOWER_FACTOR : 1.0F;
+    }
+
     public boolean isInAerialPhase() {
         return this.isFlying() && this.aerialPhaseTicks > 0;
     }
@@ -281,12 +364,18 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         boolean result = super.hurt(source, amount);
         if (result && !this.level().isClientSide() && this.isAlive() && this.isAwake()) {
             this.trackAscensionPressure(source);
+            if (this.getPatriarchState() == PatriarchState.FINAL_SUNBURST && this.stateTicks >= SUNBURST_CHANNEL_TICK && this.stateTicks < SUNBURST_BLAST_TICK) {
+                this.sunburstDamage += amount;
+                if (this.sunburstDamage >= SUNBURST_STAGGER_DAMAGE) {
+                    this.staggerSunburst();
+                }
+            }
         }
         return result;
     }
 
     private void trackAscensionPressure(DamageSource source) {
-        if (this.ascensionUsed || this.forcedTakeoff || this.isFlying()) {
+        if (this.ascensionUsed || this.forcedTakeoff || this.isFlying() || this.getBossPhase() > 0) {
             return;
         }
         Entity direct = source.getDirectEntity();
@@ -297,7 +386,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             }
             this.pressureHits++;
         }
-        if (this.pressureHits >= ASCENSION_PRESSURE_HITS || this.getHealth() <= this.getMaxHealth() * ASCENSION_HEALTH_FRACTION) {
+        if (this.pressureHits >= ASCENSION_PRESSURE_HITS) {
             this.forcedTakeoff = true;
             this.pressureHits = 0;
         }
@@ -305,6 +394,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
 
     @Override
     protected void tickStanding(@Nullable LivingEntity target) {
+        if (this.getBossPhase() == 1 && target != null && !this.isFlying() && !this.forcedTakeoff && this.tickCount - this.lastLandedTick > REASCEND_DELAY) {
+            this.forcedTakeoff = true;
+        }
         if (this.forcedTakeoff && target != null && !this.isFlying()) {
             this.tactics.clear();
             this.getNavigation().stop();
@@ -367,7 +459,30 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                 this.aerialPhaseTicks = 0;
             }
             this.updateMinionSyncState();
+            this.tickGildedChains();
         }
+    }
+
+    private void tickGildedChains() {
+        PatriarchState state = this.getPatriarchState();
+        if (this.getBossPhase() < 1 || state.isPhaseTransition() || !this.isAwake() || this.tickCount - this.lastChainTick < CHAIN_COOLDOWN) {
+            return;
+        }
+        LivingEntity target = this.getPrimaryTarget();
+        if (target == null) {
+            return;
+        }
+        double distance = Math.sqrt(horizontalDistanceSqr(target.position(), this.position()));
+        if (distance <= CHAIN_MIN_RANGE || distance >= CHAIN_MAX_RANGE || !this.hasLineOfSight(target)) {
+            return;
+        }
+        this.lastChainTick = this.tickCount;
+        Vec3 chest = this.position().add(0.0D, this.getBbHeight() * 0.6D, 0.0D);
+        Vec3 pull = chest.subtract(target.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+        this.impulse(target, pull.scale(1.8D).add(0.0D, 0.5D, 0.0D));
+        this.serverLine(GOLD_DUST, chest, target.position().add(0.0D, target.getBbHeight() * 0.5D, 0.0D), 0.8D);
+        this.playSound(SoundEvents.CHAIN_BREAK, 2.0F, 0.6F);
+        this.level().playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.CHAIN_PLACE, SoundSource.HOSTILE, 2.0F, 0.5F);
     }
 
     @Override
@@ -407,7 +522,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                     this.setFlying(true);
                     if (this.forcedTakeoff) {
                         this.forcedTakeoff = false;
-                        this.ascensionUsed = true;
+                        if (this.getBossPhase() == 0) {
+                            this.ascensionUsed = true;
+                        }
                         this.aerialPhaseTicks = AERIAL_PHASE_TICKS;
                         this.lastTactic = null;
                     }
@@ -423,6 +540,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                     this.setFlying(false);
                     this.hasUsedVexTimeInFlight = false;
                     this.aerialPhaseTicks = 0;
+                    this.lastLandedTick = this.tickCount;
                     this.returnToStanding();
                 }
             }
@@ -502,6 +620,62 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                     this.returnToStanding();
                 }
             }
+            case ASCENSION_RITE -> {
+                if (ticks == 1) {
+                    this.playSound(SoundEvents.BEACON_POWER_SELECT, 2.5F, 0.8F);
+                    this.playSound(SoundEvents.TOTEM_USE, 1.5F, 1.4F);
+                }
+                if (ticks % 5 == 0) {
+                    this.serverRing(GOLD_DUST, this.position().add(0.0D, 0.15D, 0.0D), 1.0D + ticks * 0.1D, 20);
+                }
+                if (ticks >= RITE_TICKS) {
+                    if (this.isFlying()) {
+                        this.aerialPhaseTicks = AERIAL_PHASE_TICKS;
+                        this.returnToStanding();
+                    } else {
+                        this.forcedTakeoff = true;
+                        this.hasUsedVexTimeInFlight = false;
+                        this.chainState(PatriarchState.WING_KNOCKBACK);
+                    }
+                }
+            }
+            case FALLING_SUN -> {
+                if (!this.onGround()) {
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D).add(0.0D, -0.12D, 0.0D));
+                }
+                if (ticks == 1) {
+                    this.playSound(SoundEvents.PHANTOM_DEATH, 2.5F, 0.5F);
+                }
+                if (ticks == FALLING_SUN_IMPACT_TICK) {
+                    this.performFallingSunImpact();
+                }
+                if (ticks >= FALLING_SUN_TICKS) {
+                    this.returnToStanding();
+                }
+            }
+            case SOLAR_JUDGEMENT -> {
+                this.tickSolarJudgement(ticks, target);
+                if (ticks >= JUDGEMENT_TICKS) {
+                    this.returnToStanding();
+                }
+            }
+            case SACRIFICE -> {
+                if (ticks == 5) {
+                    this.getNavigation().stop();
+                }
+                if (ticks == SACRIFICE_TICK) {
+                    this.performSacrifice();
+                }
+                if (ticks >= SACRIFICE_TICKS) {
+                    this.returnToStanding();
+                }
+            }
+            case FINAL_SUNBURST -> {
+                this.tickFinalSunburst(ticks, target);
+                if (ticks >= SUNBURST_TICKS) {
+                    this.returnToStanding();
+                }
+            }
             case DIVINE_TOUCH, SKY_BURST -> {
                 if (ticks == 20) {
                     double xOff = this.getXVector(7.0D, this.getYRot());
@@ -516,6 +690,181 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             default -> {
             }
         }
+    }
+
+    private void performFallingSunImpact() {
+        Vec3 center = this.position();
+        for (LivingEntity entity : this.enemiesInRadius(6.0D, 4.0D)) {
+            Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+            outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
+            this.impulse(entity, outward.scale(1.3D).add(0.0D, 0.45D, 0.0D));
+        }
+        this.groundBurst(center, 50, 1.2D);
+        this.serverParticles(ParticleTypes.FLAME, center.x, center.y + 0.5D, center.z, 60, 1.5D, 0.6D, 1.5D, 0.08D);
+        this.serverParticles(ParticleTypes.LARGE_SMOKE, center.x, center.y + 0.5D, center.z, 30, 1.5D, 0.6D, 1.5D, 0.04D);
+        this.level().playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 2.5F, 0.6F);
+        this.playSound(SoundEvents.ANVIL_LAND, 2.0F, 0.5F);
+        this.broadcastImpact();
+    }
+
+    private void tickSolarJudgement(int ticks, @Nullable LivingEntity target) {
+        if (ticks == 10) {
+            this.getNavigation().stop();
+        }
+        if (target != null && ticks >= JUDGEMENT_FIRST_TICK && ticks <= JUDGEMENT_LAST_TICK && (ticks - JUDGEMENT_FIRST_TICK) % JUDGEMENT_INTERVAL == 0) {
+            Vec3 goal = target.position();
+            if (ticks == JUDGEMENT_FIRST_TICK) {
+                Vec3 back = this.position().subtract(goal).multiply(1.0D, 0.0D, 1.0D);
+                back = back.lengthSqr() < 1.0E-4D ? this.horizontalForward() : back.normalize();
+                this.judgementCursor = goal.add(back.scale(JUDGEMENT_START_OFFSET));
+                this.playSound(SoundEvents.BEACON_ACTIVATE, 2.0F, 1.4F);
+            } else {
+                Vec3 toGoal = new Vec3(goal.x - this.judgementCursor.x, 0.0D, goal.z - this.judgementCursor.z);
+                double length = toGoal.length();
+                this.judgementCursor = length <= JUDGEMENT_STEP ? goal : this.judgementCursor.add(toGoal.scale(JUDGEMENT_STEP / length));
+            }
+            Vec3 ground = this.findStandableGround(this.judgementCursor.x, this.judgementCursor.z, target.getY(), 12);
+            if (ground != null) {
+                this.judgement.schedule(ground, this.stateTicks, JUDGEMENT_DELAY);
+            }
+        }
+        this.judgement.tick(this.stateTicks);
+    }
+
+    private void telegraphPillar(Vec3 pos, boolean urgent) {
+        this.serverRing(urgent ? PALE_DUST : GOLD_DUST, pos.add(0.0D, 0.1D, 0.0D), PILLAR_RADIUS, 10);
+        if (urgent) {
+            this.serverParticles(ParticleTypes.END_ROD, pos.x, pos.y + 0.2D, pos.z, 6, 0.4D, 0.1D, 0.4D, 0.08D);
+        } else {
+            this.serverParticles(ModParticleTypes.EXPLOSION_CIRCLE, pos.x, pos.y + 0.05D, pos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        }
+    }
+
+    private void strikePillar(Vec3 pos) {
+        AABB column = new AABB(pos.x - PILLAR_RADIUS, pos.y - 0.5D, pos.z - PILLAR_RADIUS, pos.x + PILLAR_RADIUS, pos.y + PILLAR_HEIGHT, pos.z + PILLAR_RADIUS);
+        for (LivingEntity entity : this.enemiesIn(column)) {
+            if (!(entity instanceof AureateVexEntity) && this.judgement.firstHit(entity.getUUID(), this.stateTicks) && this.strikeMagic(entity, 0.7F * this.power())) {
+                entity.setSecondsOnFire(3);
+            }
+        }
+        this.serverParticles(ParticleTypes.END_ROD, pos.x, pos.y + 2.5D, pos.z, 24, 0.2D, 2.0D, 0.2D, 0.02D);
+        this.serverParticles(GOLD_DUST, pos.x, pos.y + 2.5D, pos.z, 20, 0.4D, 2.0D, 0.4D, 0.0D);
+        this.serverParticles(ParticleTypes.FLASH, pos.x, pos.y + 1.0D, pos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        this.groundBurst(pos, 10, 0.4D);
+        this.level().playSound(null, pos.x, pos.y, pos.z, SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.HOSTILE, 0.8F, 1.8F);
+    }
+
+    private final class JudgementHandler implements TelegraphedStrikes.Handler {
+        @Override
+        public void telegraph(Vec3 pos, boolean urgent) {
+            AuricPatriarch.this.telegraphPillar(pos, urgent);
+        }
+
+        @Override
+        public void strike(Vec3 pos) {
+            AuricPatriarch.this.strikePillar(pos);
+        }
+    }
+
+    private void performSacrifice() {
+        this.pruneMinions();
+        Vec3 chest = this.position().add(0.0D, this.getBbHeight() * 0.6D, 0.0D);
+        int consumed = 0;
+        for (LivingEntity minion : new ArrayList<>(this.minions)) {
+            if (minion.isAlive()) {
+                this.serverLine(GOLD_DUST, minion.position().add(0.0D, minion.getBbHeight() * 0.5D, 0.0D), chest, 0.6D);
+                this.serverParticles(ParticleTypes.TOTEM_OF_UNDYING, minion.getX(), minion.getY(0.5D), minion.getZ(), 20, 0.3D, 0.5D, 0.3D, 0.2D);
+                minion.kill();
+                consumed++;
+            }
+        }
+        this.minions.clear();
+        if (consumed > 0) {
+            this.heal(Math.min(SACRIFICE_MAX_HEAL, consumed * SACRIFICE_HEAL_PER_MINION) * this.getMaxHealth());
+            this.empoweredStrikes = EMPOWERED_ATTACKS;
+            this.serverParticles(ParticleTypes.FLASH, chest.x, chest.y, chest.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        }
+        this.playSound(SoundEvents.EVOKER_CAST_SPELL, 2.0F, 0.6F);
+        this.playSound(SoundEvents.TOTEM_USE, 1.5F, 0.7F);
+    }
+
+    private void tickFinalSunburst(int ticks, @Nullable LivingEntity target) {
+        if (ticks == 1) {
+            this.getNavigation().stop();
+            this.playSound(SoundEvents.BEACON_ACTIVATE, 3.0F, 0.5F);
+        }
+        if (ticks == 5) {
+            this.placeSanctuaries();
+        }
+        if (ticks >= 5 && ticks < SUNBURST_BLAST_TICK && ticks % 5 == 0) {
+            for (Vec3 sanctuary : this.sanctuaries) {
+                this.serverRing(PALE_DUST, sanctuary.add(0.0D, 0.15D, 0.0D), SANCTUARY_RADIUS, 16);
+                this.serverParticles(ParticleTypes.END_ROD, sanctuary.x, sanctuary.y + 1.5D, sanctuary.z, 3, 0.3D, 1.2D, 0.3D, 0.01D);
+            }
+        }
+        if (ticks > SUNBURST_CHANNEL_TICK && ticks < SUNBURST_BLAST_TICK && ticks % 20 == 0) {
+            this.playSound(SoundEvents.BEACON_AMBIENT, 3.0F, 0.5F + ticks / (float) SUNBURST_BLAST_TICK);
+        }
+        if (target != null && ticks < SUNBURST_BLAST_TICK) {
+            this.faceTowards(target, 4.0F);
+        }
+        if (ticks == SUNBURST_BLAST_TICK) {
+            this.performSunburstBlast();
+        }
+    }
+
+    private void placeSanctuaries() {
+        this.sanctuaries.clear();
+        double base = this.random.nextDouble() * Math.PI * 2.0D;
+        for (int i = 0; i < SANCTUARY_COUNT; i++) {
+            double angle = base + i * Math.PI + (this.random.nextDouble() - 0.5D) * 1.2D;
+            double radius = 7.0D + this.random.nextDouble() * 3.0D;
+            Vec3 ground = this.findStandableGround(this.getX() + Math.cos(angle) * radius, this.getZ() + Math.sin(angle) * radius, this.getY(), 12);
+            if (ground != null) {
+                this.sanctuaries.add(ground);
+                this.serverParticles(ModParticleTypes.EXPLOSION_CIRCLE, ground.x, ground.y + 0.05D, ground.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            }
+        }
+        this.playSound(SoundEvents.EVOKER_PREPARE_WOLOLO, 2.0F, 1.2F);
+    }
+
+    private boolean isSheltered(LivingEntity entity) {
+        for (Vec3 sanctuary : this.sanctuaries) {
+            if (horizontalDistanceSqr(entity.position(), sanctuary) <= SANCTUARY_RADIUS * SANCTUARY_RADIUS && Math.abs(entity.getY() - sanctuary.y) < 3.0D) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void performSunburstBlast() {
+        Vec3 center = this.position();
+        for (LivingEntity entity : this.enemiesInRadius(SUNBURST_RADIUS, 8.0D)) {
+            if (entity instanceof AureateVexEntity || this.isSheltered(entity)) {
+                continue;
+            }
+            if (this.strikeMagic(entity, 2.2F * this.power())) {
+                entity.setSecondsOnFire(5);
+            }
+            Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
+            outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
+            this.impulse(entity, outward.scale(1.2D).add(0.0D, 0.6D, 0.0D));
+        }
+        this.serverParticles(ParticleTypes.EXPLOSION_EMITTER, center.x, center.y + 1.0D, center.z, 2, 1.0D, 0.5D, 1.0D, 0.0D);
+        this.serverParticles(ParticleTypes.FLASH, center.x, center.y + 3.0D, center.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        this.level().playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 4.0F, 0.5F);
+        this.playSound(SoundEvents.TOTEM_USE, 2.0F, 0.5F);
+        this.sanctuaries.clear();
+        this.broadcastImpact();
+    }
+
+    private void staggerSunburst() {
+        this.sanctuaries.clear();
+        this.playSound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, 2.0F, 0.6F);
+        this.playSound(SoundEvents.BEACON_DEACTIVATE, 2.5F, 0.6F);
+        this.serverParticles(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(0.7D), this.getZ(), 30, 0.8D, 0.8D, 0.8D, 0.05D);
+        this.returnToStanding();
+        this.stateTicks = -40;
     }
 
     @Override
@@ -640,6 +989,50 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                     BossParticles.ring(level, ParticleTypes.END_ROD, this.position().add(0.0D, 0.1D, 0.0D), 3.0D, 32, 0.0D, 0.05D);
                 }
             }
+            case ASCENSION_RITE -> {
+                BossParticles.converge(level, this.random, GOLD_DUST, chest, 3.5D, 3);
+                if (ticks % 4 == 0) {
+                    BossParticles.helix(level, ParticleTypes.END_ROD, this.position(), 2.0D, 4.0D, this.tickCount, 2, 20);
+                }
+            }
+            case FALLING_SUN -> {
+                if (ticks < FALLING_SUN_IMPACT_TICK) {
+                    Vec3 left = this.localPoint(-0.4D, this.getBbHeight() * 0.7D, 1.6D);
+                    Vec3 right = this.localPoint(-0.4D, this.getBbHeight() * 0.7D, -1.6D);
+                    level.addParticle(ParticleTypes.FLAME, left.x, left.y, left.z, 0.0D, 0.05D, 0.0D);
+                    level.addParticle(ParticleTypes.FLAME, right.x, right.y, right.z, 0.0D, 0.05D, 0.0D);
+                    level.addParticle(ParticleTypes.LARGE_SMOKE, chest.x, chest.y, chest.z, 0.0D, 0.08D, 0.0D);
+                } else if (ticks % 3 == 0) {
+                    BossParticles.motes(level, this.random, ParticleTypes.SMOKE, this.position(), 1.0D, this.getBbHeight(), 2, 0.05D);
+                }
+            }
+            case SOLAR_JUDGEMENT -> {
+                Vec3 hand = this.localPoint(0.9D, this.getBbHeight() * 0.65D, -0.6D);
+                if (ticks < JUDGEMENT_FIRST_TICK) {
+                    BossParticles.converge(level, this.random, ParticleTypes.ENCHANT, hand, 2.5D, 3);
+                } else if (ticks <= JUDGEMENT_LAST_TICK && ticks % 4 == 0) {
+                    BossParticles.burst(level, this.random, ParticleTypes.END_ROD, hand, 4, 0.15D);
+                }
+            }
+            case SACRIFICE -> {
+                if (ticks < SACRIFICE_TICK) {
+                    BossParticles.converge(level, this.random, GOLD_DUST, chest, 4.0D, 3);
+                }
+                if (ticks == SACRIFICE_TICK) {
+                    BossParticles.burst(level, this.random, ParticleTypes.TOTEM_OF_UNDYING, chest, 50, 0.6D);
+                }
+            }
+            case FINAL_SUNBURST -> {
+                Vec3 sun = this.position().add(0.0D, this.getBbHeight() + 1.5D, 0.0D);
+                if (ticks >= SUNBURST_CHANNEL_TICK && ticks < SUNBURST_BLAST_TICK) {
+                    float progress = (ticks - SUNBURST_CHANNEL_TICK) / (float) (SUNBURST_BLAST_TICK - SUNBURST_CHANNEL_TICK);
+                    BossParticles.converge(level, this.random, ParticleTypes.END_ROD, sun, 4.0D + progress * 4.0D, 2 + (int) (progress * 4.0F));
+                    BossParticles.converge(level, this.random, GOLD_DUST, sun, 3.0D, 2);
+                    if (ticks % 10 == 0) {
+                        BossParticles.ring(level, GOLD_DUST, this.position().add(0.0D, 0.2D, 0.0D), SUNBURST_RADIUS, 72, 0.0D, 0.0D);
+                    }
+                }
+            }
             case DYING -> {
                 double progress = Math.min(1.0D, ticks / (double) DEATH_ANIMATION_TICKS);
                 BossParticles.motes(level, this.random, GOLD_DUST, this.position(), 1.2D, this.getBbHeight(), 1 + (int) (progress * 4.0D), 0.08D);
@@ -701,6 +1094,40 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         if (next.isAttack() || next == PatriarchState.SKY_BURST) {
             this.lastUsed.put(next, this.tickCount);
             this.lastTactic = next;
+            if (next != PatriarchState.SACRIFICE) {
+                this.empoweredAttack = this.empoweredStrikes > 0;
+                if (this.empoweredAttack) {
+                    this.empoweredStrikes--;
+                }
+            }
+        }
+        if (previous == PatriarchState.SOLAR_JUDGEMENT) {
+            this.judgement.clear();
+        }
+        if (previous == PatriarchState.FINAL_SUNBURST) {
+            this.sanctuaries.clear();
+        }
+        if (next == PatriarchState.FINAL_SUNBURST) {
+            this.sunburstDamage = 0.0F;
+        }
+    }
+
+    @Override
+    protected void onImpactClient(PatriarchState state) {
+        Level level = this.level();
+        Vec3 base = this.position().add(0.0D, 0.15D, 0.0D);
+        switch (state) {
+            case FALLING_SUN -> {
+                BossParticles.ring(level, ParticleTypes.CLOUD, base, 1.5D, 48, 1.0D, 0.06D);
+                BossParticles.ring(level, ParticleTypes.FLAME, base, 2.0D, 40, 0.6D, 0.08D);
+            }
+            case FINAL_SUNBURST -> {
+                BossParticles.ring(level, ParticleTypes.END_ROD, base.add(0.0D, 1.0D, 0.0D), 2.0D, 80, 1.6D, 0.1D);
+                BossParticles.ring(level, GOLD_DUST, base, SUNBURST_RADIUS, 96, 0.0D, 0.2D);
+                BossParticles.burst(level, this.random, ParticleTypes.TOTEM_OF_UNDYING, base.add(0.0D, this.getBbHeight(), 0.0D), 120, 1.2D);
+            }
+            default -> {
+            }
         }
     }
 
@@ -708,6 +1135,10 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     protected void planTactics(LivingEntity target, Queue<PatriarchState> plan) {
         double distSqr = this.distanceToSqr(target);
         boolean targetOnGround = target.onGround();
+        if (this.getBossPhase() >= 2) {
+            this.planFinalTactics(distSqr, plan);
+            return;
+        }
 
         if (this.isFlying()) {
             if (this.isInAerialPhase()) {
@@ -755,15 +1186,50 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         if (this.countMinions(ReaverEntity.class) <= REAVER_RESUMMON_THRESHOLD) {
             this.offer(weights, PatriarchState.AUREATE_UNDEAD, enraged ? 3 : 2, enraged ? 360 : 500);
         }
-        weights.remove(this.lastTactic);
+        if (this.getBossPhase() >= 1) {
+            this.offer(weights, PatriarchState.SOLAR_JUDGEMENT, 3, 160);
+        }
+        this.addWeightedPlan(weights, plan, PatriarchState.AUREATE_UNDEAD, PatriarchState.SOLAR_JUDGEMENT);
+    }
 
+    private void planFinalTactics(double distSqr, Queue<PatriarchState> plan) {
+        this.pruneMinions();
+        Map<PatriarchState, Integer> weights = new EnumMap<>(PatriarchState.class);
+        if (distSqr <= 81.0D) {
+            this.offer(weights, PatriarchState.DIVINE_TOUCH, 4, 60);
+            this.offer(weights, PatriarchState.AURIC_BARRIER, 3, 160);
+            if (distSqr <= 25.0D) {
+                this.offer(weights, PatriarchState.WING_KNOCKBACK, 2, 240);
+            }
+        } else {
+            this.offer(weights, PatriarchState.SUDDEN_BEAM, 3, 80);
+        }
+        this.offer(weights, PatriarchState.GRAB_AND_STRIKE, 2, 200);
+        this.offer(weights, PatriarchState.SOLAR_JUDGEMENT, 4, 140);
+        if (this.countMinions(ReaverEntity.class) <= REAVER_RESUMMON_THRESHOLD) {
+            this.offer(weights, PatriarchState.AUREATE_UNDEAD, 3, 360);
+        }
+        if (this.minions.size() >= 2) {
+            this.offer(weights, PatriarchState.SACRIFICE, 5, 300);
+        }
+        this.offer(weights, PatriarchState.FINAL_SUNBURST, 8, SUNBURST_COOLDOWN);
+        this.addWeightedPlan(weights, plan, PatriarchState.AUREATE_UNDEAD, PatriarchState.SACRIFICE, PatriarchState.FINAL_SUNBURST, PatriarchState.SOLAR_JUDGEMENT);
+    }
+
+    private void addWeightedPlan(Map<PatriarchState, Integer> weights, Queue<PatriarchState> plan, PatriarchState... soloStates) {
+        weights.remove(this.lastTactic);
         PatriarchState first = this.pickWeighted(weights);
         if (first == null) {
             return;
         }
         plan.add(first);
         weights.remove(first);
-        weights.remove(PatriarchState.AUREATE_UNDEAD);
+        for (PatriarchState solo : soloStates) {
+            if (first == solo) {
+                return;
+            }
+            weights.remove(solo);
+        }
         PatriarchState second = this.pickWeighted(weights);
         if (second != null) {
             plan.add(second);
@@ -779,6 +1245,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         Map<PatriarchState, Integer> weights = new EnumMap<>(PatriarchState.class);
         this.offer(weights, PatriarchState.SUDDEN_BEAM, 4, 60);
         this.offer(weights, PatriarchState.AURIC_BARRIER, 3, 140);
+        if (this.getBossPhase() >= 1) {
+            this.offer(weights, PatriarchState.SOLAR_JUDGEMENT, 4, 140);
+        }
         weights.remove(this.lastTactic);
         PatriarchState pick = this.pickWeighted(weights);
         if (pick != null) {
@@ -933,7 +1402,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     }
 
     private void damageInArea(AABB damageBox) {
-        float damageAmount = this.attackDamage(0.65F);
+        float damageAmount = this.attackDamage(0.65F * this.power());
         DamageSource source = this.damageSources().indirectMagic(this, this);
         for (LivingEntity entity : this.enemiesIn(damageBox)) {
             if (!(entity instanceof AureateVexEntity)) {
@@ -970,7 +1439,8 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             case IDLING -> 0.75F;
             case TO_FLYING, TO_GROUND -> 0.5F;
             case SUDDEN_BEAM, DIVINE_TOUCH -> 1.0F;
-            case WING_KNOCKBACK, VEX_TIME -> 0.8F;
+            case WING_KNOCKBACK, VEX_TIME, SOLAR_JUDGEMENT, SACRIFICE -> 0.8F;
+            case ASCENSION_RITE, FALLING_SUN, FINAL_SUNBURST -> 1.0F;
             case AURIC_BARRIER, GRAB_AND_STRIKE -> 0.6F;
             default -> 0.0F;
         };
@@ -986,6 +1456,8 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         this.setGroundMovement();
         this.aerialPhaseTicks = 0;
         this.forcedTakeoff = false;
+        this.judgement.clear();
+        this.sanctuaries.clear();
         if (!this.level().isClientSide()) {
             this.setFlying(false);
             for (LivingEntity minion : this.minions) {
@@ -1000,7 +1472,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 500.0D)
+                .add(Attributes.MAX_HEALTH, 600.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
@@ -1025,7 +1497,12 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         DYING(11),
         AWAKE_TO_IDLE(12),
         IDLING(13),
-        IDLE_TO_AWAKE(14);
+        IDLE_TO_AWAKE(14),
+        ASCENSION_RITE(15),
+        SOLAR_JUDGEMENT(16),
+        FALLING_SUN(17),
+        SACRIFICE(18),
+        FINAL_SUNBURST(19);
 
         private final int id;
 
@@ -1041,7 +1518,12 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         public boolean isAttack() {
             return this == VEX_TIME || this == DIVINE_TOUCH || this == AURIC_BARRIER
                     || this == WING_KNOCKBACK || this == GRAB_AND_STRIKE || this == SUDDEN_BEAM
-                    || this == AUREATE_UNDEAD;
+                    || this == AUREATE_UNDEAD || this == SOLAR_JUDGEMENT || this == SACRIFICE || this == FINAL_SUNBURST;
+        }
+
+        @Override
+        public boolean isPhaseTransition() {
+            return this == ASCENSION_RITE || this == FALLING_SUN;
         }
     }
 }

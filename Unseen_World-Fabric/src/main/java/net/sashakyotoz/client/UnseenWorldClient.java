@@ -11,8 +11,6 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.lcc.sollib.api.client.SolClientRegistries;
-import net.lcc.sollib.api.client.ui.bossbar.BossBarTextState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
@@ -21,10 +19,10 @@ import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MapColor;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.api.multipart_entity.EntityPart;
@@ -34,6 +32,7 @@ import net.sashakyotoz.client.environment.ChimericDarknessEffects;
 import net.sashakyotoz.client.environment.ClientTicks;
 import net.sashakyotoz.client.environment.weather.Grippfall;
 import net.sashakyotoz.client.gui.FullScreenOverlay;
+import net.sashakyotoz.client.gui.PhasedBossBar;
 import net.sashakyotoz.client.gui.blocks.ChestScreenHandler;
 import net.sashakyotoz.client.gui.blocks.ModScreenHandlers;
 import net.sashakyotoz.client.models.*;
@@ -54,7 +53,6 @@ import net.sashakyotoz.client.renderers.projectiles.GrippingCrystalProjectileRen
 import net.sashakyotoz.client.renderers.projectiles.ParticleProjectileRenderer;
 import net.sashakyotoz.client.renderers.projectiles.ThrownAuricArcRenderer;
 import net.sashakyotoz.client.shaders.AuroraShader;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModFluids;
@@ -63,16 +61,13 @@ import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.ModDimensions;
 
 public class UnseenWorldClient implements ClientModInitializer {
-    private static final ResourceLocation BOSSBAR_WARRIOR_OF_DARKNESS = UnseenWorld.MOD.makeID("textures/gui/bossbars/warrior_of_darkness_bossbar.png");
-    private static final ResourceLocation BOSSBAR_ECLIPSE_SENTINEL = UnseenWorld.MOD.makeID("textures/gui/bossbars/eclipse_sentinel_bossbar.png");
-    private static final ResourceLocation BOSSBAR_AURIC_PATRIARCH = UnseenWorld.MOD.makeID("textures/gui/bossbars/auric_patriarch_bossbar.png");
+    private static final String WARRIOR_KEY = "entity.unseen_world.warrior_of_chimeric_darkness";
+    private static final String SENTINEL_KEY = "entity.unseen_world.eclipse_sentinel";
+    private static final String PATRIARCH_KEY = "entity.unseen_world.auric_patriarch";
 
     @Override
     public void onInitializeClient() {
-        for (Block block : ModRegistry.BLOCK_CUTOUT)
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
-        for (Block block : ModRegistry.BLOCK_TRANSLUCENT)
-            BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.RIME_ICE, RenderType.translucent());
 
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.DARK_WATER, ModFluids.DARK_FLOWING_WATER,
                 new SimpleFluidRenderHandler(UnseenWorld.MOD.makeID("block/dark_water_still"),
@@ -125,40 +120,19 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.PARTICLE_PROJECTILE, ParticleProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.THROWN_AURIC_ARC, ThrownAuricArcRenderer::new);
 
-        SolClientRegistries.BOSS_BAR.register(bossEvent -> bossEvent.getName().contains(Component.translatable("entity.unseen_world.warrior_of_chimeric_darkness")), BOSSBAR_WARRIOR_OF_DARKNESS);
-        SolClientRegistries.BOSS_BAR.register(bossEvent -> bossEvent.getName().contains(Component.translatable("entity.unseen_world.eclipse_sentinel")), BOSSBAR_ECLIPSE_SENTINEL);
-        SolClientRegistries.BOSS_BAR.register(bossEvent -> bossEvent.getName().contains(Component.translatable("entity.unseen_world.auric_patriarch")), BOSSBAR_AURIC_PATRIARCH);
-
-        SolClientRegistries.BOSS_BAR.registerTextModifier(bossEvent -> bossEvent.getName().contains(Component.translatable("entity.unseen_world.warrior_of_chimeric_darkness")),
-                (bossEvent, bossBarTextState, guiGraphics) -> new BossBarTextState(
-                        Minecraft.getInstance().font,
-                        bossEvent.getName(),
-                        guiGraphics,
-                        bossBarTextState.x(),
-                        bossBarTextState.y(),
-                        MapColor.COLOR_BLUE.col,
-                        true,
-                        1.0F));
-        SolClientRegistries.BOSS_BAR.registerTextModifier(bossEvent -> bossEvent.getName().contains(Component.translatable("entity.unseen_world.eclipse_sentinel")),
-                (bossEvent, bossBarTextState, guiGraphics) -> new BossBarTextState(
-                        Minecraft.getInstance().font,
-                        bossEvent.getName(),
-                        guiGraphics,
-                        bossBarTextState.x(),
-                        bossBarTextState.y(),
-                        MapColor.COLOR_MAGENTA.col,
-                        true,
-                        1.0F));
-        SolClientRegistries.BOSS_BAR.registerTextModifier(bossEvent -> bossEvent.getName().contains(Component.translatable("entity.unseen_world.auric_patriarch")),
-                (bossEvent, bossBarTextState, guiGraphics) -> new BossBarTextState(
-                        Minecraft.getInstance().font,
-                        bossEvent.getName(),
-                        guiGraphics,
-                        bossBarTextState.x(),
-                        bossBarTextState.y(),
-                        MapColor.COLOR_ORANGE.col,
-                        true,
-                        1.0F));
+        PhasedBossBar.of(WARRIOR_KEY, "warrior_of_darkness_bossbar")
+                .phase(BossEvent.BossBarColor.PURPLE, MapColor.COLOR_BLUE.col)
+                .phase(BossEvent.BossBarColor.RED, MapColor.COLOR_RED.col)
+                .register();
+        PhasedBossBar.of(SENTINEL_KEY, "eclipse_sentinel_bossbar")
+                .phase(BossEvent.BossBarColor.PINK, MapColor.COLOR_MAGENTA.col)
+                .phase(BossEvent.BossBarColor.PURPLE, MapColor.COLOR_PURPLE.col)
+                .register();
+        PhasedBossBar.of(PATRIARCH_KEY, "auric_patriarch_bossbar")
+                .phase(BossEvent.BossBarColor.YELLOW, MapColor.COLOR_ORANGE.col)
+                .phase(BossEvent.BossBarColor.WHITE, MapColor.GOLD.col)
+                .phase(BossEvent.BossBarColor.RED, MapColor.FIRE.col)
+                .register();
 
         EntityRendererRegistry.register(ModEntities.WARRIOR_OF_CHIMERIC_DARKNESS, WarriorOfChimericDarknessRenderer::new);
         EntityRendererRegistry.register(ModEntities.ECLIPSE_SENTINEL, EclipseSentinelRenderer::new);

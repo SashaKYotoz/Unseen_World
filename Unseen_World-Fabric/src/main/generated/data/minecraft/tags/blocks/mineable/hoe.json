@@ -1,19 +1,19 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:amethyst_leaves",
     "unseen_world:hanging_amethyst_leaves",
-    "unseen_world:grizzly_leaves",
-    "unseen_world:tealive_leaves",
-    "unseen_world:burlywood_leaves",
-    "unseen_world:hanging_burlywood_leaves",
-    "unseen_world:glowroot_vine",
-    "unseen_world:glowroot_vine_plant",
-    "unseen_world:crimsonveil_leaves",
+    "unseen_world:amethyst_leaves",
     "unseen_world:crimsonveil_vine",
-    "unseen_world:crimsonveil_vine_plant",
+    "unseen_world:grizzly_leaves",
     "unseen_world:gloomweed",
     "unseen_world:tall_gloomweed",
-    "unseen_world:murktuft"
+    "unseen_world:glowroot_vine",
+    "unseen_world:tealive_leaves",
+    "unseen_world:murktuft",
+    "unseen_world:crimsonveil_vine_plant",
+    "unseen_world:hanging_burlywood_leaves",
+    "unseen_world:crimsonveil_leaves",
+    "unseen_world:glowroot_vine_plant",
+    "unseen_world:burlywood_leaves"
   ]
 }

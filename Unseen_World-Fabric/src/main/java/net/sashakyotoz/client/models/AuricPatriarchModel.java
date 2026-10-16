@@ -163,6 +163,8 @@ public class AuricPatriarchModel extends HierarchicalModel<AuricPatriarch> {
         this.animate(entity.suddenBeam, AuricPatriarchAnimations.SUDDEN_BEAM, ageInTicks, 0.5f);
         this.animate(entity.grabAndStrike, AuricPatriarchAnimations.GRAB_AND_STRIKE, ageInTicks);
         this.animate(entity.aureateUndead, AuricPatriarchAnimations.AUREATE_UNDEAD, ageInTicks);
+        this.animate(entity.fallingSun, AuricPatriarchAnimations.FALLING_SUN, ageInTicks);
+        this.animate(entity.finalSunburst, AuricPatriarchAnimations.FINAL_SUNBURST, ageInTicks);
         this.animate(entity.death, AuricPatriarchAnimations.DEATH, ageInTicks, 0.5f);
     }
 }

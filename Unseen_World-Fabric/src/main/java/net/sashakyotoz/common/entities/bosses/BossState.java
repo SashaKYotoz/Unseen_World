@@ -6,4 +6,8 @@ public interface BossState {
     default int duration() {
         return 0;
     }
+
+    default boolean isPhaseTransition() {
+        return false;
+    }
 }

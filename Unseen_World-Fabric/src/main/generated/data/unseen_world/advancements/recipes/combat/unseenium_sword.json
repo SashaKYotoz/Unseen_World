@@ -1,7 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ingredient": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "unseen_world:unseenium_sword"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_unseenium_ingot": {
       "conditions": {
         "items": [
           {
@@ -12,17 +18,11 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "unseen_world:unseenium_sword"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_ingredient",
+      "has_unseenium_ingot",
       "has_the_recipe"
     ]
   ],

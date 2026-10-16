@@ -1,11 +1,12 @@
 package net.sashakyotoz.common.datagen.loot;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.lcc.sollib.datagen.SBlockLootTableProvider;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
@@ -25,150 +26,121 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.blocks.ModWoodFamily;
 import net.sashakyotoz.common.blocks.custom.plants.TreeBushLikeBlock;
 import net.sashakyotoz.common.items.ModItems;
 
-import java.util.Map;
-
-public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
+public class ModBlockLootTableProvider extends SBlockLootTableProvider {
     public ModBlockLootTableProvider(FabricDataOutput dataOutput) {
         super(dataOutput);
     }
 
     @Override
     public void generate() {
-        for (Map.Entry<Block, ItemLike> entry : ModRegistry.BLOCK_DROPS.entrySet()) {
-            if (ModRegistry.BLOCK_MODELS.get(ModRegistry.Models.SLAB) != null && ModRegistry.BLOCK_MODELS.get(ModRegistry.Models.SLAB).contains(entry.getKey()))
-                add(entry.getKey(), createSlabItemTable(entry.getKey()));
-            else if (ModRegistry.BLOCK_MODELS.get(ModRegistry.Models.DOOR) != null && ModRegistry.BLOCK_MODELS.get(ModRegistry.Models.DOOR).contains(entry.getKey()))
-                add(entry.getKey(), createDoorTable(entry.getKey()));
-            else if (ModRegistry.BLOCK_SILK_DROPS.containsKey(entry.getKey()))
-                add(entry.getKey(), createOreDrop(entry.getKey(), entry.getValue().asItem()));
-            else if (ModRegistry.TALL_BLOCK_SHEARS_DROPS.containsKey(entry.getKey())) {
-                if (entry.getKey() instanceof DoublePlantBlock)
-                    add(entry.getKey(), createDoublePlantWithSeedDrops(ModRegistry.TALL_BLOCK_SHEARS_DROPS.get(entry.getKey()).getB(), ModRegistry.TALL_BLOCK_SHEARS_DROPS.get(entry.getKey()).getA()));
-            } else if (ModRegistry.BLOCK_SHEARS_DROPS.containsKey(entry.getKey()))
-                add(entry.getKey(), createShearsOnlyDrop(entry.getValue()));
-            else
-                dropOther(entry.getKey(), entry.getValue());
-        }
-        add(ModBlocks.AMETHYST_LEAVES, createLeavesDrops(ModBlocks.AMETHYST_LEAVES, ModBlocks.AMETHYST_SAPLING, 0.1f));
-        add(ModBlocks.HANGING_AMETHYST_LEAVES, createSilkTouchOrShearsDispatchTable(ModBlocks.HANGING_AMETHYST_LEAVES,
-                LootItem.lootTableItem(ModBlocks.HANGING_AMETHYST_LEAVES).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.25F, 0.5F, 0.75F, 1.0F))));
-        add(ModBlocks.GRIZZLY_LEAVES, createLeavesDrops(ModBlocks.GRIZZLY_LEAVES, ModBlocks.GRIZZLY_SAPLING, 0.1f));
-        add(ModBlocks.CRIMSONVEIL_LEAVES, createLeavesDrops(ModBlocks.CRIMSONVEIL_LEAVES, ModBlocks.CRIMSONVEIL_SAPLING, 0.1f));
-        add(ModBlocks.TEALIVE_LEAVES, createLeavesDrops(ModBlocks.TEALIVE_LEAVES, ModBlocks.TEALIVE_SAPLING, 0.1f));
-        add(ModBlocks.BURLYWOOD_LEAVES, createLeavesDrops(ModBlocks.BURLYWOOD_LEAVES, ModBlocks.BURLYWOOD_SAPLING, 0.1f));
-        add(ModBlocks.BURLYWOOD_HEART, createSilkTouchOnlyTable(ModBlocks.BURLYWOOD_HEART));
+        super.generate();
 
-        dropWhenSilkTouch(ModBlocks.AMETHYST_PETALS);
-        add(ModBlocks.GLOW_APPLE_BUSH, glowAppleBushDrops(ModBlocks.GLOW_APPLE_BUSH));
-        add(ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE, block -> createOreDrop(block, ModItems.RAW_ABYSSAL_ORE));
-        add(ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE, block -> createOreDrop(block, ModItems.RAW_ABYSSAL_ORE));
-        add(ModBlocks.ABYSSAL_ORE_IN_CORONA_STONE, block -> createOreDrop(block, ModItems.RAW_ABYSSAL_ORE));
-        add(ModBlocks.UNSEENIUM_ORE_IN_GLACIEMITE, block -> createOreDrop(block, ModItems.RAW_UNSEENIUM_ORE));
-        add(ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE, block -> createOreDrop(block, ModItems.RAW_UNSEENIUM_ORE));
-        add(ModBlocks.UNSEENIUM_ORE_IN_CORONA_STONE, block -> createOreDrop(block, ModItems.RAW_UNSEENIUM_ORE));
-        add(ModBlocks.RED_TITANIUM_ORE_IN_GLACIEMITE, block -> createOreDrop(block, ModItems.RAW_RED_TITANIUM_ORE));
-        add(ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE, block -> createOreDrop(block, ModItems.RAW_RED_TITANIUM_ORE));
-        add(ModBlocks.RED_TITANIUM_ORE_IN_CORONA_STONE, block -> createOreDrop(block, ModItems.RAW_RED_TITANIUM_ORE));
-        add(ModBlocks.IRON_ORE_IN_GLACIEMITE, block -> createSilkTouchDispatchTable(
-                block,
-                this.applyExplosionDecay(
-                        block,
-                        LootItem.lootTableItem(Items.IRON_NUGGET)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
-                )));
-        add(ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE, block -> createSilkTouchDispatchTable(
-                block,
-                this.applyExplosionDecay(
-                        block,
-                        LootItem.lootTableItem(Items.IRON_NUGGET)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
-                )));
-        add(ModBlocks.IRON_ORE_IN_CORONA_STONE, block -> createSilkTouchDispatchTable(
-                block,
-                this.applyExplosionDecay(
-                        block,
-                        LootItem.lootTableItem(Items.IRON_NUGGET)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
-                )));
-        add(ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE, block -> createSingleItemTableWithSilkTouch(block, Items.NETHERITE_SCRAP));
-        add(ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE, block -> createSingleItemTableWithSilkTouch(block, Items.NETHERITE_SCRAP));
-        add(ModBlocks.ANCIENT_DEBRIS_IN_CORONA_STONE, block -> createSingleItemTableWithSilkTouch(block, Items.NETHERITE_SCRAP));
+        ModWoodFamily.ALL.forEach(family -> this.add(family.door(), this.createDoorTable(family.door())));
 
-        add(ModBlocks.AMETHYST_GRASS_BLOCK, block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.DARK_CURRANTSLATE));
-        add(ModBlocks.TEALIVY_GRASS_BLOCK, block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.TEALIVY_DIRT));
-        add(ModBlocks.GRIMWOOD_GRASS_BLOCK, block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.DARK_CURRANTSLATE));
-        add(ModBlocks.NIGHTDARK_GRASS_BLOCK, block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.NIGHTDARK_DIRT));
-        add(ModBlocks.PENUMBRAL_GRASS_BLOCK, block -> this.createSingleItemTableWithSilkTouch(block, ModBlocks.NIGHTDARK_DIRT));
+        ore(ModBlocks.RIME_ICE, Items.SNOWBALL);
+        ore(ModBlocks.HOARFROST, Items.SNOWBALL);
+        ore(ModBlocks.GRIPCRYSTAL_WART, ModItems.GRANULATED_GRIPCRYSTAL);
+        ore(ModBlocks.GRIPTONITE_CLUSTER, ModItems.GRANULATED_GRIPTONITE);
 
-        dropWhenSilkTouch(ModBlocks.UMBRAL_CORAL);
-        dropWhenSilkTouch(ModBlocks.UMBRAL_CORAL_FAN);
-        dropWhenSilkTouch(ModBlocks.DEAD_UMBRAL_CORAL);
-        dropWhenSilkTouch(ModBlocks.DEAD_UMBRAL_CORAL_FAN);
+        this.add(ModBlocks.MIDNIGHT_LILY_PAD, createShearsOnlyDrop(ModBlocks.MIDNIGHT_LILY_PAD));
+        this.add(ModBlocks.GLOOMWEED, createShearsOnlyDrop(ModBlocks.GLOOMWEED));
+        this.add(ModBlocks.MURKTUFT, createShearsOnlyDrop(ModBlocks.MURKTUFT));
+        this.add(ModBlocks.BEARFRUIT_BRAMBLE, createShearsOnlyDrop(ModItems.BEARFRUIT_BRAMBLE));
+        this.add(ModBlocks.TALL_GLOOMWEED, createDoublePlantWithSeedDrops(ModBlocks.TALL_GLOOMWEED, ModBlocks.GLOOMWEED));
+
+        leaves(ModBlocks.AMETHYST_LEAVES, ModBlocks.AMETHYST_SAPLING);
+        leaves(ModBlocks.GRIZZLY_LEAVES, ModBlocks.GRIZZLY_SAPLING);
+        leaves(ModBlocks.CRIMSONVEIL_LEAVES, ModBlocks.CRIMSONVEIL_SAPLING);
+        leaves(ModBlocks.TEALIVE_LEAVES, ModBlocks.TEALIVE_SAPLING);
+        leaves(ModBlocks.BURLYWOOD_LEAVES, ModBlocks.BURLYWOOD_SAPLING);
+        this.add(ModBlocks.HANGING_AMETHYST_LEAVES, createSilkTouchOrShearsDispatchTable(ModBlocks.HANGING_AMETHYST_LEAVES,
+                LootItem.lootTableItem(ModBlocks.HANGING_AMETHYST_LEAVES)
+                        .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.25F, 0.5F, 0.75F, 1.0F))));
+        this.add(ModBlocks.BURLYWOOD_HEART, createSilkTouchOnlyTable(ModBlocks.BURLYWOOD_HEART));
+        this.add(ModBlocks.GLOW_APPLE_BUSH, glowAppleBushDrops(ModBlocks.GLOW_APPLE_BUSH));
+        this.dropWhenSilkTouch(ModBlocks.AMETHYST_PETALS);
+
+        ore(ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE, ModItems.RAW_ABYSSAL_ORE);
+        ore(ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE, ModItems.RAW_ABYSSAL_ORE);
+        ore(ModBlocks.ABYSSAL_ORE_IN_CORONA_STONE, ModItems.RAW_ABYSSAL_ORE);
+        ore(ModBlocks.UNSEENIUM_ORE_IN_GLACIEMITE, ModItems.RAW_UNSEENIUM_ORE);
+        ore(ModBlocks.UNSEENIUM_ORE_IN_DARK_CURRANTSLATE, ModItems.RAW_UNSEENIUM_ORE);
+        ore(ModBlocks.UNSEENIUM_ORE_IN_CORONA_STONE, ModItems.RAW_UNSEENIUM_ORE);
+        ore(ModBlocks.RED_TITANIUM_ORE_IN_GLACIEMITE, ModItems.RAW_RED_TITANIUM_ORE);
+        ore(ModBlocks.RED_TITANIUM_ORE_IN_DARK_CURRANTSLATE, ModItems.RAW_RED_TITANIUM_ORE);
+        ore(ModBlocks.RED_TITANIUM_ORE_IN_CORONA_STONE, ModItems.RAW_RED_TITANIUM_ORE);
+        ironOre(ModBlocks.IRON_ORE_IN_GLACIEMITE);
+        ironOre(ModBlocks.IRON_ORE_IN_DARK_CURRANTSLATE);
+        ironOre(ModBlocks.IRON_ORE_IN_CORONA_STONE);
+        silkTouchOr(ModBlocks.ANCIENT_DEBRIS_IN_GLACIEMITE, Items.NETHERITE_SCRAP);
+        silkTouchOr(ModBlocks.ANCIENT_DEBRIS_IN_DARK_CURRANTSLATE, Items.NETHERITE_SCRAP);
+        silkTouchOr(ModBlocks.ANCIENT_DEBRIS_IN_CORONA_STONE, Items.NETHERITE_SCRAP);
+
+        silkTouchOr(ModBlocks.AMETHYST_GRASS_BLOCK, ModBlocks.DARK_CURRANTSLATE);
+        silkTouchOr(ModBlocks.TEALIVY_GRASS_BLOCK, ModBlocks.TEALIVY_DIRT);
+        silkTouchOr(ModBlocks.GRIMWOOD_GRASS_BLOCK, ModBlocks.DARK_CURRANTSLATE);
+        silkTouchOr(ModBlocks.NIGHTDARK_GRASS_BLOCK, ModBlocks.NIGHTDARK_DIRT);
+        silkTouchOr(ModBlocks.PENUMBRAL_GRASS_BLOCK, ModBlocks.NIGHTDARK_DIRT);
+
+        this.dropWhenSilkTouch(ModBlocks.UMBRAL_CORAL);
+        this.dropWhenSilkTouch(ModBlocks.UMBRAL_CORAL_FAN);
+        this.dropWhenSilkTouch(ModBlocks.DEAD_UMBRAL_CORAL);
+        this.dropWhenSilkTouch(ModBlocks.DEAD_UMBRAL_CORAL_FAN);
     }
 
-    public static LootTable.Builder glowAppleBushDrops(Block drop) {
+    private void silkTouchOr(Block block, ItemLike drop) {
+        this.add(block, this.createSingleItemTableWithSilkTouch(block, drop));
+    }
+
+    private void leaves(Block leaves, Block sapling) {
+        this.add(leaves, this.createLeavesDrops(leaves, sapling, 0.1F));
+    }
+
+    private void ore(Block block, Item raw) {
+        this.add(block, this.createOreDrop(block, raw));
+    }
+
+    private void ironOre(Block block) {
+        this.add(block, createSilkTouchDispatchTable(block, this.applyExplosionDecay(block,
+                LootItem.lootTableItem(Items.IRON_NUGGET)
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
+                        .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))));
+    }
+
+    public static LootTable.Builder glowAppleBushDrops(Block bush) {
         return LootTable.lootTable()
-                .withPool(
-                        LootPool.lootPool()
-                                .add(LootItem.lootTableItem(ModItems.GLOW_APPLE))
-                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(drop).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TreeBushLikeBlock.GROWN, true)))
-                );
+                .withPool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(ModItems.GLOW_APPLE))
+                        .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(bush)
+                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TreeBushLikeBlock.GROWN, true))));
     }
 
-    public LootTable.Builder createDoublePlantWithSeedDrops(Block tallGrass, Block grass) {
-        LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(grass)
+    public LootTable.Builder createDoublePlantWithSeedDrops(Block tallPlant, Block plant) {
+        LootPoolEntryContainer.Builder<?> drop = LootItem.lootTableItem(plant)
                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))
                 .when(HAS_SHEARS)
-                .otherwise(
-                        ((LootPoolSingletonContainer.Builder<?>) this.applyExplosionCondition(tallGrass, LootItem.lootTableItem(Items.GLOWSTONE_DUST)))
-                                .when(LootItemRandomChanceCondition.randomChance(0.1F))
-                );
+                .otherwise(((LootPoolSingletonContainer.Builder<?>) this.applyExplosionCondition(tallPlant, LootItem.lootTableItem(Items.GLOWSTONE_DUST)))
+                        .when(LootItemRandomChanceCondition.randomChance(0.1F)));
         return LootTable.lootTable()
-                .withPool(
-                        LootPool.lootPool()
-                                .add(builder)
-                                .when(
-                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(tallGrass).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER))
-                                )
-                                .when(
-                                        LocationCheck.checkLocation(
-                                                LocationPredicate.Builder.location()
-                                                        .setBlock(
-                                                                BlockPredicate.Builder.block()
-                                                                        .of(tallGrass)
-                                                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).build())
-                                                                        .build()
-                                                        ),
-                                                new BlockPos(0, 1, 0)
-                                        )
-                                )
-                )
-                .withPool(
-                        LootPool.lootPool()
-                                .add(builder)
-                                .when(
-                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(tallGrass).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER))
-                                )
-                                .when(
-                                        LocationCheck.checkLocation(
-                                                LocationPredicate.Builder.location()
-                                                        .setBlock(
-                                                                BlockPredicate.Builder.block()
-                                                                        .of(tallGrass)
-                                                                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).build())
-                                                                        .build()
-                                                        ),
-                                                new BlockPos(0, -1, 0)
-                                        )
-                                )
-                );
+                .withPool(halfPool(tallPlant, drop, DoubleBlockHalf.LOWER, DoubleBlockHalf.UPPER, new BlockPos(0, 1, 0)))
+                .withPool(halfPool(tallPlant, drop, DoubleBlockHalf.UPPER, DoubleBlockHalf.LOWER, new BlockPos(0, -1, 0)));
+    }
+
+    private static LootPool.Builder halfPool(Block tallPlant, LootPoolEntryContainer.Builder<?> drop, DoubleBlockHalf half, DoubleBlockHalf otherHalf, BlockPos otherOffset) {
+        return LootPool.lootPool()
+                .add(drop)
+                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(tallPlant)
+                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, half)))
+                .when(LocationCheck.checkLocation(
+                        LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block()
+                                .of(tallPlant)
+                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, otherHalf).build())
+                                .build()),
+                        otherOffset));
     }
 }

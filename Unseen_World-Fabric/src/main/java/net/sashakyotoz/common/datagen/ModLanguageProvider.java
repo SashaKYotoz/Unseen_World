@@ -3,13 +3,15 @@ package net.sashakyotoz.common.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.lcc.sollib.api.common.SolRegistries;
+import net.lcc.sollib.api.common.registry.Holder;
+import net.lcc.sollib.api.common.registry.holder.BlockHolder;
 import net.lcc.sollib.api.common.registry.holder.EffectHolder;
+import net.lcc.sollib.api.common.registry.holder.ItemHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.biome.Biome;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 
 import java.util.Map;
@@ -66,7 +68,7 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("item.unseen_world.gripping_bundle.ability.0", "Holds gripcrystal and griptonite. Eclipsebane draws its fuel from it");
         translationBuilder.add("item.unseen_world.gripping_bundle.lore", "It never lets go of what it holds");
 
-        translationBuilder.add("item.unseen_world.gripping_gauntlet.ability.0", "Release on hold use:: tear the held item from a creature");
+        translationBuilder.add("item.unseen_world.gripping_gauntlet.ability.0", "Release on hold use: tear the held item from a creature");
         translationBuilder.add("item.unseen_world.gripping_gauntlet.lore", "Grip what is not yours");
 
         translationBuilder.add("block.unseen_world.effigy.status", "Keys %s/%s · Seals %s/%s");
@@ -114,34 +116,46 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add("advancement.unseen_world.cure_gripcrystal_entity", "Captive of Gripping on Freedom now");
         translationBuilder.add("advancement.unseen_world.cure_gripcrystal_entity.desc", "Grip no more! The illness fades as griptonite works its magic");
         translationBuilder.add("advancement.unseen_world.fortress_in_the_darkness", "Fortress in the Darkness");
-        translationBuilder.add("advancement.unseen_world.fortress_in_the_darkness.desc", "A shadowy stronghold looms... Did its master build it, or was it built for them?");
-        translationBuilder.add("advancement.unseen_world.vault_of_eclipse", "Vault of Eclipse");
-        translationBuilder.add("advancement.unseen_world.vault_of_eclipse.desc", "Deep below, where the light dare not tread... but what eclipsed the Sentinel's glory?");
+        translationBuilder.add("advancement.unseen_world.fortress_in_the_darkness.desc", "A shadowy fortress looms... Did its master build it, or was it built for them?");
+        translationBuilder.add("advancement.unseen_world.into_the_penumbral_steppe", "Steppe of Half-Light");
+        translationBuilder.add("advancement.unseen_world.into_the_penumbral_steppe.desc", "Walk the ashen steppe, where every day is an eclipse");
+        translationBuilder.add("advancement.unseen_world.ring_of_the_corona", "Ring of the Corona");
+        translationBuilder.add("advancement.unseen_world.ring_of_the_corona.desc", "Pale stones in a black field... Something still keeps watch over them");
+        translationBuilder.add("advancement.unseen_world.into_the_auric_heights", "Gilded Summits");
+        translationBuilder.add("advancement.unseen_world.into_the_auric_heights.desc", "Climb the peaks that catch a sun no one can see");
+        translationBuilder.add("advancement.unseen_world.citadel_above_the_peaks", "Citadel Above the Peaks");
+        translationBuilder.add("advancement.unseen_world.citadel_above_the_peaks.desc", "A golden spire, an open sky... and wings circling above it");
         translationBuilder.add("advancement.unseen_world.whispers_of_the_light", "Whispers of the Light");
         translationBuilder.add("advancement.unseen_world.whispers_of_the_light.desc", "The one who bounded stars to darkness - defeated");
         translationBuilder.add("advancement.unseen_world.quenched_sun", "Quenched Sun");
         translationBuilder.add("advancement.unseen_world.quenched_sun.desc", "The one who hided eternal eclipse - defeated");
+        translationBuilder.add("advancement.unseen_world.fallen_crown", "Fallen Crown");
+        translationBuilder.add("advancement.unseen_world.fallen_crown.desc", "The one who raised gold from the dead - defeated");
 
         ModBiomes.ALL.forEach(biome -> {
             String key = "biome." + biome.location().getNamespace() + "." + biome.location().getPath();
             translationBuilder.add(key, BIOME_NAME_OVERRIDES.getOrDefault(biome, convertToName(key)));
         });
-        ModRegistry.BLOCKS.forEach(block -> {
-            if (!block.getDescriptionId().contains("sign"))
-                translationBuilder.add(block, convertToName(block.getDescriptionId()));
+        SolRegistries.MOD.iterate(BlockHolder.class, holder -> {
+            if (isOwn(holder) && !holder.get().getDescriptionId().contains("sign"))
+                translationBuilder.add(holder.get(), convertToName(holder.get().getDescriptionId()));
         });
-        ModRegistry.ITEMS.forEach(item -> {
-            if (!(item instanceof BlockItem))
-                translationBuilder.add(item, convertToName(item.getDescriptionId()));
+        SolRegistries.MOD.iterate(ItemHolder.class, holder -> {
+            if (isOwn(holder) && !(holder.get() instanceof BlockItem))
+                translationBuilder.add(holder.get(), convertToName(holder.get().getDescriptionId()));
         });
         BuiltInRegistries.ENTITY_TYPE.forEach(entityType -> {
             if (entityType.getDescriptionId().contains(UnseenWorld.MOD_ID))
                 translationBuilder.add(entityType, convertToName(entityType.getDescriptionId()));
         });
         SolRegistries.MOD.iterate(EffectHolder.class, holder -> {
-            if (holder.getID().getNamespace().equals(UnseenWorld.MOD_ID))
+            if (isOwn(holder))
                 translationBuilder.add(holder.get(), convertToName(holder.get().getDescriptionId()));
         });
+    }
+
+    private static boolean isOwn(Holder<?> holder) {
+        return holder.getID().getNamespace().equals(UnseenWorld.MOD_ID);
     }
 
     private String convertToName(String key) {
@@ -155,11 +169,6 @@ public class ModLanguageProvider extends FabricLanguageProvider {
                     .append(word.substring(1))
                     .append(" ");
         }
-        String name = nameBuilder.toString().trim();
-        if (true) {
-            return name;
-        } else {
-            return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-        }
+        return nameBuilder.toString().trim();
     }
 }

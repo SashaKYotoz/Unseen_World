@@ -10,9 +10,6 @@ import net.sashakyotoz.UnseenWorld;
 public final class ModMessages {
     public static final ResourceLocation WEATHER_PACKET_ID = UnseenWorld.MOD.makeID("weather_sync");
 
-    private ModMessages() {
-    }
-
     public static void sendWeather(ServerPlayer player, boolean active, String direction) {
         FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(active);

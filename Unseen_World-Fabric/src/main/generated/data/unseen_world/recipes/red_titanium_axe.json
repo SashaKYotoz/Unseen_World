@@ -10,9 +10,9 @@
     }
   },
   "pattern": [
-    "XXX",
-    " # ",
-    " # "
+    "XX",
+    "X#",
+    " #"
   ],
   "result": {
     "item": "unseen_world:red_titanium_axe"

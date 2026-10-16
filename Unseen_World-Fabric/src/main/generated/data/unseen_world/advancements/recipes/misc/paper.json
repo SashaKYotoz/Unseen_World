@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_reeds": {
+    "has_ashreed": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_reeds",
+      "has_ashreed",
       "has_the_recipe"
     ]
   ],

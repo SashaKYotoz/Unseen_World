@@ -3,9 +3,10 @@ package net.sashakyotoz.common.datagen;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.lcc.sollib.api.common.SolRegistries;
+import net.lcc.sollib.api.common.registry.holder.ItemHolder;
+import net.lcc.sollib.datagen.SModelProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.MultiVariantGenerator;
@@ -20,8 +21,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.blocks.ModWoodFamily;
 import net.sashakyotoz.common.blocks.custom.EngravedBricksBlock;
 import net.sashakyotoz.common.blocks.custom.OrdealSpawnerBlock;
 import net.sashakyotoz.common.blocks.custom.plants.DarknessFernBlock;
@@ -32,11 +33,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
-public class ModModelProvider extends FabricModelProvider {
-    private static final Set<Block> ITEM_TEXTURE_CROSS = Set.of(ModBlocks.ASHREED);
+public class ModModelProvider extends SModelProvider {
+    private static final String SNOWY_SUFFIX = "_snow";
+    private static final List<Block> GRASS_BLOCKS = List.of(
+            ModBlocks.NIGHTDARK_GRASS_BLOCK,
+            ModBlocks.PENUMBRAL_GRASS_BLOCK,
+            ModBlocks.TEALIVY_GRASS_BLOCK,
+            ModBlocks.AMETHYST_GRASS_BLOCK,
+            ModBlocks.GRIMWOOD_GRASS_BLOCK
+    );
 
     private static final Map<Block, Block> CORAL_FANS = Map.of(
             ModBlocks.UMBRAL_CORAL_FAN, ModBlocks.UMBRAL_CORAL_WALL_FAN,
@@ -49,33 +55,22 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators generator) {
-        ModRegistry.getModelList(ModRegistry.Models.CUBE).forEach(generator::createTrivialCube);
-        ModRegistry.getModelList(ModRegistry.Models.GRASS).forEach(block -> registerTopSoil(generator, block));
-        ModRegistry.getModelList(ModRegistry.Models.PILLAR).forEach(block -> generator.woodProvider(block).logWithHorizontal(block));
-        ModRegistry.getModelList(ModRegistry.Models.CROSS).stream()
-                .filter(block -> !ITEM_TEXTURE_CROSS.contains(block))
-                .forEach(block -> generator.createCrossBlockWithDefaultItem(block, BlockModelGenerators.TintState.NOT_TINTED));
-        ModRegistry.getModelList(ModRegistry.Models.DOOR).forEach(generator::createDoor);
-        ModRegistry.getModelList(ModRegistry.Models.TRAPDOOR).forEach(generator::createOrientableTrapdoor);
-        ModRegistry.getModelList(ModRegistry.Models.FLUID).forEach(generator::createNonTemplateModelBlock);
-        ModRegistry.getModelList(ModRegistry.Models.BULB).forEach(block -> registerCubeToggle(generator, block, BlockStateProperties.LIT, "_litted"));
-        ModRegistry.BLOCK_SETS.forEach((parent, variants) -> registerBlockSet(generator, parent, variants));
+        super.generateBlockStateModels(generator);
 
-        ITEM_TEXTURE_CROSS.forEach(block -> registerCrossWithItemTexture(generator, block));
-
+        ModWoodFamily.ALL.forEach(family -> registerWoodFamily(generator, family));
+        GRASS_BLOCKS.forEach(block -> registerTopSoil(generator, block));
         CORAL_FANS.forEach((fan, wallFan) -> registerCoralFan(generator, fan, wallFan));
+
+        registerCubeToggle(generator, ModBlocks.GLACIEMITE_BULB, BlockStateProperties.LIT, "_litted");
+        registerCubeToggle(generator, ModBlocks.BURLYWOOD_LEAVES, LeafDroppingLeaveBlock.OVERGROWN, "_overgrown");
+        registerCubeToggle(generator, ModBlocks.AMETHYST_LEAVES, LeafDroppingLeaveBlock.OVERGROWN, "_overgrown");
+        registerCrossWithItemTexture(generator, ModBlocks.ASHREED);
 
         generator.delegateItemModel(ModBlocks.GLOW_APPLE_BUSH.asItem(), UnseenWorld.MOD.makeID("block/glow_apple_bush/glow_apple_bush_without_fruit"));
         generator.createSimpleFlatItemModel(ModBlocks.HANGING_BURLYWOOD_LEAVES);
 
         ResourceLocation hoarfrost = TexturedModel.CARPET.create(ModBlocks.HOARFROST, generator.modelOutput);
         generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(ModBlocks.HOARFROST, hoarfrost));
-
-        generator.createHangingSign(ModBlocks.STRIPPED_AMETHYST_LOG, ModItems.AMETHYST_HANGING_SIGN, ModItems.AMETHYST_WALL_HANGING_SIGN);
-        generator.createHangingSign(ModBlocks.STRIPPED_GRIZZLY_LOG, ModItems.GRIZZLY_HANGING_SIGN, ModItems.GRIZZLY_WALL_HANGING_SIGN);
-        generator.createHangingSign(ModBlocks.STRIPPED_TEALIVE_LOG, ModItems.TEALIVE_HANGING_SIGN, ModItems.TEALIVE_WALL_HANGING_SIGN);
-        generator.createHangingSign(ModBlocks.STRIPPED_BURLYWOOD_LOG, ModItems.BURLYWOOD_HANGING_SIGN, ModItems.BURLYWOOD_WALL_HANGING_SIGN);
-        generator.createHangingSign(ModBlocks.STRIPPED_CRIMSONVEIL_LOG, ModItems.CRIMSONVEIL_HANGING_SIGN, ModItems.CRIMSONVEIL_WALL_HANGING_SIGN);
 
         registerOrientableLump(generator, ModBlocks.GRIPPING_DARK_CURRANTSLATE, "gripping_lump", "dark_currantslate");
         registerOrientableLump(generator, ModBlocks.GRIPPING_GLACIEMITE, "gripping_lump", "glaciemite");
@@ -86,16 +81,13 @@ public class ModModelProvider extends FabricModelProvider {
         generator.createBrushableBlock(ModBlocks.SUSPICIOUS_ASHEN_OOZE);
         generator.createBrushableBlock(ModBlocks.SUSPICIOUS_GLIMMERGRAIN_SAND);
 
-        registerCubeToggle(generator, ModBlocks.BURLYWOOD_LEAVES, LeafDroppingLeaveBlock.OVERGROWN, "_overgrown");
-        registerCubeToggle(generator, ModBlocks.AMETHYST_LEAVES, LeafDroppingLeaveBlock.OVERGROWN, "_overgrown");
-
         List.of(ModBlocks.CRIMSONVEIL_VINE, ModBlocks.CRIMSONVEIL_VINE_PLANT, ModBlocks.GLOWROOT_VINE, ModBlocks.GLOWROOT_VINE_PLANT)
                 .forEach(vine -> registerBerryCross(generator, vine));
-        registerBurlywoodFruit(generator, (HangingFruitBlock) ModBlocks.HANGING_BURLYWOOD_LEAVES);
+        registerBurlywoodFruit(generator, ModBlocks.HANGING_BURLYWOOD_LEAVES);
 
         generator.createFlowerBed(ModBlocks.AMETHYST_PETALS);
         generator.createGrowingPlant(ModBlocks.UMBRAL_KELP, ModBlocks.UMBRAL_KELP_PLANT, BlockModelGenerators.TintState.NOT_TINTED);
-        registerTintableLitCross(generator, (DarknessFernBlock) ModBlocks.GLOOMWEED, BlockModelGenerators.TintState.TINTED);
+        registerTintableLitCross(generator, ModBlocks.GLOOMWEED, BlockModelGenerators.TintState.TINTED);
         generator.createDoublePlant(ModBlocks.TALL_GLOOMWEED, BlockModelGenerators.TintState.TINTED);
         registerVerticalPlant(generator, ModBlocks.GRIPPING_SPIGELIA);
         registerCrystalLike(generator, ModBlocks.GRIPCRYSTAL_WART);
@@ -111,35 +103,29 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
-        ModRegistry.ITEM_MODELS.forEach((item, template) -> {
-            if (!isItemTextureCross(item)) {
-                generator.generateFlatItem(item, template);
-            }
-        });
-        List.of(ModBlocks.HANGING_AMETHYST_LEAVES, ModBlocks.BEARFRUIT_BRAMBLE, ModBlocks.MIDNIGHT_LILY_PAD, ModBlocks.UMBRAL_KELP)
-                .forEach(block -> generator.generateFlatItem(block.asItem(), ModelTemplates.FLAT_ITEM));
+        super.generateItemModels(generator);
 
         registerPredicatedItem(generator, ModItems.GRIPPING_BUNDLE, "filled", 0.000001);
         registerPredicatedItem(generator, ModItems.GRIPPING_GAUNTLET, "grip", 1.0);
 
-        ModelTemplate spawnEgg = new ModelTemplate(Optional.of(new ResourceLocation("minecraft", "item/template_spawn_egg")), Optional.empty());
-        for (Item item : ModRegistry.ITEMS) {
-            if (item instanceof ArmorItem armorItem) {
-                generator.generateArmorTrims(armorItem);
+        SolRegistries.MOD.iterate(ItemHolder.class, holder -> {
+            if (holder.getID().getNamespace().equals(UnseenWorld.MOD_ID) && holder.get() instanceof ArmorItem armor) {
+                generator.generateArmorTrims(armor);
             }
-            if (item.getDescriptionId().contains("spawn_egg")) {
-                generator.generateFlatItem(item, spawnEgg);
-            }
-        }
+        });
     }
 
-    private static boolean isItemTextureCross(Item item) {
-        for (Block block : ITEM_TEXTURE_CROSS) {
-            if (block.asItem() == item) {
-                return true;
-            }
-        }
-        return false;
+    private void registerWoodFamily(BlockModelGenerators generator, ModWoodFamily family) {
+        generator.woodProvider(family.log()).logWithHorizontal(family.log());
+        generator.woodProvider(family.strippedLog()).logWithHorizontal(family.strippedLog());
+        generator.createOrientableTrapdoor(family.trapdoor());
+
+        ResourceLocation sign = ModelTemplates.PARTICLE_ONLY.create(family.sign(), TextureMapping.particle(family.planks()), generator.modelOutput);
+        generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(family.sign(), sign));
+        generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(family.wallSign(), sign));
+        generator.createSimpleFlatItemModel(family.signItem());
+
+        generator.createHangingSign(family.strippedLog(), family.hangingSign(), family.wallHangingSign());
     }
 
     private void registerCoralFan(BlockModelGenerators generator, Block fan, Block wallFan) {
@@ -181,36 +167,6 @@ public class ModModelProvider extends FabricModelProvider {
         };
     }
 
-    private void registerBlockSet(BlockModelGenerators generator, Block parent, Map<ModRegistry.Models, Block> variants) {
-        if (variants.containsKey(ModRegistry.Models.WOOD)) {
-            BlockModelGenerators.WoodProvider logs = generator.woodProvider(parent);
-            logs.logWithHorizontal(parent);
-            logs.wood(variants.get(ModRegistry.Models.WOOD));
-        } else if (variants.containsKey(ModRegistry.Models.PANE)) {
-            generator.createGlassBlocks(parent, variants.get(ModRegistry.Models.PANE));
-        } else {
-            BlockModelGenerators.BlockFamilyProvider family = generator.family(parent);
-            variants.forEach((type, variant) -> registerFamilyMember(family, parent, variants, type, variant));
-        }
-    }
-
-    private void registerFamilyMember(BlockModelGenerators.BlockFamilyProvider family, Block parent, Map<ModRegistry.Models, Block> variants, ModRegistry.Models type, Block variant) {
-        switch (type) {
-            case STAIRS -> family.stairs(variant);
-            case SLAB -> family.slab(variant);
-            case BUTTON -> family.button(variant);
-            case PRESSURE_PLATE -> family.pressurePlate(variant);
-            case FENCE -> family.fence(variant);
-            case WALL -> family.wall(variant);
-            case FENCE_GATE -> family.fenceGate(variant);
-            case SIGN -> family.generateFor(new BlockFamily.Builder(parent)
-                    .sign(variant, variants.get(ModRegistry.Models.WALL_SIGN))
-                    .getFamily());
-            default -> {
-            }
-        }
-    }
-
     private void registerCrossWithItemTexture(BlockModelGenerators generator, Block block) {
         ResourceLocation model = ModelTemplates.CROSS.create(block, TextureMapping.cross(block), generator.modelOutput);
         generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, model));
@@ -231,14 +187,14 @@ public class ModModelProvider extends FabricModelProvider {
                 .with(BlockModelGenerators.createBooleanModelDispatch(BlockStateProperties.BERRIES, berry, plain)));
     }
 
-    private void registerBurlywoodFruit(BlockModelGenerators generator, HangingFruitBlock block) {
+    private void registerBurlywoodFruit(BlockModelGenerators generator, Block block) {
         ResourceLocation plain = ModelTemplates.CROSS.create(block, TextureMapping.cross(block), generator.modelOutput);
         ResourceLocation fruit = UnseenWorld.MOD.makeID("block/glow_apple_fruit");
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
                 .with(BlockModelGenerators.createBooleanModelDispatch(HangingFruitBlock.HAS_FRUIT, fruit, plain)));
     }
 
-    private void registerTintableLitCross(BlockModelGenerators generator, DarknessFernBlock block, BlockModelGenerators.TintState tintType) {
+    private void registerTintableLitCross(BlockModelGenerators generator, Block block, BlockModelGenerators.TintState tintType) {
         generator.createSimpleFlatItemModel(block);
         ResourceLocation unlit = tintType.getCross().create(block, TextureMapping.cross(block), generator.modelOutput);
         ResourceLocation lit = generator.createSuffixedVariant(block, "_lit", ModelTemplates.TINTED_CROSS, TextureMapping::cross);
@@ -303,9 +259,9 @@ public class ModModelProvider extends FabricModelProvider {
         TextureMapping snowyTextures = new TextureMapping()
                 .put(TextureSlot.BOTTOM, bottom)
                 .copyForced(TextureSlot.BOTTOM, TextureSlot.PARTICLE)
-                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top"))
-                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side"));
-        Variant snowy = variant(ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_snow", snowyTextures, generator.modelOutput));
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, SNOWY_SUFFIX + "_top"))
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, SNOWY_SUFFIX + "_side"));
+        Variant snowy = variant(ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, SNOWY_SUFFIX, snowyTextures, generator.modelOutput));
         ResourceLocation model = TexturedModel.CUBE_TOP_BOTTOM
                 .get(block)
                 .updateTextures(textures -> textures.put(TextureSlot.BOTTOM, bottom))

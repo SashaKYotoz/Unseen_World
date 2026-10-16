@@ -7,35 +7,26 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.BaseCoralWallFanBlock;
-import net.minecraft.world.level.block.GrowingPlantBodyBlock;
-import net.minecraft.world.level.block.GrowingPlantHeadBlock;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
-import net.sashakyotoz.common.blocks.custom.EffigyPartBlock;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ModItemGroups {
     public static final CreativeModeTab UNSEEN_WORLD_EQUIPMENT = register("equipment",
             FabricItemGroup.builder().title(Component.translatable("itemgroup.unseen_world.items"))
                     .icon(() -> new ItemStack(ModItems.ECLIPSE_KEYSTONE))
-                    .displayItems((displayContext, entries) -> ModRegistry.ITEMS.forEach(item -> {
-                        if (!(item instanceof BlockItem))
+                    .displayItems((displayContext, entries) -> forEachOwnItem(item -> {
+                        if (!isBlockTabItem(item) && !isSign(item))
                             entries.accept(item);
                     })).build());
     public static final CreativeModeTab UNSEEN_WORLD_BLOCKS = register("blocks",
             FabricItemGroup.builder().title(Component.translatable("itemgroup.unseen_world.blocks"))
                     .icon(() -> new ItemStack(ModBlocks.DARK_FROST_BRICKS))
-                    .displayItems((displayContext, entries) -> ModRegistry.BLOCKS.forEach(block -> {
-                        if (!block.getDescriptionId().contains("sign") && !(block instanceof LiquidBlock)
-                                && (!(block instanceof GrowingPlantBodyBlock)
-                                && (!(block instanceof GrowingPlantHeadBlock)))
-                                && (!(block instanceof BaseCoralWallFanBlock))
-                                && (!(block instanceof EffigyPartBlock)))
-                            entries.accept(block);
+                    .displayItems((displayContext, entries) -> forEachOwnItem(item -> {
+                        if (isBlockTabItem(item) && !isSign(item))
+                            entries.accept(item);
                     })).build());
 
     public static CreativeModeTab register(String id, CreativeModeTab tab) {
@@ -51,6 +42,21 @@ public class ModItemGroups {
                 previous = sign;
             }
         });
+    }
+
+    private static void forEachOwnItem(Consumer<Item> consumer) {
+        for (Item item : BuiltInRegistries.ITEM) {
+            if (BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(UnseenWorld.MOD_ID))
+                consumer.accept(item);
+        }
+    }
+
+    private static boolean isBlockTabItem(Item item) {
+        return item instanceof BlockItem && !(item instanceof ItemNameBlockItem);
+    }
+
+    private static boolean isSign(Item item) {
+        return item instanceof SignItem || item instanceof HangingSignItem;
     }
 
     private static List<Item> signItems() {

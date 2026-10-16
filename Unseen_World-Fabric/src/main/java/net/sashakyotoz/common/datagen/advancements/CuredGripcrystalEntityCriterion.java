@@ -6,9 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.sashakyotoz.UnseenWorld;
 
 public class CuredGripcrystalEntityCriterion extends SimpleCriterionTrigger<CuredGripcrystalEntityCriterion.Conditions> {
-    static final ResourceLocation ID = new ResourceLocation("cured_gripcrystal_entity");
+    static final ResourceLocation ID = UnseenWorld.MOD.makeID("cured_gripcrystal_entity");
 
     @Override
     public ResourceLocation getId() {

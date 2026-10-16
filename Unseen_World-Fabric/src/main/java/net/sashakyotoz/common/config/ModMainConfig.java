@@ -25,6 +25,4 @@ public class ModMainConfig {
     public static ConfigEntry<Boolean> renderDarkeningOnMobs = new ConfigEntry<>(true);
     public static ConfigEntry<Boolean> removeParasitesNaturally = new ConfigEntry<>(true);
     public static ConfigEntry<Boolean> doAbyssalArmorSaveFromVoid = new ConfigEntry<>(true);
-
-    public static int keyHandlerBlockCooldown = 999;
 }

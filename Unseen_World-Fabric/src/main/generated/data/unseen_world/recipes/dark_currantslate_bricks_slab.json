@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
+  "group": "dark_currantslate_bricks_slab",
   "key": {
     "#": {
       "item": "unseen_world:dark_currantslate_bricks"

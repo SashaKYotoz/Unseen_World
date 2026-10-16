@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_corona_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "unseen_world:corona_stone"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:corona_stone_bricks_wall_from_corona_stone_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_corona_stone",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:corona_stone_bricks_wall_from_corona_stone_stonecutting"
+    ]
+  },
+  "sends_telemetry_event": false
+}

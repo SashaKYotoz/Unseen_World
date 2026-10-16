@@ -1,31 +1,23 @@
 package net.sashakyotoz.common.datagen.tags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.lcc.sollib.datagen.SBlockTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.tags.ModTags;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+public class ModBlockTagProvider extends SBlockTagProvider {
     public ModBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider arg) {
-        for (TagKey<Block> tag : ModRegistry.BLOCK_TAGS.keySet()) {
-            FabricTagProvider<Block>.FabricTagBuilder builder = getOrCreateTagBuilder(tag);
-            for (Block block : ModRegistry.BLOCK_TAGS.get(tag)) {
-                builder.add(block);
-            }
-        }
+    protected void addTags(HolderLookup.Provider lookup) {
+        super.addTags(lookup);
         this.getOrCreateTagBuilder(ModTags.Blocks.BEARFRUIT_BRAMBLE_GROWABLE_ON).add(
                 Blocks.DIRT,
                 Blocks.GRASS_BLOCK,
@@ -36,8 +28,7 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.PENUMBRAL_GRASS_BLOCK,
                 ModBlocks.NIGHTDARK_DIRT,
                 ModBlocks.TEALIVY_GRASS_BLOCK,
-                ModBlocks.TEALIVY_DIRT,
-                ModBlocks.BEARFRUIT_BRAMBLE
+                ModBlocks.TEALIVY_DIRT
         );
         this.getOrCreateTagBuilder(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH).add(
                 ModBlocks.DARK_WATER

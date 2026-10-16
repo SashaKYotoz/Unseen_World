@@ -179,8 +179,13 @@ public class EclipseSentinelModel extends HierarchicalModel<EclipseSentinel> {
         this.animate(entity.laser, EclipseSentinelAnimations.LASER, ageInTicks);
         this.animate(entity.hyper_burst, EclipseSentinelAnimations.HYPER_BURST, ageInTicks);
         this.animate(entity.rise, EclipseSentinelAnimations.RISE, ageInTicks);
-        if (entity.getSentinelPose() == EclipseSentinel.SentinelPose.ECLIPSE_PULSE || entity.getSentinelPose() == EclipseSentinel.SentinelPose.RISE || entity.getSentinelPose() == EclipseSentinel.SentinelPose.HYPER_BURST) {
+        this.animate(entity.coronaRing, EclipseSentinelAnimations.CORONA_RING, ageInTicks);
+        EclipseSentinel.SentinelPose pose = entity.getSentinelPose();
+        if (pose == EclipseSentinel.SentinelPose.ECLIPSE_PULSE || pose == EclipseSentinel.SentinelPose.RISE || pose == EclipseSentinel.SentinelPose.HYPER_BURST
+                || pose == EclipseSentinel.SentinelPose.CORONA_RING) {
             this.eclipse_circle.zRot += ageInTicks * 0.05F;
+        } else if (pose == EclipseSentinel.SentinelPose.TOTALITY) {
+            this.eclipse_circle.zRot += ageInTicks * 0.2F;
         }
         this.animate(entity.death, EclipseSentinelAnimations.DEATH, ageInTicks, 0.5f);
     }

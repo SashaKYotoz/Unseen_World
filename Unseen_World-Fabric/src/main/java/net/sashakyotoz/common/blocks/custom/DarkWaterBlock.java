@@ -20,15 +20,15 @@ public class DarkWaterBlock extends LiquidBlock {
     }
 
     @Override
-    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-        if (!world.isClientSide && entity instanceof LivingEntity livingEntity && livingEntity.tickCount % 20 == 0) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (!level.isClientSide()
+                && entity instanceof LivingEntity livingEntity
+                && livingEntity.tickCount % 20 == 0) {
             if (!(livingEntity.hasEffect(MobEffects.GLOWING)
                     || EnchantmentHelper.hasAquaAffinity(livingEntity))) {
-                if (entity instanceof IGrippingEntity entity1 && entity1.getDarkeningData() < 10 && world.getFluidState(pos.above()).is(ModFluids.DARK_WATER))
+                if (entity instanceof IGrippingEntity entity1 && entity1.getDarkeningData() < 10 && level.getFluidState(pos.above()).is(ModFluids.DARK_WATER))
                     entity1.setDarkeningData(entity1.getDarkeningData() + 1);
             }
         }
-        if (entity instanceof Boat boatEntity && ActionsUtils.isMoving(boatEntity))
-            boatEntity.setDeltaMovement(boatEntity.getDeltaMovement().scale(0.5f));
     }
 }

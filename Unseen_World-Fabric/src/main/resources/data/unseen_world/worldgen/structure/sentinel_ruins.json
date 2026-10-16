@@ -3,6 +3,7 @@
   "biomes": "#unseen_world:has_structure/sentinel_ruins",
   "step": "surface_structures",
   "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
   "start_pool": "unseen_world:sentinel_ruins",
   "size": 1,
   "start_height": {

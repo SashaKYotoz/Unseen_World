@@ -10,9 +10,9 @@
     }
   },
   "pattern": [
-    "XXX",
-    " # ",
-    " # "
+    "XX",
+    "X#",
+    " #"
   ],
   "result": {
     "item": "unseen_world:abyssal_axe"

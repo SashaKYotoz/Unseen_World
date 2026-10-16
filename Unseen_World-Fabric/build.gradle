@@ -28,7 +28,9 @@ repositories {
 }
 
 fabricApi {
-    configureDataGeneration()
+    configureDataGeneration {
+        modId = "unseen_world"
+    }
 }
 
 dependencies {

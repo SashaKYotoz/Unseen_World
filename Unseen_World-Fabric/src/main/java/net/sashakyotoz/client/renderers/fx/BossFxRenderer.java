@@ -164,6 +164,14 @@ public final class BossFxRenderer {
             FxDraw.sphere(consumer, matrix, hand, 0.1F + 0.3F * charge, 8, 12, FxDraw.argb(AuricPatriarch.PALE_GOLD, 0.35F + 0.4F * charge), time * 0.5F, false);
         }
 
+        if (state == AuricPatriarch.PatriarchState.FINAL_SUNBURST && summonTicks >= AuricPatriarch.SUNBURST_CHANNEL_TICK && summonTicks < AuricPatriarch.SUNBURST_BLAST_TICK) {
+            float charge = Mth.clamp((summonTicks - AuricPatriarch.SUNBURST_CHANNEL_TICK + partialTick) / (AuricPatriarch.SUNBURST_BLAST_TICK - AuricPatriarch.SUNBURST_CHANNEL_TICK), 0.0F, 1.0F);
+            Vec3 sun = new Vec3(0.0D, patriarch.getBbHeight() + 1.5D, 0.0D);
+            FxDraw.sphere(consumer, matrix, sun, 0.3F + 1.4F * charge, 10, 16, FxDraw.argb(AuricPatriarch.PALE_GOLD, 0.35F + 0.5F * charge), time * 0.6F, false);
+            FxDraw.rays(consumer, matrix, sun, 6 + (int) (charge * 18.0F), 1.0F + 3.0F * charge, 1.0F, FxDraw.argb(AuricPatriarch.GOLD, 0.7F * charge), patriarch.getId() * 13L, time * 0.03F);
+            FxDraw.flatRing(consumer, matrix, new Vec3(0.0D, 0.08D, 0.0D), (float) AuricPatriarch.SUNBURST_RADIUS - 0.3F, (float) AuricPatriarch.SUNBURST_RADIUS, 96, FxDraw.argb(AuricPatriarch.AMBER, 0.6F * charge), FxDraw.argb(AuricPatriarch.GOLD, 0.8F * charge), time * 0.01F);
+        }
+
         renderDeathRays(consumer, matrix, patriarch, partialTick, time, AuricPatriarch.GOLD, 1.0F);
     }
 
@@ -180,6 +188,24 @@ public final class BossFxRenderer {
             FxDraw.beam(consumer, matrix, origin, end, 0.6F * beamPulse, FxDraw.argb(EclipseSentinel.ECLIPSE_PURPLE, 0.22F), FxDraw.argb(EclipseSentinel.ECLIPSE_PURPLE, 0.15F));
             FxDraw.sphere(consumer, matrix, end, 0.45F * beamPulse, 8, 12, FxDraw.argb(EclipseSentinel.CORONA, 0.5F), time, false);
             FxDraw.rays(consumer, matrix, end, 8, 1.4F, 1.0F, FxDraw.argb(EclipseSentinel.CORONA, 0.6F), sentinel.getId() * 31L + sentinel.tickCount, 0.0F);
+            if (sentinel.isSplitLaser()) {
+                Vec3 second = sentinel.getSecondBeamEnd().subtract(base);
+                FxDraw.beam(consumer, matrix, origin, second, 0.09F * beamPulse, FxDraw.argb(0xFFFFFF, 0.95F), FxDraw.argb(EclipseSentinel.CORONA, 0.9F));
+                FxDraw.beam(consumer, matrix, origin, second, 0.28F * beamPulse, FxDraw.argb(EclipseSentinel.CORONA, 0.55F), FxDraw.argb(EclipseSentinel.ECLIPSE_PURPLE, 0.5F));
+                FxDraw.sphere(consumer, matrix, second, 0.45F * beamPulse, 8, 12, FxDraw.argb(EclipseSentinel.CORONA, 0.5F), time, false);
+            }
+        }
+
+        if (state == EclipseSentinel.SentinelPose.CORONA_RING) {
+            Vec3 ground = new Vec3(0.0D, 0.08D, 0.0D);
+            for (int ring = 0; ring < EclipseSentinel.CORONA_RING_STARTS.length; ring++) {
+                float radius = (float) sentinel.coronaRingRadius(ring, ticks + partialTick);
+                if (radius > 0.0F) {
+                    float fade = 1.0F - radius / (float) EclipseSentinel.CORONA_RING_MAX_RADIUS * 0.6F;
+                    FxDraw.flatRing(consumer, matrix, ground, Math.max(0.0F, radius - 0.7F), radius, 64, FxDraw.argb(EclipseSentinel.ECLIPSE_PURPLE, 0.0F), FxDraw.argb(EclipseSentinel.CORONA, 0.85F * fade), 0.0F);
+                    FxDraw.flatRing(consumer, matrix, ground, radius, radius + 0.25F, 64, FxDraw.argb(0xFFFFFF, 0.7F * fade), FxDraw.argb(EclipseSentinel.ECLIPSE_PURPLE, 0.0F), 0.0F);
+                }
+            }
         }
 
         if (state == EclipseSentinel.SentinelPose.HYPER_BURST && ticks >= EclipseSentinel.HYPER_TARGET_TICK && sentinel.ticksSinceImpact(partialTick) > ticks) {
@@ -228,8 +254,15 @@ public final class BossFxRenderer {
             }
         }
 
+        if (warrior.isHammerThrown()) {
+            Vec3 hammer = warrior.getAbilityPos().subtract(base);
+            FxDraw.sphere(consumer, matrix, hammer, 0.45F, 8, 12, FxDraw.argb(WarriorOfChimericDarkness.GRIP_GLOW, 0.55F), time * 0.9F, false);
+            FxDraw.rays(consumer, matrix, hammer, 8, 1.2F, 1.0F, FxDraw.argb(WarriorOfChimericDarkness.GRIP_GLOW, 0.6F), warrior.getId() * 7L, time * 0.2F);
+        }
+
         float shockRadius = switch (state) {
             case CHARGED_STRIKE -> (float) WarriorOfChimericDarkness.CHARGED_STRIKE_RADIUS;
+            case SHATTER -> 6.0F;
             case SHIELDED_KNOCKBACK -> 4.0F;
             default -> 3.0F;
         };

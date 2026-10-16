@@ -44,8 +44,8 @@ public class EspyerEntity extends Monster implements PowerableMob {
     private final GripConversion conversion = new GripConversion(this, CONVERTING, this::finishConversion);
     private int lastFuseTime;
     private int currentFuseTime;
-    private int fuseTime = 30;
-    private int explosionRadius = 3;
+    private int fuseTime = 20;
+    private int explosionRadius = 4;
 
     public EspyerEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
@@ -88,10 +88,6 @@ public class EspyerEntity extends Monster implements PowerableMob {
         this.entityData.define(CHARGED, false);
         this.entityData.define(IGNITED, false);
         GripConversion.define(this.entityData, CONVERTING);
-    }
-
-    public boolean isConverting() {
-        return this.conversion.isConverting();
     }
 
     @Override
@@ -226,7 +222,7 @@ public class EspyerEntity extends Monster implements PowerableMob {
         if (!this.level().isClientSide) {
             float f = this.isPowered() ? 2.0F : 1.0F;
             this.dead = true;
-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), (float) this.explosionRadius * f, Level.ExplosionInteraction.MOB);
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), this.explosionRadius * f, Level.ExplosionInteraction.NONE);
             this.discard();
             this.spawnEffectsCloud();
         }

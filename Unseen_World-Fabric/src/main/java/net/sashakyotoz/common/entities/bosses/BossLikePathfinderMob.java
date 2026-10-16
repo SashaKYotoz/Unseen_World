@@ -27,6 +27,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -133,6 +134,26 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
         }
     }
 
+    public void serverRing(ParticleOptions type, Vec3 center, double radius, int points) {
+        for (int i = 0; i < points; i++) {
+            double angle = i * Math.PI * 2.0D / points;
+            this.serverParticles(type, center.x + Math.cos(angle) * radius, center.y, center.z + Math.sin(angle) * radius, 0, 0.0D, 0.0D, 0.0D, 0.0D);
+        }
+    }
+
+    public void serverLine(ParticleOptions type, Vec3 from, Vec3 to, double step) {
+        Vec3 delta = to.subtract(from);
+        double length = delta.length();
+        if (length < 1.0E-4D) {
+            return;
+        }
+        Vec3 direction = delta.scale(1.0D / length);
+        for (double d = 0.0D; d <= length; d += step) {
+            Vec3 point = from.add(direction.scale(d));
+            this.serverParticles(type, point.x, point.y, point.z, 0, 0.0D, 0.0D, 0.0D, 0.0D);
+        }
+    }
+
     public void groundBurst(Vec3 pos, int count, double spread) {
         BlockPos ground = BlockPos.containing(pos.x, pos.y - 0.2D, pos.z);
         BlockState state = this.level().getBlockState(ground);
@@ -151,6 +172,31 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
             cursor.move(Direction.DOWN);
         }
         return pos;
+    }
+
+    @Nullable
+    public Vec3 findStandableGround(double x, double z, double referenceY, int searchDepth) {
+        BlockPos.MutableBlockPos cursor = BlockPos.containing(x, referenceY + 3.0D, z).mutable();
+        for (int i = 0; i < searchDepth; i++) {
+            BlockPos below = cursor.below();
+            boolean solidBelow = !this.level().getBlockState(below).getCollisionShape(this.level(), below).isEmpty();
+            boolean openHere = this.level().getBlockState(cursor).getCollisionShape(this.level(), cursor).isEmpty();
+            if (solidBelow && openHere) {
+                return new Vec3(x, cursor.getY(), z);
+            }
+            cursor.move(Direction.DOWN);
+        }
+        return null;
+    }
+
+    public List<LivingEntity> enemiesInArcAt(Vec3 origin, Vec3 facing, double radius, double halfAngleDegrees, double height) {
+        double cos = Math.cos(Math.toRadians(halfAngleDegrees));
+        AABB box = new AABB(origin.x - radius, origin.y - 0.5D, origin.z - radius, origin.x + radius, origin.y + height, origin.z + radius);
+        return this.enemiesIn(box).stream().filter(entity -> {
+            Vec3 offset = new Vec3(entity.getX() - origin.x, 0.0D, entity.getZ() - origin.z);
+            double length = offset.length();
+            return length <= radius + entity.getBbWidth() * 0.5D && (length < 0.5D || facing.dot(offset.scale(1.0D / length)) >= cos);
+        }).toList();
     }
 
     public boolean isEnemy(LivingEntity entity) {

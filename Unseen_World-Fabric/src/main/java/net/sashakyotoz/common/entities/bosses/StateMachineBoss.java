@@ -1,11 +1,13 @@
 package net.sashakyotoz.common.entities.bosses;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,6 +22,8 @@ import java.util.*;
 
 public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends BossLikePathfinderMob {
     public static final EntityDataAccessor<Vector3f> ABILITY_POS = SynchedEntityData.defineId(StateMachineBoss.class, EntityDataSerializers.VECTOR3);
+    public static final EntityDataAccessor<Integer> BOSS_PHASE = SynchedEntityData.defineId(StateMachineBoss.class, EntityDataSerializers.INT);
+    private static final float[] NO_PHASES = new float[0];
     public static final int DEATH_ANIMATION_TICKS = 80;
     public static final byte IMPACT_EVENT = 90;
     private static final int SLEEP_AFTER_NO_TARGET_TICKS = 200;
@@ -27,6 +31,9 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     private final Map<S, AnimationState> stateAnimations;
     private final List<AnimationState> boundAnimations = new ArrayList<>();
     protected final Queue<S> tactics = new ArrayDeque<>();
+    protected final Deque<S> combo = new ArrayDeque<>();
+    private boolean phaseShiftPending = false;
+    private boolean phaseLockBypass = false;
     public int clientStateTicks = 0;
     protected int noTargetTicks = 0;
     protected int deathTicks = 0;
@@ -108,6 +115,92 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     protected void onStateChanged(S previous, S next) {
     }
 
+    protected float[] phaseThresholds() {
+        return NO_PHASES;
+    }
+
+    @Nullable
+    protected S phaseTransitionState(int phase) {
+        return null;
+    }
+
+    protected void onPhaseChanged(int phase) {
+    }
+
+    protected BossEvent.BossBarColor phaseBarColor(int phase) {
+        return this.bossInfo().getColor();
+    }
+
+    public int getBossPhase() {
+        return this.entityData.get(BOSS_PHASE);
+    }
+
+    public boolean isFinalPhase() {
+        return this.getBossPhase() >= this.phaseThresholds().length;
+    }
+
+    private float nextPhaseFloor() {
+        float[] thresholds = this.phaseThresholds();
+        int phase = this.getBossPhase();
+        return phase < thresholds.length ? thresholds[phase] * this.getMaxHealth() : 0.0F;
+    }
+
+    @Override
+    public void setHealth(float health) {
+        if (!this.level().isClientSide() && !this.phaseLockBypass && this.tickCount > 0 && this.isAlive() && !this.phaseShiftPending) {
+            float floor = this.nextPhaseFloor();
+            if (floor > 0.0F && health < floor) {
+                health = floor;
+                this.phaseShiftPending = true;
+            }
+        } else if (this.phaseShiftPending && !this.phaseLockBypass && health < this.nextPhaseFloor()) {
+            health = this.nextPhaseFloor();
+        }
+        super.setHealth(health);
+    }
+
+    private void advancePhase() {
+        int next = this.getBossPhase() + 1;
+        this.entityData.set(BOSS_PHASE, next);
+        this.tactics.clear();
+        this.combo.clear();
+        this.applyPhaseVisuals();
+        this.onPhaseChanged(next);
+        S transition = this.phaseTransitionState(next);
+        if (transition != null) {
+            this.getNavigation().stop();
+            this.setBossState(transition);
+        }
+    }
+
+    protected void applyPhaseVisuals() {
+        this.bossInfo().setColor(this.phaseBarColor(this.getBossPhase()));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("BossPhase", this.getBossPhase());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        int phase;
+        if (compound.contains("BossPhase")) {
+            phase = compound.getInt("BossPhase");
+        } else {
+            phase = 0;
+            for (float threshold : this.phaseThresholds()) {
+                if (this.getHealth() < threshold * this.getMaxHealth()) {
+                    phase++;
+                }
+            }
+        }
+        this.entityData.set(BOSS_PHASE, Mth.clamp(phase, 0, this.phaseThresholds().length));
+        this.applyPhaseVisuals();
+    }
+
     @SafeVarargs
     protected final void bindAnimation(AnimationState animation, S... states) {
         if (!this.boundAnimations.contains(animation)) {
@@ -123,6 +216,7 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         super.defineSynchedData();
         this.entityData.define(this.stateAccessor(), this.initialState());
         this.entityData.define(ABILITY_POS, new Vector3f());
+        this.entityData.define(BOSS_PHASE, 0);
     }
 
     public S getBossState() {
@@ -148,6 +242,7 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     }
 
     protected void returnToStanding() {
+        this.combo.clear();
         this.setBossState(this.standingState());
     }
 
@@ -238,6 +333,11 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         this.noTargetTicks = target == null ? this.noTargetTicks + 1 : 0;
         this.stateTicks++;
         S state = this.getBossState();
+        if (this.phaseShiftPending && state != this.dyingState()) {
+            this.phaseShiftPending = false;
+            this.advancePhase();
+            return;
+        }
         if (state == this.standingState()) {
             this.tickStanding(target);
         } else if (state == this.sleepTransitionState()) {
@@ -263,7 +363,12 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         } else if (state != this.dyingState()) {
             this.tickAbility(state, this.stateTicks, target);
             if (this.getBossState() == state && state.duration() > 0 && this.stateTicks >= state.duration()) {
-                this.returnToStanding();
+                S next = this.combo.poll();
+                if (next != null) {
+                    this.chainState(next);
+                } else {
+                    this.returnToStanding();
+                }
             }
         }
     }
@@ -352,11 +457,19 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         if (source.getEntity() == this || source.getDirectEntity() == this) {
             return false;
         }
-        if (!this.level().isClientSide() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.isImmuneTo(this.getBossState(), source)) {
+        boolean bypass = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
+        S current = this.getBossState();
+        if (!this.level().isClientSide() && !bypass && (current.isPhaseTransition() || this.isImmuneTo(current, source))) {
             this.onDamageBlocked(source);
             return false;
         }
-        boolean result = super.hurt(source, amount);
+        this.phaseLockBypass = bypass;
+        boolean result;
+        try {
+            result = super.hurt(source, amount);
+        } finally {
+            this.phaseLockBypass = false;
+        }
         if (result && !this.level().isClientSide() && source.getEntity() instanceof LivingEntity attacker
                 && !attacker.isAlliedTo(this) && this.isValidTarget(attacker)) {
             this.setTarget(attacker);
@@ -379,6 +492,8 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     public void die(DamageSource source) {
         if (!this.level().isClientSide()) {
             this.tactics.clear();
+            this.combo.clear();
+            this.phaseShiftPending = false;
             this.getNavigation().stop();
             this.setBossState(this.dyingState());
         }

@@ -11,8 +11,8 @@ public enum ModTiers implements Tier {
     ABYSSAL(5, 2350, 13.0F, 5.0F, 24, () -> Ingredient.of(ModItems.ABYSSAL_INGOT)),
     TITANIUM(5, 2485, 14.0F, 5.0F, 20, () -> Ingredient.of(ModItems.RED_TITANIUM_INGOT)),
     AURIC_ARC(3, 2631, 8.0F, 8.0F, 36, () -> Ingredient.of(ModItems.UNSEENIUM_INGOT)),
-    ROCKBREAKER_HAMMER(4, 2374, 10.0F, 7.0F, 30, () -> Ingredient.of(ModItems.ABYSSAL_INGOT)),
-    ECLIPSEBANE(3, 2169, 8.0F, 8.0F, 32, () -> Ingredient.of(ModItems.ABYSSAL_INGOT));
+    ROCKBREAKER_HAMMER(4, 2374, 10.0F, 9.0F, 30, () -> Ingredient.of(ModItems.ABYSSAL_INGOT)),
+    ECLIPSEBANE(3, 2169, 8.0F, 7.0F, 32, () -> Ingredient.of(ModItems.ABYSSAL_INGOT));
 
     private final int miningLevel;
     private final int durability;

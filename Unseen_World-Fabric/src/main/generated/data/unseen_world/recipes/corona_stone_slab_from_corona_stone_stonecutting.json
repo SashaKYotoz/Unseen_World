@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "unseen_world:corona_stone"
+  },
+  "result": "unseen_world:corona_stone_slab"
+}

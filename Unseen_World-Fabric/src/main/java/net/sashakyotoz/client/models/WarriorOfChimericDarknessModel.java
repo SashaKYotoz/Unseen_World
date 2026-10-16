@@ -16,6 +16,8 @@ public class WarriorOfChimericDarknessModel extends HierarchicalModel<WarriorOfC
     public static final ModelLayerLocation WARRIOR_OF_CHIMERIC_DARKNESS = new ModelLayerLocation(UnseenWorld.MOD.makeID("warrior_of_chimeric_darkness"), "main");
     private final ModelPart root;
     private final ModelPart head;
+    private final ModelPart shield;
+    private final ModelPart hammer;
 
     public WarriorOfChimericDarknessModel(ModelPart root) {
         super(RenderType::entityTranslucent);
@@ -23,6 +25,8 @@ public class WarriorOfChimericDarknessModel extends HierarchicalModel<WarriorOfC
         ModelPart body = this.root.getChild("body");
         ModelPart chest = body.getChild("chest");
         this.head = chest.getChild("head");
+        this.shield = chest.getChild("left_arm").getChild("shield");
+        this.hammer = chest.getChild("right_arm").getChild("hammer");
     }
 
     public static LayerDefinition getModelData() {
@@ -140,6 +144,8 @@ public class WarriorOfChimericDarknessModel extends HierarchicalModel<WarriorOfC
     @Override
     public void setupAnim(WarriorOfChimericDarkness entity, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.shield.visible = entity.hasShield();
+        this.hammer.visible = !entity.isHammerThrown();
         this.head.yRot = headYaw / (180F / (float) Math.PI);
         this.head.xRot = headPitch / (180F / (float) Math.PI);
 
@@ -155,6 +161,9 @@ public class WarriorOfChimericDarknessModel extends HierarchicalModel<WarriorOfC
         this.animate(entity.fissure, WarriorOfChimericDarknessAnimations.FISSURE, ageInTicks);
         this.animate(entity.charged_strike, WarriorOfChimericDarknessAnimations.CHARGED_STRIKE, ageInTicks);
         this.animate(entity.smash, WarriorOfChimericDarknessAnimations.SMASH, ageInTicks);
+        this.animate(entity.thornfield, WarriorOfChimericDarknessAnimations.THORNFIELD, ageInTicks);
+        this.animate(entity.shatter, WarriorOfChimericDarknessAnimations.SHATTER, ageInTicks);
+        this.animate(entity.hammerThrow, WarriorOfChimericDarknessAnimations.HAMMER_THROW, ageInTicks);
         this.animate(entity.death, WarriorOfChimericDarknessAnimations.DEATH, ageInTicks, 0.5f);
     }
 }

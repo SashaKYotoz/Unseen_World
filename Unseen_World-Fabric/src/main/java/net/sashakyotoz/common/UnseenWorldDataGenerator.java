@@ -2,19 +2,17 @@ package net.sashakyotoz.common;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.lcc.sollib.datagen.SEntityTagProvider;
+import net.lcc.sollib.datagen.SItemTagProvider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.util.Tuple;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
 import net.sashakyotoz.common.datagen.*;
 import net.sashakyotoz.common.datagen.loot.ModBlockLootTableProvider;
 import net.sashakyotoz.common.datagen.loot.ModChestLootTableProvider;
 import net.sashakyotoz.common.datagen.loot.OrdealLootTableProvider;
-import net.sashakyotoz.common.datagen.tags.*;
+import net.sashakyotoz.common.datagen.tags.ModBiomeTagProvider;
+import net.sashakyotoz.common.datagen.tags.ModBlockTagProvider;
+import net.sashakyotoz.common.datagen.tags.ModFluidTagProvider;
 import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.carvers.ModCarvers;
@@ -23,8 +21,6 @@ import net.sashakyotoz.common.world.features.placements.ModPlacements;
 import net.sashakyotoz.common.world.noise.ModDensityFunctions;
 import net.sashakyotoz.common.world.noise.ModNoiseSettings;
 import net.sashakyotoz.common.world.noise.ModNoises;
-
-import java.util.Map;
 
 public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -36,9 +32,9 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModBlockTagProvider::new);
         pack.addProvider(ModFluidTagProvider::new);
         pack.addProvider(ModBiomeTagProvider::new);
-        pack.addProvider(ModItemTagProvider::new);
+        pack.addProvider(SItemTagProvider::new);
+        pack.addProvider(SEntityTagProvider::new);
         pack.addProvider(ModGameEventTagProvider::new);
-        pack.addProvider(ModEntityTagProvider::new);
 
         pack.addProvider(ModBlockLootTableProvider::new);
         pack.addProvider(OrdealLootTableProvider::new);
@@ -63,22 +59,5 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
         registryBuilder.add(Registries.NOISE, ModNoises::bootstrap);
         registryBuilder.add(Registries.DENSITY_FUNCTION, ModDensityFunctions::bootstrap);
         registryBuilder.add(Registries.NOISE_SETTINGS, ModNoiseSettings::bootstrap);
-    }
-
-    public static void registerFuels() {
-        for (Map.Entry<ItemLike, Integer> entry : ModRegistry.ITEM_BURNABLE.entrySet())
-            FuelRegistry.INSTANCE.add(entry.getKey(), entry.getValue());
-    }
-
-    public static void registerBurnable() {
-        FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();
-        for (Map.Entry<Block, Tuple<Integer, Integer>> entry : ModRegistry.BLOCK_FLAMMABLE.entrySet()) {
-            registry.add(entry.getKey(), entry.getValue().getA(), entry.getValue().getB());
-        }
-    }
-
-    public static void registerStripped() {
-        for (Map.Entry<Block, Block> entry : ModRegistry.BLOCK_STRIPPED.entrySet())
-            StrippableBlockRegistry.register(entry.getKey(), entry.getValue());
     }
 }

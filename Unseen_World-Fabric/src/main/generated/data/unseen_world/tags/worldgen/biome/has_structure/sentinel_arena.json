@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "unseen_world:penumbral_steppe"
+    "unseen_world:penumbral_steppe",
+    "unseen_world:gloomweed_plains"
   ]
 }

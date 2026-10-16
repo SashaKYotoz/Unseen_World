@@ -18,8 +18,8 @@ import net.sashakyotoz.api.multipart_entity.WorldMultipartHelper;
 import net.sashakyotoz.client.environment.weather.ChimericWeatherState;
 import net.sashakyotoz.client.gui.blocks.ModScreenHandlers;
 import net.sashakyotoz.client.particles.ModParticleTypes;
+import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.ModSoundEvents;
-import net.sashakyotoz.common.UnseenWorldDataGenerator;
 import net.sashakyotoz.common.blocks.ModBlockEntities;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModFluids;
@@ -41,6 +41,7 @@ public class UnseenWorld implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModRegistry.register();
         CustomPortalBuilder.beginPortal()
                 .frameBlock(ModBlocks.DARK_FROST_BRICKS)
                 .lightWithItem(ModItems.ECLIPSE_KEYSTONE)
@@ -59,17 +60,12 @@ public class UnseenWorld implements ModInitializer {
         EntityDataSerializers.registerSerializer(WarriorOfChimericDarkness.WARRIOR_STATE);
         EntityDataSerializers.registerSerializer(EclipseSentinel.SENTINEL_STATE);
         EntityDataSerializers.registerSerializer(AuricPatriarch.PATRIARCH_STATE);
-
         ModSoundEvents.registerSounds();
         ModEntities.register();
         ModMobEffects.register();
         ModWorldFeatures.register();
         ModParticleTypes.register();
         ModScreenHandlers.register();
-
-        UnseenWorldDataGenerator.registerBurnable();
-        UnseenWorldDataGenerator.registerFuels();
-        UnseenWorldDataGenerator.registerStripped();
 
         ModTreePlacerTypes.register();
         ModSpawnRules.register();
