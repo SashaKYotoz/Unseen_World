@@ -1013,10 +1013,9 @@ public class WarriorOfChimericDarkness extends MultipartBoss<WarriorOfChimericDa
             case IDLING, AWAKE_TO_IDLE -> 0.1F;
             case CHARGED_STRIKE -> 0.4F + 0.6F * this.getChargeProgress(0.0F);
             case SHIELDED_KNOCKBACK, SHIELD -> 0.8F;
-            case SMASH, FISSURE -> 0.6F;
+            case SMASH, FISSURE, HAMMER_THROW -> 0.6F;
             case THORNFIELD -> 0.7F;
             case SHATTER -> 1.0F;
-            case HAMMER_THROW -> 0.6F;
             case DYING -> 0.0F;
             default -> 0.3F;
         };

@@ -34,6 +34,9 @@ public abstract class BlockStateBaseMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void unseen_world$detectDarkWater(Block owner, ImmutableMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> codec, CallbackInfo ci) {
+        if (values == null || values.isEmpty()) {
+            return;
+        }
         this.unseen_world$darkFlag = Boolean.TRUE.equals(values.get(DarkWaterlogging.DARK_WATER));
         this.unseen_world$darkLogged = this.unseen_world$darkFlag && Boolean.TRUE.equals(values.get(BlockStateProperties.WATERLOGGED));
     }

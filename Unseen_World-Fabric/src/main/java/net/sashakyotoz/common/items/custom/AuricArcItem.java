@@ -38,13 +38,9 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
     public static final int THROW_TICKS = 10;
     public static final int SUNBURST_TICKS = 20;
     public static final int SUNBURST_COOLDOWN = 60;
-    private static final int SUNBURST_EXTRA_DURABILITY = 1;
     private static final float THROW_SPEED = 2.5F;
     private static final float BOLT_SPEED = 2.5F;
     private static final float BOLT_SPREAD_DEGREES = 10.0F;
-    private static final double LINE_PAST_TARGET = 3.0D;
-    private static final double LINE_HALF_WIDTH = 1.25D;
-    private static final float LINE_DAMAGE_FACTOR = 0.5F;
     private static final DustParticleOptions GOLDEN_DUST = new DustParticleOptions(new Vector3f(1.0F, 0.78F, 0.25F), 1.2F);
 
     private final Multimap<Attribute, AttributeModifier> modifiers;
@@ -85,9 +81,9 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
             return;
         }
         boolean sunburst = held >= SUNBURST_TICKS;
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             InteractionHand hand = player.getUsedItemHand();
-            AbilityHelper.damage(stack, player, sunburst ? 1 + SUNBURST_EXTRA_DURABILITY : 1, hand);
+            AbilityHelper.damage(stack, player, sunburst ? 2 : 1, hand);
             if (stack.isEmpty()) {
                 return;
             }
@@ -118,9 +114,9 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
         }
         Vec3 start = player.position();
         Vec3 facing = Vec3.directionFromRotation(0.0F, player.getYRot());
-        double length = Math.sqrt(player.distanceToSqr(target)) + LINE_PAST_TARGET;
-        float damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * LINE_DAMAGE_FACTOR;
-        for (LivingEntity victim : CombatHelper.enemiesInLine(player, start, facing, length, LINE_HALF_WIDTH)) {
+        double length = Math.sqrt(player.distanceToSqr(target)) + 3.0D;
+        float damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5F;
+        for (LivingEntity victim : CombatHelper.enemiesInLine(player, start, facing, length, 1.5D)) {
             if (victim != target) {
                 victim.hurt(CombatHelper.attackSource(player), damage);
             }

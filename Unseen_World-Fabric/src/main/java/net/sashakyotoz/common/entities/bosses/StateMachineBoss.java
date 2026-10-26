@@ -99,10 +99,6 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         return 2.0D;
     }
 
-    protected double acquireRange() {
-        return 16.0D;
-    }
-
     protected boolean isImmuneTo(S state, DamageSource source) {
         return false;
     }
@@ -497,7 +493,7 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         if (this.getTarget() != null) {
             this.setTarget(null);
         }
-        Player nearest = this.level().getNearestPlayer(this.getX(), this.getY(), this.getZ(), this.acquireRange(), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
+        Player nearest = this.level().getNearestPlayer(this.getX(), this.getY(), this.getZ(), 16.0D, EntitySelector.NO_CREATIVE_OR_SPECTATOR);
         if (this.isValidTarget(nearest)) {
             this.setTarget(nearest);
             this.registerCombatant(nearest);

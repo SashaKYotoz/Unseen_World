@@ -10,7 +10,7 @@ public record SpiralSpikeFeatureConfig(BlockStateProvider state,
                                        BlockStateProvider facing_state,
                                        BlockStateProvider decorating_state,
                                        IntProvider size) implements FeatureConfiguration {
-    public static Codec<SpiralSpikeFeatureConfig> CODEC = RecordCodecBuilder.create(
+    public static final Codec<SpiralSpikeFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     BlockStateProvider.CODEC.fieldOf("state").forGetter(SpiralSpikeFeatureConfig::state),
                     BlockStateProvider.CODEC.fieldOf("facing_state").forGetter(SpiralSpikeFeatureConfig::facing_state),

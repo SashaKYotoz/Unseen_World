@@ -1574,9 +1574,8 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         return switch (this.getPatriarchState()) {
             case IDLING -> 0.75F;
             case TO_FLYING, TO_GROUND, TOUCHDOWN -> 0.5F;
-            case SUDDEN_BEAM, DIVINE_TOUCH -> 1.0F;
+            case SUDDEN_BEAM, DIVINE_TOUCH, ASCENSION_RITE, FALLING_SUN, FINAL_SUNBURST -> 1.0F;
             case WING_KNOCKBACK, VEX_TIME, SOLAR_JUDGEMENT, SACRIFICE -> 0.8F;
-            case ASCENSION_RITE, FALLING_SUN, FINAL_SUNBURST -> 1.0F;
             case AURIC_BARRIER, GRAB_AND_STRIKE -> 0.6F;
             default -> 0.0F;
         };

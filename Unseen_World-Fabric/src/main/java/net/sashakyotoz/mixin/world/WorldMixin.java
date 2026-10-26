@@ -22,7 +22,7 @@ public abstract class WorldMixin implements WorldMultipartHelper {
     @Unique
     private final Int2ObjectMap<EntityPart> URDragonParts = new Int2ObjectOpenHashMap<>();
 
-    public Int2ObjectMap<EntityPart> getPMEPartMap() {
+    public Int2ObjectMap<EntityPart> unseen_World_Fabric$getPMEPartMap() {
         return URDragonParts;
     }
 

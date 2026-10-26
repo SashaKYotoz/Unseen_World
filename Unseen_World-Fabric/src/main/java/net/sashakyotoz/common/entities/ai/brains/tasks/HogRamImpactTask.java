@@ -53,15 +53,18 @@ public class HogRamImpactTask extends Behavior<TuskhogEntity> {
         this.direction = Vec3.ZERO;
     }
 
-    protected boolean shouldRun(ServerLevel serverWorld, TuskhogEntity tuskhog) {
+    @Override
+    protected boolean checkExtraStartConditions(ServerLevel serverWorld, TuskhogEntity tuskhog) {
         return tuskhog.getBrain().hasMemoryValue(MemoryModuleType.RAM_TARGET);
     }
 
-    protected boolean shouldKeepRunning(ServerLevel serverWorld, TuskhogEntity tuskhog, long l) {
+    @Override
+    protected boolean canStillUse(ServerLevel serverWorld, TuskhogEntity tuskhog, long l) {
         return tuskhog.getBrain().hasMemoryValue(MemoryModuleType.RAM_TARGET);
     }
 
-    protected void run(ServerLevel serverWorld, TuskhogEntity tuskhog, long l) {
+    @Override
+    protected void start(ServerLevel serverWorld, TuskhogEntity tuskhog, long l) {
         BlockPos blockPos = tuskhog.blockPosition();
         Brain<?> brain = tuskhog.getBrain();
         if (brain.getMemory(MemoryModuleType.RAM_TARGET).isPresent()) {
@@ -71,7 +74,8 @@ public class HogRamImpactTask extends Behavior<TuskhogEntity> {
         }
     }
 
-    protected void keepRunning(ServerLevel serverWorld, TuskhogEntity tuskhog, long l) {
+    @Override
+    protected void tick(ServerLevel serverWorld, TuskhogEntity tuskhog, long l) {
         List<LivingEntity> list = serverWorld.getNearbyEntities(LivingEntity.class, this.targetPredicate, tuskhog, tuskhog.getBoundingBox());
         Brain<?> brain = tuskhog.getBrain();
         if (!list.isEmpty()) {

@@ -134,14 +134,10 @@ public class VenomerEntity extends ViolegerEntity {
         return this.spellTicks;
     }
 
-    protected SoundEvent getCastSpellSound() {
-        return SoundEvents.ILLUSIONER_CAST_SPELL;
-    }
-
     public abstract static class CastSpellGoal extends Goal {
         protected int spellCooldown;
         protected int startTime;
-        protected VenomerEntity venomer;
+        protected final VenomerEntity venomer;
 
         public CastSpellGoal(VenomerEntity venomerEntity) {
             this.venomer = venomerEntity;
@@ -181,7 +177,7 @@ public class VenomerEntity extends ViolegerEntity {
             this.spellCooldown--;
             if (this.spellCooldown == 0) {
                 this.castSpell();
-                venomer.playSound(venomer.getCastSpellSound(), 0.9F, 1.5F);
+                venomer.playSound(SoundEvents.ILLUSIONER_CAST_SPELL, 0.9F, 1.5F);
             }
         }
 
@@ -246,7 +242,7 @@ public class VenomerEntity extends ViolegerEntity {
         DISAPPEAR(2, 0.3, 0.3, 0.8),
         BLINDNESS(3, 0.1, 0.1, 0.2);
 
-        private static final IntFunction<Spell> BY_ID = ByIdMap.continuous((ToIntFunction<Spell>) spell -> spell.id, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+        private static final IntFunction<Spell> BY_ID = ByIdMap.continuous(spell -> spell.id, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
         final int id;
         final double[] particleVelocity;
 

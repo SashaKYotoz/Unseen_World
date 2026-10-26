@@ -11,7 +11,7 @@ public record ClusterSpikeFeatureConfig(BlockStateProvider state,
                                         BlockStateProvider covered_cluster_state,
                                         IntProvider integration_size,
                                         IntProvider height) implements FeatureConfiguration {
-    public static Codec<ClusterSpikeFeatureConfig> CODEC = RecordCodecBuilder.create(
+    public static final Codec<ClusterSpikeFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     BlockStateProvider.CODEC.fieldOf("state").forGetter(ClusterSpikeFeatureConfig::state),
                     BlockStateProvider.CODEC.fieldOf("cluster_state").forGetter(ClusterSpikeFeatureConfig::cluster_state),

@@ -93,13 +93,13 @@ public class VexalBeetleModel extends HierarchicalModel<VexalBeetleEntity> {
             float m = Math.abs(Mth.sin(limbSwing * 0.6662F + 0.0F) * 0.4F) * limbSwingAmount;
             float p = Math.abs(Mth.sin(limbSwing * 0.6662F + (float) (Math.PI * 3.0 / 2.0)) * 0.4F) * limbSwingAmount;
             this.right_leg_b.yRot += i;
-            this.left_leg_b.yRot += -i;
+            this.left_leg_b.yRot -= i;
             this.right_leg_f.yRot += l;
             this.left_leg_f.yRot += -l;
             this.right_leg_b.zRot += m;
-            this.left_leg_b.zRot += -m;
+            this.left_leg_b.zRot -= m;
             this.right_leg_f.zRot += p;
-            this.left_leg_f.zRot += -p;
+            this.left_leg_f.zRot -= p;
         }
 
         float f = Math.min((float) entity.getDeltaMovement().lengthSqr() * 200.0F, 2F);

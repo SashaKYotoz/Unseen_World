@@ -14,7 +14,7 @@ public record GrippingVegetationFeatureConfig(CaveSurface surface,
                                               float vegetationChance,
                                               IntProvider horizontalRadius,
                                               float extraEdgeColumnChance) implements FeatureConfiguration {
-    public static Codec<GrippingVegetationFeatureConfig> CODEC = RecordCodecBuilder.create(
+    public static final Codec<GrippingVegetationFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     CaveSurface.CODEC.fieldOf("surface").forGetter(GrippingVegetationFeatureConfig::surface),
                     BlockStateProvider.CODEC.fieldOf("stone_state").forGetter(GrippingVegetationFeatureConfig::stoneState),

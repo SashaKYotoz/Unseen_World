@@ -6,8 +6,8 @@ import java.util.Collection;
 
 public interface WorldMultipartHelper {
     default Collection<EntityPart> getPMEParts() {
-        return getPMEPartMap().values();
+        return unseen_World_Fabric$getPMEPartMap().values();
     }
 
-    Int2ObjectMap<EntityPart> getPMEPartMap();
+    Int2ObjectMap<EntityPart> unseen_World_Fabric$getPMEPartMap();
 }

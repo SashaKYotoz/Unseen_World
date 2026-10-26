@@ -185,14 +185,14 @@ public class UnseenWorldClient implements ClientModInitializer {
         ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             BossFxRenderer.track(entity);
             if (entity instanceof MultipartEntity multipartEntity) {
-                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).getPMEPartMap();
+                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).unseen_World_Fabric$getPMEPartMap();
                 for (EntityPart part : multipartEntity.getParts()) partMap.put(part.getId(), part);
             }
         });
         ClientEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
             BossFxRenderer.untrack(entity);
             if (entity instanceof MultipartEntity multipartEntity) {
-                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).getPMEPartMap();
+                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).unseen_World_Fabric$getPMEPartMap();
                 for (EntityPart part : multipartEntity.getParts()) partMap.remove(part.getId());
             }
         });

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.common.entities.util.BossParticles;
 import org.joml.Matrix4f;
 
 public final class FxDraw {
@@ -92,7 +93,7 @@ public final class FxDraw {
         RandomSource random = RandomSource.create(seed);
         int tipColor = coreColor & 0x00FFFFFF;
         for (int i = 0; i < count; i++) {
-            Vec3 direction = randomUnit(random).yRot(spin * (0.5F + random.nextFloat())).xRot(spin * 0.3F);
+            Vec3 direction = BossParticles.randomUnit(random).yRot(spin * (0.5F + random.nextFloat())).xRot(spin * 0.3F);
             float rayLength = length * (0.55F + random.nextFloat() * 0.45F);
             Vec3 side = direction.cross(Math.abs(direction.y) > 0.9D ? EAST : UP).normalize().scale(width * rayLength * 0.12F);
             Vec3 tip = center.add(direction.scale(rayLength));
@@ -167,12 +168,5 @@ public final class FxDraw {
 
     private static Vec3 spherePoint(Vec3 center, float radius, double theta, double phi) {
         return center.add(Math.sin(theta) * Math.cos(phi) * radius, Math.cos(theta) * radius, Math.sin(theta) * Math.sin(phi) * radius);
-    }
-
-    private static Vec3 randomUnit(RandomSource random) {
-        double theta = random.nextDouble() * Math.PI * 2.0D;
-        double z = random.nextDouble() * 2.0D - 1.0D;
-        double r = Math.sqrt(1.0D - z * z);
-        return new Vec3(r * Math.cos(theta), z, r * Math.sin(theta));
     }
 }

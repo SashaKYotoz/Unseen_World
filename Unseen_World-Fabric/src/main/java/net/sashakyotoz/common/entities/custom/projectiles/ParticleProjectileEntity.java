@@ -3,6 +3,9 @@ package net.sashakyotoz.common.entities.custom.projectiles;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -16,22 +19,22 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParticleProjectileEntity extends Projectile {
+    private static final EntityDataAccessor<Boolean> DATA_CLUSTER = SynchedEntityData.defineId(ParticleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_DETONATING = SynchedEntityData.defineId(ParticleProjectileEntity.class, EntityDataSerializers.BOOLEAN);
     private static final int MAX_TRAIL_POINTS = 20;
+    private static final int DEFAULT_MAX_LIFE_TIME = 150;
 
-    private final ConcurrentLinkedDeque<Vec3> trailPositions = new ConcurrentLinkedDeque<>();
-    private final List<PendingExplosion> pendingExplosions = new CopyOnWriteArrayList<>();
+    private final ArrayDeque<Vec3> trailPositions = new ArrayDeque<>();
+    private final List<PendingExplosion> pendingExplosions = new ArrayList<>();
 
-    private volatile int lifeTime = 0;
-    private volatile int maxLifeTime = 150;
-    private volatile boolean clusterExplosion = false;
-    private volatile boolean isDetonating = false;
+    private int lifeTime = 0;
+    private int maxLifeTime = DEFAULT_MAX_LIFE_TIME;
 
     public ParticleProjectileEntity(EntityType<? extends ParticleProjectileEntity> entityType, Level level) {
         super(entityType, level);
@@ -44,16 +47,26 @@ public class ParticleProjectileEntity extends Projectile {
         this.setPos(owner.getX(), owner.getEyeY() - 0.1D, owner.getZ());
     }
 
+    @Override
+    protected void defineSynchedData() {
+        this.entityData.define(DATA_CLUSTER, false);
+        this.entityData.define(DATA_DETONATING, false);
+    }
+
     public boolean isClusterExplosion() {
-        return this.clusterExplosion;
+        return this.entityData.get(DATA_CLUSTER);
     }
 
     public void setClusterExplosion(boolean clusterExplosion) {
-        this.clusterExplosion = clusterExplosion;
+        this.entityData.set(DATA_CLUSTER, clusterExplosion);
     }
 
-    @Override
-    protected void defineSynchedData() {
+    public boolean isDetonating() {
+        return this.entityData.get(DATA_DETONATING);
+    }
+
+    private void setDetonating(boolean detonating) {
+        this.entityData.set(DATA_DETONATING, detonating);
     }
 
     @Override
@@ -86,7 +99,7 @@ public class ParticleProjectileEntity extends Projectile {
     public void tick() {
         super.tick();
 
-        if (this.isDetonating) {
+        if (this.isDetonating()) {
             if (!this.level().isClientSide()) {
                 this.tickPendingExplosions();
             }
@@ -100,15 +113,13 @@ public class ParticleProjectileEntity extends Projectile {
         HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if (hitResult.getType() != HitResult.Type.MISS) {
             this.onHit(hitResult);
+            if (this.isRemoved() || this.isDetonating()) {
+                return;
+            }
         }
 
         Vec3 motion = this.getDeltaMovement();
-        double nextX = this.getX() + motion.x;
-        double nextY = this.getY() + motion.y;
-        double nextZ = this.getZ() + motion.z;
-
-        this.setPos(nextX, nextY, nextZ);
-
+        this.setPos(this.getX() + motion.x, this.getY() + motion.y, this.getZ() + motion.z);
         this.setDeltaMovement(motion.x, motion.y - 0.04D, motion.z);
 
         this.updateRotationFromVelocity();
@@ -148,25 +159,23 @@ public class ParticleProjectileEntity extends Projectile {
     }
 
     private void triggerImpact(Vec3 impactPos) {
-        if (this.isDetonating) {
+        if (this.isDetonating()) {
             return;
         }
 
-        if (this.clusterExplosion) {
-            this.isDetonating = true;
+        if (this.isClusterExplosion() && this.level() instanceof ServerLevel serverLevel) {
+            this.setDetonating(true);
             this.setDeltaMovement(Vec3.ZERO);
             this.setInvisible(true);
 
-            if (this.level() instanceof ServerLevel serverLevel) {
-                for (int i = 0; i < 5; i++) {
-                    double offsetX = (this.random.nextDouble() - 0.5D) * 6.0D;
-                    double offsetY = (this.random.nextDouble() - 0.5D) * 2.0D;
-                    double offsetZ = (this.random.nextDouble() - 0.5D) * 6.0D;
+            for (int i = 0; i < 5; i++) {
+                double offsetX = (this.random.nextDouble() - 0.5D) * 6.0D;
+                double offsetY = (this.random.nextDouble() - 0.5D) * 2.0D;
+                double offsetZ = (this.random.nextDouble() - 0.5D) * 6.0D;
 
-                    Vec3 targetPos = impactPos.add(offsetX, offsetY, offsetZ);
-                    serverLevel.sendParticles(ModParticleTypes.EXPLOSION_CIRCLE, targetPos.x, targetPos.y + 0.05D, targetPos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-                    this.pendingExplosions.add(new PendingExplosion(targetPos, 20));
-                }
+                Vec3 targetPos = impactPos.add(offsetX, offsetY, offsetZ);
+                serverLevel.sendParticles(ModParticleTypes.EXPLOSION_CIRCLE, targetPos.x, targetPos.y + 0.05D, targetPos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                this.pendingExplosions.add(new PendingExplosion(targetPos, 20));
             }
         } else {
             this.level().explode(this, impactPos.x, impactPos.y, impactPos.z, 2.0F, Level.ExplosionInteraction.NONE);
@@ -175,18 +184,13 @@ public class ParticleProjectileEntity extends Projectile {
     }
 
     private void tickPendingExplosions() {
-        List<PendingExplosion> completed = new ArrayList<>();
-
-        for (PendingExplosion explosion : this.pendingExplosions) {
-            if (explosion.decrementAndCheck()) {
-                Vec3 pos = explosion.getPos();
-                this.level().explode(this, pos.x, pos.y, pos.z, 2.0F, Level.ExplosionInteraction.NONE);
-                completed.add(explosion);
+        Iterator<PendingExplosion> iterator = this.pendingExplosions.iterator();
+        while (iterator.hasNext()) {
+            PendingExplosion explosion = iterator.next();
+            if (--explosion.ticks <= 0) {
+                this.level().explode(this, explosion.pos.x, explosion.pos.y, explosion.pos.z, 2.0F, Level.ExplosionInteraction.NONE);
+                iterator.remove();
             }
-        }
-
-        if (!completed.isEmpty()) {
-            this.pendingExplosions.removeAll(completed);
         }
 
         if (this.pendingExplosions.isEmpty()) {
@@ -198,9 +202,9 @@ public class ParticleProjectileEntity extends Projectile {
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.lifeTime = tag.getInt("LifeTime");
-        this.maxLifeTime = tag.getInt("MaxLifeTime");
-        this.clusterExplosion = tag.getBoolean("ClusterExplosion");
-        this.isDetonating = tag.getBoolean("IsDetonating");
+        this.maxLifeTime = tag.contains("MaxLifeTime", Tag.TAG_INT) ? tag.getInt("MaxLifeTime") : DEFAULT_MAX_LIFE_TIME;
+        this.setClusterExplosion(tag.getBoolean("ClusterExplosion"));
+        this.setDetonating(tag.getBoolean("IsDetonating"));
 
         this.pendingExplosions.clear();
         if (tag.contains("PendingExplosions", Tag.TAG_LIST)) {
@@ -208,8 +212,7 @@ public class ParticleProjectileEntity extends Projectile {
             for (int i = 0; i < listTag.size(); i++) {
                 CompoundTag entry = listTag.getCompound(i);
                 Vec3 pos = new Vec3(entry.getDouble("X"), entry.getDouble("Y"), entry.getDouble("Z"));
-                int ticks = entry.getInt("Ticks");
-                this.pendingExplosions.add(new PendingExplosion(pos, ticks));
+                this.pendingExplosions.add(new PendingExplosion(pos, entry.getInt("Ticks")));
             }
         }
     }
@@ -219,17 +222,16 @@ public class ParticleProjectileEntity extends Projectile {
         super.addAdditionalSaveData(tag);
         tag.putInt("LifeTime", this.lifeTime);
         tag.putInt("MaxLifeTime", this.maxLifeTime);
-        tag.putBoolean("ClusterExplosion", this.clusterExplosion);
-        tag.putBoolean("IsDetonating", this.isDetonating);
+        tag.putBoolean("ClusterExplosion", this.isClusterExplosion());
+        tag.putBoolean("IsDetonating", this.isDetonating());
 
         ListTag listTag = new ListTag();
         for (PendingExplosion explosion : this.pendingExplosions) {
             CompoundTag entry = new CompoundTag();
-            Vec3 pos = explosion.getPos();
-            entry.putDouble("X", pos.x);
-            entry.putDouble("Y", pos.y);
-            entry.putDouble("Z", pos.z);
-            entry.putInt("Ticks", explosion.getTicks());
+            entry.putDouble("X", explosion.pos.x);
+            entry.putDouble("Y", explosion.pos.y);
+            entry.putDouble("Z", explosion.pos.z);
+            entry.putInt("Ticks", explosion.ticks);
             listTag.add(entry);
         }
         tag.put("PendingExplosions", listTag);
@@ -237,23 +239,11 @@ public class ParticleProjectileEntity extends Projectile {
 
     private static final class PendingExplosion {
         private final Vec3 pos;
-        private final AtomicInteger ticks;
+        private int ticks;
 
         private PendingExplosion(Vec3 pos, int ticks) {
             this.pos = pos;
-            this.ticks = new AtomicInteger(ticks);
-        }
-
-        public Vec3 getPos() {
-            return this.pos;
-        }
-
-        public int getTicks() {
-            return this.ticks.get();
-        }
-
-        public boolean decrementAndCheck() {
-            return this.ticks.decrementAndGet() <= 0;
+            this.ticks = ticks;
         }
     }
 }

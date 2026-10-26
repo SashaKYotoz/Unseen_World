@@ -16,7 +16,7 @@ public abstract class EntityMixin implements IEntityDataSaver {
     private CompoundTag persistentData;
 
     @Override
-    public CompoundTag getPersistentData() {
+    public CompoundTag unseen_World_Fabric$getPersistentData() {
         if (this.persistentData == null)
             this.persistentData = new CompoundTag();
         return persistentData;

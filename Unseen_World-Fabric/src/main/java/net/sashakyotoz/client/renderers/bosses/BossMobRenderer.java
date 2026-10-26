@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.sashakyotoz.common.entities.bosses.BossLikePathfinderMob;
 
-public class BossMobRenderer<E extends BossLikePathfinderMob, M extends HierarchicalModel<E>> extends MobRenderer<E, M> {
+public abstract class BossMobRenderer<E extends BossLikePathfinderMob, M extends HierarchicalModel<E>> extends MobRenderer<E, M> {
 
     public BossMobRenderer(EntityRendererProvider.Context context, M model, float shadowRadius) {
         super(context, model, shadowRadius);
@@ -34,10 +34,5 @@ public class BossMobRenderer<E extends BossLikePathfinderMob, M extends Hierarch
             poseStack.translate(0.0F, entityLiving.getBbHeight() + 0.1F, 0.0F);
             poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(E entity) {
-        return null;
     }
 }

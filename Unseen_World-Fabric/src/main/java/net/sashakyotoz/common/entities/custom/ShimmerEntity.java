@@ -84,10 +84,6 @@ public class ShimmerEntity extends WaterAnimal {
         return SoundEvents.SQUID_DEATH;
     }
 
-    protected SoundEvent getSquirtSound() {
-        return SoundEvents.SQUID_SQUIRT;
-    }
-
     @Override
     public boolean canBeLeashed(Player player) {
         return !this.isLeashed();
@@ -192,18 +188,14 @@ public class ShimmerEntity extends WaterAnimal {
     }
 
     private void squirt() {
-        this.playSound(this.getSquirtSound(), this.getSoundVolume(), this.getVoicePitch());
+        this.playSound(SoundEvents.SQUID_SQUIRT, this.getSoundVolume(), this.getVoicePitch());
         Vec3 vec3d = this.applyBodyRotations(new Vec3(0.0, -1.0, 0.0)).add(this.getX(), this.getY(), this.getZ());
 
         for (int i = 0; i < 30; i++) {
             Vec3 vec3d2 = this.applyBodyRotations(new Vec3((double) this.random.nextFloat() * 0.6 - 0.3, -1.0, (double) this.random.nextFloat() * 0.6 - 0.3));
             Vec3 vec3d3 = vec3d2.scale(0.3 + (double) (this.random.nextFloat() * 2.0F));
-            ((ServerLevel) this.level()).sendParticles(this.getInkParticle(), vec3d.x, vec3d.y + 0.5, vec3d.z, 0, vec3d3.x, vec3d3.y, vec3d3.z, 0.1F);
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIMSON_SPORE, vec3d.x, vec3d.y + 0.5, vec3d.z, 0, vec3d3.x, vec3d3.y, vec3d3.z, 0.1F);
         }
-    }
-
-    protected ParticleOptions getInkParticle() {
-        return ParticleTypes.CRIMSON_SPORE;
     }
 
     @Override

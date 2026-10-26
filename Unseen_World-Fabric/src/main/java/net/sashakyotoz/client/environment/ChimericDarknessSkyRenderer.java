@@ -248,7 +248,7 @@ public final class ChimericDarknessSkyRenderer {
         double tip = Math.toRadians(0.4D);
         double foot = Math.toRadians(4.0D);
         for (int ray = 0; ray < RAY_COUNT; ray++) {
-            double azimuth = sourceAzimuth + Math.toRadians((ray - RAY_COUNT / 2) * 11.0D + random.nextFloat() * 6.0D - 3.0D);
+            double azimuth = sourceAzimuth + Math.toRadians((ray - RAY_COUNT / 2.0D) * 11.0D + random.nextFloat() * 6.0D - 3.0D);
             double halfWidth = Math.toRadians(1.2D + random.nextFloat() * 2.2D);
             float strength = 0.03F + random.nextFloat() * 0.05F;
             vertex(builder, sourceAzimuth - tip, sourceElevation, RAY_RADIUS, RAY, strength);

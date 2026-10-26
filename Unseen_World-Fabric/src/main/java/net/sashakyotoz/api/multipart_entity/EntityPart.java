@@ -52,7 +52,7 @@ public class EntityPart extends Entity {
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        return owner.isInvulnerableTo(damageSource);
+        return owner == null ? super.isInvulnerableTo(damageSource) : owner.isInvulnerableTo(damageSource);
     }
 
     @Override
@@ -62,12 +62,12 @@ public class EntityPart extends Entity {
 
     @Override
     public boolean isAlive() {
-        return owner.isAlive() && super.isAlive();
+        return owner == null ? super.isAlive() : owner.isAlive() && super.isAlive();
     }
 
     @Override
     public boolean is(Entity entity) {
-        return this == entity || owner == entity;
+        return this == entity || owner != null && owner == entity;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class EntityPart extends Entity {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return hitbox;
+        return hitbox == null ? super.getDimensions(pose) : hitbox;
     }
 
     @Override
@@ -98,22 +98,22 @@ public class EntityPart extends Entity {
 
     @Override
     public boolean isAlliedTo(Entity entity) {
-        return owner.isAlliedTo(entity);
+        return owner == null ? super.isAlliedTo(entity) : owner.isAlliedTo(entity);
     }
 
     @Override
     public boolean isInvisible() {
-        return owner.isInvisible();
+        return owner == null ? super.isInvisible() : owner.isInvisible();
     }
 
     @Override
     public boolean isCurrentlyGlowing() {
-        return owner.isCurrentlyGlowing();
+        return owner == null ? super.isCurrentlyGlowing() : owner.isCurrentlyGlowing();
     }
 
     @Override
     public boolean isInvisibleTo(Player player) {
-        return owner.isInvisibleTo(player);
+        return owner == null ? super.isInvisibleTo(player) : owner.isInvisibleTo(player);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class EntityPart extends Entity {
 
     @Override
     public boolean isAttackable() {
-        return owner.isAttackable();
+        return owner != null && owner.isAttackable();
     }
 
     @Override
@@ -133,27 +133,27 @@ public class EntityPart extends Entity {
 
     @Override
     public boolean isInvulnerable() {
-        return owner.isInvulnerable() || super.isInvulnerable();
+        return owner != null && owner.isInvulnerable() || super.isInvulnerable();
     }
 
     @Override
     public boolean hasPose(Pose pose) {
-        return owner.hasPose(pose);
+        return owner == null ? super.hasPose(pose) : owner.hasPose(pose);
     }
 
     @Override
     public boolean isOnPortalCooldown() {
-        return owner.isOnPortalCooldown();
+        return owner == null ? super.isOnPortalCooldown() : owner.isOnPortalCooldown();
     }
 
     @Override
     public boolean onGround() {
-        return owner.onGround();
+        return owner == null ? super.onGround() : owner.onGround();
     }
 
     @Override
     public boolean isNoGravity() {
-        return owner.isNoGravity();
+        return owner == null ? super.isNoGravity() : owner.isNoGravity();
     }
 
     @Override
@@ -163,7 +163,7 @@ public class EntityPart extends Entity {
 
     @Override
     public boolean fireImmune() {
-        return owner.fireImmune();
+        return owner == null ? super.fireImmune() : owner.fireImmune();
     }
 
     @Override
@@ -171,12 +171,6 @@ public class EntityPart extends Entity {
         return false;
     }
 
-    /**
-     * <p>Sets position relative to position of the owner entity.</p>
-     * <p><b>x, y, z</b> - offsets relative to the owner's position (without accounting any rotations).</p>
-     * <p><b>centerX, centerY, centerZ</b> - offset from owner's position relative to which part will be placed. Not affected by rotations.</p>
-     * <p><b>pitch, yaw</b> - passed X and Y rotations (in degrees), relative to which offsets will be transformed.</p>
-     */
     public void setRelativePos(double x, double y, double z, double centerX, double centerY, double centerZ, double pitch, double yaw) {
         xOld = getX();
         yOld = getY();

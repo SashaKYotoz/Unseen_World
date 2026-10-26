@@ -17,7 +17,7 @@ public abstract class ServerWorldMixin implements WorldMultipartHelper {
     @Inject(method = "getEntityOrPart", at = @At("RETURN"), cancellable = true)
     public void getEntityParts(int id, CallbackInfoReturnable<Entity> cir) {
         Entity entity = cir.getReturnValue();
-        if (entity == null) cir.setReturnValue(getPMEPartMap().get(id));
+        if (entity == null) cir.setReturnValue(unseen_World_Fabric$getPMEPartMap().get(id));
     }
 
     @Shadow

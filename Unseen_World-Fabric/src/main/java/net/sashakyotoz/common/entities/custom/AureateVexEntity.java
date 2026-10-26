@@ -154,26 +154,26 @@ public class AureateVexEntity extends Monster implements TraceableEntity {
         this.boundOrigin = boundOrigin;
     }
 
-    private boolean getVexFlag(int mask) {
-        return (this.entityData.get(DATA_FLAGS_ID) & mask) != 0;
+    private boolean getVexFlag() {
+        return (this.entityData.get(DATA_FLAGS_ID) & AureateVexEntity.FLAG_IS_CHARGING) != 0;
     }
 
-    private void setVexFlag(int mask, boolean value) {
+    private void setVexFlag(boolean value) {
         int i = this.entityData.get(DATA_FLAGS_ID);
         if (value) {
-            i |= mask;
+            i |= AureateVexEntity.FLAG_IS_CHARGING;
         } else {
-            i &= ~mask;
+            i &= ~AureateVexEntity.FLAG_IS_CHARGING;
         }
         this.entityData.set(DATA_FLAGS_ID, (byte) (i & 255));
     }
 
     public boolean isCharging() {
-        return this.getVexFlag(FLAG_IS_CHARGING);
+        return this.getVexFlag();
     }
 
     public void setIsCharging(boolean charging) {
-        this.setVexFlag(FLAG_IS_CHARGING, charging);
+        this.setVexFlag(charging);
     }
 
     public void setLimitedLife(int limitedLifeTicks) {

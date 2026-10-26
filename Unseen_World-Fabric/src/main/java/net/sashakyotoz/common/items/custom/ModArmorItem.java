@@ -103,7 +103,7 @@ public class ModArmorItem extends ArmorItem {
             player.removeEffect(MobEffects.GLOWING);
         }
         if (player.tickCount % UNSEENIUM_REPAIR_INTERVAL == 0 && isAlone(player)) {
-            repairSet(player, UNSEENIUM_REPAIR_AMOUNT);
+            repairSet(player);
         }
     }
 
@@ -117,11 +117,11 @@ public class ModArmorItem extends ArmorItem {
         }
     }
 
-    private static void repairSet(ServerPlayer player, int amount) {
+    private static void repairSet(ServerPlayer player) {
         for (EquipmentSlot slot : ARMOR_SLOTS) {
             ItemStack piece = player.getItemBySlot(slot);
             if (piece.isDamaged()) {
-                piece.setDamageValue(Math.max(0, piece.getDamageValue() - amount));
+                piece.setDamageValue(Math.max(0, piece.getDamageValue() - ModArmorItem.UNSEENIUM_REPAIR_AMOUNT));
             }
         }
     }

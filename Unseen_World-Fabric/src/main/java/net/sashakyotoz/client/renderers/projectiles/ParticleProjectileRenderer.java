@@ -29,6 +29,9 @@ public class ParticleProjectileRenderer extends EntityRenderer<ParticleProjectil
 
     @Override
     public void render(ParticleProjectileEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        if (entity.isDetonating()) {
+            return;
+        }
         double lerpX = Mth.lerp(partialTick, entity.xOld, entity.getX());
         double lerpY = Mth.lerp(partialTick, entity.yOld, entity.getY());
         double lerpZ = Mth.lerp(partialTick, entity.zOld, entity.getZ());
@@ -121,13 +124,10 @@ public class ParticleProjectileRenderer extends EntityRenderer<ParticleProjectil
             Vec3 left2 = p2.add(side.scale(w2)).subtract(currentPos);
             Vec3 right2 = p2.subtract(side.scale(w2)).subtract(currentPos);
 
-            float u1 = progress1;
-            float u2 = progress2;
-
-            addVertex(consumer, matrix, normal, (float) left1.x, (float) left1.y, (float) left1.z, u1, 0.0F, r, g, b, a1, light);
-            addVertex(consumer, matrix, normal, (float) right1.x, (float) right1.y, (float) right1.z, u1, 1.0F, r, g, b, a1, light);
-            addVertex(consumer, matrix, normal, (float) right2.x, (float) right2.y, (float) right2.z, u2, 1.0F, r, g, b, a2, light);
-            addVertex(consumer, matrix, normal, (float) left2.x, (float) left2.y, (float) left2.z, u2, 0.0F, r, g, b, a2, light);
+            addVertex(consumer, matrix, normal, (float) left1.x, (float) left1.y, (float) left1.z, progress1, 0.0F, r, g, b, a1, light);
+            addVertex(consumer, matrix, normal, (float) right1.x, (float) right1.y, (float) right1.z, progress1, 1.0F, r, g, b, a1, light);
+            addVertex(consumer, matrix, normal, (float) right2.x, (float) right2.y, (float) right2.z, progress2, 1.0F, r, g, b, a2, light);
+            addVertex(consumer, matrix, normal, (float) left2.x, (float) left2.y, (float) left2.z, progress2, 0.0F, r, g, b, a2, light);
         }
     }
 

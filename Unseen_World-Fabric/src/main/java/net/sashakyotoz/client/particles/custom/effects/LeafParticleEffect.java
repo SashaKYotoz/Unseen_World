@@ -52,7 +52,7 @@ public record LeafParticleEffect(float red, float green, float blue) implements 
 
     @Override
     public String writeToString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %d", BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), red,green,blue);
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f", BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()), red, green, blue);
     }
 
     @Override

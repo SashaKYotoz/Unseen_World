@@ -22,7 +22,6 @@ import net.sashakyotoz.common.items.custom.GrippingGauntletItem;
 import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 public class ModAdvancementProvider extends FabricAdvancementProvider {
@@ -78,7 +77,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 .addCriterion("entered_the_darkness", BiomeCriterion.of(ModBiomes.THE_DARKNESS))
                 .rewards(AdvancementRewards.EMPTY).save(consumer, "unseen_world:into_the_heart_of_darkness");
         Advancement EXPLORE_CHIMERIC_DARKNESS = requireListedBiomesVisited(
-                Advancement.Builder.advancement(), ModBiomes.ALL
+                Advancement.Builder.advancement()
         )
                 .display(ModItems.RED_TITANIUM_BOOTS,
                         Component.translatable(BASE + "explore_chimeric_darkness"),
@@ -194,8 +193,8 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
         return ResourceKey.create(Registries.STRUCTURE, UnseenWorld.MOD.makeID(path));
     }
 
-    private static Advancement.Builder requireListedBiomesVisited(Advancement.Builder builder, List<ResourceKey<Biome>> biomes) {
-        for (ResourceKey<Biome> registryKey : biomes) {
+    private static Advancement.Builder requireListedBiomesVisited(Advancement.Builder builder) {
+        for (ResourceKey<Biome> registryKey : ModBiomes.ALL) {
             builder.addCriterion(registryKey.location().toString(), PlayerTrigger.TriggerInstance.located(LocationPredicate.inBiome(registryKey)));
         }
 

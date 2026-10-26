@@ -7,7 +7,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public record StandingFlowerBunchFeatureConfig(IntProvider radius, BlockStateProvider block) implements FeatureConfiguration {
-    public static Codec<StandingFlowerBunchFeatureConfig> CODEC = RecordCodecBuilder.create(
+    public static final Codec<StandingFlowerBunchFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     IntProvider.POSITIVE_CODEC.fieldOf("radius").forGetter(StandingFlowerBunchFeatureConfig::radius),
                     BlockStateProvider.CODEC.fieldOf("block").forGetter(StandingFlowerBunchFeatureConfig::block)

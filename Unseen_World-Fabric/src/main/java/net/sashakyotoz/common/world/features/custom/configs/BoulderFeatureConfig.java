@@ -7,7 +7,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public record BoulderFeatureConfig(IntProvider size, BlockStateProvider block) implements FeatureConfiguration {
-    public static Codec<BoulderFeatureConfig> CODEC = RecordCodecBuilder.create(
+    public static final Codec<BoulderFeatureConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     IntProvider.POSITIVE_CODEC.fieldOf("height").forGetter(BoulderFeatureConfig::size),
                     BlockStateProvider.CODEC.fieldOf("block").forGetter(BoulderFeatureConfig::block)

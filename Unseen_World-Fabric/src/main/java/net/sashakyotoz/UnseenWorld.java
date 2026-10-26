@@ -110,13 +110,13 @@ public class UnseenWorld implements ModInitializer {
 
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity instanceof MultipartEntity multipartEntity) {
-                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).getPMEPartMap();
+                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).unseen_World_Fabric$getPMEPartMap();
                 for (EntityPart part : multipartEntity.getParts()) partMap.put(part.getId(), part);
             }
         });
         ServerEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
             if (entity instanceof MultipartEntity multipartEntity) {
-                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).getPMEPartMap();
+                Int2ObjectMap<EntityPart> partMap = ((WorldMultipartHelper) world).unseen_World_Fabric$getPMEPartMap();
                 for (EntityPart part : multipartEntity.getParts()) partMap.remove(part.getId());
             }
         });
