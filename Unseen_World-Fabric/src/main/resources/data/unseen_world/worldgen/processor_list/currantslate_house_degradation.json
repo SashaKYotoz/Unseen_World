@@ -31,15 +31,28 @@
         },
         {
           "input_predicate": {
-            "block": "unseen_world:dark_currantslate_bricks",
+            "block": "unseen_world:corona_stone_bricks",
             "predicate_type": "minecraft:random_block_match",
-            "probability": 0.00005
+            "probability": 0.08
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "minecraft:air"
+            "Name": "unseen_world:cracked_corona_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "unseen_world:corona_stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.04
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "unseen_world:corona_stone"
           }
         }
       ]

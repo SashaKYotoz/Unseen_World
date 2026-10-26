@@ -18,6 +18,7 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.datagen.advancements.CuredGripcrystalEntityCriterion;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.items.custom.GrippingGauntletItem;
 import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.biomes.ModBiomes;
 
@@ -71,7 +72,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         Component.translatable(BASE + "into_the_heart_of_darkness"),
                         Component.translatable(BASE + "into_the_heart_of_darkness" + DESC),
                         null,
-                        FrameType.GOAL,
+                        FrameType.TASK,
                         true, true, false)
                 .parent(INTO_THE_CHIMERIC_DARKNESS)
                 .addCriterion("entered_the_darkness", BiomeCriterion.of(ModBiomes.THE_DARKNESS))
@@ -97,12 +98,22 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 .parent(INTO_THE_CHIMERIC_DARKNESS)
                 .addCriterion("cure_gripcrystal_entity", CuredGripcrystalEntityCriterion.Conditions.any())
                 .rewards(AdvancementRewards.Builder.experience(250)).save(consumer, "unseen_world:cure_gripcrystal_entity");
+        Advancement.Builder.advancement()
+                .display(ModItems.GRIPPING_GAUNTLET,
+                        Component.translatable(BASE + "steal"),
+                        Component.translatable(BASE + "steal" + DESC),
+                        null,
+                        FrameType.TASK,
+                        true, true, true)
+                .parent(CURE_GRIPCRYSTAL_ENTITY)
+                .addCriterion(GrippingGauntletItem.STEAL_CRITERION, new ImpossibleTrigger.TriggerInstance())
+                .rewards(AdvancementRewards.Builder.experience(50)).save(consumer, GrippingGauntletItem.STEAL_ADVANCEMENT.toString());
         Advancement FORTRESS_IN_THE_DARKNESS = Advancement.Builder.advancement()
                 .display(ModItems.GRIPCRYSTAL_KEY,
                         Component.translatable(BASE + "fortress_in_the_darkness"),
                         Component.translatable(BASE + "fortress_in_the_darkness" + DESC),
                         null,
-                        FrameType.TASK,
+                        FrameType.GOAL,
                         true, true, false)
                 .parent(INTO_THE_HEART_OF_DARKNESS)
                 .addCriterion("fortress_in_the_darkness", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(WARRIOR_FORTRESS)))

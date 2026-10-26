@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -17,10 +16,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class RimehornEntity extends Animal {
-    public static final TagKey<Item> FOOD = ModTags.Items.RIMEHORN_TAMING_ITEMS;
     public static final byte GRAZE_EVENT = 91;
     public static final byte CHARGE_EVENT = 92;
     public static final int GRAZE_TICKS = 40;
@@ -41,8 +39,6 @@ public class RimehornEntity extends Animal {
     private static final int RAM_COOLDOWN = 200;
     private static final double HERD_RADIUS = 12.0D;
     private static final float VOICE_PITCH = 0.8F;
-    private static final float BABY_VOICE_PITCH = 1.25F;
-    private static final float BABY_SPAWN_CHANCE = 0.2F;
 
     public final AnimationState graze = new AnimationState();
     public final AnimationState charge = new AnimationState();
@@ -71,7 +67,7 @@ public class RimehornEntity extends Animal {
         this.goalSelector.addGoal(1, new RimehornPanicGoal(this));
         this.goalSelector.addGoal(2, new RamOnceGoal(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new TemptGoal(this, 1.1D, Ingredient.of(FOOD), false));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.1D, Ingredient.of(ModTags.Items.RIMEHORN_TAMING_ITEMS), false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.1D));
         this.goalSelector.addGoal(6, new GrazeGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -81,7 +77,7 @@ public class RimehornEntity extends Animal {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(FOOD);
+        return stack.is(ModTags.Items.RIMEHORN_TAMING_ITEMS);
     }
 
     @Nullable
@@ -93,7 +89,7 @@ public class RimehornEntity extends Animal {
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = spawnData == null ? new AgeableMob.AgeableMobGroupData(BABY_SPAWN_CHANCE) : spawnData;
+        SpawnGroupData data = spawnData == null ? new AgeableMob.AgeableMobGroupData(0.2F) : spawnData;
         return super.finalizeSpawn(level, difficulty, reason, data, dataTag);
     }
 
@@ -167,7 +163,7 @@ public class RimehornEntity extends Animal {
 
     @Override
     public float getVoicePitch() {
-        float base = this.isBaby() ? BABY_VOICE_PITCH : VOICE_PITCH;
+        float base = this.isBaby() ? 1.25F : VOICE_PITCH;
         return base + (this.random.nextFloat() - this.random.nextFloat()) * 0.1F;
     }
 
@@ -282,6 +278,11 @@ public class RimehornEntity extends Animal {
             serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), x, this.rimehorn.getY() + 0.1D, z, 8, 0.15D, 0.05D, 0.15D, 0.1D);
             this.rimehorn.playSound(state.getSoundType().getHitSound(), 0.6F, 0.9F);
         }
+    }
+
+    @Override
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+        return level.getBlockState(pos.below()).is(BlockTags.GOATS_SPAWNABLE_ON) ? 10.0F : level.getPathfindingCostFromLightLevels(pos);
     }
 
     static class RamOnceGoal extends Goal {

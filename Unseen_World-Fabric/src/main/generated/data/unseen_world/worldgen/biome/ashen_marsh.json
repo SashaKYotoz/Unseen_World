@@ -57,9 +57,9 @@
     "ambient": [
       {
         "type": "unseen_world:dreadflap",
-        "maxCount": 3,
+        "maxCount": 2,
         "minCount": 1,
-        "weight": 6
+        "weight": 3
       }
     ],
     "axolotls": [],
@@ -69,6 +69,12 @@
         "maxCount": 2,
         "minCount": 1,
         "weight": 3
+      },
+      {
+        "type": "unseen_world:umbral_serpent",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 5
       }
     ],
     "misc": [],

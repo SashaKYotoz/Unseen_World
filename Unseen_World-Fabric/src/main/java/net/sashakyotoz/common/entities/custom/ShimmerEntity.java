@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.entities.util.EntityShapes;
 
 public class ShimmerEntity extends WaterAnimal {
@@ -70,7 +71,7 @@ public class ShimmerEntity extends WaterAnimal {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SQUID_AMBIENT;
+        return ModSoundEvents.SHIMMER_AMBIENT;
     }
 
     @Override

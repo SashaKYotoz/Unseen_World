@@ -60,7 +60,7 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         this.add(ModTags.Biomes.IS_BOSS_DOMAIN, ModBiomes.BOSS_DOMAINS);
         this.add(ModTags.Biomes.HAS_WARRIOR_ARENA, List.of(ModBiomes.THE_DARKNESS));
         this.add(ModTags.Biomes.HAS_WARRIOR_RUINS, List.of(ModBiomes.THE_DARKNESS, ModBiomes.GLACIEMITE_TUNDRA, ModBiomes.DARK_WASTELAND));
-        this.add(ModTags.Biomes.HAS_SENTINEL_ARENA, List.of(ModBiomes.PENUMBRAL_STEPPE, ModBiomes.GLOOMWEED_PLAINS));
+        this.add(ModTags.Biomes.HAS_SENTINEL_ARENA, List.of(ModBiomes.PENUMBRAL_STEPPE));
         this.add(ModTags.Biomes.HAS_SENTINEL_RUINS, List.of(ModBiomes.PENUMBRAL_STEPPE, ModBiomes.GLOOMWEED_PLAINS, ModBiomes.AMETHYST_CHIMERIES, ModBiomes.CRIMSONVEIL_PLATEAU));
         this.add(ModTags.Biomes.HAS_PATRIARCH_ARENA, List.of(ModBiomes.AURIC_HEIGHTS));
         this.add(ModTags.Biomes.HAS_PATRIARCH_RUINS, List.of(ModBiomes.AURIC_HEIGHTS, ModBiomes.CURRANTSLATE_PEAKS, ModBiomes.CRIMSONVEIL_PLATEAU));
@@ -107,23 +107,6 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                 ModBiomes.CRIMSONVEIL_WOODS,
                 ModBiomes.OLD_GROWTH_CRIMSONVEIL_WOODS,
                 ModBiomes.CRIMSONVEIL_PLATEAU));
-
-        this.add(ModTags.Biomes.HAS_GLEAMCARVER, List.of(ModBiomes.TANZANITE_CAVES, ModBiomes.SHINY_CAVERNS, ModBiomes.BURLYWOOD_HOLLOWS));
-        this.add(ModTags.Biomes.HAS_HARMONY_WATCHER, List.of(ModBiomes.GLOOMWEED_PLAINS, ModBiomes.GREENISH_VALLEY, ModBiomes.TEALIVY_VALLEY));
-        this.add(ModTags.Biomes.HAS_SABERPARD, List.of(
-                ModBiomes.GRIZZLY_THICKET,
-                ModBiomes.SNOWY_GRIZZLY_THICKET,
-                ModBiomes.GRIZZLY_HIGHLANDS,
-                ModBiomes.DARK_WASTELAND,
-                ModBiomes.CRIMSONVEIL_PLATEAU,
-                ModBiomes.PENUMBRAL_STEPPE));
-        this.add(ModTags.Biomes.HAS_TUSKHOG, List.of(
-                ModBiomes.DARK_WASTELAND,
-                ModBiomes.GLOOMWEED_PLAINS,
-                ModBiomes.ASHEN_MARSH,
-                ModBiomes.CRIMSONVEIL_WOODS,
-                ModBiomes.OLD_GROWTH_CRIMSONVEIL_WOODS,
-                ModBiomes.PENUMBRAL_STEPPE));
         this.add(ModTags.Biomes.SPAWNS_STEPPE_SABERPARD, List.of(
                 ModBiomes.DARK_WASTELAND,
                 ModBiomes.GRIZZLY_HIGHLANDS,
@@ -131,6 +114,8 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                 ModBiomes.PENUMBRAL_STEPPE));
         this.add(ModTags.Biomes.SPAWNS_WARM_TUSKHOG, List.of(
                 ModBiomes.DARK_WASTELAND,
+                ModBiomes.GLOOMWEED_PLAINS,
+                ModBiomes.PENUMBRAL_STEPPE,
                 ModBiomes.CRIMSONVEIL_WOODS,
                 ModBiomes.OLD_GROWTH_CRIMSONVEIL_WOODS));
     }

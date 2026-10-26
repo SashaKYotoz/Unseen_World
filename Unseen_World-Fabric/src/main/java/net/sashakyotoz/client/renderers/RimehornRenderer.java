@@ -11,16 +11,15 @@ import net.sashakyotoz.common.entities.custom.RimehornEntity;
 
 public class RimehornRenderer extends MobRenderer<RimehornEntity, RimehornModel<RimehornEntity>> {
     private static final ResourceLocation TEXTURE = UnseenWorld.MOD.makeID("textures/entity/rimehorn/rimehorn.png");
-    private static final float ADULT_SHADOW = 0.6F;
     private static final float BABY_SCALE = 0.5F;
 
     public RimehornRenderer(EntityRendererProvider.Context context) {
-        super(context, new RimehornModel<>(context.bakeLayer(RimehornModel.RIMEHORN)), ADULT_SHADOW);
+        super(context, new RimehornModel<>(context.bakeLayer(RimehornModel.RIMEHORN)), 0.6F);
     }
 
     @Override
     public void render(RimehornEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        this.shadowRadius = entity.isBaby() ? ADULT_SHADOW * BABY_SCALE : ADULT_SHADOW;
+        this.shadowRadius = entity.isBaby() ? 0.3F : 0.6F;
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
     }
 

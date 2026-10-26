@@ -18,11 +18,6 @@ import net.sashakyotoz.utils.CombatHelper;
 import java.util.OptionalInt;
 
 public final class FissureTask implements ServerTasks.Task {
-    private static final int LENGTH = 8;
-    private static final int STEPS_PER_TICK = 2;
-    private static final int MAX_DROP = 3;
-    private static final float DAMAGE = 6.0F;
-    private static final double POP = 0.42D;
 
     private final LivingEntity owner;
     private final Vec3 origin;
@@ -48,9 +43,9 @@ public final class FissureTask implements ServerTasks.Task {
         if (this.owner.isRemoved() || this.owner.level() != level) {
             return true;
         }
-        for (int step = 0; step < STEPS_PER_TICK; step++) {
+        for (int step = 0; step < 2; step++) {
             this.distance++;
-            if (this.distance > LENGTH) {
+            if (this.distance > 8) {
                 return true;
             }
             Vec3 point = this.origin.add(this.direction.scale(this.distance));
@@ -74,7 +69,7 @@ public final class FissureTask implements ServerTasks.Task {
         if (isSolid(level, feet)) {
             return isSolid(level, feet.above()) ? OptionalInt.empty() : OptionalInt.of(this.feetY + 1);
         }
-        for (int drop = 1; drop <= MAX_DROP; drop++) {
+        for (int drop = 1; drop <= 3; drop++) {
             if (isSolid(level, feet.below(drop))) {
                 return OptionalInt.of(this.feetY - drop + 1);
             }
@@ -95,8 +90,8 @@ public final class FissureTask implements ServerTasks.Task {
         AABB area = new AABB(feet).inflate(0.25D, 0.0D, 0.25D).expandTowards(0.0D, 0.5D, 0.0D);
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area, entity -> CombatHelper.canHit(this.owner, entity))) {
             if (this.struck.add(target.getId())) {
-                target.hurt(CombatHelper.attackSource(this.owner), DAMAGE);
-                CombatHelper.pop(target, POP);
+                target.hurt(CombatHelper.attackSource(this.owner), 8.0F);
+                CombatHelper.pop(target, 0.5D);
             }
         }
     }

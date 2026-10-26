@@ -26,7 +26,7 @@
     "description": {
       "translate": "advancement.unseen_world.into_the_heart_of_darkness.desc"
     },
-    "frame": "goal",
+    "frame": "task",
     "hidden": false,
     "icon": {
       "item": "unseen_world:gripping_spigelia"

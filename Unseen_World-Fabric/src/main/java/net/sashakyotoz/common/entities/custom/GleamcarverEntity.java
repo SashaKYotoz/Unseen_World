@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +8,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,8 +26,11 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -37,8 +42,10 @@ import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.common.world.features.custom.NestDweller;
 import org.jetbrains.annotations.Nullable;
 
-public class GleamcarverEntity extends PathfinderMob implements NestDweller {
+public class GleamcarverEntity extends PathfinderMob implements NestDweller, Bucketable {
     private static final EntityDataAccessor<Integer> DATA_TYPE = SynchedEntityData.defineId(GleamcarverEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(GleamcarverEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final String FROM_BUCKET_KEY = "FromBucket";
     private static final String TYPE_KEY = "entityType";
     private static final String NEST_KEY = "NestPos";
     private static final int NO_TYPE = -1;
@@ -59,6 +66,7 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_TYPE, NO_TYPE);
+        this.entityData.define(FROM_BUCKET, false);
     }
 
     @Override
@@ -93,6 +101,7 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller {
         if (nbt.contains(NEST_KEY)) {
             this.bindToNest(NbtUtils.readBlockPos(nbt.getCompound(NEST_KEY)));
         }
+        this.setFromBucket(nbt.getBoolean(FROM_BUCKET_KEY));
     }
 
     @Override
@@ -104,11 +113,56 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller {
         if (this.nestPos != null) {
             nbt.put(NEST_KEY, NbtUtils.writeBlockPos(this.nestPos));
         }
+        nbt.putBoolean(FROM_BUCKET_KEY, this.fromBucket());
+    }
+
+    @Override
+    public boolean fromBucket() {
+        return this.entityData.get(FROM_BUCKET);
+    }
+
+    @Override
+    public void setFromBucket(boolean fromBucket) {
+        this.entityData.set(FROM_BUCKET, fromBucket);
+    }
+
+    @Override
+    public void saveToBucketTag(ItemStack stack) {
+        Bucketable.saveDefaultDataToBucketTag(this, stack);
+        if (this.gleamcarverType != null) {
+            stack.getOrCreateTag().putString(TYPE_KEY, this.gleamcarverType.typeName);
+        }
+    }
+
+    @Override
+    public void loadFromBucketTag(CompoundTag tag) {
+        Bucketable.loadDefaultDataFromBucketTag(this, tag);
+        if (tag.contains(TYPE_KEY)) {
+            this.setGleamcarverType(Type.byName(tag.getString(TYPE_KEY)));
+        }
+    }
+
+    @Override
+    public ItemStack getBucketItemStack() {
+        return new ItemStack(ModItems.GLEAMCARVER_BUCKET);
+    }
+
+    @Override
+    public SoundEvent getPickupSound() {
+        return SoundEvents.BUCKET_FILL_POWDER_SNOW;
+    }
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() || this.fromBucket();
     }
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Items.BUCKET) && this.isAlive()) {
+            return this.pickUpWithBucket(player, hand, stack);
+        }
         if (!(stack.getItem() instanceof PickaxeItem) || this.gleamcarverType == null) {
             return super.mobInteract(player, hand);
         }
@@ -128,9 +182,23 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller {
         return InteractionResult.sidedSuccess(this.level().isClientSide());
     }
 
+    private InteractionResult pickUpWithBucket(Player player, InteractionHand hand, ItemStack emptyBucket) {
+        this.playSound(this.getPickupSound(), 1.0F, 1.0F);
+        if (!this.level().isClientSide()) {
+            ItemStack filled = this.getBucketItemStack();
+            this.saveToBucketTag(filled);
+            player.setItemInHand(hand, ItemUtils.createFilledResult(emptyBucket, player, filled, false));
+            if (player instanceof ServerPlayer serverPlayer) {
+                CriteriaTriggers.FILLED_BUCKET.trigger(serverPlayer, filled);
+            }
+            this.discard();
+        }
+        return InteractionResult.sidedSuccess(this.level().isClientSide());
+    }
+
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.random.nextInt(3) == 0 ? ModSoundEvents.GLEAMCARVER_AMBIENT_SOUND : null;
+        return this.random.nextInt(3) == 0 ? ModSoundEvents.GLEAMCARVER_AMBIENT : null;
     }
 
     @Override
@@ -156,7 +224,7 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller {
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return this.nestPos == null && super.removeWhenFarAway(distanceToClosestPlayer);
+        return this.nestPos == null && !this.fromBucket() && super.removeWhenFarAway(distanceToClosestPlayer);
     }
 
     @Override

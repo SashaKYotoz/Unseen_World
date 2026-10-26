@@ -1,0 +1,9 @@
+{
+  "unseen_world:plugin": {
+    "initializer": "net.sashakyotoz.compat.wthit.UWWthitPlugin",
+    "side": "*",
+    "required": [
+      "unseen_world"
+    ]
+  }
+}

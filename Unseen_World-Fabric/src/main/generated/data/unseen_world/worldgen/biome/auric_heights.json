@@ -18,7 +18,7 @@
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.overworld.jagged_peaks"
+        "sound_id": "unseen_world:auric_heights.ambient"
       }
     },
     "sky_color": 4605011,

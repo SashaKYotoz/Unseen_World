@@ -58,6 +58,8 @@ public class ModEntities {
             Spec.fixed(1.3F, 1.0F), VexalBeetleEntity::createAttributes);
     public static final EntityType<RimehornEntity> RIMEHORN = mob("rimehorn", RimehornEntity::new, MobCategory.CREATURE,
             Spec.scalable(0.95F, 1.5F).tracking(10, 3), RimehornEntity::createAttributes);
+    public static final EntityType<UmbralSerpentEntity> UMBRAL_SERPENT = mob("umbral_serpent", UmbralSerpentEntity::new, MobCategory.CREATURE,
+            Spec.fixed(1.2F, 0.9F).tracking(10, 3), UmbralSerpentEntity::createAttributes);
     public static final EntityType<EclipsedAcolyteEntity> ECLIPSED_ACOLYTE = mob("eclipsed_acolyte", EclipsedAcolyteEntity::new, MobCategory.MONSTER,
             Spec.fixed(0.8F, 2.3F).tracking(8, 3), EclipsedAcolyteEntity::createAttributes, GRIPPING_IMMUNE);
     public static final EntityType<AureateVexEntity> AUREATE_VEX = mob("aureate_vex", AureateVexEntity::new, MobCategory.MONSTER,

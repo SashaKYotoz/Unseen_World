@@ -19,8 +19,8 @@
       "radius": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 4,
-          "min_inclusive": 3
+          "max_inclusive": 3,
+          "min_inclusive": 2
         }
       }
     },
@@ -29,6 +29,7 @@
       "state": {
         "Name": "unseen_world:grizzly_leaves",
         "Properties": {
+          "dark_water": "false",
           "distance": "7",
           "persistent": "false",
           "waterlogged": "false"
@@ -56,7 +57,7 @@
       "branch_spread": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 3,
+          "max_inclusive": 4,
           "min_inclusive": 2
         }
       },

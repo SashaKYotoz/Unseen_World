@@ -53,7 +53,7 @@
     "water_creature": [
       {
         "type": "unseen_world:shimmer",
-        "maxCount": 2,
+        "maxCount": 1,
         "minCount": 1,
         "weight": 8
       }

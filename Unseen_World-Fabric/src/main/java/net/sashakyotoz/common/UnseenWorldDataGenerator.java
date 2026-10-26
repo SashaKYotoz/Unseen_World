@@ -7,9 +7,11 @@ import net.lcc.sollib.datagen.SItemTagProvider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.sashakyotoz.common.datagen.*;
+import net.sashakyotoz.common.datagen.loot.ModArchaeologyLootTableProvider;
 import net.sashakyotoz.common.datagen.loot.ModBlockLootTableProvider;
 import net.sashakyotoz.common.datagen.loot.ModChestLootTableProvider;
 import net.sashakyotoz.common.datagen.loot.OrdealLootTableProvider;
+import net.sashakyotoz.common.datagen.recipes.ModRecipeProvider;
 import net.sashakyotoz.common.datagen.tags.ModBiomeTagProvider;
 import net.sashakyotoz.common.datagen.tags.ModBlockTagProvider;
 import net.sashakyotoz.common.datagen.tags.ModFluidTagProvider;
@@ -39,6 +41,7 @@ public class UnseenWorldDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModBlockLootTableProvider::new);
         pack.addProvider(OrdealLootTableProvider::new);
         pack.addProvider(ModChestLootTableProvider::new);
+        pack.addProvider(ModArchaeologyLootTableProvider::new);
 
         pack.addProvider(ModModelProvider::new);
 

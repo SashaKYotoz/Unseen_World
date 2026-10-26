@@ -20,6 +20,8 @@ public class ModTags {
 
         public static final TagKey<Item> VEXAL_BETTLE_TAMING_ITEMS = create("vexal_beetle_taming_items");
         public static final TagKey<Item> RIMEHORN_TAMING_ITEMS = create("rimehorn_taming_items");
+        public static final TagKey<Item> TUSKHOG_TAMING_ITEMS = create("tuskhog_taming_items");
+        public static final TagKey<Item> SERPENT_TAMING_ITEMS = create("serpent_taming_items");
 
         public static final TagKey<Item> GRIPPING_BUNDLE_CAN_HANDLE = create("gripping_bundle_can_handle");
 
@@ -76,11 +78,6 @@ public class ModTags {
         public static final TagKey<Biome> HAS_AMETHYST_TREE = create("has_amethyst_tree");
         public static final TagKey<Biome> HAS_CRIMSONVEIL_TREE = create("has_crimsonveil_tree");
 
-        public static final TagKey<Biome> HAS_GLEAMCARVER = create("has_gleamcarver");
-        public static final TagKey<Biome> HAS_HARMONY_WATCHER = create("has_harmony_watcher");
-        public static final TagKey<Biome> HAS_SABERPARD = create("has_saberpard");
-        public static final TagKey<Biome> HAS_TUSKHOG = create("has_tuskhog");
-
         public static final TagKey<Biome> SPAWNS_STEPPE_SABERPARD = create("spawns_steppe_saberpard");
         public static final TagKey<Biome> SPAWNS_WARM_TUSKHOG = create("spawns_warm_tuskhog");
 
@@ -110,6 +107,7 @@ public class ModTags {
 
     public static class Structures {
         public static final TagKey<Structure> STRUCTURES_MAP_CAN_LOCATE = create("structures_map_can_locate");
+        public static final TagKey<Structure> RUIN_STRUCTURES_MAP_CAN_LOCATE = create("ruin_structures_map_can_locate");
 
         private static TagKey<Structure> create(String name) {
             return TagKey.create(Registries.STRUCTURE, UnseenWorld.MOD.makeID(name));

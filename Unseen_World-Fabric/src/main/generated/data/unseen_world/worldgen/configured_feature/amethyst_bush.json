@@ -19,6 +19,7 @@
       "state": {
         "Name": "unseen_world:amethyst_leaves",
         "Properties": {
+          "dark_water": "false",
           "distance": "7",
           "overgrown": "false",
           "persistent": "false",

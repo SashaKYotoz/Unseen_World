@@ -1,10 +1,15 @@
 package net.sashakyotoz.common.entities.bosses;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
@@ -27,6 +32,9 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     public static final int DEATH_ANIMATION_TICKS = 80;
     public static final byte IMPACT_EVENT = 90;
     private static final int SLEEP_AFTER_NO_TARGET_TICKS = 200;
+    private static final float WIPE_RECOVERY_HEAL = 100.0F;
+    private static final int COMBATANT_CHECK_INTERVAL = 20;
+    private static final double COMBATANT_LEAVE_DISTANCE = 64.0D;
 
     private final Map<S, AnimationState> stateAnimations;
     private final List<AnimationState> boundAnimations = new ArrayList<>();
@@ -44,6 +52,8 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     @Nullable
     private LivingEntity cachedTarget;
     private int cachedTargetTick = Integer.MIN_VALUE;
+    private final Map<UUID, Integer> combatants = new HashMap<>();
+    private boolean combatantDied = false;
 
     protected StateMachineBoss(EntityType<? extends BossLikePathfinderMob> entityType, Level level, Class<S> stateClass) {
         super(entityType, level);
@@ -133,10 +143,6 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
 
     public int getBossPhase() {
         return this.entityData.get(BOSS_PHASE);
-    }
-
-    public boolean isFinalPhase() {
-        return this.getBossPhase() >= this.phaseThresholds().length;
     }
 
     private float nextPhaseFloor() {
@@ -332,6 +338,9 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         LivingEntity target = this.getPrimaryTarget();
         this.noTargetTicks = target == null ? this.noTargetTicks + 1 : 0;
         this.stateTicks++;
+        if (this.tickCount % COMBATANT_CHECK_INTERVAL == 0) {
+            this.updateCombatants(target);
+        }
         S state = this.getBossState();
         if (this.phaseShiftPending && state != this.dyingState()) {
             this.phaseShiftPending = false;
@@ -371,6 +380,51 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
                 }
             }
         }
+    }
+
+    protected void registerCombatant(@Nullable LivingEntity entity) {
+        if (entity instanceof ServerPlayer player && !player.isCreative() && !player.isSpectator() && player.isAlive()) {
+            this.combatants.putIfAbsent(player.getUUID(), deathCount(player));
+        }
+    }
+
+    private static int deathCount(ServerPlayer player) {
+        return player.getStats().getValue(Stats.CUSTOM.get(Stats.DEATHS));
+    }
+
+    private void updateCombatants(@Nullable LivingEntity target) {
+        this.registerCombatant(target);
+        MinecraftServer server = this.getServer();
+        if (server == null) {
+            return;
+        }
+        Iterator<Map.Entry<UUID, Integer>> iterator = this.combatants.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, Integer> entry = iterator.next();
+            ServerPlayer player = server.getPlayerList().getPlayer(entry.getKey());
+            if (player == null) {
+                iterator.remove();
+            } else if (player.isDeadOrDying() || deathCount(player) > entry.getValue()) {
+                this.combatantDied = true;
+                iterator.remove();
+            } else if (player.isCreative() || player.isSpectator() || player.level() != this.level()
+                    || player.distanceToSqr(this) > COMBATANT_LEAVE_DISTANCE * COMBATANT_LEAVE_DISTANCE) {
+                iterator.remove();
+            }
+        }
+        if (this.combatants.isEmpty() && this.combatantDied) {
+            this.combatantDied = false;
+            this.recoverAfterWipe();
+        }
+    }
+
+    protected void recoverAfterWipe() {
+        if (!this.isAlive() || this.getBossState() == this.dyingState() || this.getHealth() >= this.getMaxHealth()) {
+            return;
+        }
+        this.heal(WIPE_RECOVERY_HEAL);
+        this.playSound(SoundEvents.BEACON_POWER_SELECT, 2.0F, 0.6F);
+        this.serverParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() * 0.8D, this.getZ(), 12, this.getBbWidth() * 0.5D, this.getBbHeight() * 0.3D, this.getBbWidth() * 0.5D, 0.1D);
     }
 
     protected void tickStanding(@Nullable LivingEntity target) {
@@ -446,6 +500,7 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
         Player nearest = this.level().getNearestPlayer(this.getX(), this.getY(), this.getZ(), this.acquireRange(), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
         if (this.isValidTarget(nearest)) {
             this.setTarget(nearest);
+            this.registerCombatant(nearest);
             this.onTargetAcquired(nearest);
             return nearest;
         }
@@ -474,6 +529,7 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
                 && !attacker.isAlliedTo(this) && this.isValidTarget(attacker)) {
             this.setTarget(attacker);
             this.cachedTargetTick = Integer.MIN_VALUE;
+            this.registerCombatant(attacker);
             this.onTargetAcquired(attacker);
             S state = this.getBossState();
             if (state == this.idlingState() || state == this.sleepTransitionState()) {

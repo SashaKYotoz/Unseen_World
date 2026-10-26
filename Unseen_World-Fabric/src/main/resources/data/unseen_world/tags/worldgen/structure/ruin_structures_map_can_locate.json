@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "unseen_world:warrior_ruins",
+    "unseen_world:sentinel_ruins",
+    "unseen_world:patriarch_ruins"
+  ]
+}

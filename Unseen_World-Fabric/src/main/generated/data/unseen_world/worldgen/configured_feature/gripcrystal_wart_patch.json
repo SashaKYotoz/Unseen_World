@@ -19,6 +19,7 @@
               {
                 "Name": "unseen_world:gripcrystal_wart",
                 "Properties": {
+                  "dark_water": "true",
                   "facing": "up",
                   "waterlogged": "false"
                 }

@@ -102,10 +102,10 @@ public class ModItems {
     public static final Item GRIPPING_GAUNTLET = holder("gripping_gauntlet", () -> new GrippingGauntletItem(
             new Item.Properties().rarity(Rarity.EPIC).stacksTo(1))).get();
 
-    public static final Item CRYSTIE_APPLE = food("crystie_apple", ModRegistry.Foods.CRYSTIE_APPLE);
-    public static final Item GLOW_APPLE = food("glow_apple", ModRegistry.Foods.GLOW_APPLE);
+    public static final Item CRYSTIE_APPLE = food("crystie_apple", ModRegistry.Foods.CRYSTIE_APPLE, ModTags.Items.TUSKHOG_TAMING_ITEMS);
+    public static final Item GLOW_APPLE = food("glow_apple", ModRegistry.Foods.GLOW_APPLE, ModTags.Items.TUSKHOG_TAMING_ITEMS);
     public static final Item BEARFRUIT_BRAMBLE = food("bearfruit_bramble", ModRegistry.Foods.BEARFRUIT_BRAMBLE);
-    public static final Item NIGHTBERRY = food("nightberry", ModRegistry.Foods.NIGHTBERRY);
+    public static final Item NIGHTBERRY = food("nightberry", ModRegistry.Foods.NIGHTBERRY, ModTags.Items.SERPENT_TAMING_ITEMS);
     public static final Item WARPEDVEIL_VINE_FRUIT = holder("warpedveil_vine_fruit", () -> new ItemNameBlockItem(ModBlocks.CRIMSONVEIL_VINE,
             new Item.Properties().rarity(Rarity.UNCOMMON).food(ModRegistry.Foods.WARPEDVEIL_VINE_FRUIT))).withModel(ModelTemplates.FLAT_ITEM).get();
     public static final Item GLOWROOT_BULB = holder("glowroot_bulb", () -> new ItemNameBlockItem(ModBlocks.GLOWROOT_VINE,
@@ -166,6 +166,9 @@ public class ModItems {
     public static final Item DARK_WATER_BUCKET = holder("dark_water_bucket", () -> new DarkWaterBucketItem(ModFluids.DARK_WATER,
             new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1))).withModel(ModelTemplates.FLAT_ITEM).get();
 
+    public static final Item GLEAMCARVER_BUCKET = holder("gleamcarver_bucket", () -> new GleamcarverBucketItem(
+            new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET))).withModel(ModelTemplates.FLAT_ITEM).get();
+
     public static final Item DEAD_UMBRAL_CORAL_FAN_ITEM = holder("dead_umbral_coral_fan", () -> new StandingAndWallBlockItem(
             ModBlocks.DEAD_UMBRAL_CORAL_FAN, ModBlocks.DEAD_UMBRAL_CORAL_WALL_FAN, new Item.Properties(), Direction.DOWN)).get();
     public static final Item UMBRAL_CORAL_FAN_ITEM = holder("umbral_coral_fan", () -> new StandingAndWallBlockItem(
@@ -185,8 +188,10 @@ public class ModItems {
     public static final Item DREADFLAP_SPAWN_EGG = spawnEgg("dreadflap_spawn_egg", ModEntities.DREADFLAP, 1644825, 8476209);
     public static final Item REAVER_SPAWN_EGG = spawnEgg("reaver_spawn_egg", ModEntities.REAVER, 8278982, 1711153);
     public static final Item ECLIPSED_ACOLYTE_SPAWN_EGG = spawnEgg("eclipsed_acolyte_spawn_egg", ModEntities.ECLIPSED_ACOLYTE, 5000268, 8339378);
+    public static final Item AUREATE_VEX_SPAWN_EGG = spawnEgg("aureate_vex_spawn_egg", ModEntities.AUREATE_VEX, 9787244, 16445005);
     public static final Item VEXAL_BEETLE_SPAWN_EGG = spawnEgg("vexal_beetle_spawn_egg", ModEntities.VEXAL_BEETLE, 2430480, 8339378);
     public static final Item RIMEHORN_SPAWN_EGG = spawnEgg("rimehorn_spawn_egg", ModEntities.RIMEHORN, 1474182, 1711153);
+    public static final Item UMBRAL_SERPENT_SPAWN_EGG = spawnEgg("umbral_serpent_spawn_egg", ModEntities.UMBRAL_SERPENT, 2236979, 5592456);
 
     private static ItemHolder holder(String name, Supplier<Item> item) {
         return UnseenWorld.MOD.register(ItemHolder.class, name, item);
@@ -210,8 +215,9 @@ public class ModItems {
         return holder(name, () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1))).withModel(ModelTemplates.FLAT_ITEM).get();
     }
 
-    private static Item food(String name, FoodProperties food) {
-        return holder(name, () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).food(food))).withModel(ModelTemplates.FLAT_ITEM).get();
+    @SafeVarargs
+    private static Item food(String name, FoodProperties food, TagKey<Item>... tags) {
+        return holder(name, () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).food(food))).withModel(ModelTemplates.FLAT_ITEM).withTags(tags).get();
     }
 
     private static Item.Properties gear(boolean fireResistant) {

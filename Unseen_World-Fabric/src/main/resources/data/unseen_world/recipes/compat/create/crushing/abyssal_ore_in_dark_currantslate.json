@@ -1,0 +1,26 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "unseen_world:abyssal_ore_in_dark_currantslate"
+    }
+  ],
+  "processingTime": 300,
+  "results": [
+    {
+      "item": "unseen_world:raw_abyssal"
+    },
+    {
+      "chance": 0.75,
+      "item": "unseen_world:raw_abyssal"
+    },
+    {
+      "chance": 0.75,
+      "item": "create:experience_nugget"
+    },
+    {
+      "chance": 0.125,
+      "item": "unseen_world:dark_currantslate"
+    }
+  ]
+}

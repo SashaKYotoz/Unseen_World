@@ -14,34 +14,25 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.entities.ModEntities;
-import net.sashakyotoz.common.entities.custom.EldritchWatcherEntity;
-import net.sashakyotoz.common.entities.custom.EspyerEntity;
-import net.sashakyotoz.common.entities.custom.TuskhogEntity;
-import net.sashakyotoz.common.entities.custom.VexalBeetleEntity;
+import net.sashakyotoz.common.entities.custom.*;
 import net.sashakyotoz.common.entities.custom.basic.WhaleEntity;
 
 import java.time.LocalDate;
 import java.time.Month;
 
 public final class ModSpawnRules {
-    private static final int SHIMMER_HEIGHT = 3;
     private static final int REEF_SEARCH_DEPTH = 10;
     private static final int REEF_SEARCH_OFFSET = 2;
     private static final double WHALE_GROUP_RADIUS = 32.0D;
     private static final int WHALE_GROUP_LIMIT = 4;
-    private static final int WHALE_SPAWN_CHANCE = 7;
     private static final int DREADFLAP_BASE_LIGHT = 4;
     private static final int DREADFLAP_HALLOWEEN_LIGHT = 7;
-    private static final int BEETLE_MAX_LIGHT = 9;
-    private static final double LOCAL_CAP_RADIUS = 64.0D;
-    private static final int ESPYER_LOCAL_CAP = 3;
     private static final int ESPYER_MAX_Y = 32;
-    private static final int ELDRITCH_LOCAL_CAP = 3;
     private static final int ELDRITCH_MIN_Y = -32;
     private static final int ELDRITCH_MAX_Y = 96;
     private static final double PLAYER_NEARBY_RADIUS = 32.0D;
-    private static final int TUSKHOG_LOCAL_CAP = 4;
     private static final int GLEAMCARVER_MAX_Y = 16;
+    private static final int SERPENT_WATER_RADIUS = 5;
 
     private ModSpawnRules() {
     }
@@ -60,10 +51,11 @@ public final class ModSpawnRules {
         SpawnPlacements.register(ModEntities.TUSKHOG, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkTuskhogSpawnRules);
         SpawnPlacements.register(ModEntities.RIMEHORN, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkRimehornSpawnRules);
         SpawnPlacements.register(ModEntities.ECLIPSED_ACOLYTE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEclipsedAcolyteSpawnRules);
+        SpawnPlacements.register(ModEntities.UMBRAL_SERPENT, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkUmbralSerpentSpawnRules);
     }
 
     public static boolean checkShimmerSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        for (int i = 0; i < SHIMMER_HEIGHT; i++) {
+        for (int i = 0; i < 3; i++) {
             if (!level.getFluidState(pos.above(i)).is(FluidTags.WATER)) {
                 return false;
             }
@@ -89,7 +81,7 @@ public final class ModSpawnRules {
         if (isForced(spawnType)) {
             return true;
         }
-        if (random.nextInt(WHALE_SPAWN_CHANCE) != 0) {
+        if (random.nextInt(7) != 0) {
             return false;
         }
         AABB area = type.getDimensions().makeBoundingBox(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D).inflate(WHALE_GROUP_RADIUS);
@@ -113,8 +105,8 @@ public final class ModSpawnRules {
     }
 
     public static boolean checkBeetleSpawnRules(EntityType<VexalBeetleEntity> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        return Mob.checkMobSpawnRules(type, level, spawnType, pos, random)
-                && (spawnType == MobSpawnType.SPAWNER || level.getRawBrightness(pos, 0) <= BEETLE_MAX_LIGHT);
+        BlockPos below = pos.below();
+        return level.getBlockState(below).isValidSpawn(level, below, type) && level.getRawBrightness(pos, 0) <= 10;
     }
 
     public static boolean checkEspyerSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
@@ -126,7 +118,7 @@ public final class ModSpawnRules {
                 && below.getY() < ESPYER_MAX_Y
                 && !level.canSeeSky(pos)
                 && level.hasNearbyAlivePlayer(pos.getX(), pos.getY(), pos.getZ(), PLAYER_NEARBY_RADIUS)
-                && countNearby(level, EspyerEntity.class, pos) < ESPYER_LOCAL_CAP;
+                && countNearby(level, EspyerEntity.class, pos) < 3;
     }
 
     public static boolean checkEldritchWatcherSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
@@ -138,15 +130,11 @@ public final class ModSpawnRules {
                 && below.getY() > ELDRITCH_MIN_Y
                 && below.getY() < ELDRITCH_MAX_Y
                 && level.hasNearbyAlivePlayer(pos.getX(), pos.getY(), pos.getZ(), PLAYER_NEARBY_RADIUS)
-                && countNearby(level, EldritchWatcherEntity.class, pos) < ELDRITCH_LOCAL_CAP;
+                && countNearby(level, EldritchWatcherEntity.class, pos) < 3;
     }
 
     public static boolean checkHarmonyWatcherSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (spawnType == MobSpawnType.SPAWNER) {
-            return true;
-        }
-        BlockPos below = pos.below();
-        return level.getBlockState(below).isValidSpawn(level, below, type) && random.nextInt(6) == 1;
+        return checkSaberpardSpawnRules(type, level, spawnType, pos, null);
     }
 
     public static boolean checkGleamcarverSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
@@ -154,24 +142,24 @@ public final class ModSpawnRules {
     }
 
     public static boolean checkSaberpardSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        return isForced(spawnType) || level.getBlockState(pos.below()).is(BlockTags.DIRT);
+        return isForced(spawnType) || isSpawnableGround(level, pos.below(), type);
     }
 
     public static boolean checkTuskhogSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         if (isForced(spawnType)) {
             return true;
         }
-        return level.getBlockState(pos.below()).is(BlockTags.DIRT)
-                && random.nextInt(4) == 1
-                && countNearby(level, TuskhogEntity.class, pos) < TUSKHOG_LOCAL_CAP;
+        return isSpawnableGround(level, pos.below(), type)
+                && countNearby(level, TuskhogEntity.class, pos) < 4;
     }
 
     public static boolean checkRimehornSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         if (isForced(spawnType)) {
             return true;
         }
-        BlockState ground = level.getBlockState(pos.below());
-        return (ground.is(BlockTags.GOATS_SPAWNABLE_ON) || ground.is(BlockTags.SNOW) || ground.is(BlockTags.DIRT) || ground.is(ModBlocks.GLACIEMITE))
+        BlockPos belowPos = pos.below();
+        BlockState below = level.getBlockState(belowPos);
+        return (isSpawnableGround(level, belowPos, type) || below.is(BlockTags.GOATS_SPAWNABLE_ON) || below.is(ModBlocks.GLACIEMITE))
                 && level.getBlockState(pos).getCollisionShape(level, pos).isEmpty();
     }
 
@@ -184,12 +172,34 @@ public final class ModSpawnRules {
                 && level.getBlockState(pos.above(2)).getCollisionShape(level, pos.above(2)).isEmpty();
     }
 
+    public static boolean checkUmbralSerpentSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        if (isForced(spawnType)) {
+            return true;
+        }
+        BlockPos belowPos = pos.below();
+        return isSpawnableGround(level, belowPos, type) || (isNearWater(level, pos) && countNearby(level, UmbralSerpentEntity.class, pos) < 4);
+    }
+
+    private static boolean isNearWater(ServerLevelAccessor level, BlockPos center) {
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-SERPENT_WATER_RADIUS, -2, -SERPENT_WATER_RADIUS), center.offset(SERPENT_WATER_RADIUS, 0, SERPENT_WATER_RADIUS))) {
+            if (level.getFluidState(pos).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isSpawnableGround(ServerLevelAccessor level, BlockPos below, EntityType<?> type) {
+        BlockState ground = level.getBlockState(below);
+        return ground.isValidSpawn(level, below, type) || ground.is(BlockTags.DIRT) || ground.is(BlockTags.ANIMALS_SPAWNABLE_ON);
+    }
+
     private static boolean isForced(MobSpawnType spawnType) {
         return spawnType == MobSpawnType.SPAWNER || spawnType == MobSpawnType.SPAWN_EGG || spawnType == MobSpawnType.COMMAND;
     }
 
     private static <T extends LivingEntity> int countNearby(ServerLevelAccessor level, Class<T> type, BlockPos pos) {
-        return level.getEntities(EntityTypeTest.forClass(type), new AABB(pos).inflate(LOCAL_CAP_RADIUS), LivingEntity::isAlive).size();
+        return level.getEntities(EntityTypeTest.forClass(type), new AABB(pos).inflate(64.0D), LivingEntity::isAlive).size();
     }
 
     private static boolean isAroundHalloween() {

@@ -23,7 +23,7 @@
     "description": {
       "translate": "advancement.unseen_world.fortress_in_the_darkness.desc"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
       "item": "unseen_world:gripcrystal_key"

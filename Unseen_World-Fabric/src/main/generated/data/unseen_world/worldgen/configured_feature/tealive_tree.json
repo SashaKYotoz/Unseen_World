@@ -27,6 +27,7 @@
       "state": {
         "Name": "unseen_world:tealive_leaves",
         "Properties": {
+          "dark_water": "false",
           "distance": "7",
           "persistent": "false",
           "waterlogged": "false"

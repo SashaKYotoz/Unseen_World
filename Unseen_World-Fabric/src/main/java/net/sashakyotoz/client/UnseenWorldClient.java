@@ -95,6 +95,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(AureateVexModel.AUREATE_VEX, AureateVexModel::getModelData);
         EntityModelLayerRegistry.registerModelLayer(RimehornModel.RIMEHORN, RimehornModel::getModelData);
         EntityModelLayerRegistry.registerModelLayer(EclipsedAcolyteModel.ECLIPSED_ACOLYTE, EclipsedAcolyteModel::getModelData);
+        EntityModelLayerRegistry.registerModelLayer(UmbralSerpentModel.UMBRAL_SERPENT, UmbralSerpentModel::getModelData);
 
         EntityModelLayerRegistry.registerModelLayer(EffigyPedestalModel.LAYER, EffigyPedestalModel::getModelData);
 
@@ -115,6 +116,7 @@ public class UnseenWorldClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.AUREATE_VEX, AureateVexRenderer::new);
         EntityRendererRegistry.register(ModEntities.RIMEHORN, RimehornRenderer::new);
         EntityRendererRegistry.register(ModEntities.ECLIPSED_ACOLYTE, EclipsedAcolyteRenderer::new);
+        EntityRendererRegistry.register(ModEntities.UMBRAL_SERPENT, UmbralSerpentRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.GRIPPING_CRYSTAL_PROJECTILE, GrippingCrystalProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.PARTICLE_PROJECTILE, ParticleProjectileRenderer::new);

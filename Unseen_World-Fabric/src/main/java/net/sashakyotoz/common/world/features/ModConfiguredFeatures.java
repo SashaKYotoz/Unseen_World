@@ -164,9 +164,9 @@ public class ModConfiguredFeatures {
                 ).build());
         register(context, CRIMSONVEIL_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG),
-                new UpwardsBranchingTrunkPlacer(6, 4, 4, UniformInt.of(2, 4), 0.5F, UniformInt.of(1, 3), registryEntryLookup.getOrThrow(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)),
+                new UpwardsBranchingTrunkPlacer(6, 4, 2, UniformInt.of(1, 3), 0.5F, UniformInt.of(1, 3), registryEntryLookup.getOrThrow(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)),
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LEAVES),
-                new RandomSpreadFoliagePlacer(ConstantInt.of(3), UniformInt.of(0, 1), ConstantInt.of(1), 70),
+                new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 64),
                 Optional.of(
                         new MangroveRootPlacer(
                                 UniformInt.of(1, 3),
@@ -191,7 +191,7 @@ public class ModConfiguredFeatures {
                 ).ignoreVines().build());
         register(context, TALL_CRIMSONVEIL_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG),
-                new UpwardsBranchingTrunkPlacer(7, 5, 4, UniformInt.of(2, 5), 0.75F, UniformInt.of(1, 3), registryEntryLookup.getOrThrow(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)),
+                new UpwardsBranchingTrunkPlacer(8, 6, 4, UniformInt.of(2, 4), 0.75F, UniformInt.of(1, 3), registryEntryLookup.getOrThrow(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)),
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LEAVES),
                 new HangingBlobFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(0), 2, 0.5f, 0.25f),
                 Optional.of(
@@ -209,7 +209,7 @@ public class ModConfiguredFeatures {
                                 new VinesToLeavesTreeDecorator(
                                         0.125F,
                                         BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_VINE_PLANT),
-                                        UniformInt.of(2, 4)
+                                        UniformInt.of(1, 3)
                                 )
                         )
                 ).build());
@@ -227,16 +227,16 @@ public class ModConfiguredFeatures {
         ).ignoreVines().build());
         register(context, GRIZZLY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LOG),
-                new GrizzlyTrunkPlacer(8, 2, 1, 0.4F, UniformInt.of(2, 3), UniformInt.of(2, 3), 0.15F),
+                new GrizzlyTrunkPlacer(8, 2, 1, 0.4F, UniformInt.of(2, 3), UniformInt.of(2, 4), 0.15F),
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LEAVES),
-                new GrizzlyFoliagePlacer(UniformInt.of(3, 4), ConstantInt.of(0), 2, 0.3F),
+                new GrizzlyFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(0), 2, 0.3F),
                 new TwoLayersFeatureSize(1, 0, 2)
         ).dirt(BlockStateProvider.simple(ModBlocks.GRIMWOOD_GRASS_BLOCK)).build());
         register(context, TALL_GRIZZLY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LOG),
                 new GrizzlyTrunkPlacer(12, 3, 2, 0.45F, UniformInt.of(2, 3), UniformInt.of(3, 4), 0.2F),
                 BlockStateProvider.simple(ModBlocks.GRIZZLY_LEAVES),
-                new GrizzlyFoliagePlacer(UniformInt.of(3, 4), UniformInt.of(0, 1), 3, 0.3F),
+                new GrizzlyFoliagePlacer(UniformInt.of(2, 4), UniformInt.of(0, 1), 2, 0.2F),
                 new TwoLayersFeatureSize(1, 1, 2)
         ).dirt(BlockStateProvider.simple(ModBlocks.GRIMWOOD_GRASS_BLOCK)).build());
         register(context, BURLYWOOD_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -251,7 +251,7 @@ public class ModConfiguredFeatures {
         ).decorators(
                 List.of(
                         new VinesToLeavesTreeDecorator(
-                                0.12F,
+                                0.1F,
                                 BlockStateProvider.simple(ModBlocks.HANGING_BURLYWOOD_LEAVES),
                                 UniformInt.of(1, 4)
                         )
@@ -267,9 +267,9 @@ public class ModConfiguredFeatures {
         ).decorators(
                 List.of(
                         new VinesToLeavesTreeDecorator(
-                                0.1F,
+                                0.05F,
                                 BlockStateProvider.simple(ModBlocks.HANGING_BURLYWOOD_LEAVES),
-                                UniformInt.of(1, 3)
+                                UniformInt.of(1, 2)
                         )
                 )
         ).ignoreVines().dirt(BlockStateProvider.simple(Blocks.DIRT)).build());

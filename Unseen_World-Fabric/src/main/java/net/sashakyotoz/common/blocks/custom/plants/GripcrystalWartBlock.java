@@ -10,18 +10,27 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AmethystClusterBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.AABB;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.api.entity_data.data.GrippingData;
+import net.sashakyotoz.common.blocks.custom.fluids.DualWaterloggedBlock;
 import net.sashakyotoz.common.effects.ModMobEffects;
 import net.sashakyotoz.utils.ActionsUtils;
 
 import java.util.List;
 
-public class GripcrystalWartBlock extends AmethystClusterBlock {
+public class GripcrystalWartBlock extends AmethystClusterBlock implements DualWaterloggedBlock {
     public GripcrystalWartBlock(Properties settings) {
         super(12, 3, settings);
+        this.defaultBlockState().setValue(DualWaterloggedBlock.DARK_WATER, Boolean.FALSE);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(DualWaterloggedBlock.DARK_WATER, WATERLOGGED, FACING);
     }
 
     @Override

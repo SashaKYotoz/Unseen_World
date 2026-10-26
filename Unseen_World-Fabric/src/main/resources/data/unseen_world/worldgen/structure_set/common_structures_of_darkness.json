@@ -21,18 +21,14 @@
       "weight": 1
     },
     {
-      "structure": "unseen_world:grizzly_mineshaft",
-      "weight": 1
-    },
-    {
-      "structure": "unseen_world:violeger_village",
+      "structure": "unseen_world:violeger_cantonment",
       "weight": 1
     }
   ],
   "placement": {
     "type": "minecraft:random_spread",
     "salt": 1947040103,
-    "spacing": 24,
-    "separation": 16
+    "spacing": 20,
+    "separation": 12
   }
 }

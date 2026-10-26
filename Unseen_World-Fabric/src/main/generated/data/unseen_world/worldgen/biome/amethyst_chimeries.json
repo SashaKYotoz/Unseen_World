@@ -52,7 +52,14 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
+    "creature": [
+      {
+        "type": "unseen_world:vexal_beetle",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 4
+      }
+    ],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],

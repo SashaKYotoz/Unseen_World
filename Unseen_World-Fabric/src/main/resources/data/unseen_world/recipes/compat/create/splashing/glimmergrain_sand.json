@@ -1,0 +1,14 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "item": "unseen_world:glimmergrain_sand"
+    }
+  ],
+  "results": [
+    {
+      "chance": 0.1,
+      "item": "unseen_world:granulated_gripcrystal"
+    }
+  ]
+}

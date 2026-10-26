@@ -62,7 +62,7 @@ public class ModRegistry {
         public static final FoodProperties GLOWROOT_BULB = new FoodProperties.Builder().saturationMod(1).nutrition(3).effect(
                 new MobEffectInstance(MobEffects.SATURATION, 60, 0, true, true),
                 1).build();
-        public static final FoodProperties RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(2).nutrition(3).build();
-        public static final FoodProperties COOKED_RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(3).nutrition(6).build();
+        public static final FoodProperties RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(2).nutrition(2).build();
+        public static final FoodProperties COOKED_RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(4).nutrition(4).build();
     }
 }

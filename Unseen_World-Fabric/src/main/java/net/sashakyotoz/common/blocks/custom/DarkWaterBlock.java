@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -12,7 +11,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.sashakyotoz.api.entity_data.IGrippingEntity;
 import net.sashakyotoz.common.blocks.ModFluids;
-import net.sashakyotoz.utils.ActionsUtils;
 
 public class DarkWaterBlock extends LiquidBlock {
     public DarkWaterBlock(FlowingFluid fluid, Properties settings) {

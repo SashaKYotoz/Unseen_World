@@ -31,15 +31,9 @@
     },
     "foliage_placer": {
       "type": "minecraft:random_spread_foliage_placer",
-      "foliage_height": 1,
-      "leaf_placement_attempts": 70,
-      "offset": {
-        "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 1,
-          "min_inclusive": 0
-        }
-      },
+      "foliage_height": 2,
+      "leaf_placement_attempts": 64,
+      "offset": 0,
       "radius": 3
     },
     "foliage_provider": {
@@ -47,6 +41,7 @@
       "state": {
         "Name": "unseen_world:crimsonveil_leaves",
         "Properties": {
+          "dark_water": "false",
           "distance": "7",
           "persistent": "false",
           "waterlogged": "false"
@@ -126,12 +121,12 @@
       "extra_branch_steps": {
         "type": "minecraft:uniform",
         "value": {
-          "max_inclusive": 4,
-          "min_inclusive": 2
+          "max_inclusive": 3,
+          "min_inclusive": 1
         }
       },
       "height_rand_a": 4,
-      "height_rand_b": 4,
+      "height_rand_b": 2,
       "place_branch_per_log_probability": 0.5
     },
     "trunk_provider": {

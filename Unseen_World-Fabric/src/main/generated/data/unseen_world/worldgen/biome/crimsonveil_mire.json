@@ -57,13 +57,20 @@
     "ambient": [
       {
         "type": "unseen_world:dreadflap",
-        "maxCount": 3,
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 4
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "unseen_world:umbral_serpent",
+        "maxCount": 2,
         "minCount": 1,
         "weight": 6
       }
     ],
-    "axolotls": [],
-    "creature": [],
     "misc": [],
     "monster": [],
     "underground_water_creature": [],

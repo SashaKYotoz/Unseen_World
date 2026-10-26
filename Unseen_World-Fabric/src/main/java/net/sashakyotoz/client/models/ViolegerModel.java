@@ -145,6 +145,18 @@ public class ViolegerModel<T extends ViolegerEntity> extends HierarchicalModel<T
             this.leftArm.xRot = -0.9424779F + this.head.xRot;
             this.leftArm.yRot = this.head.yRot - 0.4F;
             this.leftArm.zRot = (float) (Math.PI / 2);
+        } else if (state == ViolegerEntity.State.INSPECTING) {
+            this.head.yRot = 0.0F;
+            this.head.xRot = 0.5F;
+            this.leftArm.xRot = -0.9F;
+            this.leftArm.yRot = 0.5F;
+            this.leftArm.zRot = 0.0F;
+        } else if (state == ViolegerEntity.State.STEALING) {
+            this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+            this.leftArm.yRot = this.head.yRot + 0.1F;
+            this.leftArm.zRot = 0.0F;
+            this.rightArm.xRot = -0.6F + Mth.cos(h * 0.9F) * 0.15F;
+            this.rightArm.zRot = 0.35F;
         } else if (state == ViolegerEntity.State.CELEBRATING) {
             this.rightArm.z = 0.0F;
             this.rightArm.x = -5.0F;

@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.sashakyotoz.common.blocks.ModBlocks;
+import net.sashakyotoz.common.blocks.custom.fluids.DualWaterloggedBlock;
 import net.sashakyotoz.common.blocks.custom.plants.UmbralKelpBlock;
 
 public class UmbralKelpFeature extends Feature<NoneFeatureConfiguration> {
@@ -29,8 +30,8 @@ public class UmbralKelpFeature extends Feature<NoneFeatureConfiguration> {
         int j = worldAccess.getHeight(Heightmap.Types.OCEAN_FLOOR, blockPos.getX(), blockPos.getZ());
         BlockPos blockPos2 = new BlockPos(blockPos.getX(), j, blockPos.getZ());
         if (worldAccess.getBlockState(blockPos2).is(ModBlocks.DARK_WATER)) {
-            BlockState blockState = ModBlocks.UMBRAL_KELP.defaultBlockState();
-            BlockState blockState2 = ModBlocks.UMBRAL_KELP_PLANT.defaultBlockState();
+            BlockState blockState = ModBlocks.UMBRAL_KELP.defaultBlockState().trySetValue(DualWaterloggedBlock.DARK_WATER,Boolean.TRUE);
+            BlockState blockState2 = ModBlocks.UMBRAL_KELP_PLANT.defaultBlockState().trySetValue(DualWaterloggedBlock.DARK_WATER,Boolean.TRUE);
             int k = 1 + random.nextInt(9);
 
             for (int l = 0; l <= k; l++) {

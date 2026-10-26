@@ -201,7 +201,7 @@ public class ModBiomes {
 
     private static Biome darkOcean(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
-        spawn(spawns, ModEntities.SHIMMER, 8, 1, 2);
+        spawn(spawns, ModEntities.SHIMMER, 8, 1, 1);
         return biome(0.8F, false, spawns,
                 generation(context, false, ModPlacements.MIDNIGHT_LILY_PATCH, ModPlacements.UMBRAL_KELP, ModPlacements.UMBRAL_CORAL_REEF),
                 new Look().music(SoundEvents.MUSIC_UNDER_WATER));
@@ -238,7 +238,9 @@ public class ModBiomes {
     }
 
     private static Biome greynishShore(BootstapContext<Biome> context) {
-        return biome(0.5F, false, new MobSpawnSettings.Builder(),
+        MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
+        spawn(spawns, MobCategory.CREATURE, ModEntities.UMBRAL_SERPENT, 6, 1, 2);
+        return biome(0.5F, false, spawns,
                 generation(context, true, ModPlacements.IRON_ORE_UPPER, ModPlacements.MIDNIGHT_LILY_PATCH),
                 new Look().music(SoundEvents.MUSIC_UNDER_WATER));
     }
@@ -258,7 +260,7 @@ public class ModBiomes {
     private static Biome gloomweedPlains(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, 8, 2, 4);
-        spawn(spawns, MobCategory.CREATURE, ModEntities.HARMONY_WATCHER, 4, 1, 1);
+        spawn(spawns, MobCategory.CREATURE, ModEntities.HARMONY_WATCHER, 4, 1, 2);
         return biome(0.55F, false, spawns,
                 generation(context, true, ModPlacements.IRON_ORE_UPPER, ModPlacements.GLOOMWEED_PATCH, ModPlacements.TALL_GLOOMWEED_PATCH, ModPlacements.RARE_GLOOMWEED_PATCH),
                 new Look().grass(336860160).foliage(336860160).music(SoundEvents.MUSIC_BIOME_MEADOW)
@@ -268,7 +270,8 @@ public class ModBiomes {
     private static Biome ashenMarsh(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, 3, 1, 2);
-        spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 6, 1, 3);
+        spawn(spawns, MobCategory.CREATURE, ModEntities.UMBRAL_SERPENT, 5, 1, 3);
+        spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 3, 1, 2);
         return biome(0.45F, false, spawns,
                 generation(context, true, ModPlacements.MIDNIGHT_LILY_PATCH, ModPlacements.IRON_ORE_UPPER, ModPlacements.ASHREED_PATCH, ModPlacements.GLOOMWEED_PATCH, ModPlacements.TALL_GLOOMWEED_PATCH),
                 new Look().water(3355443).grass(5592405).foliage(5592405).music(SoundEvents.MUSIC_BIOME_SWAMP)
@@ -278,7 +281,8 @@ public class ModBiomes {
 
     private static Biome crimsonveilMire(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
-        spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 6, 1, 3);
+        spawn(spawns, MobCategory.CREATURE, ModEntities.UMBRAL_SERPENT, 6, 1, 2);
+        spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 4, 1, 2);
         return biome(0.8F, false, spawns,
                 generation(context, true, ModPlacements.MIDNIGHT_LILY_PATCH, ModPlacements.IRON_ORE_UPPER,
                         ModPlacements.CRIMSONVEIL_TREE, ModPlacements.GLOOMWEED_PATCH, ModPlacements.TALL_GLOOMWEED_PATCH),
@@ -327,14 +331,18 @@ public class ModBiomes {
     }
 
     private static Biome amethystForest(BootstapContext<Biome> context) {
-        return biome(0.5F, false, new MobSpawnSettings.Builder(),
+        MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
+        spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, 6, 1, 2);
+        return biome(0.5F, false, spawns,
                 generation(context, true, ModPlacements.AMETHYST_BOULDER, ModPlacements.IRON_ORE_UPPER, ModPlacements.AMETHYST_CEILING_BOULDER,
                         ModPlacements.AMETHYST_TREE, ModPlacements.SMALL_AMETHYST_TREE, ModPlacements.TANZANITE_SPHERE, ModPlacements.AMETHYST_FLOWERS, ModPlacements.AMETHYST_BUSH),
                 new Look().water(13061821).grass(13061821).foliage(13061821).music(SoundEvents.MUSIC_BIOME_CRIMSON_FOREST));
     }
 
     private static Biome amethystChimeries(BootstapContext<Biome> context) {
-        return biome(0.5F, false, new MobSpawnSettings.Builder(),
+        MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
+        spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, 4, 1, 1);
+        return biome(0.5F, false, spawns,
                 generation(context, true, ModPlacements.AMETHYST_CLUSTER_SPIKE, ModPlacements.IRON_ORE_UPPER, ModPlacements.AMETHYST_CEILING_BOULDER,
                         ModPlacements.SMALL_AMETHYST_TREE, ModPlacements.AMETHYST_FLOWERS, ModPlacements.AMETHYST_BUSH),
                 new Look().water(13061821).grass(13061821).foliage(13061821).music(SoundEvents.MUSIC_BIOME_CRIMSON_FOREST));
@@ -361,6 +369,7 @@ public class ModBiomes {
     private static Biome crimsonveilWoods(BootstapContext<Biome> context, boolean oldGrowth) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, oldGrowth ? 3 : 5, 2, 3);
+        spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, oldGrowth ? 4 : 2, 1, 2);
         BiomeGenerationSettings settings = oldGrowth
                 ? generation(context, true, ModPlacements.IRON_ORE_UPPER, ModPlacements.TALL_CRIMSONVEIL_TREE, ModPlacements.CRIMSONVEIL_TREE, ModPlacements.TALL_GLOOMWEED_PATCH)
                 : generation(context, true, ModPlacements.IRON_ORE_UPPER, ModPlacements.CRIMSONVEIL_TREE, ModPlacements.GLOOMWEED_PATCH);
@@ -381,6 +390,7 @@ public class ModBiomes {
     private static Biome burlywoodJungle(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 5, 1, 2);
+        spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, 3, 1, 2);
         return biome(0.95F, false, spawns,
                 generation(context, true, ModPlacements.IRON_ORE_UPPER, ModPlacements.BURLYWOOD_TREE, ModPlacements.SMALL_BURLYWOOD_TREE, ModPlacements.BUSH_BURLYWOOD_TREE,
                         ModPlacements.BURLYWOOD_VIOLET_PATCH, VegetationPlacements.PATCH_GRASS_JUNGLE, ModPlacements.RARE_GLOOMWEED_PATCH, ModPlacements.BUSH_LIKE_TREE_PATCH),
@@ -425,14 +435,16 @@ public class ModBiomes {
                         ModPlacements.CORONA_BLOOM_PATCH, ModPlacements.GLOOMWEED_PATCH, ModPlacements.RARE_GLOOMWEED_PATCH),
                 new Look().grass(3618615).foliage(3618615).music(SoundEvents.MUSIC_BIOME_BADLANDS)
                         .mood(new AmbientMoodSettings(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD, 6000, 8, 2.0D))
-                        .particle(ParticleTypes.WHITE_ASH, 0.004F));
+                        .particle(ParticleTypes.WHITE_ASH, 0.004F)
+                        .music(ModSoundEvents.PENUMBRAL_STEPPE_AMBIENT));
     }
 
     private static Biome auricHeights(BootstapContext<Biome> context) {
         return biome(0.7F, false, new MobSpawnSettings.Builder(),
                 generation(context, true, ModPlacements.GILDED_CURRANTSLATE_BOULDER, ModPlacements.IRON_ORE_UPPER,
                         ModPlacements.DARK_CURRANTSLATE_CEILING_BOULDER),
-                new Look().grass(12951120).foliage(12951120).music(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS));
+                new Look().grass(12951120).foliage(12951120)
+                        .music(ModSoundEvents.AURIC_HEIGHTS_AMBIENT));
     }
 
     private static Biome biome(float temperature, boolean precipitation, MobSpawnSettings.Builder spawns, BiomeGenerationSettings generation, Look look) {

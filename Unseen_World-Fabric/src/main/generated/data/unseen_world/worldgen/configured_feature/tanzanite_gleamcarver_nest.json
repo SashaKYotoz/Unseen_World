@@ -6,6 +6,7 @@
       "state": {
         "Name": "minecraft:amethyst_cluster",
         "Properties": {
+          "dark_water": "false",
           "facing": "up",
           "waterlogged": "false"
         }
@@ -18,6 +19,7 @@
           "data": {
             "Name": "minecraft:small_amethyst_bud",
             "Properties": {
+              "dark_water": "false",
               "facing": "up",
               "waterlogged": "false"
             }
@@ -28,6 +30,7 @@
           "data": {
             "Name": "minecraft:medium_amethyst_bud",
             "Properties": {
+              "dark_water": "false",
               "facing": "up",
               "waterlogged": "false"
             }

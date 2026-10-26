@@ -5,7 +5,6 @@
   "mixins": [
     "AbstractArrowMixin",
     "BlockEntityTypeMixin",
-    "PlayerShieldMixin",
     "access.FoliagePlacerTypeInvoker",
     "access.ThrownTridentAccessor",
     "access.TreeDecoratorTypeInvoker",
@@ -13,7 +12,14 @@
     "client.compat.IrisDimensionMixin",
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
+    "entity.PlayerMixin",
     "entity.ThreadedAnvilChunkStorageMixin",
+    "waterlogging.BlockDefaultStateMixin",
+    "waterlogging.BlockItemMixin",
+    "waterlogging.BlockStateBaseMixin",
+    "waterlogging.BucketItemMixin",
+    "waterlogging.ServerLevelFluidTickMixin",
+    "waterlogging.StateDefinitionBuilderMixin",
     "world.ServerWorldMixin",
     "world.WorldMixin"
   ],

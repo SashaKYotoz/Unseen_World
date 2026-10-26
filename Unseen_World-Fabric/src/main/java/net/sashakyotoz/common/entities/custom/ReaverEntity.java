@@ -8,7 +8,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -43,6 +42,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.entities.bosses.BossLikePathfinderMob;
 import net.sashakyotoz.common.entities.util.MinionOwnership;
 import org.jetbrains.annotations.Nullable;
@@ -90,10 +90,6 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
         this.persistentAngerTarget = persistentAngerTarget;
     }
 
-    public double getMyRidingOffset() {
-        return this.isBaby() ? -0.05 : -0.45;
-    }
-
     protected void registerGoals() {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
@@ -118,6 +114,7 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
         boolean hurt = super.doHurtTarget(target);
         if (hurt) {
             this.level().broadcastEntityEvent(this, (byte) 4);
+            this.playSound(ModSoundEvents.REAVER_ATTACK, 1.0F, this.getVoicePitch());
         }
         return hurt;
     }
@@ -132,7 +129,7 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
     }
 
     protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return this.isBaby() ? 0.96999997F : 1.79F;
+        return this.isBaby() ? 0.97F : 1.79F;
     }
 
     protected void customServerAiStep() {
@@ -191,7 +188,36 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
     }
 
     private void playAngerSound() {
-        this.playSound(SoundEvents.ENDERMAN_SCREAM, this.getSoundVolume() * 1.5F, this.getVoicePitch() * 1.8F);
+        this.playSound(ModSoundEvents.REAVER_SCREAM, this.getSoundVolume(), this.getVoicePitch());
+        this.playSound(ModSoundEvents.REAVER_GRIND, 0.6F, this.getVoicePitch());
+    }
+
+    @Override
+    public void playAmbientSound() {
+        super.playAmbientSound();
+        if (!this.isSilent()) {
+            this.playSound(ModSoundEvents.REAVER_GRIND, 0.4F, this.getVoicePitch());
+        }
+    }
+
+    @Override
+    protected void playHurtSound(DamageSource source) {
+        super.playHurtSound(source);
+        this.playSound(ModSoundEvents.REAVER_CRACK, 0.7F, this.getVoicePitch());
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        boolean firstDeath = !this.isRemoved() && !this.dead;
+        super.die(source);
+        if (firstDeath && !this.level().isClientSide()) {
+            this.playSound(ModSoundEvents.REAVER_CRUMBLE, 0.8F, this.getVoicePitch());
+        }
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(ModSoundEvents.REAVER_STEP, 1.0F, 1.0F);
     }
 
     public void setTarget(@Nullable LivingEntity target) {
@@ -249,8 +275,9 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
             if (bl3) {
                 this.level().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
                 if (!this.isSilent()) {
-                    this.level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.6F);
-                    this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.6F);
+                    this.level().playSound(null, this.xo, this.yo, this.zo, ModSoundEvents.REAVER_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+                    this.playSound(ModSoundEvents.REAVER_TELEPORT, 1.0F, 1.0F);
+                    this.playSound(ModSoundEvents.REAVER_RESONATE, 0.6F, this.getVoicePitch());
                 }
             }
 
@@ -307,15 +334,15 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
     }
 
     protected SoundEvent getAmbientSound() {
-        return this.isAngry() ? SoundEvents.ENDERMAN_SCREAM : SoundEvents.ENDERMAN_AMBIENT;
+        return this.isAngry() ? ModSoundEvents.REAVER_SCREAM : ModSoundEvents.REAVER_AMBIENT;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SoundEvents.ENDERMAN_HURT;
+        return ModSoundEvents.REAVER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENDERMAN_DEATH;
+        return ModSoundEvents.REAVER_DEATH;
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {

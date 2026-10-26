@@ -1,0 +1,50 @@
+{
+  "fallback": "unseen_world:violeger_hollowhold/rooms",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/corridor_0",
+        "processors": "unseen_world:violeger_hollowhold_corridors"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/corridor_1",
+        "processors": "unseen_world:violeger_hollowhold_corridors"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/corridor_2",
+        "processors": "unseen_world:violeger_hollowhold_corridors"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/corridor_stairs",
+        "processors": "unseen_world:violeger_hollowhold_corridors"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/corridor_bend",
+        "processors": "unseen_world:violeger_hollowhold_corridors"
+      }
+    }
+  ]
+}

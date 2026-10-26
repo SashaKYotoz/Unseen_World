@@ -8,6 +8,7 @@
         "Name": "unseen_world:corona_stone_bricks_slab",
         "Properties": {
           "type": "bottom",
+          "dark_water": "false",
           "waterlogged": "false"
         }
       }

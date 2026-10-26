@@ -59,9 +59,6 @@ public class EclipsedAcolyteEntity extends Monster {
     private static final double SLAM_FORWARD = 1.8D;
     private static final double SLAM_RADIUS = 1.6D;
     private static final double SWEEP_REACH = 3.0D;
-    private static final double SWEEP_ARC_COS = 0.0D;
-    private static final double FLANK_COS = 0.64D;
-    private static final int SLAM_GRIP_SECONDS = 2;
     private static final float SWEEP_DAMAGE_FACTOR = 0.7F;
     private static final int CALM_TICKS_TO_DORMANT = 60;
 
@@ -238,7 +235,7 @@ public class EclipsedAcolyteEntity extends Monster {
     private void startAttack(LivingEntity target) {
         Vec3 facing = Vec3.directionFromRotation(0.0F, this.yBodyRot);
         Vec3 toTarget = target.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D);
-        boolean flanked = toTarget.lengthSqr() > 1.0E-4D && facing.dot(toTarget.normalize()) < FLANK_COS;
+        boolean flanked = toTarget.lengthSqr() > 1.0E-4D && facing.dot(toTarget.normalize()) < 0.64D;
         this.attackKind = flanked || this.random.nextFloat() < 0.3F ? SWEEP_EVENT : SLAM_EVENT;
         this.attackTicks = 1;
         this.getNavigation().stop();
@@ -291,7 +288,7 @@ public class EclipsedAcolyteEntity extends Monster {
             if (entity.hurt(this.damageSources().mobAttack(this), this.attackDamage())) {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0.0D, 0.3D, 0.0D));
                 if (entity instanceof IGrippingEntity gripping) {
-                    GrippingData.addGrippingSeconds(gripping, SLAM_GRIP_SECONDS);
+                    GrippingData.addGrippingSeconds(gripping, 2);
                 }
                 this.doEnchantDamageEffects(this, entity);
             }
@@ -320,7 +317,7 @@ public class EclipsedAcolyteEntity extends Monster {
                     }
                     Vec3 offset = entity.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D);
                     double reach = SWEEP_REACH + entity.getBbWidth() * 0.5D;
-                    return offset.lengthSqr() <= reach * reach && (offset.lengthSqr() < 0.25D || facing.dot(offset.normalize()) >= SWEEP_ARC_COS);
+                    return offset.lengthSqr() <= reach * reach && (offset.lengthSqr() < 0.25D || facing.dot(offset.normalize()) >= 0.0D);
                 });
         float yawRad = this.yBodyRot * Mth.DEG_TO_RAD;
         for (LivingEntity entity : hit) {

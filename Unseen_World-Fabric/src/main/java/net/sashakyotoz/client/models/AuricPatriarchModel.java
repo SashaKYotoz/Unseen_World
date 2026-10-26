@@ -146,13 +146,15 @@ public class AuricPatriarchModel extends HierarchicalModel<AuricPatriarch> {
         this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
         this.head.xRot = headPitch / (180F / (float) Math.PI);
 
-        this.animateWalk(entity.isFlying() ? AuricPatriarchAnimations.FLYING : AuricPatriarchAnimations.WALK,
-                limbSwing,
-                limbSwingAmount,
-                2.0F,
-                2.5F);
+        if (entity.isFlying()) {
+            this.animate(entity.hover, AuricPatriarchAnimations.FLYING, ageInTicks, 1.0F + Math.min(limbSwingAmount, 1.0F));
+        } else {
+            this.animateWalk(AuricPatriarchAnimations.WALK, limbSwing, limbSwingAmount, 2.0F, 2.5F);
+        }
         this.animate(entity.idleTransition, AuricPatriarchAnimations.IDLE_TRANSITION, ageInTicks, entity.getIdleTransitionSpeed());
-        this.animate(entity.flyingTransition, AuricPatriarchAnimations.FLYING_TRANSITION, ageInTicks, entity.getFlyingTransitionSpeed());
+        this.animate(entity.flyingTransition, AuricPatriarchAnimations.FLYING_TRANSITION, ageInTicks);
+        this.animate(entity.descent, AuricPatriarchAnimations.DESCENT, ageInTicks);
+        this.animate(entity.landing, AuricPatriarchAnimations.LANDING, ageInTicks);
 
         this.animate(entity.idle, AuricPatriarchAnimations.IDLE, ageInTicks);
         this.animate(entity.skyBurst, AuricPatriarchAnimations.SKY_BURST, ageInTicks);

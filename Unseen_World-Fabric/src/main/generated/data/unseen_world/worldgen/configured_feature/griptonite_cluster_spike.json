@@ -6,6 +6,7 @@
       "state": {
         "Name": "unseen_world:griptonite_cluster",
         "Properties": {
+          "dark_water": "false",
           "facing": "up",
           "waterlogged": "false"
         }

@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallbac
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.client.compat.IrisCompat;
+import net.sashakyotoz.compat.iris.IrisCompat;
 
 import java.io.IOException;
 

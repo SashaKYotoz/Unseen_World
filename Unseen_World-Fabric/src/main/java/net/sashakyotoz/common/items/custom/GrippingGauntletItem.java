@@ -1,8 +1,11 @@
 package net.sashakyotoz.common.items.custom;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -17,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.items.combat.AbilityHelper;
 import net.sashakyotoz.utils.CombatHelper;
 import org.jetbrains.annotations.Nullable;
@@ -24,10 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class GrippingGauntletItem extends Item {
-    private static final int USE_DURATION = 72000;
-    private static final int MIN_GRIP_TICKS = 10;
-    private static final double RANGE = 24.0D;
-    private static final int COOLDOWN = 100;
+    public static final ResourceLocation STEAL_ADVANCEMENT = UnseenWorld.MOD.makeID("steal");
+    public static final String STEAL_CRITERION = "stole_an_item";
 
     public GrippingGauntletItem(Properties settings) {
         super(settings);
@@ -41,16 +43,16 @@ public class GrippingGauntletItem extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return USE_DURATION;
+        return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingUseTicks) {
         if (!(entity instanceof Player player) || !(level instanceof ServerLevel serverLevel)
-                || this.getUseDuration(stack) - remainingUseTicks < MIN_GRIP_TICKS) {
+                || this.getUseDuration(stack) - remainingUseTicks < 10) {
             return;
         }
-        CombatHelper.BeamHit hit = CombatHelper.traceBeam(player, RANGE,
+        CombatHelper.BeamHit hit = CombatHelper.traceBeam(player, 24,
                 target -> CombatHelper.canHit(player, target) && hasLooseItems(target));
         if (!(hit.entity() instanceof LivingEntity target)) {
             return;
@@ -58,8 +60,14 @@ public class GrippingGauntletItem extends Item {
         disarm(target);
         serverLevel.sendParticles(ParticleTypes.REVERSE_PORTAL, target.getX(), target.getY(0.5D), target.getZ(), 16, 0.3D, 0.4D, 0.3D, 0.05D);
         serverLevel.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.CONDUIT_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.6F);
-        player.getCooldowns().addCooldown(this, COOLDOWN);
+        player.getCooldowns().addCooldown(this, 100);
         player.awardStat(Stats.ITEM_USED.get(this));
+        if (player instanceof ServerPlayer serverPlayer) {
+            Advancement advancement = serverLevel.getServer().getAdvancements().getAdvancement(STEAL_ADVANCEMENT);
+            if (advancement != null) {
+                serverPlayer.getAdvancements().award(advancement, STEAL_CRITERION);
+            }
+        }
     }
 
     @Override

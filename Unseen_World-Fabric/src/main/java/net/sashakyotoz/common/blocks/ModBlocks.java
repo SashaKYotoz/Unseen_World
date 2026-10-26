@@ -25,7 +25,6 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.client.particles.custom.effects.LeafParticleEffect;
 import net.sashakyotoz.common.blocks.custom.*;
 import net.sashakyotoz.common.blocks.custom.chests.ModChestBlock;
-import net.sashakyotoz.common.blocks.custom.corals.*;
 import net.sashakyotoz.common.blocks.custom.plants.*;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
@@ -84,7 +83,7 @@ public class ModBlocks {
     public static final Block DARK_CURRANTSLATE_STAIRS = DARK_CURRANTSLATE_SET.getStairs().get();
     public static final Block DARK_CURRANTSLATE_SLAB = DARK_CURRANTSLATE_SET.getSlab().get();
     public static final Block DARK_CURRANTSLATE_WALL = DARK_CURRANTSLATE_SET.getWall().get();
-    public static final Block GILDED_CURRANTSLATE = cubeStone("gilded_currantslate", () -> new Block(darkCurrantslate()), DUNGEON);
+    public static final Block GILDED_CURRANTSLATE = cubeStone("gilded_currantslate", () -> new Block(darkCurrantslate()), plus(DUNGEON, BlockTags.GUARDED_BY_PIGLINS));
     private static final BlockHolder DARK_CURRANTSLATE_BRICKS_SET = stoneSet("dark_currantslate_bricks", () -> new Block(darkCurrantslate()), DUNGEON);
     public static final Block DARK_CURRANTSLATE_BRICKS = DARK_CURRANTSLATE_BRICKS_SET.get();
     public static final Block DARK_CURRANTSLATE_BRICKS_STAIRS = DARK_CURRANTSLATE_BRICKS_SET.getStairs().get();
@@ -198,8 +197,8 @@ public class ModBlocks {
     public static final Block GRIZZLY_LOG = log("grizzly_log", ModBlocks::grizzlyWood, () -> ModBlocks.STRIPPED_GRIZZLY_LOG, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Items.GRIZZLY_LOGS);
     public static final Block STRIPPED_GRIZZLY_WOOD = strippedWood("stripped_grizzly_wood", ModBlocks::grizzlyWood, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Items.GRIZZLY_LOGS);
     public static final Block GRIZZLY_WOOD = wood("grizzly_wood", ModBlocks::grizzlyWood, () -> ModBlocks.STRIPPED_GRIZZLY_WOOD, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Items.GRIZZLY_LOGS);
-    public static final Block GRIZZLY_LEAVES = block("grizzly_leaves", () -> new LeavesBlock(props().destroyTime(3.5F).mapColor(MapColor.COLOR_GRAY)
-            .sound(SoundType.CHERRY_LEAVES).noOcclusion().instabreak()))
+    public static final Block GRIZZLY_LEAVES = block("grizzly_leaves", () -> new LeavesBlock(props().strength(0.2F).mapColor(MapColor.COLOR_GRAY)
+            .sound(SoundType.CHERRY_LEAVES).noOcclusion()))
             .withTags(BlockTags.LEAVES, BlockTags.MINEABLE_WITH_HOE, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
             .withFlammability(5, 30).withModel(BlockModel.CUBE).cutout().get();
     private static final BlockHolder GRIZZLY_PLANKS_SET = planks("grizzly", ModBlocks::grizzlyWood, GRIZZLY, ModTags.Blocks.GRIZZLY_BLOCKS);
@@ -219,7 +218,7 @@ public class ModBlocks {
     public static final Block STRIPPED_TEALIVE_WOOD = strippedWood("stripped_tealive_wood", ModBlocks::tealiveWood, ModTags.Blocks.TEALIVE_BLOCKS, ModTags.Items.TEALIVE_LOGS);
     public static final Block TEALIVE_WOOD = wood("tealive_wood", ModBlocks::tealiveWood, () -> ModBlocks.STRIPPED_TEALIVE_WOOD, ModTags.Blocks.TEALIVE_BLOCKS, ModTags.Items.TEALIVE_LOGS);
     public static final Block TEALIVE_LEAVES = block("tealive_leaves", () -> new LeavesBlock(props().mapColor(MapColor.COLOR_CYAN)
-            .sound(SoundType.AZALEA_LEAVES).noOcclusion().instabreak().randomTicks()))
+            .sound(SoundType.AZALEA_LEAVES).noOcclusion().strength(0.2F).randomTicks()))
             .withTags(BlockTags.LEAVES, BlockTags.MINEABLE_WITH_HOE, ModTags.Blocks.TEALIVE_BLOCKS, ModTags.Blocks.HANGING_AMETHYST_LEAVES_GROWABLE_ON)
             .withFlammability(5, 30).withModel(BlockModel.CUBE).cutout().get();
     private static final BlockHolder TEALIVE_PLANKS_SET = planks("tealive", ModBlocks::tealiveWood, TEALIVE, ModTags.Blocks.TEALIVE_BLOCKS);
@@ -279,8 +278,8 @@ public class ModBlocks {
     public static final Block CRIMSONVEIL_LOG = log("crimsonveil_log", ModBlocks::crimsonveil, () -> ModBlocks.STRIPPED_CRIMSONVEIL_LOG, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Items.CRIMSONVEIL_LOGS);
     public static final Block STRIPPED_CRIMSONVEIL_WOOD = strippedWood("stripped_crimsonveil_wood", ModBlocks::crimsonveil, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Items.CRIMSONVEIL_LOGS);
     public static final Block CRIMSONVEIL_WOOD = wood("crimsonveil_wood", ModBlocks::crimsonveil, () -> ModBlocks.STRIPPED_CRIMSONVEIL_WOOD, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Items.CRIMSONVEIL_LOGS);
-    public static final Block CRIMSONVEIL_LEAVES = block("crimsonveil_leaves", () -> new LeavesBlock(props().destroyTime(2.0F).lightLevel(state -> 2)
-            .mapColor(MapColor.TERRACOTTA_ORANGE).sound(SoundType.CHERRY_LEAVES).noOcclusion().instabreak().randomTicks()))
+    public static final Block CRIMSONVEIL_LEAVES = block("crimsonveil_leaves", () -> new LeavesBlock(props().strength(0.2F).lightLevel(state -> 2)
+            .mapColor(MapColor.TERRACOTTA_ORANGE).sound(SoundType.CHERRY_LEAVES).noOcclusion().strength(0.2F).randomTicks()))
             .withTags(BlockTags.LEAVES, BlockTags.MINEABLE_WITH_HOE, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Blocks.CRIMSONVEIL_VINES_GROWABLE_ON)
             .withFlammability(5, 30).withModel(BlockModel.CUBE).cutout().get();
     public static final Block CRIMSONVEIL_VINE = holder("crimsonveil_vine", () -> new FruitingVinesHeadBlock(vineSettings(MapColor.CRIMSON_HYPHAE, SoundType.FLOWERING_AZALEA),
@@ -342,24 +341,24 @@ public class ModBlocks {
 
     public static final Block DEAD_UMBRAL_CORAL_BLOCK = block("dead_umbral_coral_block", () -> new Block(copy(Blocks.DEAD_BRAIN_CORAL_BLOCK)))
             .withTags(PICKAXE).withModel(BlockModel.CUBE).dropsSelf().get();
-    public static final Block DEAD_UMBRAL_CORAL = block("dead_umbral_coral", () -> new ModBaseCoralPlantBlock(copy(Blocks.DEAD_BRAIN_CORAL)))
+    public static final Block DEAD_UMBRAL_CORAL = block("dead_umbral_coral", () -> new BaseCoralPlantBlock(copy(Blocks.DEAD_BRAIN_CORAL)) {})
             .withTags(PICKAXE).withModel(BlockModel.CROSS).cutout().get();
-    public static final Block DEAD_UMBRAL_CORAL_FAN = holder("dead_umbral_coral_fan", () -> new ModBaseCoralFanBlock(copy(Blocks.DEAD_BRAIN_CORAL_FAN)))
+    public static final Block DEAD_UMBRAL_CORAL_FAN = holder("dead_umbral_coral_fan", () -> new BaseCoralFanBlock(copy(Blocks.DEAD_BRAIN_CORAL_FAN)) {})
             .withTags(PICKAXE).cutout().get();
-    public static final Block DEAD_UMBRAL_CORAL_WALL_FAN = holder("dead_umbral_coral_wall_fan", () -> new ModBaseCoralWallFanBlock(copy(Blocks.DEAD_BRAIN_CORAL_WALL_FAN)
-            .dropsLike(ModBlocks.DEAD_UMBRAL_CORAL_FAN)))
+    public static final Block DEAD_UMBRAL_CORAL_WALL_FAN = holder("dead_umbral_coral_wall_fan", () -> new BaseCoralWallFanBlock(copy(Blocks.DEAD_BRAIN_CORAL_WALL_FAN)
+            .dropsLike(ModBlocks.DEAD_UMBRAL_CORAL_FAN)) {})
             .withTags(PICKAXE).cutout().get();
-    public static final Block UMBRAL_CORAL_BLOCK = block("umbral_coral_block", () -> new ModCoralBlock(ModBlocks.DEAD_UMBRAL_CORAL_BLOCK,
-            copy(Blocks.BRAIN_CORAL_BLOCK).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6)))
+    public static final Block UMBRAL_CORAL_BLOCK = block("umbral_coral_block", () -> new CoralBlock(ModBlocks.DEAD_UMBRAL_CORAL_BLOCK,
+            copy(Blocks.BRAIN_CORAL_BLOCK).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6)) {})
             .withTags(PICKAXE).withModel(BlockModel.CUBE).get();
-    public static final Block UMBRAL_CORAL = block("umbral_coral", () -> new ModCoralPlantBlock(ModBlocks.DEAD_UMBRAL_CORAL,
-            copy(Blocks.BRAIN_CORAL).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6)))
+    public static final Block UMBRAL_CORAL = block("umbral_coral", () -> new CoralPlantBlock(ModBlocks.DEAD_UMBRAL_CORAL,
+            copy(Blocks.BRAIN_CORAL).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6)) {})
             .withModel(BlockModel.CROSS).cutout().get();
-    public static final Block UMBRAL_CORAL_FAN = holder("umbral_coral_fan", () -> new ModCoralFanBlock(ModBlocks.DEAD_UMBRAL_CORAL_FAN,
-            copy(Blocks.BRAIN_CORAL_FAN).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6)))
+    public static final Block UMBRAL_CORAL_FAN = holder("umbral_coral_fan", () -> new CoralFanBlock(ModBlocks.DEAD_UMBRAL_CORAL_FAN,
+            copy(Blocks.BRAIN_CORAL_FAN).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6)) {})
             .cutout().get();
-    public static final Block UMBRAL_CORAL_WALL_FAN = holder("umbral_coral_wall_fan", () -> new ModCoralWallFanBlock(ModBlocks.DEAD_UMBRAL_CORAL_WALL_FAN,
-            copy(Blocks.BRAIN_CORAL_WALL_FAN).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6).dropsLike(ModBlocks.UMBRAL_CORAL_FAN)))
+    public static final Block UMBRAL_CORAL_WALL_FAN = holder("umbral_coral_wall_fan", () -> new CoralWallFanBlock(ModBlocks.DEAD_UMBRAL_CORAL_WALL_FAN,
+            copy(Blocks.BRAIN_CORAL_WALL_FAN).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 6).dropsLike(ModBlocks.UMBRAL_CORAL_FAN)) {})
             .cutout().get();
 
     public static final Block GLOOMWEED = block("gloomweed", () -> new DarknessFernBlock(props().replaceable().instabreak().sound(SoundType.GRASS)
@@ -447,7 +446,7 @@ public class ModBlocks {
 
     private static Block grass(String id, MapColor color, SoundType sound) {
         return block(id, () -> new DarknessGrassBlock(props().destroyTime(1).mapColor(color).sound(sound)))
-                .withTags(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.DIRT, BlockTags.VALID_SPAWN).get();
+                .withTags(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.DIRT, BlockTags.VALID_SPAWN, BlockTags.ANIMALS_SPAWNABLE_ON).get();
     }
 
     private static Block dirt(String id, MapColor color) {
@@ -556,7 +555,7 @@ public class ModBlocks {
     }
 
     private static BlockBehaviour.Properties amethystLeaves() {
-        return props().sound(SoundType.AZALEA_LEAVES).noOcclusion().instabreak().randomTicks();
+        return props().sound(SoundType.AZALEA_LEAVES).noOcclusion().strength(0.2F).randomTicks();
     }
 
     private static BlockBehaviour.Properties burlywood() {
@@ -564,7 +563,7 @@ public class ModBlocks {
     }
 
     private static BlockBehaviour.Properties burlywoodLeaves() {
-        return props().lightLevel(state -> 3).mapColor(MapColor.PLANT).sound(SoundType.BIG_DRIPLEAF).noOcclusion().instabreak().randomTicks();
+        return props().lightLevel(state -> 3).mapColor(MapColor.PLANT).sound(SoundType.BIG_DRIPLEAF).noOcclusion().strength(0.2F).randomTicks();
     }
 
     private static BlockBehaviour.Properties tealiveWood() {

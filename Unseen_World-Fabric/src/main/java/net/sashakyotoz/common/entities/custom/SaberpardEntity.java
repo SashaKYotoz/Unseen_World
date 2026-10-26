@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -10,6 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
@@ -28,12 +30,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.util.GripConversion;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.utils.ActionsUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntFunction;
@@ -169,9 +173,8 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
             world.playSound(null, this.blockPosition(), SoundEvents.OCELOT_HURT, SoundSource.NEUTRAL, 3, 2);
     }
 
-    @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(
+    public @NotNull SpawnGroupData finalizeSpawn(
             ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt
     ) {
         Holder<Biome> registryEntry = world.getBiome(this.blockPosition());
@@ -179,8 +182,12 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
         this.setVariant(type);
         if (this.random.nextBoolean())
             this.setAge(-24000);
-        this.populateDefaultEquipmentSlots(world.getRandom(), difficulty);
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
+    }
+
+    @Override
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+        return level.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) ? 10.0F : level.getPathfindingCostFromLightLevels(pos);
     }
 
     public enum Type implements StringRepresentable {

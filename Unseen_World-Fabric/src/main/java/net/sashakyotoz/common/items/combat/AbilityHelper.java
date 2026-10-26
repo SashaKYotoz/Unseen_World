@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.sashakyotoz.common.items.custom.GrippingBundleItem;
+import net.sashakyotoz.compat.accessory.GrippingBundles;
 
 import java.util.List;
 
@@ -41,6 +42,11 @@ public final class AbilityHelper {
         if (holdsAmmo(player.getOffhandItem(), ammo)) {
             return true;
         }
+        for (ItemStack bundle : GrippingBundles.worn(player)) {
+            if (GrippingBundleItem.contains(bundle, ammo)) {
+                return true;
+            }
+        }
         Inventory inventory = player.getInventory();
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
             if (holdsAmmo(inventory.getItem(slot), ammo)) {
@@ -56,6 +62,11 @@ public final class AbilityHelper {
         }
         if (takeAmmo(player.getOffhandItem(), ammo)) {
             return true;
+        }
+        for (ItemStack bundle : GrippingBundles.worn(player)) {
+            if (GrippingBundleItem.removeOne(bundle, ammo)) {
+                return true;
+            }
         }
         Inventory inventory = player.getInventory();
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {

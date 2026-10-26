@@ -3,7 +3,7 @@
   "id": "unseen_world",
   "version": "${version}",
   "name": "Unseen World",
-  "description": "Unseen World, world of darkness, are waiting for you",
+  "description": "Unseen World, world of darkness, is waiting for you",
   "authors": [
     "SashaKYotoz"
   ],
@@ -23,6 +23,12 @@
     ],
     "fabric-datagen": [
       "net.sashakyotoz.common.UnseenWorldDataGenerator"
+    ],
+    "jade": [
+      "net.sashakyotoz.compat.jade.UWJadePlugin"
+    ],
+    "emi": [
+      "net.sashakyotoz.compat.emi.UWEmiPlugin"
     ]
   },
   "mixins": [
@@ -35,7 +41,13 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "another-mod": "*"
+    "create": "*",
+    "emi": "*",
+    "jade": "*",
+    "wthit": "*",
+    "trinkets": "*",
+    "diet": "*",
+    "lambdynlights": "*"
   },
   "accessWidener": "unseen_world.accesswidener"
 }

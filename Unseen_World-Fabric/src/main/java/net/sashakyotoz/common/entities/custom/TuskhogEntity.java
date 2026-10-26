@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
@@ -34,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,6 +44,7 @@ import net.sashakyotoz.common.entities.ai.brains.TuskhogBrain;
 import net.sashakyotoz.common.entities.util.GripConversion;
 import net.sashakyotoz.common.tags.ModTags;
 import net.sashakyotoz.utils.ActionsUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntFunction;
@@ -50,8 +53,10 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(TuskhogEntity.class, EntityDataSerializers.BOOLEAN);
     private final GripConversion conversion = new GripConversion(this, CONVERTING, this::finishConversion);
     private static final Ingredient TAMING_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
+
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(TuskhogEntity.class, EntityDataSerializers.INT);
     public static final EntityDimensions LONG_JUMPING_DIMENSIONS = EntityDimensions.scalable(0.9F, 1.3F).scale(0.7F);
+
     protected static final ImmutableList<SensorType<? extends Sensor<? super TuskhogEntity>>> SENSORS = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
             SensorType.NEAREST_PLAYERS,
@@ -280,9 +285,13 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
         this.conversion.save(nbt);
     }
 
-    @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+        return level.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) ? 10.0F : level.getPathfindingCostFromLightLevels(pos);
+    }
+
+    @Override
+    public @NotNull SpawnGroupData finalizeSpawn(
             ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt
     ) {
         Holder<Biome> registryEntry = world.getBiome(this.blockPosition());
@@ -290,7 +299,6 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
         this.setVariant(type);
         if (this.random.nextBoolean())
             this.setAge(-24000);
-        this.populateDefaultEquipmentSlots(world.getRandom(), difficulty);
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
     }
 

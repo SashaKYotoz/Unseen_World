@@ -18,7 +18,7 @@
       "min_delay": 12000,
       "replace_current_music": false,
       "sound": {
-        "sound_id": "minecraft:music.overworld.badlands"
+        "sound_id": "unseen_world:penumbral_steppe.ambient"
       }
     },
     "particle": {

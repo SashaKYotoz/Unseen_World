@@ -20,7 +20,7 @@
             "min_inclusive": 1
           }
         },
-        "probability": 0.12
+        "probability": 0.1
       }
     ],
     "dirt_provider": {
@@ -46,6 +46,7 @@
       "state": {
         "Name": "unseen_world:burlywood_leaves",
         "Properties": {
+          "dark_water": "false",
           "distance": "7",
           "overgrown": "false",
           "persistent": "false",

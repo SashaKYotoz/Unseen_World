@@ -9,8 +9,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -34,9 +36,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.blocks.custom.entities.OrdealSpawnerBlockEntity;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.entities.ai.goals.VexalBeetleFlyGoal;
@@ -55,15 +59,11 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
     private static final double RIDER_SEAT_HEIGHT = 0.3D;
     private static final float GROUND_SPEED_FACTOR = 0.5F;
     private static final float GLIDE_SPEED_FACTOR = 0.6F;
-    private static final int RIDDEN_SYNC_INTERVAL = 2;
     private static final int RECOVERY_THRESHOLD = MAX_FLIGHT_TICKS / 3;
     private static final int GROUND_REGEN_PER_TICK = 2;
-    private static final int STAMINA_SYNC_INTERVAL = 5;
     private static final double GLIDE_FALL_FACTOR = 0.6D;
     private static final double GRAVITY = 0.08D;
-    private static final float TAME_CHANCE = 0.25F;
     private static final int PASSENGER_RESYNC_TICKS = 20;
-    private static final int PASSENGER_RESYNC_INTERVAL = 5;
 
     public final AnimationState flying = new AnimationState();
     private int flightStamina = MAX_FLIGHT_TICKS;
@@ -167,7 +167,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
         if (stack.is(TAMING_ITEMS) && !this.getTags().contains(OrdealSpawnerBlockEntity.ORDEAL_TAG)) {
             this.usePlayerItem(player, hand, stack);
             if (!client) {
-                if (this.random.nextFloat() < TAME_CHANCE) {
+                if (this.random.nextFloat() < 0.25F) {
                     this.tame(player);
                     this.getNavigation().stop();
                     this.setTarget(null);
@@ -262,6 +262,25 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
         if (source != null) {
             this.level().playSound(null, this, SoundEvents.HORSE_SADDLE, source, 0.5F, 1.4F);
         }
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return isTame() ? ModSoundEvents.VEXAL_BEETLE_AMBIENT : ModSoundEvents.VEXAL_BEETLE_ANGRY;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return ModSoundEvents.VEXAL_BEETLE_DEATH;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hurt = super.doHurtTarget(target);
+        if (hurt) {
+            this.playSound(ModSoundEvents.VEXAL_BEETLE_ATTACK, 1.0F, this.getVoicePitch());
+        }
+        return hurt;
     }
 
     @Override
@@ -374,6 +393,11 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
     }
 
     @Override
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+        return level.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) ? 10.0F : level.getPathfindingCostFromLightLevels(pos);
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide()) {
@@ -390,7 +414,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
             if (!exhausted && --this.flightStamina <= 0) {
                 this.flightStamina = 0;
                 exhausted = true;
-                this.playSound(SoundEvents.PHANTOM_FLAP, 1.0F, 0.5F);
+                this.playSound(ModSoundEvents.VEXAL_BEETLE_EXHAUSTED, 1.0F, 0.5F);
             }
         } else if (!airborne || !this.isVehicle()) {
             this.flightStamina = Math.min(MAX_FLIGHT_TICKS, this.flightStamina + (this.onGround() ? GROUND_REGEN_PER_TICK : 1));
@@ -401,7 +425,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
         if (exhausted != this.entityData.get(EXHAUSTED)) {
             this.entityData.set(EXHAUSTED, exhausted);
         }
-        int interval = this.isVehicle() ? RIDDEN_SYNC_INTERVAL : STAMINA_SYNC_INTERVAL;
+        int interval = this.isVehicle() ? 2 : 5;
         if (this.tickCount % interval == 0 || this.flightStamina == 0 || this.flightStamina == MAX_FLIGHT_TICKS) {
             this.entityData.set(FLIGHT_STAMINA, this.flightStamina);
         }
@@ -427,7 +451,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
                 this.setOrderedToSit(false);
                 this.setInSittingPose(false);
             }
-            if (this.passengerResyncTicks > 0 && --this.passengerResyncTicks % PASSENGER_RESYNC_INTERVAL == 0) {
+            if (this.passengerResyncTicks > 0 && --this.passengerResyncTicks % 5 == 0) {
                 this.resyncPassengers();
             }
         }

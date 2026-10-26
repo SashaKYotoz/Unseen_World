@@ -8,7 +8,7 @@
     "fan": {
       "Name": "unseen_world:umbral_coral_fan",
       "Properties": {
-        "dark_water": "true",
+        "dark_water": "false",
         "waterlogged": "true"
       }
     },
@@ -22,7 +22,7 @@
     "plant": {
       "Name": "unseen_world:umbral_coral",
       "Properties": {
-        "dark_water": "true",
+        "dark_water": "false",
         "waterlogged": "true"
       }
     },
@@ -36,7 +36,7 @@
     "wall_fan": {
       "Name": "unseen_world:umbral_coral_wall_fan",
       "Properties": {
-        "dark_water": "true",
+        "dark_water": "false",
         "facing": "north",
         "waterlogged": "true"
       }

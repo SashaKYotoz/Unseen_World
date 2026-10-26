@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.sashakyotoz.common.blocks.custom.fluids.DualWaterloggedBlock;
 import net.sashakyotoz.common.world.features.custom.configs.CoralReefFeatureConfig;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class CoralReefFeature extends Feature<CoralReefFeatureConfig> {
     }
 
     private static BlockState waterlogged(BlockState state) {
-        return state.trySetValue(BlockStateProperties.WATERLOGGED, true);
+        return state.trySetValue(BlockStateProperties.WATERLOGGED, true).trySetValue(DualWaterloggedBlock.DARK_WATER,Boolean.TRUE);
     }
 
     private static BlockPos findFloor(WorldGenLevel level, BlockPos start) {

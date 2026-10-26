@@ -229,7 +229,7 @@
               "levels": {
                 "type": "minecraft:uniform",
                 "max": 30.0,
-                "min": 15.0
+                "min": 10.0
               },
               "treasure": false
             }
@@ -245,7 +245,7 @@
               "levels": {
                 "type": "minecraft:uniform",
                 "max": 30.0,
-                "min": 15.0
+                "min": 10.0
               },
               "treasure": false
             }
@@ -261,7 +261,7 @@
               "levels": {
                 "type": "minecraft:uniform",
                 "max": 30.0,
-                "min": 15.0
+                "min": 10.0
               },
               "treasure": false
             }
@@ -277,7 +277,7 @@
               "levels": {
                 "type": "minecraft:uniform",
                 "max": 30.0,
-                "min": 15.0
+                "min": 10.0
               },
               "treasure": false
             }
@@ -293,7 +293,7 @@
               "levels": {
                 "type": "minecraft:uniform",
                 "max": 30.0,
-                "min": 15.0
+                "min": 10.0
               },
               "treasure": false
             }
@@ -309,7 +309,7 @@
               "levels": {
                 "type": "minecraft:uniform",
                 "max": 30.0,
-                "min": 15.0
+                "min": 10.0
               },
               "treasure": false
             }

@@ -1,13 +1,13 @@
 {
-  "fallback": "unseen_world:violeger_cantonment/bottom",
+  "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 2,
+      "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
-        "location": "unseen_world:violeger_cantonment/violeger_village_upper_house0",
-        "processors": "minecraft:empty"
+        "location": "unseen_world:violeger_cantonment/violeger_cantonment_upper_0",
+        "processors": "unseen_world:currantslate_house_degradation"
       }
     },
     {
@@ -15,26 +15,8 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
-        "location": "unseen_world:violeger_cantonment/violeger_village_upper_house1",
-        "processors": "minecraft:empty"
-      }
-    },
-    {
-      "weight": 2,
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "projection": "rigid",
-        "location": "unseen_world:violeger_cantonment/violeger_village_upper_house2",
-        "processors": "minecraft:empty"
-      }
-    },
-    {
-      "weight": 2,
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "projection": "rigid",
-        "location": "unseen_world:violeger_cantonment/violeger_village_upper_house3",
-        "processors": "minecraft:empty"
+        "location": "unseen_world:violeger_cantonment/violeger_cantonment_upper_1",
+        "processors": "unseen_world:currantslate_house_degradation"
       }
     },
     {
@@ -42,8 +24,8 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
-        "location": "unseen_world:violeger_cantonment/violeger_village_upper_house4",
-        "processors": "minecraft:empty"
+        "location": "unseen_world:violeger_cantonment/violeger_cantonment_upper_2",
+        "processors": "unseen_world:currantslate_house_degradation"
       }
     }
   ]

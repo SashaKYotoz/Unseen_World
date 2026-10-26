@@ -3,6 +3,7 @@ package net.sashakyotoz.common.entities.bosses;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -35,10 +36,12 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.DynamicGameEventListener;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.ModSoundEvents;
 import net.sashakyotoz.common.entities.ModEntities;
@@ -97,16 +100,28 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     private static final int SACRIFICE_TICKS = 50;
     private static final float SACRIFICE_HEAL_PER_MINION = 0.03F;
     private static final float SACRIFICE_MAX_HEAL = 0.15F;
+    private static final int LANDING_SCAN_DEPTH = 48;
+    private static final int DESCENT_MAX_TICKS = 140;
+    private static final int DESCENT_EASE_TICKS = 10;
+    private static final int DESCENT_NO_GROUND_TICKS = 20;
+    private static final double DESCENT_MIN_SPEED = 0.1D;
+    private static final double DESCENT_MAX_SPEED = 0.6D;
+    private static final double DESCENT_SPEED_PER_BLOCK = 0.09D;
+    private static final double TOUCHDOWN_HEIGHT = 0.3D;
+    private static final int TOUCHDOWN_TICKS = 25;
+    private static final int FALLING_SUN_WINDUP_TICKS = 10;
+    private static final double FALLING_SUN_MAX_DIVE_SPEED = 2.5D;
+    private static final double DYING_MAX_SINK_SPEED = 0.25D;
     private static final int EMPOWERED_ATTACKS = 2;
     private static final float EMPOWER_FACTOR = 1.5F;
     public static final int SUNBURST_CHANNEL_TICK = 10;
-    public static final int SUNBURST_BLAST_TICK = 110;
-    private static final int SUNBURST_TICKS = 130;
+    public static final int SUNBURST_BLAST_TICK = 90;
+    private static final int SUNBURST_TICKS = 110;
     public static final double SUNBURST_RADIUS = 16.0D;
     private static final double SANCTUARY_RADIUS = 2.5D;
     private static final int SANCTUARY_COUNT = 2;
     private static final float SUNBURST_STAGGER_DAMAGE = 45.0F;
-    private static final int SUNBURST_COOLDOWN = 700;
+    private static final int SUNBURST_COOLDOWN = 600;
 
     private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.unseen_world.auric_patriarch"), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.NOTCHED_10);
     public final DynamicGameEventListener<PatriarchEventListener> listener = new DynamicGameEventListener<>(
@@ -116,6 +131,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     public final AnimationState idleTransition = new AnimationState();
     public final AnimationState idle = new AnimationState();
     public final AnimationState flyingTransition = new AnimationState();
+    public final AnimationState hover = new AnimationState();
+    public final AnimationState descent = new AnimationState();
+    public final AnimationState landing = new AnimationState();
     public final AnimationState skyBurst = new AnimationState();
     public final AnimationState vexTime = new AnimationState();
     public final AnimationState divineTouch = new AnimationState();
@@ -144,6 +162,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     private final List<Vec3> sanctuaries = new ArrayList<>();
     private Vec3 judgementCursor = Vec3.ZERO;
     private int lastLandedTick = -1000;
+    private double landingY = Double.NaN;
     private int lastChainTick = -1000;
     private int empoweredStrikes = 0;
     private boolean empoweredAttack = false;
@@ -178,7 +197,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         this.bindAnimation(this.death, PatriarchState.DYING);
         this.bindAnimation(this.idleTransition, PatriarchState.AWAKE_TO_IDLE, PatriarchState.IDLE_TO_AWAKE);
         this.bindAnimation(this.idle, PatriarchState.IDLING);
-        this.bindAnimation(this.flyingTransition, PatriarchState.TO_FLYING, PatriarchState.TO_GROUND);
+        this.bindAnimation(this.flyingTransition, PatriarchState.TO_FLYING);
+        this.bindAnimation(this.descent, PatriarchState.TO_GROUND);
+        this.bindAnimation(this.landing, PatriarchState.TOUCHDOWN);
         this.bindAnimation(this.vexTime, PatriarchState.VEX_TIME, PatriarchState.ASCENSION_RITE);
         this.bindAnimation(this.skyBurst, PatriarchState.SKY_BURST);
         this.bindAnimation(this.divineTouch, PatriarchState.DIVINE_TOUCH);
@@ -345,8 +366,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             this.aerialPhaseTicks = 0;
             this.forcedTakeoff = false;
             this.hasUsedVexTimeInFlight = false;
-            this.setGroundMovement();
-            this.setFlying(false);
+            this.landingY = Double.NaN;
             this.lastUsed.put(PatriarchState.FINAL_SUNBURST, this.tickCount - SUNBURST_COOLDOWN + 100);
         }
     }
@@ -439,13 +459,9 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     }
 
     @Override
-    protected int calculateFallDamage(float fallDistance, float damageMultiplier) {
-        int damage = super.calculateFallDamage(fallDistance, damageMultiplier);
-        return this.getPatriarchState() == PatriarchState.TO_GROUND ? Mth.floor(damage / 2.0F) : damage;
-    }
-
-    public float getFlyingTransitionSpeed() {
-        return this.getPatriarchState() == PatriarchState.TO_GROUND ? -1.0F : 1.0F;
+    protected boolean ignoresFallDamage(PatriarchState state) {
+        return this.isFlying() || state == PatriarchState.TO_FLYING || state == PatriarchState.TO_GROUND
+                || state == PatriarchState.TOUCHDOWN || state == PatriarchState.FALLING_SUN;
     }
 
     @Override
@@ -458,8 +474,29 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             if (this.aerialPhaseTicks > 0 && (!this.isFlying() || --this.aerialPhaseTicks <= 0)) {
                 this.aerialPhaseTicks = 0;
             }
+            if (this.isFlying()) {
+                this.resetFallDistance();
+            }
             this.updateMinionSyncState();
             this.tickGildedChains();
+        } else if (this.level().isClientSide()) {
+            if (this.isFlying()) {
+                this.hover.startIfStopped(this.tickCount);
+            } else {
+                this.hover.stop();
+            }
+        }
+    }
+
+    @Override
+    protected void tickDeath() {
+        super.tickDeath();
+        if (!this.level().isClientSide() && !this.onGround()) {
+            Vec3 motion = this.getDeltaMovement();
+            if (motion.y < -DYING_MAX_SINK_SPEED) {
+                this.setDeltaMovement(motion.x * 0.8D, -DYING_MAX_SINK_SPEED, motion.z * 0.8D);
+            }
+            this.resetFallDistance();
         }
     }
 
@@ -531,16 +568,10 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                     this.returnToStanding();
                 }
             }
-            case TO_GROUND -> {
-                if (ticks <= 40 && this.level().getBlockState(this.getOnPos().below()).isAir()) {
-                    this.addDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.25D, 0.0D));
-                }
-                if (ticks >= 40) {
-                    this.setGroundMovement();
-                    this.setFlying(false);
-                    this.hasUsedVexTimeInFlight = false;
-                    this.aerialPhaseTicks = 0;
-                    this.lastLandedTick = this.tickCount;
+            case TO_GROUND -> this.tickDescent(ticks);
+            case TOUCHDOWN -> {
+                this.getNavigation().stop();
+                if (ticks >= TOUCHDOWN_TICKS) {
                     this.returnToStanding();
                 }
             }
@@ -640,13 +671,20 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                 }
             }
             case FALLING_SUN -> {
-                if (!this.onGround()) {
-                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D).add(0.0D, -0.12D, 0.0D));
-                }
                 if (ticks == 1) {
+                    this.getNavigation().stop();
+                    this.landingY = Double.NaN;
                     this.playSound(SoundEvents.PHANTOM_DEATH, 2.5F, 0.5F);
                 }
+                if (this.isFlying()) {
+                    this.tickFallingSunDive(ticks);
+                } else if (!this.onGround()) {
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                }
                 if (ticks == FALLING_SUN_IMPACT_TICK) {
+                    if (this.isFlying()) {
+                        this.finishLanding();
+                    }
                     this.performFallingSunImpact();
                 }
                 if (ticks >= FALLING_SUN_TICKS) {
@@ -690,6 +728,99 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             default -> {
             }
         }
+    }
+
+    private void tickDescent(int ticks) {
+        this.getNavigation().stop();
+        this.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+        this.resetFallDistance();
+        if (!this.isFlying()) {
+            this.chainState(PatriarchState.TOUCHDOWN);
+            return;
+        }
+        if (ticks == 1 || ticks % 10 == 0 || Double.isNaN(this.landingY)) {
+            this.landingY = this.findLandingY();
+        }
+        Vec3 motion = this.getDeltaMovement();
+        if (Double.isNaN(this.landingY)) {
+            this.setDeltaMovement(motion.x * 0.8D, motion.y * 0.5D, motion.z * 0.8D);
+            if (ticks >= DESCENT_NO_GROUND_TICKS) {
+                this.returnToStanding();
+            }
+            return;
+        }
+        double height = this.getY() - this.landingY;
+        if (this.onGround() || height <= TOUCHDOWN_HEIGHT || ticks >= DESCENT_MAX_TICKS) {
+            this.touchDown();
+            return;
+        }
+        double speed = Mth.clamp(height * DESCENT_SPEED_PER_BLOCK, DESCENT_MIN_SPEED, DESCENT_MAX_SPEED);
+        double ease = Math.min(1.0D, ticks / (double) DESCENT_EASE_TICKS);
+        double vertical = Mth.lerp(0.35D, motion.y, -speed * ease);
+        this.setDeltaMovement(motion.x * 0.8D, Math.max(vertical, -height), motion.z * 0.8D);
+    }
+
+    private void tickFallingSunDive(int ticks) {
+        this.resetFallDistance();
+        if (ticks == 1 || ticks % 5 == 0 || Double.isNaN(this.landingY)) {
+            this.landingY = this.findLandingY();
+        }
+        Vec3 motion = this.getDeltaMovement();
+        if (Double.isNaN(this.landingY)) {
+            this.finishLanding();
+            return;
+        }
+        double height = this.getY() - this.landingY;
+        if (this.onGround() || height <= TOUCHDOWN_HEIGHT) {
+            this.finishLanding();
+            return;
+        }
+        if (ticks < FALLING_SUN_WINDUP_TICKS) {
+            this.setDeltaMovement(motion.x * 0.5D, motion.y * 0.5D, motion.z * 0.5D);
+            return;
+        }
+        int remaining = Math.max(1, FALLING_SUN_IMPACT_TICK - ticks);
+        double dive = Math.min(height / remaining, FALLING_SUN_MAX_DIVE_SPEED);
+        this.setDeltaMovement(motion.x * 0.6D, -Math.min(dive, height), motion.z * 0.6D);
+    }
+
+    private double findLandingY() {
+        Level level = this.level();
+        BlockPos.MutableBlockPos cursor = BlockPos.containing(this.getX(), this.getY(), this.getZ()).mutable();
+        int bottom = Math.max(level.getMinBuildHeight(), cursor.getY() - LANDING_SCAN_DEPTH);
+        for (int y = cursor.getY(); y >= bottom; y--) {
+            cursor.setY(y);
+            BlockState state = level.getBlockState(cursor);
+            if (!state.getFluidState().isEmpty()) {
+                return y + state.getFluidState().getHeight(level, cursor);
+            }
+            VoxelShape shape = state.getCollisionShape(level, cursor);
+            if (!shape.isEmpty()) {
+                return y + shape.max(Direction.Axis.Y);
+            }
+        }
+        return Double.NaN;
+    }
+
+    private void finishLanding() {
+        this.landingY = Double.NaN;
+        this.setGroundMovement();
+        this.setFlying(false);
+        this.hasUsedVexTimeInFlight = false;
+        this.aerialPhaseTicks = 0;
+        this.lastLandedTick = this.tickCount;
+        this.resetFallDistance();
+        Vec3 motion = this.getDeltaMovement();
+        this.setDeltaMovement(motion.x * 0.3D, Math.min(0.0D, motion.y) * 0.3D, motion.z * 0.3D);
+    }
+
+    private void touchDown() {
+        this.finishLanding();
+        this.groundBurst(this.position(), 24, 0.8D);
+        this.serverRing(ParticleTypes.CLOUD, this.position().add(0.0D, 0.1D, 0.0D), 1.6D, 20);
+        this.playSound(SoundEvents.PHANTOM_FLAP, 1.5F, 0.6F);
+        this.playSound(SoundEvents.RAVAGER_STEP, 1.2F, 0.7F);
+        this.chainState(PatriarchState.TOUCHDOWN);
     }
 
     private void performFallingSunImpact() {
@@ -889,8 +1020,13 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                 }
             }
             case TO_GROUND -> {
-                if (this.onGround() && ticks > 5 && ticks % 10 == 0) {
-                    BossParticles.ring(level, ParticleTypes.CLOUD, this.position().add(0.0D, 0.1D, 0.0D), 1.0D, 20, 0.3D, 0.0D);
+                if (ticks % 4 == 0 && !this.level().getBlockState(this.blockPosition().below(3)).isAir()) {
+                    BossParticles.ring(level, ParticleTypes.CLOUD, this.position().add(0.0D, 0.1D, 0.0D), 1.2D, 16, 0.25D, 0.0D);
+                }
+            }
+            case TOUCHDOWN -> {
+                if (ticks == 1) {
+                    BossParticles.ring(level, ParticleTypes.CLOUD, this.position().add(0.0D, 0.1D, 0.0D), 1.0D, 28, 0.45D, 0.0D);
                 }
             }
             case SUDDEN_BEAM -> {
@@ -1437,7 +1573,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     public float alphaIntensity() {
         return switch (this.getPatriarchState()) {
             case IDLING -> 0.75F;
-            case TO_FLYING, TO_GROUND -> 0.5F;
+            case TO_FLYING, TO_GROUND, TOUCHDOWN -> 0.5F;
             case SUDDEN_BEAM, DIVINE_TOUCH -> 1.0F;
             case WING_KNOCKBACK, VEX_TIME, SOLAR_JUDGEMENT, SACRIFICE -> 0.8F;
             case ASCENSION_RITE, FALLING_SUN, FINAL_SUNBURST -> 1.0F;
@@ -1502,7 +1638,8 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         SOLAR_JUDGEMENT(16),
         FALLING_SUN(17),
         SACRIFICE(18),
-        FINAL_SUNBURST(19);
+        FINAL_SUNBURST(19),
+        TOUCHDOWN(20);
 
         private final int id;
 
