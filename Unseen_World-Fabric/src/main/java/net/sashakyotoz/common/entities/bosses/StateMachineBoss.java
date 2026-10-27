@@ -214,11 +214,11 @@ public abstract class StateMachineBoss<S extends Enum<S> & BossState> extends Bo
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(this.stateAccessor(), this.initialState());
-        this.entityData.define(ABILITY_POS, new Vector3f());
-        this.entityData.define(BOSS_PHASE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(this.stateAccessor(), this.initialState());
+        builder.define(ABILITY_POS, new Vector3f());
+        builder.define(BOSS_PHASE, 0);
     }
 
     public S getBossState() {

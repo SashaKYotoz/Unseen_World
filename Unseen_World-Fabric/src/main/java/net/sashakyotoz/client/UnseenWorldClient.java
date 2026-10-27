@@ -166,17 +166,17 @@ public class UnseenWorldClient implements ClientModInitializer {
         DimensionRenderingRegistry.registerDimensionEffects(ModDimensions.CHIMERIC_DARKNESS_LOCATION, new ChimericDarknessEffects());
         DimensionRenderingRegistry.registerWeatherRenderer(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY, new Grippfall());
 
-        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, new ResourceLocation("pull"), (stack, world, entity, seed) -> {
+        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, ResourceLocation.withDefaultNamespace("pull"), (stack, world, entity, seed) -> {
             if (entity == null)
                 return 0.0F;
             else
-                return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
+                return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
         });
-        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, new ResourceLocation("pulling"), (stack, world, entity, seed) -> entity != null
+        ItemProperties.register(ModItems.GRIPPING_ABYSSAL_BOW, ResourceLocation.withDefaultNamespace("pulling"), (stack, world, entity, seed) -> entity != null
                 && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-        ItemProperties.register(ModItems.SHIELD_OF_CHIMERIC_WARRIOR, new ResourceLocation("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-        ItemProperties.register(ModItems.GRIPPING_BUNDLE, new ResourceLocation("filled"), (stack, world, entity, seed) -> BundleItem.getFullnessDisplay(stack));
-        ItemProperties.register(ModItems.GRIPPING_GAUNTLET, new ResourceLocation("grip"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.SHIELD_OF_CHIMERIC_WARRIOR, ResourceLocation.withDefaultNamespace("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.GRIPPING_BUNDLE, ResourceLocation.withDefaultNamespace("filled"), (stack, world, entity, seed) -> BundleItem.getFullnessDisplay(stack));
+        ItemProperties.register(ModItems.GRIPPING_GAUNTLET, ResourceLocation.withDefaultNamespace("grip"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 
         SolClientRegistries.ITEM_MODEL.addInHandModel(ModItems.AURIC_ARC);
         SolClientRegistries.ITEM_MODEL.addInHandModel(ModItems.CHIMERIC_ROCKBREAKER_HAMMER);

@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -19,7 +20,7 @@ import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 import org.jetbrains.annotations.NotNull;
 
 public class HangingBlobFoliagePlacer extends BlobFoliagePlacer {
-    public static final Codec<HangingBlobFoliagePlacer> CODEC = RecordCodecBuilder.create(
+    public static final MapCodec<HangingBlobFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec(
             instance -> blobParts(instance)
                     .and(Codec.floatRange(0F, 1F).fieldOf("hanging_leaves_chance").forGetter(foliagePlacer -> foliagePlacer.hangingLeavesChance))
                     .and(Codec.floatRange(0F, 1F).fieldOf("hanging_leaves_extension_chance").forGetter(foliagePlacer -> foliagePlacer.hangingLeavesExtensionChance))

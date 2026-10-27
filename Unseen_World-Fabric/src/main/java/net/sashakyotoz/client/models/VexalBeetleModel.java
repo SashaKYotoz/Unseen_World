@@ -108,13 +108,13 @@ public class VexalBeetleModel extends HierarchicalModel<VexalBeetleEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        head.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        right_leg_b.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        left_leg_b.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        right_leg_f.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        left_leg_f.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        head.render(matrices, vertexConsumer, light, overlay, color);
+        body.render(matrices, vertexConsumer, light, overlay, color);
+        right_leg_b.render(matrices, vertexConsumer, light, overlay, color);
+        left_leg_b.render(matrices, vertexConsumer, light, overlay, color);
+        right_leg_f.render(matrices, vertexConsumer, light, overlay, color);
+        left_leg_f.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override

@@ -139,12 +139,12 @@ public class EclipseSentinelModel extends HierarchicalModel<EclipseSentinel> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        this.body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        this.right_leg.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        this.left_leg.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        this.body.render(matrices, vertexConsumer, light, overlay, color);
+        this.right_leg.render(matrices, vertexConsumer, light, overlay, color);
+        this.left_leg.render(matrices, vertexConsumer, light, overlay, color);
         if (this.eclipseAlpha > 0.0F) {
-            this.eclipse_circle.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha * this.eclipseAlpha);
+            this.eclipse_circle.render(matrices, vertexConsumer, light, overlay, color * this.eclipseAlpha);
         }
     }
 

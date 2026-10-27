@@ -40,8 +40,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.entities.ModEntities;
 import net.sashakyotoz.common.tags.ModTags;
@@ -84,9 +84,8 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
         this.landMoveControl = new MoveControl(this);
         this.waterMoveControl = new SmoothSwimmingMoveControl(this, 85, 10, 1.0F, 1.0F, false);
         this.moveControl = this.landMoveControl;
-        this.setMaxUpStep(1.0F);
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-        this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 0.0F);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -104,9 +103,9 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SADDLED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SADDLED, false);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3D, true));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.of(TAMING_ITEMS), false));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.2D, 10.0F, 3.0F, false));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.2D, 10.0F, 3.0F));
         this.goalSelector.addGoal(5, new SeekWaterGoal(this));
         this.goalSelector.addGoal(6, new RandomSwimmingGoal(this, 1.0D, 40));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D, 160));

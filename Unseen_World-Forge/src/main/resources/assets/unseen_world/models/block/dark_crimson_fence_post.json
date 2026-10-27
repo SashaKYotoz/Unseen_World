@@ -1,8 +1,0 @@
-{
-  "parent": "block/fence_post",
-  "textures": {
-    "texture": "unseen_world:block/dark_crimson_planks",
-    "particle": "unseen_world:block/dark_crimson_planks"
-  },
-  "render_type": "solid"
-}

@@ -208,7 +208,7 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
+    public EntityDimensions getDefaultDimensions(Pose pose) {
         return pose == Pose.LONG_JUMPING ? LONG_JUMPING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
     }
 
@@ -262,9 +262,9 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TYPE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TYPE, 0);
         GripConversion.define(this.entityData, CONVERTING);
     }
 
@@ -292,14 +292,14 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
 
     @Override
     public @NotNull SpawnGroupData finalizeSpawn(
-            ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt
+            ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData
     ) {
         Holder<Biome> registryEntry = world.getBiome(this.blockPosition());
         Type type = Type.fromBiome(registryEntry);
         this.setVariant(type);
         if (this.random.nextBoolean())
             this.setAge(-24000);
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
     }
 
     @Override

@@ -1,7 +1,0 @@
-{
-  "parent": "block/button_inventory",
-  "textures": {
-    "texture": "unseen_world:block/greenish_burlywood_planks"
-  },
-  "render_type": "solid"
-}

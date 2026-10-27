@@ -116,6 +116,10 @@ gradle-app.setting
 /Unseen_World-Forge/run-data
 /Unseen_World-Forge/build/
 
+/Unseen_World-NeoForge/run
+/Unseen_World-NeoForge/run-data
+/Unseen_World-NeoForge/build/
+
 /Unseen_World-Fabric/run
 /Unseen_World-Fabric/run-data
 /Unseen_World-Fabric/src/main/generated/.cache/

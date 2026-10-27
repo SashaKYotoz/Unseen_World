@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:block/gloworchid",
-    "particle": "unseen_world:block/gloworchid"
-  },
-  "render_type": "cutout"
-}

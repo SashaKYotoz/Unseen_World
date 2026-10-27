@@ -125,8 +125,8 @@ public class SaberpardModel extends HierarchicalModel<SaberpardEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        body.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override

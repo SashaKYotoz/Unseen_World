@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class PhasedBossBar {
-    private static final ResourceLocation GUI_BARS_LOCATION = new ResourceLocation("textures/gui/bars.png");
+    private static final ResourceLocation GUI_BARS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/bars.png");
     private static final int BAR_WIDTH = 182;
     private static final int BAR_HEIGHT = 5;
     private static final int FRAME_WIDTH = 183;

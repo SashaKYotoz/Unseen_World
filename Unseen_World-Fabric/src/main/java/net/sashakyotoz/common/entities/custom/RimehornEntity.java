@@ -88,14 +88,9 @@ public class RimehornEntity extends Animal {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         SpawnGroupData data = spawnData == null ? new AgeableMob.AgeableMobGroupData(0.2F) : spawnData;
-        return super.finalizeSpawn(level, difficulty, reason, data, dataTag);
-    }
-
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height * 0.9F;
+        return super.finalizeSpawn(level, difficulty, reason, data);
     }
 
     @Override

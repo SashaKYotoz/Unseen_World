@@ -93,8 +93,8 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.entityData.define(FLIGHT_STAMINA, MAX_FLIGHT_TICKS);
         this.entityData.define(EXHAUSTED, false);
         this.entityData.define(SADDLED, false);

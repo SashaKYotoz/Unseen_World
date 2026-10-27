@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class GrizzlyTrunkPlacer extends TrunkPlacer {
-    public static final Codec<GrizzlyTrunkPlacer> CODEC = RecordCodecBuilder.create(instance -> trunkPlacerParts(instance)
+    public static final MapCodec<GrizzlyTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(instance -> trunkPlacerParts(instance)
             .and(instance.group(
                     Codec.floatRange(0.1F, 0.9F).fieldOf("fork_height").forGetter(placer -> placer.forkHeight),
                     IntProvider.codec(1, 4).fieldOf("branch_count").forGetter(placer -> placer.branchCount),

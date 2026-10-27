@@ -2,6 +2,7 @@ package net.sashakyotoz.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +16,7 @@ public class FullScreenOverlay implements HudRenderCallback {
             "textures/gui/darkening.png");
 
     @Override
-    public void onHudRender(GuiGraphics context, float tickDelta) {
+    public void onHudRender(GuiGraphics context, DeltaTracker tickDelta) {
         Minecraft client = Minecraft.getInstance();
         if (client != null && client.player instanceof IGrippingEntity entity) {
             int width = client.getWindow().getGuiScaledWidth();

@@ -1,5 +1,6 @@
 package net.sashakyotoz.client.environment.weather;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,7 +42,7 @@ public class ChimericWeatherState extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public CompoundTag save(CompoundTag nbt, HolderLookup.Provider registries) {
         nbt.putBoolean("isGrippfallActive", isGrippfallActive);
         nbt.putString("direction", direction);
         nbt.putInt("gripFallTicks", gripFallTicks);

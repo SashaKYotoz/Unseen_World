@@ -428,7 +428,7 @@ public class WarriorOfChimericDarkness extends MultipartBoss<WarriorOfChimericDa
         if (ticks == HAMMER_RELEASE_TICK) {
             this.hammerStart = this.hammerHand();
             this.hammerHits.clear();
-            this.playSound(SoundEvents.TRIDENT_THROW, 2.0F, 0.4F);
+            this.playSound(SoundEvents.TRIDENT_THROW.value(), 2.0F, 0.4F);
             this.playSound(SoundEvents.WARDEN_ATTACK_IMPACT, 1.5F, 0.6F);
         }
         if (ticks <= HAMMER_LAND_TICK) {
@@ -449,7 +449,7 @@ public class WarriorOfChimericDarkness extends MultipartBoss<WarriorOfChimericDa
             }
             if (ticks == HAMMER_RECALL_TICK - 1) {
                 this.hammerHits.clear();
-                this.playSound(SoundEvents.TRIDENT_RIPTIDE_3, 2.0F, 0.5F);
+                this.playSound(SoundEvents.TRIDENT_RIPTIDE_3.value(), 2.0F, 0.5F);
                 this.level().playSound(null, this.hammerLanding.x, this.hammerLanding.y, this.hammerLanding.z, SoundEvents.DEEPSLATE_BREAK, SoundSource.HOSTILE, 2.0F, 0.5F);
             }
             return;

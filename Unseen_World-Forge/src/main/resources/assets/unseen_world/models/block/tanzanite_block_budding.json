@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/tanzanite_block_with_cluster",
-    "particle": "unseen_world:block/tanzanite_block_with_cluster"
-  },
-  "render_type": "solid"
-}

@@ -120,9 +120,9 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TYPE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(TYPE, 0);
         GripConversion.define(this.entityData, CONVERTING);
     }
 
@@ -175,14 +175,14 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
 
     @Override
     public @NotNull SpawnGroupData finalizeSpawn(
-            ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt
+            ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData
     ) {
         Holder<Biome> registryEntry = world.getBiome(this.blockPosition());
         Type type = Type.fromBiome(registryEntry);
         this.setVariant(type);
         if (this.random.nextBoolean())
             this.setAge(-24000);
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
     }
 
     @Override

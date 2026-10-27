@@ -89,15 +89,15 @@ public class GleamcarverModel extends HierarchicalModel<GleamcarverEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        head.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        forwardRightPaw.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        forwardLeftPaw.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        middleRightPaw.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        middleLeftPaw.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        backRightPaw.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        backLeftPaw.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        head.render(matrices, vertexConsumer, light, overlay, color);
+        body.render(matrices, vertexConsumer, light, overlay, color);
+        forwardRightPaw.render(matrices, vertexConsumer, light, overlay, color);
+        forwardLeftPaw.render(matrices, vertexConsumer, light, overlay, color);
+        middleRightPaw.render(matrices, vertexConsumer, light, overlay, color);
+        middleLeftPaw.render(matrices, vertexConsumer, light, overlay, color);
+        backRightPaw.render(matrices, vertexConsumer, light, overlay, color);
+        backLeftPaw.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override

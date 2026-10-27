@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -13,7 +14,7 @@ import net.sashakyotoz.common.blocks.custom.plants.HangingFruitBlock;
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 
 public class VinesToLeavesTreeDecorator extends TreeDecorator {
-    public static final Codec<VinesToLeavesTreeDecorator> CODEC = RecordCodecBuilder.create(
+    public static final MapCodec<VinesToLeavesTreeDecorator> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                             Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter(treeDecorator -> treeDecorator.probability),
                             BlockStateProvider.CODEC.fieldOf("block").forGetter(treeDecorator -> treeDecorator.block),

@@ -1,8 +1,0 @@
-{
-  "parent": "block/tinted_cross",
-  "textures": {
-    "cross": "unseen_world:block/amethyst_grass_plant",
-    "particle": "unseen_world:block/amethyst_grass_plant"
-  },
-  "render_type": "cutout"
-}

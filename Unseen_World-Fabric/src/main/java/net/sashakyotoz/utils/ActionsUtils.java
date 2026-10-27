@@ -141,7 +141,7 @@ public class ActionsUtils {
 
     public static void initializeConverting(LivingEntity origin, Mob entity, UUID converter) {
         if (origin.level() instanceof ServerLevel world && entity != null) {
-            entity.finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null, null);
+            entity.finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null);
             if (converter != null) {
                 Player player = world.getPlayerByUUID(converter);
                 if (player != null)

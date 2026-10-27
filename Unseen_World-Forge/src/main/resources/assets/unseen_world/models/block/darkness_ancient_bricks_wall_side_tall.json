@@ -1,8 +1,0 @@
-{
-  "parent": "block/template_wall_side_tall",
-  "textures": {
-    "wall": "unseen_world:block/red_ancient_brick",
-    "particle": "unseen_world:block/red_ancient_brick"
-  },
-  "render_type": "translucent"
-}

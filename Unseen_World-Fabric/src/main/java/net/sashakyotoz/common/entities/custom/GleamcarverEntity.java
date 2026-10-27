@@ -63,8 +63,8 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller, Buc
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.entityData.define(DATA_TYPE, NO_TYPE);
         this.entityData.define(FROM_BUCKET, false);
     }

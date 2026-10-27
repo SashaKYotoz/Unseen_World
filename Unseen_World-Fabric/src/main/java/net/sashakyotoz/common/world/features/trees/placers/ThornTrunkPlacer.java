@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ThornTrunkPlacer extends TrunkPlacer {
-    public static final Codec<ThornTrunkPlacer> CODEC = RecordCodecBuilder.create(instance -> trunkPlacerParts(instance)
+    public static final MapCodec<ThornTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(instance -> trunkPlacerParts(instance)
             .and(instance.group(
                     IntProvider.codec(0, 8).fieldOf("lean").forGetter(placer -> placer.lean),
                     Codec.intRange(0, 3).fieldOf("base_radius").forGetter(placer -> placer.baseRadius),

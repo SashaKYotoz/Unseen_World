@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:block/grown_crimserry_flower",
-    "particle": "unseen_world:block/grown_crimserry_flower"
-  },
-  "render_type": "cutout"
-}

@@ -1,7 +1,7 @@
 package net.sashakyotoz.mixin.waterlogging;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -33,7 +33,7 @@ public abstract class BlockStateBaseMixin {
     private BlockState unseen_world$twin;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void unseen_world$detectDarkWater(Block owner, ImmutableMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> codec, CallbackInfo ci) {
+    private void unseen_world$detectDarkWater(Block owner, Reference2ObjectArrayMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> codec, CallbackInfo ci) {
         if (values == null || values.isEmpty()) {
             return;
         }

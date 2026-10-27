@@ -1,7 +1,0 @@
-{
-  "parent": "unseen_world:custom/redness_hammer",
-  "textures": {
-    "0": "unseen_world:block/nether_hammer",
-    "particle": "unseen_world:item/nether_hammer"
-  }
-}

@@ -79,8 +79,8 @@ public class VenomerEntity extends ViolegerEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.entityData.define(SPELL, (byte) 0);
     }
 

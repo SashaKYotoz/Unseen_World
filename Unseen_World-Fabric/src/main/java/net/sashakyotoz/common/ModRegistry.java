@@ -34,35 +34,35 @@ public class ModRegistry {
     }
 
     public static class Foods {
-        public static final FoodProperties CRYSTIE_APPLE = new FoodProperties.Builder().saturationMod(2).nutrition(3).effect(
+        public static final FoodProperties CRYSTIE_APPLE = new FoodProperties.Builder().saturationModifier(2).nutrition(3).effect(
                         new MobEffectInstance(MobEffects.HARM, 1, 0, true, false),
                         1)
                 .effect(
                         new MobEffectInstance(MobEffects.DIG_SPEED, 240, 1, true, false),
                         1).build();
-        public static final FoodProperties GLOW_APPLE = new FoodProperties.Builder().saturationMod(3).nutrition(3)
+        public static final FoodProperties GLOW_APPLE = new FoodProperties.Builder().saturationModifier(3).nutrition(3)
                 .effect(
                         new MobEffectInstance(MobEffects.GLOWING, 300, 1, true, false),
                         1).build();
-        public static final FoodProperties BEARFRUIT_BRAMBLE = new FoodProperties.Builder().alwaysEat().saturationMod(1).nutrition(3).effect(
+        public static final FoodProperties BEARFRUIT_BRAMBLE = new FoodProperties.Builder().alwaysEdible().saturationModifier(1).nutrition(3).effect(
                         new MobEffectInstance(MobEffects.REGENERATION, 100, 1, true, true),
                         1)
                 .effect(
                         new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0, true, true),
                         1).build();
-        public static final FoodProperties NIGHTBERRY = new FoodProperties.Builder().alwaysEat().saturationMod(2).nutrition(2).effect(
+        public static final FoodProperties NIGHTBERRY = new FoodProperties.Builder().alwaysEdible().saturationModifier(2).nutrition(2).effect(
                         new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, true),
                         1)
                 .effect(
                         new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 100, 0, true, true),
                         1).build();
-        public static final FoodProperties WARPEDVEIL_VINE_FRUIT = new FoodProperties.Builder().saturationMod(1).nutrition(3).effect(
+        public static final FoodProperties WARPEDVEIL_VINE_FRUIT = new FoodProperties.Builder().saturationModifier(1).nutrition(3).effect(
                 new MobEffectInstance(MobEffects.GLOWING, 300, 0, true, true),
                 1).build();
-        public static final FoodProperties GLOWROOT_BULB = new FoodProperties.Builder().saturationMod(1).nutrition(3).effect(
+        public static final FoodProperties GLOWROOT_BULB = new FoodProperties.Builder().saturationModifier(1).nutrition(3).effect(
                 new MobEffectInstance(MobEffects.SATURATION, 60, 0, true, true),
                 1).build();
-        public static final FoodProperties RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(2).nutrition(2).build();
-        public static final FoodProperties COOKED_RIMEHORN_MEAT = new FoodProperties.Builder().saturationMod(4).nutrition(4).build();
+        public static final FoodProperties RIMEHORN_MEAT = new FoodProperties.Builder().saturationModifier(2).nutrition(2).build();
+        public static final FoodProperties COOKED_RIMEHORN_MEAT = new FoodProperties.Builder().saturationModifier(4).nutrition(4).build();
     }
 }

@@ -1,8 +1,0 @@
-{
-  "parent": "block/wall_inventory",
-  "textures": {
-    "wall": "unseen_world:block/dark_currantslate",
-    "particle": "unseen_world:block/dark_currantslate"
-  },
-  "render_type": "solid"
-}

@@ -1,7 +1,0 @@
-{
-  "parent": "block/pressure_plate_up",
-  "textures": {
-    "texture": "unseen_world:block/tealivy_planks"
-  },
-  "render_type": "solid"
-}

@@ -26,7 +26,7 @@ public final class MinionOwnership {
         this.ownerId = ownerId;
     }
 
-    public static void define(SynchedEntityData data, EntityDataAccessor<Integer> ownerId) {
+    public static void define(SynchedEntityData.Builder data, EntityDataAccessor<Integer> ownerId) {
         data.define(ownerId, -1);
     }
 

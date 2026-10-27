@@ -44,8 +44,8 @@ public class ShieldOfWarriorModel extends Model {
 		return this.handle;
 	}
 	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-		base.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-		handle.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+		base.render(matrices, vertexConsumer, light, overlay, color);
+		handle.render(matrices, vertexConsumer, light, overlay, color);
 	}
 }

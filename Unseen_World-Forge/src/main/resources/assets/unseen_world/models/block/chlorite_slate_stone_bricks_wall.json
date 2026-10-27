@@ -1,8 +1,0 @@
-{
-  "parent": "block/template_wall_side",
-  "textures": {
-    "wall": "unseen_world:block/chlorite_slate_stone_bricks_with_animation",
-    "particle": "unseen_world:block/chlorite_slate_stone_bricks_with_animation"
-  },
-  "render_type": "solid"
-}

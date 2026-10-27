@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "unseen_world:greenish_valley",
-  "features": "unseen_world:greenish_tree",
-  "step": "top_layer_modification"
-}

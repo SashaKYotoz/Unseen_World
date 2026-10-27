@@ -73,11 +73,11 @@ public class HarmonyWatcherModel extends HierarchicalModel<HarmonyWatcherEntity>
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        head.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        rightArm.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        leftArm.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        head.render(matrices, vertexConsumer, light, overlay, color);
+        body.render(matrices, vertexConsumer, light, overlay, color);
+        rightArm.render(matrices, vertexConsumer, light, overlay, color);
+        leftArm.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override

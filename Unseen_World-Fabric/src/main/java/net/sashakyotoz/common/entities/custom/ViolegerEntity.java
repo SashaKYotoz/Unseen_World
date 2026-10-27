@@ -97,10 +97,10 @@ public class ViolegerEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(IS_HOSTILE, false);
-        this.entityData.define(ACTION, ACTION_NONE);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(IS_HOSTILE, false);
+        builder.define(ACTION, ACTION_NONE);
     }
 
     @Override
@@ -162,8 +162,8 @@ public class ViolegerEntity extends Monster implements RangedAttackMob {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData);
         if (this.isTrader()) {
             if (spawnType == MobSpawnType.SPAWNER) {
                 this.becomeSpawnerBorn();
@@ -347,7 +347,7 @@ public class ViolegerEntity extends Monster implements RangedAttackMob {
     @Override
     public void performRangedAttack(LivingEntity target, float pullProgress) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, ModItems.GRIPPING_ABYSSAL_BOW)));
-        AbstractArrow abstractArrow = ProjectileUtil.getMobArrow(this, itemstack, pullProgress);
+        AbstractArrow abstractArrow = ProjectileUtil.getMobArrow(this, itemstack, pullProgress, this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, ModItems.GRIPPING_ABYSSAL_BOW)));
         double d0 = target.getX() - this.getX();
         double d1 = target.getY() + 0.35F - abstractArrow.getY();
         double d2 = target.getZ() - this.getZ();

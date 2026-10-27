@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class BurlywoodFoliagePlacer extends FoliagePlacer {
-    public static final Codec<BurlywoodFoliagePlacer> CODEC = RecordCodecBuilder.create(instance -> foliagePlacerParts(instance)
+    public static final MapCodec<BurlywoodFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec(instance -> foliagePlacerParts(instance)
             .and(Codec.floatRange(0.0F, 1.0F).fieldOf("skirt_chance").forGetter(placer -> placer.skirtChance))
             .apply(instance, BurlywoodFoliagePlacer::new));
 

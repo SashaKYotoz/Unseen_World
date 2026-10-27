@@ -82,8 +82,8 @@ public class EspyerEntity extends Monster implements PowerableMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.entityData.define(FUSE_SPEED, -1);
         this.entityData.define(CHARGED, false);
         this.entityData.define(IGNITED, false);

@@ -14,5 +14,5 @@ public class ModMobEffects {
 
     public static final EffectHolder GRIPPING_RESISTANCE = UnseenWorld.MOD.register(EffectHolder.class, "gripping_resistance",
             () -> MobEffectAccessor.create(MobEffectCategory.BENEFICIAL, 172931))
-            .withPotion(() -> Potions.AWKWARD,() -> ModItems.GRIPPING_MEMBRANE, 7200, false, false);
+            .withPotion(Potions.AWKWARD,() -> ModItems.GRIPPING_MEMBRANE, 7200, false, false);
 }

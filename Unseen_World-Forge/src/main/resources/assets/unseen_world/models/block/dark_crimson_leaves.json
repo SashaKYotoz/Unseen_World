@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/dark_crimson_leaves",
-    "particle": "unseen_world:block/dark_crimson_leaves"
-  },
-  "render_type": "translucent"
-}

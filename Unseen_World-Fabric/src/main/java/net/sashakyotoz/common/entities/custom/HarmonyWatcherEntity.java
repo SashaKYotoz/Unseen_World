@@ -55,10 +55,10 @@ public class HarmonyWatcherEntity extends PathfinderMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(WATCHER_TYPE, UNASSIGNED);
-        this.entityData.define(ANGRY, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(WATCHER_TYPE, UNASSIGNED);
+        builder.define(ANGRY, false);
     }
 
     @Override
@@ -74,8 +74,8 @@ public class HarmonyWatcherEntity extends PathfinderMob {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData);
         if (!this.hasWatcherType()) {
             this.setWatcherType(typeForBiome(level.getBiome(this.blockPosition())));
         }

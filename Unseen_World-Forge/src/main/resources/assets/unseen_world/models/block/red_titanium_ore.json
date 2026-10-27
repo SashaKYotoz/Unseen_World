@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "unseen_world:block/red_titanium_ore",
-    "particle": "unseen_world:block/red_titanium_ore"
-  },
-  "render_type": "solid"
-}

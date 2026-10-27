@@ -309,10 +309,10 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(IS_FLYING, false);
-        this.entityData.define(ARE_MINIONS_OUT, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(IS_FLYING, false);
+        builder.define(ARE_MINIONS_OUT, false);
     }
 
     @Override
@@ -875,7 +875,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
         AABB column = new AABB(pos.x - PILLAR_RADIUS, pos.y - 0.5D, pos.z - PILLAR_RADIUS, pos.x + PILLAR_RADIUS, pos.y + PILLAR_HEIGHT, pos.z + PILLAR_RADIUS);
         for (LivingEntity entity : this.enemiesIn(column)) {
             if (!(entity instanceof AureateVexEntity) && this.judgement.firstHit(entity.getUUID(), this.stateTicks) && this.strikeMagic(entity, 0.7F * this.power())) {
-                entity.setSecondsOnFire(3);
+                entity.setRemainingFireTicks(60);
             }
         }
         this.serverParticles(ParticleTypes.END_ROD, pos.x, pos.y + 2.5D, pos.z, 24, 0.2D, 2.0D, 0.2D, 0.02D);
@@ -975,7 +975,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                 continue;
             }
             if (this.strikeMagic(entity, 2.2F * this.power())) {
-                entity.setSecondsOnFire(5);
+                entity.setRemainingFireTicks(100);
             }
             Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
             outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();
@@ -1107,7 +1107,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
             }
             case DIVINE_TOUCH, SKY_BURST -> {
                 if (ticks == 5 && state == PatriarchState.DIVINE_TOUCH) {
-                    this.playClientSound(SoundEvents.TRIDENT_RIPTIDE_1, 0.75F, 1.5F);
+                    this.playClientSound(SoundEvents.TRIDENT_RIPTIDE_1.value(), 0.75F, 1.5F);
                 }
                 if (ticks == 20) {
                     this.playClientSound(ModSoundEvents.WIND_SLIDE, 1.0F, state == PatriarchState.SKY_BURST ? 1.2F : 1.0F);
@@ -1504,7 +1504,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                     vex.moveTo(this.getX() + offsetX, this.getY() + 1.0D, this.getZ() + offsetZ, this.random.nextFloat() * 360.0F, 0.0F);
                     vex.setOwner(this);
                     vex.setBoundOrigin(this.getOnPos().below());
-                    vex.finalizeSpawn(serverLevel, this.level().getCurrentDifficultyAt(this.getOnPos()), MobSpawnType.MOB_SUMMONED, null, null);
+                    vex.finalizeSpawn(serverLevel, this.level().getCurrentDifficultyAt(this.getOnPos()), MobSpawnType.MOB_SUMMONED, null);
                     serverLevel.addFreshEntity(vex);
                     this.minions.add(vex);
                     this.summonFlourish(serverLevel, vex.position());

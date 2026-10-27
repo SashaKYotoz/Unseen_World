@@ -52,11 +52,6 @@ public class AureateVexEntity extends Monster implements TraceableEntity {
         this.xpReward = 3;
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height - 0.28125F;
-    }
-
     public boolean isFlapping() {
         return this.tickCount % TICKS_PER_FLAP == 0;
     }
@@ -98,10 +93,10 @@ public class AureateVexEntity extends Monster implements TraceableEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_FLAGS_ID, (byte) 0);
-        MinionOwnership.define(this.entityData, OWNER_ID);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_FLAGS_ID, (byte) 0);
+        MinionOwnership.define(builder, OWNER_ID);
     }
 
     @Override
@@ -203,22 +198,17 @@ public class AureateVexEntity extends Monster implements TraceableEntity {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         RandomSource randomSource = level.getRandom();
         this.populateDefaultEquipmentSlots(randomSource, difficulty);
-        this.populateDefaultEquipmentEnchantments(randomSource, difficulty);
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+        this.populateDefaultEquipmentEnchantments(level, randomSource, difficulty);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData);
     }
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.UNSEENIUM_SWORD));
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
-    }
-
-    @Override
-    public double getMyRidingOffset() {
-        return 0.4D;
     }
 
     private class VexMoveControl extends MoveControl {
@@ -337,9 +327,9 @@ public class AureateVexEntity extends Monster implements TraceableEntity {
             for (int i = 0; i < 3; ++i) {
                 mutablePos.setWithOffset(origin, AureateVexEntity.this.getRandom().nextInt(17) - 8, AureateVexEntity.this.getRandom().nextInt(15) - 7, AureateVexEntity.this.getRandom().nextInt(17) - 8);
                 if (AureateVexEntity.this.level().isEmptyBlock(mutablePos)) {
-                    AureateVexEntity.this.moveControl.setWantedPosition( mutablePos.getX() + 0.5D,  mutablePos.getY() + 0.5D,  mutablePos.getZ() + 0.5D, 0.25D);
+                    AureateVexEntity.this.moveControl.setWantedPosition(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D, 0.25D);
                     if (AureateVexEntity.this.getTarget() == null) {
-                        AureateVexEntity.this.getLookControl().setLookAt( mutablePos.getX() + 0.5D,  mutablePos.getY() + 0.5D,  mutablePos.getZ() + 0.5D, 180.0F, 20.0F);
+                        AureateVexEntity.this.getLookControl().setLookAt(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D, 180.0F, 20.0F);
                     }
                     break;
                 }

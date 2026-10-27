@@ -1,9 +1,0 @@
-{
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "unseen_world:block/tealivy_planks",
-    "top": "unseen_world:block/tealivy_planks",
-    "side": "unseen_world:block/tealivy_planks"
-  },
-  "render_type": "solid"
-}

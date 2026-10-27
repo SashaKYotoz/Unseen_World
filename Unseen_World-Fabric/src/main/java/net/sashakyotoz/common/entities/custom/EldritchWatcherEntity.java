@@ -59,8 +59,8 @@ public class EldritchWatcherEntity extends PathfinderMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         GripConversion.define(this.entityData, CONVERTING);
         this.entityData.define(CHARGE_TICKS, 0);
         this.entityData.define(CARRYING_BLOCK, false);

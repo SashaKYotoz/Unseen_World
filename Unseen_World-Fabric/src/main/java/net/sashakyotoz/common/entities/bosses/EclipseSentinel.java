@@ -212,9 +212,9 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SECOND_BEAM, new Vector3f());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SECOND_BEAM, new Vector3f());
     }
 
     @Override

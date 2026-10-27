@@ -81,8 +81,8 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         MinionOwnership.define(this.entityData, OWNER_ID);
     }
 

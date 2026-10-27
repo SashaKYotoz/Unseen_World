@@ -25,7 +25,7 @@ public abstract class ServerWorldMixin implements WorldMultipartHelper {
 
     @Inject(method = "advanceWeatherCycle", at = @At(value = "TAIL"))
     public void tickWeather(CallbackInfo ci) {
-        if (getLevel().dimensionTypeId().equals(ModDimensions.CHIMERIC_DARKNESS_TYPE))
+        if (getLevel().dimension().equals(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY))
             ChimericWeatherState.get((ServerLevel) (Object) this).tick();
     }
 }

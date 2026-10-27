@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "unseen_world:block/grizzly_sapling",
-    "particle": "unseen_world:block/grizzly_sapling"
-  },
-  "render_type": "cutout"
-}

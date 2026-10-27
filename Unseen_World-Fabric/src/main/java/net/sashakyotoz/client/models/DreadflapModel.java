@@ -57,8 +57,8 @@ public class DreadflapModel extends HierarchicalModel<DreadflapEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        this.body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        this.body.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override

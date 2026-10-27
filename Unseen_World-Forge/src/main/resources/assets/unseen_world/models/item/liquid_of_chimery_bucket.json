@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "unseen_world:item/bucket_with_chimeriter_water"
-  }
-}

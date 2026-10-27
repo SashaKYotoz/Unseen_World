@@ -79,7 +79,6 @@ public class EclipsedAcolyteEntity extends Monster {
     public EclipsedAcolyteEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.xpReward = 10;
-        this.setMaxUpStep(1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -94,9 +93,9 @@ public class EclipsedAcolyteEntity extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DORMANT, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DORMANT, false);
     }
 
     @Override
@@ -113,8 +112,8 @@ public class EclipsedAcolyteEntity extends Monster {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData);
         this.setHome(this.blockPosition(), this.getYRot());
         if (spawnType == MobSpawnType.STRUCTURE) {
             this.setPersistenceRequired();
@@ -293,7 +292,7 @@ public class EclipsedAcolyteEntity extends Monster {
                 this.doEnchantDamageEffects(this, entity);
             }
             if (wasBlocking) {
-                ((Player) entity).disableShield(true);
+                ((Player) entity).disableShield();
             }
         }
         this.playSound(SoundEvents.DEEPSLATE_BREAK, 1.4F, 0.5F);
@@ -397,7 +396,7 @@ public class EclipsedAcolyteEntity extends Monster {
         super.readAdditionalSaveData(compound);
         this.setDormant(compound.getBoolean("Dormant"));
         if (compound.contains("HomePos")) {
-            this.setHome(NbtUtils.readBlockPos(compound.getCompound("HomePos")), compound.getFloat("HomeYaw"));
+            NbtUtils.readBlockPos(compound, "HomePos").ifPresent((blockPos) -> this.setHome(blockPos, compound.getFloat("HomeYaw")));
         }
     }
 

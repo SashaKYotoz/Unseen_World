@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 import net.sashakyotoz.common.world.features.trees.ModTreePlacerTypes;
 
 public class GrizzlyFoliagePlacer extends FoliagePlacer {
-    public static final Codec<GrizzlyFoliagePlacer> CODEC = RecordCodecBuilder.create(instance -> foliagePlacerParts(instance)
+    public static final MapCodec<GrizzlyFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec(instance -> foliagePlacerParts(instance)
             .and(instance.group(
                     Codec.intRange(1, 4).fieldOf("height").forGetter(placer -> placer.height),
                     Codec.floatRange(0.0F, 1.0F).fieldOf("edge_hole_chance").forGetter(placer -> placer.edgeHoleChance)))

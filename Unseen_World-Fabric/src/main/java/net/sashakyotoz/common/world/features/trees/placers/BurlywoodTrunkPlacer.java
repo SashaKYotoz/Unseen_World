@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.world.features.trees.placers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +27,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class BurlywoodTrunkPlacer extends TrunkPlacer {
-    public static final Codec<BurlywoodTrunkPlacer> CODEC = RecordCodecBuilder.create(instance -> trunkPlacerParts(instance)
+    public static final MapCodec<BurlywoodTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(instance -> trunkPlacerParts(instance)
             .and(instance.group(
                     Codec.floatRange(0.2F, 0.8F).fieldOf("fork_height").forGetter(placer -> placer.forkHeight),
                     BranchSettings.CODEC.fieldOf("branches").forGetter(placer -> placer.branches),
