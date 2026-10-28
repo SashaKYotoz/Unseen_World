@@ -23,17 +23,13 @@
     },
     "height": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 27,
-        "min_inclusive": 13
-      }
+      "max_inclusive": 27,
+      "min_inclusive": 13
     },
     "integration_size": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 15,
-        "min_inclusive": 11
-      }
+      "max_inclusive": 15,
+      "min_inclusive": 11
     },
     "state": {
       "type": "minecraft:simple_state_provider",

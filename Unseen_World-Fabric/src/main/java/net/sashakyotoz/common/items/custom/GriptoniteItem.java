@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.items.custom;
 
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +26,7 @@ public class GriptoniteItem extends Item {
         if (!level.isClientSide) {
             GrippingData.removeGripping(gripping);
             player.playNotifySound(SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.5F, 1.0F);
-            stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }

@@ -53,7 +53,7 @@ public final class BossFxRenderer {
         }
         PoseStack poseStack = context.matrixStack();
         Vec3 camera = context.camera().getPosition();
-        float partialTick = context.tickDelta();
+        float partialTick = context.tickCounter().getGameTimeDeltaPartialTick(false);
         VertexConsumer consumer = buffers.getBuffer(FxRenderType.glow());
 
         Iterator<Entity> iterator = TRACKED.iterator();

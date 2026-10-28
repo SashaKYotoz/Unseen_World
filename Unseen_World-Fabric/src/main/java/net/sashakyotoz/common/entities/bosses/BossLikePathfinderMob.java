@@ -18,7 +18,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -43,7 +42,7 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
     }
 
     @Override
-    public boolean canBeLeashed(Player player) {
+    public boolean canBeLeashed() {
         return false;
     }
 
@@ -57,18 +56,16 @@ public abstract class BossLikePathfinderMob extends PathfinderMob implements Ene
     public abstract ServerBossEvent bossInfo();
 
     @Override
-    protected void dropAllDeathLoot(DamageSource source) {
-        Entity entity = source.getEntity();
-        int looting = entity instanceof LivingEntity living ? EnchantmentHelper.getMobLooting(living) : 0;
+    protected void dropAllDeathLoot(ServerLevel level, DamageSource source) {
         boolean hitByPlayer = this.lastHurtByPlayerTime > 0;
-        if (this.shouldDropLoot() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+        if (this.shouldDropLoot() && level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
             if (this.haveToDropLoot(source)) {
                 this.dropFromLootTable(source, hitByPlayer);
             }
-            this.dropCustomDeathLoot(source, looting, hitByPlayer);
+            this.dropCustomDeathLoot(level, source, hitByPlayer);
         }
         this.dropEquipment();
-        this.dropExperience();
+        this.dropExperience(source.getEntity());
     }
 
     @Override

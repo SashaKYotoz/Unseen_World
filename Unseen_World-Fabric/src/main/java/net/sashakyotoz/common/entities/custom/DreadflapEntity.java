@@ -59,7 +59,7 @@ public class DreadflapEntity extends AmbientCreature {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.entityData.define(BAT_FLAGS, (byte) 0);
+        builder.define(BAT_FLAGS, (byte) 0);
     }
 
     @Override
@@ -218,10 +218,5 @@ public class DreadflapEntity extends AmbientCreature {
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putByte("BatFlags", this.entityData.get(BAT_FLAGS));
-    }
-
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height * 0.8f;
     }
 }

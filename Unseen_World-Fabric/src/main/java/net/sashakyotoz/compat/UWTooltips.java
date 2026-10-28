@@ -64,7 +64,7 @@ public final class UWTooltips {
         if (!(blockEntity instanceof OrdealSpawnerBlockEntity) || level == null) {
             return;
         }
-        CompoundTag saved = blockEntity.saveWithoutMetadata();
+        CompoundTag saved = blockEntity.saveWithoutMetadata(level.registryAccess());
         CompoundTag data = new CompoundTag();
         if (saved.contains("primary", Tag.TAG_STRING)) {
             data.putString("primary", saved.getString("primary"));
@@ -103,7 +103,7 @@ public final class UWTooltips {
                 lines.accept(Component.translatable("tooltip.unseen_world.ordeal_spawner.progress", spawned, total).withStyle(ChatFormatting.GRAY));
             }
             case COOLDOWN -> lines.accept(Component.translatable("tooltip.unseen_world.ordeal_spawner.ready_in",
-                    StringUtil.formatTickDuration((int) Math.min(Integer.MAX_VALUE, data.getLong("cooldown_left")))).withStyle(ChatFormatting.GRAY));
+                    StringUtil.formatTickDuration((int) Math.min(Integer.MAX_VALUE, data.getLong("cooldown_left")), 20.0F)).withStyle(ChatFormatting.GRAY));
             case EJECTING_REWARD -> {
             }
             default -> {

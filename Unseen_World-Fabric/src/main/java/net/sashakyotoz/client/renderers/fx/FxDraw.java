@@ -30,9 +30,8 @@ public final class FxDraw {
     }
 
     private static void vertex(VertexConsumer consumer, Matrix4f matrix, Vec3 pos, int argb) {
-        consumer.vertex(matrix, (float) pos.x, (float) pos.y, (float) pos.z)
-                .color((argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF, (argb >>> 24) & 0xFF)
-                .endVertex();
+        consumer.addVertex(matrix, (float) pos.x, (float) pos.y, (float) pos.z)
+                .setColor((argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF, (argb >>> 24) & 0xFF);
     }
 
     public static void quad(VertexConsumer consumer, Matrix4f matrix, Vec3 a, Vec3 b, Vec3 c, Vec3 d, int colorA, int colorB, int colorC, int colorD) {

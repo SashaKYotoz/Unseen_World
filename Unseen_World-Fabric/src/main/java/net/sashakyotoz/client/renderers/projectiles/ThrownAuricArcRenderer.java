@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.core.component.DataComponents;
 import net.sashakyotoz.common.entities.custom.projectiles.ThrownAuricArc;
 import net.sashakyotoz.common.items.ModItems;
 
@@ -30,7 +30,7 @@ public class ThrownAuricArcRenderer extends EntityRenderer<ThrownAuricArc> {
         this.itemRenderer = context.getItemRenderer();
         this.plain = new ItemStack(ModItems.AURIC_ARC);
         this.glinting = this.plain.copy();
-        this.glinting.enchant(Enchantments.LOYALTY, 1);
+        this.glinting.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     @Override

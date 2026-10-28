@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -23,6 +24,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.util.function.Supplier;
 
 public class FruitingVinesBodyBlock extends GrowingPlantBodyBlock implements ModPlantVines {
+    @Override
+    protected MapCodec<? extends GrowingPlantBodyBlock> codec() {
+        return MapCodec.unit(this);
+    }
+
     private final Supplier<Block> head;
     private final Supplier<? extends ItemLike> fruit;
     private final TagKey<Block> growableOn;
@@ -46,12 +52,12 @@ public class FruitingVinesBodyBlock extends GrowingPlantBodyBlock implements Mod
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return this.getFruitToDrop();
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         return this.pickBerries(player, state, level, pos);
     }
 
@@ -69,7 +75,7 @@ public class FruitingVinesBodyBlock extends GrowingPlantBodyBlock implements Mod
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return !state.getValue(FRUITS);
     }
 

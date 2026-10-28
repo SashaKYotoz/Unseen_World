@@ -15,10 +15,8 @@
         },
         "height": {
           "type": "minecraft:uniform",
-          "value": {
-            "max_inclusive": 4,
-            "min_inclusive": 2
-          }
+          "max_inclusive": 4,
+          "min_inclusive": 2
         },
         "probability": 0.125
       }
@@ -39,10 +37,8 @@
       "offset": 0,
       "radius": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 3,
-          "min_inclusive": 2
-        }
+        "max_inclusive": 3,
+        "min_inclusive": 2
       }
     },
     "foliage_provider": {
@@ -73,19 +69,15 @@
       "curvature": 1.8,
       "foliage_clearance": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 5,
-          "min_inclusive": 3
-        }
+        "max_inclusive": 5,
+        "min_inclusive": 3
       },
       "height_rand_a": 2,
       "height_rand_b": 1,
       "lean": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 5,
-          "min_inclusive": 3
-        }
+        "max_inclusive": 5,
+        "min_inclusive": 3
       }
     },
     "trunk_provider": {

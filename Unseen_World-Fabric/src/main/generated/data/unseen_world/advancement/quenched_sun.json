@@ -1,0 +1,38 @@
+{
+  "parent": "unseen_world:ring_of_the_corona",
+  "criteria": {
+    "quenched_sun": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "unseen_world:eclipse_sentinel"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.unseen_world.quenched_sun.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "unseen_world:eclipsebane"
+    },
+    "title": {
+      "translate": "advancement.unseen_world.quenched_sun"
+    }
+  },
+  "requirements": [
+    [
+      "quenched_sun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -29,6 +30,13 @@ import net.sashakyotoz.common.items.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 public class MidnightLilyPadBlock extends BushBlock implements BonemealableBlock {
+    public static final MapCodec<MidnightLilyPadBlock> CODEC = simpleCodec(MidnightLilyPadBlock::new);
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty HAS_BERRY = BooleanProperty.create("has_berry");
 
     public MidnightLilyPadBlock(Properties settings) {
@@ -43,11 +51,11 @@ public class MidnightLilyPadBlock extends BushBlock implements BonemealableBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(HAS_BERRY)) {
             return FruitBearing.harvest(world, pos, state.setValue(HAS_BERRY, false), new ItemStack(ModItems.NIGHTBERRY), player);
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
     @Override
@@ -62,7 +70,7 @@ public class MidnightLilyPadBlock extends BushBlock implements BonemealableBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
         return !state.getValue(HAS_BERRY);
     }
 

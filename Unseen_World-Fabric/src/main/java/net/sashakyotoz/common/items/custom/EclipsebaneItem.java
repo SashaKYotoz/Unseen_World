@@ -52,7 +52,7 @@ public class EclipsebaneItem extends SwordItem implements MeleeAbilityItem {
     private static final float SWEEP_MIN_RATIO = 0.5F;
 
     public EclipsebaneItem(int attackDamage, float attackSpeed, Properties settings) {
-        super(ModTiers.ECLIPSEBANE, attackDamage, attackSpeed, settings);
+        super(ModTiers.ECLIPSEBANE, settings.attributes(SwordItem.createAttributes(ModTiers.ECLIPSEBANE, attackDamage, attackSpeed)));
     }
 
     @Override
@@ -77,13 +77,13 @@ public class EclipsebaneItem extends SwordItem implements MeleeAbilityItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return USE_DURATION;
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseTicks) {
-        int held = this.getUseDuration(stack) - remainingUseTicks;
+        int held = this.getUseDuration(stack, entity) - remainingUseTicks;
         if (level.isClientSide) {
             spawnChargeParticles(level, entity, held >= PULSE_CHARGE_TICKS ? 3 : 1);
         } else if (held == PULSE_CHARGE_TICKS) {
@@ -93,7 +93,7 @@ public class EclipsebaneItem extends SwordItem implements MeleeAbilityItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingUseTicks) {
-        if (!(entity instanceof Player player) || this.getUseDuration(stack) - remainingUseTicks < PULSE_CHARGE_TICKS) {
+        if (!(entity instanceof Player player) || this.getUseDuration(stack, entity) - remainingUseTicks < PULSE_CHARGE_TICKS) {
             return;
         }
         if (level instanceof ServerLevel serverLevel) {
@@ -122,7 +122,7 @@ public class EclipsebaneItem extends SwordItem implements MeleeAbilityItem {
         if (!AbilityHelper.isSweepHit(player) || !(player.level() instanceof ServerLevel level)) {
             return;
         }
-        float ratio = Math.max(SWEEP_MIN_RATIO, EnchantmentHelper.getSweepingDamageRatio(player));
+        float ratio = Math.max(SWEEP_MIN_RATIO, (float) player.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO));
         float damage = 1.0F + ratio * (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
         for (LivingEntity victim : CombatHelper.enemiesInArc(player, SWEEP_REACH, SWEEP_HALF_ANGLE)) {
             if (victim != target && victim.hurt(CombatHelper.attackSource(player), damage)) {
@@ -132,8 +132,8 @@ public class EclipsebaneItem extends SwordItem implements MeleeAbilityItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
         AbilityHelper.appendAbilityLines(this.getDescriptionId(), 3, tooltip);
     }
 
@@ -141,14 +141,14 @@ public class EclipsebaneItem extends SwordItem implements MeleeAbilityItem {
         Vec3 look = player.getLookAngle();
         Vec3 push = new Vec3(look.x, Mth.clamp(look.y, -DASH_MAX_RISE, DASH_MAX_RISE), look.z).normalize().scale(DASH_SPEED);
         player.push(push.x, push.y, push.z);
-        player.startAutoSpinAttack(DASH_SPIN_TICKS);
+        player.startAutoSpinAttack(DASH_SPIN_TICKS, (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE), stack);
         if (player.onGround()) {
             player.move(MoverType.SELF, new Vec3(0.0D, DASH_GROUND_LIFT, 0.0D));
         }
         player.getCooldowns().addCooldown(this, DASH_COOLDOWN);
         if (!level.isClientSide) {
             AbilityHelper.damage(stack, player, DASH_DURABILITY, hand);
-            level.playSound(null, player, SoundEvents.TRIDENT_RIPTIDE_1, SoundSource.PLAYERS, 1.0F, 1.2F);
+            level.playSound(null, player, SoundEvents.TRIDENT_RIPTIDE_1.value(), SoundSource.PLAYERS, 1.0F, 1.2F);
         }
         player.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);

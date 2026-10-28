@@ -23,7 +23,8 @@ public class ShimmerRenderer extends MobRenderer<ShimmerEntity, ShimmerModel> {
         return UnseenWorld.MOD.makeID("textures/entity/shimmer/shimmer.png");
     }
 
-    protected void setupRotations(ShimmerEntity shimmerEntity, PoseStack matrixStack, float ageInTicks, float rotationYaw, float partialTicks) {
+    @Override
+    protected void setupRotations(ShimmerEntity shimmerEntity, PoseStack matrixStack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
         float i = Mth.lerp(partialTicks, shimmerEntity.prevTiltAngle, shimmerEntity.tiltAngle);
         float j = Mth.lerp(partialTicks, shimmerEntity.prevRollAngle, shimmerEntity.rollAngle);
         matrixStack.translate(0.0F, 0.5F, 0.0F);
@@ -33,6 +34,7 @@ public class ShimmerRenderer extends MobRenderer<ShimmerEntity, ShimmerModel> {
         matrixStack.translate(0.0F, -1.2F, 0.0F);
     }
 
+    @Override
     protected float getBob(ShimmerEntity shimmerEntity, float partialTicks) {
         return Mth.lerp(partialTicks, shimmerEntity.prevTentacleAngle, shimmerEntity.tentacleAngle);
     }

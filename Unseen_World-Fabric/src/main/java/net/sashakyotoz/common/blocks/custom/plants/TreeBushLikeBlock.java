@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -32,6 +33,13 @@ import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.world.features.ModConfiguredFeatures;
 
 public class TreeBushLikeBlock extends BushBlock implements BonemealableBlock {
+    public static final MapCodec<TreeBushLikeBlock> CODEC = simpleCodec(TreeBushLikeBlock::new);
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty GROWN = BooleanProperty.create("grown");
     public static final EnumProperty<BushTypes> TYPE = EnumProperty.create("type", BushTypes.class);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -91,11 +99,11 @@ public class TreeBushLikeBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(GROWN) && state.getValue(TYPE) == BushTypes.BUSH) {
             return FruitBearing.harvest(world, pos, state.setValue(GROWN, false), new ItemStack(ModItems.GLOW_APPLE), player);
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
     @Override
@@ -137,7 +145,7 @@ public class TreeBushLikeBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
         return state.getValue(TYPE) == BushTypes.BUSH && world.getBlockState(pos.above()).isAir();
     }
 

@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -382,7 +383,9 @@ public class RimehornEntity extends Animal {
             float damage = (float) this.rimehorn.getAttributeValue(Attributes.ATTACK_DAMAGE);
             if (target.hurt(this.rimehorn.damageSources().mobAttack(this.rimehorn), damage)) {
                 target.knockback(RAM_KNOCKBACK, -this.dashDirection.x, -this.dashDirection.z);
-                this.rimehorn.doEnchantDamageEffects(this.rimehorn, target);
+                if (this.rimehorn.level() instanceof ServerLevel server) {
+                    EnchantmentHelper.doPostAttackEffects(server, target, this.rimehorn.damageSources().mobAttack(this.rimehorn));
+                }
             }
             this.rimehorn.playSound(SoundEvents.GOAT_RAM_IMPACT, 1.0F, VOICE_PITCH);
             this.rimehorn.setDeltaMovement(this.rimehorn.getDeltaMovement().multiply(0.2D, 1.0D, 0.2D));

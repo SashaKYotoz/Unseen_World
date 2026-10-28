@@ -69,7 +69,7 @@ public class CeilingBoulderFeature extends Feature<BoulderFeatureConfig> {
         for (BlockPos place : crystals) {
             if (state.getBlock() instanceof AmethystClusterBlock amethyst) {
                 state = getPlacementState(amethyst, world, place);
-                if (state.hasProperty(BlockStateProperties.FACING) && !amethyst.canSurvive(state, world, pos))
+                if (state.hasProperty(BlockStateProperties.FACING) && !state.canSurvive(world, pos))
                     continue;
             }
             this.safeSetBlock(world, place, state,
@@ -95,7 +95,7 @@ public class CeilingBoulderFeature extends Feature<BoulderFeatureConfig> {
     private BlockState getPlacementState(AmethystClusterBlock block, LevelReader world, BlockPos pos) {
         List<Direction> possible = new ArrayList<>();
         for (Direction dir : Direction.values()) {
-            if (block.canSurvive(block.defaultBlockState().setValue(BlockStateProperties.FACING, dir), world, pos))
+            if (block.defaultBlockState().setValue(BlockStateProperties.FACING, dir).canSurvive(world, pos))
                 possible.add(dir);
         }
         Collections.shuffle(possible);

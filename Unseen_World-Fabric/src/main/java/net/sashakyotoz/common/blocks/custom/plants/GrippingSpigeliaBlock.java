@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -30,6 +32,13 @@ import net.sashakyotoz.common.items.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 public class GrippingSpigeliaBlock extends BushBlock {
+    public static final MapCodec<GrippingSpigeliaBlock> CODEC = simpleCodec(GrippingSpigeliaBlock::new);
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return CODEC;
+    }
+
     public static final DirectionProperty VERTICAL_DIRECTION = BlockStateProperties.VERTICAL_DIRECTION;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
 
@@ -99,8 +108,7 @@ public class GrippingSpigeliaBlock extends BushBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getItemInHand(hand);
+    protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (itemStack.getItem() instanceof SwordItem
                 && state.getValue(AGE) > 0) {
             if (!level.isClientSide()) {
@@ -108,8 +116,8 @@ public class GrippingSpigeliaBlock extends BushBlock {
                 level.setBlock(pos, state.setValue(AGE, 0), UPDATE_ALL);
             }
             level.playSound(player, pos, SoundEvents.UI_STONECUTTER_TAKE_RESULT, SoundSource.BLOCKS, 1.0F, 1.7F);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return super.useItemOn(itemStack, state, level, pos, player, hand, hit);
     }
 }

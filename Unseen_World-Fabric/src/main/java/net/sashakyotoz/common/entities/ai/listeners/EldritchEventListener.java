@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.entities.ai.listeners;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
@@ -25,7 +26,7 @@ public record EldritchEventListener(EldritchWatcherEntity watcher) implements Ga
     }
 
     @Override
-    public boolean handleGameEvent(ServerLevel world, GameEvent event, GameEvent.Context context, Vec3 emitterPos) {
+    public boolean handleGameEvent(ServerLevel world, Holder<GameEvent> event, GameEvent.Context context, Vec3 emitterPos) {
         Entity entity = context.sourceEntity();
         if (event.is(ModTags.GameEvents.ELDRITCH_CAN_LISTEN) &&
                 !(entity instanceof EldritchWatcherEntity) &&

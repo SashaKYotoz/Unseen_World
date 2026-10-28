@@ -1,6 +1,8 @@
 package net.sashakyotoz.common.blocks.custom.fluids;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
@@ -108,13 +110,13 @@ public interface DualWaterloggedBlock extends SimpleWaterloggedBlock {
     }
 
     @Override
-    default boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+    default boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         return !state.getValue(BlockStateProperties.WATERLOGGED) && isWaterloggingFluid(fluid);
     }
 
     @Override
     default boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluid) {
-        if (!this.canPlaceLiquid(level, pos, state, fluid.getType())) {
+        if (!this.canPlaceLiquid(null, level, pos, state, fluid.getType())) {
             return false;
         }
         if (!level.isClientSide()) {
@@ -125,7 +127,7 @@ public interface DualWaterloggedBlock extends SimpleWaterloggedBlock {
     }
 
     @Override
-    default ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
+    default ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
         if (!state.getValue(BlockStateProperties.WATERLOGGED)) {
             return ItemStack.EMPTY;
         }

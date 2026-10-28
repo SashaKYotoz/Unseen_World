@@ -37,7 +37,7 @@ public class GrippingGloomwhaleEntity extends WhaleEntity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        GripConversion.define(this.entityData, CONVERTING);
+        GripConversion.define(builder, CONVERTING);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.sashakyotoz.client.renderers.layers;
 
+import net.minecraft.util.FastColor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -23,6 +24,6 @@ public class EldritchWatcherPulsatingLayer<T extends EldritchWatcherEntity, M ex
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderType.entityTranslucentEmissive(
                 UnseenWorld.MOD.makeID("textures/entity/eldritch_watcher/eldritch_watcher_pulsating_spots.png")
         ));
-        this.getParentModel().renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, (float) Oscillator.getOscillatingValue(ClientTicks.getTicks()));
+        this.getParentModel().renderToBuffer(matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat((float) Oscillator.getOscillatingValue(ClientTicks.getTicks()), 1.0F, 1.0F, 1.0F));
     }
 }

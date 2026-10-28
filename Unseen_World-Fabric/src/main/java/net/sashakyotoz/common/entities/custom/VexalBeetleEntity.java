@@ -1,5 +1,7 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -57,6 +59,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
 
     public static final int MAX_FLIGHT_TICKS = 60;
     private static final double RIDER_SEAT_HEIGHT = 0.3D;
+    private static final double PLAYER_SEAT_OFFSET = 0.25D;
     private static final float GROUND_SPEED_FACTOR = 0.5F;
     private static final float GLIDE_SPEED_FACTOR = 0.6F;
     private static final int RECOVERY_THRESHOLD = MAX_FLIGHT_TICKS / 3;
@@ -95,9 +98,9 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.entityData.define(FLIGHT_STAMINA, MAX_FLIGHT_TICKS);
-        this.entityData.define(EXHAUSTED, false);
-        this.entityData.define(SADDLED, false);
+        builder.define(FLIGHT_STAMINA, MAX_FLIGHT_TICKS);
+        builder.define(EXHAUSTED, false);
+        builder.define(SADDLED, false);
     }
 
     @Override
@@ -106,7 +109,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(TAMING_ITEMS), false));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.1D, 8.0F, 2.5F, true));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.1D, 8.0F, 2.5F));
         this.goalSelector.addGoal(5, new VexalBeetleFlyGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -247,8 +250,8 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return RIDER_SEAT_HEIGHT;
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
+        return new Vec3(0.0D, (RIDER_SEAT_HEIGHT + PLAYER_SEAT_OFFSET) * scale, 0.0D);
     }
 
     @Override
@@ -257,7 +260,7 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
     }
 
     @Override
-    public void equipSaddle(@Nullable SoundSource source) {
+    public void equipSaddle(ItemStack stack, @Nullable SoundSource source) {
         this.entityData.set(SADDLED, true);
         if (source != null) {
             this.level().playSound(null, this, SoundEvents.HORSE_SADDLE, source, 0.5F, 1.4F);
@@ -495,5 +498,10 @@ public class VexalBeetleEntity extends TamableAnimal implements FlyingAnimal, Sa
         }
         this.entityData.set(EXHAUSTED, compound.getBoolean("Exhausted"));
         this.entityData.set(SADDLED, compound.getBoolean("Saddle"));
+    }
+
+    @Override
+    protected boolean canFlyToOwner() {
+        return true;
     }
 }

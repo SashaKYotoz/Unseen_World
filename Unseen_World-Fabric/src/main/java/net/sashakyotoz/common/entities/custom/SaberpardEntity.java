@@ -123,7 +123,7 @@ public class SaberpardEntity extends Animal implements VariantHolder<SaberpardEn
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(TYPE, 0);
-        GripConversion.define(this.entityData, CONVERTING);
+        GripConversion.define(builder, CONVERTING);
     }
 
     @Override

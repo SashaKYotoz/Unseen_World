@@ -1,6 +1,8 @@
 package net.sashakyotoz.common.items;
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.core.component.DataComponents;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.lcc.sollib.api.common.registry.holder.BlockHolder;
 import net.lcc.sollib.api.common.registry.holder.ItemHolder;
 import net.minecraft.core.Direction;
@@ -45,7 +47,7 @@ public class ModItems {
         WeaponEvents.register();
     }
 
-    private static final ModelTemplate SPAWN_EGG = new ModelTemplate(Optional.of(new ResourceLocation("minecraft", "item/template_spawn_egg")), Optional.empty());
+    private static final ModelTemplate SPAWN_EGG = new ModelTemplate(Optional.of(ResourceLocation.withDefaultNamespace("item/template_spawn_egg")), Optional.empty());
 
     public static final Item ECLIPSE_KEYSTONE = flat("eclipse_keystone", Rarity.EPIC);
 
@@ -56,49 +58,50 @@ public class ModItems {
     public static final Item ABYSSAL_INGOT = ingot("abyssal_ingot");
     public static final Item RED_TITANIUM_INGOT = ingot("red_titanium_ingot");
 
-    public static final Item UNSEENIUM_SHOVEL = handheld("unseenium_shovel", () -> new ShovelItem(ModTiers.UNSEENIUM, 2.5F, -3.0F, gear(false)), ItemTags.SHOVELS);
-    public static final Item UNSEENIUM_PICKAXE = handheld("unseenium_pickaxe", () -> new PickaxeItem(ModTiers.UNSEENIUM, 2, -2.8F, gear(false)), ItemTags.PICKAXES);
-    public static final Item UNSEENIUM_AXE = handheld("unseenium_axe", () -> new AxeItem(ModTiers.UNSEENIUM, 6, -3.0F, gear(false)), ItemTags.AXES);
-    public static final Item UNSEENIUM_HOE = handheld("unseenium_hoe", () -> new HoeItem(ModTiers.UNSEENIUM, -5, 0, gear(false)), ItemTags.HOES);
-    public static final Item UNSEENIUM_SWORD = handheld("unseenium_sword", () -> new SwordItem(ModTiers.UNSEENIUM, 4, -2.4F, gear(false)), ItemTags.SWORDS);
+    public static final Item UNSEENIUM_SHOVEL = handheld("unseenium_shovel", () -> new ShovelItem(ModTiers.UNSEENIUM, gear(false).attributes(DiggerItem.createAttributes(ModTiers.UNSEENIUM, 2.5F, -3.0F))), ItemTags.SHOVELS);
+    public static final Item UNSEENIUM_PICKAXE = handheld("unseenium_pickaxe", () -> new PickaxeItem(ModTiers.UNSEENIUM, gear(false).attributes(DiggerItem.createAttributes(ModTiers.UNSEENIUM, 2.0F, -2.8F))), ItemTags.PICKAXES);
+    public static final Item UNSEENIUM_AXE = handheld("unseenium_axe", () -> new AxeItem(ModTiers.UNSEENIUM, gear(false).attributes(DiggerItem.createAttributes(ModTiers.UNSEENIUM, 6.0F, -3.0F))), ItemTags.AXES);
+    public static final Item UNSEENIUM_HOE = handheld("unseenium_hoe", () -> new HoeItem(ModTiers.UNSEENIUM, gear(false).attributes(DiggerItem.createAttributes(ModTiers.UNSEENIUM, -5.0F, 0.0F))), ItemTags.HOES);
+    public static final Item UNSEENIUM_SWORD = handheld("unseenium_sword", () -> new SwordItem(ModTiers.UNSEENIUM, gear(false).attributes(SwordItem.createAttributes(ModTiers.UNSEENIUM, 4, -2.4F))), ItemTags.SWORDS);
     public static final Item UNSEENIUM_HELMET = armor("unseenium_helmet", ModArmorMaterials.UNSEENIUM, ArmorItem.Type.HELMET, false);
     public static final Item UNSEENIUM_CHESTPLATE = armor("unseenium_chestplate", ModArmorMaterials.UNSEENIUM, ArmorItem.Type.CHESTPLATE, false);
     public static final Item UNSEENIUM_LEGGINGS = armor("unseenium_leggings", ModArmorMaterials.UNSEENIUM, ArmorItem.Type.LEGGINGS, false);
     public static final Item UNSEENIUM_BOOTS = armor("unseenium_boots", ModArmorMaterials.UNSEENIUM, ArmorItem.Type.BOOTS, false);
 
-    public static final Item ABYSSAL_SHOVEL = handheld("abyssal_shovel", () -> new ShovelItem(ModTiers.ABYSSAL, 2.5F, -3.0F, gear(true)), ItemTags.SHOVELS);
-    public static final Item ABYSSAL_PICKAXE = handheld("abyssal_pickaxe", () -> new PickaxeItem(ModTiers.ABYSSAL, 2, -2.8F, gear(true)), ItemTags.PICKAXES);
-    public static final Item ABYSSAL_AXE = handheld("abyssal_axe", () -> new AxeItem(ModTiers.ABYSSAL, 6, -3.0F, gear(true)), ItemTags.AXES);
-    public static final Item ABYSSAL_HOE = handheld("abyssal_hoe", () -> new HoeItem(ModTiers.ABYSSAL, -6, 0, gear(true)), ItemTags.HOES);
-    public static final Item ABYSSAL_SWORD = handheld("abyssal_sword", () -> new SwordItem(ModTiers.ABYSSAL, 4, -2.4F, gear(true)), ItemTags.SWORDS);
+    public static final Item ABYSSAL_SHOVEL = handheld("abyssal_shovel", () -> new ShovelItem(ModTiers.ABYSSAL, gear(true).attributes(DiggerItem.createAttributes(ModTiers.ABYSSAL, 2.5F, -3.0F))), ItemTags.SHOVELS);
+    public static final Item ABYSSAL_PICKAXE = handheld("abyssal_pickaxe", () -> new PickaxeItem(ModTiers.ABYSSAL, gear(true).attributes(DiggerItem.createAttributes(ModTiers.ABYSSAL, 2.0F, -2.8F))), ItemTags.PICKAXES);
+    public static final Item ABYSSAL_AXE = handheld("abyssal_axe", () -> new AxeItem(ModTiers.ABYSSAL, gear(true).attributes(DiggerItem.createAttributes(ModTiers.ABYSSAL, 6.0F, -3.0F))), ItemTags.AXES);
+    public static final Item ABYSSAL_HOE = handheld("abyssal_hoe", () -> new HoeItem(ModTiers.ABYSSAL, gear(true).attributes(DiggerItem.createAttributes(ModTiers.ABYSSAL, -6.0F, 0.0F))), ItemTags.HOES);
+    public static final Item ABYSSAL_SWORD = handheld("abyssal_sword", () -> new SwordItem(ModTiers.ABYSSAL, gear(true).attributes(SwordItem.createAttributes(ModTiers.ABYSSAL, 4, -2.4F))), ItemTags.SWORDS);
     public static final Item ABYSSAL_HELMET = armor("abyssal_helmet", ModArmorMaterials.ABYSSAL, ArmorItem.Type.HELMET, true);
     public static final Item ABYSSAL_CHESTPLATE = armor("abyssal_chestplate", ModArmorMaterials.ABYSSAL, ArmorItem.Type.CHESTPLATE, true);
     public static final Item ABYSSAL_LEGGINGS = armor("abyssal_leggings", ModArmorMaterials.ABYSSAL, ArmorItem.Type.LEGGINGS, true);
     public static final Item ABYSSAL_BOOTS = armor("abyssal_boots", ModArmorMaterials.ABYSSAL, ArmorItem.Type.BOOTS, true);
 
-    public static final Item RED_TITANIUM_SHOVEL = handheld("red_titanium_shovel", () -> new ShovelItem(ModTiers.TITANIUM, 2.5F, -3.0F, gear(true)), ItemTags.SHOVELS);
-    public static final Item RED_TITANIUM_PICKAXE = handheld("red_titanium_pickaxe", () -> new PickaxeItem(ModTiers.TITANIUM, 2, -2.8F, gear(true)), ItemTags.PICKAXES);
-    public static final Item RED_TITANIUM_AXE = handheld("red_titanium_axe", () -> new AxeItem(ModTiers.TITANIUM, 6, -3.0F, gear(true)), ItemTags.AXES);
-    public static final Item RED_TITANIUM_HOE = handheld("red_titanium_hoe", () -> new HoeItem(ModTiers.TITANIUM, -6, 0, gear(true)), ItemTags.HOES);
-    public static final Item RED_TITANIUM_SWORD = handheld("red_titanium_sword", () -> new SwordItem(ModTiers.TITANIUM, 4, -2.4F, gear(true)), ItemTags.SWORDS);
+    public static final Item RED_TITANIUM_SHOVEL = handheld("red_titanium_shovel", () -> new ShovelItem(ModTiers.TITANIUM, gear(true).attributes(DiggerItem.createAttributes(ModTiers.TITANIUM, 2.5F, -3.0F))), ItemTags.SHOVELS);
+    public static final Item RED_TITANIUM_PICKAXE = handheld("red_titanium_pickaxe", () -> new PickaxeItem(ModTiers.TITANIUM, gear(true).attributes(DiggerItem.createAttributes(ModTiers.TITANIUM, 2.0F, -2.8F))), ItemTags.PICKAXES);
+    public static final Item RED_TITANIUM_AXE = handheld("red_titanium_axe", () -> new AxeItem(ModTiers.TITANIUM, gear(true).attributes(DiggerItem.createAttributes(ModTiers.TITANIUM, 6.0F, -3.0F))), ItemTags.AXES);
+    public static final Item RED_TITANIUM_HOE = handheld("red_titanium_hoe", () -> new HoeItem(ModTiers.TITANIUM, gear(true).attributes(DiggerItem.createAttributes(ModTiers.TITANIUM, -6.0F, 0.0F))), ItemTags.HOES);
+    public static final Item RED_TITANIUM_SWORD = handheld("red_titanium_sword", () -> new SwordItem(ModTiers.TITANIUM, gear(true).attributes(SwordItem.createAttributes(ModTiers.TITANIUM, 4, -2.4F))), ItemTags.SWORDS);
     public static final Item RED_TITANIUM_HELMET = armor("red_titanium_helmet", ModArmorMaterials.TITANIUM, ArmorItem.Type.HELMET, true);
     public static final Item RED_TITANIUM_CHESTPLATE = armor("red_titanium_chestplate", ModArmorMaterials.TITANIUM, ArmorItem.Type.CHESTPLATE, true);
     public static final Item RED_TITANIUM_LEGGINGS = armor("red_titanium_leggings", ModArmorMaterials.TITANIUM, ArmorItem.Type.LEGGINGS, true);
     public static final Item RED_TITANIUM_BOOTS = armor("red_titanium_boots", ModArmorMaterials.TITANIUM, ArmorItem.Type.BOOTS, true);
 
     public static final Item AURIC_ARC = holder("auric_arc", () -> new AuricArcItem(9.0D, -2.8D,
-            new Item.Properties().rarity(Rarity.EPIC).durability(ModTiers.AURIC_ARC.getUses()))).get();
+            new Item.Properties().rarity(Rarity.EPIC).durability(ModTiers.AURIC_ARC.getUses())))
+            .withTags(ItemTags.TRIDENT_ENCHANTABLE, ItemTags.DURABILITY_ENCHANTABLE).get();
     public static final Item CHIMERIC_ROCKBREAKER_HAMMER = holder("chimeric_rockbreaker_hammer", () -> new ChimericRockbreakerHammerItem(4, -3.1F,
             new Item.Properties().rarity(Rarity.EPIC))).withTags(ItemTags.PICKAXES).get();
     public static final Item SHIELD_OF_CHIMERIC_WARRIOR = holder("shield_of_chimeric_warrior", () -> new ShieldOfChimericWarriorItem(
-            new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(893))).withTags(ConventionalItemTags.SHIELDS).get();
+            new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(893))).withTags(ConventionalItemTags.SHIELD_TOOLS, ItemTags.DURABILITY_ENCHANTABLE).get();
     public static final Item ECLIPSEBANE = holder("eclipsebane", () -> new EclipsebaneItem(4, -2.6F,
             new Item.Properties().rarity(Rarity.EPIC))).withTags(ItemTags.SWORDS).get();
     public static final Item GRIPPING_ABYSSAL_BOW = holder("gripping_abyssal_bow", () -> new GrippingAbyssalBowItem(
-            new Item.Properties().rarity(Rarity.RARE).durability(984))).withTags(ConventionalItemTags.BOWS).get();
+            new Item.Properties().rarity(Rarity.RARE).durability(984))).withTags(ConventionalItemTags.BOW_TOOLS, ItemTags.BOW_ENCHANTABLE, ItemTags.DURABILITY_ENCHANTABLE).get();
 
     public static final Item GRIPPING_BUNDLE = holder("gripping_bundle", () -> new GrippingBundleItem(
-            new Item.Properties().rarity(Rarity.EPIC).stacksTo(1))).get();
+            new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).component(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY))).get();
     public static final Item GRIPPING_GAUNTLET = holder("gripping_gauntlet", () -> new GrippingGauntletItem(
             new Item.Properties().rarity(Rarity.EPIC).stacksTo(1))).get();
 
@@ -229,11 +232,20 @@ public class ModItems {
         return holder(name, item).withTags(toolTag).withModel(ModelTemplates.FLAT_HANDHELD_ITEM).get();
     }
 
-    private static Item armor(String name, ArmorMaterial material, ArmorItem.Type type, boolean fireResistant) {
+    private static Item armor(String name, ModArmorMaterials material, ArmorItem.Type type, boolean fireResistant) {
         return holder(name, () -> {
-            Item.Properties properties = new Item.Properties().rarity(Rarity.RARE);
-            return new ModArmorItem(material, type, fireResistant ? properties.fireResistant() : properties);
-        }).withTags(ItemTags.TRIMMABLE_ARMOR).get();
+            Item.Properties properties = new Item.Properties().rarity(Rarity.RARE).durability(material.durability(type));
+            return new ModArmorItem(material.holder(), type, fireResistant ? properties.fireResistant() : properties);
+        }).withTags(ItemTags.TRIMMABLE_ARMOR, armorTag(type)).get();
+    }
+
+    private static TagKey<Item> armorTag(ArmorItem.Type type) {
+        return switch (type) {
+            case HELMET -> ItemTags.HEAD_ARMOR;
+            case CHESTPLATE, BODY -> ItemTags.CHEST_ARMOR;
+            case LEGGINGS -> ItemTags.LEG_ARMOR;
+            case BOOTS -> ItemTags.FOOT_ARMOR;
+        };
     }
 
     private static Item spawnEgg(String name, EntityType<? extends Mob> type, int primaryColor, int secondaryColor) {
@@ -245,26 +257,26 @@ public class ModItems {
     }
 
     private static BlockBehaviour.Properties signSettings() {
-        return BlockBehaviour.Properties.copy(Blocks.OAK_SIGN);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN);
     }
 
     private static Block standingSign(String name, WoodType wood, TagKey<Block> woodTag, Supplier<ItemLike> drop) {
-        return sign(name, () -> new StandingSignBlock(signSettings(), wood), drop)
+        return sign(name, () -> new StandingSignBlock(wood, signSettings()), drop)
                 .withTags(BlockTags.SIGNS, BlockTags.STANDING_SIGNS, BlockTags.WALL_POST_OVERRIDE, BlockTags.MINEABLE_WITH_AXE, woodTag).get();
     }
 
     private static Block wallSign(String name, WoodType wood, Supplier<ItemLike> drop) {
-        return sign(name, () -> new WallSignBlock(signSettings(), wood), drop)
+        return sign(name, () -> new WallSignBlock(wood, signSettings()), drop)
                 .withTags(BlockTags.SIGNS, BlockTags.WALL_SIGNS, BlockTags.WALL_POST_OVERRIDE, BlockTags.MINEABLE_WITH_AXE).get();
     }
 
     private static Block hangingSign(String name, WoodType wood, TagKey<Block> woodTag, Supplier<ItemLike> drop) {
-        return sign(name, () -> new CeilingHangingSignBlock(signSettings(), wood), drop)
+        return sign(name, () -> new CeilingHangingSignBlock(wood, signSettings()), drop)
                 .withTags(BlockTags.ALL_HANGING_SIGNS, BlockTags.CEILING_HANGING_SIGNS, BlockTags.MINEABLE_WITH_AXE, woodTag).get();
     }
 
     private static Block wallHangingSign(String name, WoodType wood, TagKey<Block> woodTag, Supplier<ItemLike> drop) {
-        return sign(name, () -> new WallHangingSignBlock(signSettings(), wood), drop)
+        return sign(name, () -> new WallHangingSignBlock(wood, signSettings()), drop)
                 .withTags(BlockTags.ALL_HANGING_SIGNS, BlockTags.WALL_HANGING_SIGNS, BlockTags.MINEABLE_WITH_AXE, woodTag).get();
     }
 

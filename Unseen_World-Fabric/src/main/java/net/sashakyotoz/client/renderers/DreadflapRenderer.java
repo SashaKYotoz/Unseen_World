@@ -14,13 +14,14 @@ public class DreadflapRenderer extends MobRenderer<DreadflapEntity, DreadflapMod
     public DreadflapRenderer(EntityRendererProvider.Context context) {
         super(context, new DreadflapModel(context.bakeLayer(DreadflapModel.DREADFLAP)), 0.5F);
     }
-    protected void setupRotations(DreadflapEntity entity, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
+    @Override
+    protected void setupRotations(DreadflapEntity entity, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
         if (entity.isRoosting())
             poseStack.translate(0.0F, -0.1F, 0.0F);
         else
             poseStack.translate(0.0F, Mth.cos(ageInTicks * 0.3F) * 0.1F, 0.0F);
 
-        super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks);
+        super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks, scale);
     }
 
     @Override

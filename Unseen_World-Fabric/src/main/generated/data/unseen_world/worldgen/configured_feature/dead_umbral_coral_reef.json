@@ -14,10 +14,8 @@
     },
     "height": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 3,
-        "min_inclusive": 1
-      }
+      "max_inclusive": 3,
+      "min_inclusive": 1
     },
     "plant": {
       "Name": "unseen_world:dead_umbral_coral",
@@ -28,10 +26,8 @@
     },
     "radius": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 2,
-        "min_inclusive": 0
-      }
+      "max_inclusive": 2,
+      "min_inclusive": 0
     },
     "wall_fan": {
       "Name": "unseen_world:dead_umbral_coral_wall_fan",

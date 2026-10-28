@@ -37,8 +37,8 @@ public class WhaleEntity extends WaterAnimal {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.entityData.define(HAS_TARGET, false);
-        this.entityData.define(TARGET_DISTANCE_SQR, 0.0F);
+        builder.define(HAS_TARGET, false);
+        builder.define(TARGET_DISTANCE_SQR, 0.0F);
     }
 
     @Override
@@ -85,11 +85,6 @@ public class WhaleEntity extends WaterAnimal {
 
     @Override
     public void handleAirSupply(int air) {
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return false;
     }
 
     @Override

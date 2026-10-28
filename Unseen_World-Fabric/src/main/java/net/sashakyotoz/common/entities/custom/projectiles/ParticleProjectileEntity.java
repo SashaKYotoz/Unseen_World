@@ -48,9 +48,9 @@ public class ParticleProjectileEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_CLUSTER, false);
-        this.entityData.define(DATA_DETONATING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_CLUSTER, false);
+        builder.define(DATA_DETONATING, false);
     }
 
     public boolean isClusterExplosion() {

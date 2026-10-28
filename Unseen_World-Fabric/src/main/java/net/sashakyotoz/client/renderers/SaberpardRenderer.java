@@ -26,8 +26,8 @@ public class SaberpardRenderer extends MobRenderer<SaberpardEntity, SaberpardMod
     }
 
     @Override
-    public void setupRotations(SaberpardEntity entity, PoseStack matrices, float animationProgress, float bodyYaw, float tickDelta) {
-        super.setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta);
+    public void setupRotations(SaberpardEntity entity, PoseStack matrices, float animationProgress, float bodyYaw, float tickDelta, float scale) {
+        super.setupRotations(entity, matrices, animationProgress, bodyYaw, tickDelta, scale);
         double velocity = entity.getDeltaMovement().y;
         if (!entity.onGround()
                 && (velocity < -0.1 || velocity > 0.1)

@@ -208,11 +208,6 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     }
 
     @Override
-    public EntityDimensions getDefaultDimensions(Pose pose) {
-        return pose == Pose.LONG_JUMPING ? LONG_JUMPING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
-    }
-
-    @Override
     public void handleEntityEvent(byte status) {
         if (status == EntityEvent.START_RAM) {
             this.preparingRam = true;
@@ -265,7 +260,7 @@ public class TuskhogEntity extends Animal implements VariantHolder<TuskhogEntity
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(TYPE, 0);
-        GripConversion.define(this.entityData, CONVERTING);
+        GripConversion.define(builder, CONVERTING);
     }
 
     @Override

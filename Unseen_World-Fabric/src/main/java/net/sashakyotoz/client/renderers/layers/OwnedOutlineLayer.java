@@ -49,55 +49,42 @@ public class OwnedOutlineLayer<T extends Entity & TraceableEntity, M extends Ent
         poseStack.translate(0.0D, pivot, 0.0D);
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0.0D, -pivot, 0.0D);
-        this.getParentModel().renderToBuffer(poseStack, consumer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.getParentModel().renderToBuffer(poseStack, consumer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
     }
 
     private record FlatColorConsumer(VertexConsumer delegate, int red, int green, int blue) implements VertexConsumer {
         @Override
-        public VertexConsumer vertex(double x, double y, double z) {
-            this.delegate.vertex(x, y, z);
+        public VertexConsumer addVertex(float x, float y, float z) {
+            this.delegate.addVertex(x, y, z);
             return this;
         }
 
         @Override
-        public VertexConsumer color(int r, int g, int b, int a) {
-            this.delegate.color(this.red, this.green, this.blue, 255);
+        public VertexConsumer setColor(int r, int g, int b, int a) {
+            this.delegate.setColor(this.red, this.green, this.blue, 255);
             return this;
         }
 
         @Override
-        public VertexConsumer uv(float u, float v) {
-            this.delegate.uv(u, v);
+        public VertexConsumer setUv(float u, float v) {
+            this.delegate.setUv(u, v);
             return this;
         }
 
         @Override
-        public VertexConsumer overlayCoords(int u, int v) {
+        public VertexConsumer setUv1(int u, int v) {
             return this;
         }
 
         @Override
-        public VertexConsumer uv2(int u, int v) {
+        public VertexConsumer setUv2(int u, int v) {
             return this;
         }
 
         @Override
-        public VertexConsumer normal(float x, float y, float z) {
+        public VertexConsumer setNormal(float x, float y, float z) {
             return this;
-        }
-
-        @Override
-        public void endVertex() {
-            this.delegate.endVertex();
-        }
-
-        @Override
-        public void defaultColor(int r, int g, int b, int a) {
-        }
-
-        @Override
-        public void unsetDefaultColor() {
         }
     }
 }

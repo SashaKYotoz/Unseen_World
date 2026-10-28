@@ -15,10 +15,8 @@
       "height": 2,
       "offset": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 1,
-          "min_inclusive": 0
-        }
+        "max_inclusive": 1,
+        "min_inclusive": 0
       },
       "radius": 2
     },
@@ -64,17 +62,13 @@
       },
       "branch_end_offset_from_top": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 0,
-          "min_inclusive": -1
-        }
+        "max_inclusive": 0,
+        "min_inclusive": -1
       },
       "branch_horizontal_length": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 4,
-          "min_inclusive": 2
-        }
+        "max_inclusive": 4,
+        "min_inclusive": 2
       },
       "branch_start_offset_from_top": {
         "max_inclusive": -3,

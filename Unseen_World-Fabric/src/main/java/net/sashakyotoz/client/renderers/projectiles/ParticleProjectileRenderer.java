@@ -13,7 +13,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.custom.projectiles.ParticleProjectileEntity;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -56,7 +55,7 @@ public class ParticleProjectileRenderer extends EntityRenderer<ParticleProjectil
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(HEAD_TEXTURE));
         PoseStack.Pose pose = poseStack.last();
         Matrix4f matrix = pose.pose();
-        Matrix3f normal = pose.normal();
+        PoseStack.Pose normal = pose;
 
         float size = 0.5F;
         int light = 15728880;
@@ -78,13 +77,13 @@ public class ParticleProjectileRenderer extends EntityRenderer<ParticleProjectil
         Vec3 cameraPos = this.entityRenderDispatcher.camera.getPosition();
         PoseStack.Pose pose = poseStack.last();
         Matrix4f matrix = pose.pose();
-        Matrix3f normal = pose.normal();
+        PoseStack.Pose normal = pose;
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(TRAIL_TEXTURE));
         renderRibbonStrip(trail, currentPos, cameraPos, matrix, normal, consumer, 0.25F, 255, 255, 255, 220);
     }
 
-    private void renderRibbonStrip(List<Vec3> trail, Vec3 currentPos, Vec3 cameraPos, Matrix4f matrix, Matrix3f normal, VertexConsumer consumer, float baseWidth, int r, int g, int b, int alpha) {
+    private void renderRibbonStrip(List<Vec3> trail, Vec3 currentPos, Vec3 cameraPos, Matrix4f matrix, PoseStack.Pose normal, VertexConsumer consumer, float baseWidth, int r, int g, int b, int alpha) {
         int count = trail.size();
         if (count < 2) {
             return;
@@ -131,14 +130,13 @@ public class ParticleProjectileRenderer extends EntityRenderer<ParticleProjectil
         }
     }
 
-    private void addVertex(VertexConsumer consumer, Matrix4f matrix, Matrix3f normal, float x, float y, float z, float u, float v, int r, int g, int b, int a, int light) {
-        consumer.vertex(matrix, x, y, z)
-                .color(r, g, b, a)
-                .uv(u, v)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(normal, 0.0F, 1.0F, 0.0F)
-                .endVertex();
+    private void addVertex(VertexConsumer consumer, Matrix4f matrix, PoseStack.Pose normal, float x, float y, float z, float u, float v, int r, int g, int b, int a, int light) {
+        consumer.addVertex(matrix, x, y, z)
+                .setColor(r, g, b, a)
+                .setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(normal, 0.0F, 1.0F, 0.0F);
     }
 
     @Override

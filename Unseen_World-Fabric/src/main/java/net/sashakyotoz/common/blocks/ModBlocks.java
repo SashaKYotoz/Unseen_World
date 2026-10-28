@@ -1,7 +1,7 @@
 package net.sashakyotoz.common.blocks;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.lcc.sollib.api.common.registry.data.block.BlockModel;
 import net.lcc.sollib.api.common.registry.holder.BlockHolder;
 import net.minecraft.core.BlockPos;
@@ -15,7 +15,8 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.util.ColorRGBA;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
@@ -72,7 +73,7 @@ public class ModBlocks {
     public static final Block EFFIGY = block("effigy", () -> new EffigyBlock(effigySettings()
             .lightLevel(state -> state.getValue(EffigyBlock.PHASE).luminance)))
             .withTags(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).get();
-    public static final Block EFFIGY_PART = holder("effigy_part", () -> new EffigyPartBlock(effigySettings().noParticlesOnBreak()))
+    public static final Block EFFIGY_PART = holder("effigy_part", () -> new EffigyPartBlock(effigySettings().noTerrainParticles()))
             .withTags(BlockTags.DRAGON_IMMUNE, BlockTags.WITHER_IMMUNE).get();
     public static final Block GRIPTONITE_LANTERN = block("griptonite_lantern", () -> new ModLanternBlock(props().forceSolidOn()
             .sound(SoundType.LANTERN).randomTicks().requiresCorrectToolForDrops().strength(3.5F).lightLevel(state -> 14)))
@@ -161,7 +162,7 @@ public class ModBlocks {
     public static final Block SUSPICIOUS_ASHEN_OOZE = block("suspicious_ashen_ooze", () -> new SusBlock(ModBlocks.ASHEN_OOZE,
             props().destroyTime(0.25F).mapColor(MapColor.TERRACOTTA_ORANGE), SoundEvents.BRUSH_GRAVEL, SoundEvents.BRUSH_SAND_COMPLETED))
             .withTags(BlockTags.MINEABLE_WITH_SHOVEL).get();
-    public static final Block GLIMMERGRAIN_SAND = block("glimmergrain_sand", () -> new FallingBlock(props().sound(SoundType.SOUL_SAND).destroyTime(1).mapColor(MapColor.COLOR_GRAY)))
+    public static final Block GLIMMERGRAIN_SAND = block("glimmergrain_sand", () -> new ColoredFallingBlock(new ColorRGBA(0xFF000000), props().sound(SoundType.SOUL_SAND).destroyTime(1).mapColor(MapColor.COLOR_GRAY)))
             .withTags(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.SAND, BlockTags.SMELTS_TO_GLASS).dropsSelf().withModel(BlockModel.CUBE).get();
     public static final Block SUSPICIOUS_GLIMMERGRAIN_SAND = block("suspicious_glimmergrain_sand", () -> new SusBlock(ModBlocks.GLIMMERGRAIN_SAND,
             props().sound(SoundType.SUSPICIOUS_SAND).destroyTime(0.25F).mapColor(MapColor.SAND), SoundEvents.BRUSH_SAND, SoundEvents.BRUSH_GRAVEL_COMPLETED))
@@ -191,7 +192,7 @@ public class ModBlocks {
     public static final Block AMETHYST_FENCE_GATE = AMETHYST_PLANKS_SET.getFenceGate().get();
     public static final Block AMETHYST_DOOR = door("amethyst", AMETHYST, ModTags.Blocks.AMETHYST_BLOCKS);
     public static final Block AMETHYST_TRAPDOOR = trapdoor("amethyst", AMETHYST, ModTags.Blocks.AMETHYST_BLOCKS);
-    public static final Block AMETHYST_SAPLING = sapling("amethyst", new AmethystSaplingGenerator(), ModTags.Blocks.AMETHYST_BLOCKS);
+    public static final Block AMETHYST_SAPLING = sapling("amethyst", ModTreeGrowers.AMETHYST, ModTags.Blocks.AMETHYST_BLOCKS);
 
     public static final Block STRIPPED_GRIZZLY_LOG = strippedLog("stripped_grizzly_log", ModBlocks::grizzlyWood, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Items.GRIZZLY_LOGS);
     public static final Block GRIZZLY_LOG = log("grizzly_log", ModBlocks::grizzlyWood, () -> ModBlocks.STRIPPED_GRIZZLY_LOG, ModTags.Blocks.GRIZZLY_BLOCKS, ModTags.Items.GRIZZLY_LOGS);
@@ -211,7 +212,7 @@ public class ModBlocks {
     public static final Block GRIZZLY_FENCE_GATE = GRIZZLY_PLANKS_SET.getFenceGate().get();
     public static final Block GRIZZLY_DOOR = door("grizzly", GRIZZLY, ModTags.Blocks.GRIZZLY_BLOCKS);
     public static final Block GRIZZLY_TRAPDOOR = trapdoor("grizzly", GRIZZLY, ModTags.Blocks.GRIZZLY_BLOCKS);
-    public static final Block GRIZZLY_SAPLING = sapling("grizzly", new GrizzlySaplingGenerator(), ModTags.Blocks.GRIZZLY_BLOCKS);
+    public static final Block GRIZZLY_SAPLING = sapling("grizzly", ModTreeGrowers.GRIZZLY, ModTags.Blocks.GRIZZLY_BLOCKS);
 
     public static final Block STRIPPED_TEALIVE_LOG = strippedLog("stripped_tealive_log", ModBlocks::tealiveWood, ModTags.Blocks.TEALIVE_BLOCKS, ModTags.Items.TEALIVE_LOGS);
     public static final Block TEALIVE_LOG = log("tealive_log", ModBlocks::tealiveWood, () -> ModBlocks.STRIPPED_TEALIVE_LOG, ModTags.Blocks.TEALIVE_BLOCKS, ModTags.Items.TEALIVE_LOGS);
@@ -231,7 +232,7 @@ public class ModBlocks {
     public static final Block TEALIVE_FENCE_GATE = TEALIVE_PLANKS_SET.getFenceGate().get();
     public static final Block TEALIVE_DOOR = door("tealive", TEALIVE, ModTags.Blocks.TEALIVE_BLOCKS);
     public static final Block TEALIVE_TRAPDOOR = trapdoor("tealive", TEALIVE, ModTags.Blocks.TEALIVE_BLOCKS);
-    public static final Block TEALIVE_SAPLING = sapling("tealive", new TealiveSaplingGenerator(), ModTags.Blocks.TEALIVE_BLOCKS);
+    public static final Block TEALIVE_SAPLING = sapling("tealive", ModTreeGrowers.TEALIVE, ModTags.Blocks.TEALIVE_BLOCKS);
 
     public static final Block STRIPPED_BURLYWOOD_LOG = strippedLog("stripped_burlywood_log", ModBlocks::burlywood, ModTags.Blocks.BURLYWOOD_BLOCKS, ModTags.Items.BURLYWOOD_LOGS);
     public static final Block BURLYWOOD_LOG = log("burlywood_log", ModBlocks::burlywood, () -> ModBlocks.STRIPPED_BURLYWOOD_LOG, ModTags.Blocks.BURLYWOOD_BLOCKS, ModTags.Items.BURLYWOOD_LOGS);
@@ -272,7 +273,7 @@ public class ModBlocks {
     public static final Block BURLYWOOD_FENCE_GATE = BURLYWOOD_PLANKS_SET.getFenceGate().get();
     public static final Block BURLYWOOD_DOOR = door("burlywood", BURLYWOOD, ModTags.Blocks.BURLYWOOD_BLOCKS);
     public static final Block BURLYWOOD_TRAPDOOR = trapdoor("burlywood", BURLYWOOD, ModTags.Blocks.BURLYWOOD_BLOCKS);
-    public static final Block BURLYWOOD_SAPLING = sapling("burlywood", new BurlywoodSaplingGenerator(), ModTags.Blocks.BURLYWOOD_BLOCKS);
+    public static final Block BURLYWOOD_SAPLING = sapling("burlywood", ModTreeGrowers.BURLYWOOD, ModTags.Blocks.BURLYWOOD_BLOCKS);
 
     public static final Block STRIPPED_CRIMSONVEIL_LOG = strippedLog("stripped_crimsonveil_log", ModBlocks::crimsonveil, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Items.CRIMSONVEIL_LOGS);
     public static final Block CRIMSONVEIL_LOG = log("crimsonveil_log", ModBlocks::crimsonveil, () -> ModBlocks.STRIPPED_CRIMSONVEIL_LOG, ModTags.Blocks.CRIMSONVEIL_BLOCKS, ModTags.Items.CRIMSONVEIL_LOGS);
@@ -300,7 +301,7 @@ public class ModBlocks {
     public static final Block CRIMSONVEIL_FENCE_GATE = CRIMSONVEIL_PLANKS_SET.getFenceGate().get();
     public static final Block CRIMSONVEIL_DOOR = door("crimsonveil", CRIMSONVEIL, ModTags.Blocks.CRIMSONVEIL_BLOCKS);
     public static final Block CRIMSONVEIL_TRAPDOOR = trapdoor("crimsonveil", CRIMSONVEIL, ModTags.Blocks.CRIMSONVEIL_BLOCKS);
-    public static final Block CRIMSONVEIL_SAPLING = sapling("crimsonveil", new CrimsonveilSaplingGenerator(), ModTags.Blocks.CRIMSONVEIL_BLOCKS);
+    public static final Block CRIMSONVEIL_SAPLING = sapling("crimsonveil", ModTreeGrowers.CRIMSONVEIL, ModTags.Blocks.CRIMSONVEIL_BLOCKS);
 
     public static final Block BEARFRUIT_BRAMBLE = block("bearfruit_bramble_stem", () -> new StandingFruitBlock(copy(Blocks.OAK_SAPLING)
             .mapColor(MapColor.COLOR_PURPLE).instabreak().lightLevel(StandingFruitBlock.STATE_TO_LUMINANCE),
@@ -317,17 +318,18 @@ public class ModBlocks {
             .withItem(item -> item.withModel(ModelTemplates.FLAT_ITEM)).cutout().get();
     public static final Block AMETHYST_PETALS = block("amethyst_petals", () -> new PinkPetalsBlock(props().mapColor(MapColor.ICE).instabreak().noCollission()
             .sound(SoundType.SMALL_AMETHYST_BUD).pushReaction(PushReaction.DESTROY)
-            .lightLevel(lightLevelFromBlockState(8, BlockStateProperties.FLOWER_AMOUNT, 2))))
+            .lightLevel(lightLevelFromBlockState(8, BlockStateProperties.FLOWER_AMOUNT, 2))) {
+            })
             .cutout().get();
     public static final Block GLOW_APPLE_BUSH = block("glow_apple_bush", () -> new TreeBushLikeBlock(props().mapColor(MapColor.GRASS).destroyTime(0.25F)
             .sound(SoundType.SMALL_DRIPLEAF).pushReaction(PushReaction.DESTROY)
             .lightLevel(lightLevelFromBlockStateR(10, TreeBushLikeBlock.GROWN)).randomTicks()))
             .cutout().get();
-    public static final Block BURLYWOOD_VIOLET = flower("burlywood_violet", () -> new FlowerBlock(MobEffects.GLOWING, 100, props().mapColor(MapColor.ICE)
+    public static final Block BURLYWOOD_VIOLET = flower("burlywood_violet", () -> new FlowerBlock(MobEffects.GLOWING, 100.0F, props().mapColor(MapColor.ICE)
             .instabreak().sound(SoundType.FLOWERING_AZALEA).lightLevel(state -> 10).noCollission()));
-    public static final Block FROSTBLOOM = flower("frostbloom", () -> new FrostbloomBlock(MobEffects.WEAKNESS, 100, props().mapColor(MapColor.ICE)
+    public static final Block FROSTBLOOM = flower("frostbloom", () -> new FrostbloomBlock(MobEffects.WEAKNESS, 100.0F, props().mapColor(MapColor.ICE)
             .instabreak().sound(SoundType.GLASS).lightLevel(state -> 6).noCollission()));
-    public static final Block CORONA_BLOOM = flower("corona_bloom", () -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 200, props().mapColor(MapColor.FIRE)
+    public static final Block CORONA_BLOOM = flower("corona_bloom", () -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 200.0F, props().mapColor(MapColor.FIRE)
             .instabreak().sound(SoundType.NETHER_WART).lightLevel(state -> 12)
             .emissiveRendering((state, level, pos) -> level.getBlockState(pos.above()).isAir()).noCollission()));
     public static final Block ASHREED = block("ashreed", () -> new ReedBlock(copy(Blocks.SUGAR_CANE)))
@@ -434,8 +436,8 @@ public class ModBlocks {
     }
 
     private static Block ore(String id, float hardness, int light, int minXp, int maxXp, TagKey<Block>[] tool) {
-        return block(id, () -> new DropExperienceBlock(props().destroyTime(hardness).requiresCorrectToolForDrops().lightLevel(state -> light),
-                UniformInt.of(minXp, maxXp)))
+        return block(id, () -> new DropExperienceBlock(UniformInt.of(minXp, maxXp),
+                props().destroyTime(hardness).requiresCorrectToolForDrops().lightLevel(state -> light)))
                 .withTags(tool).withModel(BlockModel.CUBE).get();
     }
 
@@ -488,8 +490,8 @@ public class ModBlocks {
                 .withFlammability(5, 20).dropsSelf()
                 .withSetPrefix(wood)
                 .withStairs().withSlab().withFence().withFenceGate(type)
-                .withButton(type.setType(), 30, true)
-                .withPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, type.setType());
+                .withButton(type.setType(), 30)
+                .withPressurePlate(type.setType());
         planks.getStairs().withTags(BlockTags.WOODEN_STAIRS, BlockTags.MINEABLE_WITH_AXE, family)
                 .withItem(item -> item.withTags(ItemTags.WOODEN_STAIRS)).withFlammability(5, 20);
         planks.getSlab().withTags(BlockTags.WOODEN_SLABS, BlockTags.MINEABLE_WITH_AXE, family)
@@ -506,20 +508,20 @@ public class ModBlocks {
     }
 
     private static Block door(String wood, WoodType type, TagKey<Block> family) {
-        return block(wood + "_door", () -> new DoorBlock(copy(Blocks.OAK_DOOR).mapColor(MapColor.TERRACOTTA_YELLOW), type.setType()))
+        return block(wood + "_door", () -> new DoorBlock(type.setType(), copy(Blocks.OAK_DOOR).mapColor(MapColor.TERRACOTTA_YELLOW)))
                 .withTags(BlockTags.WOODEN_DOORS, BlockTags.MINEABLE_WITH_AXE, family)
                 .withItem(item -> item.withTags(ItemTags.WOODEN_DOORS))
                 .withModel(BlockModel.DOOR).cutout().get();
     }
 
     private static Block trapdoor(String wood, WoodType type, TagKey<Block> family) {
-        return block(wood + "_trapdoor", () -> new TrapDoorBlock(copy(Blocks.OAK_TRAPDOOR).mapColor(MapColor.TERRACOTTA_YELLOW), type.setType()))
+        return block(wood + "_trapdoor", () -> new TrapDoorBlock(type.setType(), copy(Blocks.OAK_TRAPDOOR).mapColor(MapColor.TERRACOTTA_YELLOW)))
                 .withTags(BlockTags.WOODEN_TRAPDOORS, BlockTags.MINEABLE_WITH_AXE, family)
                 .withItem(item -> item.withTags(ItemTags.WOODEN_TRAPDOORS))
                 .dropsSelf().cutout().get();
     }
 
-    private static Block sapling(String wood, AbstractTreeGrower grower, TagKey<Block> family) {
+    private static Block sapling(String wood, TreeGrower grower, TagKey<Block> family) {
         return block(wood + "_sapling", () -> new SaplingBlock(grower, copy(Blocks.OAK_SAPLING).mapColor(MapColor.COLOR_PURPLE).instabreak()))
                 .withTags(BlockTags.SAPLINGS, family)
                 .withItem(item -> item.withTags(ItemTags.SAPLINGS))
@@ -531,7 +533,7 @@ public class ModBlocks {
     }
 
     private static BlockBehaviour.Properties copy(Block block) {
-        return BlockBehaviour.Properties.copy(block);
+        return BlockBehaviour.Properties.ofFullCopy(block);
     }
 
     private static BlockBehaviour.Properties darkCurrantslate() {

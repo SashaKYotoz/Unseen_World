@@ -27,7 +27,7 @@ public class FertilizeGoal extends Goal {
         if (this.watcher.level().getBlockState(pos).is(BlockTags.DIRT)){
             BlockState blockState = this.watcher.level().getBlockState(pos);
             if (blockState.getBlock() instanceof BonemealableBlock fertilizable) {
-                if (fertilizable.isValidBonemealTarget(this.watcher.level(), pos, blockState, this.watcher.level().isClientSide)) {
+                if (fertilizable.isValidBonemealTarget(this.watcher.level(), pos, blockState)) {
                     if (this.watcher.level() instanceof ServerLevel world) {
                         if (fertilizable.isBonemealSuccess(this.watcher.level(), this.watcher.level().random, pos, blockState))
                             fertilizable.performBonemeal(world, world.random, pos, blockState);

@@ -13,7 +13,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -38,7 +40,7 @@ public class ModArmorItem extends ArmorItem {
     private static final int UNSEENIUM_REPAIR_AMOUNT = 2;
     private static final double UNSEENIUM_SOLITUDE_RADIUS = 16.0D;
 
-    public ModArmorItem(ArmorMaterial material, Type type, Properties settings) {
+    public ModArmorItem(Holder<ArmorMaterial> material, Type type, Properties settings) {
         super(material, type, settings);
     }
 
@@ -113,7 +115,7 @@ public class ModArmorItem extends ArmorItem {
 
     private static void damageSet(ServerPlayer player, int amount) {
         for (EquipmentSlot slot : ARMOR_SLOTS) {
-            player.getItemBySlot(slot).hurtAndBreak(amount, player, wearer -> wearer.broadcastBreakEvent(slot));
+            player.getItemBySlot(slot).hurtAndBreak(amount, player, slot);
         }
     }
 
@@ -127,8 +129,8 @@ public class ModArmorItem extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
-        super.appendHoverText(stack, world, tooltip, context);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
         tooltip.add(Component.translatable("item.unseen_world.armor_tips").withStyle(ChatFormatting.BLUE));
         ArmorSet set = ArmorSet.of(this.getMaterial());
         if (set != null) {
@@ -155,18 +157,18 @@ public class ModArmorItem extends ArmorItem {
         RED_TITANIUM(ModArmorMaterials.TITANIUM, "item.unseen_world.titanium_armor_tooltip"),
         UNSEENIUM(ModArmorMaterials.UNSEENIUM, "item.unseen_world.unseenium_armor_tooltip", "item.unseen_world.unseenium_armor_tooltip1");
 
-        private final ArmorMaterial material;
+        private final ModArmorMaterials material;
         private final String[] tooltipKeys;
 
-        ArmorSet(ArmorMaterial material, String... tooltipKeys) {
+        ArmorSet(ModArmorMaterials material, String... tooltipKeys) {
             this.material = material;
             this.tooltipKeys = tooltipKeys;
         }
 
         @Nullable
-        private static ArmorSet of(ArmorMaterial material) {
+        private static ArmorSet of(Holder<ArmorMaterial> material) {
             for (ArmorSet set : values()) {
-                if (set.material == material) {
+                if (set.material.matches(material)) {
                     return set;
                 }
             }
@@ -176,7 +178,7 @@ public class ModArmorItem extends ArmorItem {
         private boolean isWornBy(LivingEntity entity) {
             for (EquipmentSlot slot : ARMOR_SLOTS) {
                 if (!(entity.getItemBySlot(slot).getItem() instanceof ArmorItem armor)
-                        || armor.getMaterial() != this.material
+                        || !this.material.matches(armor.getMaterial())
                         || armor.getEquipmentSlot() != slot) {
                     return false;
                 }

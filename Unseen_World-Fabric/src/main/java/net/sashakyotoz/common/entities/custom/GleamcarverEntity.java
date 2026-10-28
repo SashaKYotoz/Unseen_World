@@ -1,5 +1,9 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -65,8 +69,8 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller, Buc
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.entityData.define(DATA_TYPE, NO_TYPE);
-        this.entityData.define(FROM_BUCKET, false);
+        builder.define(DATA_TYPE, NO_TYPE);
+        builder.define(FROM_BUCKET, false);
     }
 
     @Override
@@ -98,10 +102,19 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller, Buc
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         this.setGleamcarverType(nbt.contains(TYPE_KEY) ? Type.byName(nbt.getString(TYPE_KEY)) : null);
-        if (nbt.contains(NEST_KEY)) {
-            this.bindToNest(NbtUtils.readBlockPos(nbt.getCompound(NEST_KEY)));
+        BlockPos nest = readNestPos(nbt);
+        if (nest != null) {
+            this.bindToNest(nest);
         }
         this.setFromBucket(nbt.getBoolean(FROM_BUCKET_KEY));
+    }
+
+    private static BlockPos readNestPos(CompoundTag nbt) {
+        if (nbt.contains(NEST_KEY, Tag.TAG_COMPOUND)) {
+            CompoundTag legacy = nbt.getCompound(NEST_KEY);
+            return new BlockPos(legacy.getInt("X"), legacy.getInt("Y"), legacy.getInt("Z"));
+        }
+        return NbtUtils.readBlockPos(nbt, NEST_KEY).orElse(null);
     }
 
     @Override
@@ -130,7 +143,8 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller, Buc
     public void saveToBucketTag(ItemStack stack) {
         Bucketable.saveDefaultDataToBucketTag(this, stack);
         if (this.gleamcarverType != null) {
-            stack.getOrCreateTag().putString(TYPE_KEY, this.gleamcarverType.typeName);
+            String typeName = this.gleamcarverType.typeName;
+            CustomData.update(DataComponents.BUCKET_ENTITY_DATA, stack, tag -> tag.putString(TYPE_KEY, typeName));
         }
     }
 
@@ -176,7 +190,7 @@ public class GleamcarverEntity extends PathfinderMob implements NestDweller, Buc
         if (!this.level().isClientSide()) {
             this.spawnAtLocation(drop);
             this.setGleamcarverType(depleted(this.gleamcarverType));
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             player.getCooldowns().addCooldown(stack.getItem(), HARVEST_COOLDOWN);
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide());

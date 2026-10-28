@@ -1,5 +1,10 @@
 package net.sashakyotoz.common.blocks.custom;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -39,12 +44,19 @@ public class OrdealSpawnerBlock extends BaseEntityBlock {
     public static final EnumProperty<OrdealSpawnerState> STATE = EnumProperty.create("state", OrdealSpawnerState.class);
     public static final EnumProperty<Type> TYPE = EnumProperty.create("type", Type.class);
 
+    public static final MapCodec<OrdealSpawnerBlock> CODEC = simpleCodec(OrdealSpawnerBlock::new);
+
     public OrdealSpawnerBlock(Properties settings) {
         super(settings);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(GRIPPING, false)
                 .setValue(STATE, OrdealSpawnerState.INACTIVE)
                 .setValue(TYPE, Type.GRIPCRYSTAL));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -63,15 +75,14 @@ public class OrdealSpawnerBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack stack = player.getItemInHand(hand);
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!(stack.getItem() instanceof SpawnEggItem egg) || !player.getAbilities().instabuild) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof OrdealSpawnerBlockEntity spawner) {
-            player.displayClientMessage(spawner.configure(egg.getType(stack.getTag())), true);
+            player.displayClientMessage(spawner.configure(egg.getType(stack)), true);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
@@ -126,8 +137,8 @@ public class OrdealSpawnerBlock extends BaseEntityBlock {
             return secondary ? this.defaultSecondary.get() : this.defaultPrimary.get();
         }
 
-        public ResourceLocation lootTable(boolean gripping) {
-            return UnseenWorld.MOD.makeID("chests/ordeal_spawner_" + this.name + (gripping ? "_gripping" : ""));
+        public ResourceKey<LootTable> lootTable(boolean gripping) {
+            return ResourceKey.create(Registries.LOOT_TABLE, UnseenWorld.MOD.makeID("chests/ordeal_spawner_" + this.name + (gripping ? "_gripping" : "")));
         }
 
         @Override

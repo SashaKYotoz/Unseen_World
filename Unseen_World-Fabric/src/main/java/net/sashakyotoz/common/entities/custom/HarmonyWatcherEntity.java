@@ -176,7 +176,7 @@ public class HarmonyWatcherEntity extends PathfinderMob {
         if (this.level().isClientSide()) {
             return;
         }
-        boolean fertilizing = this.goalSelector.getRunningGoals().anyMatch(goal -> goal.getGoal() instanceof FertilizeGoal);
+        boolean fertilizing = this.goalSelector.getAvailableGoals().stream().anyMatch(goal -> goal.isRunning() && goal.getGoal() instanceof FertilizeGoal);
         if (fertilizing && !this.wasFertilizing) {
             this.level().broadcastEntityEvent(this, FERTILIZE_EVENT);
         }

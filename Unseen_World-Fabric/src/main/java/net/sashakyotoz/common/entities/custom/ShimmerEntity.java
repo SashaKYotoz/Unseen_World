@@ -60,13 +60,9 @@ public class ShimmerEntity extends WaterAnimal {
     }
 
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height * 0.6F;
-    }
-
-    @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return EntityShapes.oriented(2.5F, 0.9F, this.dimensionBucket * 15.0F);
+    protected EntityDimensions getDefaultDimensions(Pose pose) {
+        EntityDimensions dimensions = EntityShapes.oriented(2.5F, 0.9F, this.dimensionBucket * 15.0F);
+        return dimensions.withEyeHeight(dimensions.height() * 0.6F);
     }
 
     @Override
@@ -85,8 +81,8 @@ public class ShimmerEntity extends WaterAnimal {
     }
 
     @Override
-    public boolean canBeLeashed(Player player) {
-        return !this.isLeashed();
+    public boolean canBeLeashed() {
+        return true;
     }
 
     @Override

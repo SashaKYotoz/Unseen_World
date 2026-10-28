@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "crimsonveil_button",
+  "ingredients": [
+    {
+      "item": "unseen_world:crimsonveil_planks"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "unseen_world:crimsonveil_button"
+  }
+}

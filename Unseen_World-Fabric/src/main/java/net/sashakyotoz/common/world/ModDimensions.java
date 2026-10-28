@@ -1,7 +1,7 @@
 package net.sashakyotoz.common.world;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -23,7 +23,7 @@ public class ModDimensions {
 
     public static final ResourceLocation CHIMERIC_DARKNESS_LOCATION = UnseenWorld.MOD.makeID("the_chimeric_darkness");
 
-    public static void bootstrap(BootstapContext<DimensionType> context) {
+    public static void bootstrap(BootstrapContext<DimensionType> context) {
         context.register(CHIMERIC_DARKNESS_TYPE, new DimensionType(
                 OptionalLong.of(16000), // fixedTime
                 false, // hasSkylight

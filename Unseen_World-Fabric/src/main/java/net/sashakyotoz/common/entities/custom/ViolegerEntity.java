@@ -1,5 +1,7 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -55,8 +57,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class ViolegerEntity extends Monster implements RangedAttackMob {
-    public static final ResourceLocation GRIPCRYSTAL_BARTER = UnseenWorld.MOD.makeID("gameplay/violeger_barter_gripcrystal");
-    public static final ResourceLocation GRIPTONITE_BARTER = UnseenWorld.MOD.makeID("gameplay/violeger_barter_griptonite");
+    public static final ResourceKey<LootTable> GRIPCRYSTAL_BARTER = ResourceKey.create(Registries.LOOT_TABLE, UnseenWorld.MOD.makeID("gameplay/violeger_barter_gripcrystal"));
+    public static final ResourceKey<LootTable> GRIPTONITE_BARTER = ResourceKey.create(Registries.LOOT_TABLE, UnseenWorld.MOD.makeID("gameplay/violeger_barter_griptonite"));
     private static final EntityDataAccessor<Byte> ACTION = SynchedEntityData.defineId(ViolegerEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> IS_HOSTILE = SynchedEntityData.defineId(ViolegerEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -284,9 +286,9 @@ public class ViolegerEntity extends Monster implements RangedAttackMob {
         ItemStack offer = this.getOffhandItem();
         this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
         this.setDropChance(EquipmentSlot.OFFHAND, DEFAULT_HAND_DROP);
-        ResourceLocation table = offer.is(ModItems.GRIPTONITE) ? GRIPTONITE_BARTER : offer.is(ModItems.GRIPCRYSTAL) ? GRIPCRYSTAL_BARTER : null;
+        ResourceKey<LootTable> table = offer.is(ModItems.GRIPTONITE) ? GRIPTONITE_BARTER : offer.is(ModItems.GRIPCRYSTAL) ? GRIPCRYSTAL_BARTER : null;
         if (table != null && this.level() instanceof ServerLevel serverLevel) {
-            LootTable loot = serverLevel.getServer().getLootData().getLootTable(table);
+            LootTable loot = serverLevel.getServer().reloadableRegistries().getLootTable(table);
             LootParams params = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, this).create(LootContextParamSets.PIGLIN_BARTER);
             Vec3 destination = this.customerPosition();
             for (ItemStack reward : loot.getRandomItems(params)) {

@@ -105,7 +105,7 @@ public final class ChimericDarknessSkyRenderer {
         buffer.drawWithShader(pose, projection, shader);
     }
 
-    private static VertexBuffer upload(BufferBuilder.RenderedBuffer rendered) {
+    private static VertexBuffer upload(MeshData rendered) {
         VertexBuffer buffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
         buffer.bind();
         buffer.upload(rendered);
@@ -114,12 +114,10 @@ public final class ChimericDarknessSkyRenderer {
     }
 
     private static BufferBuilder begin() {
-        BufferBuilder builder = Tesselator.getInstance().getBuilder();
-        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        return builder;
+        return Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
     }
 
-    private static BufferBuilder.RenderedBuffer buildDome() {
+    private static MeshData buildDome() {
         BufferBuilder builder = begin();
         int rings = 24;
         int segments = 48;
@@ -137,10 +135,10 @@ public final class ChimericDarknessSkyRenderer {
                 vertex(builder, left, high, DOME_RADIUS, highColor, 1.0F);
             }
         }
-        return builder.end();
+        return builder.buildOrThrow();
     }
 
-    private static BufferBuilder.RenderedBuffer buildHorizon() {
+    private static MeshData buildHorizon() {
         BufferBuilder builder = begin();
         int rings = 14;
         int segments = 48;
@@ -158,10 +156,10 @@ public final class ChimericDarknessSkyRenderer {
                 vertex(builder, left, high, DOME_RADIUS, WHITE, highAlpha);
             }
         }
-        return builder.end();
+        return builder.buildOrThrow();
     }
 
-    private static BufferBuilder.RenderedBuffer buildStars() {
+    private static MeshData buildStars() {
         BufferBuilder builder = begin();
         RandomSource random = RandomSource.create(10842L);
         for (int i = 0; i < STAR_ATTEMPTS; i++) {
@@ -204,13 +202,13 @@ public final class ChimericDarknessSkyRenderer {
                 double radial = -rotatedU * pitchCos;
                 double offsetX = radial * yawSin - rotatedV * yawCos;
                 double offsetZ = rotatedV * yawSin + radial * yawCos;
-                builder.vertex(centerX + offsetX, centerY + offsetY, centerZ + offsetZ).color(tint[0], tint[1], tint[2], alpha).endVertex();
+                builder.addVertex((float) (centerX + offsetX), (float) (centerY + offsetY), (float) (centerZ + offsetZ)).setColor(tint[0], tint[1], tint[2], alpha);
             }
         }
-        return builder.end();
+        return builder.buildOrThrow();
     }
 
-    private static BufferBuilder.RenderedBuffer buildAurora() {
+    private static MeshData buildAurora() {
         BufferBuilder builder = begin();
         RandomSource random = RandomSource.create(4096L);
         float[] intensity = new float[AURORA_COLUMNS + 1];
@@ -228,7 +226,7 @@ public final class ChimericDarknessSkyRenderer {
                 auroraVertex(builder, left, row + 1, intensity[column]);
             }
         }
-        return builder.end();
+        return builder.buildOrThrow();
     }
 
     private static void auroraVertex(BufferBuilder builder, double azimuth, int row, float intensity) {
@@ -240,7 +238,7 @@ public final class ChimericDarknessSkyRenderer {
         vertex(builder, azimuth, elevation, AURORA_RADIUS, mix(AURORA_LOW, AURORA_HIGH, hue), AURORA_WEIGHTS[row] * intensity * band * 0.6F);
     }
 
-    private static BufferBuilder.RenderedBuffer buildRays() {
+    private static MeshData buildRays() {
         BufferBuilder builder = begin();
         RandomSource random = RandomSource.create(7717L);
         double sourceAzimuth = Math.toRadians(225.0D);
@@ -256,14 +254,13 @@ public final class ChimericDarknessSkyRenderer {
             vertex(builder, azimuth + halfWidth, foot, RAY_RADIUS, RAY, 0.0F);
             vertex(builder, azimuth - halfWidth, foot, RAY_RADIUS, RAY, 0.0F);
         }
-        return builder.end();
+        return builder.buildOrThrow();
     }
 
     private static void vertex(BufferBuilder builder, double azimuth, double elevation, double radius, float[] color, float alpha) {
         double horizontal = Math.cos(elevation) * radius;
-        builder.vertex(Math.sin(azimuth) * horizontal, Math.sin(elevation) * radius, Math.cos(azimuth) * horizontal)
-                .color(color[0], color[1], color[2], alpha)
-                .endVertex();
+        builder.addVertex((float) (Math.sin(azimuth) * horizontal), (float) (Math.sin(elevation) * radius), (float) (Math.cos(azimuth) * horizontal))
+                .setColor(color[0], color[1], color[2], alpha);
     }
 
     private static float[] domeColor(double elevation) {

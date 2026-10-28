@@ -44,24 +44,18 @@
     },
     "pillar_count": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 11,
-        "min_inclusive": 7
-      }
+      "max_inclusive": 11,
+      "min_inclusive": 7
     },
     "pillar_height": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 5,
-        "min_inclusive": 2
-      }
+      "max_inclusive": 5,
+      "min_inclusive": 2
     },
     "radius": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 7,
-        "min_inclusive": 4
-      }
+      "max_inclusive": 7,
+      "min_inclusive": 4
     }
   }
 }

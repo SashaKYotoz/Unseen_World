@@ -1,0 +1,43 @@
+{
+  "parent": "unseen_world:into_the_heart_of_darkness",
+  "criteria": {
+    "fortress_in_the_darkness": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "unseen_world:warrior_fortress"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "unseen_world:gripcrystal_key",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancement.unseen_world.fortress_in_the_darkness"
+    },
+    "description": {
+      "translate": "advancement.unseen_world.fortress_in_the_darkness.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "fortress_in_the_darkness"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

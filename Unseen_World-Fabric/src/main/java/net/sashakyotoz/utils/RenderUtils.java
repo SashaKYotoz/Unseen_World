@@ -12,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class RenderUtils {
@@ -52,7 +51,7 @@ public class RenderUtils {
         VertexConsumer consumer = buffer.getBuffer(type);
         PoseStack.Pose lastPose = poseStack.last();
         Matrix4f pose = lastPose.pose();
-        Matrix3f normal = lastPose.normal();
+        PoseStack.Pose normal = lastPose;
 
         int red = (color >> 16) & 0xFF;
         int green = (color >> 8) & 0xFF;
@@ -108,13 +107,12 @@ public class RenderUtils {
         return new Vec3(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
     }
 
-    private static void vertex(VertexConsumer consumer, Matrix4f pose, Matrix3f normal, float x, float y, float z, int r, int g, int b, float u, float v) {
-        consumer.vertex(pose, x, y, z)
-                .color(r, g, b, 200)
-                .uv(u, v)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(FULL_BRIGHT)
-                .normal(normal, 0.0F, 1.0F, 0.0F)
-                .endVertex();
+    private static void vertex(VertexConsumer consumer, Matrix4f pose, PoseStack.Pose normal, float x, float y, float z, int r, int g, int b, float u, float v) {
+        consumer.addVertex(pose, x, y, z)
+                .setColor(r, g, b, 200)
+                .setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(FULL_BRIGHT)
+                .setNormal(normal, 0.0F, 1.0F, 0.0F);
     }
 }

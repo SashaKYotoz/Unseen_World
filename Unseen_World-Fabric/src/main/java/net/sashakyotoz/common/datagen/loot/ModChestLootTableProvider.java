@@ -3,12 +3,15 @@ package net.sashakyotoz.common.datagen.loot;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
@@ -24,26 +27,33 @@ import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
-    public static final ResourceLocation WARRIOR_RUINS = chest("warrior_ruins");
-    public static final ResourceLocation WARRIOR_FORTRESS = chest("warrior_fortress");
-    public static final ResourceLocation SENTINEL_RUINS = chest("sentinel_ruins");
-    public static final ResourceLocation SENTINEL_STRONGHOLD = chest("sentinel_stronghold");
-    public static final ResourceLocation PATRIARCH_RUINS = chest("patriarch_ruins");
-    public static final ResourceLocation PATRIARCH_CITADEL = chest("patriarch_citadel");
-    public static final ResourceLocation VIOLEGER_CANTONMENT = chest("violeger_cantonment");
-    public static final ResourceLocation VIOLEGER_CAMP_REMAINS = chest("violeger_camp_remains");
-    public static final ResourceLocation DARKNESS_MINESHAFT_MAP = chest("darkness_mineshaft_map");
-    public static final ResourceLocation DARKNESS_MINESHAFT_ORES = chest("darkness_mineshaft_ores");
-    public static final ResourceLocation FROST_BROKEN_PORTAL_LOOT = chest("frost_broken_portal_loot");
-    public static final ResourceLocation VIOLEGER_HOLLOWHOLD_LARDER = chest("violeger_hollowhold_larder");
-    public static final ResourceLocation VIOLEGER_HOLLOWHOLD_ARMORY = chest("violeger_hollowhold_armory");
-    public static final ResourceLocation VIOLEGER_HOLLOWHOLD_VAULT = chest("violeger_hollowhold_vault");
+    public static final ResourceKey<LootTable> WARRIOR_RUINS = chest("warrior_ruins");
+    public static final ResourceKey<LootTable> WARRIOR_RUINS_CRYPT = chest("warrior_ruins_crypt");
+    public static final ResourceKey<LootTable> WARRIOR_RUINS_REMAINS = chest("warrior_ruins_remains");
+    public static final ResourceKey<LootTable> WARRIOR_FORTRESS = chest("warrior_fortress");
+    public static final ResourceKey<LootTable> SENTINEL_RUINS = chest("sentinel_ruins");
+    public static final ResourceKey<LootTable> SENTINEL_STRONGHOLD = chest("sentinel_stronghold");
+    public static final ResourceKey<LootTable> PATRIARCH_RUINS = chest("patriarch_ruins");
+    public static final ResourceKey<LootTable> PATRIARCH_CITADEL = chest("patriarch_citadel");
+    public static final ResourceKey<LootTable> VIOLEGER_CANTONMENT = chest("violeger_cantonment");
+    public static final ResourceKey<LootTable> VIOLEGER_CAMP_REMAINS = chest("violeger_camp_remains");
+    public static final ResourceKey<LootTable> DARKNESS_MINESHAFT_MAP = chest("darkness_mineshaft_map");
+    public static final ResourceKey<LootTable> DARKNESS_MINESHAFT_ORES = chest("darkness_mineshaft_ores");
+    public static final ResourceKey<LootTable> FROST_BROKEN_PORTAL_LOOT = chest("frost_broken_portal_loot");
+    public static final ResourceKey<LootTable> VIOLEGER_HOLLOWHOLD_LARDER = chest("violeger_hollowhold_larder");
+    public static final ResourceKey<LootTable> VIOLEGER_HOLLOWHOLD_ARMORY = chest("violeger_hollowhold_armory");
+    public static final ResourceKey<LootTable> VIOLEGER_HOLLOWHOLD_VAULT = chest("violeger_hollowhold_vault");
 
-    public ModChestLootTableProvider(FabricDataOutput output) {
-        super(output, LootContextParamSets.CHEST);
+    private final CompletableFuture<HolderLookup.Provider> registryLookup;
+    private HolderLookup.Provider registries;
+
+    public ModChestLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        super(output, registryLookup, LootContextParamSets.CHEST);
+        this.registryLookup = registryLookup;
     }
 
     @Override
@@ -52,8 +62,11 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
     }
 
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> exporter) {
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> exporter) {
+        this.registries = this.registryLookup.join();
         exporter.accept(WARRIOR_RUINS, warriorRuins());
+        exporter.accept(WARRIOR_RUINS_CRYPT, warriorRuinsCrypt());
+        exporter.accept(WARRIOR_RUINS_REMAINS, warriorRuinsRemains());
         exporter.accept(WARRIOR_FORTRESS, warriorFortress());
         exporter.accept(SENTINEL_RUINS, sentinelRuins());
         exporter.accept(SENTINEL_STRONGHOLD, sentinelStronghold());
@@ -69,7 +82,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
         exporter.accept(VIOLEGER_HOLLOWHOLD_VAULT, violegerHollowholdVault());
     }
 
-    private static LootTable.Builder warriorRuins() {
+    private LootTable.Builder warriorRuins() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.COOKED_RIMEHORN_MEAT, 10, 1, 3))
@@ -95,7 +108,42 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.ECLIPSE_KEYSTONE, 1)));
     }
 
-    private static LootTable.Builder warriorFortress() {
+    private LootTable.Builder warriorRuinsCrypt() {
+        return LootTable.lootTable()
+                .withPool(pool(1, 2)
+                        .add(stack(Items.BONE, 5, 1, 4))
+                        .add(stack(ModItems.GRANULATED_GRIPCRYSTAL, 8, 2, 7))
+                        .add(stack(Items.SHIELD, 6, 1, 4))
+                        .add(stack(Items.IRON_INGOT, 8, 1, 3))
+                        .add(stack(Items.SPECTRAL_ARROW, 5, 4, 10)))
+                .withPool(pool(1, 2)
+                        .add(empty(10))
+                        .add(damaged(ModItems.ABYSSAL_SWORD, 2, 0.15F, 0.45F))
+                        .add(damaged(ModItems.ABYSSAL_AXE, 2, 0.15F, 0.45F))
+                        .add(damaged(ModItems.ABYSSAL_PICKAXE, 2, 0.15F, 0.45F))
+                        .add(damaged(ModItems.ABYSSAL_HOE, 2, 0.15F, 0.45F))
+                        .add(damaged(ModItems.ABYSSAL_BOOTS, 1, 0.15F, 0.4F))
+                        .add(damaged(ModItems.GRIPPING_ABYSSAL_BOW, 5, 0.15F, 0.4F))
+                        .add(single(ModItems.GRIPTONITE, 3))
+                        .add(single(ModItems.GRIPCRYSTAL_KEY, 2))
+                        .add(single(ModItems.ECLIPSE_KEYSTONE, 1)));
+    }
+
+    private LootTable.Builder warriorRuinsRemains() {
+        return LootTable.lootTable()
+                .withPool(pool(2, 4)
+                        .add(stack(Items.BONE, 10, 1, 4))
+                        .add(stack(ModItems.RIMEHORN_MEAT, 8, 1, 4))
+                        .add(stack(Items.IRON_NUGGET, 8, 3, 15))
+                        .add(stack(Items.CROSSBOW, 3, 3, 15))
+                        .add(stack(Items.ARROW, 5, 4, 10)))
+                .withPool(pool(1, 1)
+                        .add(empty(15))
+                        .add(damaged(Items.IRON_AXE, 3, 0.15F, 0.45F))
+                        .add(single(ModItems.GRIPCRYSTAL_KEY, 2)));
+    }
+
+    private LootTable.Builder warriorFortress() {
         return LootTable.lootTable()
                 .withPool(pool(2, 3)
                         .add(stack(ModItems.COOKED_RIMEHORN_MEAT, 10, 2, 5))
@@ -124,7 +172,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.GRIPCRYSTAL_KEY, 4)));
     }
 
-    private static LootTable.Builder sentinelRuins() {
+    private LootTable.Builder sentinelRuins() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.BEARFRUIT_BRAMBLE, 10, 2, 4))
@@ -150,7 +198,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.ECLIPSE_KEYSTONE, 1)));
     }
 
-    private static LootTable.Builder sentinelStronghold() {
+    private LootTable.Builder sentinelStronghold() {
         return LootTable.lootTable()
                 .withPool(pool(2, 3)
                         .add(stack(ModItems.BEARFRUIT_BRAMBLE, 8, 2, 5))
@@ -180,7 +228,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.ECLIPSE_KEYSTONE, 2)));
     }
 
-    private static LootTable.Builder patriarchRuins() {
+    private LootTable.Builder patriarchRuins() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.GLOW_APPLE, 8, 1, 3))
@@ -205,7 +253,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.ECLIPSE_KEYSTONE, 1)));
     }
 
-    private static LootTable.Builder patriarchCitadel() {
+    private LootTable.Builder patriarchCitadel() {
         return LootTable.lootTable()
                 .withPool(pool(2, 3)
                         .add(stack(ModItems.GLOW_APPLE, 6, 2, 4))
@@ -235,7 +283,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.AURIC_KEY, 4)));
     }
 
-    private static LootTable.Builder violegerCantonment() {
+    private LootTable.Builder violegerCantonment() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.COOKED_RIMEHORN_MEAT, 10, 2, 4))
@@ -269,7 +317,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(structureMap(1)));
     }
 
-    private static LootTable.Builder darknessMineshaftMap() {
+    private LootTable.Builder darknessMineshaftMap() {
         return LootTable.lootTable()
                 .withPool(pool(1, 1)
                         .add(ruinStructureMap(2)))
@@ -285,7 +333,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(stack(ModItems.GRIPTONITE, 1, 2, 2)));
     }
 
-    private static LootTable.Builder darknessMineshaftOres() {
+    private LootTable.Builder darknessMineshaftOres() {
         return LootTable.lootTable()
                 .withPool(pool(1, 1)
                         .add(single(ModItems.GLOW_APPLE, 20))
@@ -305,7 +353,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(stack(ModBlocks.GRIPTONITE_LANTERN, 2, 1, 3)));
     }
 
-    private static LootTable.Builder frostBrokenPortalLoot() {
+    private LootTable.Builder frostBrokenPortalLoot() {
         return LootTable.lootTable()
                 .withPool(pool(1, 3)
                         .setBonusRolls(ConstantValue.exactly(1))
@@ -329,7 +377,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(Items.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, 1)));
     }
 
-    private static LootTable.Builder violegerCampRemains() {
+    private LootTable.Builder violegerCampRemains() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.RIMEHORN_MEAT, 6, 1, 2))
@@ -352,7 +400,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.ECLIPSE_KEYSTONE, 1)));
     }
 
-    private static LootTable.Builder violegerHollowholdLarder() {
+    private LootTable.Builder violegerHollowholdLarder() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.COOKED_RIMEHORN_MEAT, 6, 1, 4))
@@ -373,7 +421,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(stack(ModBlocks.GRIPTONITE_LANTERN, 2, 1, 2)));
     }
 
-    private static LootTable.Builder violegerHollowholdArmory() {
+    private LootTable.Builder violegerHollowholdArmory() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(Items.ARROW, 10, 6, 16))
@@ -393,7 +441,7 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(damaged(ModItems.GRIPPING_ABYSSAL_BOW, 1, 0.3F, 0.6F)));
     }
 
-    private static LootTable.Builder violegerHollowholdVault() {
+    private LootTable.Builder violegerHollowholdVault() {
         return LootTable.lootTable()
                 .withPool(pool(2, 4)
                         .add(stack(ModItems.RAW_UNSEENIUM_ORE, 10, 1, 4))
@@ -419,8 +467,8 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                         .add(single(ModItems.GRIPPING_GAUNTLET, 1)));
     }
 
-    private static ResourceLocation chest(String name) {
-        return UnseenWorld.MOD.makeID("chests/" + name);
+    private static ResourceKey<LootTable> chest(String name) {
+        return ResourceKey.create(Registries.LOOT_TABLE, UnseenWorld.MOD.makeID("chests/" + name));
     }
 
     private static LootPool.Builder pool(int minRolls, int maxRolls) {
@@ -449,22 +497,22 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                 .apply(SetItemDamageFunction.setDamage(UniformGenerator.between(1.0F - maxWear, 1.0F - minWear)));
     }
 
-    private static LootPoolSingletonContainer.Builder<?> enchanted(ItemLike item, int weight, int minLevels, int maxLevels) {
+    private LootPoolSingletonContainer.Builder<?> enchanted(ItemLike item, int weight, int minLevels, int maxLevels) {
         return LootItem.lootTableItem(item)
                 .setWeight(weight)
-                .apply(EnchantWithLevelsFunction.enchantWithLevels(UniformGenerator.between(minLevels, maxLevels)));
+                .apply(EnchantWithLevelsFunction.enchantWithLevels(this.registries, UniformGenerator.between(minLevels, maxLevels)));
     }
 
-    private static LootPoolSingletonContainer.Builder<?> book(int weight) {
+    private LootPoolSingletonContainer.Builder<?> book(int weight) {
         return LootItem.lootTableItem(Items.BOOK)
                 .setWeight(weight)
-                .apply(EnchantRandomlyFunction.randomApplicableEnchantment());
+                .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.registries));
     }
 
-    private static LootPoolSingletonContainer.Builder<?> bookWithLevels(int weight, int levels) {
+    private LootPoolSingletonContainer.Builder<?> bookWithLevels(int weight, int levels) {
         return LootItem.lootTableItem(Items.BOOK)
                 .setWeight(weight)
-                .apply(EnchantWithLevelsFunction.enchantWithLevels(ConstantValue.exactly(levels)));
+                .apply(EnchantWithLevelsFunction.enchantWithLevels(this.registries, ConstantValue.exactly(levels)));
     }
 
     private static LootPoolSingletonContainer.Builder<?> structureMap(int weight) {
@@ -472,23 +520,24 @@ public class ModChestLootTableProvider extends SimpleFabricLootTableProvider {
                 .setWeight(weight)
                 .apply(ExplorationMapFunction.makeExplorationMap()
                         .setDestination(ModTags.Structures.STRUCTURES_MAP_CAN_LOCATE)
-                        .setMapDecoration(MapDecoration.Type.RED_X)
+                        .setMapDecoration(MapDecorationTypes.RED_X)
                         .setZoom((byte) 2)
                         .setSkipKnownStructures(true))
-                .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.structures")));
+                .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.structures"), SetNameFunction.Target.ITEM_NAME));
     }
+
     private static LootPoolSingletonContainer.Builder<?> ruinStructureMap(int weight) {
         return LootItem.lootTableItem(Items.MAP)
                 .setWeight(weight)
                 .apply(ExplorationMapFunction.makeExplorationMap()
                         .setDestination(ModTags.Structures.RUIN_STRUCTURES_MAP_CAN_LOCATE)
-                        .setMapDecoration(MapDecoration.Type.RED_X)
+                        .setMapDecoration(MapDecorationTypes.RED_X)
                         .setZoom((byte) 2)
                         .setSkipKnownStructures(false))
-                .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.ruined_structures")));
+                .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.ruined_structures"), SetNameFunction.Target.ITEM_NAME));
     }
 
-    private static LootPoolSingletonContainer.Builder<?> potion(Potion potion, int weight) {
+    private static LootPoolSingletonContainer.Builder<?> potion(Holder<Potion> potion, int weight) {
         return LootItem.lootTableItem(Items.POTION)
                 .setWeight(weight)
                 .apply(SetPotionFunction.setPotion(potion));

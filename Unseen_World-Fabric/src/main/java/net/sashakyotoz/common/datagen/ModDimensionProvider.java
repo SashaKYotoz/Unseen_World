@@ -34,14 +34,13 @@ public class ModDimensionProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput output) {
         return this.registries.thenCompose(provider -> {
-            RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            RegistryOps<JsonElement> ops = provider.createSerializationContext(JsonOps.INSTANCE);
             Holder<DimensionType> type = provider.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(ModDimensions.CHIMERIC_DARKNESS_TYPE);
             Holder<NoiseGeneratorSettings> settings = provider.lookupOrThrow(Registries.NOISE_SETTINGS).getOrThrow(ModNoiseSettings.CHIMERIC_DARKNESS);
             MultiNoiseBiomeSource biomeSource = MultiNoiseBiomeSource.createFromList(ChimericDarknessBiomeParameters.build(provider.lookupOrThrow(Registries.BIOME)));
             LevelStem stem = new LevelStem(type, new NoiseBasedChunkGenerator(biomeSource, settings));
             JsonElement json = LevelStem.CODEC.encodeStart(ops, stem)
-                    .getOrThrow(false, error -> {
-                    });
+                    .getOrThrow(IllegalStateException::new);
             return DataProvider.saveStable(output, json, this.paths.json(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY.location()));
         });
     }

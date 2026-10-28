@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "unseen_world:polished_tanzanite"
-  },
-  "result": "unseen_world:polished_tanzanite_stairs"
-}

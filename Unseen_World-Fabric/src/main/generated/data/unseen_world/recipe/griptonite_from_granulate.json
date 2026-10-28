@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "griptonite",
+  "key": {
+    "#": {
+      "item": "unseen_world:granulated_griptonite"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "unseen_world:griptonite"
+  }
+}

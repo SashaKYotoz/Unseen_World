@@ -1,5 +1,7 @@
 package net.sashakyotoz.common.entities.custom.projectiles;
 
+import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -39,8 +41,11 @@ public class ThrownAuricArc extends ThrownTrident {
         if (owner instanceof Player) {
             arc.pickup = Pickup.ALLOWED;
         }
-        ((ThrownTridentAccessor) arc).unseen_world$setTridentItem(stack.copy());
-        arc.getEntityData().set(ThrownTridentAccessor.unseen_world$getLoyaltyId(), (byte) EnchantmentHelper.getLoyalty(stack));
+        arc.setPickupItemStack(stack.copy());
+        byte loyalty = level instanceof ServerLevel server
+                ? (byte) Mth.clamp(EnchantmentHelper.getTridentReturnToOwnerAcceleration(server, stack, arc), 0, 127)
+                : 0;
+        arc.getEntityData().set(ThrownTridentAccessor.unseen_world$getLoyaltyId(), loyalty);
         arc.getEntityData().set(ThrownTridentAccessor.unseen_world$getFoilId(), stack.hasFoil());
         arc.sunburst = sunburst;
         return arc;

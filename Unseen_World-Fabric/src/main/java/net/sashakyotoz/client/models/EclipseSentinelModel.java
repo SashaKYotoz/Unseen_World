@@ -1,5 +1,6 @@
 package net.sashakyotoz.client.models;
 
+import net.minecraft.util.FastColor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -144,7 +145,7 @@ public class EclipseSentinelModel extends HierarchicalModel<EclipseSentinel> {
         this.right_leg.render(matrices, vertexConsumer, light, overlay, color);
         this.left_leg.render(matrices, vertexConsumer, light, overlay, color);
         if (this.eclipseAlpha > 0.0F) {
-            this.eclipse_circle.render(matrices, vertexConsumer, light, overlay, color * this.eclipseAlpha);
+            this.eclipse_circle.render(matrices, vertexConsumer, light, overlay, FastColor.ARGB32.color(FastColor.as8BitChannel(FastColor.ARGB32.alpha(color) / 255.0F * this.eclipseAlpha), color));
         }
     }
 

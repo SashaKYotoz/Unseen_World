@@ -27,8 +27,8 @@ public abstract class LevelRendererSkyMixin {
     @Nullable
     private ClientLevel level;
 
-    @WrapWithCondition(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/Camera;ZLjava/lang/Runnable;)V"))
-    private boolean unseen_world$replaceSky(LevelRenderer renderer, PoseStack poseStack, Matrix4f projectionMatrix, float partialTick, Camera camera, boolean thickFog, Runnable skyFogSetup) {
+    @WrapWithCondition(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;FLnet/minecraft/client/Camera;ZLjava/lang/Runnable;)V"))
+    private boolean unseen_world$replaceSky(LevelRenderer renderer, Matrix4f frustumMatrix, Matrix4f projectionMatrix, float partialTick, Camera camera, boolean thickFog, Runnable skyFogSetup) {
         ClientLevel clientLevel = this.level;
         if (clientLevel == null || !clientLevel.dimension().equals(ModDimensions.CHIMERIC_DARKNESS_LEVEL_KEY)) {
             return true;
@@ -45,6 +45,8 @@ public abstract class LevelRendererSkyMixin {
                 IrisCompat.beginCustomSky();
             }
             try {
+                PoseStack poseStack = new PoseStack();
+                poseStack.mulPose(frustumMatrix);
                 ChimericDarknessSkyRenderer.INSTANCE.render(clientLevel, poseStack, projectionMatrix, partialTick);
             } finally {
                 if (shaderPack) {

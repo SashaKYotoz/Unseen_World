@@ -1,5 +1,6 @@
 package net.sashakyotoz.client.renderers.layers;
 
+import net.minecraft.util.FastColor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -43,7 +44,7 @@ public class GrippingLayer<T extends LivingEntity, M extends EntityModel<T>> ext
     @Override
     protected void renderModelPartOverlay(ModelPart part, PoseStack matrices, MultiBufferSource vertexConsumers, int light, Entity entity) {
         if (entity instanceof IGrippingEntity iGrippingEntity)
-            part.render(matrices, vertexConsumers.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE)), light, OverlayTexture.NO_OVERLAY, 1, 1, 1, iGrippingEntity.getGrippingData() / 10f);
+            part.render(matrices, vertexConsumers.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE)), light, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(iGrippingEntity.getGrippingData() / 10f, 1.0F, 1.0F, 1.0F));
     }
 
     @Override

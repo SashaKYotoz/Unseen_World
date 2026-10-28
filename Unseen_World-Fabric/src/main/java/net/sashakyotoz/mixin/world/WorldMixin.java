@@ -26,7 +26,7 @@ public abstract class WorldMixin implements WorldMultipartHelper {
         return URDragonParts;
     }
 
-    @Inject(method = "getEntities", at = @At("TAIL"))
+    @Inject(method = "getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;", at = @At("TAIL"))
     private void getEntityParts(Entity except, AABB box, Predicate<? super Entity> predicate, CallbackInfoReturnable<List<Entity>> cir) {
         for (EntityPart part : getPMEParts())
             if (part != null && part != except && part.getBoundingBox().intersects(box) && predicate.test(part)) cir.getReturnValue().add(part);

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityRenderDispatcherMixin {
 
     @Inject(method = "renderHitbox", at = @At("HEAD"))
-    private static void renderHitbox(PoseStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, CallbackInfo ci) {
+    private static void renderHitbox(PoseStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, float red, float green, float blue, CallbackInfo ci) {
         if (entity instanceof MultipartEntity multipartEntity) {
             double x = -Mth.lerp(tickDelta, entity.xOld, entity.getX());
             double y = -Mth.lerp(tickDelta, entity.yOld, entity.getY());

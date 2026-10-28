@@ -1,5 +1,7 @@
 package net.sashakyotoz.common.entities.bosses;
 
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
@@ -57,7 +59,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchState> {
-    public static final EntityDataSerializer<PatriarchState> PATRIARCH_STATE = EntityDataSerializer.simpleEnum(PatriarchState.class);
+    public static final EntityDataSerializer<PatriarchState> PATRIARCH_STATE = EnumDataSerializer.of(PatriarchState.class);
     public static final EntityDataAccessor<PatriarchState> PHASE = SynchedEntityData.defineId(AuricPatriarch.class, PATRIARCH_STATE);
     public static final EntityDataAccessor<Boolean> IS_FLYING = SynchedEntityData.defineId(AuricPatriarch.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> ARE_MINIONS_OUT = SynchedEntityData.defineId(AuricPatriarch.class, EntityDataSerializers.BOOLEAN);
@@ -718,7 +720,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                 if (ticks == 20) {
                     double xOff = this.getXVector(7.0D, this.getYRot());
                     double zOff = this.getZVector(7.0D, this.getYRot());
-                    this.damageInArea(new AABB(this.getOnPos(), BlockPos.containing(this.getX() + xOff, this.getY(), this.getZ() + zOff)).inflate(2.5D));
+                    this.damageInArea(new AABB(Vec3.atLowerCornerOf(this.getOnPos()), Vec3.atLowerCornerOf(BlockPos.containing(this.getX() + xOff, this.getY(), this.getZ() + zOff))).inflate(2.5D));
                     this.push(this.getXVector(1.0D, this.getYRot()), 0.125D, this.getZVector(1.0D, this.getYRot()));
                 }
                 if (ticks >= 40) {
@@ -1481,7 +1483,7 @@ public class AuricPatriarch extends StateMachineBoss<AuricPatriarch.PatriarchSta
                 area.setWaitTime(10);
                 area.setOwner(this);
                 area.setParticle(ParticleTypes.REVERSE_PORTAL);
-                area.setPotion(Potions.WEAKNESS);
+                area.setPotionContents(new PotionContents(Potions.WEAKNESS));
                 this.level().addFreshEntity(area);
             }
         }

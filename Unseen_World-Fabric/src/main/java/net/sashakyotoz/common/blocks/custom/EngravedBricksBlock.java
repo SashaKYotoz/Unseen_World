@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,9 +31,16 @@ public class EngravedBricksBlock extends HorizontalDirectionalBlock {
     private static final int MAX_NETWORK_SIZE = 256;
     private static final float ROTATING_FALL_DISTANCE = 0.6F;
 
+    public static final MapCodec<EngravedBricksBlock> CODEC = simpleCodec(EngravedBricksBlock::new);
+
     public EngravedBricksBlock(Properties settings) {
         super(settings);
         this.registerDefaultState(this.stateDefinition.any().setValue(GRIPPED, false).setValue(HORIZONTAL_FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 
     public static boolean feeds(BlockState state, Direction towards) {

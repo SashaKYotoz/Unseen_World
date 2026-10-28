@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
@@ -26,15 +26,12 @@ import net.minecraft.world.level.levelgen.feature.featuresize.ThreeLayersFeature
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BushFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.RandomSpreadFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import net.minecraft.world.level.levelgen.feature.treedecorators.AttachedToLeavesDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.CherryTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.UpwardsBranchingTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -130,7 +127,7 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SHINY_GLEAMCARVER_NEST = create("shiny_gleamcarver_nest");
 
 
-    public static void boostrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void boostrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<Block> registryEntryLookup = context.lookup(Registries.BLOCK);
         register(context, AMETHYST_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.AMETHYST_LOG),
@@ -164,23 +161,14 @@ public class ModConfiguredFeatures {
                 ).build());
         register(context, CRIMSONVEIL_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG),
-                new UpwardsBranchingTrunkPlacer(6, 4, 2, UniformInt.of(1, 3), 0.5F, UniformInt.of(1, 3), registryEntryLookup.getOrThrow(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)),
+                new CrimsonveilTrunkPlacer(5, 2, 1, 0.5F, UniformInt.of(3, 4), UniformInt.of(2, 3), UniformInt.of(2, 3), true),
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LEAVES),
-                new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 64),
-                Optional.of(
-                        new MangroveRootPlacer(
-                                UniformInt.of(1, 3),
-                                BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG),
-                                Optional.of(new AboveRootPlacement(BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG), 0.25F)),
-                                new MangroveRootPlacement(
-                                        registryEntryLookup.getOrThrow(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH),
-                                        HolderSet.direct(Block::builtInRegistryHolder, ModBlocks.NIGHTDARK_GRASS_BLOCK, ModBlocks.NIGHTDARK_DIRT, ModBlocks.CRIMSONVEIL_LOG),
-                                        BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG), 5, 12, 0.2F))),
-                new TwoLayersFeatureSize(2, 0, 2))
+                new CrimsonveilFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 0.3F, 0.25F, 0.3F),
+                new TwoLayersFeatureSize(1, 0, 2))
                 .decorators(
                         List.of(
                                 new AttachedToLeavesDecorator(
-                                        0.3F,
+                                        0.2F,
                                         1,
                                         0,
                                         BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_VINE),
@@ -188,31 +176,34 @@ public class ModConfiguredFeatures {
                                         List.of(Direction.DOWN)
                                 )
                         )
-                ).ignoreVines().build());
+                ).dirt(BlockStateProvider.simple(ModBlocks.NIGHTDARK_DIRT)).ignoreVines().build());
         register(context, TALL_CRIMSONVEIL_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG),
-                new UpwardsBranchingTrunkPlacer(8, 6, 4, UniformInt.of(2, 4), 0.75F, UniformInt.of(1, 3), registryEntryLookup.getOrThrow(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)),
+                new CrimsonveilTrunkPlacer(9, 3, 2, 0.45F, UniformInt.of(4, 5), UniformInt.of(3, 5), UniformInt.of(3, 5), true),
                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LEAVES),
-                new HangingBlobFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(0), 2, 0.5f, 0.25f),
+                new CrimsonveilFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(0), 0.4F, 0.3F, 0.35F),
                 Optional.of(
                         new MangroveRootPlacer(
-                                UniformInt.of(1, 4),
+                                UniformInt.of(1, 2),
                                 BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG),
-                                Optional.of(new AboveRootPlacement(BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG), 0F)),
+                                Optional.empty(),
                                 new MangroveRootPlacement(
                                         registryEntryLookup.getOrThrow(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH),
-                                        HolderSet.direct(Block::builtInRegistryHolder, ModBlocks.NIGHTDARK_GRASS_BLOCK, ModBlocks.CRIMSONVEIL_LOG),
-                                        BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG), 6, 13, 0.2F))),
-                new TwoLayersFeatureSize(1, 0, 2))
+                                        HolderSet.direct(Block::builtInRegistryHolder, ModBlocks.NIGHTDARK_GRASS_BLOCK, ModBlocks.NIGHTDARK_DIRT, ModBlocks.CRIMSONVEIL_LOG),
+                                        BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_LOG), 4, 6, 0.15F))),
+                new TwoLayersFeatureSize(2, 0, 3))
                 .decorators(
                         List.of(
-                                new VinesToLeavesTreeDecorator(
-                                        0.125F,
-                                        BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_VINE_PLANT),
-                                        UniformInt.of(1, 3)
+                                new AttachedToLeavesDecorator(
+                                        0.25F,
+                                        1,
+                                        0,
+                                        BlockStateProvider.simple(ModBlocks.CRIMSONVEIL_VINE),
+                                        2,
+                                        List.of(Direction.DOWN)
                                 )
                         )
-                ).build());
+                ).dirt(BlockStateProvider.simple(ModBlocks.NIGHTDARK_DIRT)).ignoreVines().build());
         register(context, TEALIVE_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.TEALIVE_LOG),
                 new CherryTrunkPlacer(7, 1, 0,
@@ -540,12 +531,12 @@ public class ModConfiguredFeatures {
         registerCaveContent(context);
     }
 
-    private static void registerCaveContent(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    private static void registerCaveContent(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configured = context.lookup(Registries.CONFIGURED_FEATURE);
 
         register(context, HOLLOWS_FLOOR_VEGETATION, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(
                 new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-                        .add(Blocks.GRASS.defaultBlockState(), 50)
+                        .add(Blocks.SHORT_GRASS.defaultBlockState(), 50)
                         .add(Blocks.MOSS_CARPET.defaultBlockState(), 25)
                         .add(ModBlocks.BURLYWOOD_VIOLET.defaultBlockState(), 8)
                         .add(Blocks.AZALEA.defaultBlockState(), 4)
@@ -653,7 +644,7 @@ public class ModConfiguredFeatures {
         return ResourceKey.create(Registries.CONFIGURED_FEATURE, UnseenWorld.MOD.makeID(name));
     }
 
-    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstapContext<ConfiguredFeature<?, ?>> context,
+    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context,
                                                                                           ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {
         context.register(key, new ConfiguredFeature<>(feature, config));
     }

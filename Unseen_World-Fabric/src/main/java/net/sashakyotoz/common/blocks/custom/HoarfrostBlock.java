@@ -2,6 +2,7 @@ package net.sashakyotoz.common.blocks.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.GameEventTags;
@@ -35,7 +36,7 @@ public class HoarfrostBlock extends Block {
                 || entity.level().getBlockState(entity.blockPosition()).is(BlockTags.DAMPENS_VIBRATIONS);
     }
 
-    public static boolean isMuffledMovement(GameEvent event, Entity source) {
+    public static boolean isMuffledMovement(Holder<GameEvent> event, Entity source) {
         return source != null && event.is(GameEventTags.IGNORE_VIBRATIONS_SNEAKING) && isMuffled(source);
     }
 
@@ -67,7 +68,7 @@ public class HoarfrostBlock extends Block {
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return type == PathComputationType.LAND;
     }
 }

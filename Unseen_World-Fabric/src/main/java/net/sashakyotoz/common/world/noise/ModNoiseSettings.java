@@ -2,7 +2,7 @@ package net.sashakyotoz.common.world.noise;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.OverworldBiomeBuilder;
@@ -22,7 +22,7 @@ public final class ModNoiseSettings {
     private ModNoiseSettings() {
     }
 
-    public static void bootstrap(BootstapContext<NoiseGeneratorSettings> context) {
+    public static void bootstrap(BootstrapContext<NoiseGeneratorSettings> context) {
         HolderGetter<DensityFunction> functions = context.lookup(Registries.DENSITY_FUNCTION);
         HolderGetter<NormalNoise.NoiseParameters> noises = context.lookup(Registries.NOISE);
         DensityFunction zero = DensityFunctions.zero();
@@ -61,6 +61,6 @@ public final class ModNoiseSettings {
     }
 
     private static DensityFunction vanilla(HolderGetter<DensityFunction> functions, String path) {
-        return new DensityFunctions.HolderHolder(functions.getOrThrow(ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation("minecraft", path))));
+        return new DensityFunctions.HolderHolder(functions.getOrThrow(ResourceKey.create(Registries.DENSITY_FUNCTION, ResourceLocation.withDefaultNamespace(path))));
     }
 }

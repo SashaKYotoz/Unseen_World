@@ -3,10 +3,12 @@ package net.sashakyotoz.common.datagen.loot;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -22,17 +24,18 @@ import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.items.ModItems;
 import net.sashakyotoz.common.tags.ModTags;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class ModArchaeologyLootTableProvider extends SimpleFabricLootTableProvider {
-    public static final ResourceLocation GLACIEMITE_RUINS_SAND = archaeology("glaciemite_ruins_sand");
-    public static final ResourceLocation GLACIEMITE_RUINS_OOZE = archaeology("glaciemite_ruins_ooze");
-    public static final ResourceLocation GLACIEMITE_RUINS_RARE = archaeology("glaciemite_ruins_rare");
-    public static final ResourceLocation VIOLEGER_HOLLOWHOLD_RUBBLE = archaeology("violeger_hollowhold_rubble");
-    public static final ResourceLocation VIOLEGER_HOLLOWHOLD_RELIC = archaeology("violeger_hollowhold_relic");
+    public static final ResourceKey<LootTable> GLACIEMITE_RUINS_SAND = archaeology("glaciemite_ruins_sand");
+    public static final ResourceKey<LootTable> GLACIEMITE_RUINS_OOZE = archaeology("glaciemite_ruins_ooze");
+    public static final ResourceKey<LootTable> GLACIEMITE_RUINS_RARE = archaeology("glaciemite_ruins_rare");
+    public static final ResourceKey<LootTable> VIOLEGER_HOLLOWHOLD_RUBBLE = archaeology("violeger_hollowhold_rubble");
+    public static final ResourceKey<LootTable> VIOLEGER_HOLLOWHOLD_RELIC = archaeology("violeger_hollowhold_relic");
 
-    public ModArchaeologyLootTableProvider(FabricDataOutput output) {
-        super(output, LootContextParamSets.ARCHAEOLOGY);
+    public ModArchaeologyLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        super(output, registryLookup, LootContextParamSets.ARCHAEOLOGY);
     }
 
     @Override
@@ -40,12 +43,12 @@ public class ModArchaeologyLootTableProvider extends SimpleFabricLootTableProvid
         return "Unseen World Archaeology Loot";
     }
 
-    private static ResourceLocation archaeology(String name) {
-        return UnseenWorld.MOD.makeID("archaeology/" + name);
+    private static ResourceKey<LootTable> archaeology(String name) {
+        return ResourceKey.create(Registries.LOOT_TABLE, UnseenWorld.MOD.makeID("archaeology/" + name));
     }
 
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> exporter) {
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> exporter) {
         exporter.accept(GLACIEMITE_RUINS_SAND, trailSupplies());
         exporter.accept(GLACIEMITE_RUINS_OOZE, campBelongings());
         exporter.accept(GLACIEMITE_RUINS_RARE, movementRelics());
@@ -91,10 +94,10 @@ public class ModArchaeologyLootTableProvider extends SimpleFabricLootTableProvid
                 .add(LootItem.lootTableItem(Items.MAP).setWeight(3)
                         .apply(ExplorationMapFunction.makeExplorationMap()
                                 .setDestination(ModTags.Structures.RUIN_STRUCTURES_MAP_CAN_LOCATE)
-                                .setMapDecoration(MapDecoration.Type.RED_X)
+                                .setMapDecoration(MapDecorationTypes.RED_X)
                                 .setZoom((byte) 2)
                                 .setSkipKnownStructures(false))
-                        .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.ruined_structures"))))
+                        .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.ruined_structures"), SetNameFunction.Target.ITEM_NAME)))
                 .add(item(ModItems.GRIPCRYSTAL, 3))
                 .add(item(ModItems.GRIPTONITE, 2))
                 .add(stack(ModItems.UNSEENIUM_INGOT, 2, 1, 2))
@@ -133,10 +136,10 @@ public class ModArchaeologyLootTableProvider extends SimpleFabricLootTableProvid
                 .add(LootItem.lootTableItem(Items.MAP).setWeight(2)
                         .apply(ExplorationMapFunction.makeExplorationMap()
                                 .setDestination(ModTags.Structures.STRUCTURES_MAP_CAN_LOCATE)
-                                .setMapDecoration(MapDecoration.Type.RED_X)
+                                .setMapDecoration(MapDecorationTypes.RED_X)
                                 .setZoom((byte) 2)
                                 .setSkipKnownStructures(false))
-                        .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.structures"))))
+                        .apply(SetNameFunction.setName(Component.translatable("filled_map.unseen_world.structures"), SetNameFunction.Target.ITEM_NAME)))
                 .add(item(ModItems.GRIPCRYSTAL, 3))
                 .add(item(ModItems.GRIPTONITE, 2))
                 .add(stack(ModItems.UNSEENIUM_INGOT, 2, 1, 2))

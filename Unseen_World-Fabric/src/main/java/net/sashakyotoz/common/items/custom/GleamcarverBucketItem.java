@@ -1,5 +1,7 @@
 package net.sashakyotoz.common.items.custom;
 
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -43,7 +45,7 @@ public class GleamcarverBucketItem extends Item {
         if (gleamcarver == null) {
             return InteractionResult.FAIL;
         }
-        gleamcarver.loadFromBucketTag(stack.getOrCreateTag());
+        gleamcarver.loadFromBucketTag(stack.getOrDefault(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY).copyTag());
         gleamcarver.setFromBucket(true);
         level.playSound(null, target, SoundEvents.BUCKET_EMPTY_POWDER_SNOW, SoundSource.NEUTRAL, 1.0F, 1.0F);
         level.gameEvent(player, GameEvent.ENTITY_PLACE, target);

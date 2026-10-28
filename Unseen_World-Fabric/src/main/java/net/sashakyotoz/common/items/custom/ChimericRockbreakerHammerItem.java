@@ -41,7 +41,7 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
     private static final int FISSURE_DURABILITY = 3;
 
     public ChimericRockbreakerHammerItem(int attackDamage, float attackSpeed, Properties settings) {
-        super(ModTiers.ROCKBREAKER_HAMMER, attackDamage, attackSpeed, settings);
+        super(ModTiers.ROCKBREAKER_HAMMER, settings.attributes(PickaxeItem.createAttributes(ModTiers.ROCKBREAKER_HAMMER, attackDamage, attackSpeed)));
     }
 
     @Override
@@ -72,20 +72,20 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return USE_DURATION;
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseTicks) {
-        if (!level.isClientSide && this.getUseDuration(stack) - remainingUseTicks == CHARGE_TICKS) {
-            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_NETHERITE, SoundSource.PLAYERS, 1.0F, 0.6F);
+        if (!level.isClientSide && this.getUseDuration(stack, entity) - remainingUseTicks == CHARGE_TICKS) {
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_NETHERITE.value(), SoundSource.PLAYERS, 1.0F, 0.6F);
         }
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingUseTicks) {
-        if (!(entity instanceof Player player) || this.getUseDuration(stack) - remainingUseTicks < CHARGE_TICKS) {
+        if (!(entity instanceof Player player) || this.getUseDuration(stack, entity) - remainingUseTicks < CHARGE_TICKS) {
             return;
         }
         if (level instanceof ServerLevel serverLevel) {
@@ -97,8 +97,8 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
         AbilityHelper.appendAbilityLines(this.getDescriptionId(), 3, tooltip);
     }
 
@@ -115,6 +115,6 @@ public class ChimericRockbreakerHammerItem extends PickaxeItem {
             level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ground), center.x, center.y + 0.1D, center.z, 48, STRIKE_RADIUS * 0.5D, 0.05D, STRIKE_RADIUS * 0.5D, 0.2D);
         }
         level.sendParticles(ParticleTypes.EXPLOSION, center.x, center.y + 0.5D, center.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-        level.playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 0.6F, 1.4F);
+        level.playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 0.6F, 1.4F);
     }
 }

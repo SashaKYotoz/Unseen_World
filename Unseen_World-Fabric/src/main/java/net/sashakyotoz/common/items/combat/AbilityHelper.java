@@ -32,7 +32,7 @@ public final class AbilityHelper {
     }
 
     public static void damage(ItemStack stack, LivingEntity user, int amount, InteractionHand hand) {
-        stack.hurtAndBreak(amount, user, entity -> entity.broadcastBreakEvent(hand));
+        stack.hurtAndBreak(amount, user, LivingEntity.getSlotForHand(hand));
     }
 
     public static boolean hasAmmo(Player player, Item ammo) {

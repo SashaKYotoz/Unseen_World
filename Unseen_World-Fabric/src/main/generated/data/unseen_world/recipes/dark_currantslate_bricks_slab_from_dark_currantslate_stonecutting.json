@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 2,
-  "ingredient": {
-    "item": "unseen_world:dark_currantslate"
-  },
-  "result": "unseen_world:dark_currantslate_bricks_slab"
-}

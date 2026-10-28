@@ -1,0 +1,38 @@
+{
+  "parent": "unseen_world:fortress_in_the_darkness",
+  "criteria": {
+    "whispers_of_the_light": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "unseen_world:warrior_of_chimeric_darkness"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.unseen_world.whispers_of_the_light.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "unseen_world:chimeric_rockbreaker_hammer"
+    },
+    "title": {
+      "translate": "advancement.unseen_world.whispers_of_the_light"
+    }
+  },
+  "requirements": [
+    [
+      "whispers_of_the_light"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

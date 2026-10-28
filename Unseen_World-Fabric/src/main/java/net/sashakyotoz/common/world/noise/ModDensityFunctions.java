@@ -3,7 +3,7 @@ package net.sashakyotoz.common.world.noise;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -44,7 +44,7 @@ public final class ModDensityFunctions {
     private ModDensityFunctions() {
     }
 
-    public static void bootstrap(BootstapContext<DensityFunction> context) {
+    public static void bootstrap(BootstrapContext<DensityFunction> context) {
         HolderGetter<DensityFunction> functions = context.lookup(Registries.DENSITY_FUNCTION);
         HolderGetter<NormalNoise.NoiseParameters> noises = context.lookup(Registries.NOISE);
 
@@ -153,7 +153,7 @@ public final class ModDensityFunctions {
     }
 
     private static DensityFunction vanilla(HolderGetter<DensityFunction> functions, String path) {
-        return new DensityFunctions.HolderHolder(functions.getOrThrow(ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation("minecraft", path))));
+        return new DensityFunctions.HolderHolder(functions.getOrThrow(ResourceKey.create(Registries.DENSITY_FUNCTION, ResourceLocation.withDefaultNamespace(path))));
     }
 
     private static ResourceKey<DensityFunction> key(String name) {

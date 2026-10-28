@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.util;
 
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -36,7 +37,7 @@ public final class GripConversion {
         this.finisher = finisher;
     }
 
-    public static void define(SynchedEntityData data, EntityDataAccessor<Boolean> flag) {
+    public static void define(SynchedEntityData.Builder data, EntityDataAccessor<Boolean> flag) {
         data.define(flag, false);
     }
 
@@ -72,7 +73,7 @@ public final class GripConversion {
         }
         if (!this.mob.level().isClientSide()) {
             if (!player.getAbilities().instabuild) {
-                stack.hurtAndBreak(1, player, user -> user.broadcastBreakEvent(hand));
+                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             }
             this.start(player.getUUID(), this.mob.getRandom().nextInt(extraDelay + 1) + minDelay);
         }

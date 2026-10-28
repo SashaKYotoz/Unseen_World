@@ -1,0 +1,26 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "unseen_world:red_titanium_ore_in_glaciemite"
+    }
+  ],
+  "processing_time": 300,
+  "results": [
+    {
+      "id": "unseen_world:raw_red_titanium"
+    },
+    {
+      "id": "unseen_world:raw_red_titanium",
+      "chance": 0.75
+    },
+    {
+      "id": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "id": "unseen_world:glaciemite",
+      "chance": 0.125
+    }
+  ]
+}

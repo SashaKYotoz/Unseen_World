@@ -1,7 +1,7 @@
 package net.sashakyotoz.common.world.noise;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.sashakyotoz.UnseenWorld;
@@ -17,7 +17,7 @@ public final class ModNoises {
     private ModNoises() {
     }
 
-    public static void bootstrap(BootstapContext<NormalNoise.NoiseParameters> context) {
+    public static void bootstrap(BootstrapContext<NormalNoise.NoiseParameters> context) {
         context.register(CAVE_CHEESE, new NormalNoise.NoiseParameters(-8, 0.5D, 1.0D, 2.0D, 1.0D, 2.0D, 1.0D, 0.0D, 2.0D, 0.0D));
         context.register(VALLEY_PILLAR, new NormalNoise.NoiseParameters(-4, 1.0D, 1.0D));
         context.register(VALLEY_PILLAR_HEIGHT, new NormalNoise.NoiseParameters(-7, 1.0D, 1.0D, 0.5D));

@@ -7,3 +7,7 @@ accessible field net/minecraft/client/renderer/LevelRenderer starBuffer Lcom/moj
 accessible field net/minecraft/client/model/geom/builders/PartDefinition children Ljava/util/Map;
 
 accessible field net/minecraft/client/model/geom/ModelPart children Ljava/util/Map;
+
+accessible method net/minecraft/world/entity/projectile/Projectile <init> (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V
+
+accessible method net/minecraft/world/entity/projectile/AbstractArrow setPierceLevel (B)V

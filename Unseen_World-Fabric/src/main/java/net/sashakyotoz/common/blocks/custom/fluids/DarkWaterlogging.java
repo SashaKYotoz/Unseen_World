@@ -1,6 +1,8 @@
 package net.sashakyotoz.common.blocks.custom.fluids;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -95,6 +97,6 @@ public final class DarkWaterlogging {
     }
 
     private static boolean acceptsWater(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.getBlock() instanceof LiquidBlockContainer container && container.canPlaceLiquid(level, pos, state, Fluids.WATER);
+        return state.getBlock() instanceof LiquidBlockContainer container && container.canPlaceLiquid(null, level, pos, state, Fluids.WATER);
     }
 }

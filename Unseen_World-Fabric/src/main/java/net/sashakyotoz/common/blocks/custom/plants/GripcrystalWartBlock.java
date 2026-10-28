@@ -50,7 +50,7 @@ public class GripcrystalWartBlock extends AmethystClusterBlock implements DualWa
     }
 
     private void gripNearby(Level world, BlockPos pos) {
-        if (world.isClientSide) {
+        if (world.isClientSide()) {
             return;
         }
         List<LivingEntity> gripped = world.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(6), entity -> entity instanceof IGrippingEntity);
@@ -58,7 +58,7 @@ public class GripcrystalWartBlock extends AmethystClusterBlock implements DualWa
             return;
         }
         gripped.forEach(entity -> {
-            if (!entity.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.get())) {
+            if (!entity.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.getAsHolder())) {
                 GrippingData.addGrippingSeconds((IGrippingEntity) entity, 6);
             }
         });

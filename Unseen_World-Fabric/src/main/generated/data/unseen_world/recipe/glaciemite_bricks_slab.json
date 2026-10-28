@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "glaciemite_bricks_slab",
+  "key": {
+    "#": {
+      "item": "unseen_world:glaciemite_bricks"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "unseen_world:glaciemite_bricks_slab"
+  }
+}

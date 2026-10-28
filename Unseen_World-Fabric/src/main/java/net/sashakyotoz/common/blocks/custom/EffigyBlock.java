@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,6 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -59,6 +61,7 @@ public class EffigyBlock extends BaseEntityBlock {
             Block.box(-10, 6, -10, 26, 12, 26),
             Block.box(-13, 12, -13, 29, 16, 29));
     private static final Map<Boss, VoxelShape[]> SLICES = new ConcurrentHashMap<>();
+    public static final MapCodec<EffigyBlock> CODEC = simpleCodec(EffigyBlock::new);
 
     public EffigyBlock(Properties settings) {
         super(settings);
@@ -66,6 +69,11 @@ public class EffigyBlock extends BaseEntityBlock {
                 .setValue(FACING, Direction.NORTH)
                 .setValue(BOSS, Boss.WARRIOR)
                 .setValue(PHASE, Phase.DORMANT));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     public static VoxelShape slice(BlockState core, int dx, int dy, int dz) {
@@ -205,28 +213,35 @@ public class EffigyBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof EffigyBlockEntity effigy)) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         Boss boss = state.getValue(BOSS);
-        ItemStack stack = player.getItemInHand(hand);
         if (stack.is(boss.key())) {
             if (!level.isClientSide) {
                 effigy.insertKey(player, stack);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         if (hand == InteractionHand.MAIN_HAND && player.getOffhandItem().is(boss.key())) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         if (Boss.isAnyKey(stack)) {
             if (!level.isClientSide) {
                 player.displayClientMessage(Component.translatable("block.unseen_world.effigy.wrong_key", boss.key().getDescription()), true);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         if (hand != InteractionHand.MAIN_HAND || !stack.isEmpty()) {
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!(level.getBlockEntity(pos) instanceof EffigyBlockEntity effigy)) {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide) {
@@ -348,8 +363,8 @@ public class EffigyBlock extends BaseEntityBlock {
 
         public VoxelShape statueHull() {
             EntityDimensions dimensions = this.entity().getDimensions();
-            float width = Mth.clamp(this.statueWidth > 0.0F ? this.statueWidth : dimensions.width, 0.5F, 3.0F);
-            float height = Mth.clamp(this.statueHeight > 0.0F ? this.statueHeight : dimensions.height, 1.0F, STATUE_LAYERS);
+            float width = Mth.clamp(this.statueWidth > 0.0F ? this.statueWidth : dimensions.width(), 0.5F, 3.0F);
+            float height = Mth.clamp(this.statueHeight > 0.0F ? this.statueHeight : dimensions.height(), 1.0F, STATUE_LAYERS);
             double half = width / 2.0D;
             return Shapes.box(0.5D - half, 1.0D, 0.5D - half, 0.5D + half, 1.0D + height, 0.5D + half);
         }

@@ -48,7 +48,6 @@ public class EldritchWatcherEntity extends PathfinderMob {
 
     public EldritchWatcherEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.setMaxUpStep(1.5f);
         this.xpReward = 15;
     }
 
@@ -61,9 +60,9 @@ public class EldritchWatcherEntity extends PathfinderMob {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        GripConversion.define(this.entityData, CONVERTING);
-        this.entityData.define(CHARGE_TICKS, 0);
-        this.entityData.define(CARRYING_BLOCK, false);
+        GripConversion.define(builder, CONVERTING);
+        builder.define(CHARGE_TICKS, 0);
+        builder.define(CARRYING_BLOCK, false);
     }
 
     public void setCarriedBlock(boolean flag) {
@@ -128,6 +127,7 @@ public class EldritchWatcherEntity extends PathfinderMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.STEP_HEIGHT, 1.5D)
                 .add(Attributes.MAX_HEALTH, 80)
                 .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.ATTACK_DAMAGE, 8)

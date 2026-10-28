@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,10 +23,15 @@ public class DarkWaterBlock extends LiquidBlock {
                 && entity instanceof LivingEntity livingEntity
                 && livingEntity.tickCount % 20 == 0) {
             if (!(livingEntity.hasEffect(MobEffects.GLOWING)
-                    || EnchantmentHelper.hasAquaAffinity(livingEntity))) {
+                    || hasAquaAffinity(livingEntity))) {
                 if (entity instanceof IGrippingEntity entity1 && entity1.getDarkeningData() < 10 && level.getFluidState(pos.above()).is(ModFluids.DARK_WATER))
                     entity1.setDarkeningData(entity1.getDarkeningData() + 1);
             }
         }
+    }
+
+    private static boolean hasAquaAffinity(LivingEntity entity) {
+        return entity.getAttributes().hasAttribute(Attributes.SUBMERGED_MINING_SPEED)
+                && entity.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED) > Attributes.SUBMERGED_MINING_SPEED.value().getDefaultValue();
     }
 }

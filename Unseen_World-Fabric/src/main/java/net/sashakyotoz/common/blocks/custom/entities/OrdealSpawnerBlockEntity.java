@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -268,7 +269,7 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
             if (player instanceof IGrippingEntity gripping && GrippingData.consumeGripping(gripping, GRIPPING_THRESHOLD)) {
                 BlockState gripped = state.setValue(OrdealSpawnerBlock.GRIPPING, true);
                 level.setBlock(pos, gripped, Block.UPDATE_ALL);
-                level.playSound(null, pos, SoundEvents.SOUL_ESCAPE, SoundSource.BLOCKS, 2.0F, 0.6F);
+                level.playSound(null, pos, SoundEvents.SOUL_ESCAPE.value(), SoundSource.BLOCKS, 2.0F, 0.6F);
                 level.playSound(null, player.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0F, 0.5F);
                 level.sendParticles(ParticleTypes.REVERSE_PORTAL, player.getX(), player.getY(0.5D), player.getZ(), 30, 0.3D, 0.6D, 0.3D, 0.05D);
                 level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 30, 0.4D, 0.4D, 0.4D, 0.02D);
@@ -301,7 +302,7 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
             double x = cursor.getX() + 0.5D;
             double y = cursor.getY();
             double z = cursor.getZ() + 0.5D;
-            if (!level.noCollision(type.getAABB(x, y, z))) {
+            if (!level.noCollision(type.getSpawnAABB(x, y, z))) {
                 continue;
             }
             Vec3 body = new Vec3(x, y + type.getHeight() * 0.5D, z);
@@ -314,7 +315,7 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
             }
             entity.moveTo(x, y, z, random.nextFloat() * 360.0F, 0.0F);
             if (entity instanceof Mob mob) {
-                mob.finalizeSpawn(level, level.getCurrentDifficultyAt(cursor), MobSpawnType.SPAWNER, null, null);
+                mob.finalizeSpawn(level, level.getCurrentDifficultyAt(cursor), MobSpawnType.SPAWNER, null);
                 mob.setPersistenceRequired();
                 if (target != null) {
                     mob.setTarget(target);
@@ -341,7 +342,7 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
 
     private void ejectReward(ServerLevel level, BlockPos pos, BlockState state, @Nullable ServerPlayer player) {
         OrdealSpawnerBlock.Type type = state.getValue(OrdealSpawnerBlock.TYPE);
-        LootTable table = level.getServer().getLootData().getLootTable(type.lootTable(state.getValue(OrdealSpawnerBlock.GRIPPING)));
+        LootTable table = level.getServer().reloadableRegistries().getLootTable(type.lootTable(state.getValue(OrdealSpawnerBlock.GRIPPING)));
         LootParams.Builder params = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
         if (player != null) {
             params.withParameter(LootContextParams.THIS_ENTITY, player).withLuck(player.getLuck());
@@ -480,8 +481,8 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.primary = tag.contains("primary", Tag.TAG_STRING) ? ResourceLocation.tryParse(tag.getString("primary")) : null;
         this.secondary = tag.contains("secondary", Tag.TAG_STRING) ? ResourceLocation.tryParse(tag.getString("secondary")) : null;
         this.spawned = tag.getInt("spawned");
@@ -496,8 +497,8 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         this.writeDisplayData(tag);
         tag.putInt("timer", this.timer);
         tag.putInt("idle", this.idleTicks);
@@ -534,7 +535,7 @@ public class OrdealSpawnerBlockEntity extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         this.writeDisplayData(tag);
         return tag;

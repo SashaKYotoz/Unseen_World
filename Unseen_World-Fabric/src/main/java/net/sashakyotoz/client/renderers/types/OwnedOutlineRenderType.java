@@ -22,7 +22,7 @@ public final class OwnedOutlineRenderType extends RenderType {
 
     private static final Function<ResourceLocation, RenderType> OWNED_OUTLINE = Util.memoize(texture -> create(
             "unseen_world_owned_outline",
-            DefaultVertexFormat.POSITION_COLOR_TEX,
+            DefaultVertexFormat.POSITION_TEX_COLOR,
             VertexFormat.Mode.QUADS,
             256,
             false,

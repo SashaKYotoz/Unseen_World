@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -289,7 +290,7 @@ public class EclipsedAcolyteEntity extends Monster {
                 if (entity instanceof IGrippingEntity gripping) {
                     GrippingData.addGrippingSeconds(gripping, 2);
                 }
-                this.doEnchantDamageEffects(this, entity);
+                this.applyPostAttackEffects(entity);
             }
             if (wasBlocking) {
                 ((Player) entity).disableShield();
@@ -322,7 +323,7 @@ public class EclipsedAcolyteEntity extends Monster {
         for (LivingEntity entity : hit) {
             if (entity.hurt(this.damageSources().mobAttack(this), this.attackDamage() * SWEEP_DAMAGE_FACTOR)) {
                 entity.knockback(0.8D, Mth.sin(yawRad), -Mth.cos(yawRad));
-                this.doEnchantDamageEffects(this, entity);
+                this.applyPostAttackEffects(entity);
             }
         }
         this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1.0F, 0.6F);
@@ -595,6 +596,12 @@ public class EclipsedAcolyteEntity extends Monster {
             if (++this.calmTicks >= CALM_TICKS_TO_DORMANT) {
                 this.acolyte.setDormant(true);
             }
+        }
+    }
+
+    private void applyPostAttackEffects(LivingEntity target) {
+        if (this.level() instanceof ServerLevel server) {
+            EnchantmentHelper.doPostAttackEffects(server, target, this.damageSources().mobAttack(this));
         }
     }
 }

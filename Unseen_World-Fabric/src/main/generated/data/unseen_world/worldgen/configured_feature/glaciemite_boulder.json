@@ -9,10 +9,8 @@
     },
     "height": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 9,
-        "min_inclusive": 4
-      }
+      "max_inclusive": 9,
+      "min_inclusive": 4
     }
   }
 }

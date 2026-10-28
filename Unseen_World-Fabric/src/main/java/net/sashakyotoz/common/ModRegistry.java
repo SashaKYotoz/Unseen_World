@@ -24,7 +24,7 @@ public class ModRegistry {
             return;
         }
         registered = true;
-        CURED_GRIPCRYSTAL_ENTITY_CRITERION = CriteriaTriggers.register(new CuredGripcrystalEntityCriterion());
+        CURED_GRIPCRYSTAL_ENTITY_CRITERION = CriteriaTriggers.register(UnseenWorld.MOD.makeID("cured_gripcrystal_entity").toString(), new CuredGripcrystalEntityCriterion());
         WARRIOR_SHIELD_DECORATION = register("crafting_warrior_shield_decoration", new SimpleCraftingRecipeSerializer<>(WarriorShieldDecorationRecipe::new));
         UnseenWorld.log().debug("Registering recipe serializers and criteria for modid : " + UnseenWorld.MOD_ID);
     }

@@ -3,10 +3,11 @@ package net.sashakyotoz.common.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.lcc.sollib.api.common.SolRegistries;
-import net.lcc.sollib.api.common.registry.Holder;
+import net.lcc.sollib.api.common.registry.SHolder;
 import net.lcc.sollib.api.common.registry.holder.BlockHolder;
 import net.lcc.sollib.api.common.registry.holder.EffectHolder;
 import net.lcc.sollib.api.common.registry.holder.ItemHolder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
@@ -16,17 +17,18 @@ import net.sashakyotoz.common.world.biomes.ModBiomes;
 import net.sashakyotoz.compat.UWInfoPages;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class ModLanguageProvider extends FabricLanguageProvider {
     private static final Map<ResourceKey<Biome>, String> BIOME_NAME_OVERRIDES = Map.of(
             ModBiomes.DEEP_GLACIEMITE_CAVES, "Deep Glaciemite Caverns");
 
-    public ModLanguageProvider(FabricDataOutput dataOutput) {
-        super(dataOutput);
+    public ModLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        super(dataOutput, registryLookup);
     }
 
     @Override
-    public void generateTranslations(TranslationBuilder builder) {
+    public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder builder) {
         builder.add("itemgroup.unseen_world.items", "Unseen World: Items");
         builder.add("itemgroup.unseen_world.blocks", "Unseen World: Blocks");
 
@@ -223,7 +225,7 @@ public class ModLanguageProvider extends FabricLanguageProvider {
         });
     }
 
-    private static boolean isOwn(Holder<?> holder) {
+    private static boolean isOwn(SHolder<?> holder) {
         return holder.getID().getNamespace().equals(UnseenWorld.MOD_ID);
     }
 

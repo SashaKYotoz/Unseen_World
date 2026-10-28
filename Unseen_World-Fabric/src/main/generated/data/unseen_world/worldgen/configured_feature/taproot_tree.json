@@ -10,10 +10,8 @@
     "anchor_replaceable": "unseen_world:chimeric_darkness_stones",
     "crown_radius": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 3,
-        "min_inclusive": 2
-      }
+      "max_inclusive": 3,
+      "min_inclusive": 2
     },
     "hanging_leaves": {
       "type": "minecraft:simple_state_provider",
@@ -65,10 +63,8 @@
     },
     "trunk_length": {
       "type": "minecraft:uniform",
-      "value": {
-        "max_inclusive": 7,
-        "min_inclusive": 4
-      }
+      "max_inclusive": 7,
+      "min_inclusive": 4
     }
   }
 }

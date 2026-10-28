@@ -1,5 +1,6 @@
 package net.sashakyotoz;
 
+import net.sashakyotoz.common.networking.ModMessages;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.api.ModInitializer;
@@ -53,6 +54,7 @@ public class UnseenWorld implements ModInitializer {
     @Override
     public void onInitialize() {
         ModRegistry.register();
+        ModMessages.register();
         CustomPortalBuilder.beginPortal()
                 .frameBlock(ModBlocks.DARK_FROST_BRICKS)
                 .lightWithItem(ModItems.ECLIPSE_KEYSTONE)

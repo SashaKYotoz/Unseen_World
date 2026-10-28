@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -13,9 +14,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
 public class GrippingStoneBlock extends DirectionalBlock {
+    public static final MapCodec<GrippingStoneBlock> CODEC = simpleCodec(GrippingStoneBlock::new);
+
     public GrippingStoneBlock(Properties settings) {
         super(settings);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+    }
+
+    @Override
+    protected MapCodec<? extends DirectionalBlock> codec() {
+        return CODEC;
     }
 
     @Override

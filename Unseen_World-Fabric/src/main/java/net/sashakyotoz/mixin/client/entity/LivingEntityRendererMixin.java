@@ -1,5 +1,6 @@
 package net.sashakyotoz.mixin.client.entity;
 
+import net.minecraft.util.FastColor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -31,13 +32,13 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V", ordinal = 0, shift = At.Shift.AFTER))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V", ordinal = 0, shift = At.Shift.AFTER))
     private void renderMixinInvoke(T livingEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int packedLight, CallbackInfo ci) {
         if (livingEntity instanceof IGrippingEntity entity && entity.getGrippingData() > 0) {
             float modifer = Oscillator.calculateDecreasingValue(entity.getGrippingData() / 10f);
             VertexConsumer vertexconsumer = vertexConsumerProvider.getBuffer(RenderType.eyes(this.getTextureLocation(livingEntity)));
             int i = LivingEntityRenderer.getOverlayCoords(livingEntity, getWhiteOverlayProgress(livingEntity, g));
-            this.model.renderToBuffer(matrixStack, vertexconsumer, packedLight, i, modifer, modifer, 1.0F, 1.0F);
+            this.model.renderToBuffer(matrixStack, vertexconsumer, packedLight, i, FastColor.ARGB32.colorFromFloat(1.0F, modifer, modifer, 1.0F));
         }
     }
 }

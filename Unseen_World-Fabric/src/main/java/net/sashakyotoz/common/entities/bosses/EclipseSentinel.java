@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.bosses;
 
+import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,7 +39,7 @@ import org.joml.Vector3f;
 import java.util.*;
 
 public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose> {
-    public static final EntityDataSerializer<SentinelPose> SENTINEL_STATE = EntityDataSerializer.simpleEnum(SentinelPose.class);
+    public static final EntityDataSerializer<SentinelPose> SENTINEL_STATE = EnumDataSerializer.of(SentinelPose.class);
     public static final EntityDataAccessor<SentinelPose> PHASE = SynchedEntityData.defineId(EclipseSentinel.class, SENTINEL_STATE);
     public static final EntityDataAccessor<Vector3f> SECOND_BEAM = SynchedEntityData.defineId(EclipseSentinel.class, EntityDataSerializers.VECTOR3);
 
@@ -123,7 +124,6 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
         super(entityType, level, SentinelPose.class,
                 new PartLayout("body", 0.45F, 0.35F, 0.75D, 1.9D, false),
                 new PartLayout("crack", 0.45F, 0.35F, -0.75D, 1.75D, true));
-        this.setMaxUpStep(1.5F);
         if (this.getNavigation() instanceof GroundPathNavigation navigation) {
             navigation.setCanFloat(true);
             navigation.setCanWalkOverFences(true);
@@ -143,6 +143,7 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.STEP_HEIGHT, 1.5D)
                 .add(Attributes.MAX_HEALTH, 500.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
@@ -314,7 +315,7 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 this.trackThenLock(target, ticks, DASH_LOCK_TICK, 8.0F);
                 if (ticks == DASH_LOCK_TICK) {
                     this.dashDistance = target == null ? 4.0D : Mth.clamp(this.gapTo(target) + 0.5D, 0.0D, 9.0D);
-                    this.playSound(SoundEvents.TRIDENT_RIPTIDE_2, 1.5F, 0.7F);
+                    this.playSound(SoundEvents.TRIDENT_RIPTIDE_2.value(), 1.5F, 0.7F);
                     if (this.isEnraged()) {
                         this.echoOrigin = this.position();
                         this.echoFacing = this.horizontalForward();
@@ -530,7 +531,7 @@ public class EclipseSentinel extends MultipartBoss<EclipseSentinel.SentinelPose>
                 boolean grounded = entity.getY() < this.getY() + CORONA_RING_CLEARANCE && entity.getY() > this.getY() - 2.0D;
                 if (Math.abs(distance - radius) <= CORONA_RING_HALF_WIDTH + entity.getBbWidth() * 0.5D && grounded && hits.add(entity.getUUID())) {
                     if (this.strikeMagic(entity, 0.7F)) {
-                        entity.setSecondsOnFire(4);
+                        entity.igniteForSeconds(4.0F);
                     }
                     Vec3 outward = new Vec3(entity.getX() - center.x, 0.0D, entity.getZ() - center.z);
                     outward = outward.lengthSqr() < 1.0E-4D ? this.horizontalForward() : outward.normalize();

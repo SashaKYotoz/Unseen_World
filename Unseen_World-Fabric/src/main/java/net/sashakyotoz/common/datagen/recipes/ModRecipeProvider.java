@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.lcc.sollib.api.common.SolRegistries;
 import net.lcc.sollib.api.common.registry.holder.BlockHolder;
 import net.lcc.sollib.datagen.SRecipeProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -12,14 +13,13 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.sashakyotoz.UnseenWorld;
-import net.sashakyotoz.common.ModRegistry;
 import net.sashakyotoz.common.blocks.ModBlocks;
 import net.sashakyotoz.common.blocks.ModWoodFamily;
 import net.sashakyotoz.common.items.ModItems;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeProvider extends SRecipeProvider {
     private static final Map<Block, Block> STONECUTTER_CHAINS = Map.of(
@@ -38,12 +38,12 @@ public class ModRecipeProvider extends SRecipeProvider {
                     ModItems.RED_TITANIUM_SWORD, ModItems.RED_TITANIUM_PICKAXE, ModItems.RED_TITANIUM_AXE, ModItems.RED_TITANIUM_SHOVEL, ModItems.RED_TITANIUM_HOE)
     );
 
-    public ModRecipeProvider(FabricDataOutput output) {
-        super(output);
+    public ModRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
     }
 
     @Override
-    public void buildRecipes(Consumer<FinishedRecipe> exporter) {
+    public void buildRecipes(RecipeOutput exporter) {
         super.buildRecipes(exporter);
 
         SolRegistries.MOD.iterate(BlockHolder.class, holder -> {
@@ -58,7 +58,7 @@ public class ModRecipeProvider extends SRecipeProvider {
         ModWoodFamily.ALL.forEach(family -> woodFamily(exporter, family));
         GEAR.forEach(gear -> gear(exporter, gear));
 
-        SpecialRecipeBuilder.special(ModRegistry.WARRIOR_SHIELD_DECORATION).save(exporter, "unseen_world:crafting_warrior_shield_decoration");
+        SpecialRecipeBuilder.special(WarriorShieldDecorationRecipe::new).save(exporter, "unseen_world:crafting_warrior_shield_decoration");
 
         oreBlasting(exporter, List.of(ModBlocks.ABYSSAL_ORE_IN_DARK_CURRANTSLATE, ModBlocks.ABYSSAL_ORE_IN_GLACIEMITE, ModBlocks.ABYSSAL_ORE_IN_CORONA_STONE),
                 RecipeCategory.TOOLS, ModItems.RAW_ABYSSAL_ORE, 10, 400, "abyssal_ore");
@@ -149,7 +149,7 @@ public class ModRecipeProvider extends SRecipeProvider {
         return holder;
     }
 
-    private void setMembers(Consumer<FinishedRecipe> exporter, BlockHolder holder) {
+    private void setMembers(RecipeOutput exporter, BlockHolder holder) {
         Block base = holder.get();
         if (holder.getFence() != null) {
             fenceBuilder(holder.getFence().get(), Ingredient.of(base))
@@ -169,7 +169,7 @@ public class ModRecipeProvider extends SRecipeProvider {
         }
     }
 
-    private static void stonecutting(Consumer<FinishedRecipe> exporter, ItemLike source, BlockHolder target) {
+    private static void stonecutting(RecipeOutput exporter, ItemLike source, BlockHolder target) {
         if (target.get().asItem() != source.asItem()) {
             stonecutterResultFromBase(exporter, RecipeCategory.BUILDING_BLOCKS, target.get(), source);
         }
@@ -184,7 +184,7 @@ public class ModRecipeProvider extends SRecipeProvider {
         }
     }
 
-    private void woodFamily(Consumer<FinishedRecipe> exporter, ModWoodFamily family) {
+    private void woodFamily(RecipeOutput exporter, ModWoodFamily family) {
         planksFromLogs(exporter, family.planks(), family.logs(), 4);
         woodFromLogs(exporter, family.wood(), family.log());
         woodFromLogs(exporter, family.strippedWood(), family.strippedLog());
@@ -200,7 +200,7 @@ public class ModRecipeProvider extends SRecipeProvider {
         hangingSign(exporter, family.hangingSignItem(), family.strippedLog());
     }
 
-    private void ingot(Consumer<FinishedRecipe> exporter, Item ingot, Item raw) {
+    private void ingot(RecipeOutput exporter, Item ingot, Item raw) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ingot)
                 .requires(raw, 4)
                 .requires(Items.NETHERITE_SCRAP, 4)
@@ -209,7 +209,7 @@ public class ModRecipeProvider extends SRecipeProvider {
                 .save(exporter);
     }
 
-    private void gear(Consumer<FinishedRecipe> exporter, Gear gear) {
+    private void gear(RecipeOutput exporter, Gear gear) {
         shaped(exporter, RecipeCategory.COMBAT, gear.helmet(), gear.ingot(), "XXX", "X X");
         shaped(exporter, RecipeCategory.COMBAT, gear.chestplate(), gear.ingot(), "X X", "XXX", "XXX");
         shaped(exporter, RecipeCategory.COMBAT, gear.leggings(), gear.ingot(), "XXX", "X X", "X X");
@@ -221,7 +221,7 @@ public class ModRecipeProvider extends SRecipeProvider {
         shaped(exporter, RecipeCategory.TOOLS, gear.hoe(), gear.ingot(), "XX", " #", " #");
     }
 
-    private void shaped(Consumer<FinishedRecipe> exporter, RecipeCategory category, Item result, Item ingot, String... pattern) {
+    private void shaped(RecipeOutput exporter, RecipeCategory category, Item result, Item ingot, String... pattern) {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(category, result).define('X', ingot);
         boolean usesStick = false;
         for (String row : pattern) {

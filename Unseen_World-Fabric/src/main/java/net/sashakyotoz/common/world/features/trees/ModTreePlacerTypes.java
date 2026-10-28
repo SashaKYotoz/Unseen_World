@@ -20,6 +20,8 @@ public class ModTreePlacerTypes {
             GrizzlyTrunkPlacer.CODEC);
     public static final TrunkPlacerType<?> BURLYWOOD_TRUNK_PLACER = TrunkPlacerTypeInvoker.callRegister("burlywood_trunk_placer",
             BurlywoodTrunkPlacer.CODEC);
+    public static final TrunkPlacerType<CrimsonveilTrunkPlacer> CRIMSONVEIL_TRUNK_PLACER = Registry.register(BuiltInRegistries.TRUNK_PLACER_TYPE,
+            UnseenWorld.MOD.makeID("crimsonveil_trunk_placer"), new TrunkPlacerType<>(CrimsonveilTrunkPlacer.CODEC));
     public static final TrunkPlacerType<ThornTrunkPlacer> THORN_TRUNK_PLACER = Registry.register(BuiltInRegistries.TRUNK_PLACER_TYPE,
             UnseenWorld.MOD.makeID("thorn_trunk_placer"), new TrunkPlacerType<>(ThornTrunkPlacer.CODEC));
 
@@ -27,6 +29,8 @@ public class ModTreePlacerTypes {
             GrizzlyFoliagePlacer.CODEC);
     public static final FoliagePlacerType<?> BURLYWOOD_FOLIAGE_PLACER = FoliagePlacerTypeInvoker.callRegister("burlywood_foliage_placer",
             BurlywoodFoliagePlacer.CODEC);
+    public static final FoliagePlacerType<CrimsonveilFoliagePlacer> CRIMSONVEIL_FOLIAGE_PLACER = Registry.register(BuiltInRegistries.FOLIAGE_PLACER_TYPE,
+            UnseenWorld.MOD.makeID("crimsonveil_foliage_placer"), new FoliagePlacerType<>(CrimsonveilFoliagePlacer.CODEC));
     public static final FoliagePlacerType<ThornFoliagePlacer> THORN_FOLIAGE_PLACER = Registry.register(BuiltInRegistries.FOLIAGE_PLACER_TYPE,
             UnseenWorld.MOD.makeID("thorn_foliage_placer"), new FoliagePlacerType<>(ThornFoliagePlacer.CODEC));
     public static final FoliagePlacerType<?> HANGING_BLOB_FOLIAGE_PLACER = FoliagePlacerTypeInvoker.callRegister("hanging_blob_foliage_placer",

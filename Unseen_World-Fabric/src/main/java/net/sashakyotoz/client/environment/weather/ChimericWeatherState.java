@@ -19,19 +19,21 @@ public class ChimericWeatherState extends SavedData {
     private int gripFallTicks = 0;
     private int gripFallCleanTicks = 12000;
 
+    private static final SavedData.Factory<ChimericWeatherState> FACTORY = new SavedData.Factory<>(
+            ChimericWeatherState::new,
+            ChimericWeatherState::fromNbt,
+            null
+    );
+
     private ServerLevel world;
 
     public static ChimericWeatherState get(ServerLevel world) {
-        ChimericWeatherState state = world.getDataStorage().computeIfAbsent(
-                ChimericWeatherState::fromNbt,
-                ChimericWeatherState::new,
-                "chimeric_weather"
-        );
+        ChimericWeatherState state = world.getDataStorage().computeIfAbsent(FACTORY, "chimeric_weather");
         state.world = world;
         return state;
     }
 
-    public static ChimericWeatherState fromNbt(CompoundTag tag) {
+    public static ChimericWeatherState fromNbt(CompoundTag tag, HolderLookup.Provider registries) {
         ChimericWeatherState state = new ChimericWeatherState();
         state.isGrippfallActive = tag.getBoolean("isGrippfallActive");
         String direction = tag.getString("direction");

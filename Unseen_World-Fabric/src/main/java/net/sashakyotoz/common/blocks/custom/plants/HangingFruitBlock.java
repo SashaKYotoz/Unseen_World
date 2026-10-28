@@ -59,15 +59,15 @@ public class HangingFruitBlock extends HangingPlantBlock implements Bonemealable
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(HAS_FRUIT)) {
             return FruitBearing.harvest(world, pos, state.setValue(HAS_FRUIT, false), new ItemStack(this.drop.get()), player);
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
         return !state.getValue(HAS_FRUIT);
     }
 

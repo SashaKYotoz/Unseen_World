@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -84,10 +85,10 @@ public class EspyerEntity extends Monster implements PowerableMob {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.entityData.define(FUSE_SPEED, -1);
-        this.entityData.define(CHARGED, false);
-        this.entityData.define(IGNITED, false);
-        GripConversion.define(this.entityData, CONVERTING);
+        builder.define(FUSE_SPEED, -1);
+        builder.define(CHARGED, false);
+        builder.define(IGNITED, false);
+        GripConversion.define(builder, CONVERTING);
     }
 
     @Override
@@ -208,7 +209,7 @@ public class EspyerEntity extends Monster implements PowerableMob {
                 if (!itemStack.isDamageableItem()) {
                     itemStack.shrink(1);
                 } else {
-                    itemStack.hurtAndBreak(1, player, playerx -> playerx.broadcastBreakEvent(hand));
+                    itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
                 }
             }
 

@@ -1,5 +1,6 @@
 package net.sashakyotoz.client.renderers.layers;
 
+import net.minecraft.util.FastColor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -39,7 +40,7 @@ public class GlowingPartsLayer<T extends Entity, M extends EntityModel<T>> exten
     ) {
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucentEmissive(texture));
         float alpha = this.alphaFunction.map(tAlphaFunction -> tAlphaFunction.apply(entity, tickDelta, animationProgress)).orElse(1.0F);
-        this.getParentModel().renderToBuffer(poseStack, vertexConsumer, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        this.getParentModel().renderToBuffer(poseStack, vertexConsumer, 15728640, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
     }
 
     @FunctionalInterface

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "unseen_world:polished_tanzanite"
+  },
+  "result": {
+    "count": 2,
+    "id": "unseen_world:polished_tanzanite_slab"
+  }
+}

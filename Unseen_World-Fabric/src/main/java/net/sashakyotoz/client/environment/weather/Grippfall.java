@@ -2,7 +2,9 @@ package net.sashakyotoz.client.environment.weather;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.fabricmc.fabric.api.client.rendering.v1.DimensionRenderingRegistry;
@@ -54,7 +56,7 @@ public class Grippfall implements DimensionRenderingRegistry.WeatherRenderer {
     @Override
     public void render(WorldRenderContext context) {
         if (isGrippfallActive && !Minecraft.getInstance().isPaused()) {
-            renderWeather(context.world(), context.lightmapTextureManager(), context.tickDelta(), context.camera().getPosition().x, context.camera().getPosition().y, context.camera().getPosition().z);
+            renderWeather(context.world(), context.lightmapTextureManager(), context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera().getPosition().x, context.camera().getPosition().y, context.camera().getPosition().z);
             tickGrippfallSplashing(context.world(), Minecraft.getInstance(), context.camera());
         }
     }
@@ -65,7 +67,7 @@ public class Grippfall implements DimensionRenderingRegistry.WeatherRenderer {
         int j = Mth.floor(cameraY);
         int k = Mth.floor(cameraZ);
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuilder();
+        BufferBuilder bufferBuilder = null;
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
@@ -126,12 +128,9 @@ public class Grippfall implements DimensionRenderingRegistry.WeatherRenderer {
                     if (random.nextDouble() < 0.35) {
                         mutable.set(o, r, n);
                         if (m != 0) {
-                            if (m >= 0) {
-                                tessellator.end();
-                            }
                             m = 0;
                             RenderSystem.setShaderTexture(0, GRIPPFALL);
-                            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+                            bufferBuilder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
                         }
 
                         int u = ClientTicks.getTicks() + o * o * 3121 + o * 45238971 + n * n * 418711 + n * 13761 & 31;
@@ -151,32 +150,32 @@ public class Grippfall implements DimensionRenderingRegistry.WeatherRenderer {
                         double slantX = heightDiff * slantFactor * xSlope;
                         double slantZ = heightDiff * slantFactor * zSlope;
 
-                        bufferBuilder.vertex((double) o - cameraX - d + 0.5 + slantX, (double) s - cameraY, (double) n - cameraZ - e + 0.5 + slantZ)
-                                .uv(0.0F, (float) r * 0.25F + h)
-                                .color(1.0F, 1.0F, 1.0F, y)
-                                .uv2(z)
-                                .endVertex();
-                        bufferBuilder.vertex((double) o - cameraX + d + 0.5 + slantX, (double) s - cameraY, (double) n - cameraZ + e + 0.5 + slantZ)
-                                .uv(1.0F, (float) r * 0.25F + h)
-                                .color(1.0F, 1.0F, 1.0F, y)
-                                .uv2(z)
-                                .endVertex();
-                        bufferBuilder.vertex((double) o - cameraX + d + 0.5, (double) r - cameraY, (double) n - cameraZ + e + 0.5)
-                                .uv(1.0F, (float) s * 0.25F + h)
-                                .color(1.0F, 1.0F, 1.0F, y)
-                                .uv2(z)
-                                .endVertex();
-                        bufferBuilder.vertex((double) o - cameraX - d + 0.5, (double) r - cameraY, (double) n - cameraZ - e + 0.5)
-                                .uv(0.0F, (float) s * 0.25F + h)
-                                .color(1.0F, 1.0F, 1.0F, y)
-                                .uv2(z)
-                                .endVertex();
+                        bufferBuilder.addVertex((float) ((double) o - cameraX - d + 0.5 + slantX), (float) ((double) s - cameraY), (float) ((double) n - cameraZ - e + 0.5 + slantZ))
+                                .setUv(0.0F, (float) r * 0.25F + h)
+                                .setColor(1.0F, 1.0F, 1.0F, y)
+                                .setLight(z);
+                        bufferBuilder.addVertex((float) ((double) o - cameraX + d + 0.5 + slantX), (float) ((double) s - cameraY), (float) ((double) n - cameraZ + e + 0.5 + slantZ))
+                                .setUv(1.0F, (float) r * 0.25F + h)
+                                .setColor(1.0F, 1.0F, 1.0F, y)
+                                .setLight(z);
+                        bufferBuilder.addVertex((float) ((double) o - cameraX + d + 0.5), (float) ((double) r - cameraY), (float) ((double) n - cameraZ + e + 0.5))
+                                .setUv(1.0F, (float) s * 0.25F + h)
+                                .setColor(1.0F, 1.0F, 1.0F, y)
+                                .setLight(z);
+                        bufferBuilder.addVertex((float) ((double) o - cameraX - d + 0.5), (float) ((double) r - cameraY), (float) ((double) n - cameraZ - e + 0.5))
+                                .setUv(0.0F, (float) s * 0.25F + h)
+                                .setColor(1.0F, 1.0F, 1.0F, y)
+                                .setLight(z);
                     }
                 }
             }
         }
-        if (m >= 0)
-            tessellator.end();
+        if (bufferBuilder != null) {
+            MeshData mesh = bufferBuilder.build();
+            if (mesh != null) {
+                BufferUploader.drawWithShader(mesh);
+            }
+        }
         RenderSystem.enableCull();
         RenderSystem.disableBlend();
         manager.turnOffLightLayer();

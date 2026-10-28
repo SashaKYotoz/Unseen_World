@@ -6,8 +6,12 @@ import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -31,9 +35,11 @@ import net.sashakyotoz.common.blocks.ModWoodFamily;
 import net.sashakyotoz.common.blocks.custom.plants.TreeBushLikeBlock;
 import net.sashakyotoz.common.items.ModItems;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ModBlockLootTableProvider extends SBlockLootTableProvider {
-    public ModBlockLootTableProvider(FabricDataOutput dataOutput) {
-        super(dataOutput);
+    public ModBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        super(dataOutput, registryLookup);
     }
 
     @Override
@@ -60,7 +66,7 @@ public class ModBlockLootTableProvider extends SBlockLootTableProvider {
         leaves(ModBlocks.BURLYWOOD_LEAVES, ModBlocks.BURLYWOOD_SAPLING);
         this.add(ModBlocks.HANGING_AMETHYST_LEAVES, createSilkTouchOrShearsDispatchTable(ModBlocks.HANGING_AMETHYST_LEAVES,
                 LootItem.lootTableItem(ModBlocks.HANGING_AMETHYST_LEAVES)
-                        .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.25F, 0.5F, 0.75F, 1.0F))));
+                        .when(BonusLevelTableCondition.bonusLevelFlatChance(this.fortune(), 0.25F, 0.5F, 0.75F, 1.0F))));
         this.add(ModBlocks.BURLYWOOD_HEART, createSilkTouchOnlyTable(ModBlocks.BURLYWOOD_HEART));
         this.add(ModBlocks.GLOW_APPLE_BUSH, glowAppleBushDrops(ModBlocks.GLOW_APPLE_BUSH));
         this.dropWhenSilkTouch(ModBlocks.AMETHYST_PETALS);
@@ -93,6 +99,10 @@ public class ModBlockLootTableProvider extends SBlockLootTableProvider {
         this.dropWhenSilkTouch(ModBlocks.DEAD_UMBRAL_CORAL_FAN);
     }
 
+    private Holder<Enchantment> fortune() {
+        return this.registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
+    }
+
     private void silkTouchOr(Block block, ItemLike drop) {
         this.add(block, this.createSingleItemTableWithSilkTouch(block, drop));
     }
@@ -109,7 +119,7 @@ public class ModBlockLootTableProvider extends SBlockLootTableProvider {
         this.add(block, createSilkTouchDispatchTable(block, this.applyExplosionDecay(block,
                 LootItem.lootTableItem(Items.IRON_NUGGET)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
-                        .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)))));
+                        .apply(ApplyBonusCount.addOreBonusCount(this.fortune())))));
     }
 
     public static LootTable.Builder glowAppleBushDrops(Block bush) {
@@ -139,8 +149,7 @@ public class ModBlockLootTableProvider extends SBlockLootTableProvider {
                 .when(LocationCheck.checkLocation(
                         LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block()
                                 .of(tallPlant)
-                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, otherHalf).build())
-                                .build()),
+                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoublePlantBlock.HALF, otherHalf))),
                         otherOffset));
     }
 }

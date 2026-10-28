@@ -1,0 +1,45 @@
+{
+  "parent": "unseen_world:into_the_chimeric_darkness",
+  "criteria": {
+    "entered_the_auric_heights": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biomes": "unseen_world:auric_heights",
+                "position": {
+                  "y": {
+                    "max": 320.0,
+                    "min": 0.0
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.unseen_world.into_the_auric_heights.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "unseen_world:gilded_currantslate"
+    },
+    "title": {
+      "translate": "advancement.unseen_world.into_the_auric_heights"
+    }
+  },
+  "requirements": [
+    [
+      "entered_the_auric_heights"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

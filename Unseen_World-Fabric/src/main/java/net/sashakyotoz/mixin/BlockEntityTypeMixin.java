@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.sashakyotoz.common.blocks.custom.SusBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +19,10 @@ public class BlockEntityTypeMixin {
         BlockEntityType self = (BlockEntityType) (Object) this;
         if ((BlockEntityType.SIGN.equals(self) || BlockEntityType.HANGING_SIGN.equals(self)) &&
                 (state.getBlock() instanceof StandingSignBlock || state.getBlock() instanceof WallSignBlock
-                 || state.getBlock() instanceof CeilingHangingSignBlock || state.getBlock() instanceof WallHangingSignBlock)) {
+                        || state.getBlock() instanceof CeilingHangingSignBlock || state.getBlock() instanceof WallHangingSignBlock)) {
+            cir.setReturnValue(true);
+        }
+        if (BlockEntityType.BRUSHABLE_BLOCK.equals(self) && state.getBlock() instanceof SusBlock) {
             cir.setReturnValue(true);
         }
     }

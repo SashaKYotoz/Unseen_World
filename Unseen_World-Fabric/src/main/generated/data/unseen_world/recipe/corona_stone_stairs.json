@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "corona_stone_stairs",
+  "key": {
+    "#": {
+      "item": "unseen_world:corona_stone"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "unseen_world:corona_stone_stairs"
+  }
+}

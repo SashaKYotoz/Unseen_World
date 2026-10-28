@@ -34,7 +34,9 @@ import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -53,8 +55,8 @@ import java.util.UUID;
 public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity {
     private static final EntityDataAccessor<Integer> OWNER_ID = SynchedEntityData.defineId(ReaverEntity.class, EntityDataSerializers.INT);
 
-    private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
-    private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 0.05, AttributeModifier.Operation.ADDITION);
+    private static final ResourceLocation SPEED_MODIFIER_ATTACKING_ID = ResourceLocation.fromNamespaceAndPath("unseen_world", "reaver_attacking_speed_boost");
+    private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_ID, 0.05, AttributeModifier.Operation.ADD_VALUE);
     private static final UniformInt FIRST_ANGER_SOUND_DELAY = TimeUtil.rangeOfSeconds(0, 1);
     private int playFirstAngerSoundIn;
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
@@ -83,7 +85,7 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        MinionOwnership.define(this.entityData, OWNER_ID);
+        MinionOwnership.define(builder, OWNER_ID);
     }
 
     public void setPersistentAngerTarget(@Nullable UUID persistentAngerTarget) {
@@ -128,19 +130,15 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
         }
     }
 
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return this.isBaby() ? 0.97F : 1.79F;
-    }
-
     protected void customServerAiStep() {
         AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attributeInstance != null) {
             if (this.isAngry()) {
-                if (!this.isBaby() && !attributeInstance.hasModifier(SPEED_MODIFIER_ATTACKING)) {
+                if (!this.isBaby() && !attributeInstance.hasModifier(SPEED_MODIFIER_ATTACKING_ID)) {
                     attributeInstance.addTransientModifier(SPEED_MODIFIER_ATTACKING);
                 }
                 this.maybePlayFirstAngerSound();
-            } else if (attributeInstance.hasModifier(SPEED_MODIFIER_ATTACKING)) {
+            } else if (attributeInstance.hasModifier(SPEED_MODIFIER_ATTACKING_ID)) {
                 attributeInstance.removeModifier(SPEED_MODIFIER_ATTACKING);
             }
         }
@@ -300,9 +298,8 @@ public class ReaverEntity extends Monster implements NeutralMob, TraceableEntity
 
     private boolean hurtWithCleanWater(DamageSource source, ThrownPotion potion, float amount) {
         ItemStack itemStack = potion.getItem();
-        Potion potion2 = PotionUtils.getPotion(itemStack);
-        List<MobEffectInstance> list = PotionUtils.getMobEffects(itemStack);
-        return potion2 == Potions.WATER && list.isEmpty() && super.hurt(source, amount);
+        PotionContents contents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        return contents.is(Potions.WATER) && super.hurt(source, amount);
     }
 
     public void startPersistentAngerTimer() {

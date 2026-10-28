@@ -3,10 +3,12 @@ package net.sashakyotoz.common.blocks.custom.entities;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -145,7 +147,7 @@ public class EffigyBlockEntity extends BlockEntity {
         entity.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, yaw, 0.0F);
         entity.setYHeadRot(yaw);
         if (entity instanceof Mob mob) {
-            mob.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null, null);
+            mob.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null);
             mob.setPersistenceRequired();
             Player nearest = level.getNearestPlayer(entity, 48.0D);
             if (nearest != null && !nearest.isCreative() && !nearest.isSpectator()) {
@@ -165,7 +167,7 @@ public class EffigyBlockEntity extends BlockEntity {
         this.setPhase(level, pos, state, EffigyBlock.Phase.AWAKENED);
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, boss.material().defaultBlockState()),
                 entity.getX(), entity.getY(0.5D), entity.getZ(), 120, entity.getBbWidth() * 0.5D, entity.getBbHeight() * 0.5D, entity.getBbWidth() * 0.5D, 0.15D);
-        level.playSound(null, pos, SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 1.0F, 0.6F);
+        level.playSound(null, pos, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 1.0F, 0.6F);
         level.playSound(null, pos, SoundEvents.DEEPSLATE_BRICKS_BREAK, SoundSource.HOSTILE, 2.0F, 0.5F);
         level.gameEvent(entity, GameEvent.ENTITY_PLACE, pos.above());
     }
@@ -277,6 +279,15 @@ public class EffigyBlockEntity extends BlockEntity {
     }
 
     @Nullable
+    private static BlockPos readPos(CompoundTag tag, String key) {
+        if (tag.contains(key, Tag.TAG_COMPOUND)) {
+            CompoundTag legacy = tag.getCompound(key);
+            return new BlockPos(legacy.getInt("X"), legacy.getInt("Y"), legacy.getInt("Z"));
+        }
+        return NbtUtils.readBlockPos(tag, key).orElse(null);
+    }
+
+    @Nullable
     private static BlockPos parseTag(String tag) {
         try {
             return BlockPos.of(Long.parseLong(tag.substring(BOSS_TAG_PREFIX.length())));
@@ -286,17 +297,17 @@ public class EffigyBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.keys = tag.getInt("keys");
         this.timer = tag.getInt("timer");
         this.boss = tag.hasUUID("boss") ? tag.getUUID("boss") : null;
-        this.lastBossPos = tag.contains("last_boss_pos") ? NbtUtils.readBlockPos(tag.getCompound("last_boss_pos")) : null;
+        this.lastBossPos = readPos(tag, "last_boss_pos");
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putInt("keys", this.keys);
         tag.putInt("timer", this.timer);
         if (this.boss != null) {
@@ -308,7 +319,7 @@ public class EffigyBlockEntity extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         tag.putInt("keys", this.keys);
         return tag;

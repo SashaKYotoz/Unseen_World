@@ -46,7 +46,7 @@ public class TuskhogBrain {
                 0,
                 ImmutableList.of(
                         new Swim(0.8F),
-                        new AnimalPanic(2.0F),
+                        new AnimalPanic<TuskhogEntity>(2.0F),
                         new LookAtTargetSink(45, 90),
                         new MoveToTargetSink(),
                         new CountDownCooldownTicks(MemoryModuleType.TEMPTATION_COOLDOWN_TICKS),
@@ -61,7 +61,7 @@ public class TuskhogBrain {
                 Activity.IDLE,
                 ImmutableList.of(
                         Pair.of(0, SetEntityLookTargetSometimes.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60))),
-                        Pair.of(0, new AnimalMakeLove(ModEntities.TUSKHOG, 1.0F)),
+                        Pair.of(0, new AnimalMakeLove(ModEntities.TUSKHOG)),
                         Pair.of(1, new FollowTemptation(goat -> 1.25F)),
                         Pair.of(2, BabyFollowAdult.create(WALKING_SPEED, 1.25F)),
                         Pair.of(

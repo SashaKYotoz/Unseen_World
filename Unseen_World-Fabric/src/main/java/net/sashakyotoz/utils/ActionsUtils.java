@@ -1,6 +1,6 @@
 package net.sashakyotoz.utils;
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -117,7 +117,7 @@ public class ActionsUtils {
     public static boolean isEntityInCover(LivingEntity livingEntity, ServerLevel world) {
         return !ChimericWeatherState.get(world).isGrippfallActive()
                 || ModArmorItem.isAbyssalArmorSet(livingEntity)
-                || livingEntity.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.get())
+                || livingEntity.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.getAsHolder())
                 || (ChimericWeatherState.get(world).isGrippfallActive()
                 && world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, livingEntity.blockPosition()).getY() > livingEntity.blockPosition().getY());
     }

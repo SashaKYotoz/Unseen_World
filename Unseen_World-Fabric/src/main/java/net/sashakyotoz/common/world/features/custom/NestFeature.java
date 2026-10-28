@@ -86,7 +86,7 @@ public class NestFeature extends Feature<NestFeatureConfig> {
                 return;
             }
             mob.moveTo(center.getX() + 0.5D, center.getY(), center.getZ() + 0.5D, random.nextFloat() * 360.0F, 0.0F);
-            mob.finalizeSpawn(level, level.getCurrentDifficultyAt(center), MobSpawnType.STRUCTURE, null, null);
+            mob.finalizeSpawn(level, level.getCurrentDifficultyAt(center), MobSpawnType.STRUCTURE, null);
             if (mob instanceof NestDweller dweller) {
                 dweller.bindToNest(center);
             }

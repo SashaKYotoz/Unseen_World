@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.sashakyotoz.UnseenWorld;
 
@@ -19,7 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 public final class PhasedBossBar {
-    private static final ResourceLocation GUI_BARS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/bars.png");
+    private static final String[] COLOR_NAMES = {"pink", "blue", "red", "green", "yellow", "purple", "white"};
+    private static final ResourceLocation[] BACKGROUND_SPRITES = sprites("background");
+    private static final ResourceLocation[] PROGRESS_SPRITES = sprites("progress");
     private static final int BAR_WIDTH = 182;
     private static final int BAR_HEIGHT = 5;
     private static final int FRAME_WIDTH = 183;
@@ -84,13 +87,21 @@ public final class PhasedBossBar {
     }
 
     private void render(GuiGraphics guiGraphics, int x, int y, BossEvent bossEvent) {
-        int colorVOffset = bossEvent.getColor().ordinal() * BAR_HEIGHT * 2;
-        guiGraphics.blit(GUI_BARS_LOCATION, x, y, 0, colorVOffset, BAR_WIDTH, BAR_HEIGHT);
-        int progressWidth = (int) (bossEvent.getProgress() * (float) FRAME_WIDTH);
+        int colorIndex = bossEvent.getColor().ordinal();
+        guiGraphics.blitSprite(BACKGROUND_SPRITES[colorIndex], BAR_WIDTH, BAR_HEIGHT, 0, 0, x, y, BAR_WIDTH, BAR_HEIGHT);
+        int progressWidth = Mth.lerpDiscrete(bossEvent.getProgress(), 0, BAR_WIDTH);
         if (progressWidth > 0) {
-            guiGraphics.blit(GUI_BARS_LOCATION, x, y, 0, colorVOffset + BAR_HEIGHT, progressWidth, BAR_HEIGHT);
+            guiGraphics.blitSprite(PROGRESS_SPRITES[colorIndex], BAR_WIDTH, BAR_HEIGHT, 0, 0, x, y, progressWidth, BAR_HEIGHT);
         }
         guiGraphics.blit(this.frameTexture(this.phaseIndex(bossEvent)), x, y - 2, 0.0F, 0.0F, FRAME_WIDTH, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT);
+    }
+
+    private static ResourceLocation[] sprites(String kind) {
+        ResourceLocation[] sprites = new ResourceLocation[COLOR_NAMES.length];
+        for (int i = 0; i < COLOR_NAMES.length; i++) {
+            sprites[i] = ResourceLocation.withDefaultNamespace("boss_bar/" + COLOR_NAMES[i] + "_" + kind);
+        }
+        return sprites;
     }
 
     private BossBarTextState modifyText(BossEvent bossEvent, BossBarTextState state, GuiGraphics guiGraphics) {

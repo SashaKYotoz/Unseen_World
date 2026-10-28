@@ -43,9 +43,9 @@ public abstract class LivingEntityMixin implements IGrippingEntity {
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    private void unseen_world$defineGrippingData(CallbackInfo ci) {
-        this.unseen_world$self().getEntityData().define(GRIPPING, 0);
-        this.unseen_world$self().getEntityData().define(DARKENING, 0);
+    private void unseen_world$defineGrippingData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+        builder.define(GRIPPING, 0);
+        builder.define(DARKENING, 0);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
@@ -73,7 +73,7 @@ public abstract class LivingEntityMixin implements IGrippingEntity {
         boolean ordealMob = living.getTags().contains(OrdealSpawnerBlockEntity.ORDEAL_TAG);
         if (this.getGrippingData() > 0) {
             if (!ordealMob) {
-                if (living.isAlive() && !living.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.get())) {
+                if (living.isAlive() && !living.hasEffect(ModMobEffects.GRIPPING_RESISTANCE.getAsHolder())) {
                     living.hurt(living.damageSources().starve(), 1.0F);
                 }
                 if (ActionsUtils.isEntityInCover(living, level)) {

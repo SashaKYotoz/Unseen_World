@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "abyssal_ingot",
+  "ingredients": [
+    {
+      "item": "unseen_world:raw_abyssal"
+    },
+    {
+      "item": "unseen_world:raw_abyssal"
+    },
+    {
+      "item": "unseen_world:raw_abyssal"
+    },
+    {
+      "item": "unseen_world:raw_abyssal"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "unseen_world:abyssal_ingot"
+  }
+}

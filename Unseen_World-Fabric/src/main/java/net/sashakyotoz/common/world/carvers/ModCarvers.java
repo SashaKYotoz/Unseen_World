@@ -2,7 +2,7 @@ package net.sashakyotoz.common.world.carvers;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.world.level.block.Block;
@@ -20,7 +20,7 @@ import net.sashakyotoz.common.world.carvers.custom.configs.SpiralCaveCarverConfi
 public class ModCarvers {
     public static final ResourceKey<ConfiguredWorldCarver<?>> SPIRAL_CAVE = create("spiral_cave");
 
-    public static void boostrap(BootstapContext<ConfiguredWorldCarver<?>> context) {
+    public static void boostrap(BootstrapContext<ConfiguredWorldCarver<?>> context) {
         HolderGetter<Block> registryEntryLookup = context.lookup(Registries.BLOCK);
         register(context, SPIRAL_CAVE, SpiralCaveCarver.INSTANCE, new SpiralCaveCarverConfig(
                 0.35F,
@@ -41,7 +41,7 @@ public class ModCarvers {
         return ResourceKey.create(Registries.CONFIGURED_CARVER, UnseenWorld.MOD.makeID(name));
     }
 
-    private static <FC extends CarverConfiguration, F extends WorldCarver<FC>> void register(BootstapContext<ConfiguredWorldCarver<?>> context,
+    private static <FC extends CarverConfiguration, F extends WorldCarver<FC>> void register(BootstrapContext<ConfiguredWorldCarver<?>> context,
                                                                                              ResourceKey<ConfiguredWorldCarver<?>> key, F feature, FC config) {
         context.register(key, new ConfiguredWorldCarver<>(feature, config));
     }

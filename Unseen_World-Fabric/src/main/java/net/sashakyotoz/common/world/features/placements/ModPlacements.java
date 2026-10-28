@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
@@ -102,7 +102,7 @@ public class ModPlacements {
     public static final ResourceKey<PlacedFeature> TANZANITE_GLEAMCARVER_NEST = create("tanzanite_gleamcarver_nest");
     public static final ResourceKey<PlacedFeature> SHINY_GLEAMCARVER_NEST = create("shiny_gleamcarver_nest");
 
-    public static void boostrap(BootstapContext<PlacedFeature> context) {
+    public static void boostrap(BootstrapContext<PlacedFeature> context) {
         var configLookup = context.lookup(Registries.CONFIGURED_FEATURE);
         register(context, AMETHYST_TREE, configLookup.getOrThrow(ModConfiguredFeatures.AMETHYST_TREE),
                 VegetationPlacements.treePlacement(
@@ -130,11 +130,11 @@ public class ModPlacements {
                         ModBlocks.TEALIVE_SAPLING));
         register(context, CRIMSONVEIL_TREE, configLookup.getOrThrow(ModConfiguredFeatures.CRIMSONVEIL_TREE),
                 VegetationPlacements.treePlacement(
-                        PlacementUtils.countExtra(1, 0.5f, 2),
+                        PlacementUtils.countExtra(1, 0.5f, 1),
                         ModBlocks.CRIMSONVEIL_SAPLING));
         register(context, TALL_CRIMSONVEIL_TREE, configLookup.getOrThrow(ModConfiguredFeatures.TALL_CRIMSONVEIL_TREE),
                 VegetationPlacements.treePlacement(
-                        PlacementUtils.countExtra(1, 0.5f, 3),
+                        PlacementUtils.countExtra(1, 0.5f, 2),
                         ModBlocks.CRIMSONVEIL_SAPLING));
         register(context, BURLYWOOD_TREE, configLookup.getOrThrow(ModConfiguredFeatures.BURLYWOOD_TREE),
                 VegetationPlacements.treePlacement(
@@ -484,14 +484,14 @@ public class ModPlacements {
         return ResourceKey.create(Registries.PLACED_FEATURE, UnseenWorld.MOD.makeID(name));
     }
 
-    private static void register(BootstapContext<PlacedFeature> context,
+    private static void register(BootstrapContext<PlacedFeature> context,
                                  ResourceKey<PlacedFeature> key,
                                  Holder<ConfiguredFeature<?, ?>> config,
                                  List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(config, List.copyOf(modifiers)));
     }
 
-    private static void register(BootstapContext<PlacedFeature> context,
+    private static void register(BootstrapContext<PlacedFeature> context,
                                  ResourceKey<PlacedFeature> key,
                                  Holder<ConfiguredFeature<?, ?>> config,
                                  PlacementModifier... modifiers) {

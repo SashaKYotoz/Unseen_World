@@ -2,7 +2,9 @@ package net.sashakyotoz.common.datagen.loot;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -20,11 +22,12 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sashakyotoz.common.blocks.custom.OrdealSpawnerBlock;
 import net.sashakyotoz.common.items.ModItems;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class OrdealLootTableProvider extends SimpleFabricLootTableProvider {
-    public OrdealLootTableProvider(FabricDataOutput output) {
-        super(output, LootContextParamSets.CHEST);
+    public OrdealLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        super(output, registryLookup, LootContextParamSets.CHEST);
     }
 
     @Override
@@ -33,7 +36,7 @@ public class OrdealLootTableProvider extends SimpleFabricLootTableProvider {
     }
 
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> exporter) {
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> exporter) {
         for (OrdealSpawnerBlock.Type type : OrdealSpawnerBlock.Type.values()) {
             exporter.accept(type.lootTable(false), LootTable.lootTable()
                     .withPool(supplies(type)));
@@ -83,7 +86,7 @@ public class OrdealLootTableProvider extends SimpleFabricLootTableProvider {
                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)));
     }
 
-    private static LootPoolSingletonContainer.Builder<?> potion(Item item, Potion potion, int weight) {
+    private static LootPoolSingletonContainer.Builder<?> potion(Item item, Holder<Potion> potion, int weight) {
         return LootItem.lootTableItem(item)
                 .setWeight(weight)
                 .apply(SetPotionFunction.setPotion(potion));

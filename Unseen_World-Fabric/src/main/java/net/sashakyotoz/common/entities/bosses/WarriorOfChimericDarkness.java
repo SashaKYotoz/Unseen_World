@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.entities.bosses;
 
+import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class WarriorOfChimericDarkness extends MultipartBoss<WarriorOfChimericDarkness.WarriorPose> {
-    public static final EntityDataSerializer<WarriorPose> WARRIOR_STATE = EntityDataSerializer.simpleEnum(WarriorPose.class);
+    public static final EntityDataSerializer<WarriorPose> WARRIOR_STATE = EnumDataSerializer.of(WarriorPose.class);
     protected static final EntityDataAccessor<WarriorPose> PHASE = SynchedEntityData.defineId(WarriorOfChimericDarkness.class, WARRIOR_STATE);
 
     public static final int ABYSS_VIOLET = 0x5B1E8C;
@@ -120,7 +121,6 @@ public class WarriorOfChimericDarkness extends MultipartBoss<WarriorOfChimericDa
         super(entityType, level, WarriorPose.class,
                 new PartLayout("body", 0.6F, 0.8F, 1.25D, 1.75D, false),
                 new PartLayout("backCrack", 0.6F, 0.8F, -1.1D, 1.75D, true));
-        this.setMaxUpStep(1.5F);
         if (this.getNavigation() instanceof GroundPathNavigation navigation) {
             navigation.setCanFloat(true);
             navigation.setCanWalkOverFences(true);
@@ -140,6 +140,7 @@ public class WarriorOfChimericDarkness extends MultipartBoss<WarriorOfChimericDa
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.STEP_HEIGHT, 1.5D)
                 .add(Attributes.MAX_HEALTH, 450.0D)
                 .add(Attributes.ARMOR, 14.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 4.0D)

@@ -45,7 +45,7 @@ public final class ShieldMechanics {
             return;
         }
         InteractionHand hand = player.getUsedItemHand();
-        shield.hurtAndBreak(1 + Mth.floor(damage), player, entity -> entity.broadcastBreakEvent(hand));
+        shield.hurtAndBreak(1 + Mth.floor(damage), player, LivingEntity.getSlotForHand(hand));
         if (shield.isEmpty()) {
             player.setItemInHand(hand, ItemStack.EMPTY);
             player.stopUsingItem();

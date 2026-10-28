@@ -54,7 +54,7 @@ public class ModChestRenderer<T extends ModChestBlockEntity> extends ChestRender
             float g = propertySource.apply(ChestBlock.opennessCombiner(entity)).get(tickDelta);
             g = 1.0F - g;
             g = 1.0F - g * g * g;
-            int i = propertySource.apply(new BrightnessCombiner<>()).applyAsInt(light);
+            int i = propertySource.apply(new BrightnessCombiner<>()).get(light);
             Material spriteIdentifier = new Material(Sheets.CHEST_SHEET, chest.getType().texture);
             VertexConsumer vertexConsumer = spriteIdentifier.buffer(vertexConsumers, RenderType::entityCutout);
             this.render(matrices, vertexConsumer, this.chestLock, this.chestLid, this.chestBottom, g, i, overlay);

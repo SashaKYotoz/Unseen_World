@@ -59,10 +59,10 @@ public class ExplosionCircleParticle extends TextureSheetParticle {
 
         int light = this.getLightColor(partialTicks);
 
-        buffer.vertex(px - size, py, pz - size).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(px - size, py, pz + size).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(px + size, py, pz + size).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(px + size, py, pz - size).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.addVertex(px - size, py, pz - size).setUv(u1, v1).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(light);
+        buffer.addVertex(px - size, py, pz + size).setUv(u1, v0).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(light);
+        buffer.addVertex(px + size, py, pz + size).setUv(u0, v0).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(light);
+        buffer.addVertex(px + size, py, pz - size).setUv(u0, v1).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(light);
     }
 
     public static class Factory implements ParticleProvider<SimpleParticleType> {

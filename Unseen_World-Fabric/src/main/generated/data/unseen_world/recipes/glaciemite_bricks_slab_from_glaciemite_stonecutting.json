@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 2,
-  "ingredient": {
-    "item": "unseen_world:glaciemite"
-  },
-  "result": "unseen_world:glaciemite_bricks_slab"
-}

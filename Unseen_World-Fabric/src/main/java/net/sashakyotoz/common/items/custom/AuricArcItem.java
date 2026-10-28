@@ -1,7 +1,6 @@
 package net.sashakyotoz.common.items.custom;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -10,17 +9,18 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -29,7 +29,6 @@ import net.sashakyotoz.common.items.ModTiers;
 import net.sashakyotoz.common.items.combat.AbilityHelper;
 import net.sashakyotoz.common.items.combat.MeleeAbilityItem;
 import net.sashakyotoz.utils.CombatHelper;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -43,18 +42,15 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
     private static final float BOLT_SPREAD_DEGREES = 10.0F;
     private static final DustParticleOptions GOLDEN_DUST = new DustParticleOptions(new Vector3f(1.0F, 0.78F, 0.25F), 1.2F);
 
-    private final Multimap<Attribute, AttributeModifier> modifiers;
-
     public AuricArcItem(double attackDamage, double attackSpeed, Properties settings) {
-        super(settings);
-        this.modifiers = ImmutableMultimap.of(
-                Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION),
-                Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeed, AttributeModifier.Operation.ADDITION));
+        super(settings.attributes(createAttributes(attackDamage, attackSpeed)).component(DataComponents.TOOL, TridentItem.createToolProperties()));
     }
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
-        return slot == EquipmentSlot.MAINHAND ? this.modifiers : super.getDefaultAttributeModifiers(slot);
+    public static ItemAttributeModifiers createAttributes(double attackDamage, double attackSpeed) {
+        return ItemAttributeModifiers.builder()
+                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, attackDamage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .build();
     }
 
     @Override
@@ -72,11 +68,11 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
         if (!(entity instanceof Player player)) {
             return;
         }
-        int held = this.getUseDuration(stack) - remainingUseTicks;
+        int held = this.getUseDuration(stack, entity) - remainingUseTicks;
         if (held < THROW_TICKS) {
             return;
         }
-        if (EnchantmentHelper.getRiptide(stack) > 0) {
+        if (EnchantmentHelper.getTridentSpinAttackStrength(stack, player) > 0.0F) {
             super.releaseUsing(stack, level, entity, remainingUseTicks);
             return;
         }
@@ -93,7 +89,7 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
                 arc.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
             }
             level.addFreshEntity(arc);
-            level.playSound(null, arc, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound(null, arc, SoundEvents.TRIDENT_THROW.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
             if (sunburst) {
                 releaseSunburst(level, player);
             }
@@ -129,14 +125,14 @@ public class AuricArcItem extends TridentItem implements MeleeAbilityItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
         AbilityHelper.appendAbilityLines(this.getDescriptionId(), 3, tooltip);
     }
 
     private static void releaseSunburst(Level level, Player player) {
         for (float offset : new float[]{-BOLT_SPREAD_DEGREES, BOLT_SPREAD_DEGREES}) {
-            SpectralArrow bolt = new SpectralArrow(level, player);
+            SpectralArrow bolt = new SpectralArrow(level, player, new ItemStack(Items.SPECTRAL_ARROW), null);
             bolt.shootFromRotation(player, player.getXRot(), player.getYRot() + offset, 0.0F, BOLT_SPEED, 1.0F);
             bolt.pickup = AbstractArrow.Pickup.DISALLOWED;
             level.addFreshEntity(bolt);

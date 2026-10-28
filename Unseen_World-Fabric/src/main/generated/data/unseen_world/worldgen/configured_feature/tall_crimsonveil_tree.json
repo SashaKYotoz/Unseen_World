@@ -3,45 +3,43 @@
   "config": {
     "decorators": [
       {
-        "type": "minecraft:vines_to_leaves_decorator",
-        "block": {
+        "type": "minecraft:attached_to_leaves",
+        "block_provider": {
           "type": "minecraft:simple_state_provider",
           "state": {
-            "Name": "unseen_world:crimsonveil_vine_plant",
+            "Name": "unseen_world:crimsonveil_vine",
             "Properties": {
+              "age": "0",
               "berries": "false"
             }
           }
         },
-        "height": {
-          "type": "minecraft:uniform",
-          "value": {
-            "max_inclusive": 3,
-            "min_inclusive": 1
-          }
-        },
-        "probability": 0.125
+        "directions": [
+          "down"
+        ],
+        "exclusion_radius_xz": 1,
+        "exclusion_radius_y": 0,
+        "probability": 0.25,
+        "required_empty_blocks": 2
       }
     ],
     "dirt_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:dirt"
+        "Name": "unseen_world:nightdark_dirt"
       }
     },
     "foliage_placer": {
-      "type": "minecraft:hanging_blob_foliage_placer",
-      "hanging_leaves_chance": 0.5,
-      "hanging_leaves_extension_chance": 0.25,
-      "height": 2,
+      "type": "unseen_world:crimsonveil_foliage_placer",
+      "hanging_leaves_chance": 0.4,
+      "hanging_leaves_extension_chance": 0.3,
       "offset": 0,
       "radius": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 3,
-          "min_inclusive": 2
-        }
-      }
+        "max_inclusive": 3,
+        "min_inclusive": 2
+      },
+      "ragged_edge_chance": 0.35
     },
     "foliage_provider": {
       "type": "minecraft:simple_state_provider",
@@ -56,33 +54,22 @@
       }
     },
     "force_dirt": false,
-    "ignore_vines": false,
+    "ignore_vines": true,
     "minimum_size": {
       "type": "minecraft:two_layers_feature_size",
-      "limit": 1,
+      "limit": 2,
       "lower_size": 0,
-      "upper_size": 2
+      "upper_size": 3
     },
     "root_placer": {
       "type": "minecraft:mangrove_root_placer",
-      "above_root_placement": {
-        "above_root_placement_chance": 0.0,
-        "above_root_provider": {
-          "type": "minecraft:simple_state_provider",
-          "state": {
-            "Name": "unseen_world:crimsonveil_log",
-            "Properties": {
-              "axis": "y"
-            }
-          }
-        }
-      },
       "mangrove_root_placement": {
         "can_grow_through": "#minecraft:mangrove_roots_can_grow_through",
-        "max_root_length": 13,
-        "max_root_width": 6,
+        "max_root_length": 6,
+        "max_root_width": 4,
         "muddy_roots_in": [
           "unseen_world:nightdark_grass_block",
+          "unseen_world:nightdark_dirt",
           "unseen_world:crimsonveil_log"
         ],
         "muddy_roots_provider": {
@@ -94,7 +81,7 @@
             }
           }
         },
-        "random_skew_chance": 0.2
+        "random_skew_chance": 0.15
       },
       "root_provider": {
         "type": "minecraft:simple_state_provider",
@@ -107,33 +94,32 @@
       },
       "trunk_offset_y": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 4,
-          "min_inclusive": 1
-        }
+        "max_inclusive": 2,
+        "min_inclusive": 1
       }
     },
     "trunk_placer": {
-      "type": "minecraft:upwards_branching_trunk_placer",
-      "base_height": 8,
-      "can_grow_through": "#minecraft:mangrove_logs_can_grow_through",
-      "extra_branch_length": {
+      "type": "unseen_world:crimsonveil_trunk_placer",
+      "base_height": 9,
+      "branch_count": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 3,
-          "min_inclusive": 1
-        }
+        "max_inclusive": 5,
+        "min_inclusive": 4
       },
-      "extra_branch_steps": {
+      "branch_reach": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 4,
-          "min_inclusive": 2
-        }
+        "max_inclusive": 5,
+        "min_inclusive": 3
       },
-      "height_rand_a": 6,
-      "height_rand_b": 4,
-      "place_branch_per_log_probability": 0.75
+      "branch_rise": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 5,
+        "min_inclusive": 3
+      },
+      "central_leader": true,
+      "fork_height": 0.45,
+      "height_rand_a": 3,
+      "height_rand_b": 2
     },
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",

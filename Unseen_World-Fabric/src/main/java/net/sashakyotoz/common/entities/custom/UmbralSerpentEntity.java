@@ -1,5 +1,7 @@
 package net.sashakyotoz.common.entities.custom;
 
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
@@ -57,6 +59,7 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
 
     private static final int ATTACK_ANIMATION_TICKS = 10;
     private static final double RIDER_SEAT_HEIGHT = 0.62D;
+    private static final double PLAYER_SEAT_OFFSET = 0.25D;
     private static final float RIDDEN_LAND_SPEED_FACTOR = 0.375F;
     private static final float RIDDEN_WATER_SPEED_FACTOR = 0.28F;
     private static final double WATER_DRAG = 0.9D;
@@ -274,8 +277,8 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return RIDER_SEAT_HEIGHT;
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
+        return new Vec3(0.0D, (RIDER_SEAT_HEIGHT + PLAYER_SEAT_OFFSET) * scale, 0.0D);
     }
 
     @Override
@@ -284,7 +287,7 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
     }
 
     @Override
-    public void equipSaddle(@Nullable SoundSource source) {
+    public void equipSaddle(ItemStack stack, @Nullable SoundSource source) {
         this.entityData.set(SADDLED, true);
         if (source != null) {
             this.level().playSound(null, this, SoundEvents.STRIDER_SADDLE, source, 0.5F, 1.0F);
@@ -394,18 +397,8 @@ public class UmbralSerpentEntity extends TamableAnimal implements Saddleable {
     }
 
     @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
     public boolean isPushedByFluid() {
         return false;
-    }
-
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions) {
-        return dimensions.height * 0.6F;
     }
 
     @Override

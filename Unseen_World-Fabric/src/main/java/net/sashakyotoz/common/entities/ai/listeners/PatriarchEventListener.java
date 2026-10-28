@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.entities.ai.listeners;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +25,7 @@ public record PatriarchEventListener(AuricPatriarch patriarch,
         return 32;
     }
 
-    public boolean handleGameEvent(ServerLevel level, GameEvent event, GameEvent.Context context, Vec3 pos) {
+    public boolean handleGameEvent(ServerLevel level, Holder<GameEvent> event, GameEvent.Context context, Vec3 pos) {
         Entity entity = context.sourceEntity();
 
         if (!(entity instanceof AuricPatriarch) && entity instanceof LivingEntity target) {

@@ -1,6 +1,6 @@
 package net.sashakyotoz.common.items.custom;
 
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -42,14 +42,14 @@ public class GrippingGauntletItem extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int remainingUseTicks) {
         if (!(entity instanceof Player player) || !(level instanceof ServerLevel serverLevel)
-                || this.getUseDuration(stack) - remainingUseTicks < 10) {
+                || this.getUseDuration(stack, entity) - remainingUseTicks < 10) {
             return;
         }
         CombatHelper.BeamHit hit = CombatHelper.traceBeam(player, 24,
@@ -63,7 +63,7 @@ public class GrippingGauntletItem extends Item {
         player.getCooldowns().addCooldown(this, 100);
         player.awardStat(Stats.ITEM_USED.get(this));
         if (player instanceof ServerPlayer serverPlayer) {
-            Advancement advancement = serverLevel.getServer().getAdvancements().getAdvancement(STEAL_ADVANCEMENT);
+            AdvancementHolder advancement = serverLevel.getServer().getAdvancements().get(STEAL_ADVANCEMENT);
             if (advancement != null) {
                 serverPlayer.getAdvancements().award(advancement, STEAL_CRITERION);
             }
@@ -71,7 +71,7 @@ public class GrippingGauntletItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         AbilityHelper.appendAbilityLines(this.getDescriptionId(), 1, tooltip);
     }
 

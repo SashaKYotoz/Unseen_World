@@ -1,5 +1,6 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -28,6 +29,11 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 public class StandingFruitBlock extends BushBlock implements BonemealableBlock {
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return MapCodec.unit(this);
+    }
+
     public Supplier<ItemLike> drop;
     public final TagKey<Block> canStayOn;
     private final VoxelShape plantShape;
@@ -80,15 +86,15 @@ public class StandingFruitBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(HAS_FRUIT)) {
             return FruitBearing.harvest(world, pos, state.setValue(HAS_FRUIT, false).setValue(HAS_FLOWER, false), new ItemStack(this.drop.get()), player);
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
         return !state.getValue(HAS_FRUIT) || !state.getValue(HAS_FLOWER);
     }
 

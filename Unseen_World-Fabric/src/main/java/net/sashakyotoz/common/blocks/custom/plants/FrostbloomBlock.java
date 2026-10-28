@@ -1,6 +1,7 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -9,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.sashakyotoz.common.tags.ModTags;
 
 public class FrostbloomBlock extends FlowerBlock {
-    public FrostbloomBlock(MobEffect effect, int duration, Properties properties) {
+    public FrostbloomBlock(Holder<MobEffect> effect, float duration, Properties properties) {
         super(effect, duration, properties);
     }
 

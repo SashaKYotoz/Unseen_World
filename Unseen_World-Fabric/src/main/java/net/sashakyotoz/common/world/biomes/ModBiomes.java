@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -110,7 +110,7 @@ public class ModBiomes {
         order(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, ModPlacements.BUSH_LIKE_TREE_PATCH, ModPlacements.CHIMERIC_FREEZE);
     }
 
-    public static void boostrap(BootstapContext<Biome> context) {
+    public static void boostrap(BootstrapContext<Biome> context) {
         context.register(DEEP_GLACIEMITE_CAVES, deepGlaciemiteCaves(context));
         context.register(TANZANITE_CAVES, tanzaniteCaves(context));
         context.register(SHINY_CAVERNS, shinyCaverns(context));
@@ -151,7 +151,7 @@ public class ModBiomes {
         context.register(AURIC_HEIGHTS, auricHeights(context));
     }
 
-    private static Biome deepGlaciemiteCaves(BootstapContext<Biome> context) {
+    private static Biome deepGlaciemiteCaves(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.MONSTER, ModEntities.ESPYER, 6, 1, 1);
         spawn(spawns, MobCategory.AMBIENT, ModEntities.ELDRITCH_WATCHER, 5, 1, 1);
@@ -164,7 +164,7 @@ public class ModBiomes {
                         .particle(ParticleTypes.WHITE_ASH, 0.006F));
     }
 
-    private static Biome tanzaniteCaves(BootstapContext<Biome> context) {
+    private static Biome tanzaniteCaves(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, ModEntities.GLEAMCARVER, 5, 1, 1);
         spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 6, 1, 2);
@@ -175,7 +175,7 @@ public class ModBiomes {
                 new Look().grass(13061821).foliage(13061821).music(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES));
     }
 
-    private static Biome shinyCaverns(BootstapContext<Biome> context) {
+    private static Biome shinyCaverns(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.MONSTER, ModEntities.ESPYER, 4, 1, 1);
         spawn(spawns, ModEntities.GLEAMCARVER, 5, 1, 1);
@@ -188,7 +188,7 @@ public class ModBiomes {
                 new Look().water(6579300).grass(6579300).foliage(6579300).music(SoundEvents.MUSIC_BIOME_FROZEN_PEAKS).particle(ParticleTypes.SNOWFLAKE, 0.002F));
     }
 
-    private static Biome burlywoodHollows(BootstapContext<Biome> context) {
+    private static Biome burlywoodHollows(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, ModEntities.GLEAMCARVER, 4, 1, 1);
         spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 4, 1, 2);
@@ -199,7 +199,7 @@ public class ModBiomes {
                 new Look().grass(6717235).foliage(6717235).music(SoundEvents.MUSIC_BIOME_LUSH_CAVES).particle(ParticleTypes.SPORE_BLOSSOM_AIR, 0.004F));
     }
 
-    private static Biome darkOcean(BootstapContext<Biome> context) {
+    private static Biome darkOcean(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, ModEntities.SHIMMER, 8, 1, 1);
         return biome(0.8F, false, spawns,
@@ -207,7 +207,7 @@ public class ModBiomes {
                 new Look().music(SoundEvents.MUSIC_UNDER_WATER));
     }
 
-    private static Biome lifelessOcean(BootstapContext<Biome> context) {
+    private static Biome lifelessOcean(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, ModEntities.GLOOMWHALE, 8, 1, 3);
         spawn(spawns, ModEntities.GRIPPING_GLOOMWHALE, 3, 1, 1);
@@ -216,7 +216,7 @@ public class ModBiomes {
                 new Look().music(SoundEvents.MUSIC_UNDER_WATER).mood(new AmbientMoodSettings(SoundEvents.AMBIENT_BASALT_DELTAS_MOOD, 6000, 8, 4.0D)));
     }
 
-    private static Biome frigidSpireOcean(BootstapContext<Biome> context) {
+    private static Biome frigidSpireOcean(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, ModEntities.GRIPPING_GLOOMWHALE, 8, 1, 2);
         spawn(spawns, ModEntities.GLOOMWHALE, 2, 1, 2);
@@ -231,13 +231,13 @@ public class ModBiomes {
                 .build();
     }
 
-    private static Biome river(BootstapContext<Biome> context, float temperature) {
+    private static Biome river(BootstrapContext<Biome> context, float temperature) {
         return biome(temperature, false, new MobSpawnSettings.Builder(),
                 generation(context, false, ModPlacements.MIDNIGHT_LILY_PATCH, ModPlacements.UMBRAL_KELP),
                 new Look().music(SoundEvents.MUSIC_UNDER_WATER));
     }
 
-    private static Biome greynishShore(BootstapContext<Biome> context) {
+    private static Biome greynishShore(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.UMBRAL_SERPENT, 6, 1, 2);
         return biome(0.5F, false, spawns,
@@ -245,7 +245,7 @@ public class ModBiomes {
                 new Look().music(SoundEvents.MUSIC_UNDER_WATER));
     }
 
-    private static Biome darkWasteland(BootstapContext<Biome> context) {
+    private static Biome darkWasteland(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, 6, 2, 4);
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 3, 1, 1);
@@ -257,7 +257,7 @@ public class ModBiomes {
                         .particle(ParticleTypes.ASH, 0.01F));
     }
 
-    private static Biome gloomweedPlains(BootstapContext<Biome> context) {
+    private static Biome gloomweedPlains(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, 8, 2, 4);
         spawn(spawns, MobCategory.CREATURE, ModEntities.HARMONY_WATCHER, 4, 1, 2);
@@ -267,7 +267,7 @@ public class ModBiomes {
                         .mood(new AmbientMoodSettings(SoundEvents.AMBIENT_WARPED_FOREST_MOOD, 6000, 8, 4.0D)));
     }
 
-    private static Biome ashenMarsh(BootstapContext<Biome> context) {
+    private static Biome ashenMarsh(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, 3, 1, 2);
         spawn(spawns, MobCategory.CREATURE, ModEntities.UMBRAL_SERPENT, 5, 1, 3);
@@ -279,7 +279,7 @@ public class ModBiomes {
                         .particle(ParticleTypes.WHITE_ASH, 0.02F));
     }
 
-    private static Biome crimsonveilMire(BootstapContext<Biome> context) {
+    private static Biome crimsonveilMire(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.UMBRAL_SERPENT, 6, 1, 2);
         spawn(spawns, MobCategory.AMBIENT, ModEntities.DREADFLAP, 4, 1, 2);
@@ -291,7 +291,7 @@ public class ModBiomes {
                         .particle(ParticleTypes.CRIMSON_SPORE, 0.01F));
     }
 
-    private static Biome glaciemiteTundra(BootstapContext<Biome> context) {
+    private static Biome glaciemiteTundra(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.MONSTER, ModEntities.ESPYER, 5, 1, 1);
         spawn(spawns, MobCategory.CREATURE, ModEntities.RIMEHORN, 6, 2, 5);
@@ -300,7 +300,7 @@ public class ModBiomes {
                 new Look().water(6579300).grass(6579300).foliage(6579300).music(SoundEvents.MUSIC_BIOME_SNOWY_SLOPES).particle(ParticleTypes.SNOWFLAKE, 0.012F));
     }
 
-    private static Biome theDarkness(BootstapContext<Biome> context) {
+    private static Biome theDarkness(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.MONSTER, ModEntities.ESPYER, 3, 1, 1);
         spawn(spawns, MobCategory.AMBIENT, ModEntities.ELDRITCH_WATCHER, 5, 1, 1);
@@ -312,7 +312,7 @@ public class ModBiomes {
                         .music(ModSoundEvents.THE_DARKNESS_AMBIENT));
     }
 
-    private static Biome greenishValley(BootstapContext<Biome> context) {
+    private static Biome greenishValley(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.HARMONY_WATCHER, 5, 1, 1);
         return biome(0.75F, false, spawns,
@@ -321,7 +321,7 @@ public class ModBiomes {
                 new Look().water(6717235).grass(6717235).foliage(6717235).music(SoundEvents.MUSIC_GAME));
     }
 
-    private static Biome tealivyValley(BootstapContext<Biome> context) {
+    private static Biome tealivyValley(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.HARMONY_WATCHER, 4, 1, 1);
         return biome(0.5F, false, spawns,
@@ -330,7 +330,7 @@ public class ModBiomes {
                         .mood(new AmbientMoodSettings(SoundEvents.AMBIENT_WARPED_FOREST_MOOD, 6000, 8, 4.0D)));
     }
 
-    private static Biome amethystForest(BootstapContext<Biome> context) {
+    private static Biome amethystForest(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, 6, 1, 2);
         return biome(0.5F, false, spawns,
@@ -339,7 +339,7 @@ public class ModBiomes {
                 new Look().water(13061821).grass(13061821).foliage(13061821).music(SoundEvents.MUSIC_BIOME_CRIMSON_FOREST));
     }
 
-    private static Biome amethystChimeries(BootstapContext<Biome> context) {
+    private static Biome amethystChimeries(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, 4, 1, 1);
         return biome(0.5F, false, spawns,
@@ -348,7 +348,7 @@ public class ModBiomes {
                 new Look().water(13061821).grass(13061821).foliage(13061821).music(SoundEvents.MUSIC_BIOME_CRIMSON_FOREST));
     }
 
-    private static Biome grizzlyThicket(BootstapContext<Biome> context) {
+    private static Biome grizzlyThicket(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 4, 1, 2);
         return biome(0.3F, false, spawns,
@@ -357,7 +357,7 @@ public class ModBiomes {
                 new Look().water(7340544).grass(7340544).foliage(7340544).music(SoundEvents.MUSIC_BIOME_FOREST));
     }
 
-    private static Biome snowyGrizzlyThicket(BootstapContext<Biome> context) {
+    private static Biome snowyGrizzlyThicket(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.RIMEHORN, 6, 2, 5);
         spawn(spawns, MobCategory.MONSTER, ModEntities.ESPYER, 3, 1, 1);
@@ -366,7 +366,7 @@ public class ModBiomes {
                 new Look().water(6579300).grass(7340544).foliage(7340544).music(SoundEvents.MUSIC_BIOME_GROVE));
     }
 
-    private static Biome crimsonveilWoods(BootstapContext<Biome> context, boolean oldGrowth) {
+    private static Biome crimsonveilWoods(BootstrapContext<Biome> context, boolean oldGrowth) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, oldGrowth ? 3 : 5, 2, 3);
         spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, oldGrowth ? 4 : 2, 1, 2);
@@ -378,7 +378,7 @@ public class ModBiomes {
                         .mood(new AmbientMoodSettings(SoundEvents.AMBIENT_CRIMSON_FOREST_MOOD, 6000, 8, 4.0D)));
     }
 
-    private static Biome crimsonveilPlateau(BootstapContext<Biome> context) {
+    private static Biome crimsonveilPlateau(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 4, 1, 2);
         return biome(0.9F, false, spawns,
@@ -387,7 +387,7 @@ public class ModBiomes {
                 new Look().grass(336860160).foliage(336860160).music(SoundEvents.MUSIC_BIOME_CRIMSON_FOREST));
     }
 
-    private static Biome burlywoodJungle(BootstapContext<Biome> context) {
+    private static Biome burlywoodJungle(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 5, 1, 2);
         spawn(spawns, MobCategory.CREATURE, ModEntities.VEXAL_BEETLE, 3, 1, 2);
@@ -397,7 +397,7 @@ public class ModBiomes {
                 new Look().water(6717235).grass(6717235).foliage(6717235).music(SoundEvents.MUSIC_BIOME_JUNGLE));
     }
 
-    private static Biome grizzlyHighlands(BootstapContext<Biome> context) {
+    private static Biome grizzlyHighlands(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 3, 1, 1);
         return biome(0.3F, false, spawns,
@@ -405,20 +405,20 @@ public class ModBiomes {
                 new Look().water(7340544).grass(7340544).foliage(7340544).music(SoundEvents.MUSIC_BIOME_MEADOW));
     }
 
-    private static Biome tealivyHighlands(BootstapContext<Biome> context) {
+    private static Biome tealivyHighlands(BootstrapContext<Biome> context) {
         return biome(0.35F, false, new MobSpawnSettings.Builder(),
                 generation(context, true, ModPlacements.IRON_ORE_UPPER, ModPlacements.GLOOMWEED_PATCH, ModPlacements.CHIMERIC_FREEZE),
                 new Look().water(5013401).grass(5013401).foliage(5013401).music(SoundEvents.MUSIC_CREDITS));
     }
 
-    private static Biome currantslatePeaks(BootstapContext<Biome> context) {
+    private static Biome currantslatePeaks(BootstrapContext<Biome> context) {
         return biome(0.4F, false, new MobSpawnSettings.Builder(),
                 generation(context, true, ModPlacements.GRIPTONITE_CLUSTER_SPIKE, ModPlacements.IRON_ORE_UPPER, ModPlacements.DARK_CURRANTSLATE_CEILING_BOULDER),
                 new Look().music(SoundEvents.MUSIC_BIOME_STONY_PEAKS)
                         .mood(new AmbientMoodSettings(SoundEvents.AMBIENT_WARPED_FOREST_MOOD, 6000, 8, 4.0D)));
     }
 
-    private static Biome glaciemitePeaks(BootstapContext<Biome> context) {
+    private static Biome glaciemitePeaks(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.MONSTER, ModEntities.ESPYER, 6, 1, 1);
         return biome(-0.7F, true, spawns,
@@ -426,7 +426,7 @@ public class ModBiomes {
                 new Look().water(6579300).grass(6579300).foliage(6579300).music(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS).particle(ParticleTypes.SNOWFLAKE, 0.02F));
     }
 
-    private static Biome penumbralSteppe(BootstapContext<Biome> context) {
+    private static Biome penumbralSteppe(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawn(spawns, MobCategory.CREATURE, ModEntities.TUSKHOG, 4, 2, 3);
         spawn(spawns, MobCategory.CREATURE, ModEntities.SABERPARD, 2, 1, 1);
@@ -439,7 +439,7 @@ public class ModBiomes {
                         .music(ModSoundEvents.PENUMBRAL_STEPPE_AMBIENT));
     }
 
-    private static Biome auricHeights(BootstapContext<Biome> context) {
+    private static Biome auricHeights(BootstrapContext<Biome> context) {
         return biome(0.7F, false, new MobSpawnSettings.Builder(),
                 generation(context, true, ModPlacements.GILDED_CURRANTSLATE_BOULDER, ModPlacements.IRON_ORE_UPPER,
                         ModPlacements.DARK_CURRANTSLATE_CEILING_BOULDER),
@@ -459,7 +459,7 @@ public class ModBiomes {
     }
 
     @SafeVarargs
-    private static BiomeGenerationSettings generation(BootstapContext<Biome> context, boolean spiralCaves, ResourceKey<PlacedFeature>... features) {
+    private static BiomeGenerationSettings generation(BootstrapContext<Biome> context, boolean spiralCaves, ResourceKey<PlacedFeature>... features) {
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         List<ResourceKey<PlacedFeature>> sorted = new ArrayList<>();
         for (ResourceKey<PlacedFeature> feature : features) {

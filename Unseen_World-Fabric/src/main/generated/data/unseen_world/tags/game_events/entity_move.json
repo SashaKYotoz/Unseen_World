@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "minecraft:step",
-    "minecraft:elytra_glide",
-    "minecraft:teleport"
-  ]
-}

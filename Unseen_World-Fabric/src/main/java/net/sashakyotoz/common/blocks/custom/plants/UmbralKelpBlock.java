@@ -1,6 +1,9 @@
 package net.sashakyotoz.common.blocks.custom.plants;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -21,6 +24,13 @@ import net.sashakyotoz.common.blocks.ModFluids;
 import org.jetbrains.annotations.Nullable;
 
 public class UmbralKelpBlock extends GrowingPlantHeadBlock implements LiquidBlockContainer {
+    public static final MapCodec<UmbralKelpBlock> CODEC = simpleCodec(UmbralKelpBlock::new);
+
+    @Override
+    protected MapCodec<? extends GrowingPlantHeadBlock> codec() {
+        return CODEC;
+    }
+
     protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 9.0, 16.0);
 
     public UmbralKelpBlock(BlockBehaviour.Properties settings) {
@@ -43,7 +53,7 @@ public class UmbralKelpBlock extends GrowingPlantHeadBlock implements LiquidBloc
     }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
         return false;
     }
 

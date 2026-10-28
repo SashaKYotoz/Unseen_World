@@ -38,20 +38,20 @@ public final class ModSpawnRules {
     }
 
     public static void register() {
-        SpawnPlacements.register(ModEntities.SHIMMER, SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkShimmerSpawnRules);
-        SpawnPlacements.register(ModEntities.GLOOMWHALE, SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkWhaleSpawnRules);
-        SpawnPlacements.register(ModEntities.GRIPPING_GLOOMWHALE, SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkWhaleSpawnRules);
-        SpawnPlacements.register(ModEntities.DREADFLAP, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkDreadflapSpawnRules);
-        SpawnPlacements.register(ModEntities.VEXAL_BEETLE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkBeetleSpawnRules);
-        SpawnPlacements.register(ModEntities.ESPYER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEspyerSpawnRules);
-        SpawnPlacements.register(ModEntities.ELDRITCH_WATCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEldritchWatcherSpawnRules);
-        SpawnPlacements.register(ModEntities.HARMONY_WATCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkHarmonyWatcherSpawnRules);
-        SpawnPlacements.register(ModEntities.GLEAMCARVER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkGleamcarverSpawnRules);
-        SpawnPlacements.register(ModEntities.SABERPARD, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkSaberpardSpawnRules);
-        SpawnPlacements.register(ModEntities.TUSKHOG, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkTuskhogSpawnRules);
-        SpawnPlacements.register(ModEntities.RIMEHORN, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkRimehornSpawnRules);
-        SpawnPlacements.register(ModEntities.ECLIPSED_ACOLYTE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEclipsedAcolyteSpawnRules);
-        SpawnPlacements.register(ModEntities.UMBRAL_SERPENT, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkUmbralSerpentSpawnRules);
+        SpawnPlacements.register(ModEntities.SHIMMER, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkShimmerSpawnRules);
+        SpawnPlacements.register(ModEntities.GLOOMWHALE, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkWhaleSpawnRules);
+        SpawnPlacements.register(ModEntities.GRIPPING_GLOOMWHALE, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkWhaleSpawnRules);
+        SpawnPlacements.register(ModEntities.DREADFLAP, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkDreadflapSpawnRules);
+        SpawnPlacements.register(ModEntities.VEXAL_BEETLE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkBeetleSpawnRules);
+        SpawnPlacements.register(ModEntities.ESPYER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEspyerSpawnRules);
+        SpawnPlacements.register(ModEntities.ELDRITCH_WATCHER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEldritchWatcherSpawnRules);
+        SpawnPlacements.register(ModEntities.HARMONY_WATCHER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkHarmonyWatcherSpawnRules);
+        SpawnPlacements.register(ModEntities.GLEAMCARVER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkGleamcarverSpawnRules);
+        SpawnPlacements.register(ModEntities.SABERPARD, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkSaberpardSpawnRules);
+        SpawnPlacements.register(ModEntities.TUSKHOG, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkTuskhogSpawnRules);
+        SpawnPlacements.register(ModEntities.RIMEHORN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkRimehornSpawnRules);
+        SpawnPlacements.register(ModEntities.ECLIPSED_ACOLYTE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkEclipsedAcolyteSpawnRules);
+        SpawnPlacements.register(ModEntities.UMBRAL_SERPENT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ModSpawnRules::checkUmbralSerpentSpawnRules);
     }
 
     public static boolean checkShimmerSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {

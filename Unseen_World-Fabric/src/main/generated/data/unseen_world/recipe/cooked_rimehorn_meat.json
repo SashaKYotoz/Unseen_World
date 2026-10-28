@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 300,
+  "experience": 0.5,
+  "ingredient": {
+    "item": "unseen_world:rimehorn_meat"
+  },
+  "result": {
+    "id": "unseen_world:cooked_rimehorn_meat"
+  }
+}

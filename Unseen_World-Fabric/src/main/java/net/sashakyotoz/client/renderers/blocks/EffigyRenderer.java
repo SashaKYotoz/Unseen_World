@@ -150,9 +150,9 @@ public class EffigyRenderer implements BlockEntityRenderer<EffigyBlockEntity> {
         }
 
         private static boolean isGlint(RenderType type) {
-            return type == RenderType.glint() || type == RenderType.glintTranslucent() || type == RenderType.glintDirect()
+            return type == RenderType.glint() || type == RenderType.glintTranslucent()
                     || type == RenderType.entityGlint() || type == RenderType.entityGlintDirect()
-                    || type == RenderType.armorGlint() || type == RenderType.armorEntityGlint();
+                    || type == RenderType.armorEntityGlint();
         }
 
         private static boolean isItemSheet(RenderType type) {
@@ -163,56 +163,40 @@ public class EffigyRenderer implements BlockEntityRenderer<EffigyBlockEntity> {
 
     private record ShadedConsumer(VertexConsumer delegate, float shade) implements VertexConsumer {
         @Override
-        public VertexConsumer vertex(double x, double y, double z) {
-            this.delegate.vertex(x, y, z);
+        public VertexConsumer addVertex(float x, float y, float z) {
+            this.delegate.addVertex(x, y, z);
             return this;
         }
 
         @Override
-        public VertexConsumer color(int red, int green, int blue, int alpha) {
+        public VertexConsumer setColor(int red, int green, int blue, int alpha) {
             int grey = (int) ((red * 0.299F + green * 0.587F + blue * 0.114F) * this.shade);
-            this.delegate.color(grey, grey, grey, alpha);
+            this.delegate.setColor(grey, grey, grey, alpha);
             return this;
         }
 
         @Override
-        public VertexConsumer uv(float u, float v) {
-            this.delegate.uv(u, v);
+        public VertexConsumer setUv(float u, float v) {
+            this.delegate.setUv(u, v);
             return this;
         }
 
         @Override
-        public VertexConsumer overlayCoords(int u, int v) {
-            this.delegate.overlayCoords(u, v);
+        public VertexConsumer setUv1(int u, int v) {
+            this.delegate.setUv1(u, v);
             return this;
         }
 
         @Override
-        public VertexConsumer uv2(int u, int v) {
-            this.delegate.uv2(u, v);
+        public VertexConsumer setUv2(int u, int v) {
+            this.delegate.setUv2(u, v);
             return this;
         }
 
         @Override
-        public VertexConsumer normal(float x, float y, float z) {
-            this.delegate.normal(x, y, z);
+        public VertexConsumer setNormal(float x, float y, float z) {
+            this.delegate.setNormal(x, y, z);
             return this;
-        }
-
-        @Override
-        public void endVertex() {
-            this.delegate.endVertex();
-        }
-
-        @Override
-        public void defaultColor(int red, int green, int blue, int alpha) {
-            int grey = (int) ((red * 0.299F + green * 0.587F + blue * 0.114F) * this.shade);
-            this.delegate.defaultColor(grey, grey, grey, alpha);
-        }
-
-        @Override
-        public void unsetDefaultColor() {
-            this.delegate.unsetDefaultColor();
         }
     }
 
@@ -220,45 +204,33 @@ public class EffigyRenderer implements BlockEntityRenderer<EffigyBlockEntity> {
         INSTANCE;
 
         @Override
-        public VertexConsumer vertex(double x, double y, double z) {
+        public VertexConsumer addVertex(float x, float y, float z) {
             return this;
         }
 
         @Override
-        public VertexConsumer color(int red, int green, int blue, int alpha) {
+        public VertexConsumer setColor(int red, int green, int blue, int alpha) {
             return this;
         }
 
         @Override
-        public VertexConsumer uv(float u, float v) {
+        public VertexConsumer setUv(float u, float v) {
             return this;
         }
 
         @Override
-        public VertexConsumer overlayCoords(int u, int v) {
+        public VertexConsumer setUv1(int u, int v) {
             return this;
         }
 
         @Override
-        public VertexConsumer uv2(int u, int v) {
+        public VertexConsumer setUv2(int u, int v) {
             return this;
         }
 
         @Override
-        public VertexConsumer normal(float x, float y, float z) {
+        public VertexConsumer setNormal(float x, float y, float z) {
             return this;
-        }
-
-        @Override
-        public void endVertex() {
-        }
-
-        @Override
-        public void defaultColor(int red, int green, int blue, int alpha) {
-        }
-
-        @Override
-        public void unsetDefaultColor() {
         }
     }
 }
