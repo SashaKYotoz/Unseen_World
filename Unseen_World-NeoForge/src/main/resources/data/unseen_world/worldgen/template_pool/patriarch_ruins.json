@@ -1,0 +1,32 @@
+{
+  "fallback": "unseen_world:sentinel_ruins",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:patriarch_ruins/patriarch_ruins0",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:patriarch_ruins/patriarch_ruins1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "unseen_world:patriarch_ruins/patriarch_ruins2",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

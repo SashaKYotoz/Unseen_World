@@ -1,0 +1,71 @@
+{
+  "type": "minecraft:add",
+  "argument1": -1.0,
+  "argument2": {
+    "type": "minecraft:mul",
+    "argument1": "unseen_world:chimeric_darkness/spire_mask",
+    "argument2": {
+      "type": "minecraft:add",
+      "argument1": 1.0,
+      "argument2": {
+        "type": "minecraft:min",
+        "argument1": {
+          "type": "minecraft:min",
+          "argument1": {
+            "type": "minecraft:cache_2d",
+            "argument": {
+              "type": "minecraft:mul",
+              "argument1": 7.0,
+              "argument2": {
+                "type": "minecraft:add",
+                "argument1": -0.62,
+                "argument2": {
+                  "type": "minecraft:abs",
+                  "argument": {
+                    "type": "minecraft:noise",
+                    "noise": "unseen_world:chimeric_darkness/sea_spire",
+                    "xz_scale": 1.0,
+                    "y_scale": 0.0
+                  }
+                }
+              }
+            }
+          },
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": {
+              "type": "minecraft:y_clamped_gradient",
+              "from_value": 11.4,
+              "from_y": -64,
+              "to_value": -27.0,
+              "to_y": 320
+            },
+            "argument2": {
+              "type": "minecraft:cache_2d",
+              "argument": {
+                "type": "minecraft:mul",
+                "argument1": 4.0,
+                "argument2": {
+                  "type": "minecraft:abs",
+                  "argument": {
+                    "type": "minecraft:noise",
+                    "noise": "unseen_world:chimeric_darkness/sea_spire_height",
+                    "xz_scale": 1.0,
+                    "y_scale": 0.0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "argument2": {
+          "type": "minecraft:y_clamped_gradient",
+          "from_value": -1.0,
+          "from_y": 4,
+          "to_value": 1.0,
+          "to_y": 20
+        }
+      }
+    }
+  }
+}

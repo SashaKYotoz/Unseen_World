@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_red_titanium_ore_in_corona_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "unseen_world:red_titanium_ore_in_corona_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:raw_red_titanium_from_blasting_red_titanium_ore_in_corona_stone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_red_titanium_ore_in_corona_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:raw_red_titanium_from_blasting_red_titanium_ore_in_corona_stone"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_glaciemite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "unseen_world:glaciemite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:glaciemite_bricks_from_glaciemite_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_glaciemite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:glaciemite_bricks_from_glaciemite_stonecutting"
+    ]
+  }
+}

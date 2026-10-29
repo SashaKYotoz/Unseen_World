@@ -1,0 +1,7 @@
+{
+  "parent": "unseen_world:block/chest_template",
+  "textures": {
+    "0": "unseen_world:chest/dark_currantslate_chest",
+    "particle": "unseen_world:block/dark_currantslate"
+  }
+}

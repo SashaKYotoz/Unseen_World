@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "unseen_world:block/crimsonveil_planks",
+    "side": "unseen_world:block/crimsonveil_planks",
+    "top": "unseen_world:block/crimsonveil_planks"
+  }
+}

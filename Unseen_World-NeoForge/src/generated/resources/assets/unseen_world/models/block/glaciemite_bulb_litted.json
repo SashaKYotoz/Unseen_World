@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "unseen_world:block/glaciemite_bulb_litted"
+  }
+}

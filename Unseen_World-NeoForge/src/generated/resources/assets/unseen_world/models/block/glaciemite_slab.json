@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "unseen_world:block/glaciemite",
+    "side": "unseen_world:block/glaciemite",
+    "top": "unseen_world:block/glaciemite"
+  }
+}

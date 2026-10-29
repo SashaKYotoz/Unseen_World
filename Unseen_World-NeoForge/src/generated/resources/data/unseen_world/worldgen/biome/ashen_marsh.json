@@ -1,0 +1,87 @@
+{
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
+  "downfall": 0.0,
+  "effects": {
+    "fog_color": 4605011,
+    "foliage_color": 5592405,
+    "grass_color": 5592405,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 4.0,
+      "sound": "minecraft:ambient.basalt_deltas.mood",
+      "tick_delay": 6000
+    },
+    "music": {
+      "max_delay": 24000,
+      "min_delay": 12000,
+      "replace_current_music": false,
+      "sound": {
+        "sound_id": "minecraft:music.overworld.swamp"
+      }
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:white_ash"
+      },
+      "probability": 0.02
+    },
+    "sky_color": 4605011,
+    "water_color": 3355443,
+    "water_fog_color": 3355443
+  },
+  "features": [
+    [],
+    [],
+    [
+      "unseen_world:midnight_lily_patch"
+    ],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:iron_ore_upper"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:gloomweed_patch",
+      "unseen_world:tall_gloomweed_patch",
+      "unseen_world:ashreed_patch"
+    ]
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "unseen_world:dreadflap",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 3
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "unseen_world:tuskhog",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 3
+      },
+      {
+        "type": "unseen_world:umbral_serpent",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.45
+}

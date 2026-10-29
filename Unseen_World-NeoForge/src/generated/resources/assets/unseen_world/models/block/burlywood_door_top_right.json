@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right",
+  "textures": {
+    "bottom": "unseen_world:block/burlywood_door_bottom",
+    "top": "unseen_world:block/burlywood_door_top"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "unseen_world:block/gripcrystal_wart",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "unseen_world:block/gripcrystal_wart",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "unseen_world:block/gripcrystal_wart",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "unseen_world:block/gripcrystal_wart",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "unseen_world:block/gripcrystal_wart"
+    },
+    "facing=west": {
+      "model": "unseen_world:block/gripcrystal_wart",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

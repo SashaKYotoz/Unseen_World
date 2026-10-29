@@ -1,0 +1,99 @@
+{
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
+  "downfall": 0.5,
+  "effects": {
+    "fog_color": 4605011,
+    "foliage_color": 6579300,
+    "grass_color": 6579300,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 2.0,
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000
+    },
+    "music": {
+      "max_delay": 24000,
+      "min_delay": 12000,
+      "replace_current_music": false,
+      "sound": {
+        "sound_id": "minecraft:music.overworld.frozen_peaks"
+      }
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:snowflake"
+      },
+      "probability": 0.002
+    },
+    "sky_color": 4605011,
+    "water_color": 6579300,
+    "water_fog_color": 6579300
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:iron_ore",
+      "unseen_world:abyssal_ore",
+      "unseen_world:unseenium_ore"
+    ],
+    [
+      "unseen_world:unseenium_currantslate_disk",
+      "unseen_world:titanium_currantslate_disk",
+      "unseen_world:gripping_glaciemite_patch_ceiling",
+      "unseen_world:shiny_ice_ceiling_boulder",
+      "unseen_world:frozen_cave_pool"
+    ],
+    [],
+    [
+      "unseen_world:shiny_frostbloom",
+      "unseen_world:hoarfrost_patch",
+      "unseen_world:shiny_gleamcarver_nest"
+    ]
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "unseen_world:gleamcarver",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      },
+      {
+        "type": "unseen_world:eldritch_watcher",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 3
+      },
+      {
+        "type": "unseen_world:dreadflap",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      }
+    ],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "unseen_world:espyer",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 4
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": -0.3
+}

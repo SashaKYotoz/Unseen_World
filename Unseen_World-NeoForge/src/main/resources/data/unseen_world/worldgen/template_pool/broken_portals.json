@@ -1,0 +1,32 @@
+{
+  "fallback": "unseen_world:broken_portals",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "unseen_world:broken_portal/frost_broken_portal_0",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "unseen_world:broken_portal/frost_broken_portal_1",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "unseen_world:broken_portal/frost_broken_portal_2",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

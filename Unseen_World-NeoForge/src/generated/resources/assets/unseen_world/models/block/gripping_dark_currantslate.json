@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "unseen_world:block/dark_currantslate",
+    "particle": "unseen_world:block/dark_currantslate",
+    "side": "unseen_world:block/gripping_dark_currantslate",
+    "top": "unseen_world:block/gripping_lump"
+  }
+}

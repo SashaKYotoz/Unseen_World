@@ -1,0 +1,41 @@
+package net.sashakyotoz.client.renderers;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.sashakyotoz.UnseenWorld;
+import net.sashakyotoz.client.models.ShimmerModel;
+import net.sashakyotoz.client.renderers.layers.GlowingPartsLayer;
+import net.sashakyotoz.common.entities.custom.ShimmerEntity;
+
+public class ShimmerRenderer extends MobRenderer<ShimmerEntity, ShimmerModel> {
+
+    public ShimmerRenderer(EntityRendererProvider.Context context) {
+        super(context, new ShimmerModel(context.bakeLayer(ShimmerModel.SHIMMER)), 1);
+        this.addLayer(new GlowingPartsLayer<>(this, UnseenWorld.MOD.makeID("textures/entity/shimmer/shimmer_glowing_parts.png"),
+                ((entity, tick, g) -> entity.getGlowBrightness(tick))));
+    }
+
+    public ResourceLocation getTextureLocation(ShimmerEntity shimmerEntity) {
+        return UnseenWorld.MOD.makeID("textures/entity/shimmer/shimmer.png");
+    }
+
+    @Override
+    protected void setupRotations(ShimmerEntity shimmerEntity, PoseStack matrixStack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
+        float i = Mth.lerp(partialTicks, shimmerEntity.prevTiltAngle, shimmerEntity.tiltAngle);
+        float j = Mth.lerp(partialTicks, shimmerEntity.prevRollAngle, shimmerEntity.rollAngle);
+        matrixStack.translate(0.0F, 0.5F, 0.0F);
+        matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - rotationYaw));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(i));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(j));
+        matrixStack.translate(0.0F, -1.2F, 0.0F);
+    }
+
+    @Override
+    protected float getBob(ShimmerEntity shimmerEntity, float partialTicks) {
+        return Mth.lerp(partialTicks, shimmerEntity.prevTentacleAngle, shimmerEntity.tentacleAngle);
+    }
+}

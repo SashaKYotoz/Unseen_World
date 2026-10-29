@@ -1,0 +1,14 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:warrior_fortress/warrior_fortress_courtyard",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

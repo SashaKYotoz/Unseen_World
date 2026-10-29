@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "entered_the_chimeric_darkness": {
+      "conditions": {
+        "to": "unseen_world:chimeric_darkness"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "background": "unseen_world:textures/environment/advancements_frame.png",
+    "description": {
+      "translate": "advancement.unseen_world.into_the_chimeric_darkness.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "unseen_world:eclipse_keystone"
+    },
+    "title": {
+      "translate": "advancement.unseen_world.into_the_chimeric_darkness"
+    }
+  },
+  "requirements": [
+    [
+      "entered_the_chimeric_darkness"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

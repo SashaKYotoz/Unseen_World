@@ -1,0 +1,16 @@
+{
+  "type": "unseen_world:boulder",
+  "config": {
+    "block": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:amethyst_block"
+      }
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 7,
+      "min_inclusive": 4
+    }
+  }
+}

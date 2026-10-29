@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "has_berry=false": {
+      "model": "unseen_world:block/midnight_lily"
+    },
+    "has_berry=true": {
+      "model": "unseen_world:block/midnight_lily_with_berry"
+    }
+  }
+}

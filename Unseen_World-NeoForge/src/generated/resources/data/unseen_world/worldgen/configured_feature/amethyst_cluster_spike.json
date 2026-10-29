@@ -1,0 +1,54 @@
+{
+  "type": "unseen_world:cluster_spike_feature",
+  "config": {
+    "cluster_state": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:medium_amethyst_bud",
+            "Properties": {
+              "dark_water": "false",
+              "facing": "up",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:large_amethyst_bud",
+            "Properties": {
+              "dark_water": "false",
+              "facing": "up",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "covered_cluster_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:amethyst_block"
+      }
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 17,
+      "min_inclusive": 7
+    },
+    "integration_size": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 11,
+      "min_inclusive": 7
+    },
+    "state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:amethyst_block"
+      }
+    }
+  }
+}

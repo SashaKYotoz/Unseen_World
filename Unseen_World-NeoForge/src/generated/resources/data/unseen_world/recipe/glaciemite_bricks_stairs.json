@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "glaciemite_bricks_stairs",
+  "key": {
+    "#": {
+      "item": "unseen_world:glaciemite_bricks"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "unseen_world:glaciemite_bricks_stairs"
+  }
+}

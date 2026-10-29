@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "gripping=false": {
+      "model": "unseen_world:block/ordeal_spawner"
+    },
+    "gripping=true": {
+      "model": "unseen_world:block/ordeal_spawner_gripped"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "unseen_world:spiral_spike_feature",
+  "config": {
+    "decorating_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:gripcrystal_wart",
+        "Properties": {
+          "dark_water": "true",
+          "facing": "up",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "facing_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:gripping_glaciemite",
+        "Properties": {
+          "facing": "up"
+        }
+      }
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 12,
+      "min_inclusive": 4
+    },
+    "state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:glaciemite"
+      }
+    }
+  }
+}

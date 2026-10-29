@@ -1,0 +1,71 @@
+{
+  "carvers": {
+    "air": "unseen_world:spiral_cave"
+  },
+  "downfall": 0.0,
+  "effects": {
+    "fog_color": 4605011,
+    "foliage_color": 336860160,
+    "grass_color": 336860160,
+    "mood_sound": {
+      "block_search_extent": 8,
+      "offset": 4.0,
+      "sound": "minecraft:ambient.crimson_forest.mood",
+      "tick_delay": 6000
+    },
+    "music": {
+      "max_delay": 24000,
+      "min_delay": 12000,
+      "replace_current_music": false,
+      "sound": {
+        "sound_id": "minecraft:music.nether.crimson_forest"
+      }
+    },
+    "sky_color": 4605011,
+    "water_color": 0,
+    "water_fog_color": 0
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "unseen_world:iron_ore_upper"
+    ],
+    [],
+    [],
+    [
+      "unseen_world:crimsonveil_tree",
+      "unseen_world:gloomweed_patch"
+    ]
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "unseen_world:tuskhog",
+        "maxCount": 3,
+        "minCount": 2,
+        "weight": 5
+      },
+      {
+        "type": "unseen_world:vexal_beetle",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 2
+      }
+    ],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.8
+}

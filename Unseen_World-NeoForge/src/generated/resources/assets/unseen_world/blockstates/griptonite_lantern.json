@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "unseen_world:block/griptonite_lantern"
+    },
+    "hanging=true": {
+      "model": "unseen_world:block/griptonite_lantern_hanging"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "type": "unseen_world:coral_reef",
+  "config": {
+    "block": {
+      "Name": "unseen_world:umbral_coral_block"
+    },
+    "decoration_chance": 0.2,
+    "fan": {
+      "Name": "unseen_world:umbral_coral_fan",
+      "Properties": {
+        "dark_water": "false",
+        "waterlogged": "true"
+      }
+    },
+    "height": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 5,
+      "min_inclusive": 2
+    },
+    "plant": {
+      "Name": "unseen_world:umbral_coral",
+      "Properties": {
+        "dark_water": "false",
+        "waterlogged": "true"
+      }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "wall_fan": {
+      "Name": "unseen_world:umbral_coral_wall_fan",
+      "Properties": {
+        "dark_water": "false",
+        "facing": "north",
+        "waterlogged": "true"
+      }
+    }
+  }
+}

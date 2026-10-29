@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "unseen_world:dark_currantslate"
+  },
+  "result": {
+    "count": 1,
+    "id": "unseen_world:dark_currantslate_bricks_wall"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "grizzly_button",
+  "ingredients": [
+    {
+      "item": "unseen_world:grizzly_planks"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "unseen_world:grizzly_button"
+  }
+}

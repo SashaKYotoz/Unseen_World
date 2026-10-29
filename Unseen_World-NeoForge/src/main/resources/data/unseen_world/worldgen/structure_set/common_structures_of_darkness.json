@@ -1,0 +1,34 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:violeger_camp_remains",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:glaciemite_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:sentinel_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:patriarch_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:warrior_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:violeger_cantonment",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1947040103,
+    "spacing": 20,
+    "separation": 12
+  }
+}

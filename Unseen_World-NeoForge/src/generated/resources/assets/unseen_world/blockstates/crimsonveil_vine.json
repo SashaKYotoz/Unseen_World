@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "berries=false": {
+      "model": "unseen_world:block/crimsonveil_vine"
+    },
+    "berries=true": {
+      "model": "unseen_world:block/crimsonveil_vine_has_berry"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/tealive_slab"
+    },
+    "type=double": {
+      "model": "unseen_world:block/tealive_planks"
+    },
+    "type=top": {
+      "model": "unseen_world:block/tealive_slab_top"
+    }
+  }
+}

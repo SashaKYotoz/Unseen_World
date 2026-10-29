@@ -1,0 +1,70 @@
+{
+  "type": "unseen_world:taproot_tree",
+  "config": {
+    "anchor": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:rooted_dirt"
+      }
+    },
+    "anchor_replaceable": "unseen_world:chimeric_darkness_stones",
+    "crown_radius": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 2
+    },
+    "hanging_leaves": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:hanging_burlywood_leaves",
+        "Properties": {
+          "has_fruit": "false"
+        }
+      }
+    },
+    "heart": {
+      "Name": "unseen_world:burlywood_heart",
+      "Properties": {
+        "persistent": "false"
+      }
+    },
+    "heart_chance": 0.1,
+    "leaves": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:burlywood_leaves",
+        "Properties": {
+          "dark_water": "false",
+          "distance": "7",
+          "overgrown": "false",
+          "persistent": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "roots": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:hanging_roots",
+        "Properties": {
+          "dark_water": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "trunk": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:burlywood_log",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    },
+    "trunk_length": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 7,
+      "min_inclusive": 4
+    }
+  }
+}

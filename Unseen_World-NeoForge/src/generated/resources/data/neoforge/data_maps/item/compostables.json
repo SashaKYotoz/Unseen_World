@@ -1,0 +1,25 @@
+{
+  "values": {
+    "unseen_world:bearfruit_bramble": {
+      "chance": 0.05
+    },
+    "unseen_world:crystie_apple": {
+      "chance": 0.05
+    },
+    "unseen_world:gloomweed": {
+      "chance": 0.1
+    },
+    "unseen_world:glow_apple": {
+      "chance": 0.05
+    },
+    "unseen_world:nightberry": {
+      "chance": 0.05
+    },
+    "unseen_world:tall_gloomweed": {
+      "chance": 0.15
+    },
+    "unseen_world:umbral_kelp": {
+      "chance": 0.15
+    }
+  }
+}

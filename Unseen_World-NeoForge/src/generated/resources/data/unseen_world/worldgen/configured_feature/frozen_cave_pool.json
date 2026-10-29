@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:disk",
+  "config": {
+    "half_height": 0,
+    "radius": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "unseen_world:rime_ice"
+        }
+      },
+      "rules": []
+    },
+    "target": {
+      "type": "minecraft:all_of",
+      "predicates": [
+        {
+          "type": "minecraft:matching_blocks",
+          "blocks": "unseen_world:dark_water"
+        },
+        {
+          "type": "minecraft:matching_blocks",
+          "blocks": [
+            "minecraft:air",
+            "minecraft:cave_air"
+          ],
+          "offset": [
+            0,
+            1,
+            0
+          ]
+        }
+      ]
+    }
+  }
+}

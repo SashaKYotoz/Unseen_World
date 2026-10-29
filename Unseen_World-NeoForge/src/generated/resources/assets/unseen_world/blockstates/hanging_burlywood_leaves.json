@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "has_fruit=false": {
+      "model": "unseen_world:block/hanging_burlywood_leaves"
+    },
+    "has_fruit=true": {
+      "model": "unseen_world:block/glow_apple_fruit"
+    }
+  }
+}

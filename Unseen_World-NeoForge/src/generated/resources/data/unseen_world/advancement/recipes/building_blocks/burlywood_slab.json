@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_burlywood_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "unseen_world:burlywood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "unseen_world:burlywood_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_burlywood_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "unseen_world:burlywood_slab"
+    ]
+  }
+}

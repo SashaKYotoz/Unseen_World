@@ -1,0 +1,333 @@
+{
+  "the_darkness.ambient": {
+    "subtitle": "sounds.unseen_world.ambient_sound",
+    "sounds": [
+      "unseen_world:biome/the_darkness"
+    ]
+  },
+  "penumbral_steppe.ambient": {
+    "subtitle": "sounds.unseen_world.ambient_sound",
+    "sounds": [
+      "unseen_world:biome/penumbral_steppe"
+    ]
+  },
+  "auric_heights.ambient": {
+    "subtitle": "sounds.unseen_world.ambient_sound",
+    "sounds": [
+      "unseen_world:biome/auric_heights"
+    ]
+  },
+  "ordeal_spawner.rewarding": {
+    "subtitle": "sounds.unseen_world.ordeal_spawner_rewarding",
+    "sounds": [
+      "unseen_world:block/ordeal_spawner_rewarding"
+    ]
+  },
+  "entity.gleamcarver.ambient": {
+    "subtitle": "sounds.unseen_world.gleamcarver_ambient",
+    "sounds": [
+      "unseen_world:entity/gleamcarver/gleamcarver_ambient_sound",
+      "unseen_world:entity/gleamcarver/gleamcarver_ambient_sound1"
+    ]
+  },
+  "wind_slide": {
+    "subtitle": "sounds.unseen_world.wind_slide_sound",
+    "sounds": [
+      "unseen_world:entity/wind_slide_sound",
+      "unseen_world:entity/wind_slide_sound1",
+      "unseen_world:entity/wind_slide_sound2"
+    ]
+  },
+  "entity.reaver.ambient": {
+    "subtitle": "sounds.unseen_world.reaver_ambient",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/idle1",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/endermen/idle2",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/endermen/idle3",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/endermen/idle4",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/endermen/idle5",
+        "pitch": 0.72
+      }
+    ]
+  },
+  "entity.reaver.scream": {
+    "subtitle": "sounds.unseen_world.reaver_scream",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/scream1",
+        "pitch": 0.68,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:mob/endermen/scream2",
+        "pitch": 0.68,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:mob/endermen/scream3",
+        "pitch": 0.68,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:mob/endermen/scream4",
+        "pitch": 0.68,
+        "attenuation_distance": 24
+      }
+    ]
+  },
+  "entity.reaver.grind": {
+    "sounds": [
+      {
+        "name": "minecraft:dig/stone1",
+        "pitch": 0.55,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:dig/stone2",
+        "pitch": 0.55,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:dig/stone3",
+        "pitch": 0.55,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:dig/stone4",
+        "pitch": 0.55,
+        "volume": 0.7
+      }
+    ]
+  },
+  "entity.reaver.hurt": {
+    "subtitle": "sounds.unseen_world.reaver_hurt",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/hit1",
+        "pitch": 0.65
+      },
+      {
+        "name": "minecraft:mob/endermen/hit2",
+        "pitch": 0.65
+      },
+      {
+        "name": "minecraft:mob/endermen/hit3",
+        "pitch": 0.65
+      },
+      {
+        "name": "minecraft:mob/endermen/hit4",
+        "pitch": 0.65
+      }
+    ]
+  },
+  "entity.reaver.crack": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/hit1",
+        "pitch": 0.75,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit2",
+        "pitch": 0.75,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit3",
+        "pitch": 0.75,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit4",
+        "pitch": 0.75,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break1",
+        "pitch": 0.6,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break2",
+        "pitch": 0.6,
+        "volume": 0.7
+      }
+    ]
+  },
+  "entity.reaver.death": {
+    "subtitle": "sounds.unseen_world.reaver_death",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/death",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.reaver.crumble": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/death",
+        "pitch": 0.7,
+        "volume": 0.8
+      }
+    ]
+  },
+  "entity.reaver.teleport": {
+    "subtitle": "sounds.unseen_world.reaver_teleport",
+    "sounds": [
+      {
+        "name": "minecraft:mob/endermen/portal",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/endermen/portal2",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "entity.reaver.resonate": {
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst/resonate1",
+        "pitch": 0.55,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate2",
+        "pitch": 0.55,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate3",
+        "pitch": 0.55,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate4",
+        "pitch": 0.55,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.reaver.attack": {
+    "subtitle": "sounds.unseen_world.reaver_attack",
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/throw",
+        "pitch": 0.85
+      }
+    ]
+  },
+  "entity.reaver.step": {
+    "subtitle": "sounds.unseen_world.reaver_step",
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/walk1",
+        "pitch": 1.3,
+        "volume": 0.45
+      },
+      {
+        "name": "minecraft:mob/irongolem/walk2",
+        "pitch": 1.3,
+        "volume": 0.45
+      },
+      {
+        "name": "minecraft:mob/irongolem/walk3",
+        "pitch": 1.3,
+        "volume": 0.45
+      },
+      {
+        "name": "minecraft:mob/irongolem/walk4",
+        "pitch": 1.3,
+        "volume": 0.45
+      }
+    ]
+  },
+  "entity.vexal_beetle.ambient": {
+    "subtitle": "sounds.unseen_world.vexal_beetle_ambient",
+    "sounds": [
+      {
+        "name": "unseen_world:entity/vexal_beetle/idle1",
+        "volume": 0.5
+      },
+      {
+        "name": "unseen_world:entity/vexal_beetle/idle2",
+        "volume": 0.5
+      },
+      {
+        "name": "unseen_world:entity/vexal_beetle/idle3",
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.vexal_beetle.angry": {
+    "subtitle": "sounds.unseen_world.vexal_beetle_angry",
+    "sounds": [
+      {
+        "name": "unseen_world:entity/vexal_beetle/angry1",
+        "volume": 0.3
+      },
+      {
+        "name": "unseen_world:entity/vexal_beetle/angry2",
+        "volume": 0.2
+      }
+    ]
+  },
+  "entity.vexal_beetle.death": {
+    "subtitle": "sounds.unseen_world.vexal_beetle_death",
+    "sounds": [
+      {
+        "name": "unseen_world:entity/vexal_beetle/death",
+        "pitch": 1.6,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.vexal_beetle.attack": {
+    "subtitle": "sounds.unseen_world.vexal_beetle_attack",
+    "sounds": [
+      "unseen_world:entity/vexal_beetle/attack1",
+      "unseen_world:entity/vexal_beetle/attack2"
+    ]
+  },
+  "entity.vexal_beetle.exhausted": {
+    "subtitle": "sounds.unseen_world.vexal_beetle_exhausted",
+    "sounds": [
+      "unseen_world:entity/vexal_beetle/exhausted"
+    ]
+  },
+  "entity.shimmer.ambient": {
+    "subtitle": "sounds.unseen_world.shimmer_ambient",
+    "sounds": [
+      {
+        "name": "unseen_world:entity/shimmer/ambient1",
+        "volume": 0.6
+      },
+      {
+        "name": "unseen_world:entity/shimmer/ambient2",
+        "volume": 0.7
+      },
+      {
+        "name": "unseen_world:entity/shimmer/ambient3",
+        "volume": 0.8
+      },
+      {
+        "name": "unseen_world:entity/shimmer/ambient4",
+        "volume": 0.9
+      }
+    ]
+  }
+}

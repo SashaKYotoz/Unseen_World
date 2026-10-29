@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "unseen_world:block/chimeric_portal_ns"
+    },
+    "axis=z": {
+      "model": "unseen_world:block/chimeric_portal_ew"
+    }
+  }
+}

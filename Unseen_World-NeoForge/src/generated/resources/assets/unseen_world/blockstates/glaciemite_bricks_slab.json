@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/glaciemite_bricks_slab"
+    },
+    "type=double": {
+      "model": "unseen_world:block/glaciemite_bricks"
+    },
+    "type=top": {
+      "model": "unseen_world:block/glaciemite_bricks_slab_top"
+    }
+  }
+}

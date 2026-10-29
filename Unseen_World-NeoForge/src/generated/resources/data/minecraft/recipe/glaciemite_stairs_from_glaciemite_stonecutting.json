@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "unseen_world:glaciemite"
+  },
+  "result": {
+    "count": 1,
+    "id": "unseen_world:glaciemite_stairs"
+  }
+}

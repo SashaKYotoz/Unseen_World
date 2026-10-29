@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "grizzly_slab",
+  "key": {
+    "#": {
+      "item": "unseen_world:grizzly_planks"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "unseen_world:grizzly_slab"
+  }
+}

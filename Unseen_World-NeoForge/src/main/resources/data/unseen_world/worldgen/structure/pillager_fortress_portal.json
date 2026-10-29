@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": "#unseen_world:has_frost_portal",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "weight": 3,
+          "type": "minecraft:pillager",
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "weight": 1,
+          "type": "unseen_world:violeger",
+          "minCount": 1,
+          "maxCount": 1
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "unseen_world:pillager_fortress_portals",
+  "size": 1,
+  "start_height": {
+    "absolute": 0
+  },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "max_distance_from_center": 32,
+  "use_expansion_hack": false
+}

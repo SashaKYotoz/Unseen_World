@@ -1,0 +1,14 @@
+{
+  "fallback": "unseen_world:broken_portals",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:broken_portal/pillager_fortress_portal0",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

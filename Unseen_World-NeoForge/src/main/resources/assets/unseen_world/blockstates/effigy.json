@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "boss=warrior,facing=north": {
+      "model": "unseen_world:block/effigy_warrior",
+      "y": 180
+    },
+    "boss=warrior,facing=east": {
+      "model": "unseen_world:block/effigy_warrior",
+      "y": 270
+    },
+    "boss=warrior,facing=south": {
+      "model": "unseen_world:block/effigy_warrior"
+    },
+    "boss=warrior,facing=west": {
+      "model": "unseen_world:block/effigy_warrior",
+      "y": 90
+    },
+    "boss=sentinel,facing=north": {
+      "model": "unseen_world:block/effigy_sentinel",
+      "y": 180
+    },
+    "boss=sentinel,facing=east": {
+      "model": "unseen_world:block/effigy_sentinel",
+      "y": 270
+    },
+    "boss=sentinel,facing=south": {
+      "model": "unseen_world:block/effigy_sentinel"
+    },
+    "boss=sentinel,facing=west": {
+      "model": "unseen_world:block/effigy_sentinel",
+      "y": 90
+    },
+    "boss=patriarch,facing=north": {
+      "model": "unseen_world:block/effigy_patriarch",
+      "y": 180
+    },
+    "boss=patriarch,facing=east": {
+      "model": "unseen_world:block/effigy_patriarch",
+      "y": 270
+    },
+    "boss=patriarch,facing=south": {
+      "model": "unseen_world:block/effigy_patriarch"
+    },
+    "boss=patriarch,facing=west": {
+      "model": "unseen_world:block/effigy_patriarch",
+      "y": 90
+    }
+  }
+}

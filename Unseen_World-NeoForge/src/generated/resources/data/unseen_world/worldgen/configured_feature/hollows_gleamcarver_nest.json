@@ -1,0 +1,63 @@
+{
+  "type": "unseen_world:nest",
+  "config": {
+    "core": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:burlywood_violet"
+      }
+    },
+    "decoration": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "unseen_world:burlywood_violet"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:moss_carpet"
+          },
+          "weight": 3
+        }
+      ]
+    },
+    "decoration_chance": 0.5,
+    "dweller": "unseen_world:gleamcarver",
+    "dweller_count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "floor": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:moss_block"
+      }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 2
+    },
+    "shell": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:moss_block"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:rooted_dirt"
+          },
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

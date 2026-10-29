@@ -1,0 +1,41 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/barracks",
+        "processors": "unseen_world:violeger_hollowhold_rooms"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/larder",
+        "processors": "unseen_world:violeger_hollowhold_rooms"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/armory",
+        "processors": "unseen_world:violeger_hollowhold_rooms"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:violeger_hollowhold/vault",
+        "processors": "unseen_world:violeger_hollowhold_rooms"
+      }
+    }
+  ]
+}

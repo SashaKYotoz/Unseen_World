@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "unseen_world:chest/dark_currantslate_chest"
+    },
+    {
+      "type": "single",
+      "resource": "unseen_world:chest/glaciemite_chest"
+    },
+    {
+      "type": "single",
+      "resource": "unseen_world:chest/corona_stone_chest"
+    }
+  ]
+}

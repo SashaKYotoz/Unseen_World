@@ -1,0 +1,78 @@
+{
+  "type": "unseen_world:nest",
+  "config": {
+    "core": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:amethyst_cluster",
+        "Properties": {
+          "dark_water": "false",
+          "facing": "up",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "decoration": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:small_amethyst_bud",
+            "Properties": {
+              "dark_water": "false",
+              "facing": "up",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:medium_amethyst_bud",
+            "Properties": {
+              "dark_water": "false",
+              "facing": "up",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "decoration_chance": 0.4,
+    "dweller": "unseen_world:gleamcarver",
+    "dweller_count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "floor": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:calcite"
+      }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 2
+    },
+    "shell": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "unseen_world:corona_stone"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:calcite"
+          },
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

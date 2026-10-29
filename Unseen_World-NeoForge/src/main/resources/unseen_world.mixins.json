@@ -1,0 +1,37 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.sashakyotoz.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractArrowMixin",
+    "access.ThrownTridentAccessor",
+    "entity.EntityMixin",
+    "entity.LivingEntityMixin",
+    "entity.PlayerMixin",
+    "entity.ThreadedAnvilChunkStorageMixin",
+    "waterlogging.BlockDefaultStateMixin",
+    "waterlogging.BlockItemMixin",
+    "waterlogging.BlockStateBaseMixin",
+    "waterlogging.BucketItemMixin",
+    "waterlogging.ServerLevelFluidTickMixin",
+    "waterlogging.StateDefinitionBuilderMixin",
+    "world.ServerWorldMixin",
+    "world.WorldMixin"
+  ],
+  "client": [
+    "client.ArmorFeatureRendererMixin",
+    "client.BuiltinModelItemRendererMixin",
+    "client.DarkWaterSpriteMixin",
+    "client.DarkWaterTintMixin",
+    "client.FogRendererMixin",
+    "client.LevelRendererSkyMixin",
+    "client.LocalPlayerJumpScaleMixin",
+    "client.compat.IrisDimensionMixin",
+    "client.entity.EntityRenderDispatcherMixin",
+    "client.entity.LivingEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

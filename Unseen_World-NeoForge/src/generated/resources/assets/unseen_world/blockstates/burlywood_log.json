@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "unseen_world:block/burlywood_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "unseen_world:block/burlywood_log"
+    },
+    "axis=z": {
+      "model": "unseen_world:block/burlywood_log_horizontal",
+      "x": 90
+    }
+  }
+}

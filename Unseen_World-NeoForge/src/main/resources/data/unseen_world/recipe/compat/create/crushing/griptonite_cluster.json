@@ -1,0 +1,19 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "unseen_world:griptonite_cluster"
+    }
+  ],
+  "processing_time": 150,
+  "results": [
+    {
+      "id": "unseen_world:granulated_griptonite",
+      "count": 2
+    },
+    {
+      "id": "unseen_world:granulated_griptonite",
+      "chance": 0.5
+    }
+  ]
+}

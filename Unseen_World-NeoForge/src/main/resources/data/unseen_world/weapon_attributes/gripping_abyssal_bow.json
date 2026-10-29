@@ -1,0 +1,19 @@
+{
+  "attributes": {
+    "attack_range": 1.5,
+    "two_handed": true,
+    "pose": "bettercombat:pose_two_handed_bow",
+    "attacks": [
+      {
+        "hitbox": "VERTICAL_PLANE",
+        "damage_multiplier": 1,
+        "angle": 160,
+        "upswing": 0.5,
+        "animation": "bettercombat:two_handed_slam",
+        "swing_sound": {
+          "id": "bettercombat:staff_slam"
+        }
+      }
+    ]
+  }
+}

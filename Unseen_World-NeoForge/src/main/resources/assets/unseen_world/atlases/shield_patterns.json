@@ -1,0 +1,17 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "unseen_world:item/shield_of_warrior_patterned"
+    },
+    {
+      "type": "single",
+      "resource": "unseen_world:item/shield_of_warrior"
+    },
+    {
+      "type": "directory",
+      "source": "unseen_world:item/shield",
+      "prefix": "unseen_world:item/shield/"
+    }
+  ]
+}

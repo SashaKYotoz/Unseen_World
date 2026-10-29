@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:sentinel_stronghold",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:patriarch_citadel",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:warrior_fortress",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 592301239,
+    "spacing": 28,
+    "separation": 22
+  }
+}

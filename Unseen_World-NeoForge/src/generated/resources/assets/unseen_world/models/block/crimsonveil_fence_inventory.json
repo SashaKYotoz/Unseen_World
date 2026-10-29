@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_inventory",
+  "textures": {
+    "texture": "unseen_world:block/crimsonveil_planks"
+  }
+}

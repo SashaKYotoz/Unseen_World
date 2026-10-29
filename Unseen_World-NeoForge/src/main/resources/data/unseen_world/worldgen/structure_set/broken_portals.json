@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "unseen_world:frost_broken_portal",
+      "weight": 1
+    },
+    {
+      "structure": "unseen_world:pillager_fortress_portal",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 809858312,
+    "spacing": 28,
+    "separation": 12
+  }
+}

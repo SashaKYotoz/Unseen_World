@@ -1,0 +1,7 @@
+{
+  "parent": "unseen_world:block/chest_template",
+  "textures": {
+    "0": "unseen_world:chest/glaciemite_chest",
+    "particle": "unseen_world:block/glaciemite"
+  }
+}

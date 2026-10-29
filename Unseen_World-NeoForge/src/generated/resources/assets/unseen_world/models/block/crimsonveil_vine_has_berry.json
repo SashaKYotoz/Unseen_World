@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "unseen_world:block/crimsonveil_vine_has_berry"
+  }
+}

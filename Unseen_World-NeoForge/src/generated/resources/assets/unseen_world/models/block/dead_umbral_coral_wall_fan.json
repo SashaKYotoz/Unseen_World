@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/coral_wall_fan",
+  "textures": {
+    "fan": "unseen_world:block/dead_umbral_coral_fan"
+  }
+}

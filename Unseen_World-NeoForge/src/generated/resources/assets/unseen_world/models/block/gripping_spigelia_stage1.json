@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "unseen_world:block/gripping_spigelia_stage1"
+  }
+}

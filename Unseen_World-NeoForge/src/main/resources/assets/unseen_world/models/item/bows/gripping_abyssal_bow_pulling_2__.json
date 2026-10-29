@@ -1,0 +1,6 @@
+{
+  "parent": "unseen_world:item/gripping_abyssal_bow",
+  "textures": {
+    "layer0": "unseen_world:item/bows/gripping_abyssal_bow_pulling_2__"
+  }
+}

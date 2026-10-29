@@ -1,0 +1,30 @@
+{
+  "parent": "unseen_world:cure_gripcrystal_entity",
+  "criteria": {
+    "stole_an_item": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.unseen_world.steal.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "unseen_world:gripping_gauntlet"
+    },
+    "title": {
+      "translate": "advancement.unseen_world.steal"
+    }
+  },
+  "requirements": [
+    [
+      "stole_an_item"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  },
+  "sends_telemetry_event": true
+}

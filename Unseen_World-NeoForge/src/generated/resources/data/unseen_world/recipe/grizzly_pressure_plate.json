@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "grizzly_pressure_plate",
+  "key": {
+    "#": {
+      "item": "unseen_world:grizzly_planks"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "unseen_world:grizzly_pressure_plate"
+  }
+}

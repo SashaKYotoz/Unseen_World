@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "unseen_world:glow_apple_bush",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "grown": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "unseen_world:glow_apple"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "unseen_world:blocks/glow_apple_bush"
+}

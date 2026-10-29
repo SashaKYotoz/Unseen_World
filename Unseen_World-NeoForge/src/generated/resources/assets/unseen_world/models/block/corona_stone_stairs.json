@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "unseen_world:block/corona_stone",
+    "side": "unseen_world:block/corona_stone",
+    "top": "unseen_world:block/corona_stone"
+  }
+}

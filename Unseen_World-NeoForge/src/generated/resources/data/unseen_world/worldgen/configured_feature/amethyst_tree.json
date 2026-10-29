@@ -1,0 +1,93 @@
+{
+  "type": "minecraft:tree",
+  "config": {
+    "decorators": [
+      {
+        "type": "minecraft:vines_to_leaves_decorator",
+        "block": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "unseen_world:hanging_amethyst_leaves",
+            "Properties": {
+              "has_fruit": "false"
+            }
+          }
+        },
+        "height": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 4,
+          "min_inclusive": 2
+        },
+        "probability": 0.125
+      }
+    ],
+    "dirt_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:amethyst_grass_block",
+        "Properties": {
+          "snowy": "false"
+        }
+      }
+    },
+    "foliage_placer": {
+      "type": "unseen_world:thorn_foliage_placer",
+      "edge_hole_chance": 0.2,
+      "max_depth": 1,
+      "offset": 0,
+      "radius": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 3,
+        "min_inclusive": 2
+      }
+    },
+    "foliage_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:amethyst_leaves",
+        "Properties": {
+          "dark_water": "false",
+          "distance": "7",
+          "overgrown": "false",
+          "persistent": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "force_dirt": true,
+    "ignore_vines": false,
+    "minimum_size": {
+      "type": "minecraft:two_layers_feature_size",
+      "limit": 1,
+      "lower_size": 1,
+      "upper_size": 2
+    },
+    "trunk_placer": {
+      "type": "unseen_world:thorn_trunk_placer",
+      "base_height": 10,
+      "base_radius": 1,
+      "curvature": 1.8,
+      "foliage_clearance": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 5,
+        "min_inclusive": 3
+      },
+      "height_rand_a": 2,
+      "height_rand_b": 1,
+      "lean": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 5,
+        "min_inclusive": 3
+      }
+    },
+    "trunk_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "unseen_world:amethyst_log",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    }
+  }
+}

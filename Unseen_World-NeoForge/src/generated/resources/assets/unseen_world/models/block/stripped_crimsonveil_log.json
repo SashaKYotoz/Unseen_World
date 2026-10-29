@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "unseen_world:block/stripped_crimsonveil_log_top",
+    "side": "unseen_world:block/stripped_crimsonveil_log"
+  }
+}

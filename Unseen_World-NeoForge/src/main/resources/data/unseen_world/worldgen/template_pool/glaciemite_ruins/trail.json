@@ -1,0 +1,104 @@
+{
+  "fallback": "unseen_world:glaciemite_ruins/plots",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/road_straight_0",
+        "processors": "unseen_world:glaciemite_ruins_roads"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/road_straight_1",
+        "processors": "unseen_world:glaciemite_ruins_roads"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/road_straight_2",
+        "processors": "unseen_world:glaciemite_ruins_roads"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/road_bend",
+        "processors": "unseen_world:glaciemite_ruins_roads"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/road_tee",
+        "processors": "unseen_world:glaciemite_ruins_roads"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/road_broken",
+        "processors": "unseen_world:glaciemite_ruins_roads"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/hut",
+        "processors": "unseen_world:glaciemite_ruins_houses"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/farmland",
+        "processors": "unseen_world:glaciemite_ruins_houses"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/storehouse",
+        "processors": "unseen_world:glaciemite_ruins_houses"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/watchtower",
+        "processors": "unseen_world:glaciemite_ruins_houses"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "unseen_world:glaciemite_ruins/shrine",
+        "processors": "unseen_world:glaciemite_ruins_houses"
+      }
+    }
+  ]
+}

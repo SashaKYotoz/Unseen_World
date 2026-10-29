@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_corona_bloom": {
+      "conditions": {
+        "items": [
+          {
+            "items": "unseen_world:corona_bloom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:orange_dye_from_corona_bloom"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_corona_bloom"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:orange_dye_from_corona_bloom"
+    ]
+  }
+}

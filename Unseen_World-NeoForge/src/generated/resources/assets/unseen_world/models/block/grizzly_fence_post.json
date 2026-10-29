@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_post",
+  "textures": {
+    "texture": "unseen_world:block/grizzly_planks"
+  }
+}

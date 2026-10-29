@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "unseen_world:block/burlywood_slab"
+    },
+    "type=double": {
+      "model": "unseen_world:block/burlywood_planks"
+    },
+    "type=top": {
+      "model": "unseen_world:block/burlywood_slab_top"
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "unseen_world:glaciemite_bricks",
+            "probability": 0.1
+          },
+          "output_state": {
+            "Name": "unseen_world:cracked_glaciemite_bricks"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "unseen_world:corona_stone_bricks",
+            "probability": 0.1
+          },
+          "output_state": {
+            "Name": "unseen_world:cracked_corona_stone_bricks"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "unseen_world:glaciemite",
+            "probability": 0.05
+          },
+          "output_state": {
+            "Name": "unseen_world:gripping_glaciemite"
+          }
+        }
+      ]
+    },
+    {
+      "processor_type": "minecraft:capped",
+      "limit": 2,
+      "delegate": {
+        "processor_type": "minecraft:rule",
+        "rules": [
+          {
+            "location_predicate": {
+              "predicate_type": "minecraft:always_true"
+            },
+            "input_predicate": {
+              "predicate_type": "minecraft:block_match",
+              "block": "minecraft:gravel"
+            },
+            "output_state": {
+              "Name": "minecraft:suspicious_gravel",
+              "Properties": {
+                "dusted": "0"
+              }
+            },
+            "block_entity_modifier": {
+              "type": "minecraft:append_loot",
+              "loot_table": "unseen_world:archaeology/violeger_hollowhold_relic"
+            }
+          },
+          {
+            "location_predicate": {
+              "predicate_type": "minecraft:always_true"
+            },
+            "input_predicate": {
+              "predicate_type": "minecraft:block_match",
+              "block": "unseen_world:glimmergrain_sand"
+            },
+            "output_state": {
+              "Name": "unseen_world:suspicious_glimmergrain_sand"
+            },
+            "block_entity_modifier": {
+              "type": "minecraft:append_loot",
+              "loot_table": "unseen_world:archaeology/violeger_hollowhold_relic"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "processor_type": "minecraft:capped",
+      "limit": 8,
+      "delegate": {
+        "processor_type": "minecraft:rule",
+        "rules": [
+          {
+            "location_predicate": {
+              "predicate_type": "minecraft:always_true"
+            },
+            "input_predicate": {
+              "predicate_type": "minecraft:block_match",
+              "block": "minecraft:gravel"
+            },
+            "output_state": {
+              "Name": "minecraft:suspicious_gravel",
+              "Properties": {
+                "dusted": "0"
+              }
+            },
+            "block_entity_modifier": {
+              "type": "minecraft:append_loot",
+              "loot_table": "unseen_world:archaeology/violeger_hollowhold_rubble"
+            }
+          },
+          {
+            "location_predicate": {
+              "predicate_type": "minecraft:always_true"
+            },
+            "input_predicate": {
+              "predicate_type": "minecraft:block_match",
+              "block": "unseen_world:glimmergrain_sand"
+            },
+            "output_state": {
+              "Name": "unseen_world:suspicious_glimmergrain_sand"
+            },
+            "block_entity_modifier": {
+              "type": "minecraft:append_loot",
+              "loot_table": "unseen_world:archaeology/violeger_hollowhold_rubble"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
