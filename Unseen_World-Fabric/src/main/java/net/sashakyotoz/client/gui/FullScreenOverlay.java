@@ -22,23 +22,24 @@ public class FullScreenOverlay implements HudRenderCallback {
             int width = client.getWindow().getGuiScaledWidth();
             int height = client.getWindow().getGuiScaledHeight();
             if (entity.getGrippingData() > 0) {
-                RenderSystem.disableDepthTest();
-                RenderSystem.depthMask(false);
-                context.setColor(1.0F, 1.0F, 1.0F, Math.min(1, entity.getGrippingData() * 0.1f));
-                context.blit(GRIPPING, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
-                RenderSystem.depthMask(true);
-                RenderSystem.enableDepthTest();
-                context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                renderOverlay(context, GRIPPING, width, height, Math.min(1.0F, entity.getGrippingData() * 0.1F));
             }
             if (entity.getDarkeningData() > 0) {
-                RenderSystem.disableDepthTest();
-                RenderSystem.depthMask(false);
-                context.setColor(1.0F, 1.0F, 1.0F, Math.min(1, entity.getDarkeningData() * 0.1f));
-                context.blit(DARKENING, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
-                RenderSystem.depthMask(true);
-                RenderSystem.enableDepthTest();
-                context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                renderOverlay(context, DARKENING, width, height, Math.min(1.0F, entity.getDarkeningData() * 0.1F));
             }
         }
+    }
+
+    private static void renderOverlay(GuiGraphics context, ResourceLocation texture, int width, int height, float alpha) {
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.setColor(1.0F, 1.0F, 1.0F, alpha);
+        context.blit(texture, 0, 0, -90, 0.0F, 0.0F, width, height, width, height);
+        context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
     }
 }

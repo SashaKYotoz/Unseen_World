@@ -18,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.items.ModItems;
@@ -26,7 +25,6 @@ import net.sashakyotoz.common.items.ModTiers;
 import net.sashakyotoz.common.items.combat.AbilityHelper;
 import net.sashakyotoz.common.items.combat.MeleeAbilityItem;
 import net.sashakyotoz.utils.CombatHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

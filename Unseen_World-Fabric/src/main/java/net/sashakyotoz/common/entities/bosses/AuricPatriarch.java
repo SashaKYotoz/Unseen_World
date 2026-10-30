@@ -1,7 +1,5 @@
 package net.sashakyotoz.common.entities.bosses;
 
-import net.minecraft.world.item.alchemy.PotionContents;
-import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
@@ -36,6 +34,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,6 +52,7 @@ import net.sashakyotoz.common.entities.custom.AureateVexEntity;
 import net.sashakyotoz.common.entities.custom.ReaverEntity;
 import net.sashakyotoz.common.entities.custom.projectiles.ParticleProjectileEntity;
 import net.sashakyotoz.common.entities.util.BossParticles;
+import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

@@ -1,9 +1,9 @@
 package net.sashakyotoz.common.entities.custom.projectiles;
 
-import net.minecraft.util.Mth;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;

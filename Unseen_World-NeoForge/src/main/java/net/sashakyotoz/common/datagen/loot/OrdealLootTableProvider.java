@@ -2,6 +2,8 @@ package net.sashakyotoz.common.datagen.loot;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.storage.loot.functions.SetPotionFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.sashakyotoz.common.blocks.custom.OrdealSpawnerBlock;
+import net.sashakyotoz.common.effects.ModMobEffects;
 import net.sashakyotoz.common.items.ModItems;
 
 import java.util.function.BiConsumer;
@@ -59,12 +62,21 @@ public class OrdealLootTableProvider implements LootTableSubProvider {
                 .add(potion(Items.POTION, Potions.NIGHT_VISION, 5))
                 .add(potion(Items.SPLASH_POTION, Potions.HEALING, 3));
         return switch (type) {
-            case GRIPCRYSTAL -> pool.add(counted(ModItems.GRANULATED_GRIPCRYSTAL, 2, 4, 6));
-            case ABYSSAL -> pool.add(counted(Items.ENDER_PEARL, 1, 2, 4))
-                    .add(potion(Items.POTION, Potions.WATER_BREATHING, 3));
-            case AURIC -> pool.add(counted(Items.GOLD_NUGGET, 3, 9, 8))
+            case GRIPCRYSTAL -> pool
+                    .add(counted(ModItems.GRANULATED_GRIPCRYSTAL, 2, 4, 6))
+                    .add(potion(Items.POTION, grippingResistance(), 3));
+            case ABYSSAL -> pool
+                    .add(counted(Items.ENDER_PEARL, 1, 2, 4))
+                    .add(potion(Items.POTION, Potions.STRONG_HEALING, 3));
+            case AURIC -> pool
+                    .add(counted(Items.GOLD_NUGGET, 3, 9, 8))
                     .add(potion(Items.POTION, Potions.FIRE_RESISTANCE, 3));
         };
+    }
+
+    private static Holder<Potion> grippingResistance() {
+        return BuiltInRegistries.POTION.getHolderOrThrow(ResourceKey.create(Registries.POTION,
+                ModMobEffects.GRIPPING_RESISTANCE.getPotion().getID()));
     }
 
     private static Item key(OrdealSpawnerBlock.Type type) {

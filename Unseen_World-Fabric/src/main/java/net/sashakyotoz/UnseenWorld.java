@@ -1,6 +1,5 @@
 package net.sashakyotoz;
 
-import net.sashakyotoz.common.networking.ModMessages;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.api.ModInitializer;
@@ -40,6 +39,7 @@ import net.sashakyotoz.common.entities.bosses.EclipseSentinel;
 import net.sashakyotoz.common.entities.bosses.WarriorOfChimericDarkness;
 import net.sashakyotoz.common.items.ModItemGroups;
 import net.sashakyotoz.common.items.ModItems;
+import net.sashakyotoz.common.networking.ModMessages;
 import net.sashakyotoz.common.world.ModDimensions;
 import net.sashakyotoz.common.world.ModSpawnRules;
 import net.sashakyotoz.common.world.ModWorldFeatures;

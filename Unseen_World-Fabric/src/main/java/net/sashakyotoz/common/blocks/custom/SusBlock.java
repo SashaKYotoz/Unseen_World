@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.sashakyotoz.common.blocks.custom.entities.SusBlockEntity;
-import org.jetbrains.annotations.Nullable;
 
 public class SusBlock extends BrushableBlock {
     public SusBlock(Block baseBlock, Properties settings, SoundEvent brushingSound, SoundEvent brushingCompleteSound) {

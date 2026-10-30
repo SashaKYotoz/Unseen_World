@@ -1,6 +1,5 @@
 package net.sashakyotoz.client.models;
 
-import net.minecraft.util.FastColor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -9,6 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.FastColor;
 import net.sashakyotoz.UnseenWorld;
 import net.sashakyotoz.common.entities.animations.EclipseSentinelAnimations;
 import net.sashakyotoz.common.entities.bosses.EclipseSentinel;

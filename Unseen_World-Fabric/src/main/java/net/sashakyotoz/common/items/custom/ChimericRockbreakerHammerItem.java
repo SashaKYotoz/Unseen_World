@@ -23,7 +23,6 @@ import net.sashakyotoz.common.items.ModTiers;
 import net.sashakyotoz.common.items.combat.AbilityHelper;
 import net.sashakyotoz.common.items.combat.FissureTask;
 import net.sashakyotoz.utils.CombatHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

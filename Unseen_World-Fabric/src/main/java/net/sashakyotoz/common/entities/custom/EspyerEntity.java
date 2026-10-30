@@ -1,6 +1,5 @@
 package net.sashakyotoz.common.entities.custom;
 
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;

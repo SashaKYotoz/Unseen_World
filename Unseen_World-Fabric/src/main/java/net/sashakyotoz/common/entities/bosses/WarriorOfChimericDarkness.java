@@ -1,6 +1,5 @@
 package net.sashakyotoz.common.entities.bosses;
 
-import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -26,6 +25,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.client.particles.ModParticleTypes;
 import net.sashakyotoz.common.entities.util.BossParticles;
+import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

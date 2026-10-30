@@ -143,6 +143,17 @@
           ],
           "name": "unseen_world:granulated_gripcrystal",
           "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_potion",
+              "id": "unseen_world:gripping_resistance"
+            }
+          ],
+          "name": "minecraft:potion",
+          "weight": 3
         }
       ],
       "rolls": {

@@ -33,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 
 public class VenomerEntity extends ViolegerEntity {
     private static final EntityDataAccessor<Byte> SPELL = SynchedEntityData.defineId(VenomerEntity.class, EntityDataSerializers.BYTE);

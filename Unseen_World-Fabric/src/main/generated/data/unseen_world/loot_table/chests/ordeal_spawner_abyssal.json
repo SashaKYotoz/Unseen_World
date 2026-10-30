@@ -149,7 +149,7 @@
           "functions": [
             {
               "function": "minecraft:set_potion",
-              "id": "minecraft:water_breathing"
+              "id": "minecraft:strong_healing"
             }
           ],
           "name": "minecraft:potion",

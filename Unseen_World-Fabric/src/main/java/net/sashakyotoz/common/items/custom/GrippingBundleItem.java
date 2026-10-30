@@ -1,7 +1,6 @@
 package net.sashakyotoz.common.items.custom;
 
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.SlotAccess;
@@ -12,10 +11,9 @@ import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.component.BundleContents;
 import net.sashakyotoz.common.items.combat.AbilityHelper;
 import net.sashakyotoz.common.tags.ModTags;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

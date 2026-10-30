@@ -1,6 +1,5 @@
 package net.sashakyotoz.common.entities.bosses;
 
-import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,6 +32,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.sashakyotoz.common.entities.custom.EclipsedAcolyteEntity;
 import net.sashakyotoz.common.entities.util.BossParticles;
+import net.sashakyotoz.common.entities.util.EnumDataSerializer;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 

@@ -1,8 +1,6 @@
 package net.sashakyotoz.common.blocks.custom.fluids;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
